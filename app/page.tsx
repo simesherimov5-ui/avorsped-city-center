@@ -19,13 +19,6 @@ const WHY_US = [
   { icon: Landmark, title: "Внимание на деталите", desc: "Од пропорцијата на фасадата до изборот на арматура." },
 ];
 
-// Draft copy — swap once the client sends the final wording.
-const INTRO_FEATURES = [
-  { icon: MapPin, title: "Одлична локација", desc: "Во центарот на Струмица, блиску до паркови и главните градски содржини." },
-  { icon: ShieldCheck, title: "Сигурна инвестиција", desc: "30 години искуство и секој проект испорачан во ветениот рок." },
-  { icon: Sparkles, title: "Современ дизајн", desc: "Архитектура и материјали избрани за удобен, современ живот." },
-];
-
 export default function HomePage() {
   const counts = availabilityCounts(apartments.filter((a) => a.buildingId));
 
@@ -48,17 +41,6 @@ export default function HomePage() {
               <Button href="/about" variant="secondary">За компанијата</Button>
             </div>
           </Reveal>
-          <div className="mt-16 grid gap-8 sm:grid-cols-3">
-            {INTRO_FEATURES.map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.08}>
-                <div className="flex flex-col gap-3">
-                  <item.icon className="h-6 w-6 text-accent" strokeWidth={1.5} />
-                  <div className="font-display text-lg">{item.title}</div>
-                  <p className="text-sm text-ink/60">{item.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 

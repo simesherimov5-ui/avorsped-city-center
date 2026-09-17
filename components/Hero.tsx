@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
 import { Logo } from "@/components/ui/Logo";
 
@@ -10,19 +15,54 @@ const HERO_IMAGE = {
 export function Hero() {
   return (
     <section className="relative flex h-[100svh] min-h-[560px] items-center justify-center overflow-hidden bg-charcoal text-warm-white">
-      <div className="absolute inset-0">
+      <motion.div
+        initial={{ scale: 1.08, opacity: 0.7 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0"
+      >
         <Media image={HERO_IMAGE} tone="dark" className="h-full w-full" priority sizes="100vw" />
         <div className="absolute inset-0 bg-black/35" />
-      </div>
-
-      <div className="absolute left-6 top-6 z-10 sm:left-10 sm:top-10">
-        <Logo variant="inline" />
-      </div>
+      </motion.div>
 
       <div className="relative flex flex-col items-center px-6 text-center">
-        <h1 className="font-display text-3xl tracking-tight sm:text-5xl">Добредојдовте во Javor Sped</h1>
-        <p className="mt-3 text-lg text-warm-white/80 sm:text-xl">вашиот нов дом</p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.7 }}
+          className="text-xl font-semibold uppercase leading-tight tracking-[0.15em] text-warm-white sm:text-3xl sm:tracking-[0.2em]"
+        >
+          <div>Добредојдовте</div>
+          <div>Вашиот нов дом</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.7 }}
+          className="mt-10"
+        >
+          <Logo variant="stacked" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.7 }}
+          className="mt-10 flex flex-wrap justify-center gap-4"
+        >
+          <Button href="/development" variant="primary">Истражи го проектот</Button>
+          <Button href="/projects" variant="secondary" tone="dark">Погледни ги проектите</Button>
+        </motion.div>
       </div>
+
+      <motion.div
+        animate={{ y: [0, 8, 0] }}
+        transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-warm-white/50"
+      >
+        <ChevronDown className="h-5 w-5" />
+      </motion.div>
     </section>
   );
 }
