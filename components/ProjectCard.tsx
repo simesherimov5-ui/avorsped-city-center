@@ -31,7 +31,10 @@ export function ProjectCard({ project }: { project: Project }) {
             STATUS_STYLE[project.status]
           )}
         >
-          {project.typeLabel ? `${project.typeLabel} · ${STATUS_LABEL[project.status]}` : STATUS_LABEL[project.status]}
+          {(() => {
+            const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
+            return project.typeLabel ? `${project.typeLabel} · ${statusText}` : statusText;
+          })()}
         </span>
 
         {hasHoverDetails && (

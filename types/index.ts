@@ -99,6 +99,7 @@ export interface Project {
   specifications: { label: string; value: string }[];
   isFlagship?: boolean;
   typeLabel?: string;
+  statusLabelOverride?: string;
   tagline?: string;
   distanceHighlights?: string[];
 }
