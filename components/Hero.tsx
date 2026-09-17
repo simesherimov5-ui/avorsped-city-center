@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
 
 const HERO_IMAGE = {
-  src: "/images/exteriors/exterior-hero-wide.jpg",
+  src: "/images/exteriors/exterior-03-day.jpg",
   alt: "City Center — насловна визуелизација",
   isPlaceholder: false,
 };
@@ -35,23 +35,24 @@ export function Hero() {
       </motion.div>
 
       <div className="relative flex flex-col items-center px-6 text-center">
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="text-base font-light uppercase tracking-[0.25em] text-warm-white/80 sm:text-lg"
+          className="text-xl font-semibold uppercase leading-tight tracking-[0.15em] text-warm-white sm:text-3xl sm:tracking-[0.2em]"
         >
-          Добредојдовте во вашиот нов дом
-        </motion.p>
+          <div>Добредојдовте</div>
+          <div>Вашиот нов дом</div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
-          className="mt-6 leading-none"
+          className="mt-10 leading-none"
         >
-          <div className="font-display text-4xl tracking-tight sm:text-6xl">Јавор Шпед</div>
-          <div className="mt-3 text-xs uppercase tracking-[0.5em] text-accent">Holding</div>
+          <div className="font-display text-3xl tracking-tight sm:text-5xl">Јавор Шпед</div>
+          <div className="mt-3 text-sm font-semibold uppercase tracking-[0.5em] text-accent">Holding</div>
         </motion.div>
 
         <motion.div
