@@ -98,6 +98,9 @@ export interface Project {
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   specifications: { label: string; value: string }[];
   isFlagship?: boolean;
+  typeLabel?: string;
+  tagline?: string;
+  distanceHighlights?: string[];
 }
 
 export interface CompanyStat {

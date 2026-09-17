@@ -15,18 +15,39 @@ const STATUS_LABEL: Record<Project["status"], string> = {
 };
 
 export function ProjectCard({ project }: { project: Project }) {
+  const hasHoverDetails = Boolean(project.tagline || project.distanceHighlights?.length);
+
   return (
     <Link href={`/projects/${project.slug}`} className="focus-ring group block border border-line bg-warm-white">
-      <div className="relative">
-        <Media image={project.heroImage} label={`${project.name} - визуелизација`} className="aspect-[4/3]" />
+      <div className="relative overflow-hidden">
+        <Media
+          image={project.heroImage}
+          label={`${project.name} - визуелизација`}
+          className="aspect-[4/3] transition-transform duration-500 ease-out group-hover:scale-105"
+        />
         <span
           className={cn(
             "absolute left-3 top-3 px-2.5 py-1 text-[10px] uppercase tracking-widest",
             STATUS_STYLE[project.status]
           )}
         >
-          {STATUS_LABEL[project.status]}
+          {project.typeLabel ? `${project.typeLabel} · ${STATUS_LABEL[project.status]}` : STATUS_LABEL[project.status]}
         </span>
+
+        {hasHoverDetails && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-charcoal/90 via-charcoal/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+            {project.tagline && (
+              <div className="font-display text-sm text-warm-white sm:text-base">{project.tagline}</div>
+            )}
+            {project.distanceHighlights && project.distanceHighlights.length > 0 && (
+              <ul className="mt-1.5 space-y-0.5 text-[11px] uppercase tracking-wide text-warm-white/80">
+                {project.distanceHighlights.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
       <div className="p-5">
         <div className="font-display text-xl">{project.name}</div>
