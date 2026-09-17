@@ -11,7 +11,7 @@ const TABS: { label: string; value: ProjectStatus | "all" }[] = [
   { label: "Сите", value: "all" },
   { label: "Завршено", value: "completed" },
   { label: "Во изградба", value: "under-construction" },
-  { label: "Претстои", value: "upcoming" },
+  { label: "Наскоро", value: "upcoming" },
 ];
 
 export default function ProjectsPage() {

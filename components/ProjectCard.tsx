@@ -11,7 +11,7 @@ const STATUS_STYLE: Record<Project["status"], string> = {
 const STATUS_LABEL: Record<Project["status"], string> = {
   completed: "Завршено",
   "under-construction": "Во изградба",
-  upcoming: "Претстои",
+  upcoming: "Наскоро",
 };
 
 export function ProjectCard({ project }: { project: Project }) {
