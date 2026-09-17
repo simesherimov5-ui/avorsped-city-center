@@ -35,7 +35,15 @@ export function Media({
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
-      <Image src={image.src} alt={image.alt} fill sizes={sizes} className="object-cover" priority={priority} />
+      <Image
+        src={image.src}
+        alt={image.alt}
+        fill
+        sizes={sizes}
+        className="object-cover"
+        priority={priority}
+        quality={priority ? 100 : 90}
+      />
     </div>
   );
 }
