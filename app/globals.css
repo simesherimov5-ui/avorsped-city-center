@@ -3,6 +3,7 @@
 :root {
   --color-cream: #f6f4ef;
   --color-warm-white: #fbfaf7;
+  --color-silver: #f0f1f3;
   --color-concrete: #cbc7be;
   --color-charcoal: #1b1a18;
   --color-ink: #2b2a26;
@@ -14,6 +15,7 @@
 @theme inline {
   --color-cream: var(--color-cream);
   --color-warm-white: var(--color-warm-white);
+  --color-silver: var(--color-silver);
   --color-concrete: var(--color-concrete);
   --color-charcoal: var(--color-charcoal);
   --color-ink: var(--color-ink);

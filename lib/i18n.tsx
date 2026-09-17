@@ -19,7 +19,7 @@ const dictionaries: Record<Locale, Record<string, string>> = {
   mk: {
     "nav.home": "Почетна",
     "nav.projects": "Проекти",
-    "nav.development": "Тековен проект",
+    "nav.development": "Тековни проекти",
     "nav.about": "За нас",
     "nav.contact": "Контакт",
     "nav.consultation": "Закажи консултација",

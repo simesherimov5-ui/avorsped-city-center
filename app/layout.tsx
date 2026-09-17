@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -50,14 +51,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
-        <I18nProvider>
-          <CompareProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <CompareBar />
-          </CompareProvider>
-        </I18nProvider>
+        <MotionConfig reducedMotion="user">
+          <I18nProvider>
+            <CompareProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <CompareBar />
+            </CompareProvider>
+          </I18nProvider>
+        </MotionConfig>
       </body>
     </html>
   );

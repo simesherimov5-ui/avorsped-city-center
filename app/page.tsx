@@ -27,7 +27,7 @@ export default function HomePage() {
       <Hero />
 
       {/* Company introduction */}
-      <section className="bg-warm-white py-24">
+      <section className="bg-silver py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Reveal>
             <SectionHeading
@@ -48,7 +48,7 @@ export default function HomePage() {
       <section className="bg-cream py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Reveal>
-            <SectionHeading eyebrow="Тековен проект" title={development.name} />
+            <SectionHeading eyebrow="Тековни проекти" title={development.name} />
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-center">

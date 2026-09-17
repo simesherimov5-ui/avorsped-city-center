@@ -18,7 +18,10 @@ export function ProjectCard({ project }: { project: Project }) {
   const hasHoverDetails = Boolean(project.tagline || project.distanceHighlights?.length);
 
   return (
-    <Link href={`/projects/${project.slug}`} className="focus-ring group block border border-line bg-warm-white">
+    <Link
+      href={project.isFlagship ? "/development" : `/projects/${project.slug}`}
+      className="focus-ring group block border border-line bg-warm-white"
+    >
       <div className="relative overflow-hidden">
         <Media
           image={project.heroImage}
