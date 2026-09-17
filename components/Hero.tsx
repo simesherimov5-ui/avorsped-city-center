@@ -21,16 +21,6 @@ export function Hero() {
         className="absolute inset-0"
       >
         <Media image={HERO_IMAGE} tone="dark" className="h-full w-full" priority sizes="100vw" />
-        <video
-          className="hero-video absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={HERO_IMAGE.src}
-        >
-          <source src="/videos/city-center-hero.mp4" type="video/mp4" />
-        </video>
         <div className="absolute inset-0 bg-black/35" />
       </motion.div>
 
