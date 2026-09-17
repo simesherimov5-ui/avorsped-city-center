@@ -19,13 +19,60 @@ interface MasterplanProps {
   variant?: "preview" | "full";
 }
 
+const SITE_TILES = [
+  { key: "courtyard", src: "/images/site/courtyard.jpg", label: "Двор" },
+  { key: "central", src: "/images/site/central-area.jpg", label: "Централна површина" },
+];
+
 export function Masterplan({ variant = "full" }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <div className="w-full">
+      {/* Mobile: compact 2-column card grid, natural reading order */}
+      <div className="mx-auto grid max-w-sm grid-cols-2 gap-2.5 sm:hidden">
+        {buildings.map((building) => {
+          const units = apartments.filter((a) => a.buildingId === building.id);
+          const available = units.filter((a) => a.status === "available").length;
+
+          return (
+            <Link
+              key={building.id}
+              href={`/development/${building.id}`}
+              className="focus-ring group relative block aspect-square overflow-hidden rounded-sm border border-line bg-charcoal text-warm-white"
+            >
+              <div className="absolute inset-0">
+                <Media image={building.exteriorImage} tone="dark" className="h-full w-full" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/20 to-transparent" />
+              <div className="relative flex h-full flex-col justify-between p-2.5">
+                <span className="font-display text-lg leading-none">{building.shortLabel}</span>
+                <div className="text-[10px] uppercase tracking-wide text-warm-white/80">
+                  {available} достапни · {STATUS_LABEL[building.status]}
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+        {SITE_TILES.map((tile) => (
+          <div
+            key={tile.key}
+            className="group relative flex aspect-square items-end overflow-hidden rounded-sm border border-line"
+          >
+            <div className="absolute inset-0">
+              <Media image={{ src: tile.src, alt: tile.label, isPlaceholder: false }} className="h-full w-full" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
+            <span className="relative p-2.5 text-[10px] uppercase tracking-wide text-warm-white">
+              {tile.label}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Tablet/desktop: true site layout, positioned to match the real masterplan */}
       <div
-        className="mx-auto grid max-w-3xl gap-3 sm:gap-4"
+        className="mx-auto hidden max-w-3xl gap-3 sm:grid sm:gap-4"
         style={{ gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "repeat(4, auto)" }}
       >
         {buildings.map((building) => {
