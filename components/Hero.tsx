@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
+import { Logo } from "@/components/ui/Logo";
 
 const HERO_IMAGE = {
   src: "/images/exteriors/exterior-03-day.jpg",
@@ -39,10 +40,9 @@ export function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
-          className="mt-10 leading-none"
+          className="mt-10"
         >
-          <div className="font-display text-3xl tracking-tight sm:text-5xl">Јавор Шпед</div>
-          <div className="mt-3 text-sm font-semibold uppercase tracking-[0.5em] text-accent">Holding</div>
+          <Logo variant="stacked" />
         </motion.div>
 
         <motion.div

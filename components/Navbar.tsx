@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/Button";
+import { Logo } from "@/components/ui/Logo";
 
 const LINKS = [
   { href: "/", key: "nav.home" },
@@ -24,9 +25,8 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-warm-white/10 bg-charcoal">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-10">
-        <Link href="/" className="flex flex-col leading-none text-warm-white focus-ring">
-          <span className="font-display text-lg tracking-tight">Јавор Шпед</span>
-          <span className="mt-1 text-[9px] uppercase tracking-[0.3em] text-warm-white/50">Holding</span>
+        <Link href="/" className="focus-ring">
+          <Logo variant="inline" />
         </Link>
 
         <div className="hidden flex-1 items-center justify-center gap-8 lg:flex">
