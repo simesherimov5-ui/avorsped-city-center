@@ -35,14 +35,23 @@ export function Hero() {
       </motion.div>
 
       <div className="relative flex flex-col items-center px-6 text-center">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.7 }}
+          className="text-lg font-light tracking-wide text-warm-white/90 sm:text-2xl"
+        >
+          Добредојдовте во вашиот нов дом.
+        </motion.p>
+
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.7 }}
-          className="leading-none"
+          transition={{ delay: 0.35, duration: 0.7 }}
+          className="mt-5 leading-none"
         >
-          <div className="text-xs uppercase tracking-[0.4em] text-warm-white/70">Holding</div>
-          <div className="mt-3 font-display text-5xl tracking-tight sm:text-7xl">Јавор Шпед</div>
+          <div className="font-display text-5xl tracking-tight sm:text-7xl">Јавор Шпед</div>
+          <div className="mt-3 text-xs uppercase tracking-[0.4em] text-warm-white/70">Holding</div>
         </motion.div>
 
         <motion.div
