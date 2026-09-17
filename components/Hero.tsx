@@ -39,19 +39,19 @@ export function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="text-lg font-light tracking-wide text-warm-white/90 sm:text-2xl"
+          className="text-base font-light uppercase tracking-[0.25em] text-warm-white/80 sm:text-lg"
         >
-          Добредојдовте во вашиот нов дом.
+          Добредојдовте во вашиот нов дом
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7 }}
-          className="mt-5 leading-none"
+          className="mt-6 leading-none"
         >
-          <div className="font-display text-5xl tracking-tight sm:text-7xl">Јавор Шпед</div>
-          <div className="mt-3 text-xs uppercase tracking-[0.4em] text-warm-white/70">Holding</div>
+          <div className="font-display text-4xl tracking-tight sm:text-6xl">Јавор Шпед</div>
+          <div className="mt-3 text-xs uppercase tracking-[0.5em] text-accent">Holding</div>
         </motion.div>
 
         <motion.div
