@@ -120,7 +120,7 @@ export function Masterplan({ variant = "full" }: MasterplanProps) {
                   boxShadow: isHovered ? "0 0 0 8px rgba(184,150,46,0.3)" : "0 0 0 0px rgba(184,150,46,0)",
                 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white text-xs font-bold text-black shadow-md sm:h-9 sm:w-9 sm:text-sm"
+                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-black text-xs font-bold text-white shadow-md sm:h-9 sm:w-9 sm:text-sm"
               >
                 {building.shortLabel}
               </motion.div>
