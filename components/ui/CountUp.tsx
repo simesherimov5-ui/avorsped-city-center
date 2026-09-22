@@ -12,6 +12,7 @@ export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pa
   const match = value.match(/^(\d+)(.*)$/);
   const target = match ? parseInt(match[1], 10) : 0;
   const suffix = match ? match[2] : value;
+  const hasMatch = Boolean(match);
 
   const ref = useRef<HTMLSpanElement>(null);
   const [prefersReducedMotion] = useState(
@@ -21,10 +22,10 @@ export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pa
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || !match || prefersReducedMotion) return;
+    if (!node || !hasMatch || prefersReducedMotion) return;
 
     let started = false;
-    let frame: number;
+    let intervalId: ReturnType<typeof setInterval>;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -32,14 +33,15 @@ export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pa
         started = true;
         observer.disconnect();
 
-        const startTime = performance.now();
-        const step = (now: number) => {
-          const progress = Math.min((now - startTime) / duration, 1);
+        const startTime = Date.now();
+        const tick = () => {
+          const progress = Math.min((Date.now() - startTime) / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
           setDisplay(Math.round(eased * target));
-          if (progress < 1) frame = requestAnimationFrame(step);
+          if (progress >= 1) clearInterval(intervalId);
         };
-        frame = requestAnimationFrame(step);
+        intervalId = setInterval(tick, 16);
+        tick();
       },
       { threshold: 0.3 }
     );
@@ -47,13 +49,18 @@ export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pa
     observer.observe(node);
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(frame);
+      clearInterval(intervalId);
     };
-  }, [target, duration, match, prefersReducedMotion]);
+    // `match` is a fresh array every render (String.match doesn't return a
+    // stable reference) — depending on it directly would re-run this effect
+    // on every render (including the ones triggered by our own setDisplay
+    // ticks), resetting the count before it ever finishes. `hasMatch` and
+    // `target` are the only derived values that matter and are stable.
+  }, [target, duration, hasMatch, prefersReducedMotion]);
 
   return (
     <span ref={ref}>
-      {match ? String(display).padStart(pad, "0") : null}
+      {hasMatch ? String(display).padStart(pad, "0") : null}
       {suffix}
     </span>
   );

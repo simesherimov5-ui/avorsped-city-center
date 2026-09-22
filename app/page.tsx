@@ -5,7 +5,7 @@ import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
-import { Media } from "@/components/ui/Media";
+import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { Button } from "@/components/ui/Button";
 import { projects, companyStats } from "@/data";
 
@@ -16,7 +16,7 @@ const HIGHLIGHTS = [
   },
   {
     title: "Квалитет",
-    quote: "Не прифаќаме кратенки — секој детаљ поминува низ строга контрола пред да биде завршен.",
+    quote: "Не прифаќаме кратенки — секој детал поминува низ строга контрола пред да биде завршен.",
   },
   {
     title: "Доверба",
@@ -52,9 +52,8 @@ export default function HomePage() {
           <div className="grid gap-12 sm:grid-cols-3">
             {HIGHLIGHTS.map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
-                <div className="text-center sm:text-left">
-                  <span className="font-display text-6xl leading-none text-accent">&ldquo;</span>
-                  <div className="mt-3 font-display text-lg">{item.title}</div>
+                <div className="border border-line p-6">
+                  <div className="font-display text-lg">{item.title}</div>
                   <p className="mt-2 text-sm text-ink/60">&bdquo;{item.quote}&ldquo;</p>
                 </div>
               </Reveal>
@@ -70,20 +69,15 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="Визуелизации"
               title="Визуелизација"
-              description="Погледнете го домот пред да го изградиме — секој агол, секоја линија, секој детаљ."
+              description="Погледнете го домот пред да го изградиме — секој агол, секоја линија, секој детал."
             />
           </Reveal>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {GALLERY_PHOTOS.map((photo, i) => (
-              <Reveal key={photo.src} delay={i * 0.06}>
-                <Media
-                  image={{ ...photo, isPlaceholder: false }}
-                  className="aspect-[4/3] border border-line"
-                />
-              </Reveal>
-            ))}
-          </div>
         </div>
+        <Reveal delay={0.1}>
+          <div className="mt-10">
+            <PhotoCarousel photos={GALLERY_PHOTOS} />
+          </div>
+        </Reveal>
       </section>
 
       {/* 4. Portfolio — clickable projects */}

@@ -3,6 +3,7 @@ import { Masterplan } from "@/components/Masterplan";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { CountUp } from "@/components/ui/CountUp";
 import { development, availabilityCounts, apartments } from "@/data";
 
 export const metadata: Metadata = {
@@ -59,7 +60,9 @@ export default function DevelopmentPage() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="font-display text-3xl text-accent">{value}</div>
+      <div className="font-display text-3xl text-accent">
+        <CountUp value={value} />
+      </div>
       <div className="mt-1 text-xs uppercase tracking-widest text-ink/50">{label}</div>
     </div>
   );
