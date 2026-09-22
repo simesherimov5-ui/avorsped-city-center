@@ -24,6 +24,19 @@ const SITE_TILES = [
   { key: "central", src: "/images/site/central-area.jpg", label: "Централна површина" },
 ];
 
+// Best-effort marker centers over each building's rooftop in the real aerial
+// photo (percentages of the image, marker centered via translate). The photo
+// has no printed labels, so this mapping is a visual estimate calibrated
+// against the client's reference — adjust here if a number still looks off.
+const AERIAL_HOTSPOTS: Record<string, { top: string; left: string }> = {
+  b01: { top: "18%", left: "19%" },
+  b02: { top: "46%", left: "21%" },
+  b03: { top: "28%", left: "49%" },
+  b04: { top: "54%", left: "68%" },
+  b05: { top: "78%", left: "84%" },
+  b06: { top: "78%", left: "49%" },
+};
+
 export function Masterplan({ variant = "full" }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -70,91 +83,63 @@ export function Masterplan({ variant = "full" }: MasterplanProps) {
         ))}
       </div>
 
-      {/* Tablet/desktop: true site layout, positioned to match the real masterplan */}
-      <div
-        className="mx-auto hidden max-w-3xl gap-3 sm:grid sm:gap-4"
-        style={{ gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "repeat(4, auto)" }}
-      >
+      {/* Tablet/desktop: real aerial photo with clickable hotspots per building */}
+      <div className="relative mx-auto hidden aspect-[16/9] w-full max-w-5xl overflow-hidden border border-line sm:block">
+        <Media
+          image={{
+            src: "/images/site/masterplan-aerial.jpg",
+            alt: "Ситуационен план — аерален поглед на комплексот",
+            isPlaceholder: false,
+          }}
+          className="h-full w-full"
+          sizes="(max-width: 1280px) 100vw, 1024px"
+        />
+
         {buildings.map((building) => {
+          const spot = AERIAL_HOTSPOTS[building.id];
+          if (!spot) return null;
+
           const units = apartments.filter((a) => a.buildingId === building.id);
           const available = units.filter((a) => a.status === "available").length;
           const isHovered = hovered === building.id;
 
           return (
-            <motion.div
+            <Link
               key={building.id}
-              style={{
-                gridColumn: building.position.col + 1,
-                gridRow: building.position.row + 1,
-              }}
-              onHoverStart={() => setHovered(building.id)}
-              onHoverEnd={() => setHovered(null)}
+              href={`/development/${building.id}`}
+              onMouseEnter={() => setHovered(building.id)}
+              onMouseLeave={() => setHovered(null)}
+              onFocus={() => setHovered(building.id)}
+              onBlur={() => setHovered(null)}
+              className="focus-ring group absolute -translate-x-1/2 -translate-y-1/2"
+              style={spot}
             >
-              <Link
-                href={`/development/${building.id}`}
-                className="focus-ring group relative block aspect-[4/5] overflow-hidden border border-line bg-charcoal text-warm-white"
+              <motion.div
+                animate={{
+                  scale: isHovered ? 1.15 : 1,
+                  boxShadow: isHovered ? "0 0 0 8px rgba(184,150,46,0.3)" : "0 0 0 0px rgba(184,150,46,0)",
+                }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white text-xs font-bold text-black shadow-md sm:h-9 sm:w-9 sm:text-sm"
               >
-                <div className="absolute inset-0">
-                  <Media image={building.exteriorImage} tone="dark" className="h-full w-full" />
+                {building.shortLabel}
+              </motion.div>
+
+              <motion.div
+                initial={false}
+                animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 6 }}
+                className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 w-44 -translate-x-1/2 rounded-sm border border-line bg-charcoal p-3 text-left text-warm-white shadow-lg"
+              >
+                <div className="font-display text-base">{building.name}</div>
+                <div className="mt-1.5 space-y-0.5 text-[11px] text-warm-white/70">
+                  <div>{building.floors.length} ката · {building.totalApartments} станови</div>
+                  <div>{available} достапни сега</div>
+                  <div>{STATUS_LABEL[building.status]}</div>
                 </div>
-                <motion.div
-                  animate={{ opacity: isHovered ? 1 : 0.35 }}
-                  className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-transparent"
-                />
-                <div className="relative flex h-full flex-col justify-between p-3 sm:p-4">
-                  <span className="font-display text-2xl sm:text-3xl">{building.shortLabel}</span>
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-warm-white/70">
-                      {building.name}
-                    </div>
-                    <motion.div
-                      initial={false}
-                      animate={{ height: isHovered ? "auto" : 0, opacity: isHovered ? 1 : 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-2 space-y-0.5 text-[11px] text-warm-white/70">
-                        <div>{building.floors.length} ката · {building.totalApartments} станови</div>
-                        <div>{available} достапни сега</div>
-                        <div>{STATUS_LABEL[building.status]}</div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+              </motion.div>
+            </Link>
           );
         })}
-
-        <div
-          style={{ gridColumn: 2, gridRow: 2 }}
-          className="group relative flex items-end overflow-hidden border border-line"
-        >
-          <div className="absolute inset-0">
-            <Media
-              image={{ src: "/images/site/courtyard.jpg", alt: "Двор", isPlaceholder: false }}
-              className="h-full w-full"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
-          <span className="relative p-2 text-[11px] uppercase tracking-widest text-warm-white sm:p-3">
-            Двор
-          </span>
-        </div>
-        <div
-          style={{ gridColumn: 2, gridRow: 3 }}
-          className="group relative flex items-end overflow-hidden border border-line"
-        >
-          <div className="absolute inset-0">
-            <Media
-              image={{ src: "/images/site/central-area.jpg", alt: "Централна површина", isPlaceholder: false }}
-              className="h-full w-full"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
-          <span className="relative p-2 text-[11px] uppercase tracking-widest text-warm-white sm:p-3">
-            Централна површина
-          </span>
-        </div>
       </div>
 
       {variant === "full" && (

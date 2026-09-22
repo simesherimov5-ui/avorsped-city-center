@@ -6,6 +6,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { CountUp } from "@/components/ui/CountUp";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
 import { development, projects, companyStats, availabilityCounts, apartments } from "@/data";
@@ -133,7 +134,9 @@ export default function HomePage() {
             <div className="mt-14 grid grid-cols-2 gap-6 border-t border-line pt-10 sm:grid-cols-4">
               {companyStats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="font-display text-3xl text-accent">{stat.value}</div>
+                  <div className="font-display text-3xl text-accent">
+                    <CountUp value={stat.value} />
+                  </div>
                   <div className="mt-1 text-xs uppercase tracking-widest text-ink/50">{stat.label}</div>
                 </div>
               ))}
