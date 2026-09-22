@@ -67,7 +67,11 @@ export default function HomePage() {
       <section className="bg-silver py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Reveal>
-            <SectionHeading eyebrow="Визуелизации" title="City Center во слики" />
+            <SectionHeading
+              eyebrow="Визуелизации"
+              title="Визуелизација"
+              description="Погледнете го домот пред да го изградиме — секој агол, секоја линија, секој детаљ."
+            />
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {GALLERY_PHOTOS.map((photo, i) => (
