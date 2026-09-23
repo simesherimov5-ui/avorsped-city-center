@@ -65,10 +65,6 @@ h1, h2, h3, h4 {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-
-  .autoplay-video {
-    display: none;
-  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

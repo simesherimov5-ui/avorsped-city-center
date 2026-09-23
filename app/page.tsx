@@ -94,20 +94,6 @@ export default function HomePage() {
             <PhotoCarousel photos={GALLERY_PHOTOS} />
           </div>
         </Reveal>
-        <Reveal delay={0.15}>
-          <div className="mx-auto mt-6 max-w-7xl px-6 lg:px-10">
-            <video
-              className="autoplay-video aspect-video w-full border border-line object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/images/exteriors/exterior-hero-wide.jpg"
-            >
-              <source src="/videos/city-center-hero.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </Reveal>
       </section>
 
       {/* 4. Portfolio — clickable projects */}

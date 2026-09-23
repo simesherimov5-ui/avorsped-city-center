@@ -37,23 +37,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </div>
 
       <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
-        <Media
-          image={project.heroImage}
-          label={`${project.name} - насловна визуелизација`}
-          className="aspect-[16/7]"
-          sizes="100vw"
-        />
+        {project.gallery.length > 0 ? (
+          <PhotoCarousel photos={project.gallery} />
+        ) : (
+          <Media
+            image={project.heroImage}
+            label={`${project.name} - насловна визуелизација`}
+            className="aspect-[16/7]"
+            sizes="100vw"
+          />
+        )}
         <div className="mt-8 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="text-xs uppercase tracking-widest text-accent">{project.location}</div>
             <h1 className="mt-1 font-display text-4xl">{project.name}</h1>
             <p className="mt-5 leading-relaxed text-ink/70">{project.description}</p>
-
-            {project.gallery.length > 0 && (
-              <div className="mt-10">
-                <PhotoCarousel photos={project.gallery} />
-              </div>
-            )}
 
             {project.apartmentTypes && (
               <div className="mt-12">
