@@ -1,4 +1,5 @@
-import { Building2, ShieldCheck, Sparkles, Landmark, Ruler, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Building2, ShieldCheck, Sparkles, Landmark, Ruler, MapPin, ArrowRight } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { ProjectCard } from "@/components/ProjectCard";
 import { StatusLegend } from "@/components/ui/StatusBadge";
@@ -13,14 +14,17 @@ const HIGHLIGHTS = [
   {
     title: "30 години искуство",
     quote: "Секој проект го градиме со истата посветеност како да е нашиот прв.",
+    href: "/about",
   },
   {
     title: "Квалитет",
     quote: "Не прифаќаме кратенки — секој детал поминува низ строга контрола пред да биде завршен.",
+    href: "/development",
   },
   {
     title: "Доверба",
     quote: "Транспарентен процес на продажба, од првиот разговор до предавањето на клучевите.",
+    href: "/contact",
   },
 ];
 
@@ -49,12 +53,21 @@ export default function HomePage() {
       {/* 2. Highlights — three short quotes */}
       <section className="bg-warm-white py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="grid gap-12 sm:grid-cols-3">
+          <div className="grid gap-12 sm:grid-cols-3 sm:divide-x sm:divide-line">
             {HIGHLIGHTS.map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
-                <div className="border border-line p-6">
-                  <div className="font-display text-lg">{item.title}</div>
-                  <p className="mt-2 text-sm text-ink/60">&bdquo;{item.quote}&ldquo;</p>
+                <div className="sm:px-8 sm:first:pl-0 sm:last:pr-0">
+                  <h3 className="inline-block border-b-4 border-accent pb-1 font-display text-3xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-relaxed text-ink/60">{item.quote}</p>
+                  <Link
+                    href={item.href}
+                    aria-label={item.title}
+                    className="focus-ring mt-6 flex h-9 w-9 items-center justify-center rounded-full border-2 border-accent text-accent transition-colors hover:bg-accent hover:text-charcoal"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </Reveal>
             ))}
