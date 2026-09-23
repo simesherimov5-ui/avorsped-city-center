@@ -74,6 +74,28 @@ export const projects: Project[] = [
       { label: "Локација", value: "Северна Македонија" },
     ],
   },
+  {
+    id: "dojranski-raj",
+    slug: "dojranski-raj",
+    name: "Дојрански Рај",
+    location: "Стар Дојран — Сретеново, Северна Македонија",
+    status: "under-construction",
+    year: 2027,
+    units: 30,
+    description:
+      "Гарсоњери од 27 до 41 м2 на чекор од Дојранското Езеро, во Сретеново - Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
+    tagline: "Дојран како никогаш досега",
+    distanceHighlights: ["На плажа Фук Так", "Чекор до Дојранското Езеро"],
+    heroImage: { src: "", alt: "Дојрански Рај", isPlaceholder: true },
+    gallery: [{ src: "", alt: "Дојрански Рај - визуелизација", isPlaceholder: true }],
+    specifications: [
+      { label: "Локација", value: "Стар Дојран - Сретеново (плажа Фук Так)" },
+      { label: "Површини", value: "27 - 41 м2" },
+      { label: "Цена", value: "1 250 - 1 350 €/м2 со ДДВ" },
+      { label: "Вселување", value: "Јули 2027" },
+      { label: "Контакт", value: "071/333-088" },
+    ],
+  },
 ];
 
 export const companyStats: CompanyStat[] = [
