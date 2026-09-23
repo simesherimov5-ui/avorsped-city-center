@@ -19,7 +19,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <Link
-      href={project.isFlagship ? "/development" : `/projects/${project.slug}`}
+      href={project.href ?? (project.isFlagship ? "/development" : `/projects/${project.slug}`)}
       className="focus-ring group block border border-line bg-warm-white"
     >
       <div className="relative overflow-hidden">

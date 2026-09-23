@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { projects } from "@/data";
 import { Media } from "@/components/ui/Media";
+import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { Button } from "@/components/ui/Button";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
 import { development } from "@/data";
@@ -48,11 +49,28 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <h1 className="mt-1 font-display text-4xl">{project.name}</h1>
             <p className="mt-5 leading-relaxed text-ink/70">{project.description}</p>
 
-            <div className="mt-10 grid grid-cols-3 gap-3">
-              {project.gallery.map((img, i) => (
-                <Media key={i} image={img} className="aspect-square" />
-              ))}
-            </div>
+            {project.gallery.length > 0 && (
+              <div className="mt-10">
+                <PhotoCarousel photos={project.gallery} />
+              </div>
+            )}
+
+            {project.apartmentTypes && (
+              <div className="mt-12">
+                <h2 className="font-display text-2xl">Распоред на станови</h2>
+                <div className="mt-6 space-y-8">
+                  {project.apartmentTypes.map((type) => (
+                    <div key={type.label}>
+                      <Media image={type.image} label={type.label} className="aspect-[16/11]" />
+                      <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+                        <div className="font-medium">{type.label}</div>
+                        <div className="text-sm text-accent">{type.area}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {project.isFlagship && (
               <div className="mt-12">

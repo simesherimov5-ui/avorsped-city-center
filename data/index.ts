@@ -65,8 +65,43 @@ export const projects: Project[] = [
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
-    heroImage: { src: "", alt: "Станбена Куќа", isPlaceholder: true },
-    gallery: [{ src: "", alt: "Станбена Куќа - концептуална визуелизација", isPlaceholder: true }],
+    heroImage: { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
+    gallery: [
+      { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/spalna-soba.jpg", alt: "Станбена Куќа — спална соба", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/spalna-soba-2.jpg", alt: "Станбена Куќа — спална соба 2", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/detska-soba.jpg", alt: "Станбена Куќа — детска соба", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/hodnik.jpg", alt: "Станбена Куќа — ходник", isPlaceholder: false },
+    ],
+    apartmentTypes: [
+      {
+        label: "Четирисобен — Стан 1 / Приземје",
+        area: "115 м² + 50 м² двор",
+        image: {
+          src: "/images/stanbena-zgrada/floorplans/stan-1-prizemje.jpg",
+          alt: "Распоред — Стан 1, Приземје, четирисобен",
+          isPlaceholder: false,
+        },
+      },
+      {
+        label: "Трособен — Стан 2, 4, 6 / Кат 1, 2, 3",
+        area: "87 м²",
+        image: {
+          src: "/images/stanbena-zgrada/floorplans/stan-2-4-6-kat.jpg",
+          alt: "Распоред — Стан 2, 4, 6, трособен",
+          isPlaceholder: false,
+        },
+      },
+      {
+        label: "Трособен — Стан 3, 5, 7 / Кат 1, 2, 3",
+        area: "83 м²",
+        image: {
+          src: "/images/stanbena-zgrada/floorplans/stan-3-5-7-kat.jpg",
+          alt: "Распоред — Стан 3, 5, 7, трособен",
+          isPlaceholder: false,
+        },
+      },
+    ],
     specifications: [
       { label: "Локација", value: "Ул. Цветан Димов бр. 16, Струмица" },
       { label: "Вкупно станови", value: "7" },
@@ -86,8 +121,16 @@ export const projects: Project[] = [
       "Гарсоњери од 27 до 41 м2 на чекор од Дојранското Езеро, во Сретеново - Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
     tagline: "Дојран како никогаш досега",
     distanceHighlights: ["На плажа Фук Так", "Чекор до Дојранското Езеро"],
-    heroImage: { src: "", alt: "Дојрански Рај", isPlaceholder: true },
-    gallery: [{ src: "", alt: "Дојрански Рај - визуелизација", isPlaceholder: true }],
+    href: "/dojran",
+    heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
+    gallery: [
+      { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
+      { src: "/images/dojran/facade-2.jpg", alt: "Дојрански Рај — фасада 2", isPlaceholder: false },
+      { src: "/images/dojran/facade-3.jpg", alt: "Дојрански Рај — фасада 3", isPlaceholder: false },
+      { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
+      { src: "/images/dojran/aerial-1.jpg", alt: "Дојрански Рај — аерален поглед", isPlaceholder: false },
+      { src: "/images/dojran/aerial-beach.jpg", alt: "Дојрански Рај — плажа Фук Так", isPlaceholder: false },
+    ],
     specifications: [
       { label: "Локација", value: "Стар Дојран - Сретеново (плажа Фук Так)" },
       { label: "Површини", value: "27 - 41 м2" },

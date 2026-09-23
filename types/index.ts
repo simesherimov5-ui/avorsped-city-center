@@ -102,6 +102,12 @@ export interface Project {
   statusLabelOverride?: string;
   tagline?: string;
   distanceHighlights?: string[];
+  href?: string;
+  apartmentTypes?: {
+    label: string;
+    area: string;
+    image: { src: string; alt: string; isPlaceholder: boolean };
+  }[];
 }
 
 export interface CompanyStat {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -7,12 +7,6 @@ import { Footer } from "@/components/Footer";
 import { I18nProvider } from "@/lib/i18n";
 import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["400", "500", "600"],
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="mk" className={inter.variable}>
       <body className="antialiased">
         <script
           type="application/ld+json"
