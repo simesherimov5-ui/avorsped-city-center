@@ -24,7 +24,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
   const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
 
   return (
-    <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/7]">
+    <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/8]">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={index}

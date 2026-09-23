@@ -12,7 +12,7 @@ export function ConstructionTimeline({ stages }: { stages: ConstructionStage[] }
   return (
     <div>
       <div className="relative flex justify-between overflow-x-auto pb-2">
-        <div className="absolute left-0 right-0 top-3 h-px bg-line" aria-hidden />
+        <div className="absolute left-0 right-0 top-[18px] h-px bg-line" aria-hidden />
         {stages.map((stage) => {
           const isActive = stage.key === activeKey;
           return (
@@ -23,7 +23,7 @@ export function ConstructionTimeline({ stages }: { stages: ConstructionStage[] }
             >
               <span
                 className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full border text-[10px]",
+                  "flex h-9 w-9 items-center justify-center rounded-full border text-[10px]",
                   stage.percentComplete === 100
                     ? "border-accent bg-accent text-charcoal"
                     : isActive

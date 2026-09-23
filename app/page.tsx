@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Building2, ShieldCheck, Sparkles, Landmark, Ruler, MapPin, ArrowRight } from "lucide-react";
 import { Hero } from "@/components/Hero";
-import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectShowcase } from "@/components/ProjectShowcase";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -60,14 +60,14 @@ export default function HomePage() {
             {HIGHLIGHTS.map((item, i) => (
               <Reveal key={item.title} delay={i * 0.08}>
                 <div className="sm:px-8 sm:first:pl-0 sm:last:pr-0">
-                  <h3 className="inline-block border-b-4 border-accent pb-1 font-display text-3xl">
+                  <h3 className="inline-block border-b-2 border-accent pb-2 font-display text-2xl sm:text-3xl">
                     {item.title}
                   </h3>
                   <p className="mt-4 text-sm leading-relaxed text-ink/60">{item.quote}</p>
                   <Link
                     href={item.href}
                     aria-label={item.title}
-                    className="focus-ring mt-6 flex h-9 w-9 items-center justify-center rounded-full border-2 border-accent text-accent transition-colors hover:bg-accent hover:text-charcoal"
+                    className="focus-ring mt-7 flex h-9 w-9 items-center justify-center rounded-full border border-accent text-accent transition-colors hover:bg-accent hover:text-charcoal"
                   >
                     <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -86,30 +86,29 @@ export default function HomePage() {
               eyebrow="Визуелизации"
               title="Визуелизација"
               description="Погледнете го домот пред да го изградиме — секој агол, секоја линија, секој детал."
+              align="center"
             />
           </Reveal>
         </div>
         <Reveal delay={0.1}>
           <div className="mt-10">
-            <PhotoCarousel photos={GALLERY_PHOTOS} />
+            <PhotoCarousel photos={GALLERY_PHOTOS} className="max-w-5xl" />
           </div>
         </Reveal>
       </section>
 
-      {/* 4. Portfolio — clickable projects */}
+      {/* 4. Portfolio — large stacked project showcase */}
       <section className="bg-warm-white py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Reveal>
             <SectionHeading eyebrow="Нашето портфолио" title="Портфолио на проекти" />
           </Reveal>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p, i) => (
-              <Reveal key={p.id} delay={i * 0.08}>
-                <ProjectCard project={p} />
-              </Reveal>
-            ))}
-          </div>
         </div>
+        <Reveal delay={0.1}>
+          <div className="mx-auto mt-12 max-w-7xl px-6 lg:px-10">
+            <ProjectShowcase projects={projects} />
+          </div>
+        </Reveal>
       </section>
 
       {/* 5. Why us + final CTA */}
@@ -121,10 +120,10 @@ export default function HomePage() {
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {WHY_US.map((item, i) => (
               <Reveal key={item.title} delay={i * 0.06}>
-                <div className="flex flex-col gap-3 border-t border-line pt-5">
+                <div className="flex flex-col gap-3.5 border-t border-line pt-6">
                   <item.icon className="h-5 w-5 text-accent" strokeWidth={1.5} />
-                  <div className="font-display text-lg">{item.title}</div>
-                  <p className="text-sm text-ink/60">{item.desc}</p>
+                  <div className="font-display text-xl">{item.title}</div>
+                  <p className="text-sm leading-relaxed text-ink/60">{item.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -136,7 +135,7 @@ export default function HomePage() {
                   <div className="font-display text-3xl text-accent">
                     <CountUp value={stat.value} />
                   </div>
-                  <div className="mt-1 text-xs uppercase tracking-widest text-ink/50">{stat.label}</div>
+                  <div className="eyebrow mt-1.5 text-ink/50">{stat.label}</div>
                 </div>
               ))}
             </div>

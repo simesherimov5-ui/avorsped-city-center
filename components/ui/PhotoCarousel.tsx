@@ -6,14 +6,22 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
 
-export function PhotoCarousel({ photos }: { photos: { src: string; alt: string }[] }) {
+export function PhotoCarousel({
+  photos,
+  className,
+  fit,
+}: {
+  photos: { src: string; alt: string }[];
+  className?: string;
+  fit?: "cover" | "contain";
+}) {
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0]);
 
   const go = (dir: 1 | -1) => setIndex(([i]) => [(i + dir + photos.length) % photos.length, dir]);
   const goTo = (i: number) => setIndex(([current]) => [i, i > current ? 1 : -1]);
 
   return (
-    <div className="relative mx-auto aspect-[16/9] max-w-3xl overflow-hidden">
+    <div className={cn("relative mx-auto aspect-[16/9] overflow-hidden", className ?? "max-w-2xl")}>
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={index}
@@ -28,6 +36,7 @@ export function PhotoCarousel({ photos }: { photos: { src: string; alt: string }
             image={{ ...photos[index], isPlaceholder: false }}
             className="h-full w-full"
             sizes="100vw"
+            fit={fit}
           />
         </motion.div>
       </AnimatePresence>

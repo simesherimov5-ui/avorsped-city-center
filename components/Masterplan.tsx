@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { buildings, apartments } from "@/data";
 import { Media } from "@/components/ui/Media";
+import { cn } from "@/lib/cn";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -38,7 +39,7 @@ export function Masterplan({ variant = "full" }: MasterplanProps) {
   return (
     <div className="w-full">
       {/* Real aerial photo with clickable hotspots per building — same on every screen size */}
-      <div className="relative mx-auto aspect-[16/9] w-full max-w-5xl overflow-hidden border border-line">
+      <div className="relative mx-auto aspect-[16/9] w-full max-w-4xl overflow-hidden border border-line">
         <Media
           image={{
             src: "/images/site/masterplan-aerial.jpg",
@@ -74,7 +75,12 @@ export function Masterplan({ variant = "full" }: MasterplanProps) {
                   boxShadow: isHovered ? "0 0 0 8px rgba(184,150,46,0.3)" : "0 0 0 0px rgba(184,150,46,0)",
                 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-black text-xs font-bold text-white shadow-md sm:h-9 sm:w-9 sm:text-sm"
+                className={cn(
+                  "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold transition-colors sm:h-9 sm:w-9 sm:text-sm",
+                  isHovered
+                    ? "border-accent bg-accent text-charcoal"
+                    : "border-warm-white/50 bg-charcoal/85 text-warm-white"
+                )}
               >
                 {building.shortLabel}
               </motion.div>
@@ -82,10 +88,10 @@ export function Masterplan({ variant = "full" }: MasterplanProps) {
               <motion.div
                 initial={false}
                 animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 6 }}
-                className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 w-44 -translate-x-1/2 rounded-sm border border-line bg-charcoal p-3 text-left text-warm-white shadow-lg"
+                className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-warm-white/10 bg-charcoal p-3.5 text-left text-warm-white shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]"
               >
                 <div className="font-display text-base">{building.name}</div>
-                <div className="mt-1.5 space-y-0.5 text-[11px] text-warm-white/70">
+                <div className="mt-2 space-y-1 text-[11px] text-warm-white/70">
                   <div>{building.floors.length} ката · {building.totalApartments} станови</div>
                   <div>{available} достапни сега</div>
                   <div>{STATUS_LABEL[building.status]}</div>

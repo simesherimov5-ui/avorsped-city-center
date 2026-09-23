@@ -20,17 +20,17 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={project.href ?? (project.isFlagship ? "/development" : `/projects/${project.slug}`)}
-      className="focus-ring group block border border-line bg-warm-white"
+      className="focus-ring group block border border-line bg-warm-white transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.35)]"
     >
       <div className="relative overflow-hidden">
         <Media
           image={project.heroImage}
           label={`${project.name} - визуелизација`}
-          className="aspect-[4/3] transition-transform duration-500 ease-out group-hover:scale-105"
+          className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <span
           className={cn(
-            "absolute left-3 top-3 px-2.5 py-1 text-[10px] uppercase tracking-widest",
+            "eyebrow absolute left-3 top-3 px-2.5 py-1",
             STATUS_STYLE[project.status]
           )}
         >
@@ -55,10 +55,10 @@ export function ProjectCard({ project }: { project: Project }) {
           </div>
         )}
       </div>
-      <div className="p-5">
+      <div className="border-t border-line p-6">
         <div className="font-display text-xl">{project.name}</div>
-        <div className="mt-1 text-sm text-ink/50">{project.location}</div>
-        <div className="mt-3 flex gap-4 text-xs text-ink/60">
+        <div className="mt-1.5 text-sm text-ink/50">{project.location}</div>
+        <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-ink/60">
           <span>{project.year}</span>
           <span>{project.units} станови</span>
         </div>

@@ -5,9 +5,29 @@ import { ChevronLeft } from "lucide-react";
 import { projects } from "@/data";
 import { Media } from "@/components/ui/Media";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
+import { RoomVideoTour } from "@/components/RoomVideoTour";
+import { StanbenaFloorPlan } from "@/components/StanbenaFloorPlan";
 import { Button } from "@/components/ui/Button";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
 import { development } from "@/data";
+
+const VISTA_HEIGHTS_ROOM_TOUR = [
+  {
+    label: "Дневна соба",
+    image: { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Дневна соба", isPlaceholder: false },
+    video: "/videos/stanbena-zgrada/dnevna-soba.mp4",
+  },
+  {
+    label: "Кујна и трпезарија",
+    image: { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Кујна и трпезарија", isPlaceholder: false },
+    video: "/videos/stanbena-zgrada/kujna.mp4",
+  },
+  {
+    label: "Двор",
+    image: { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Двор", isPlaceholder: false },
+    video: "/videos/stanbena-zgrada/dvor.mp4",
+  },
+];
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -38,7 +58,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
         {project.gallery.length > 0 ? (
-          <PhotoCarousel photos={project.gallery} />
+          <PhotoCarousel
+            photos={project.gallery}
+            className={project.id === "vista-heights" ? "max-w-4xl" : undefined}
+            fit={project.id === "vista-heights" ? "contain" : undefined}
+          />
         ) : (
           <Media
             image={project.heroImage}
@@ -53,21 +77,41 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <h1 className="mt-1 font-display text-4xl">{project.name}</h1>
             <p className="mt-5 leading-relaxed text-ink/70">{project.description}</p>
 
-            {project.apartmentTypes && (
+            {project.id === "vista-heights" && (
               <div className="mt-12">
-                <h2 className="font-display text-2xl">Распоред на станови</h2>
-                <div className="mt-6 space-y-8">
-                  {project.apartmentTypes.map((type) => (
-                    <div key={type.label}>
-                      <Media image={type.image} label={type.label} className="aspect-[16/11]" />
-                      <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
-                        <div className="font-medium">{type.label}</div>
-                        <div className="text-sm text-accent">{type.area}</div>
-                      </div>
-                    </div>
-                  ))}
+                <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
+                <p className="mt-2 text-sm text-ink/60">Кликнете на просторија за да пуштите кратко видео разгледување.</p>
+                <div className="mt-6">
+                  <RoomVideoTour rooms={VISTA_HEIGHTS_ROOM_TOUR} />
                 </div>
               </div>
+            )}
+
+            {project.id === "vista-heights" ? (
+              <div className="mt-12">
+                <h2 className="font-display text-2xl">Распоред на просториите</h2>
+                <p className="mt-2 text-sm text-ink/60">Кликнете на број за да пуштите видео од таа просторија.</p>
+                <div className="mt-6">
+                  <StanbenaFloorPlan />
+                </div>
+              </div>
+            ) : (
+              project.apartmentTypes && (
+                <div className="mt-12">
+                  <h2 className="font-display text-2xl">Распоред на станови</h2>
+                  <div className="mt-6 space-y-8">
+                    {project.apartmentTypes.map((type) => (
+                      <div key={type.label}>
+                        <Media image={type.image} label={type.label} className="aspect-[16/11]" />
+                        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+                          <div className="font-medium">{type.label}</div>
+                          <div className="text-sm text-accent">{type.area}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
             )}
 
             {project.isFlagship && (

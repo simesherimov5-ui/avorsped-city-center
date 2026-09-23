@@ -20,6 +20,7 @@ export function Media({
   tone,
   label,
   priority,
+  fit = "cover",
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
 }: {
   image: MediaImage;
@@ -27,6 +28,7 @@ export function Media({
   tone?: "light" | "dark";
   label?: string;
   priority?: boolean;
+  fit?: "cover" | "contain";
   sizes?: string;
 }) {
   if (image.isPlaceholder || !image.src) {
@@ -34,13 +36,13 @@ export function Media({
   }
 
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={cn("relative overflow-hidden", fit === "contain" && "bg-silver", className)}>
       <Image
         src={image.src}
         alt={image.alt}
         fill
         sizes={sizes}
-        className="object-cover"
+        className={fit === "contain" ? "object-contain" : "object-cover"}
         priority={priority}
         quality={priority ? 100 : 90}
       />

@@ -69,10 +69,8 @@ export const projects: Project[] = [
     gallery: [
       { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/spalna-soba.jpg", alt: "Станбена Куќа — спална соба", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/spalna-soba-2.jpg", alt: "Станбена Куќа — спална соба 2", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/detska-soba.jpg", alt: "Станбена Куќа — детска соба", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/hodnik.jpg", alt: "Станбена Куќа — ходник", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена Куќа — кујна и трпезарија", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена Куќа — двор", isPlaceholder: false },
     ],
     apartmentTypes: [
       {

@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
-import { ProjectSlideshow } from "@/components/ProjectSlideshow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
-import { development, availabilityCounts, apartments, projects } from "@/data";
+import { development, availabilityCounts, apartments } from "@/data";
 
 export const metadata: Metadata = {
   title: "Тековен проект — City Center",
@@ -17,10 +16,6 @@ export default function DevelopmentPage() {
 
   return (
     <div className="pt-28">
-      <section className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
-        <ProjectSlideshow projects={projects} />
-      </section>
-
       <section className="mx-auto max-w-7xl px-6 py-16 text-center lg:px-10">
         <SectionHeading
           eyebrow={development.location}

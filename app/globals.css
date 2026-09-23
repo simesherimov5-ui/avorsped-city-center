@@ -10,6 +10,15 @@
   --color-accent: #b8962e;
   --color-accent-soft: #ecdca3;
   --color-line: #dedad0;
+
+  /* Typography scale — named tokens for consistent size + line-height pairs,
+     reused across components instead of picking numbers ad hoc. */
+  --text-body-size: 1.0625rem;
+  --text-body-leading: 1.7;
+  --text-lead-size: 1.1875rem;
+  --text-lead-leading: 1.75;
+  --text-caption-size: 0.8125rem;
+  --text-caption-leading: 1.5;
 }
 
 @theme inline {
@@ -22,7 +31,7 @@
   --color-accent: var(--color-accent);
   --color-accent-soft: var(--color-accent-soft);
   --color-line: var(--color-line);
-  --font-display: var(--font-inter);
+  --font-display: var(--font-fraunces);
   --font-sans: var(--font-inter);
 }
 
@@ -38,11 +47,36 @@ body {
   background: var(--color-cream);
   color: var(--color-charcoal);
   font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-leading);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display), Georgia, serif;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.12;
+}
+
+.text-lead {
+  font-size: var(--text-lead-size);
+  line-height: var(--text-lead-leading);
+}
+
+.text-caption {
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-leading);
+}
+
+/* Small uppercase label used above headings and on section eyebrows —
+   one consistent size/tracking pair instead of ad hoc tracking-widest calls. */
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 ::selection {

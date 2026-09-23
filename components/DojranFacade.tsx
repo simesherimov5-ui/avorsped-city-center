@@ -10,17 +10,17 @@ import { cn } from "@/lib/cn";
 // building's visible floors (top floor first). Approximate — the photo
 // has no markers, so these are calibrated by eye against the elevation.
 const BANDS = [
-  { number: 3, top: "0%", height: "24%" },
-  { number: 2, top: "24%", height: "20%" },
-  { number: 1, top: "44%", height: "19%" },
-  { number: 0, top: "63%", height: "14%" },
+  { number: 3, top: "19%", height: "21%" },
+  { number: 2, top: "40%", height: "11%" },
+  { number: 1, top: "51%", height: "12%" },
+  { number: 0, top: "63%", height: "12%" },
 ];
 
 export function DojranFacade({ image }: { image: { src: string; alt: string; isPlaceholder: boolean } }) {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <div className="relative">
+    <div className="relative self-start">
       <Media image={image} label="Дојрански Рај — фасада" className="aspect-[16/8]" sizes="100vw" />
       {BANDS.map((band) => {
         const floor = dojranFloors.find((f) => f.number === band.number);

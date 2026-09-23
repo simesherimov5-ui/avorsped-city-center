@@ -41,10 +41,10 @@ export function CompareBar() {
             })}
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <Button variant="ghost" onClick={clear} className="!px-3">
+            <Button variant="ghost" size="sm" onClick={clear} className="!px-3">
               Исчисти
             </Button>
-            <Button href="/compare" variant="primary">
+            <Button href="/compare" variant="primary" size="sm">
               Спореди
             </Button>
           </div>

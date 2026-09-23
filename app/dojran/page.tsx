@@ -15,26 +15,28 @@ export default function DojranPage() {
 
   return (
     <div className="pt-28">
-      <DojranFacade image={project.heroImage} />
+      <section className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+        <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
+          <DojranFacade image={project.heroImage} />
 
-      <section className="mx-auto max-w-3xl px-6 py-10 lg:px-10">
-        <div className="border border-line bg-warm-white p-5 sm:p-7">
-          <div className="text-[11px] uppercase tracking-widest text-accent">{project.location}</div>
-          <h1 className="mt-1.5 font-display text-xl sm:text-2xl">{project.name}</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/70">{project.description}</p>
+          <div className="border border-line bg-warm-white p-4 sm:p-5">
+            <div className="text-[11px] uppercase tracking-widest text-accent">{project.location}</div>
+            <h1 className="mt-1.5 font-display text-xl sm:text-2xl">{project.name}</h1>
+            <p className="mt-3 text-sm leading-relaxed text-ink/70">{project.description}</p>
 
-          <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 sm:grid-cols-4">
-            {project.specifications.map((s) => (
-              <div key={s.label}>
-                <div className="font-display text-sm text-accent">{s.value}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-widest text-ink/50">{s.label}</div>
-              </div>
-            ))}
-          </div>
+            <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5">
+              {project.specifications.map((s) => (
+                <div key={s.label}>
+                  <div className="font-display text-sm text-accent">{s.value}</div>
+                  <div className="mt-1 text-[10px] uppercase tracking-widest text-ink/50">{s.label}</div>
+                </div>
+              ))}
+            </div>
 
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button href="/consultation" variant="primary" size="sm">Закажи консултација</Button>
-            <Button href="/contact" variant="secondary" size="sm">Контактирај нè</Button>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Button href="/consultation" variant="primary" size="sm">Закажи консултација</Button>
+              <Button href="/contact" variant="secondary" size="sm">Контактирај нè</Button>
+            </div>
           </div>
         </div>
       </section>
