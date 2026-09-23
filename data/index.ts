@@ -65,8 +65,9 @@ export const projects: Project[] = [
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
-    heroImage: { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
+    heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
     gallery: [
+      { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/spalna-soba.jpg", alt: "Станбена Куќа — спална соба", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/spalna-soba-2.jpg", alt: "Станбена Куќа — спална соба 2", isPlaceholder: false },

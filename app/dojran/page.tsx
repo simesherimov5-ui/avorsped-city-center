@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Media } from "@/components/ui/Media";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { DojranFloorSelector } from "@/components/DojranFloorSelector";
+import { DojranFacade } from "@/components/DojranFacade";
 import { projects } from "@/data";
 
 export const metadata: Metadata = {
@@ -33,18 +33,13 @@ export default function DojranPage() {
 
       <section className="bg-cream py-16">
         <div className="mx-auto max-w-6xl px-6 lg:px-10">
-          <Media
-            image={project.heroImage}
-            label="Дојрански Рај — фасада"
-            className="aspect-[16/8]"
-            sizes="100vw"
-          />
+          <DojranFacade image={project.heroImage} />
           <div className="mt-12 grid gap-10 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <SectionHeading
                 eyebrow="Една зграда"
                 title="Изберете кат"
-                description="Кликнете на кат за да ги видите достапните станови на тој кат."
+                description="Кликнете на кат — на сликата или во листата — за да ги видите достапните станови на тој кат."
               />
             </div>
             <div>
