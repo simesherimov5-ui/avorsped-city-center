@@ -12,8 +12,8 @@ import { cn } from "@/lib/cn";
 const BANDS = [
   { number: 3, top: "0%", height: "24%" },
   { number: 2, top: "24%", height: "20%" },
-  { number: 1, top: "44%", height: "20%" },
-  { number: 0, top: "64%", height: "36%" },
+  { number: 1, top: "44%", height: "19%" },
+  { number: 0, top: "63%", height: "14%" },
 ];
 
 export function DojranFacade({ image }: { image: { src: string; alt: string; isPlaceholder: boolean } }) {
