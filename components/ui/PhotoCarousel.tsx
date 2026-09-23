@@ -13,7 +13,7 @@ export function PhotoCarousel({ photos }: { photos: { src: string; alt: string }
   const goTo = (i: number) => setIndex(([current]) => [i, i > current ? 1 : -1]);
 
   return (
-    <div className="relative aspect-[16/9] overflow-hidden">
+    <div className="relative mx-auto aspect-[16/9] max-w-3xl overflow-hidden">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={index}
