@@ -2,7 +2,7 @@ import type { UnitStatus } from "@/types";
 import { cn } from "@/lib/cn";
 import { statusLabel } from "@/lib/format";
 
-const DOT_COLOR: Record<UnitStatus, string> = {
+export const DOT_COLOR: Record<UnitStatus, string> = {
   available: "bg-emerald-600",
   reserved: "bg-amber-500",
   sold: "bg-ink/40",

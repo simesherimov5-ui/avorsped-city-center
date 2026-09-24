@@ -129,13 +129,13 @@ export default function HomePage() {
             ))}
           </div>
           <Reveal delay={0.3}>
-            <div className="mt-14 grid grid-cols-2 gap-6 border-t border-line pt-10 sm:grid-cols-4">
-              {companyStats.map((stat) => (
-                <div key={stat.label}>
-                  <div className="font-display text-3xl text-accent">
+            <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
+              {companyStats.map((stat, i) => (
+                <div key={stat.label} className={i > 0 ? "sm:pl-8" : undefined}>
+                  <div className="font-display text-4xl text-accent sm:text-5xl">
                     <CountUp value={stat.value} />
                   </div>
-                  <div className="eyebrow mt-1.5 text-ink/50">{stat.label}</div>
+                  <div className="eyebrow mt-2 text-ink/50">{stat.label}</div>
                 </div>
               ))}
             </div>
