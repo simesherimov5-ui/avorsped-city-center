@@ -8,6 +8,7 @@ import type {
   Room,
   UnitStatus,
 } from "@/types";
+import { b06Floor3Overview } from "@/lib/assets";
 
 // Pure, deterministic pseudo-random so server and client render identical mock data.
 function seeded(...nums: number[]): number {
@@ -364,6 +365,7 @@ export function generateDevelopment(): GeneratedDevelopment {
           number: f,
           label: `Кат ${f}`,
           apartmentIds: realApartments.map((a) => a.id),
+          officialOverviewImage: b06Floor3Overview,
         });
         continue;
       }
@@ -509,6 +511,23 @@ export function generateDevelopment(): GeneratedDevelopment {
       { name: "Макпетрол 051 Струмица 2", category: "Услуги", distance: "150 м" },
     ],
     mapQuery: "Ленинова, Струмица, Северна Македонија",
+    masterplanImage: {
+      src: "/images/site/masterplan-aerial.jpg",
+      alt: "Ситуационен план — аерален поглед на комплексот",
+      isPlaceholder: false,
+    },
+    // Best-effort marker centers over each building's rooftop in the real aerial
+    // photo (percentages of the image, marker centered via translate). The photo
+    // has no printed labels, so this mapping is a visual estimate calibrated
+    // against the client's reference — adjust here if a number still looks off.
+    buildingHotspots: {
+      b01: { top: "18%", left: "19%" },
+      b02: { top: "46%", left: "21%" },
+      b03: { top: "28%", left: "49%" },
+      b04: { top: "54%", left: "68%" },
+      b05: { top: "78%", left: "84%" },
+      b06: { top: "78%", left: "49%" },
+    },
   };
 
   return { development, apartments: allApartments };

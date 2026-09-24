@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Phone } from "lucide-react";
-import { apartments, getApartment, getBuilding, getApartmentsForFloor, companyInfo } from "@/data";
+import { apartments, getApartment, getBuilding, getApartmentsForFloor, companyInfo, development, projects } from "@/data";
 import { formatArea, formatPrice, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const apt = getApartment(id);
-  return { title: apt ? `Стан ${apt.number} — City Center` : "Стан" };
+  return { title: apt ? `Стан ${apt.number} — ${development.name}` : "Стан" };
 }
 
 export default async function ApartmentPage({ params }: { params: Promise<{ id: string }> }) {
@@ -32,9 +32,9 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   if (!apartment) notFound();
   const building = getBuilding(apartment.buildingId);
   const floorPlanImage = floorPlanImageForApartment(apartment);
-  const isRealFloorPlan = apartment.buildingId === "b06" && apartment.floor === 3;
+  const cityCenterId = projects.find((p) => p.id === "city-center")?.id ?? "";
 
-  const inquiryHref = `/consultation?kind=apartment-inquiry&project=${encodeURIComponent("City Center")}&building=${apartment.buildingId}&apartment=${apartment.id}`;
+  const inquiryHref = `/consultation?kind=apartment-inquiry&project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
 
   const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter(
     (a) => a.id !== apartment.id
@@ -95,7 +95,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     </tbody>
                   </table>
                   <p className="mt-3 text-xs leading-relaxed text-ink/40">
-                    {isRealFloorPlan
+                    {floorPlanImage.isExactMatch
                       ? `Точна архитектонска основа за Стан ${apartment.number}.`
                       : `Основата е пример за овој тип на стан. Мерењата во табелата се специфични за Стан ${apartment.number}.`}
                   </p>

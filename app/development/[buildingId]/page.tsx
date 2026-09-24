@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { getBuilding, apartments, buildings } from "@/data";
+import { getBuilding, apartments, buildings, development } from "@/data";
 import { availabilityCounts } from "@/data";
 import { Media } from "@/components/ui/Media";
-import { FloorSelector } from "@/components/FloorSelector";
+import { FloorList } from "@/components/FloorList";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -29,7 +29,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name} — City Center` : "Зграда" };
+  return { title: building ? `${building.name} — ${development.name}` : "Зграда" };
 }
 
 export default async function BuildingPage({
@@ -73,7 +73,14 @@ export default async function BuildingPage({
         <div className="mx-auto max-w-3xl px-6 lg:px-10">
           <SectionHeading eyebrow="Изберете кат" title="Изберете кат за да ја видите основата" align="center" />
           <div className="mt-10">
-            <FloorSelector building={building} />
+            <FloorList
+              basePath={`/development/${building.id}`}
+              floors={building.floors.map((floor) => {
+                const units = apartments.filter((a) => a.buildingId === building.id && a.floor === floor.number);
+                const available = units.filter((a) => a.status === "available").length;
+                return { number: floor.number, label: floor.label, meta: `${units.length} станови · ${available} достапни` };
+              })}
+            />
           </div>
         </div>
       </section>

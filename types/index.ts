@@ -1,6 +1,8 @@
 // Centralized type definitions for the entire data model.
 // Designed so a future CMS/backend can populate these shapes without UI changes.
 
+export type MediaImage = { src: string; alt: string; isPlaceholder: boolean };
+
 export type UnitStatus = "available" | "reserved" | "sold";
 
 export type Orientation =
@@ -47,6 +49,8 @@ export interface Floor {
   number: number; // 0 = ground
   label: string; // "Ground", "Floor 1", ...
   apartmentIds: string[];
+  /** Real, official full-floor architectural plan, when one exists — never fabricated for floors without it. */
+  officialOverviewImage?: MediaImage;
 }
 
 export interface Building {
@@ -81,6 +85,10 @@ export interface Development {
   heroImage: { src: string; alt: string; isPlaceholder: boolean };
   nearbyPoints: { name: string; category: string; distance: string }[];
   mapQuery: string;
+  /** Aerial/site-plan photo used by the interactive masterplan explorer. */
+  masterplanImage: MediaImage;
+  /** Marker positions for each building.id over masterplanImage, as percentages. */
+  buildingHotspots: Record<string, { top: string; left: string }>;
 }
 
 export type ProjectStatus = "completed" | "under-construction" | "upcoming";
@@ -135,6 +143,8 @@ export interface Project {
   floorPlanExplorer?: FloorPlanExplorerData;
   /** Optional construction-progress timeline, shown on the generic project page when present. */
   constructionStages?: ConstructionStage[];
+  /** Optional buildings for projects with building-level selection (e.g. the consultation form's dependent "building of interest" field). */
+  buildings?: Building[];
 }
 
 export interface CompanyStat {

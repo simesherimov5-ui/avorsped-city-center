@@ -5,7 +5,7 @@ import type { ConsultationRequest } from "@/types";
 
 export const metadata: Metadata = {
   title: "Закажи консултација",
-  description: "Закажи консултација со нашиот тим за продажба за City Center или за било кој друг наш проект.",
+  description: "Закажи консултација со нашиот тим за продажба за кој било од нашите проекти.",
 };
 
 export default async function ConsultationPage({
@@ -22,7 +22,7 @@ export default async function ConsultationPage({
         <SectionHeading
           eyebrow="Стапете во контакт"
           title={kind === "apartment-inquiry" ? "Прашај за овој стан" : "Закажи консултација"}
-          description="Разговарајте со нашиот тим за продажба за City Center или за било кој друг наш проект. Овој формулар е прототип — пораките сè уште не се испраќаат никаде."
+          description="Разговарајте со нашиот тим за продажба за кој било од нашите проекти. Овој формулар е прототип — пораките сè уште не се испраќаат никаде."
         />
         <div className="mt-10">
           <BookingForm

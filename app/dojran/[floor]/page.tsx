@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { DojranFloorSelector } from "@/components/DojranFloorSelector";
+import { FloorList } from "@/components/FloorList";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { dojranFloors, getDojranFloor } from "@/data/dojran";
 import { projects } from "@/data";
@@ -62,7 +62,11 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
 
           <aside>
             <div className="eyebrow mb-4 text-ink/40">Изберете кат</div>
-            <DojranFloorSelector activeFloor={floorNum} />
+            <FloorList
+              basePath="/dojran"
+              activeFloor={floorNum}
+              floors={dojranFloors.map((f) => ({ number: f.number, label: f.label, meta: f.unitsHint }))}
+            />
           </aside>
         </div>
       </section>

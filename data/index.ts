@@ -54,6 +54,7 @@ export const projects: Project[] = [
     ],
     href: "/development",
     constructionStages: development.constructionStages,
+    buildings: development.buildings,
   },
   {
     id: "vista-heights",

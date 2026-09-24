@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
 import { DOT_COLOR } from "@/components/ui/StatusBadge";
+import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
-import { development, availabilityCounts, apartments } from "@/data";
+import { development, availabilityCounts, apartments, buildings } from "@/data";
 
 export const metadata: Metadata = {
   title: "Тековен проект — City Center",
@@ -57,7 +58,14 @@ export default function DevelopmentPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-12">
-              <Masterplan variant="full" />
+              <Masterplan
+                variant="full"
+                buildings={buildings}
+                apartments={apartments}
+                image={development.masterplanImage}
+                hotspots={development.buildingHotspots}
+                basePath="/development"
+              />
             </div>
           </Reveal>
         </div>
@@ -158,6 +166,8 @@ export default function DevelopmentPage() {
           <Button href="/apartments" variant="primary">Пронајди го твојот стан</Button>
         </div>
       </section>
+
+      <OtherProjects currentProjectId="city-center" />
     </div>
   );
 }

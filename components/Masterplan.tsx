@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { buildings, apartments } from "@/data";
-import type { Building } from "@/types";
+import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
@@ -18,26 +17,23 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 interface MasterplanProps {
+  /** The buildings to plot — any project with more than one building can pass its own. */
+  buildings: Building[];
+  /** Used to compute each building's live availability count. */
+  apartments: Apartment[];
+  /** The aerial/site-plan photo the hotspots are positioned over. */
+  image: MediaImage;
+  /** Marker position per building.id, as percentages of `image`. */
+  hotspots: Record<string, { top: string; left: string }>;
+  /** Route prefix a building detail page lives under, e.g. "/development". */
+  basePath: string;
   variant?: "preview" | "full";
   className?: string;
 }
 
-// Best-effort marker centers over each building's rooftop in the real aerial
-// photo (percentages of the image, marker centered via translate). The photo
-// has no printed labels, so this mapping is a visual estimate calibrated
-// against the client's reference — adjust here if a number still looks off.
-const AERIAL_HOTSPOTS: Record<string, { top: string; left: string }> = {
-  b01: { top: "18%", left: "19%" },
-  b02: { top: "46%", left: "21%" },
-  b03: { top: "28%", left: "49%" },
-  b04: { top: "54%", left: "68%" },
-  b05: { top: "78%", left: "84%" },
-  b06: { top: "78%", left: "49%" },
-};
-
 type BuildingWithAvailability = Building & { available: number };
 
-export function Masterplan({ variant = "full", className }: MasterplanProps) {
+export function Masterplan({ buildings, apartments, image, hotspots, basePath, variant = "full", className }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -47,7 +43,7 @@ export function Masterplan({ variant = "full", className }: MasterplanProps) {
   }));
 
   const active = buildingStats.find((b) => b.id === selected) ?? null;
-  const zoomSpot = active ? AERIAL_HOTSPOTS[active.id] : null;
+  const zoomSpot = active ? hotspots[active.id] : null;
 
   return (
     <div className="w-full">
@@ -60,19 +56,11 @@ export function Masterplan({ variant = "full", className }: MasterplanProps) {
             animate={{ scale: zoomSpot ? 1.16 : 1 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Media
-              image={{
-                src: "/images/site/masterplan-aerial.jpg",
-                alt: "Ситуационен план — аерален поглед на комплексот",
-                isPlaceholder: false,
-              }}
-              className="h-full w-full"
-              sizes="(max-width: 1280px) 100vw, 1024px"
-            />
+            <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 1024px" />
           </motion.div>
 
           {buildingStats.map((building) => {
-            const spot = AERIAL_HOTSPOTS[building.id];
+            const spot = hotspots[building.id];
             if (!spot) return null;
 
             const isHovered = hovered === building.id;
@@ -146,7 +134,7 @@ export function Masterplan({ variant = "full", className }: MasterplanProps) {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="h-full"
               >
-                <BuildingPanel building={active} />
+                <BuildingPanel building={active} basePath={basePath} />
               </motion.div>
             ) : (
               <motion.div
@@ -219,7 +207,7 @@ export function Masterplan({ variant = "full", className }: MasterplanProps) {
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="mt-4"
             >
-              <BuildingPanel building={active} />
+              <BuildingPanel building={active} basePath={basePath} />
             </motion.div>
           ) : (
             <p className="mt-4 text-sm text-ink/50">
@@ -231,14 +219,14 @@ export function Masterplan({ variant = "full", className }: MasterplanProps) {
 
       {variant === "full" && !active && (
         <p className="mx-auto mt-6 hidden max-w-md text-center text-sm text-ink/40 lg:block">
-          Сите шест згради се достапни за истражување — изберете од планот или од листата.
+          Сите згради се достапни за истражување — изберете од планот или од листата.
         </p>
       )}
     </div>
   );
 }
 
-function BuildingPanel({ building }: { building: BuildingWithAvailability }) {
+function BuildingPanel({ building, basePath }: { building: BuildingWithAvailability; basePath: string }) {
   return (
     <div className="flex h-full flex-col border border-line bg-warm-white p-6">
       <div className="aspect-[4/3] overflow-hidden border border-line">
@@ -254,7 +242,7 @@ function BuildingPanel({ building }: { building: BuildingWithAvailability }) {
         <PanelStat label="Достапни" value={String(building.available)} />
         <PanelStat label="Фаза" value={STATUS_LABEL[building.status]} />
       </dl>
-      <Button href={`/development/${building.id}`} variant="primary" className="mt-6 w-full">
+      <Button href={`${basePath}/${building.id}`} variant="primary" className="mt-6 w-full">
         Разгледај ја зградата
       </Button>
     </div>

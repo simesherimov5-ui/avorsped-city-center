@@ -10,6 +10,7 @@ import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
+import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 
 export function generateStaticParams() {
@@ -158,6 +159,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </Reveal>
         </div>
       </section>
+
+      <OtherProjects currentProjectId={project.id} />
     </div>
   );
 }

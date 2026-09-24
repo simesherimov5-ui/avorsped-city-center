@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { DojranFloorSelector } from "@/components/DojranFloorSelector";
+import { FloorList } from "@/components/FloorList";
 import { DojranFacade } from "@/components/DojranFacade";
+import { OtherProjects } from "@/components/OtherProjects";
 import { projects } from "@/data";
+import { dojranFloors } from "@/data/dojran";
 
 export const metadata: Metadata = {
   title: "Дојрански Рај — Стар Дојран",
@@ -48,11 +50,16 @@ export default function DojranPage() {
               description="Кликнете на кат — на сликата погоре или во листата — за да ги видите достапните станови на тој кат."
             />
             <div className="mt-6">
-              <DojranFloorSelector />
+              <FloorList
+                basePath="/dojran"
+                floors={dojranFloors.map((f) => ({ number: f.number, label: f.label, meta: f.unitsHint }))}
+              />
             </div>
           </div>
         </div>
       </section>
+
+      <OtherProjects currentProjectId="dojranski-raj" />
     </div>
   );
 }

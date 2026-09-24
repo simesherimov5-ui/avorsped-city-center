@@ -25,8 +25,8 @@ const REAL_FLOOR_PLAN_BY_ID: Record<string, { src: string; alt: string }> = Obje
 
 export function floorPlanImageForApartment(apartment: Apartment) {
   const real = REAL_FLOOR_PLAN_BY_ID[apartment.id];
-  if (real) return { ...real, isPlaceholder: false as const };
-  return { ...FLOOR_PLAN_IMAGE[apartment.type], isPlaceholder: false as const };
+  if (real) return { ...real, isPlaceholder: false as const, isExactMatch: true };
+  return { ...FLOOR_PLAN_IMAGE[apartment.type], isPlaceholder: false as const, isExactMatch: false };
 }
 
 export const b06Floor3Overview = {

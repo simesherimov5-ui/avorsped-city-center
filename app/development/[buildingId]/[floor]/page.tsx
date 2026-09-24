@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { getBuilding, getApartmentsForFloor, buildings } from "@/data";
-import { b06Floor3Overview } from "@/lib/assets";
+import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
 import { FloorPlan } from "@/components/FloorPlan";
-import { FloorSelector } from "@/components/FloorSelector";
+import { FloorList } from "@/components/FloorList";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Media } from "@/components/ui/Media";
 
@@ -20,7 +19,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { buildingId, floor } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name}, Кат ${floor} — City Center` : "Кат" };
+  return { title: building ? `${building.name}, Кат ${floor} — ${development.name}` : "Кат" };
 }
 
 export default async function FloorPage({
@@ -37,7 +36,6 @@ export default async function FloorPage({
   if (!floor) notFound();
 
   const units = getApartmentsForFloor(building.id, floorNum);
-  const hasRealOverview = building.id === "b06" && floorNum === 3;
 
   return (
     <div className="pt-28">
@@ -53,10 +51,10 @@ export default async function FloorPage({
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
         <SectionHeading eyebrow={building.name} title={`Основа на ${floor.label.toLowerCase()}`} />
 
-        {hasRealOverview && (
+        {floor.officialOverviewImage && (
           <div className="mt-8">
             <div className="eyebrow text-ink/50">Официјална основа на катот</div>
-            <Media image={b06Floor3Overview} className="mt-3 aspect-[16/10]" />
+            <Media image={floor.officialOverviewImage} className="mt-3 aspect-[16/10]" />
           </div>
         )}
 
@@ -64,7 +62,15 @@ export default async function FloorPage({
           <FloorPlan apartments={units} />
           <div>
             <div className="eyebrow mb-3 text-ink/50">Други катови</div>
-            <FloorSelector building={building} activeFloor={floorNum} />
+            <FloorList
+              basePath={`/development/${building.id}`}
+              activeFloor={floorNum}
+              floors={building.floors.map((f) => {
+                const floorUnits = apartments.filter((a) => a.buildingId === building.id && a.floor === f.number);
+                const available = floorUnits.filter((a) => a.status === "available").length;
+                return { number: f.number, label: f.label, meta: `${floorUnits.length} станови · ${available} достапни` };
+              })}
+            />
           </div>
         </div>
       </section>

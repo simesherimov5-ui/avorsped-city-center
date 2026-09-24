@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import type { ConsultationRequest } from "@/types";
-import { buildings, projects } from "@/data";
+import { projects } from "@/data";
 import { Button } from "@/components/ui/Button";
 
 interface BookingFormProps {
@@ -32,9 +32,16 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
     ...defaultValues,
   });
   const [submitted, setSubmitted] = useState(false);
+  const selectedProject = projects.find((p) => p.id === values.project);
 
   function update<K extends keyof ConsultationRequest>(key: K, value: ConsultationRequest[K]) {
     setValues((v) => ({ ...v, [key]: value }));
+  }
+
+  function selectProject(projectId: string) {
+    // Building options are project-specific, so a stale selection from a
+    // previous project would silently point at the wrong building.
+    setValues((v) => ({ ...v, project: projectId, buildingId: "" }));
   }
 
   if (submitted) {
@@ -62,8 +69,8 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
         <div className="border border-accent/30 bg-accent-soft/40 px-4 py-3 text-sm text-ink/70">
           Прашање за:{" "}
           <strong className="text-charcoal">
-            {values.project}
-            {values.buildingId ? ` · ${buildings.find((b) => b.id === values.buildingId)?.name}` : ""}
+            {selectedProject?.name ?? values.project}
+            {values.buildingId ? ` · ${selectedProject?.buildings?.find((b) => b.id === values.buildingId)?.name}` : ""}
             {values.apartmentId ? ` · Стан ${values.apartmentId.split("-").pop()}` : ""}
           </strong>
         </div>
@@ -102,26 +109,30 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
 
         <label className="space-y-1.5">
           <span className={labelClass}>Проект од интерес</span>
-          <select className={inputClass} value={values.project} onChange={(e) => update("project", e.target.value)}>
+          <select className={inputClass} value={values.project} onChange={(e) => selectProject(e.target.value)}>
             <option value="">Изберете проект</option>
             {projects.map((p) => (
-              <option key={p.id} value={p.name}>
+              <option key={p.id} value={p.id}>
                 {p.name}
               </option>
             ))}
           </select>
         </label>
-        <label className="space-y-1.5">
-          <span className={labelClass}>Зграда од интерес</span>
-          <select className={inputClass} value={values.buildingId} onChange={(e) => update("buildingId", e.target.value)}>
-            <option value="">Било која зграда</option>
-            {buildings.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        {/* Building options are data-driven per project — only projects that
+            actually model multiple buildings (currently City Center) show this field. */}
+        {selectedProject?.buildings && selectedProject.buildings.length > 0 && (
+          <label className="space-y-1.5">
+            <span className={labelClass}>Зграда од интерес</span>
+            <select className={inputClass} value={values.buildingId} onChange={(e) => update("buildingId", e.target.value)}>
+              <option value="">Било која зграда</option>
+              {selectedProject.buildings.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       <label className="block space-y-1.5">
