@@ -29,8 +29,12 @@ export function floorPlanImageForApartment(apartment: Apartment) {
   return { ...FLOOR_PLAN_IMAGE[apartment.type], isPlaceholder: false as const, isExactMatch: false };
 }
 
+// Real pixel dimensions of the source PNG — the only copy of this drawing in the
+// repo; there is no higher-resolution or vector (CAD/DWG) version available.
 export const b06Floor3Overview = {
   src: "/images/floorplans/b06-f3/overview.png",
   alt: "Основа на цел кат — Зграда 06, Кат 3",
   isPlaceholder: false as const,
+  width: 1800,
+  height: 1273,
 };

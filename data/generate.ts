@@ -5,6 +5,7 @@ import type {
   Development,
   Floor,
   Orientation,
+  PlanRegion,
   Room,
   UnitStatus,
 } from "@/types";
@@ -108,6 +109,17 @@ interface RealUnitDef {
   bathrooms: number;
   balconyArea: number;
   rooms: Room[];
+  /**
+   * Hotspot rectangle (percentages of the full /images/floorplans/b06-f3/overview.png)
+   * for the interactive floor-plan viewer. The source is a flattened PDF/PNG export of
+   * the architectural drawing — there is no vector/CAD file in the repo to derive exact
+   * wall boundaries from — so these are best-effort zones: row position and left-to-right
+   * order read directly off the printed "Стан NN" labels, column widths weighted by each
+   * unit's real total area (below). They are close enough to be usable and honest, but
+   * not a traced boundary; replace with exact coordinates if the CAD/DWG source is ever
+   * supplied.
+   */
+  planRegion: PlanRegion;
 }
 
 const REAL_B06_F3_UNITS: RealUnitDef[] = [
@@ -124,6 +136,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Бања", area: 4.95 },
       { name: "Тераса", area: 5.25 },
     ],
+    planRegion: { x: 2, y: 32, width: 11.0, height: 22 },
   },
   {
     number: "21а",
@@ -137,6 +150,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Бања", area: 4.4 },
       { name: "Тераса", area: 5.45 },
     ],
+    planRegion: { x: 13.0, y: 32, width: 8.1, height: 22 },
   },
   {
     number: "22",
@@ -152,6 +166,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.4 },
       { name: "Тераса", area: 5.88 },
     ],
+    planRegion: { x: 21.1, y: 32, width: 13.9, height: 22 },
   },
   {
     number: "23",
@@ -167,6 +182,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.4 },
       { name: "Тераса", area: 5.88 },
     ],
+    planRegion: { x: 35.0, y: 32, width: 14.5, height: 22 },
   },
   {
     number: "24",
@@ -182,6 +198,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Бања 2", area: 7.52 },
       { name: "Тераса", area: 6.2 },
     ],
+    planRegion: { x: 49.5, y: 32, width: 14.5, height: 22 },
   },
   {
     number: "25",
@@ -197,6 +214,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.4 },
       { name: "Тераса", area: 5.25 },
     ],
+    planRegion: { x: 53.5, y: 54, width: 10.5, height: 22 },
   },
   {
     number: "26",
@@ -210,6 +228,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Бања", area: 6.08 },
       { name: "Тераса", area: 5.04 },
     ],
+    planRegion: { x: 45.7, y: 54, width: 7.8, height: 22 },
   },
   {
     number: "27",
@@ -225,6 +244,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.52 },
       { name: "Тераса", area: 5.88 },
     ],
+    planRegion: { x: 32.9, y: 54, width: 12.8, height: 22 },
   },
   {
     number: "28",
@@ -240,6 +260,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.52 },
       { name: "Тераса", area: 6.19 },
     ],
+    planRegion: { x: 20.3, y: 54, width: 12.6, height: 22 },
   },
   {
     number: "29",
@@ -253,6 +274,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Бања", area: 6.08 },
       { name: "Тераса", area: 5.04 },
     ],
+    planRegion: { x: 12.5, y: 54, width: 7.8, height: 22 },
   },
   {
     number: "30",
@@ -268,6 +290,7 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
       { name: "Тоалет", area: 2.6 },
       { name: "Тераса", area: 5.25 },
     ],
+    planRegion: { x: 2, y: 54, width: 10.5, height: 22 },
   },
 ];
 
@@ -295,6 +318,7 @@ function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[
       status: pickStatus(5, floor, 8, idx),
       rooms: unit.rooms,
       shape: buildFloorPlanShape(idx, REAL_B06_F3_UNITS.length),
+      realPlanRegion: unit.planRegion,
       gallery: [
         { src: "", alt: `${id} дневна соба`, isPlaceholder: true },
         { src: "", alt: `${id} кујна`, isPlaceholder: true },

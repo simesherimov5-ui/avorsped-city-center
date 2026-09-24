@@ -26,6 +26,14 @@ export interface FloorPlanShape {
   labelPosition: [number, number];
 }
 
+/** A hotspot region as a percentage rectangle over a real (photographed/scanned) floor-plan image. */
+export interface PlanRegion {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface Apartment {
   id: string; // e.g. "b03-f05-503"
   buildingId: string;
@@ -43,14 +51,20 @@ export interface Apartment {
   shape: FloorPlanShape;
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   tour?: { available: boolean; type: "360" | "matterport" | "glb" | "none" };
+  /** Present only where a real architectural floor-plan image exists for this unit's floor (see Floor.officialOverviewImage). */
+  realPlanRegion?: PlanRegion;
 }
 
 export interface Floor {
   number: number; // 0 = ground
   label: string; // "Ground", "Floor 1", ...
   apartmentIds: string[];
-  /** Real, official full-floor architectural plan, when one exists — never fabricated for floors without it. */
-  officialOverviewImage?: MediaImage;
+  /**
+   * Real, official full-floor architectural plan, when one exists — never fabricated
+   * for floors without it. width/height are the source file's real pixel dimensions,
+   * used only to render it at its true aspect ratio, never to distort it.
+   */
+  officialOverviewImage?: MediaImage & { width: number; height: number };
 }
 
 export interface Building {
