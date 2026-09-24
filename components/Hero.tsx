@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
-import { Logo } from "@/components/ui/Logo";
-import { development, buildings } from "@/data";
+import { development, buildings, projects } from "@/data";
+
+const cityCenter = projects.find((p) => p.id === "city-center")!;
 
 const HERO_IMAGE = {
-  src: "/images/exteriors/exterior-03-day.jpg",
+  src: "/images/exteriors/exterior-hero-wide.jpg",
   alt: "City Center — насловна визуелизација",
   isPlaceholder: false,
 };
@@ -23,7 +24,16 @@ export function Hero() {
         transition={{ duration: 1.6, ease: EASE }}
         className="absolute inset-0"
       >
-        <Media image={HERO_IMAGE} tone="dark" className="h-full w-full" priority sizes="100vw" />
+        {/* Settle-in on load, then an almost imperceptible continuous drift —
+            a restrained Ken Burns effect rather than a looping video, so the
+            architecture reads as a still photograph that's quietly alive. */}
+        <motion.div
+          animate={{ scale: [1, 1.045, 1] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
+          className="h-full w-full"
+        >
+          <Media image={HERO_IMAGE} tone="dark" className="h-full w-full" priority sizes="100vw" />
+        </motion.div>
         {/* Layered scrim: darker at the very top (for the header) and bottom
             (for the content block), clearer through the middle so the
             architecture itself stays the focal point. */}
@@ -38,27 +48,26 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.8, ease: EASE }}
           className="eyebrow text-accent-soft"
         >
-          Exclusive Building · Основано 1994
+          {development.location}
         </motion.div>
 
-        <motion.div
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.9, ease: EASE }}
+          className="mt-4 font-display text-6xl text-warm-white sm:text-7xl lg:text-8xl"
+        >
+          {development.name}
+        </motion.h1>
+
+        <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.8, ease: EASE }}
-          className="mt-5 text-xl font-medium uppercase leading-tight tracking-[0.16em] text-warm-white sm:text-3xl sm:tracking-[0.22em] lg:text-4xl"
+          transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
+          className="mt-5 max-w-md text-lg text-warm-white/80"
         >
-          <div>Добредојдовте</div>
-          <div>Вашиот нов дом</div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.55, duration: 0.9 }}
-          className="mt-9"
-        >
-          <Logo variant="stacked" />
-        </motion.div>
+          {cityCenter.tagline}
+        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -66,13 +75,13 @@ export function Hero() {
           transition={{ delay: 0.75, duration: 0.8, ease: EASE }}
           className="mt-9 flex flex-wrap justify-center gap-4"
         >
-          <Button href="/development" variant="primary">Истражи го проектот</Button>
-          <Button href="/projects" variant="secondary" tone="dark">Погледни ги проектите</Button>
+          <Button href="/apartments" variant="primary">Разгледај станови</Button>
+          <Button href="/development" variant="secondary" tone="dark">Истражи го проектот</Button>
         </motion.div>
       </div>
 
-      {/* Project metadata strip — small, architectural, grounds the hero in
-          a real place and scale rather than generic marketing copy. */}
+      {/* Brand credit + project facts — small, architectural, grounds the
+          hero in a real place and scale rather than generic marketing copy. */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -80,7 +89,7 @@ export function Hero() {
         className="relative border-t border-warm-white/15"
       >
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] uppercase tracking-[0.2em] text-warm-white/55 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px]">
-          <span>{development.location}</span>
+          <span>Exclusive Building · Основано 1994</span>
           <span className="flex items-center gap-3 sm:gap-5">
             <span>{buildings.length} Згради</span>
             <span className="h-3 w-px bg-warm-white/25" aria-hidden />

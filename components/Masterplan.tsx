@@ -18,6 +18,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 interface MasterplanProps {
   variant?: "preview" | "full";
+  className?: string;
 }
 
 // Best-effort marker centers over each building's rooftop in the real aerial
@@ -33,13 +34,13 @@ const AERIAL_HOTSPOTS: Record<string, { top: string; left: string }> = {
   b06: { top: "78%", left: "49%" },
 };
 
-export function Masterplan({ variant = "full" }: MasterplanProps) {
+export function Masterplan({ variant = "full", className }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <div className="w-full">
       {/* Real aerial photo with clickable hotspots per building — same on every screen size */}
-      <div className="relative mx-auto aspect-[16/9] w-full max-w-4xl overflow-hidden border border-line">
+      <div className={cn("relative mx-auto aspect-[16/9] w-full overflow-hidden border border-line", className ?? "max-w-4xl")}>
         <Media
           image={{
             src: "/images/site/masterplan-aerial.jpg",
