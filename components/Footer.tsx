@@ -35,7 +35,7 @@ export function Footer() {
 
         <div>
           <div className="eyebrow text-warm-white/40">Консултација</div>
-          <p className="mt-5 text-sm leading-relaxed text-warm-white/60">Разговарајте со нашиот тим за продажба за City Center.</p>
+          <p className="mt-5 text-sm leading-relaxed text-warm-white/60">Разговарајте со нашиот тим за продажба за кој било од нашите проекти.</p>
           <Link
             href="/consultation"
             className="mt-5 inline-block border border-warm-white/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-warm-white/60 hover:bg-warm-white/10"

@@ -50,7 +50,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           ) : (
             <Media
               image={project.heroImage}
-              label={`${project.name} - насловна визуелизација`}
+              label={`${project.name} — насловна визуелизација`}
               className="aspect-[16/7]"
               sizes="100vw"
             />

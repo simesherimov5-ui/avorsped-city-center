@@ -426,7 +426,7 @@ export function generateDevelopment(): GeneratedDevelopment {
       totalApartments: floors.reduce((sum, fl) => sum + fl.apartmentIds.length, 0),
       exteriorImage: {
         src: buildingExteriors[b],
-        alt: `Зграда ${String(b + 1).padStart(2, "0")} - надворешен изглед`,
+        alt: `Зграда ${String(b + 1).padStart(2, "0")} — надворешен изглед`,
         isPlaceholder: false,
       },
       status: buildingStatuses[b],
@@ -497,7 +497,7 @@ export function generateDevelopment(): GeneratedDevelopment {
     constructionStages,
     heroImage: {
       src: "/images/site/masterplan-aerial.jpg",
-      alt: "City Center - визуелизација од воздух",
+      alt: "City Center — визуелизација од воздух",
       isPlaceholder: false,
     },
     nearbyPoints: [

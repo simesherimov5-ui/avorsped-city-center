@@ -21,7 +21,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="relative overflow-hidden">
         <Media
           image={project.heroImage}
-          label={`${project.name} - визуелизација`}
+          label={`${project.name} — визуелизација`}
           fit={project.imageFit}
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />

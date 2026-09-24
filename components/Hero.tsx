@@ -3,13 +3,14 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
-import { development, buildings, projects } from "@/data";
+import { Logo } from "@/components/ui/Logo";
+import { companyStats } from "@/data";
 
-const cityCenter = projects.find((p) => p.id === "city-center")!;
-
+// A company-wide hero, not a single-project pitch: the portfolio holds
+// several developments and this is their shared front door.
 const HERO_IMAGE = {
   src: "/images/exteriors/exterior-hero-wide.jpg",
-  alt: "City Center — насловна визуелизација",
+  alt: "Јавор Шпед — архитектонска визуелизација",
   isPlaceholder: false,
 };
 
@@ -48,26 +49,26 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.8, ease: EASE }}
           className="eyebrow text-accent-soft"
         >
-          {development.location}
+          Exclusive Building · Основано 1994
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.9, ease: EASE }}
-          className="mt-4 font-display text-6xl text-warm-white sm:text-7xl lg:text-8xl"
-        >
-          {development.name}
-        </motion.h1>
-
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.8, ease: EASE }}
-          className="mt-5 max-w-md text-lg text-warm-white/80"
+          transition={{ delay: 0.35, duration: 0.8, ease: EASE }}
+          className="mt-5 max-w-2xl text-xl font-medium uppercase leading-tight tracking-[0.16em] text-warm-white sm:text-3xl sm:tracking-[0.22em] lg:text-4xl"
         >
-          {cityCenter.tagline}
-        </motion.p>
+          Добредојдовте во вашиот нов дом
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55, duration: 0.9 }}
+          className="mt-9"
+        >
+          <Logo variant="stacked" />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -75,13 +76,12 @@ export function Hero() {
           transition={{ delay: 0.75, duration: 0.8, ease: EASE }}
           className="mt-9 flex flex-wrap justify-center gap-4"
         >
-          <Button href="/apartments" variant="primary">Разгледај станови</Button>
-          <Button href="/development" variant="secondary" tone="dark">Истражи го проектот</Button>
+          <Button href="/projects" variant="primary">Погледни ги проектите</Button>
+          <Button href="/consultation" variant="secondary" tone="dark">Закажи консултација</Button>
         </motion.div>
       </div>
 
-      {/* Brand credit + project facts — small, architectural, grounds the
-          hero in a real place and scale rather than generic marketing copy. */}
+      {/* Company footprint — real, portfolio-wide numbers, not one project's. */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -89,13 +89,13 @@ export function Hero() {
         className="relative border-t border-warm-white/15"
       >
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] uppercase tracking-[0.2em] text-warm-white/55 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px]">
-          <span>Exclusive Building · Основано 1994</span>
+          <span>Струмица, Северна Македонија</span>
           <span className="flex items-center gap-3 sm:gap-5">
-            <span>{buildings.length} Згради</span>
+            <span>{companyStats[0].value} {companyStats[0].label}</span>
             <span className="h-3 w-px bg-warm-white/25" aria-hidden />
-            <span>{development.totalApartments} Станови</span>
+            <span>{companyStats[1].value} {companyStats[1].label}</span>
             <span className="hidden h-3 w-px bg-warm-white/25 sm:block" aria-hidden />
-            <span className="hidden sm:inline">{development.expectedCompletion}</span>
+            <span className="hidden sm:inline">{companyStats[2].value} {companyStats[2].label}</span>
           </span>
         </div>
       </motion.div>

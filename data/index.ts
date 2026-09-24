@@ -42,9 +42,9 @@ export const projects: Project[] = [
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
     heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
     gallery: [
-      { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center - визуелизација 1", isPlaceholder: false },
-      { src: "/images/exteriors/exterior-gallery-2.jpg", alt: "City Center - визуелизација 2", isPlaceholder: false },
-      { src: "/images/site/masterplan-aerial.jpg", alt: "City Center - ситуационен план", isPlaceholder: false },
+      { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center — визуелизација 1", isPlaceholder: false },
+      { src: "/images/exteriors/exterior-gallery-2.jpg", alt: "City Center — визуелизација 2", isPlaceholder: false },
+      { src: "/images/site/masterplan-aerial.jpg", alt: "City Center — ситуационен план", isPlaceholder: false },
     ],
     specifications: [
       { label: "Згради", value: "6" },
@@ -161,7 +161,7 @@ export const projects: Project[] = [
     year: 2027,
     units: 30,
     description:
-      "Гарсоњери од 27 до 41 м2 на чекор од Дојранското Езеро, во Сретеново - Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
+      "Гарсоњери од 27 до 41 м2 на чекор од Дојранското Езеро, во Сретеново, Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
     tagline: "Дојран како никогаш досега",
     distanceHighlights: ["На плажа Фук Так", "Чекор до Дојранското Езеро"],
     href: "/dojran",
@@ -175,9 +175,9 @@ export const projects: Project[] = [
       { src: "/images/dojran/aerial-beach.jpg", alt: "Дојрански Рај — плажа Фук Так", isPlaceholder: false },
     ],
     specifications: [
-      { label: "Локација", value: "Стар Дојран - Сретеново (плажа Фук Так)" },
-      { label: "Површини", value: "27 - 41 м2" },
-      { label: "Цена", value: "1 250 - 1 350 €/м2 со ДДВ" },
+      { label: "Локација", value: "Стар Дојран, Сретеново (плажа Фук Так)" },
+      { label: "Површини", value: "27 до 41 м2" },
+      { label: "Цена", value: "1 250 до 1 350 €/м2 со ДДВ" },
       { label: "Вселување", value: "Јули 2027" },
       { label: "Контакт", value: "071/333-088" },
     ],
