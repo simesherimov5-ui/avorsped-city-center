@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
+import { ProjectCard } from "@/components/ProjectCard";
 
 export const metadata: Metadata = {
   title: "За нас",
@@ -91,20 +92,16 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
-      <section className="bg-cream py-16">
-        <div className="mx-auto max-w-6xl px-6 lg:px-10">
-          <Reveal>
-            <SectionHeading eyebrow="Портфолио" title={`${projects.filter((p) => p.status === "completed").length} завршени проекти`} />
-            <div className="mt-8 flex flex-wrap gap-3 text-sm text-ink/60">
-              {projects
-                .filter((p) => p.status === "completed")
-                .map((p) => (
-                  <span key={p.id} className="border border-line px-3 py-1.5">
-                    {p.name} · {p.year}
-                  </span>
-                ))}
-            </div>
-          </Reveal>
+      <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10">
+        <Reveal>
+          <SectionHeading eyebrow="Портфолио" title="Она што го градиме сега" />
+        </Reveal>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p, i) => (
+            <Reveal key={p.id} delay={i * 0.08}>
+              <ProjectCard project={p} />
+            </Reveal>
+          ))}
         </div>
       </section>
 

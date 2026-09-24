@@ -35,14 +35,30 @@ export function Hero() {
         >
           <Media image={HERO_IMAGE} tone="dark" className="h-full w-full" priority sizes="100vw" />
         </motion.div>
-        {/* Layered scrim: darker at the very top (for the header) and bottom
-            (for the content block), clearer through the middle so the
-            architecture itself stays the focal point. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/15 to-charcoal/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-charcoal/30" />
+        {/* Content-anchored scrim: the architecture stays clearest in the
+            upper frame (sky, roofline) and darkens progressively only where
+            the text block actually sits, rather than a flat veil over the
+            whole photo. A soft ellipse adds a touch of extra depth directly
+            behind the type without reading as a hard band. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(27,26,24,0.38) 0%, rgba(27,26,24,0.16) 26%, rgba(27,26,24,0.3) 40%, rgba(27,26,24,0.6) 56%, rgba(27,26,24,0.72) 72%, rgba(27,26,24,0.85) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse 65% 55% at 50% 60%, rgba(20,19,17,0.32), transparent 72%)",
+          }}
+        />
       </motion.div>
 
-      <div className="relative flex flex-1 flex-col items-center justify-end px-6 pb-14 text-center sm:pb-16">
+      <div
+        className="relative flex flex-1 flex-col items-center justify-end px-6 pb-14 text-center sm:pb-16"
+        style={{ textShadow: "0 2px 16px rgba(0,0,0,0.35)" }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}

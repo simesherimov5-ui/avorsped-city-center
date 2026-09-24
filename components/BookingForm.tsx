@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import type { ConsultationRequest } from "@/types";
 import { projects } from "@/data";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
 
 interface BookingFormProps {
   defaultValues?: Partial<ConsultationRequest>;
@@ -15,6 +16,16 @@ interface BookingFormProps {
 const inputClass =
   "w-full border border-line bg-warm-white px-3.5 py-2.5 text-sm focus-ring";
 const labelClass = "eyebrow text-ink/50";
+
+// Real weekday business hours (see companyInfo.hours: "Пон–Пет 09:00–18:00"),
+// offered as discrete slots rather than a native time input, which renders
+// inconsistently across browsers and reads as an afterthought on mobile.
+const TIME_SLOTS = Array.from({ length: 19 }, (_, i) => {
+  const totalMinutes = 9 * 60 + i * 30;
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+});
 
 export function BookingForm({ defaultValues, kind = "consultation", compact = false }: BookingFormProps) {
   const [values, setValues] = useState<ConsultationRequest>({
@@ -100,10 +111,27 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
               <span className={labelClass}>Посакуван датум</span>
               <input type="date" className={inputClass} value={values.preferredDate} onChange={(e) => update("preferredDate", e.target.value)} />
             </label>
-            <label className="space-y-1.5">
+            <div className="space-y-1.5 sm:col-span-2">
               <span className={labelClass}>Посакувано време</span>
-              <input type="time" className={inputClass} value={values.preferredTime} onChange={(e) => update("preferredTime", e.target.value)} />
-            </label>
+              <div className="flex flex-wrap gap-2">
+                {TIME_SLOTS.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => update("preferredTime", values.preferredTime === t ? "" : t)}
+                    aria-pressed={values.preferredTime === t}
+                    className={cn(
+                      "focus-ring border px-3 py-1.5 text-sm tabular-nums transition-colors",
+                      values.preferredTime === t
+                        ? "border-accent bg-accent/10 text-charcoal"
+                        : "border-line text-ink/70 hover:border-accent/50"
+                    )}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
           </>
         )}
 
