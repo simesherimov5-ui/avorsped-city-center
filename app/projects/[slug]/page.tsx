@@ -73,7 +73,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         )}
         <div className="mt-8 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <div className="text-xs uppercase tracking-widest text-accent">{project.location}</div>
+            <div className="eyebrow text-accent">{project.location}</div>
             <h1 className="mt-1 font-display text-4xl">{project.name}</h1>
             <p className="mt-5 leading-relaxed text-ink/70">{project.description}</p>
 
@@ -126,7 +126,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <aside className="h-fit space-y-6 border border-line bg-warm-white p-6">
             <div>
-              <div className="text-xs uppercase tracking-widest text-ink/40">Спецификации</div>
+              <div className="eyebrow text-ink/40">Спецификации</div>
               <dl className="mt-4 space-y-3">
                 {project.specifications.map((s) => (
                   <div key={s.label} className="flex justify-between border-b border-line pb-2 text-sm">

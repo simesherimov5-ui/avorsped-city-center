@@ -98,10 +98,10 @@ export default function HomePage() {
       </section>
 
       {/* 4. Portfolio — large stacked project showcase */}
-      <section className="bg-warm-white py-24">
+      <section className="bg-charcoal py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Reveal>
-            <SectionHeading eyebrow="Нашето портфолио" title="Портфолио на проекти" />
+            <SectionHeading eyebrow="Нашето портфолио" title="Портфолио на проекти" tone="dark" />
           </Reveal>
         </div>
         <Reveal delay={0.1}>

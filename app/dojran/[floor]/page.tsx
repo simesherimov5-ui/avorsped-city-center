@@ -61,7 +61,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
           </div>
 
           <aside>
-            <div className="mb-4 text-xs uppercase tracking-widest text-ink/40">Изберете кат</div>
+            <div className="eyebrow mb-4 text-ink/40">Изберете кат</div>
             <DojranFloorSelector activeFloor={floorNum} />
           </aside>
         </div>

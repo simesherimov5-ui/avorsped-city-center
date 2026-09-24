@@ -14,7 +14,7 @@ interface BookingFormProps {
 
 const inputClass =
   "w-full border border-line bg-warm-white px-3.5 py-2.5 text-sm focus-ring";
-const labelClass = "text-xs uppercase tracking-widest text-ink/50";
+const labelClass = "eyebrow text-ink/50";
 
 export function BookingForm({ defaultValues, kind = "consultation", compact = false }: BookingFormProps) {
   const [values, setValues] = useState<ConsultationRequest>({

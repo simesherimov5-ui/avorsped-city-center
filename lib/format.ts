@@ -1,11 +1,13 @@
 import type { Orientation } from "@/types";
 
 export function formatPrice(value: number): string {
-  return new Intl.NumberFormat("mk-MK", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(value);
+  // Manual thousands-grouping instead of Intl.NumberFormat: the "mk-MK"
+  // locale data available at build/SSR time can differ from a browser's,
+  // producing a server/client hydration mismatch on the exact same value.
+  const grouped = Math.round(value)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `${grouped} €`;
 }
 
 export function formatArea(value: number): string {

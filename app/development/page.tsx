@@ -63,7 +63,7 @@ function Stat({ label, value }: { label: string; value: string }) {
       <div className="font-display text-3xl text-accent">
         <CountUp value={value} />
       </div>
-      <div className="mt-1 text-xs uppercase tracking-widest text-ink/50">{label}</div>
+      <div className="eyebrow mt-1 text-ink/50">{label}</div>
     </div>
   );
 }

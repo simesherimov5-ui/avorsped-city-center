@@ -36,7 +36,13 @@ export function Media({
   }
 
   return (
-    <div className={cn("relative overflow-hidden", fit === "contain" && "bg-silver", className)}>
+    <div
+      className={cn(
+        "relative overflow-hidden",
+        fit === "contain" && (tone === "dark" ? "bg-charcoal" : "bg-silver"),
+        className
+      )}
+    >
       <Image
         src={image.src}
         alt={image.alt}

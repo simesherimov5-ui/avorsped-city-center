@@ -30,14 +30,14 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-6 lg:px-10">
           <div className="grid gap-10 lg:grid-cols-2">
             <div>
-              <div className="text-xs uppercase tracking-widest text-accent">Мисија</div>
+              <div className="eyebrow text-accent">Мисија</div>
               <p className="mt-3 font-display text-2xl leading-snug">{companyInfo.mission}</p>
             </div>
             <div className="grid grid-cols-2 gap-8">
               {companyStats.map((s) => (
                 <div key={s.label}>
                   <div className="font-display text-3xl text-accent">{s.value}</div>
-                  <div className="mt-1 text-xs uppercase tracking-widest text-ink/50">{s.label}</div>
+                  <div className="eyebrow mt-1 text-ink/50">{s.label}</div>
                 </div>
               ))}
             </div>

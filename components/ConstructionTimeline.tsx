@@ -49,7 +49,7 @@ export function ConstructionTimeline({ stages }: { stages: ConstructionStage[] }
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <Placeholder label={`${active.label} — фотографија од напредокот`} className="aspect-[4/3]" />
         <div>
-          <div className="text-xs uppercase tracking-widest text-accent">{active.date}</div>
+          <div className="eyebrow text-accent">{active.date}</div>
           <h3 className="mt-1 font-display text-2xl">{active.label}</h3>
           <p className="mt-3 text-sm leading-relaxed text-ink/70">{active.description}</p>
           <div className="mt-4 h-1.5 w-full bg-line">

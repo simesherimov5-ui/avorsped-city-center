@@ -25,6 +25,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
               image={project.heroImage}
               label={`${project.name} — визуелизација`}
               tone="dark"
+              fit={project.id === "vista-heights" ? "contain" : "cover"}
               className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="100vw"
             />

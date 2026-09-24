@@ -24,7 +24,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
   const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
 
   return (
-    <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/8]">
+    <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/10]">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={index}
@@ -35,10 +35,17 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <Media image={project.heroImage} tone="dark" className="h-full w-full" sizes="100vw" priority />
+          <Media
+            image={project.heroImage}
+            tone="dark"
+            fit={project.id === "vista-heights" ? "contain" : "cover"}
+            className="h-full w-full"
+            sizes="100vw"
+            priority
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-6 text-warm-white sm:p-10">
-            <span className="inline-block bg-accent px-2.5 py-1 text-[10px] uppercase tracking-widest text-charcoal">
+            <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-charcoal">
               {statusText}
             </span>
             <h2 className="mt-3 font-display text-2xl sm:text-4xl">{project.name}</h2>

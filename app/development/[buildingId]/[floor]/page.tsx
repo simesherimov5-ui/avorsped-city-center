@@ -55,7 +55,7 @@ export default async function FloorPage({
 
         {hasRealOverview && (
           <div className="mt-8">
-            <div className="text-xs uppercase tracking-widest text-ink/50">Официјална основа на катот</div>
+            <div className="eyebrow text-ink/50">Официјална основа на катот</div>
             <Media image={b06Floor3Overview} className="mt-3 aspect-[16/10]" />
           </div>
         )}
@@ -63,7 +63,7 @@ export default async function FloorPage({
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_260px]">
           <FloorPlan apartments={units} />
           <div>
-            <div className="mb-3 text-xs uppercase tracking-widest text-ink/50">Други катови</div>
+            <div className="eyebrow mb-3 text-ink/50">Други катови</div>
             <FloorSelector building={building} activeFloor={floorNum} />
           </div>
         </div>
