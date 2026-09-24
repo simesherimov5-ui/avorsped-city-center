@@ -1,4 +1,4 @@
-import type { Orientation } from "@/types";
+import type { Orientation, ProjectStatus } from "@/types";
 
 export function formatPrice(value: number): string {
   // Manual thousands-grouping instead of Intl.NumberFormat: the "mk-MK"
@@ -16,6 +16,16 @@ export function formatArea(value: number): string {
 
 export function statusLabel(status: "available" | "reserved" | "sold"): string {
   return { available: "Достапен", reserved: "Резервиран", sold: "Продаден" }[status];
+}
+
+const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
+  completed: "Завршено",
+  "under-construction": "Во изградба",
+  upcoming: "Наскоро",
+};
+
+export function projectStatusLabel(status: ProjectStatus): string {
+  return PROJECT_STATUS_LABELS[status];
 }
 
 const ORIENTATION_LABELS: Record<Orientation, string> = {

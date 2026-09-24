@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
+import { projectStatusLabel } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 const STATUS_STYLE: Record<Project["status"], string> = {
@@ -8,24 +9,20 @@ const STATUS_STYLE: Record<Project["status"], string> = {
   "under-construction": "bg-accent text-charcoal",
   upcoming: "bg-ink text-warm-white",
 };
-const STATUS_LABEL: Record<Project["status"], string> = {
-  completed: "Завршено",
-  "under-construction": "Во изградба",
-  upcoming: "Наскоро",
-};
 
 export function ProjectCard({ project }: { project: Project }) {
   const hasHoverDetails = Boolean(project.tagline || project.distanceHighlights?.length);
 
   return (
     <Link
-      href={project.href ?? (project.isFlagship ? "/development" : `/projects/${project.slug}`)}
+      href={project.href ?? `/projects/${project.slug}`}
       className="focus-ring group block border border-line bg-warm-white transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.35)]"
     >
       <div className="relative overflow-hidden">
         <Media
           image={project.heroImage}
           label={`${project.name} - визуелизација`}
+          fit={project.imageFit}
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <span
@@ -35,7 +32,7 @@ export function ProjectCard({ project }: { project: Project }) {
           )}
         >
           {(() => {
-            const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
+            const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
             return project.typeLabel ? `${project.typeLabel} · ${statusText}` : statusText;
           })()}
         </span>

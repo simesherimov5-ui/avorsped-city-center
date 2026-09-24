@@ -85,6 +85,25 @@ export interface Development {
 
 export type ProjectStatus = "completed" | "under-construction" | "upcoming";
 
+export interface RoomTourRoom {
+  label: string;
+  image: { src: string; alt: string; isPlaceholder: boolean };
+  video: string;
+}
+
+export interface FloorPlanHotspot {
+  number: number;
+  top: string; // percentage, e.g. "34.0%"
+  left: string;
+  room?: string; // key into FloorPlanExplorerData.rooms
+}
+
+export interface FloorPlanExplorerData {
+  image: { src: string; alt: string; isPlaceholder: boolean };
+  hotspots: FloorPlanHotspot[];
+  rooms: Record<string, { label: string; video: string }>;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -97,17 +116,25 @@ export interface Project {
   heroImage: { src: string; alt: string; isPlaceholder: boolean };
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   specifications: { label: string; value: string }[];
-  isFlagship?: boolean;
+  /** How gallery/hero images should fit their frame — "contain" for near-square source photos that would otherwise be aggressively cropped. */
+  imageFit?: "cover" | "contain";
   typeLabel?: string;
   statusLabelOverride?: string;
   tagline?: string;
   distanceHighlights?: string[];
+  /** Optional dedicated deep-dive page for this project (e.g. a multi-building explorer). Falls back to the generic /projects/[slug] page. */
   href?: string;
   apartmentTypes?: {
     label: string;
     area: string;
     image: { src: string; alt: string; isPlaceholder: boolean };
   }[];
+  /** Optional room-by-room video tour, shown on the generic project page when present. */
+  roomTour?: RoomTourRoom[];
+  /** Optional clickable, numbered floor-plan diagram with per-room video playback. */
+  floorPlanExplorer?: FloorPlanExplorerData;
+  /** Optional construction-progress timeline, shown on the generic project page when present. */
+  constructionStages?: ConstructionStage[];
 }
 
 export interface CompanyStat {

@@ -6,35 +6,11 @@ import { projects } from "@/data";
 import { Media } from "@/components/ui/Media";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { RoomVideoTour } from "@/components/RoomVideoTour";
-import { StanbenaFloorPlan } from "@/components/StanbenaFloorPlan";
+import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionTimeline } from "@/components/ConstructionTimeline";
-import { development } from "@/data";
-
-const STATUS_LABEL: Record<string, string> = {
-  completed: "Завршено",
-  "under-construction": "Во изградба",
-  upcoming: "Наскоро",
-};
-
-const VISTA_HEIGHTS_ROOM_TOUR = [
-  {
-    label: "Дневна соба",
-    image: { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Дневна соба", isPlaceholder: false },
-    video: "/videos/stanbena-zgrada/dnevna-soba.mp4",
-  },
-  {
-    label: "Кујна и трпезарија",
-    image: { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Кујна и трпезарија", isPlaceholder: false },
-    video: "/videos/stanbena-zgrada/kujna.mp4",
-  },
-  {
-    label: "Двор",
-    image: { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Двор", isPlaceholder: false },
-    video: "/videos/stanbena-zgrada/dvor.mp4",
-  },
-];
+import { projectStatusLabel } from "@/lib/format";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -68,8 +44,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           {project.gallery.length > 0 ? (
             <PhotoCarousel
               photos={project.gallery}
-              className={project.id === "vista-heights" ? "max-w-4xl" : undefined}
-              fit={project.id === "vista-heights" ? "contain" : undefined}
+              className={project.imageFit === "contain" ? "max-w-4xl" : undefined}
+              fit={project.imageFit}
             />
           ) : (
             <Media
@@ -88,7 +64,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <span className="text-line">·</span>
             <span>{project.year}</span>
             <span className="text-line">·</span>
-            <span>{STATUS_LABEL[project.status]}</span>
+            <span>{project.statusLabelOverride ?? projectStatusLabel(project.status)}</span>
             <span className="text-line">·</span>
             <span>{project.units} станови</span>
           </div>
@@ -102,25 +78,25 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <p className="mt-5 max-w-xl text-lead leading-relaxed text-ink/70">{project.description}</p>
             </Reveal>
 
-            {project.id === "vista-heights" && (
+            {project.roomTour && (
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
                   <p className="mt-2 max-w-md text-sm text-ink/60">Кликнете на просторија за да пуштите кратко видео разгледување.</p>
                   <div className="mt-6">
-                    <RoomVideoTour rooms={VISTA_HEIGHTS_ROOM_TOUR} />
+                    <RoomVideoTour rooms={project.roomTour} />
                   </div>
                 </div>
               </Reveal>
             )}
 
-            {project.id === "vista-heights" ? (
+            {project.floorPlanExplorer ? (
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Распоред на просториите</h2>
                   <p className="mt-2 max-w-md text-sm text-ink/60">Кликнете на број за да пуштите видео од таа просторија.</p>
                   <div className="mt-6">
-                    <StanbenaFloorPlan />
+                    <InteractiveFloorPlan {...project.floorPlanExplorer} />
                   </div>
                 </div>
               </Reveal>
@@ -145,12 +121,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               )
             )}
 
-            {project.isFlagship && (
+            {project.constructionStages && (
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Тек на изградба</h2>
                   <div className="mt-6">
-                    <ConstructionTimeline stages={development.constructionStages} />
+                    <ConstructionTimeline stages={project.constructionStages} />
                   </div>
                 </div>
               </Reveal>
@@ -170,8 +146,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   ))}
                 </dl>
               </div>
-              {project.isFlagship && (
-                <Button href="/development" variant="primary" className="w-full">
+              {project.href && (
+                <Button href={project.href} variant="primary" className="w-full">
                   Истражи го проектот
                 </Button>
               )}

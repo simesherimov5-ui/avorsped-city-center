@@ -5,14 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
+import { projectStatusLabel } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import type { Project } from "@/types";
-
-const STATUS_LABEL: Record<Project["status"], string> = {
-  completed: "Завршено",
-  "under-construction": "Во изградба",
-  upcoming: "Наскоро",
-};
 
 export function ProjectSlideshow({ projects }: { projects: Project[] }) {
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0]);
@@ -21,7 +16,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
   const goTo = (i: number) => setIndex(([current]) => [i, i > current ? 1 : -1]);
 
   const project = projects[index];
-  const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
+  const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
 
   return (
     <div className="relative aspect-[16/9] overflow-hidden sm:aspect-[16/10]">
@@ -38,7 +33,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
           <Media
             image={project.heroImage}
             tone="dark"
-            fit={project.id === "vista-heights" ? "contain" : "cover"}
+            fit={project.imageFit ?? "cover"}
             className="h-full w-full"
             sizes="100vw"
             priority

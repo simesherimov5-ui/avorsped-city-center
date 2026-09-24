@@ -1,31 +1,26 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
+import { projectStatusLabel } from "@/lib/format";
 import type { Project } from "@/types";
-
-const STATUS_LABEL: Record<Project["status"], string> = {
-  completed: "Завршено",
-  "under-construction": "Во изградба",
-  upcoming: "Наскоро",
-};
 
 export function ProjectShowcase({ projects }: { projects: Project[] }) {
   return (
     <div className="flex flex-col">
       {projects.map((project) => {
-        const statusText = project.statusLabelOverride ?? STATUS_LABEL[project.status];
+        const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
 
         return (
           <Link
             key={project.id}
-            href={project.href ?? (project.isFlagship ? "/development" : `/projects/${project.slug}`)}
+            href={project.href ?? `/projects/${project.slug}`}
             className="focus-ring group relative block aspect-[4/3] overflow-hidden border-t border-line first:border-t-0 sm:aspect-[21/9]"
           >
             <Media
               image={project.heroImage}
               label={`${project.name} — визуелизација`}
               tone="dark"
-              fit={project.id === "vista-heights" ? "contain" : "cover"}
+              fit={project.imageFit ?? "cover"}
               className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="100vw"
             />

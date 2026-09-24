@@ -52,7 +52,8 @@ export const projects: Project[] = [
       { label: "Очекуван завршеток", value: development.expectedCompletion },
       { label: "Локација", value: development.location },
     ],
-    isFlagship: true,
+    href: "/development",
+    constructionStages: development.constructionStages,
   },
   {
     id: "vista-heights",
@@ -65,6 +66,7 @@ export const projects: Project[] = [
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
+    imageFit: "contain",
     heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
     gallery: [
       { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
@@ -72,6 +74,48 @@ export const projects: Project[] = [
       { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена Куќа — кујна и трпезарија", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена Куќа — двор", isPlaceholder: false },
     ],
+    roomTour: [
+      {
+        label: "Дневна соба",
+        image: { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Дневна соба", isPlaceholder: false },
+        video: "/videos/stanbena-zgrada/dnevna-soba.mp4",
+      },
+      {
+        label: "Кујна и трпезарија",
+        image: { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Кујна и трпезарија", isPlaceholder: false },
+        video: "/videos/stanbena-zgrada/kujna.mp4",
+      },
+      {
+        label: "Двор",
+        image: { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Двор", isPlaceholder: false },
+        video: "/videos/stanbena-zgrada/dvor.mp4",
+      },
+    ],
+    floorPlanExplorer: {
+      image: {
+        src: "/images/stanbena-zgrada/floorplan-numbered.webp",
+        alt: "Распоред на просториите — четирисобен стан",
+        isPlaceholder: false,
+      },
+      rooms: {
+        "dnevna-soba": { label: "Дневна соба", video: "/videos/stanbena-zgrada/dnevna-soba.mp4" },
+        kujna: { label: "Кујна и трпезарија", video: "/videos/stanbena-zgrada/kujna.mp4" },
+        dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4" },
+      },
+      // Numbered badges on the floor-plan image, matched by eye to the render.
+      // Only numbers with a linked room are clickable; the rest are shown as-is.
+      hotspots: [
+        { number: 1, top: "34.0%", left: "31.8%" },
+        { number: 2, top: "44.2%", left: "70.3%", room: "dnevna-soba" },
+        { number: 3, top: "22.2%", left: "76.0%", room: "kujna" },
+        { number: 4, top: "60.7%", left: "21.2%" },
+        { number: 5, top: "71.5%", left: "47.8%" },
+        { number: 6, top: "39.8%", left: "15.4%" },
+        { number: 7, top: "27.8%", left: "55.6%", room: "kujna" },
+        { number: 8, top: "87.5%", left: "77.1%", room: "dvor" },
+        { number: 9, top: "95.1%", left: "12.4%" },
+      ],
+    },
     apartmentTypes: [
       {
         label: "Четирисобен — Стан 1 / Приземје",

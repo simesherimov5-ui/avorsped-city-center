@@ -4,51 +4,22 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
+import type { FloorPlanExplorerData } from "@/types";
 
-interface RoomVideo {
-  label: string;
-  video: string;
-}
-
-const ROOMS: Record<string, RoomVideo> = {
-  "dnevna-soba": { label: "Дневна соба", video: "/videos/stanbena-zgrada/dnevna-soba.mp4" },
-  kujna: { label: "Кујна и трпезарија", video: "/videos/stanbena-zgrada/kujna.mp4" },
-  dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4" },
-};
-
-// Numbered badges on the floor-plan image, matched by eye to the render.
-// Only numbers with a linked room are clickable; the rest are shown as-is.
-const HOTSPOTS: { number: number; top: string; left: string; room?: keyof typeof ROOMS }[] = [
-  { number: 1, top: "34.0%", left: "31.8%" },
-  { number: 2, top: "44.2%", left: "70.3%", room: "dnevna-soba" },
-  { number: 3, top: "22.2%", left: "76.0%", room: "kujna" },
-  { number: 4, top: "60.7%", left: "21.2%" },
-  { number: 5, top: "71.5%", left: "47.8%" },
-  { number: 6, top: "39.8%", left: "15.4%" },
-  { number: 7, top: "27.8%", left: "55.6%", room: "kujna" },
-  { number: 8, top: "87.5%", left: "77.1%", room: "dvor" },
-  { number: 9, top: "95.1%", left: "12.4%" },
-];
-
-export function StanbenaFloorPlan() {
+// Generic, data-driven numbered floor-plan diagram: any project can supply its
+// own image + hotspot coordinates + per-room video map without a new component.
+export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplorerData) {
   const [hovered, setHovered] = useState<number | null>(null);
-  const [activeRoom, setActiveRoom] = useState<keyof typeof ROOMS | null>(null);
+  const [activeRoom, setActiveRoom] = useState<string | null>(null);
 
   return (
     <>
       <div className="relative mx-auto aspect-[680/771] w-full max-w-md overflow-hidden border border-line">
-        <Media
-          image={{
-            src: "/images/stanbena-zgrada/floorplan-numbered.webp",
-            alt: "Распоред на просториите — четирисобен стан",
-            isPlaceholder: false,
-          }}
-          className="h-full w-full"
-          sizes="(max-width: 640px) 100vw, 448px"
-        />
+        <Media image={image} className="h-full w-full" sizes="(max-width: 640px) 100vw, 448px" />
 
-        {HOTSPOTS.map((spot) => {
-          const isClickable = Boolean(spot.room);
+        {hotspots.map((spot) => {
+          const room = spot.room ? rooms[spot.room] : undefined;
+          const isClickable = Boolean(room);
           const isHovered = hovered === spot.number;
 
           return (
@@ -56,10 +27,10 @@ export function StanbenaFloorPlan() {
               key={spot.number}
               type="button"
               disabled={!isClickable}
-              onClick={() => spot.room && setActiveRoom(spot.room)}
+              onClick={() => room && setActiveRoom(spot.room ?? null)}
               onMouseEnter={() => isClickable && setHovered(spot.number)}
               onMouseLeave={() => setHovered(null)}
-              aria-label={spot.room ? `Пушти видео — ${ROOMS[spot.room].label}` : undefined}
+              aria-label={room ? `Пушти видео — ${room.label}` : undefined}
               className={cn(
                 "focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform",
                 isClickable ? "cursor-pointer" : "cursor-default"
@@ -83,7 +54,7 @@ export function StanbenaFloorPlan() {
         })}
       </div>
 
-      {activeRoom && (
+      {activeRoom && rooms[activeRoom] && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/85 p-6"
           onClick={() => setActiveRoom(null)}
@@ -93,8 +64,8 @@ export function StanbenaFloorPlan() {
             onClick={(e) => e.stopPropagation()}
           >
             <video
-              key={ROOMS[activeRoom].video}
-              src={ROOMS[activeRoom].video}
+              key={rooms[activeRoom].video}
+              src={rooms[activeRoom].video}
               autoPlay
               loop
               muted
@@ -102,7 +73,7 @@ export function StanbenaFloorPlan() {
               className="aspect-video h-full w-full object-cover"
             />
             <div className="absolute inset-x-0 top-0 flex items-center justify-between bg-gradient-to-b from-charcoal/80 to-transparent p-4">
-              <span className="text-sm uppercase tracking-widest text-warm-white">{ROOMS[activeRoom].label}</span>
+              <span className="text-sm uppercase tracking-widest text-warm-white">{rooms[activeRoom].label}</span>
               <button
                 type="button"
                 onClick={() => setActiveRoom(null)}
