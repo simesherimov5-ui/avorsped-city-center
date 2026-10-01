@@ -6,11 +6,12 @@ Working document for the people and agents extending this project. Update it in 
 
 1. **Open every Claude Code session on the repo folder.** In the desktop app the session header must show the project folder, not "No folder".
    Run `/context` and check that `CLAUDE.md` is listed under Memory files. Without a folder, none of this repo's rules, hooks or permissions load.
-2. **One roadmap item per session.** Start in Plan mode: ask for a plan and the list of files, review it, then implement.
+2. **One roadmap item per session.** Start with `/roadmap-item <n>`: it asks for a plan and the list of files, waits for approval, then implements.
+   Ask the `reviewer` subagent to check the diff before opening a pull request.
 3. **Commit after each prompt.** Usage limits can end a session mid-task.
 4. **Done means `npm run check` is green** (a Stop hook enforces it) **and CI is green** on the pull request.
 5. **Work on a branch and merge through a pull request.** Keep `main` deployable.
-6. **Audit prompts write findings to a file** (for example `docs/ux-audit.md`), not code. Fix findings as separate roadmap items.
+6. **Audit prompts write findings to a file, not code.** Use `/ux-audit`, which writes `docs/ux-audit.md`. Fix findings as separate roadmap items.
 7. **Visual direction changes need an approved entry in `docs/design-brief.md` first.**
 8. **Prompts drafted elsewhere (a chat Project, for example) should point at roadmap items,** not restate rules. This repo is the source of truth.
 
@@ -37,6 +38,10 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 - Status labels are duplicated in `ApartmentFilters.tsx` instead of using `lib/format.ts`.
 - The i18n scaffold in `lib/i18n.tsx` is used by two files; almost all UI text is hardcoded Macedonian.
 - Forms (consultation, contact) are mocks.
+- Two animation systems coexist: Framer Motion (`components/ui/Reveal.tsx`, older pages) and GSAP + Lenis (`components/motion/`, `components/intro/`, `lib/gsap.ts`).
+  `components/ui/SmoothScroll.tsx` appears unused (only the `components/motion/` version is imported). Decide whether to consolidate.
+- Two `eslint-disable react-hooks/set-state-in-effect` lines are deliberate post-mount syncs (`app/apartments/page.tsx`, `components/intro/Preloader.tsx`).
+  `useSyncExternalStore` would remove them but needs a browser test.
 
 ## Sequence
 
