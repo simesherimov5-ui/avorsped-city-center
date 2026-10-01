@@ -32,12 +32,7 @@ export function PhotoCarousel({
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <Media
-            image={{ ...photos[index], isPlaceholder: false }}
-            className="h-full w-full"
-            sizes="100vw"
-            fit={fit}
-          />
+          <Media image={{ ...photos[index], isPlaceholder: false }} className="h-full w-full" sizes="100vw" fit={fit} />
         </motion.div>
       </AnimatePresence>
 

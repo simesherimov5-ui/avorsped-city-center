@@ -23,9 +23,7 @@ export function ApartmentFilters({
       <div className="flex items-start justify-between gap-3 border-b border-line pb-5">
         <div>
           <div className="eyebrow text-ink/40">Резултати</div>
-          {resultsCount !== undefined && (
-            <div className="mt-1.5 font-display text-3xl text-accent">{resultsCount}</div>
-          )}
+          {resultsCount !== undefined && <div className="mt-1.5 font-display text-3xl text-accent">{resultsCount}</div>}
         </div>
         {hasFilters && (
           <button

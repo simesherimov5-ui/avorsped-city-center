@@ -33,7 +33,15 @@ interface MasterplanProps {
 
 type BuildingWithAvailability = Building & { available: number };
 
-export function Masterplan({ buildings, apartments, image, hotspots, basePath, variant = "full", className }: MasterplanProps) {
+export function Masterplan({
+  buildings,
+  apartments,
+  image,
+  hotspots,
+  basePath,
+  variant = "full",
+  className,
+}: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -49,7 +57,12 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
     <div className="w-full">
       <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-stretch">
         {/* Real aerial photo with selectable hotspots per building */}
-        <div className={cn("relative mx-auto aspect-[16/9] w-full overflow-hidden border border-line", className ?? "max-w-4xl")}>
+        <div
+          className={cn(
+            "relative mx-auto aspect-[16/9] w-full overflow-hidden border border-line",
+            className ?? "max-w-4xl"
+          )}
+        >
           <motion.div
             className="absolute inset-0"
             style={{ transformOrigin: zoomSpot ? `${zoomSpot.left} ${zoomSpot.top}` : "50% 50%" }}
@@ -87,9 +100,7 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                     scale: isSelected ? 1.25 : isHovered ? 1.15 : 1,
                     opacity: isDimmed ? 0.45 : 1,
                     boxShadow:
-                      isSelected || isHovered
-                        ? "0 0 0 9px rgba(184,150,46,0.28)"
-                        : "0 0 0 0px rgba(184,150,46,0)",
+                      isSelected || isHovered ? "0 0 0 9px rgba(184,150,46,0.28)" : "0 0 0 0px rgba(184,150,46,0)",
                   }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className={cn(
@@ -112,7 +123,9 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                 >
                   <div className="font-display text-base">{building.name}</div>
                   <div className="mt-2 space-y-1 text-[11px] text-warm-white/70">
-                    <div>{building.floors.length} ката · {building.totalApartments} станови</div>
+                    <div>
+                      {building.floors.length} ката · {building.totalApartments} станови
+                    </div>
                     <div>{building.available} достапни сега</div>
                     <div>{STATUS_LABEL[building.status]}</div>
                   </div>
@@ -230,7 +243,11 @@ function BuildingPanel({ building, basePath }: { building: BuildingWithAvailabil
   return (
     <div className="flex h-full flex-col border border-line bg-warm-white p-6">
       <div className="aspect-[4/3] overflow-hidden border border-line">
-        <Media image={building.exteriorImage} label={`${building.name} — надворешен изглед`} className="h-full w-full" />
+        <Media
+          image={building.exteriorImage}
+          label={`${building.name} — надворешен изглед`}
+          className="h-full w-full"
+        />
       </div>
       <div className="mt-5">
         <div className="eyebrow text-accent">Зграда {building.shortLabel}</div>

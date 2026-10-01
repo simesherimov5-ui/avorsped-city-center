@@ -28,9 +28,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
 
             <div className="absolute inset-0 flex items-end justify-between gap-4 p-6 sm:p-12">
               <div className="text-warm-white">
-                <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-charcoal">
-                  {statusText}
-                </span>
+                <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-charcoal">{statusText}</span>
                 <h3 className="mt-4 font-display text-2xl sm:text-4xl lg:text-5xl">{project.name}</h3>
                 <div className="mt-2 text-sm tracking-wide text-warm-white/70">{project.location}</div>
               </div>

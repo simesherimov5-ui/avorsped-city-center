@@ -3,7 +3,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Phone } from "lucide-react";
-import { apartments, getApartment, getBuilding, getApartmentsForFloor, companyInfo, development, projects } from "@/data";
+import {
+  apartments,
+  getApartment,
+  getBuilding,
+  getApartmentsForFloor,
+  companyInfo,
+  development,
+  projects,
+} from "@/data";
 import { formatArea, formatPrice, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -16,11 +24,7 @@ export function generateStaticParams() {
   return apartments.map((a) => ({ id: a.id }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const apt = getApartment(id);
   return { title: apt ? `Стан ${apt.number} — ${development.name}` : "Стан" };
@@ -36,9 +40,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
   const inquiryHref = `/consultation?kind=apartment-inquiry&project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
 
-  const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter(
-    (a) => a.id !== apartment.id
-  );
+  const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
 
   return (
     <div className="pt-28">

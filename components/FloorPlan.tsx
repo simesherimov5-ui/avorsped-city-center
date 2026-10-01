@@ -25,12 +25,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
   return (
     <div>
       <div className="border border-line bg-warm-white p-3 sm:p-6">
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full"
-          role="img"
-          aria-label="Основа на кат со кликабилни станови"
-        >
+        <svg viewBox="0 0 100 100" className="w-full" role="img" aria-label="Основа на кат со кликабилни станови">
           <rect x="0" y="0" width="100" height="100" fill="none" stroke="#dedad0" strokeWidth="0.5" />
           {apartments.map((apt) => {
             const [p0, p1, p2, p3] = apt.shape.points;

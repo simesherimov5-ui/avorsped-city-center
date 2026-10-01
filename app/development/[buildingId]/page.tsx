@@ -22,21 +22,13 @@ export function generateStaticParams() {
   return buildings.map((b) => ({ buildingId: b.id }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ buildingId: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ buildingId: string }> }): Promise<Metadata> {
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
   return { title: building ? `${building.name} — ${development.name}` : "Зграда" };
 }
 
-export default async function BuildingPage({
-  params,
-}: {
-  params: Promise<{ buildingId: string }>;
-}) {
+export default async function BuildingPage({ params }: { params: Promise<{ buildingId: string }> }) {
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
   if (!building) notFound();
@@ -47,7 +39,10 @@ export default async function BuildingPage({
   return (
     <div className="pt-28">
       <div className="mx-auto max-w-7xl px-6 pt-6 lg:px-10">
-        <Link href="/development" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
+        <Link
+          href="/development"
+          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+        >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектот
         </Link>
       </div>
@@ -78,7 +73,11 @@ export default async function BuildingPage({
               floors={building.floors.map((floor) => {
                 const units = apartments.filter((a) => a.buildingId === building.id && a.floor === floor.number);
                 const available = units.filter((a) => a.status === "available").length;
-                return { number: floor.number, label: floor.label, meta: `${units.length} станови · ${available} достапни` };
+                return {
+                  number: floor.number,
+                  label: floor.label,
+                  meta: `${units.length} станови · ${available} достапни`,
+                };
               })}
             />
           </div>

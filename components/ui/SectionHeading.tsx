@@ -17,12 +17,13 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn(align === "center" && "mx-auto max-w-2xl text-center", className)}>
-      {eyebrow && (
-        <div className={cn("eyebrow", tone === "dark" ? "text-accent-soft" : "text-accent")}>
-          {eyebrow}
-        </div>
-      )}
-      <h2 className={cn("mt-4 font-display text-3xl sm:text-[2.75rem]", tone === "dark" ? "text-warm-white" : "text-charcoal")}>
+      {eyebrow && <div className={cn("eyebrow", tone === "dark" ? "text-accent-soft" : "text-accent")}>{eyebrow}</div>}
+      <h2
+        className={cn(
+          "mt-4 font-display text-3xl sm:text-[2.75rem]",
+          tone === "dark" ? "text-warm-white" : "text-charcoal"
+        )}
+      >
         {title}
       </h2>
       {description && (

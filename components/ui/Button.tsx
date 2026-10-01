@@ -35,10 +35,7 @@ export function Button({
       tone === "dark"
         ? "border border-warm-white/40 text-warm-white hover:border-warm-white hover:bg-warm-white/10"
         : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
-    ghost:
-      tone === "dark"
-        ? "text-warm-white/80 hover:text-warm-white"
-        : "text-charcoal/70 hover:text-charcoal",
+    ghost: tone === "dark" ? "text-warm-white/80 hover:text-warm-white" : "text-charcoal/70 hover:text-charcoal",
   }[variant];
 
   const classes = cn(base, styles, className);

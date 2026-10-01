@@ -6,14 +6,7 @@ export type MediaImage = { src: string; alt: string; isPlaceholder: boolean };
 export type UnitStatus = "available" | "reserved" | "sold";
 
 export type Orientation =
-  | "North"
-  | "South"
-  | "East"
-  | "West"
-  | "North-East"
-  | "North-West"
-  | "South-East"
-  | "South-West";
+  "North" | "South" | "East" | "West" | "North-East" | "North-West" | "South-East" | "South-West";
 
 export interface Room {
   name: string;
