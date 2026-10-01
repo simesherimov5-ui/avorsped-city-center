@@ -12,10 +12,16 @@ A premium digital sales experience prototype for Exclusive Building (Јавор 
 ## Getting Started
 
 ```bash
-npm run dev      # dev server at http://localhost:3000
-npm run build    # production build (also type-checks)
-npm run lint     # ESLint
+npm ci                # install (Node 22, see .nvmrc)
+npm run dev           # dev server at http://localhost:3000
+npm run build         # production build (also type-checks)
+npm run check         # lint + typecheck + format check + unit tests
+npm run format        # Prettier
+npm test              # Vitest unit tests
 ```
+
+CI (`.github/workflows/ci.yml`) runs the same checks plus the build on every pull request.
+Contributor and agent conventions are in `CLAUDE.md`; planned work is in `docs/roadmap.md`.
 
 ## Architecture
 
