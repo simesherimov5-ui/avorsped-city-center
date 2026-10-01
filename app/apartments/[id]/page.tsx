@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Phone } from "lucide-react";
 import { apartments, getApartment, getBuilding, getApartmentsForFloor, companyInfo, development, projects } from "@/data";
@@ -11,6 +10,7 @@ import { Media } from "@/components/ui/Media";
 import { ApartmentTour } from "@/components/ApartmentTour";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { Button } from "@/components/ui/Button";
+import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 
 export function generateStaticParams() {
   return apartments.map((a) => ({ id: a.id }));
@@ -41,14 +41,15 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   );
 
   return (
-    <div className="pt-28">
+    <ZoomEnter className="pt-28">
       <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
-        <Link
+        <ZoomNavLink
           href={`/development/${apartment.buildingId}/${apartment.floor}`}
+          label={building?.name}
           className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон основата на катот
-        </Link>
+        </ZoomNavLink>
       </div>
 
       <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
@@ -88,7 +89,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                       ))}
                       <tr>
                         <td className="py-3 font-medium">Вкупна внатрешна површина</td>
-                        <td className="py-3 text-right font-display text-lg text-accent">
+                        <td className="py-3 text-right font-display text-lg text-gold-deep">
                           {formatArea(apartment.area)}
                         </td>
                       </tr>
@@ -144,7 +145,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
           <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
             <div>
               <div className="eyebrow text-ink/40">Цена</div>
-              <div className="mt-1.5 font-display text-4xl text-accent">{formatPrice(apartment.price)}</div>
+              <div className="mt-1.5 font-display text-4xl text-gold-deep">{formatPrice(apartment.price)}</div>
               <div className="mt-1.5 text-xs text-ink/50">Индикативна цена, подложна на конечна спецификација</div>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
@@ -175,7 +176,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
           </aside>
         </div>
       </section>
-    </div>
+    </ZoomEnter>
   );
 }
 

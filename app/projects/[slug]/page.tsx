@@ -74,7 +74,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="mt-10 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Reveal delay={0.1}>
-              <div className="eyebrow text-accent">{project.location}</div>
+              <div className="eyebrow text-gold-deep">{project.location}</div>
               <h1 className="mt-1 font-display text-4xl sm:text-5xl">{project.name}</h1>
               <p className="mt-5 max-w-xl text-lead leading-relaxed text-ink/70">{project.description}</p>
             </Reveal>
@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                           <Media image={type.image} label={type.label} className="aspect-[16/11]" />
                           <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
                             <div className="font-medium">{type.label}</div>
-                            <div className="text-sm text-accent">{type.area}</div>
+                            <div className="text-sm text-gold-deep">{type.area}</div>
                           </div>
                         </div>
                       ))}

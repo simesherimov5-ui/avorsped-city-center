@@ -27,7 +27,7 @@ export default function DevelopmentPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20 pt-16 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <Reveal>
-            <div className="eyebrow text-accent">{development.location}</div>
+            <div className="eyebrow text-gold-deep">{development.location}</div>
             <h1 className="mt-4 font-display text-5xl sm:text-6xl">{development.name}</h1>
           </Reveal>
           <Reveal delay={0.08}>
@@ -76,7 +76,7 @@ export default function DevelopmentPage() {
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <Reveal>
             <div>
-              <div className="eyebrow text-accent">Достапност</div>
+              <div className="eyebrow text-gold-deep">Достапност</div>
               <h2 className="mt-4 font-display text-3xl sm:text-4xl">
                 {counts.available} од {counts.total} станови сè уште се достапни
               </h2>
@@ -126,7 +126,7 @@ export default function DevelopmentPage() {
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <div>
-              <div className="eyebrow text-accent">Локација</div>
+              <div className="eyebrow text-gold-deep">Локација</div>
               <h2 className="mt-4 font-display text-3xl">{development.location}</h2>
               <ul className="mt-8 space-y-4">
                 {development.nearbyPoints.map((point) => (
@@ -157,9 +157,9 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <section className="bg-charcoal py-20 text-center text-warm-white">
+      <section className="bg-chrome py-20 text-center text-on-chrome">
         <h2 className="font-display text-3xl">Не сте сигурни која зграда?</h2>
-        <p className="mx-auto mt-3 max-w-md text-warm-white/70">
+        <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
           Филтрирајте секој стан од сите шест згради по големина, буџет и достапност.
         </p>
         <div className="mt-8">
@@ -175,7 +175,7 @@ export default function DevelopmentPage() {
 function Stat({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
     <div className={className}>
-      <div className="font-display text-4xl text-accent sm:text-5xl">
+      <div className="font-display text-4xl text-gold-deep sm:text-5xl">
         <CountUp value={value} />
       </div>
       <div className="eyebrow mt-2 text-ink/50">{label}</div>

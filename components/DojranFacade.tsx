@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Media } from "@/components/ui/Media";
+import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { dojranFloors } from "@/data/dojran";
 import { cn } from "@/lib/cn";
 
@@ -28,9 +28,10 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
         const isHovered = hovered === band.number;
 
         return (
-          <Link
+          <ZoomNavLink
             key={band.number}
             href={`/dojran/${band.number}`}
+            label={floor.label}
             onMouseEnter={() => setHovered(band.number)}
             onMouseLeave={() => setHovered(null)}
             onFocus={() => setHovered(band.number)}
@@ -47,14 +48,14 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
             >
               <span
                 className={cn(
-                  "rounded-full bg-charcoal px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-warm-white shadow-md transition-opacity",
+                  "rounded-full bg-chrome px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-on-chrome shadow-md transition-opacity",
                   isHovered ? "opacity-100" : "opacity-0"
                 )}
               >
                 {floor.label}
               </span>
             </div>
-          </Link>
+          </ZoomNavLink>
         );
       })}
     </div>

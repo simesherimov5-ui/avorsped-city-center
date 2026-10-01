@@ -1,6 +1,6 @@
 import { cn } from "@/lib/cn";
 
-function BuildingMark({ className }: { className?: string }) {
+export function BuildingMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
       <path d="M20 2 L36 15 V54 H4 V15 L20 2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -15,10 +15,15 @@ function BuildingMark({ className }: { className?: string }) {
 /**
  * Brand mark matching the company's printed HOLDING card: gold building
  * icon between "HOLDING" and "JAVOR SPED" / "SINCE 1994". `inline` packs
- * it horizontally for the navbar; `stacked` is the full vertical lockup
- * for the hero.
+ * it horizontally; `stacked` is the full vertical lockup; `icon` is just
+ * the mark on its own, for places that already carry the wordmark nearby
+ * (the navbar) or don't need it repeated.
  */
-export function Logo({ variant = "stacked", className }: { variant?: "inline" | "stacked"; className?: string }) {
+export function Logo({ variant = "stacked", className }: { variant?: "inline" | "stacked" | "icon"; className?: string }) {
+  if (variant === "icon") {
+    return <BuildingMark className={cn("h-8 w-8 text-accent", className)} />;
+  }
+
   if (variant === "inline") {
     return (
       <div className={cn("flex items-center gap-2.5 text-accent", className)}>

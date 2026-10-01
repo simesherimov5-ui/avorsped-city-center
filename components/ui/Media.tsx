@@ -39,7 +39,7 @@ export function Media({
     <div
       className={cn(
         "relative overflow-hidden",
-        fit === "contain" && (tone === "dark" ? "bg-charcoal" : "bg-silver"),
+        fit === "contain" && (tone === "dark" ? "bg-chrome" : "bg-silver"),
         className
       )}
     >

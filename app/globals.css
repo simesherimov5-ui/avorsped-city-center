@@ -1,15 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream: #f6f4ef;
-  --color-warm-white: #fbfaf7;
-  --color-silver: #f0f1f3;
-  --color-concrete: #cbc7be;
-  --color-charcoal: #1b1a18;
-  --color-ink: #2b2a26;
-  --color-accent: #b8962e;
-  --color-accent-soft: #ecdca3;
-  --color-line: #dedad0;
+  /*
+   * Exactly three colors on this whole site: paper, ink and gold — plus
+   * tints/gradients of those (never a new hue). One fixed palette, no
+   * light/dark flip — see the design-system brief this implements.
+   */
+  --color-paper: #faf8f5;
+  --color-ink: #141414;
+  --color-gold: #c9a45c;
+  --color-gold-deep: #7a6136;  /* gold text on paper — the only gold that's readable there (5.5:1) */
+  --color-gold-light: #e6cf9a; /* highlights/shimmer on ink only */
+  --color-gold-dark: #8e7240;  /* gradient depth (logo/ring gradients only, never text) */
+  --color-line: rgba(20, 20, 20, 0.1);
+  --color-line-dark: rgba(250, 248, 245, 0.12);
+
+  /*
+   * Legacy names kept as exact aliases of the three colors above, so the
+   * rest of the codebase (still using cream/warm-white/silver/charcoal/
+   * chrome/on-chrome/accent/accent-soft class names) renders the correct
+   * palette without a mechanical rename of every file. New components use
+   * paper/ink/gold directly.
+   */
+  --color-cream: var(--color-paper);
+  --color-warm-white: var(--color-paper);
+  --color-silver: var(--color-paper);
+  --color-concrete: rgba(20, 20, 20, 0.14);
+  --color-charcoal: var(--color-ink);
+  --color-accent: var(--color-gold);
+  --color-accent-soft: var(--color-gold-light);
+  --color-chrome: var(--color-ink);
+  --color-on-chrome: var(--color-paper);
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
@@ -22,17 +43,26 @@
 }
 
 @theme inline {
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-gold: var(--color-gold);
+  --color-gold-deep: var(--color-gold-deep);
+  --color-gold-light: var(--color-gold-light);
+  --color-gold-dark: var(--color-gold-dark);
+  --color-line: var(--color-line);
+  --color-line-dark: var(--color-line-dark);
   --color-cream: var(--color-cream);
   --color-warm-white: var(--color-warm-white);
   --color-silver: var(--color-silver);
   --color-concrete: var(--color-concrete);
   --color-charcoal: var(--color-charcoal);
-  --color-ink: var(--color-ink);
   --color-accent: var(--color-accent);
   --color-accent-soft: var(--color-accent-soft);
-  --color-line: var(--color-line);
+  --color-chrome: var(--color-chrome);
+  --color-on-chrome: var(--color-on-chrome);
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono);
 }
 
 * {
@@ -44,8 +74,8 @@ html {
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-charcoal);
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-size);
   line-height: var(--text-body-leading);
@@ -75,20 +105,30 @@ h1, h2, h3, h4 {
 .eyebrow {
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 
+/* Counters, stats, measurements — IBM Plex Mono at the weight/spacing the
+   design system reserves for numbers, with tabular-nums so digits don't
+   shift width as they change (preloader counter, stat count-ups). */
+.mono-stat {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  font-variant-numeric: tabular-nums;
+}
+
 ::selection {
-  background: var(--color-accent);
-  color: var(--color-warm-white);
+  background: var(--color-gold);
+  color: var(--color-paper);
 }
 
 .focus-ring {
   outline: none;
 }
 .focus-ring:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
 
@@ -107,4 +147,77 @@ h1, h2, h3, h4 {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* "Reserved" availability pattern — a diagonal hatch rather than a color, so
+   status reads from texture + label, never from hue alone (used by
+   StatusBadge, the masterplan and the floor-plan unit tiles). */
+.hatch-ink {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 0.15) 0,
+    rgba(20, 20, 20, 0.15) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+}
+
+/* Click feedback — a single gold pulse from the pointer's position, the same
+   flourish on every clickable surface (buttons, cards, nav links) so motion
+   on interaction reads as one consistent language, not a scattered effect
+   per component. Spawned by lib/clickPulse.ts into a `.click-pulse-overlay`
+   sibling, never onto the host element itself, so it never clips content
+   (badges, underlines) that's meant to bleed outside the host's own bounds. */
+.click-pulse-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.click-pulse {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(201, 164, 92, 0.45) 0%, rgba(201, 164, 92, 0) 72%);
+  transform: scale(0);
+  opacity: 0.6;
+  animation: click-pulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes click-pulse {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .click-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Hero legibility scrim — content-anchored behind the sky band where the
+   eyebrow/headline actually sit now, not a flat veil. Sampling the source
+   photo's luminance in the top 45% of the frame under a simulated
+   object-fit:cover crop at 1440×760, 768×900 and 390×740 found a
+   consistently bright ~150–195/255 sky at every size (no per-breakpoint
+   split needed this time — the old bottom-anchored recipe needed one
+   because the building band varied much more by crop). Tapers to near-zero
+   over the building itself and eases back in slightly behind the stats
+   strip at the very bottom. See Hero.tsx for the sampling notes. */
+.hero-scrim {
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 20, 20, 0.44) 0%,
+    rgba(20, 20, 20, 0.58) 10%,
+    rgba(20, 20, 20, 0.5) 22%,
+    rgba(20, 20, 20, 0.3) 32%,
+    rgba(20, 20, 20, 0.1) 42%,
+    rgba(20, 20, 20, 0) 55%,
+    rgba(20, 20, 20, 0.2) 80%,
+    rgba(20, 20, 20, 0.4) 100%
+  );
+}
+.hero-scrim-radial {
+  background: radial-gradient(ellipse 70% 46% at 50% 14%, rgba(20, 20, 20, 0.3), transparent 72%);
 }

@@ -5,6 +5,7 @@ import { projects } from "@/data";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectSlideshow } from "@/components/ProjectSlideshow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 import type { ProjectStatus } from "@/types";
 
@@ -43,11 +44,19 @@ export default function ProjectsPage() {
           ))}
         </div>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
-            <ProjectCard key={p.id} project={p} />
-          ))}
-        </div>
+        {filtered.length > 0 ? (
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => (
+              <ProjectCard key={p.id} project={p} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            className="mt-10"
+            title="Сè уште немаме завршен проект"
+            description="Сите наши проекти во моментов се во изградба или во планирање."
+          />
+        )}
       </section>
     </div>
   );

@@ -2,16 +2,23 @@ import type { UnitStatus } from "@/types";
 import { cn } from "@/lib/cn";
 import { statusLabel } from "@/lib/format";
 
+/**
+ * Status reads from fill/pattern + the label text, never from hue alone —
+ * available is the only status that uses gold at all. Exported (not just
+ * used internally) since app/development/page.tsx reuses these same
+ * classes as bar-meter fills, not just small dots, so each value needs to
+ * work as a solid fill rather than a border-only ring.
+ */
 export const DOT_COLOR: Record<UnitStatus, string> = {
-  available: "bg-emerald-600",
-  reserved: "bg-amber-500",
-  sold: "bg-ink/40",
+  available: "bg-gold",
+  reserved: "hatch-ink bg-ink/5",
+  sold: "bg-ink/20",
 };
 
 const PILL_STYLE: Record<UnitStatus, string> = {
-  available: "border-emerald-700/20 bg-emerald-700/[0.06] text-emerald-800",
-  reserved: "border-amber-600/25 bg-amber-600/[0.08] text-amber-800",
-  sold: "border-ink/15 bg-ink/[0.04] text-ink/50",
+  available: "border-gold text-ink",
+  reserved: "hatch-ink border-ink/40 text-ink/70",
+  sold: "border-ink/15 text-ink/40 opacity-35 pointer-events-none",
 };
 
 export function StatusBadge({

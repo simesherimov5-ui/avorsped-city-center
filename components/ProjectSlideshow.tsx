@@ -38,13 +38,13 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 p-6 text-warm-white sm:p-10">
-            <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-charcoal">
+          <div className="absolute inset-0 bg-gradient-to-t from-chrome/85 via-chrome/20 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 p-6 text-on-chrome sm:p-10">
+            <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
               {statusText}
             </span>
             <h2 className="mt-3 font-display text-2xl sm:text-4xl">{project.name}</h2>
-            <div className="mt-1 text-sm text-warm-white/70">{project.location}</div>
+            <div className="mt-1 text-sm text-on-chrome/70">{project.location}</div>
             <div className="mt-5">
               <Button href={project.href ?? `/projects/${project.slug}`} variant="primary">
                 Погледни го проектот
@@ -58,7 +58,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
         type="button"
         onClick={() => go(-1)}
         aria-label="Претходен проект"
-        className="focus-ring absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal/60 text-warm-white transition-colors hover:bg-charcoal"
+        className="focus-ring absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/60 text-on-chrome transition-colors hover:bg-chrome"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -66,7 +66,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
         type="button"
         onClick={() => go(1)}
         aria-label="Следен проект"
-        className="focus-ring absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal/60 text-warm-white transition-colors hover:bg-charcoal"
+        className="focus-ring absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/60 text-on-chrome transition-colors hover:bg-chrome"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
@@ -78,7 +78,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
             type="button"
             onClick={() => goTo(i)}
             aria-label={p.name}
-            className={cn("h-1.5 w-6 rounded-full transition-colors", i === index ? "bg-accent" : "bg-warm-white/40")}
+            className={cn("h-1.5 w-6 rounded-full transition-colors", i === index ? "bg-accent" : "bg-on-chrome/40")}
           />
         ))}
       </div>

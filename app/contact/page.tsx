@@ -20,19 +20,19 @@ export default function ContactPage() {
           <div>
             <ul className="space-y-5 text-sm">
               <li className="flex gap-3">
-                <MapPin className="h-4 w-4 shrink-0 text-accent" />
+                <MapPin className="h-4 w-4 shrink-0 text-gold-deep" />
                 <span>{companyInfo.address}</span>
               </li>
               <li className="flex gap-3">
-                <Phone className="h-4 w-4 shrink-0 text-accent" />
+                <Phone className="h-4 w-4 shrink-0 text-gold-deep" />
                 <a href={`tel:${companyInfo.phone}`}>{companyInfo.phone}</a>
               </li>
               <li className="flex gap-3">
-                <Mail className="h-4 w-4 shrink-0 text-accent" />
+                <Mail className="h-4 w-4 shrink-0 text-gold-deep" />
                 <a href={`mailto:${companyInfo.email}`}>{companyInfo.email}</a>
               </li>
               <li className="flex gap-3">
-                <Clock className="h-4 w-4 shrink-0 text-accent" />
+                <Clock className="h-4 w-4 shrink-0 text-gold-deep" />
                 <span>{companyInfo.hours}</span>
               </li>
             </ul>

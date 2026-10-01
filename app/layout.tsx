@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -7,6 +7,10 @@ import { Footer } from "@/components/Footer";
 import { I18nProvider } from "@/lib/i18n";
 import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
+import { TransitionOverlayProvider } from "@/components/ui/ZoomTransition";
+import { IntroProvider } from "@/components/intro/Preloader";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,6 +21,12 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-fraunces",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +46,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="mk" className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}>
       <body className="antialiased">
         <script
           type="application/ld+json"
@@ -52,14 +62,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <MotionConfig reducedMotion="user">
-          <I18nProvider>
-            <CompareProvider>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
-              <CompareBar />
-            </CompareProvider>
-          </I18nProvider>
+          <TransitionOverlayProvider>
+            <IntroProvider>
+              <I18nProvider>
+                <CompareProvider>
+                  <SmoothScroll />
+                  <GrayscaleToggle />
+                  <Navbar />
+                  <main>{children}</main>
+                  <Footer />
+                  <CompareBar />
+                </CompareProvider>
+              </I18nProvider>
+            </IntroProvider>
+          </TransitionOverlayProvider>
         </MotionConfig>
       </body>
     </html>

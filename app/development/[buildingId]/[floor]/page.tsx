@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import type { Apartment } from "@/types";
 import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
 import { FloorPlan } from "@/components/FloorPlan";
 import { RealFloorPlanViewer } from "@/components/RealFloorPlanViewer";
 import { FloorList } from "@/components/FloorList";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 
 export function generateStaticParams() {
   return buildings.flatMap((b) => b.floors.map((f) => ({ buildingId: b.id, floor: String(f.number) })));
@@ -55,20 +54,24 @@ export default async function FloorPage({
   });
 
   return (
-    <div className="pt-28">
-      <div className="mx-auto max-w-7xl px-6 pt-6 lg:px-10">
-        <Link
-          href={`/development/${building.id}`}
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
-        >
-          <ChevronLeft className="h-4 w-4" /> Назад кон {building.name}
-        </Link>
+    <ZoomEnter className="pt-28">
+      {/* A quiet wayfinding line, not a spec header — the visitor already
+          arrived through the building, so it doesn't need repeating as a
+          prominent heading. The floor plan and its apartments are the
+          actual content of this page. */}
+      <div className="mx-auto max-w-7xl px-6 pt-8 lg:px-10">
+        <nav aria-label="Патека" className="flex items-center gap-1.5 text-xs text-ink/40">
+          <ZoomNavLink href={`/development/${building.id}`} label={building.name} className="focus-ring transition-colors hover:text-charcoal">
+            {building.name}
+          </ZoomNavLink>
+          <ChevronRight className="h-3 w-3" aria-hidden />
+          <span className="text-ink/60">{floor.label}</span>
+        </nav>
+        <h1 className="mt-3 font-display text-3xl text-charcoal sm:text-4xl">Изберете го вашиот стан</h1>
       </div>
 
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
-        <SectionHeading eyebrow={building.name} title={`Основа на ${floor.label.toLowerCase()}`} />
-
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
+        <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
           <div>
             {hasRealPlan && overview ? (
               <RealFloorPlanViewer
@@ -76,6 +79,7 @@ export default async function FloorPage({
                 imageWidth={overview.width}
                 imageHeight={overview.height}
                 apartments={unitsWithRegions}
+                focusRegion={floor.interactiveCropRegion}
               />
             ) : (
               <FloorPlan apartments={units} />
@@ -89,7 +93,7 @@ export default async function FloorPage({
 
         {overview && (
           <div className="mt-16 border-t border-line pt-12">
-            <div className="eyebrow text-accent">Официјална документација</div>
+            <div className="eyebrow text-gold-deep">Официјална документација</div>
             <h2 className="mt-1.5 font-display text-2xl">Официјална основа на катот</h2>
             <p className="mt-2 max-w-lg text-sm text-ink/60">
               Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги
@@ -101,6 +105,6 @@ export default async function FloorPage({
           </div>
         )}
       </section>
-    </div>
+    </ZoomEnter>
   );
 }

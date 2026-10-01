@@ -20,12 +20,17 @@ const labelClass = "eyebrow text-ink/50";
 // Real weekday business hours (see companyInfo.hours: "Пон–Пет 09:00–18:00"),
 // offered as discrete slots rather than a native time input, which renders
 // inconsistently across browsers and reads as an afterthought on mobile.
-const TIME_SLOTS = Array.from({ length: 19 }, (_, i) => {
-  const totalMinutes = 9 * 60 + i * 30;
-  const h = Math.floor(totalMinutes / 60);
-  const m = totalMinutes % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-});
+// Split into two genuine groups — before/after midday — rather than one long
+// run of 19 buttons, so the grid stays scannable at a glance.
+function timeSlots(startHour: number, endHour: number) {
+  const out: string[] = [];
+  for (let m = startHour * 60; m < endHour * 60; m += 30) {
+    out.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
+  }
+  return out;
+}
+const MORNING_SLOTS = timeSlots(9, 13);
+const AFTERNOON_SLOTS = [...timeSlots(13, 18), "18:00"];
 
 export function BookingForm({ defaultValues, kind = "consultation", compact = false }: BookingFormProps) {
   const [values, setValues] = useState<ConsultationRequest>({
@@ -58,7 +63,7 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
   if (submitted) {
     return (
       <div className="flex flex-col items-center gap-3 border border-line bg-warm-white p-10 text-center">
-        <CheckCircle2 className="h-8 w-8 text-emerald-700" />
+        <CheckCircle2 className="h-8 w-8 text-gold-deep" />
         <h3 className="font-display text-xl">Ви благодариме, {values.firstName}.</h3>
         <p className="max-w-sm text-sm text-ink/60">
           Ова е прототип — не беше испратена реална порака. Во продукција, ова би се испратило до
@@ -111,25 +116,22 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
               <span className={labelClass}>Посакуван датум</span>
               <input type="date" className={inputClass} value={values.preferredDate} onChange={(e) => update("preferredDate", e.target.value)} />
             </label>
-            <div className="space-y-1.5 sm:col-span-2">
-              <span className={labelClass}>Посакувано време</span>
-              <div className="flex flex-wrap gap-2">
-                {TIME_SLOTS.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => update("preferredTime", values.preferredTime === t ? "" : t)}
-                    aria-pressed={values.preferredTime === t}
-                    className={cn(
-                      "focus-ring border px-3 py-1.5 text-sm tabular-nums transition-colors",
-                      values.preferredTime === t
-                        ? "border-accent bg-accent/10 text-charcoal"
-                        : "border-line text-ink/70 hover:border-accent/50"
-                    )}
-                  >
-                    {t}
-                  </button>
-                ))}
+            <div className="space-y-2 sm:col-span-2">
+              <div className="flex items-baseline justify-between">
+                <span className={labelClass}>Посакувано време</span>
+                <span className="text-xs text-ink/40">
+                  {values.preferredTime ? (
+                    <>
+                      Избрано: <span className="font-medium text-charcoal">{values.preferredTime}</span>
+                    </>
+                  ) : (
+                    "по избор"
+                  )}
+                </span>
+              </div>
+              <div role="radiogroup" aria-label="Посакувано време" className="space-y-3">
+                <TimeSlotRow label="Претпладне" slots={MORNING_SLOTS} value={values.preferredTime} onChange={(t) => update("preferredTime", t)} />
+                <TimeSlotRow label="Попладне" slots={AFTERNOON_SLOTS} value={values.preferredTime} onChange={(t) => update("preferredTime", t)} />
               </div>
             </div>
           </>
@@ -183,5 +185,45 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
               : "Закажи консултација"}
       </Button>
     </form>
+  );
+}
+
+function TimeSlotRow({
+  label,
+  slots,
+  value,
+  onChange,
+}: {
+  label: string;
+  slots: string[];
+  value?: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <div className="mb-1.5 text-[11px] text-ink/40">{label}</div>
+      <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-8">
+        {slots.map((t) => {
+          const isSelected = value === t;
+          return (
+            <button
+              key={t}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              onClick={() => onChange(isSelected ? "" : t)}
+              className={cn(
+                "focus-ring border px-2 py-2 text-center text-sm tabular-nums transition-colors active:scale-95",
+                isSelected
+                  ? "border-accent bg-accent/10 font-medium text-charcoal"
+                  : "border-line text-ink/70 hover:border-accent/50"
+              )}
+            >
+              {t}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

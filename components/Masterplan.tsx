@@ -4,8 +4,21 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
-import { Button } from "@/components/ui/Button";
+import { ZoomNavLink } from "@/components/ui/ZoomTransition";
+import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+
+interface Rect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+function rectOf(el: Element): Rect {
+  const r = el.getBoundingClientRect();
+  return { x: r.x, y: r.y, width: r.width, height: r.height };
+}
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -36,6 +49,7 @@ type BuildingWithAvailability = Building & { available: number };
 export function Masterplan({ buildings, apartments, image, hotspots, basePath, variant = "full", className }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedRect, setSelectedRect] = useState<Rect | null>(null);
 
   const buildingStats: BuildingWithAvailability[] = buildings.map((building) => ({
     ...building,
@@ -53,8 +67,8 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
           <motion.div
             className="absolute inset-0"
             style={{ transformOrigin: zoomSpot ? `${zoomSpot.left} ${zoomSpot.top}` : "50% 50%" }}
-            animate={{ scale: zoomSpot ? 1.16 : 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            animate={{ scale: zoomSpot ? 1.32 : 1 }}
+            transition={{ duration: 1.1, ease: EASE }}
           >
             <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 1024px" />
           </motion.div>
@@ -76,10 +90,13 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(building.id)}
                 onBlur={() => setHovered(null)}
-                onClick={() => setSelected((current) => (current === building.id ? null : building.id))}
+                onClick={(e) => {
+                  setSelectedRect(rectOf(e.currentTarget));
+                  setSelected((current) => (current === building.id ? null : building.id));
+                }}
                 aria-pressed={isSelected}
                 aria-label={`${building.name} — детали`}
-                className="focus-ring group absolute -translate-x-1/2 -translate-y-1/2"
+                className="focus-ring group absolute -translate-x-1/2 -translate-y-1/2 active:scale-90"
                 style={spot}
               >
                 <motion.div
@@ -94,11 +111,13 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-9 sm:w-9 sm:text-sm",
-                    isSelected || isHovered
-                      ? "border-accent bg-accent text-charcoal"
+                    isSelected
+                      ? "border-accent bg-accent text-chrome"
                       : isUnavailable
-                        ? "border-warm-white/25 bg-charcoal/50 text-warm-white/40"
-                        : "border-warm-white/50 bg-charcoal/85 text-warm-white"
+                        ? "border-on-chrome/20 bg-ink/20 text-on-chrome/40"
+                        : isHovered
+                          ? "border-accent bg-accent/25 text-chrome"
+                          : "border-on-chrome/50 bg-chrome/85 text-on-chrome"
                   )}
                 >
                   {building.shortLabel}
@@ -108,10 +127,10 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                 <motion.div
                   initial={false}
                   animate={{ opacity: isHovered && !isSelected ? 1 : 0, y: isHovered && !isSelected ? 0 : 6 }}
-                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-warm-white/10 bg-charcoal p-3.5 text-left text-warm-white shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]"
+                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]"
                 >
                   <div className="font-display text-base">{building.name}</div>
-                  <div className="mt-2 space-y-1 text-[11px] text-warm-white/70">
+                  <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
                     <div>{building.floors.length} ката · {building.totalApartments} станови</div>
                     <div>{building.available} достапни сега</div>
                     <div>{STATUS_LABEL[building.status]}</div>
@@ -134,7 +153,7 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="h-full"
               >
-                <BuildingPanel building={active} basePath={basePath} />
+                <BuildingPanel building={active} basePath={basePath} originRect={selectedRect} />
               </motion.div>
             ) : (
               <motion.div
@@ -153,10 +172,13 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
                     <button
                       key={b.id}
                       type="button"
-                      onClick={() => setSelected(b.id)}
+                      onClick={(e) => {
+                        setSelectedRect(rectOf(e.currentTarget));
+                        setSelected(b.id);
+                      }}
                       onMouseEnter={() => setHovered(b.id)}
                       onMouseLeave={() => setHovered(null)}
-                      className="focus-ring flex h-9 w-9 items-center justify-center border border-line text-sm font-medium text-ink/60 transition-colors hover:border-accent hover:text-accent"
+                      className="focus-ring flex h-9 w-9 items-center justify-center border border-line text-sm font-medium text-ink/60 transition-colors hover:border-accent hover:text-gold-deep"
                     >
                       {b.shortLabel}
                     </button>
@@ -177,16 +199,19 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
               <button
                 key={building.id}
                 type="button"
-                onClick={() => setSelected((current) => (current === building.id ? null : building.id))}
+                onClick={(e) => {
+                  setSelectedRect(rectOf(e.currentTarget));
+                  setSelected((current) => (current === building.id ? null : building.id));
+                }}
                 className={cn(
-                  "focus-ring flex shrink-0 items-center gap-2.5 border px-4 py-2.5 text-sm transition-colors",
+                  "focus-ring flex shrink-0 items-center gap-2.5 border px-4 py-2.5 text-sm transition-colors active:scale-[0.97]",
                   isSelected ? "border-accent bg-accent/10 text-charcoal" : "border-line text-ink/60"
                 )}
               >
                 <span
                   className={cn(
                     "flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
-                    isSelected ? "border-accent bg-accent text-charcoal" : "border-line text-ink/50"
+                    isSelected ? "border-accent bg-accent text-chrome" : "border-line text-ink/50"
                   )}
                 >
                   {building.shortLabel}
@@ -207,7 +232,7 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="mt-4"
             >
-              <BuildingPanel building={active} basePath={basePath} />
+              <BuildingPanel building={active} basePath={basePath} originRect={selectedRect} />
             </motion.div>
           ) : (
             <p className="mt-4 text-sm text-ink/50">
@@ -226,14 +251,22 @@ export function Masterplan({ buildings, apartments, image, hotspots, basePath, v
   );
 }
 
-function BuildingPanel({ building, basePath }: { building: BuildingWithAvailability; basePath: string }) {
+function BuildingPanel({
+  building,
+  basePath,
+  originRect,
+}: {
+  building: BuildingWithAvailability;
+  basePath: string;
+  originRect: Rect | null;
+}) {
   return (
     <div className="flex h-full flex-col border border-line bg-warm-white p-6">
       <div className="aspect-[4/3] overflow-hidden border border-line">
         <Media image={building.exteriorImage} label={`${building.name} — надворешен изглед`} className="h-full w-full" />
       </div>
       <div className="mt-5">
-        <div className="eyebrow text-accent">Зграда {building.shortLabel}</div>
+        <div className="eyebrow text-gold-deep">Зграда {building.shortLabel}</div>
         <h3 className="mt-1.5 font-display text-2xl">{building.name}</h3>
       </div>
       <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5 text-sm">
@@ -242,9 +275,14 @@ function BuildingPanel({ building, basePath }: { building: BuildingWithAvailabil
         <PanelStat label="Достапни" value={String(building.available)} />
         <PanelStat label="Фаза" value={STATUS_LABEL[building.status]} />
       </dl>
-      <Button href={`${basePath}/${building.id}`} variant="primary" className="mt-6 w-full">
+      <ZoomNavLink
+        href={`${basePath}/${building.id}`}
+        label={building.name}
+        originRect={originRect ? () => originRect : undefined}
+        className="focus-ring mt-6 flex w-full items-center justify-center gap-2 whitespace-nowrap bg-accent px-7 py-3.5 text-xs font-medium uppercase tracking-[0.16em] text-chrome transition-colors hover:bg-accent-soft active:scale-[0.97]"
+      >
         Разгледај ја зградата
-      </Button>
+      </ZoomNavLink>
     </div>
   );
 }

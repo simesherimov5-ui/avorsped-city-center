@@ -45,7 +45,7 @@ export function PhotoCarousel({
         type="button"
         onClick={() => go(-1)}
         aria-label="Претходна слика"
-        className="focus-ring absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal/50 text-warm-white transition-colors hover:bg-charcoal/80"
+        className="focus-ring absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -53,7 +53,7 @@ export function PhotoCarousel({
         type="button"
         onClick={() => go(1)}
         aria-label="Следна слика"
-        className="focus-ring absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal/50 text-warm-white transition-colors hover:bg-charcoal/80"
+        className="focus-ring absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
@@ -65,7 +65,7 @@ export function PhotoCarousel({
             type="button"
             onClick={() => goTo(i)}
             aria-label={`Слика ${i + 1}`}
-            className={cn("h-1.5 w-6 rounded-full transition-colors", i === index ? "bg-accent" : "bg-warm-white/50")}
+            className={cn("h-1.5 w-6 rounded-full transition-colors", i === index ? "bg-accent" : "bg-on-chrome/50")}
           />
         ))}
       </div>

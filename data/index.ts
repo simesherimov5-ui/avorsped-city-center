@@ -55,6 +55,7 @@ export const projects: Project[] = [
     href: "/development",
     constructionStages: development.constructionStages,
     buildings: development.buildings,
+    capabilities: { hasMasterplan: true, hasBuildings: true, hasApartmentSelection: true },
   },
   {
     id: "vista-heights",
@@ -152,6 +153,7 @@ export const projects: Project[] = [
       { label: "Тип станови", value: "Четирисобен (приземје), трособни (кат 1-3)" },
       { label: "Ориентација", value: "Североисток / Југозапад" },
     ],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
   },
   {
     id: "dojranski-raj",
@@ -182,6 +184,7 @@ export const projects: Project[] = [
       { label: "Вселување", value: "Јули 2027" },
       { label: "Контакт", value: "071/333-088" },
     ],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
   },
 ];
 

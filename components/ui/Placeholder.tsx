@@ -18,7 +18,7 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
     <div
       className={cn(
         "relative flex items-center justify-center overflow-hidden",
-        isDark ? "bg-charcoal" : "bg-concrete/30",
+        isDark ? "bg-chrome" : "bg-concrete/30",
         className
       )}
     >
@@ -33,7 +33,7 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
       <div
         className={cn(
           "relative flex flex-col items-center gap-2 px-4 text-center",
-          isDark ? "text-warm-white/50" : "text-ink/40"
+          isDark ? "text-on-chrome/50" : "text-ink/40"
         )}
       >
         <ImageOff className="h-5 w-5" strokeWidth={1.5} />

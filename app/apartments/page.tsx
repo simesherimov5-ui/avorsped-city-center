@@ -1,24 +1,81 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { SearchX, SlidersHorizontal, X } from "lucide-react";
-import type { ApartmentFilterState } from "@/types";
+import type { ApartmentFilterState, Orientation, UnitStatus } from "@/types";
 import { apartments } from "@/data";
 import { ApartmentFilters } from "@/components/ApartmentFilters";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 
+// Keeps the filter state shareable: a link with a query string reopens to
+// the same search. Only fields with a real value are written, so a fresh
+// visit to /apartments still has a clean URL.
+const NUM_KEYS = ["floor", "bedrooms", "minArea", "maxArea", "maxPrice"] as const;
+const STR_KEYS = ["buildingId", "status", "orientation"] as const;
+
+function filtersFromParams(params: URLSearchParams): ApartmentFilterState {
+  const state: ApartmentFilterState = {};
+  for (const key of NUM_KEYS) {
+    const raw = params.get(key);
+    if (raw !== null && !Number.isNaN(Number(raw))) state[key] = Number(raw);
+  }
+  for (const key of STR_KEYS) {
+    const raw = params.get(key);
+    if (raw) (state as Record<string, string>)[key] = raw;
+  }
+  return state;
+}
+
+function paramsFromFilters(filters: ApartmentFilterState): string {
+  const params = new URLSearchParams();
+  for (const key of NUM_KEYS) {
+    const v = filters[key];
+    if (v !== undefined) params.set(key, String(v));
+  }
+  for (const key of STR_KEYS) {
+    const v = filters[key];
+    if (v) params.set(key, v);
+  }
+  return params.toString();
+}
+
 export default function ApartmentsPage() {
-  const [filters, setFilters] = useState<ApartmentFilterState>({});
+  const router = useRouter();
+  // Starts empty on both server and client (so first paint always matches —
+  // no hydration mismatch), then syncs from the real URL right after mount.
+  // Deliberately not next/navigation's useSearchParams: that hook forces
+  // this page onto a client-only render path via an implicit Suspense
+  // boundary, which flashes blank on first load instead of showing the
+  // server-rendered list immediately.
+  const [filters, setFiltersState] = useState<ApartmentFilterState>({});
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  useEffect(() => {
+    const fromUrl = filtersFromParams(new URLSearchParams(window.location.search));
+    if (Object.keys(fromUrl).length > 0) setFiltersState(fromUrl);
+  }, []);
+
+  // router.replace (not push) so adjusting a filter never spams browser history.
+  const setFilters = useCallback(
+    (next: ApartmentFilterState) => {
+      setFiltersState(next);
+      const qs = paramsFromFilters(next);
+      router.replace(qs ? `/apartments?${qs}` : "/apartments", { scroll: false });
+    },
+    [router]
+  );
 
   const results = useMemo(() => {
     return apartments.filter((a) => {
       if (filters.buildingId && a.buildingId !== filters.buildingId) return false;
+      if (filters.floor !== undefined && a.floor !== filters.floor) return false;
       if (filters.bedrooms !== undefined && a.bedrooms !== filters.bedrooms) return false;
-      if (filters.status && a.status !== filters.status) return false;
+      if (filters.status && a.status !== (filters.status as UnitStatus)) return false;
+      if (filters.orientation && a.orientation !== (filters.orientation as Orientation)) return false;
       if (filters.minArea !== undefined && a.area < filters.minArea) return false;
       if (filters.maxArea !== undefined && a.area > filters.maxArea) return false;
       if (filters.maxPrice !== undefined && a.price > filters.maxPrice) return false;
@@ -43,7 +100,7 @@ export default function ApartmentsPage() {
           <div>
             <div className="flex items-center justify-between gap-4 border-b border-line pb-4 lg:hidden">
               <div>
-                <span className="font-display text-2xl text-accent">{results.length}</span>
+                <span className="font-display text-2xl text-gold-deep">{results.length}</span>
                 <span className="ml-2 text-sm text-ink/60">станови одговараат</span>
               </div>
               <button
@@ -92,7 +149,7 @@ export default function ApartmentsPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="absolute inset-0 bg-charcoal/60"
+              className="absolute inset-0 bg-chrome/60"
               onClick={() => setSheetOpen(false)}
             />
             <motion.div

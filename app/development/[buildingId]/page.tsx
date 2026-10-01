@@ -5,9 +5,10 @@ import { ChevronLeft } from "lucide-react";
 import { getBuilding, apartments, buildings, development } from "@/data";
 import { availabilityCounts } from "@/data";
 import { Media } from "@/components/ui/Media";
-import { FloorList } from "@/components/FloorList";
+import { BuildingDirectory } from "@/components/BuildingDirectory";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ZoomEnter } from "@/components/ui/ZoomTransition";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -45,7 +46,7 @@ export default async function BuildingPage({
   const counts = availabilityCounts(units);
 
   return (
-    <div className="pt-28">
+    <ZoomEnter className="pt-28">
       <div className="mx-auto max-w-7xl px-6 pt-6 lg:px-10">
         <Link href="/development" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
           <ChevronLeft className="h-4 w-4" /> Назад кон проектот
@@ -56,7 +57,8 @@ export default async function BuildingPage({
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <Media image={building.exteriorImage} className="aspect-[4/3]" />
           <div>
-            <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} />
+            <div className="eyebrow text-ink/40">Вие сте овде</div>
+            <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
             <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
               <Stat label="Катови" value={String(building.floors.length)} />
               <Stat label="Станови" value={String(building.totalApartments)} />
@@ -71,9 +73,10 @@ export default async function BuildingPage({
 
       <section className="bg-cream py-16">
         <div className="mx-auto max-w-3xl px-6 lg:px-10">
-          <SectionHeading eyebrow="Изберете кат" title="Изберете кат за да ја видите основата" align="center" />
+          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
           <div className="mt-10">
-            <FloorList
+            <BuildingDirectory
+              buildingName={building.name}
               basePath={`/development/${building.id}`}
               floors={building.floors.map((floor) => {
                 const units = apartments.filter((a) => a.buildingId === building.id && a.floor === floor.number);
@@ -84,7 +87,7 @@ export default async function BuildingPage({
           </div>
         </div>
       </section>
-    </div>
+    </ZoomEnter>
   );
 }
 

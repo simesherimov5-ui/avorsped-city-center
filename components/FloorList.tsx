@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { cn } from "@/lib/cn";
 
 export interface FloorListItem {
@@ -31,17 +31,18 @@ export function FloorList({
         const isActive = activeFloor === floor.number;
 
         return (
-          <Link
+          <ZoomNavLink
             key={floor.number}
             href={`${basePath}/${floor.number}`}
+            label={floor.label}
             aria-current={isActive ? "page" : undefined}
-            className="focus-ring group relative flex items-start gap-4 py-2"
+            className="focus-ring group relative flex items-start gap-4 py-2 transition-transform active:scale-[0.99]"
           >
             <span
               className={cn(
                 "relative z-10 mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
                 isActive
-                  ? "border-accent bg-accent text-charcoal"
+                  ? "border-accent bg-accent text-chrome"
                   : "border-line bg-warm-white text-ink/50 group-hover:border-accent/50 group-hover:text-charcoal"
               )}
             >
@@ -53,7 +54,7 @@ export function FloorList({
               </span>
               <span className="text-xs text-ink/45">{floor.meta}</span>
             </span>
-          </Link>
+          </ZoomNavLink>
         );
       })}
     </div>

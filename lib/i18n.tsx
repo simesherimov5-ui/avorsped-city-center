@@ -11,16 +11,22 @@ const dictionaries: Record<Locale, Record<string, string>> = {
   en: {
     "nav.home": "Home",
     "nav.projects": "Projects",
+    "nav.completedProjects": "Completed Projects",
     "nav.about": "About Us",
     "nav.contact": "Contact",
     "nav.consultation": "Book a Consultation",
+    "nav.themeToDark": "Switch to dark mode",
+    "nav.themeToLight": "Switch to light mode",
   },
   mk: {
     "nav.home": "Почетна",
     "nav.projects": "Проекти",
+    "nav.completedProjects": "Завршени проекти",
     "nav.about": "За нас",
     "nav.contact": "Контакт",
     "nav.consultation": "Закажи консултација",
+    "nav.themeToDark": "Вклучи темен режим",
+    "nav.themeToLight": "Вклучи светол режим",
   },
 };
 

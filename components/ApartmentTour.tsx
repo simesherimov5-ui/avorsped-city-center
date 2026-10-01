@@ -34,7 +34,7 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
   }
 
   return (
-    <div className="border border-line bg-charcoal">
+    <div className="border border-line bg-chrome">
       <div className="relative aspect-video">
         <Placeholder
           label={`360° приказ (placeholder) — ${HOTSPOTS.find((h) => h.key === room)?.label}`}
@@ -42,19 +42,19 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
           className="absolute inset-0"
         />
         <button
-          className="focus-ring absolute right-4 top-4 flex items-center gap-1.5 border border-warm-white/30 px-3 py-1.5 text-xs text-warm-white hover:bg-warm-white/10"
+          className="focus-ring absolute right-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-chrome hover:bg-on-chrome/10"
           aria-label="Цел екран"
         >
           <Maximize2 className="h-3.5 w-3.5" /> Цел екран
         </button>
         <button
-          className="focus-ring absolute left-4 top-4 flex items-center gap-1.5 border border-warm-white/30 px-3 py-1.5 text-xs text-warm-white hover:bg-warm-white/10"
+          className="focus-ring absolute left-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-chrome hover:bg-on-chrome/10"
           aria-label="Ротирај поглед"
         >
           <RotateCw className="h-3.5 w-3.5" /> Ротирај
         </button>
       </div>
-      <div className="flex flex-wrap gap-2 border-t border-warm-white/10 p-3">
+      <div className="flex flex-wrap gap-2 border-t border-on-chrome/10 p-3">
         {HOTSPOTS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -62,8 +62,8 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
             className={cn(
               "focus-ring flex items-center gap-1.5 border px-3 py-1.5 text-xs transition-colors",
               room === key
-                ? "border-accent bg-accent/20 text-warm-white"
-                : "border-warm-white/20 text-warm-white/70 hover:border-warm-white/40"
+                ? "border-accent bg-accent/20 text-on-chrome"
+                : "border-on-chrome/20 text-on-chrome/70 hover:border-on-chrome/40"
             )}
           >
             <Icon className="h-3.5 w-3.5" /> {label}

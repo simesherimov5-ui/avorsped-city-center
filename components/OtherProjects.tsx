@@ -11,7 +11,7 @@ export function OtherProjects({ currentProjectId }: { currentProjectId: string }
   if (others.length === 0) return null;
 
   return (
-    <section className="bg-charcoal py-24">
+    <section className="bg-chrome py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal>
           <SectionHeading eyebrow="Продолжете да истражувате" title="Другите наши проекти" tone="dark" />

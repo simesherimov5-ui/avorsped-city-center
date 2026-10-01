@@ -1,11 +1,25 @@
 "use client";
 
 import { X } from "lucide-react";
-import type { ApartmentFilterState } from "@/types";
+import type { ApartmentFilterState, Orientation } from "@/types";
 import { buildings } from "@/data";
+import { orientationLabel } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 const BEDROOM_OPTIONS = [0, 1, 2, 3, 4];
+const ORIENTATIONS: Orientation[] = [
+  "North",
+  "North-East",
+  "East",
+  "South-East",
+  "South",
+  "South-West",
+  "West",
+  "North-West",
+];
+const FLOOR_OPTIONS = Array.from(new Set(buildings.flatMap((b) => b.floors.map((f) => f.number)))).sort(
+  (a, b) => a - b
+);
 
 export function ApartmentFilters({
   value,
@@ -24,7 +38,7 @@ export function ApartmentFilters({
         <div>
           <div className="eyebrow text-ink/40">Резултати</div>
           {resultsCount !== undefined && (
-            <div className="mt-1.5 font-display text-3xl text-accent">{resultsCount}</div>
+            <div className="mt-1.5 font-display text-3xl text-gold-deep">{resultsCount}</div>
           )}
         </div>
         {hasFilters && (
@@ -88,6 +102,40 @@ export function ApartmentFilters({
             <option value="sold">Продаден</option>
           </select>
         </Field>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Field label="Кат">
+            <select
+              className="filter-input"
+              value={value.floor ?? ""}
+              onChange={(e) => onChange({ ...value, floor: e.target.value ? Number(e.target.value) : undefined })}
+            >
+              <option value="">Било кој кат</option>
+              {FLOOR_OPTIONS.map((f) => (
+                <option key={f} value={f}>
+                  {f === 0 ? "Приземје" : `Кат ${f}`}
+                </option>
+              ))}
+            </select>
+          </Field>
+
+          <Field label="Ориентација">
+            <select
+              className="filter-input"
+              value={value.orientation ?? ""}
+              onChange={(e) =>
+                onChange({ ...value, orientation: (e.target.value || undefined) as Orientation | undefined })
+              }
+            >
+              <option value="">Било која</option>
+              {ORIENTATIONS.map((o) => (
+                <option key={o} value={o}>
+                  {orientationLabel(o)}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </div>
 
         <div className="grid grid-cols-2 gap-4">
           <Field label="Мин. м²">

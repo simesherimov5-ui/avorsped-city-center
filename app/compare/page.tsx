@@ -50,7 +50,7 @@ export default function ComparePage() {
                   <th className="w-40" />
                   {selected.map((a) => (
                     <th key={a.id} className="border-b border-line px-4 pb-4 text-left align-top">
-                      <Link href={`/apartments/${a.id}`} className="focus-ring block font-display text-lg hover:text-accent">
+                      <Link href={`/apartments/${a.id}`} className="focus-ring block font-display text-lg hover:text-gold-deep">
                         Стан {a.number}
                       </Link>
                       <StatusBadge status={a.status} variant="pill" className="mt-2" />
@@ -69,7 +69,7 @@ export default function ComparePage() {
                           key={a.id}
                           className={cn(
                             "px-4 py-3 capitalize",
-                            isPrice ? "font-display text-lg text-accent" : "text-ink/80"
+                            isPrice ? "font-display text-lg text-gold-deep" : "text-ink/80"
                           )}
                         >
                           {row.get(a)}

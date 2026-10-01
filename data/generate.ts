@@ -390,6 +390,16 @@ export function generateDevelopment(): GeneratedDevelopment {
           label: `Кат ${f}`,
           apartmentIds: realApartments.map((a) => a.id),
           officialOverviewImage: b06Floor3Overview,
+          // The scanned page includes a printed "ОБЈЕКТ 6" title block and a
+          // full room-by-room measurement table to the right of the drawing —
+          // real content, but not what a buyer needs while choosing an
+          // apartment. Measured directly off the 1800×1273 source (canvas
+          // column-sampling found the drawing's white background gives way to
+          // the table's tan panel at x≈1235px, i.e. 68.6% across); the
+          // interactive viewer frames just the drawing, with a small margin.
+          // The full page — table included — still renders unmodified in the
+          // "official documentation" section below.
+          interactiveCropRegion: { x: 0, y: 0, width: 68.3, height: 100 },
         });
         continue;
       }

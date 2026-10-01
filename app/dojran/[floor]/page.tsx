@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { FloorList } from "@/components/FloorList";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
+import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { dojranFloors, getDojranFloor } from "@/data/dojran";
 import { projects } from "@/data";
 
@@ -32,11 +32,11 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
   const project = projects.find((p) => p.id === "dojranski-raj")!;
 
   return (
-    <div className="pt-28">
+    <ZoomEnter className="pt-28">
       <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
-        <Link href="/dojran" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
+        <ZoomNavLink href="/dojran" label="Дојрански Рај" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
           <ChevronLeft className="h-4 w-4" /> Назад кон Дојрански Рај
-        </Link>
+        </ZoomNavLink>
       </div>
 
       <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
@@ -70,6 +70,6 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
           </aside>
         </div>
       </section>
-    </div>
+    </ZoomEnter>
   );
 }

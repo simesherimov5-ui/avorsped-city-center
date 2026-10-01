@@ -9,6 +9,7 @@ import { Placeholder } from "@/components/ui/Placeholder";
 import { getBuilding } from "@/data";
 import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
+import { spawnClickPulse } from "@/lib/clickPulse";
 
 export function ApartmentCard({ apartment }: { apartment: Apartment }) {
   const building = getBuilding(apartment.buildingId);
@@ -17,8 +18,9 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
 
   return (
     <div
+      onPointerDown={spawnClickPulse}
       className={cn(
-        "group relative border bg-warm-white transition-all duration-300",
+        "group relative isolate border bg-warm-white transition-all duration-300",
         selected ? "border-accent shadow-[0_18px_40px_-24px_rgba(184,150,46,0.45)]" : "border-line hover:border-charcoal/20 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.3)]"
       )}
     >
@@ -28,7 +30,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
             label={`Стан ${apartment.number} — основа`}
             className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           />
-          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-warm-white/95" />
+          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-on-chrome/95" />
         </div>
       </Link>
 
@@ -65,7 +67,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
           <Link
             href={`/apartments/${apartment.id}`}
             aria-label={`Погледни го стан ${apartment.number}`}
-            className="focus-ring mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent text-accent transition-colors hover:bg-accent hover:text-charcoal"
+            className="focus-ring mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
           >
             <ArrowRight className="h-4 w-4" />
           </Link>

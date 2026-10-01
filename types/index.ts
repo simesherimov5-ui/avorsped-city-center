@@ -65,6 +65,14 @@ export interface Floor {
    * used only to render it at its true aspect ratio, never to distort it.
    */
   officialOverviewImage?: MediaImage & { width: number; height: number };
+  /**
+   * Percentage sub-rect (of officialOverviewImage) that the *interactive*
+   * apartment-selection viewer frames by default — e.g. excluding a printed
+   * title block or room-schedule table that's part of the same scanned page.
+   * The official-documentation viewer always ignores this and shows the full,
+   * unmodified page. Omit when the scan has no such extra content to exclude.
+   */
+  interactiveCropRegion?: PlanRegion;
 }
 
 export interface Building {
@@ -159,6 +167,18 @@ export interface Project {
   constructionStages?: ConstructionStage[];
   /** Optional buildings for projects with building-level selection (e.g. the consultation form's dependent "building of interest" field). */
   buildings?: Building[];
+  /**
+   * Declares which exploration stages this project actually supports, so
+   * shared UI (nav CTAs, the project page's "explore" entry point) can
+   * branch on stated intent instead of re-deriving it from data shape every
+   * time. Never used to force a stage a project has no real data for —
+   * a future project can leave any of these false/undefined.
+   */
+  capabilities?: {
+    hasMasterplan?: boolean;
+    hasBuildings?: boolean;
+    hasApartmentSelection?: boolean;
+  };
 }
 
 export interface CompanyStat {

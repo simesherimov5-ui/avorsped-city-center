@@ -40,7 +40,7 @@ export default function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-2">
             <Reveal>
               <div>
-                <div className="eyebrow text-accent">Мисија</div>
+                <div className="eyebrow text-gold-deep">Мисија</div>
                 <p className="mt-3 max-w-md font-display text-2xl leading-snug">{companyInfo.mission}</p>
               </div>
             </Reveal>
@@ -48,7 +48,7 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 sm:divide-x sm:divide-line">
                 {companyStats.map((s, i) => (
                   <div key={s.label} className={i > 0 ? "sm:pl-6" : undefined}>
-                    <div className="font-display text-4xl text-accent">
+                    <div className="font-display text-4xl text-gold-deep">
                       <CountUp value={s.value} />
                     </div>
                     <div className="eyebrow mt-1.5 text-ink/50">{s.label}</div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-charcoal py-20 text-center text-warm-white">
+      <section className="bg-chrome py-20 text-center text-on-chrome">
         <h2 className="font-display text-3xl">Сакате да дознаете повеќе?</h2>
         <div className="mt-8">
           <Button href="/contact" variant="primary">Контактирајте нè</Button>

@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { projectStatusLabel } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { spawnClickPulse } from "@/lib/clickPulse";
 
+// Never color-code project phase — "completed" is distinguished by shape
+// (a bordered pill) rather than a hue that would break the 3-color palette.
 const STATUS_STYLE: Record<Project["status"], string> = {
-  completed: "bg-emerald-700 text-warm-white",
-  "under-construction": "bg-accent text-charcoal",
-  upcoming: "bg-ink text-warm-white",
+  completed: "border border-gold bg-paper text-ink",
+  "under-construction": "bg-accent text-chrome",
+  upcoming: "bg-chrome text-on-chrome",
 };
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -16,7 +21,8 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={project.href ?? `/projects/${project.slug}`}
-      className="focus-ring group block border border-line bg-warm-white transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.35)]"
+      onPointerDown={spawnClickPulse}
+      className="focus-ring group relative isolate block border border-line bg-warm-white transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.35)]"
     >
       <div className="relative overflow-hidden">
         <Media
@@ -38,12 +44,12 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-charcoal/90 via-charcoal/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
             {project.tagline && (
-              <div className="font-display text-sm text-warm-white sm:text-base">{project.tagline}</div>
+              <div className="font-display text-sm text-on-chrome sm:text-base">{project.tagline}</div>
             )}
             {project.distanceHighlights && project.distanceHighlights.length > 0 && (
-              <ul className="mt-1.5 space-y-0.5 text-[11px] uppercase tracking-wide text-warm-white/80">
+              <ul className="mt-1.5 space-y-0.5 text-[11px] uppercase tracking-wide text-on-chrome/80">
                 {project.distanceHighlights.map((item) => (
                   <li key={item}>{item}</li>
                 ))}

@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { spawnClickPulse } from "@/lib/clickPulse";
 
 interface ButtonProps {
   children: ReactNode;
@@ -26,18 +29,21 @@ export function Button({
   disabled,
 }: ButtonProps) {
   const base = cn(
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium uppercase transition-colors duration-200 focus-ring disabled:opacity-40 disabled:cursor-not-allowed",
+    "relative isolate inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
     size === "sm" ? "px-5 py-2.5 text-[11px] tracking-[0.14em]" : "px-7 py-3.5 text-xs tracking-[0.16em]"
   );
   const styles = {
-    primary: "bg-accent text-charcoal hover:bg-accent-soft",
+    // text-chrome (not text-charcoal): this sits on the fixed gold accent in
+    // both themes, and charcoal flips to a light color in dark mode, which
+    // would leave light text on gold — a real contrast failure.
+    primary: "bg-accent text-chrome hover:bg-accent-soft",
     secondary:
       tone === "dark"
-        ? "border border-warm-white/40 text-warm-white hover:border-warm-white hover:bg-warm-white/10"
+        ? "border border-on-chrome/40 text-on-chrome hover:border-on-chrome hover:bg-on-chrome/10"
         : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
     ghost:
       tone === "dark"
-        ? "text-warm-white/80 hover:text-warm-white"
+        ? "text-on-chrome/80 hover:text-on-chrome"
         : "text-charcoal/70 hover:text-charcoal",
   }[variant];
 
@@ -45,13 +51,19 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick}>
+      <Link href={href} className={classes} onClick={onClick} onPointerDown={spawnClickPulse}>
         {children}
       </Link>
     );
   }
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
+    <button
+      type={type}
+      onClick={onClick}
+      onPointerDown={spawnClickPulse}
+      disabled={disabled}
+      className={classes}
+    >
       {children}
     </button>
   );

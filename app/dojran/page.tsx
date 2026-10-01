@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { FloorList } from "@/components/FloorList";
 import { DojranFacade } from "@/components/DojranFacade";
 import { OtherProjects } from "@/components/OtherProjects";
+import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { projects } from "@/data";
 import { dojranFloors } from "@/data/dojran";
 
@@ -16,7 +17,7 @@ export default function DojranPage() {
   const project = projects.find((p) => p.id === "dojranski-raj")!;
 
   return (
-    <div className="pt-28">
+    <ZoomEnter className="pt-28">
       <section className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <DojranFacade image={project.heroImage} />
@@ -24,14 +25,14 @@ export default function DojranPage() {
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2">
           <div>
-            <div className="eyebrow text-accent">{project.location}</div>
+            <div className="eyebrow text-gold-deep">{project.location}</div>
             <h1 className="mt-1.5 font-display text-2xl sm:text-3xl">{project.name}</h1>
             <p className="mt-3 text-sm leading-relaxed text-ink/70">{project.description}</p>
 
             <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 sm:grid-cols-4">
               {project.specifications.map((s) => (
                 <div key={s.label}>
-                  <div className="font-display text-sm text-accent">{s.value}</div>
+                  <div className="font-display text-sm text-gold-deep">{s.value}</div>
                   <div className="eyebrow mt-1 text-ink/50">{s.label}</div>
                 </div>
               ))}
@@ -60,6 +61,6 @@ export default function DojranPage() {
       </section>
 
       <OtherProjects currentProjectId="dojranski-raj" />
-    </div>
+    </ZoomEnter>
   );
 }
