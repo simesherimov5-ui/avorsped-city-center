@@ -7,12 +7,13 @@ import { join } from "node:path";
 const input = JSON.parse(readFileSync(0, "utf8") || "{}");
 const file = input?.tool_input?.file_path;
 const root = process.env.CLAUDE_PROJECT_DIR || input?.cwd || process.cwd();
-const prettier = join(root, "node_modules", ".bin", process.platform === "win32" ? "prettier.cmd" : "prettier");
+// Run Prettier through node: Node cannot spawn the .cmd shim on Windows (EINVAL).
+const prettier = join(root, "node_modules", "prettier", "bin", "prettier.cjs");
 
 if (file && existsSync(file) && existsSync(prettier)) {
   try {
     // --ignore-unknown skips unsupported file types; .prettierignore is respected.
-    execFileSync(prettier, ["--ignore-unknown", "--write", file], { cwd: root, stdio: "pipe" });
+    execFileSync(process.execPath, [prettier, "--ignore-unknown", "--write", file], { cwd: root, stdio: "pipe" });
   } catch (error) {
     const detail = String(error.stderr || error.message)
       .trim()
