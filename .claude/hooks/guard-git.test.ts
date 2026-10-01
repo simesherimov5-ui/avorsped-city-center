@@ -11,6 +11,8 @@ describe("guard-git", () => {
     ["git push origin HEAD:main", "feature"],
     ["git push origin HEAD:refs/heads/main", "feature"],
     ["git push origin +feature:master", "feature"],
+    ["git push origin HEAD", "main"],
+    ["git push origin HEAD:main", "feature"],
     ["git push", "main"],
     ["git push origin", "main"],
     ["git commit -m x", "main"],

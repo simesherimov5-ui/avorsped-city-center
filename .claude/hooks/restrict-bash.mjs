@@ -9,6 +9,7 @@ const ALLOWED = /^git(\s+-C\s+\S+)?\s+(status|diff|log|show)(\s|$)/;
 export function isAllowed(command) {
   const text = command.trim();
   if (/[;&|<>`\r\n]|\$\(/.test(text)) return false;
+  if (/(^|\s)--output(=|\s|$)/.test(text)) return false; // `git diff --output=file` writes a file
   return ALLOWED.test(text);
 }
 

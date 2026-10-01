@@ -1,6 +1,7 @@
 // PreToolUse hook for skills that may write exactly one file (/design-proposal, /ux-audit).
 // Usage in a skill's frontmatter: node restrict-edit.mjs <allowed path relative to the project>.
-// Blocks Edit and Write on any other path (exit code 2).
+// Blocks the Edit and Write tools on any other path (exit code 2). It does not cover NotebookEdit
+// or shell redirects; the skill text and the reviewer cover those.
 import { readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";

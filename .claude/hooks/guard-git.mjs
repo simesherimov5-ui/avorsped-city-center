@@ -52,7 +52,8 @@ export function check(command, currentBranch) {
       return "Force pushes are blocked.";
     }
     const positional = args.filter((a) => !a.startsWith("-"));
-    const refspecs = positional.slice(1);
+    // `HEAD` pushes the current branch, so resolve it before checking the target.
+    const refspecs = positional.slice(1).map((r) => r.replace(/^(\+?)HEAD(?=:|$)/, `$1${currentBranch || "HEAD"}`));
     if (refspecs.some(targetsProtected)) return "Pushing to main/master is blocked: open a pull request.";
     if (refspecs.length === 0 && onProtected) return `Pushing ${currentBranch} is blocked: open a pull request.`;
   }

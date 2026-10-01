@@ -28,6 +28,8 @@ describe("restrict-bash", () => {
     "git status; git push",
     "cat .env",
     "git diff $(whoami)",
+    "git diff --output=out.txt",
+    "git log --output out.txt",
     "npm run check",
   ])("blocks %s", (command) => expect(bashAllowed(command)).toBe(false));
 });
