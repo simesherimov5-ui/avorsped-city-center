@@ -7,8 +7,8 @@ Working document for the people and agents extending this project. Update it in 
 1. **Open every Claude Code session on the repo folder.** In the desktop app the session header must show the project folder, not "No folder".
    Run `/context` and check that `CLAUDE.md` is listed under Memory files. Without a folder, none of this repo's rules, hooks or permissions load.
 2. **One roadmap item per session.** Start with `/roadmap-item <n>`: it asks for a plan and the list of files, waits for approval, then implements.
-   Ask the `reviewer` subagent to check the diff before opening a pull request.
-3. **Commit after each prompt.** Usage limits can end a session mid-task.
+   Ask the `reviewer` subagent to check the diff, then `/pr-ready` opens the pull request.
+3. **Commit after each verified step** (one concern per commit). Usage limits can end a session mid-task.
 4. **Done means `npm run check` is green** (a Stop hook enforces it) **and CI is green** on the pull request.
 5. **Work on a branch and merge through a pull request.** Keep `main` deployable.
 6. **Audit prompts write findings to a file, not code.** Use `/ux-audit`, which writes `docs/ux-audit.md`. Fix findings as separate roadmap items.
@@ -32,14 +32,15 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 
 ## Known gaps today
 
-- Client components and whole pages import `@/data` directly, so the generator and dataset run in the browser bundle.
-  This blocks swapping in a real backend.
-- `RealFloorPlanViewer.tsx` renders a raw `<img>` instead of going through `Media`.
-- Status labels are duplicated in `ApartmentFilters.tsx` instead of using `lib/format.ts`.
+- Pages (14 of 15) and 8 component files import `@/data` directly; 3 pages are client components (`app/apartments`, `app/compare`, `app/projects`), so the generator and dataset run in the browser bundle.
+  This blocks swapping in a real backend. Lint stops new component imports; the 8 existing ones are the baseline in `eslint.config.mjs`.
+- `RealFloorPlanViewer.tsx` renders a raw `<img>` instead of going through `Media` (one `eslint-disable`, line 239).
+- Status labels are duplicated in `ApartmentFilters.tsx` instead of using `lib/format.ts`, and `app/projects/page.tsx:14-16` repeats the project-status labels (`projectStatusLabel`).
 - The i18n scaffold in `lib/i18n.tsx` is used by two files; almost all UI text is hardcoded Macedonian.
 - Forms (consultation, contact) are mocks.
 - Two animation systems coexist: Framer Motion (`components/ui/Reveal.tsx`, older pages) and GSAP + Lenis (`components/motion/`, `components/intro/`, `lib/gsap.ts`).
   `components/ui/SmoothScroll.tsx` appears unused (only the `components/motion/` version is imported). Decide whether to consolidate.
+- Hex colours outside the tokens: `FloorPlan.tsx`, `intro/GoldLogo.tsx`, `intro/GoldRing.tsx`, `intro/Preloader.tsx` (baseline in `eslint.config.mjs`).
 - Two `eslint-disable react-hooks/set-state-in-effect` lines are deliberate post-mount syncs (`app/apartments/page.tsx`, `components/intro/Preloader.tsx`).
   `useSyncExternalStore` would remove them but needs a browser test.
 
@@ -47,14 +48,29 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 
 One PR per row, in order. Characterization tests come before refactors.
 
-| #   | Work                                                                                                  | Done when                                         |
-| --- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| 0   | Foundation: typecheck, Prettier, Vitest, CI, Claude Code config                                       | `npm run check` and CI are green on a fresh clone |
-| 1   | Playwright smoke tests of current behaviour (browse → floor → apartment, compare, booking form)       | Tests pass on `main` before any refactor          |
-| 2   | Guardrails: lint rule against `next/image` outside `Media`, fix `RealFloorPlanViewer`, labels         | Lint fails on the known violations                |
-| 3   | Server-only data layer: `domain/` Zod schemas, async repositories, deterministic seed                 | No client file imports data directly              |
-| 3b  | Pages to Server Components, one PR per page group, with before/after bundle size from `next build`    | Bundle shrinks; pages receive plain props         |
-| 4   | i18n: `next-intl`, `app/[locale]`, `mk` default plus `en`, key-parity test, Cyrillic-literal CI check | Every page works in `/mk` and `/en`               |
+| #   | Work                                                                                                                                            | Done when                                                             |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 0   | Foundation: typecheck, Prettier, Vitest, CI, Claude Code config                                                                                 | `npm run check` and CI are green on a fresh clone                     |
+| 1   | Playwright smoke tests of current behaviour (browse → floor → apartment, compare, booking form)                                                 | Tests pass on `main` before any refactor                              |
+| 2   | Guardrails: the lint rules exist (Setup PR); fix `RealFloorPlanViewer`, labels, hex colours, then delete their baselines in `eslint.config.mjs` | Every baseline list in `eslint.config.mjs` is empty                   |
+| 3   | Server-only data layer: `domain/` Zod schemas, async repositories, deterministic seed                                                           | No client file imports data directly; `DATA_IMPORT_BASELINE` is empty |
+| 3b  | Pages to Server Components, one PR per page group, with before/after bundle size from `next build`                                              | Bundle shrinks; pages receive plain props                             |
+| 4   | i18n: `next-intl`, `app/[locale]`, `mk` default plus `en`, key-parity test, Cyrillic-literal CI check                                           | Every page works in `/mk` and `/en`                                   |
+
+## Claude Code setup: later
+
+Not created yet; each one waits for its trigger so the config never describes something that doesn't exist.
+
+| Add                                                                                     | Trigger                                                                  |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `/new-feature` skill                                                                    | Items 3 and 3b are done (`features/` and repositories exist to template) |
+| `/smoke-test` skill, `.claude/rules/e2e.md` (paths `e2e/**`)                            | Item 1 creates `e2e/` and an `npm run e2e` script                        |
+| `/i18n-extract` skill, `.claude/rules/i18n.md` (paths `messages/**`, `app/[locale]/**`) | Item 4 creates `messages/*.json` and the parity test                     |
+| `/add-collection` skill                                                                 | A CMS exists                                                             |
+| `server/data/CLAUDE.md`                                                                 | Item 3 creates `server/data/`                                            |
+| `features/CLAUDE.md`                                                                    | The first `features/<name>/` exists                                      |
+| CMS folder `CLAUDE.md`                                                                  | A CMS app exists                                                         |
+| Reviewer checks for locale parity                                                       | Item 4                                                                   |
 
 ## Deferred until triggered
 
