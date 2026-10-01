@@ -9,7 +9,8 @@ import { dojranFloors } from "@/data/dojran";
 
 export const metadata: Metadata = {
   title: "Дојрански Рај — Стар Дојран",
-  description: "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите достапните станови.",
+  description:
+    "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите достапните станови.",
 };
 
 export default function DojranPage() {
@@ -38,8 +39,12 @@ export default function DojranPage() {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button href="/consultation" variant="primary" size="sm">Закажи консултација</Button>
-              <Button href="/contact" variant="secondary" size="sm">Контактирај нè</Button>
+              <Button href="/consultation" variant="primary" size="sm">
+                Закажи консултација
+              </Button>
+              <Button href="/contact" variant="secondary" size="sm">
+                Контактирај нè
+              </Button>
             </div>
           </div>
 

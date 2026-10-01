@@ -76,8 +76,12 @@ export function Hero() {
           transition={{ delay: 0.75, duration: 0.8, ease: EASE }}
           className="mt-9 flex flex-wrap justify-center gap-4"
         >
-          <Button href="/projects" variant="primary">Погледни ги проектите</Button>
-          <Button href="/consultation" variant="secondary" tone="dark">Закажи консултација</Button>
+          <Button href="/projects" variant="primary">
+            Погледни ги проектите
+          </Button>
+          <Button href="/consultation" variant="secondary" tone="dark">
+            Закажи консултација
+          </Button>
         </motion.div>
       </div>
 
@@ -91,11 +95,17 @@ export function Hero() {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] uppercase tracking-[0.2em] text-warm-white/55 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px]">
           <span>Струмица, Северна Македонија</span>
           <span className="flex items-center gap-3 sm:gap-5">
-            <span>{companyStats[0].value} {companyStats[0].label}</span>
+            <span>
+              {companyStats[0].value} {companyStats[0].label}
+            </span>
             <span className="h-3 w-px bg-warm-white/25" aria-hidden />
-            <span>{companyStats[1].value} {companyStats[1].label}</span>
+            <span>
+              {companyStats[1].value} {companyStats[1].label}
+            </span>
             <span className="hidden h-3 w-px bg-warm-white/25 sm:block" aria-hidden />
-            <span className="hidden sm:inline">{companyStats[2].value} {companyStats[2].label}</span>
+            <span className="hidden sm:inline">
+              {companyStats[2].value} {companyStats[2].label}
+            </span>
           </span>
         </div>
       </motion.div>

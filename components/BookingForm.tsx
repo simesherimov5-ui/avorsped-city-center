@@ -12,8 +12,7 @@ interface BookingFormProps {
   compact?: boolean;
 }
 
-const inputClass =
-  "w-full border border-line bg-warm-white px-3.5 py-2.5 text-sm focus-ring";
+const inputClass = "w-full border border-line bg-warm-white px-3.5 py-2.5 text-sm focus-ring";
 const labelClass = "eyebrow text-ink/50";
 
 export function BookingForm({ defaultValues, kind = "consultation", compact = false }: BookingFormProps) {
@@ -50,8 +49,8 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
         <CheckCircle2 className="h-8 w-8 text-emerald-700" />
         <h3 className="font-display text-xl">Ви благодариме, {values.firstName}.</h3>
         <p className="max-w-sm text-sm text-ink/60">
-          Ова е прототип — не беше испратена реална порака. Во продукција, ова би се испратило до
-          нашиот CRM и календар, а член на нашиот тим за продажба би потврдил во рок од еден работен ден.
+          Ова е прототип — не беше испратена реална порака. Во продукција, ова би се испратило до нашиот CRM и календар,
+          а член на нашиот тим за продажба би потврдил во рок од еден работен ден.
         </p>
       </div>
     );
@@ -79,30 +78,62 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1.5">
           <span className={labelClass}>Име *</span>
-          <input required className={inputClass} value={values.firstName} onChange={(e) => update("firstName", e.target.value)} />
+          <input
+            required
+            className={inputClass}
+            value={values.firstName}
+            onChange={(e) => update("firstName", e.target.value)}
+          />
         </label>
         <label className="space-y-1.5">
           <span className={labelClass}>Презиме *</span>
-          <input required className={inputClass} value={values.lastName} onChange={(e) => update("lastName", e.target.value)} />
+          <input
+            required
+            className={inputClass}
+            value={values.lastName}
+            onChange={(e) => update("lastName", e.target.value)}
+          />
         </label>
         <label className="space-y-1.5">
           <span className={labelClass}>Е-пошта *</span>
-          <input required type="email" className={inputClass} value={values.email} onChange={(e) => update("email", e.target.value)} />
+          <input
+            required
+            type="email"
+            className={inputClass}
+            value={values.email}
+            onChange={(e) => update("email", e.target.value)}
+          />
         </label>
         <label className="space-y-1.5">
           <span className={labelClass}>Телефон *</span>
-          <input required type="tel" className={inputClass} value={values.phone} onChange={(e) => update("phone", e.target.value)} />
+          <input
+            required
+            type="tel"
+            className={inputClass}
+            value={values.phone}
+            onChange={(e) => update("phone", e.target.value)}
+          />
         </label>
 
         {!compact && (
           <>
             <label className="space-y-1.5">
               <span className={labelClass}>Посакуван датум</span>
-              <input type="date" className={inputClass} value={values.preferredDate} onChange={(e) => update("preferredDate", e.target.value)} />
+              <input
+                type="date"
+                className={inputClass}
+                value={values.preferredDate}
+                onChange={(e) => update("preferredDate", e.target.value)}
+              />
             </label>
             <label className="space-y-1.5">
               <span className={labelClass}>Посакувано време</span>
-              <input type="time" className={inputClass} value={values.preferredTime} onChange={(e) => update("preferredTime", e.target.value)} />
+              <input
+                type="time"
+                className={inputClass}
+                value={values.preferredTime}
+                onChange={(e) => update("preferredTime", e.target.value)}
+              />
             </label>
           </>
         )}
@@ -123,7 +154,11 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
         {selectedProject?.buildings && selectedProject.buildings.length > 0 && (
           <label className="space-y-1.5">
             <span className={labelClass}>Зграда од интерес</span>
-            <select className={inputClass} value={values.buildingId} onChange={(e) => update("buildingId", e.target.value)}>
+            <select
+              className={inputClass}
+              value={values.buildingId}
+              onChange={(e) => update("buildingId", e.target.value)}
+            >
               <option value="">Било која зграда</option>
               {selectedProject.buildings.map((b) => (
                 <option key={b.id} value={b.id}>

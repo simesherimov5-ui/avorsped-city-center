@@ -48,7 +48,12 @@ export function FloorList({
               {floor.number}
             </span>
             <span className="flex flex-1 items-center justify-between gap-3 border-b border-line pb-2.5 group-last:border-0">
-              <span className={cn("text-sm transition-colors", isActive ? "font-semibold text-charcoal" : "text-ink/70 group-hover:text-charcoal")}>
+              <span
+                className={cn(
+                  "text-sm transition-colors",
+                  isActive ? "font-semibold text-charcoal" : "text-ink/70 group-hover:text-charcoal"
+                )}
+              >
                 {floor.label}
               </span>
               <span className="text-xs text-ink/45">{floor.meta}</span>

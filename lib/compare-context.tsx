@@ -22,11 +22,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
       isFull: ids.length >= MAX_COMPARE,
       toggle: (id: string) =>
         setIds((prev) =>
-          prev.includes(id)
-            ? prev.filter((x) => x !== id)
-            : prev.length >= MAX_COMPARE
-              ? prev
-              : [...prev, id]
+          prev.includes(id) ? prev.filter((x) => x !== id) : prev.length >= MAX_COMPARE ? prev : [...prev, id]
         ),
       clear: () => setIds([]),
     }),
