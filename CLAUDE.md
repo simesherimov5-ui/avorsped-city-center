@@ -22,8 +22,8 @@ Mock-data sales prototype, not live. Assume anything you push may be public.
 ## Conventions
 
 - Pages import data from `@/data` (or `@/data/dojran`). Only `data/` knows how data is generated.
-- Project photography goes through `components/ui/Media.tsx`; status and type labels come from `lib/format.ts`. Lint enforces the Media rule and apartment-status labels, with a baseline of known exceptions in `eslint.config.mjs`.
-- Use the colour tokens in `app/globals.css`. Don't add hex colours.
+- Project photography goes through `components/ui/Media.tsx`: no `next/image` or `<img>` elsewhere. Status and type labels come from `lib/format.ts`. Lint enforces both (apartment-status labels only), with the known exceptions in `eslint.config.mjs` and one `eslint-disable` in `RealFloorPlanViewer.tsx`.
+- Use the colour tokens in `app/globals.css`. Lint rejects new six-digit hex literals.
 - Component, animation and design rules load from `.claude/rules/` when you touch those files.
 - Before changing routing, metadata, caching or `next.config.ts`, read the matching guide in `node_modules/next/dist/docs/`.
 
