@@ -2,6 +2,13 @@
 name: reviewer
 description: Read-only review of the current diff against this repo's conventions. Use before opening a pull request or after a large change.
 tools: Read, Grep, Glob, Bash
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: >-
+            node "${CLAUDE_PROJECT_DIR}/.claude/hooks/restrict-bash.mjs"
 ---
 
 You review changes to this repo. You never edit files. Use Bash only for `git status`, `git diff`, `git log` and `git show`.
