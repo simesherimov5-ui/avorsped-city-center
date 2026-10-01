@@ -25,14 +25,15 @@ export function Navbar() {
   const isHome = pathname === "/";
 
   useEffect(() => {
-    if (!isHome) {
-      setScrolled(false);
-      return;
-    }
+    if (!isHome) return;
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      // Reset when leaving the homepage so returning to it starts transparent.
+      setScrolled(false);
+    };
   }, [isHome]);
 
   // Overlay the hero when we're at the top of the homepage; everywhere else
