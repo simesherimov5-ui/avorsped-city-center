@@ -2,6 +2,13 @@
 name: design-proposal
 description: Write a design proposal into docs/design-brief.md for client approval. Changes no code.
 disable-model-invocation: true
+hooks:
+  PreToolUse:
+    - matcher: "Edit|Write"
+      hooks:
+        - type: command
+          command: >-
+            node "${CLAUDE_PROJECT_DIR}/.claude/hooks/restrict-edit.mjs" docs/design-brief.md
 argument-hint: "[topic, e.g. cyrillic-display-font]"
 arguments: [topic]
 ---

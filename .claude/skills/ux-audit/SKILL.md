@@ -2,6 +2,13 @@
 name: ux-audit
 description: Audit the site's UX and visual quality and write the findings to docs/ux-audit.md. Changes no source code.
 disable-model-invocation: true
+hooks:
+  PreToolUse:
+    - matcher: "Edit|Write"
+      hooks:
+        - type: command
+          command: >-
+            node "${CLAUDE_PROJECT_DIR}/.claude/hooks/restrict-edit.mjs" docs/ux-audit.md
 argument-hint: "[route or area; default: whole site]"
 arguments: [area]
 ---
