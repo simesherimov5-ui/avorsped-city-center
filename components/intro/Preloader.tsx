@@ -51,6 +51,9 @@ export function IntroProvider({ children }: { children: ReactNode }) {
     } catch {
       seen = false;
     }
+    // Post-mount sync from sessionStorage (browser-only): the first render must match the
+    // server's, and a layout effect applies this before paint, so there is no flash.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- deliberate hydration-safe sync
     if (seen) setState({ ready: true, instant: true });
   }, []);
 

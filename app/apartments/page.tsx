@@ -56,6 +56,7 @@ export default function ApartmentsPage() {
 
   useEffect(() => {
     const fromUrl = filtersFromParams(new URLSearchParams(window.location.search));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- deliberate post-mount URL sync (see comment above)
     if (Object.keys(fromUrl).length > 0) setFiltersState(fromUrl);
   }, []);
 
