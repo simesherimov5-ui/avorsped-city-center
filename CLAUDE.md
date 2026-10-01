@@ -27,10 +27,11 @@ Next.js 16 App Router · React 19 · TypeScript strict · Tailwind v4. Mock-data
 ## Ask first
 
 - Anything under `public/` (client assets), `package-lock.json`, `next.config.ts`, `.github/`, new dependencies, the real-unit data in `data/generate.ts`.
+- Changing the visual direction (palette, typography, layout concept, motion style): needs an approved entry in `docs/design-brief.md`.
 - Never commit `.env*`, client documents, prices or personal data, and keep them out of commit and PR text.
 
 ## Workflow
 
 - For anything touching more than a couple of files: plan first, list the files, wait for approval.
 - One concern per commit, imperative messages. Work on the assigned branch; never push to `main`.
-- Planned work and decisions live in `docs/roadmap.md`. Read it before starting a roadmap item.
+- Planned work and decisions live in `docs/roadmap.md` (read it before starting a roadmap item); design decisions in `docs/design-brief.md`.

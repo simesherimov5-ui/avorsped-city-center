@@ -2,6 +2,18 @@
 
 Working document for the people and agents extending this project. Update it in the same PR that changes a decision.
 
+## How we work
+
+1. **Open every Claude Code session on the repo folder.** In the desktop app the session header must show the project folder, not "No folder".
+   Run `/context` and check that `CLAUDE.md` is listed under Memory files. Without a folder, none of this repo's rules, hooks or permissions load.
+2. **One roadmap item per session.** Start in Plan mode: ask for a plan and the list of files, review it, then implement.
+3. **Commit after each prompt.** Usage limits can end a session mid-task.
+4. **Done means `npm run check` is green** (a Stop hook enforces it) **and CI is green** on the pull request.
+5. **Work on a branch and merge through a pull request.** Keep `main` deployable.
+6. **Audit prompts write findings to a file** (for example `docs/ux-audit.md`), not code. Fix findings as separate roadmap items.
+7. **Visual direction changes need an approved entry in `docs/design-brief.md` first.**
+8. **Prompts drafted elsewhere (a chat Project, for example) should point at roadmap items,** not restate rules. This repo is the source of truth.
+
 ## Target architecture
 
 ```
@@ -54,4 +66,5 @@ Trigger: a hosting decision, a launch date, or the first non-developer who must 
 
 - Locales: `mk` (default) and `en`. Library: `next-intl` with `app/[locale]` routing (verify against its current docs when implementing).
 - UI strings live in `messages/mk.json` and `messages/en.json`; components contain no literal user-facing text.
-- Open: whether URL slugs stay Latin; whether the current font covers all Macedonian Cyrillic letters.
+- Open: whether URL slugs stay Latin.
+- The display font (Fraunces) has no Cyrillic subset, and Inter is loaded without its Cyrillic subset; see `docs/design-brief.md`.
