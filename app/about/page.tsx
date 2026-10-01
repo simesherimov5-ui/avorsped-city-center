@@ -9,7 +9,8 @@ import { ProjectCard } from "@/components/ProjectCard";
 
 export const metadata: Metadata = {
   title: "За нас",
-  description: "Дознајте повеќе за Јавор Шпед и Exclusive Building — нашата приказна, мисија, вредности и завршени проекти.",
+  description:
+    "Дознајте повеќе за Јавор Шпед и Exclusive Building — нашата приказна, мисија, вредности и завршени проекти.",
 };
 
 const BRAND_IMAGE = {
@@ -108,7 +109,9 @@ export default function AboutPage() {
       <section className="bg-chrome py-20 text-center text-on-chrome">
         <h2 className="font-display text-3xl">Сакате да дознаете повеќе?</h2>
         <div className="mt-8">
-          <Button href="/contact" variant="primary">Контактирајте нè</Button>
+          <Button href="/contact" variant="primary">
+            Контактирајте нè
+          </Button>
         </div>
       </section>
     </div>

@@ -40,7 +40,9 @@ export default function ComparePage() {
                 Додајте до 3 станови за споредба од листата со достапни единици.
               </p>
             </div>
-            <Button href="/apartments" variant="primary" size="sm">Разгледај станови</Button>
+            <Button href="/apartments" variant="primary" size="sm">
+              Разгледај станови
+            </Button>
           </div>
         ) : (
           <div className="mt-10 overflow-x-auto">
@@ -50,7 +52,10 @@ export default function ComparePage() {
                   <th className="w-40" />
                   {selected.map((a) => (
                     <th key={a.id} className="border-b border-line px-4 pb-4 text-left align-top">
-                      <Link href={`/apartments/${a.id}`} className="focus-ring block font-display text-lg hover:text-gold-deep">
+                      <Link
+                        href={`/apartments/${a.id}`}
+                        className="focus-ring block font-display text-lg hover:text-gold-deep"
+                      >
                         Стан {a.number}
                       </Link>
                       <StatusBadge status={a.status} variant="pill" className="mt-2" />

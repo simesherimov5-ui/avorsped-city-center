@@ -9,9 +9,9 @@
   --color-paper: #faf8f5;
   --color-ink: #141414;
   --color-gold: #c9a45c;
-  --color-gold-deep: #7a6136;  /* gold text on paper — the only gold that's readable there (5.5:1) */
+  --color-gold-deep: #7a6136; /* gold text on paper — the only gold that's readable there (5.5:1) */
   --color-gold-light: #e6cf9a; /* highlights/shimmer on ink only */
-  --color-gold-dark: #8e7240;  /* gradient depth (logo/ring gradients only, never text) */
+  --color-gold-dark: #8e7240; /* gradient depth (logo/ring gradients only, never text) */
   --color-line: rgba(20, 20, 20, 0.1);
   --color-line-dark: rgba(250, 248, 245, 0.12);
 

@@ -41,10 +41,7 @@ export function Button({
       tone === "dark"
         ? "border border-on-chrome/40 text-on-chrome hover:border-on-chrome hover:bg-on-chrome/10"
         : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
-    ghost:
-      tone === "dark"
-        ? "text-on-chrome/80 hover:text-on-chrome"
-        : "text-charcoal/70 hover:text-charcoal",
+    ghost: tone === "dark" ? "text-on-chrome/80 hover:text-on-chrome" : "text-charcoal/70 hover:text-charcoal",
   }[variant];
 
   const classes = cn(base, styles, className);
@@ -57,13 +54,7 @@ export function Button({
     );
   }
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      onPointerDown={spawnClickPulse}
-      disabled={disabled}
-      className={classes}
-    >
+    <button type={type} onClick={onClick} onPointerDown={spawnClickPulse} disabled={disabled} className={classes}>
       {children}
     </button>
   );

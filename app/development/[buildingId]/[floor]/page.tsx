@@ -57,7 +57,11 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           actual content of this page. */}
       <div className="mx-auto max-w-7xl px-6 pt-8 lg:px-10">
         <nav aria-label="Патека" className="flex items-center gap-1.5 text-xs text-ink/40">
-          <ZoomNavLink href={`/development/${building.id}`} label={building.name} className="focus-ring transition-colors hover:text-charcoal">
+          <ZoomNavLink
+            href={`/development/${building.id}`}
+            label={building.name}
+            className="focus-ring transition-colors hover:text-charcoal"
+          >
             {building.name}
           </ZoomNavLink>
           <ChevronRight className="h-3 w-3" aria-hidden />

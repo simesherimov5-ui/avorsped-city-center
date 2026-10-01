@@ -13,11 +13,7 @@ export function generateStaticParams() {
   return dojranFloors.map((f) => ({ floor: String(f.number) }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ floor: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ floor: string }> }): Promise<Metadata> {
   const { floor: floorParam } = await params;
   const floor = getDojranFloor(Number(floorParam));
   return { title: floor ? `${floor.label} — Дојрански Рај` : "Дојрански Рај" };
@@ -34,7 +30,11 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
   return (
     <ZoomEnter className="pt-28">
       <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
-        <ZoomNavLink href="/dojran" label="Дојрански Рај" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
+        <ZoomNavLink
+          href="/dojran"
+          label="Дојрански Рај"
+          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+        >
           <ChevronLeft className="h-4 w-4" /> Назад кон Дојрански Рај
         </ZoomNavLink>
       </div>
@@ -51,7 +51,9 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
                 Контактирајте нè за најнови информации и достапност.
               </p>
               <div className="mt-6">
-                <Button href="/consultation" variant="primary">Закажи консултација</Button>
+                <Button href="/consultation" variant="primary">
+                  Закажи консултација
+                </Button>
               </div>
             </div>
 

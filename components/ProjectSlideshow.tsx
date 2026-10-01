@@ -40,9 +40,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-chrome/85 via-chrome/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-6 text-on-chrome sm:p-10">
-            <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
-              {statusText}
-            </span>
+            <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">{statusText}</span>
             <h2 className="mt-3 font-display text-2xl sm:text-4xl">{project.name}</h2>
             <div className="mt-1 text-sm text-on-chrome/70">{project.location}</div>
             <div className="mt-5">

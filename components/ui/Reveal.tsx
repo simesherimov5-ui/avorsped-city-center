@@ -12,7 +12,11 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
       initial={{ opacity: 0, y: reduceMotion ? 0 : REVEAL_DISTANCE }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: reduceMotion ? DURATION.instant : DURATION.slow, delay: reduceMotion ? 0 : delay, ease: EASE }}
+      transition={{
+        duration: reduceMotion ? DURATION.instant : DURATION.slow,
+        delay: reduceMotion ? 0 : delay,
+        ease: EASE,
+      }}
     >
       {children}
     </motion.div>

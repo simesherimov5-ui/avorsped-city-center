@@ -44,7 +44,14 @@ export function Hero() {
   useGSAP(
     () => {
       if (!ready) return;
-      const targets = [imageWrapRef.current, eyebrowRef.current, headlineRef.current, actionsRef.current, statsBarRef.current, scrollIndicatorRef.current];
+      const targets = [
+        imageWrapRef.current,
+        eyebrowRef.current,
+        headlineRef.current,
+        actionsRef.current,
+        statsBarRef.current,
+        scrollIndicatorRef.current,
+      ];
       if (targets.some((t) => !t)) return;
 
       const split = new SplitText(headlineRef.current, { type: "lines", mask: "lines", linesClass: "line" });
@@ -89,7 +96,10 @@ export function Hero() {
   );
 
   return (
-    <section ref={sectionRef} className="relative flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-ink text-paper">
+    <section
+      ref={sectionRef}
+      className="relative flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-ink text-paper"
+    >
       <motion.div style={{ y: photoY }} className="absolute inset-0">
         <div ref={imageWrapRef} className="h-full w-full">
           {/* Settle-in on load, then an almost imperceptible continuous drift —
@@ -159,7 +169,9 @@ export function Hero() {
       <div className="relative flex flex-1 flex-col items-center justify-end px-6 pb-14 text-center sm:pb-16">
         <div ref={actionsRef} className="flex flex-wrap justify-center gap-4">
           <span className="relative inline-flex">
-            <Button href="/projects" variant="primary">Погледни ги проектите</Button>
+            <Button href="/projects" variant="primary">
+              Погледни ги проектите
+            </Button>
             {/* Gold frame that draws in around the primary CTA as it settles — a
                 decorative entrance flourish, independent of the button's own
                 permanent gold fill. */}
@@ -176,7 +188,9 @@ export function Hero() {
               />
             </svg>
           </span>
-          <Button href="/consultation" variant="secondary" tone="dark">Закажи консултација</Button>
+          <Button href="/consultation" variant="secondary" tone="dark">
+            Закажи консултација
+          </Button>
         </div>
       </div>
 

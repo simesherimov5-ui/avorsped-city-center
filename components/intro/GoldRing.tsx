@@ -35,7 +35,14 @@ export function GoldRing({
       style={{ overflow: "visible" }}
     >
       <defs>
-        <linearGradient id="goldRingGradient" x1="0" y1="0" x2={RING_VIEWBOX} y2={RING_VIEWBOX} gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="goldRingGradient"
+          x1="0"
+          y1="0"
+          x2={RING_VIEWBOX}
+          y2={RING_VIEWBOX}
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stopColor="#8E7240" />
           <stop offset="33%" stopColor="#C9A45C" />
           <stop offset="66%" stopColor="#E6CF9A" />

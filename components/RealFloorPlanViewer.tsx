@@ -27,7 +27,11 @@ function clamp(v: number, min: number, max: number) {
  * container's own box doesn't change size with zoom, only its content
  * scales) — good enough for "near the apartment", not claimed as exact.
  */
-function cardPlacement(r: { x: number; y: number; width: number; height: number }, containerW: number, containerH: number) {
+function cardPlacement(
+  r: { x: number; y: number; width: number; height: number },
+  containerW: number,
+  containerH: number
+) {
   const left = (r.x / 100) * containerW;
   const top = (r.y / 100) * containerH;
   const right = left + (r.width / 100) * containerW;
@@ -70,7 +74,13 @@ interface RealFloorPlanViewerProps {
   focusRegion?: PlanRegion;
 }
 
-export function RealFloorPlanViewer({ image, imageWidth, imageHeight, apartments = [], focusRegion }: RealFloorPlanViewerProps) {
+export function RealFloorPlanViewer({
+  image,
+  imageWidth,
+  imageHeight,
+  apartments = [],
+  focusRegion,
+}: RealFloorPlanViewerProps) {
   const fx = focusRegion?.x ?? 0;
   const fy = focusRegion?.y ?? 0;
   const fw = focusRegion?.width ?? 100;
@@ -105,7 +115,9 @@ export function RealFloorPlanViewer({ image, imageWidth, imageHeight, apartments
     if (!el) return;
     const observer = new ResizeObserver(([entry]) => {
       const box = entry.contentBoxSize?.[0];
-      setContainerSize(box ? { width: box.inlineSize, height: box.blockSize } : { width: el.clientWidth, height: el.clientHeight });
+      setContainerSize(
+        box ? { width: box.inlineSize, height: box.blockSize } : { width: el.clientWidth, height: el.clientHeight }
+      );
     });
     observer.observe(el);
     return () => observer.disconnect();
@@ -114,15 +126,13 @@ export function RealFloorPlanViewer({ image, imageWidth, imageHeight, apartments
   const selected = apartments.find((a) => a.id === selectedId) ?? null;
   // While something is selected, hovering a *different* unit still shows a
   // quick preview; hovering the selected one would just repeat its own card.
-  const hovered = hoveredId && hoveredId !== selectedId ? apartments.find((a) => a.id === hoveredId) ?? null : null;
+  const hovered = hoveredId && hoveredId !== selectedId ? (apartments.find((a) => a.id === hoveredId) ?? null) : null;
   // The card shows whichever is more specific: an active hover wins over the
   // standing selection, so glancing at a neighbor never fights the open card.
   const cardApartment = hovered ?? selected;
   const cardRegion = cardApartment ? toFocusPct(cardApartment.realPlanRegion) : null;
   const cardPos =
-    cardRegion && containerSize.width > 0
-      ? cardPlacement(cardRegion, containerSize.width, containerSize.height)
-      : null;
+    cardRegion && containerSize.width > 0 ? cardPlacement(cardRegion, containerSize.width, containerSize.height) : null;
 
   function clampPan(next: { x: number; y: number }, z: number) {
     if (z <= 1) return { x: 0, y: 0 };
@@ -275,7 +285,13 @@ export function RealFloorPlanViewer({ image, imageWidth, imageHeight, apartments
                   <span
                     className={cn(
                       "absolute inset-0 transition-colors duration-150",
-                      isSelected ? "bg-accent/[0.14]" : isHovered ? "bg-accent/[0.07]" : unavailable ? "bg-ink/[0.025]" : "bg-transparent"
+                      isSelected
+                        ? "bg-accent/[0.14]"
+                        : isHovered
+                          ? "bg-accent/[0.07]"
+                          : unavailable
+                            ? "bg-ink/[0.025]"
+                            : "bg-transparent"
                     )}
                     style={isSelected ? { boxShadow: "inset 0 0 0 1px rgba(184,150,46,0.45)" } : undefined}
                   />
@@ -485,8 +501,8 @@ function ApartmentSummary({ apartment }: { apartment: Apartment }) {
       <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className="font-display text-2xl">{formatArea(apartment.area)}</span>
         <span className="text-sm text-ink/60">
-          {typeLabel(apartment.type)} · {apartment.bedrooms} {apartment.bedrooms === 1 ? "спална соба" : "спални соби"} ·{" "}
-          {apartment.bathrooms} {apartment.bathrooms === 1 ? "бања" : "бањи"}
+          {typeLabel(apartment.type)} · {apartment.bedrooms} {apartment.bedrooms === 1 ? "спална соба" : "спални соби"}{" "}
+          · {apartment.bathrooms} {apartment.bathrooms === 1 ? "бања" : "бањи"}
         </span>
       </div>
       <div className="mt-2 flex items-center gap-2 text-sm">

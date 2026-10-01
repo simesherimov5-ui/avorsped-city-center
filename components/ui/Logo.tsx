@@ -19,7 +19,13 @@ export function BuildingMark({ className }: { className?: string }) {
  * the mark on its own, for places that already carry the wordmark nearby
  * (the navbar) or don't need it repeated.
  */
-export function Logo({ variant = "stacked", className }: { variant?: "inline" | "stacked" | "icon"; className?: string }) {
+export function Logo({
+  variant = "stacked",
+  className,
+}: {
+  variant?: "inline" | "stacked" | "icon";
+  className?: string;
+}) {
   if (variant === "icon") {
     return <BuildingMark className={cn("h-8 w-8 text-accent", className)} />;
   }

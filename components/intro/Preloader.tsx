@@ -179,7 +179,13 @@ function Preloader({ onDone }: { onDone: () => void }) {
     // Outer dashed ring fades in, then rotates slowly forever.
     gsap.set(outerRingRef.current, { opacity: 0, transformOrigin: "50% 50%" });
     tl.to(outerRingRef.current, { opacity: 1, duration: 1.2, ease: "power2.out" }, 0);
-    gsap.to(outerRingRef.current, { rotation: 360, duration: 60, ease: "none", repeat: -1, transformOrigin: "50% 50%" });
+    gsap.to(outerRingRef.current, {
+      rotation: 360,
+      duration: 60,
+      ease: "none",
+      repeat: -1,
+      transformOrigin: "50% 50%",
+    });
 
     // Counter 000 → 100 over exactly 3s, main ring draws in sync, dot rides the tip.
     const progress = { t: 0, count: 0 };
@@ -208,17 +214,21 @@ function Preloader({ onDone }: { onDone: () => void }) {
     tl.to([cornerLeftRef.current, cornerRightRef.current], { opacity: 0.5, y: 0, duration: 0.6 }, 0.6);
     tl.to(brandTextRef.current, { opacity: 1, y: 0, duration: 0.6 }, 0.6);
 
-    tl.call(() => {
-      if (cancelled) return;
-      // Hold at 100, breathing, until real readiness (below) says go.
-      breathTween = gsap.to(contentRef.current, {
-        opacity: 0.85,
-        duration: 1,
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut",
-      });
-    }, [], COUNT_DURATION + 0.3);
+    tl.call(
+      () => {
+        if (cancelled) return;
+        // Hold at 100, breathing, until real readiness (below) says go.
+        breathTween = gsap.to(contentRef.current, {
+          opacity: 0.85,
+          duration: 1,
+          yoyo: true,
+          repeat: -1,
+          ease: "sine.inOut",
+        });
+      },
+      [],
+      COUNT_DURATION + 0.3
+    );
 
     // Real readiness gate — independent of the (purely time-based) counter.
     const fontsReady = "fonts" in document ? document.fonts.ready : Promise.resolve();
@@ -266,13 +276,17 @@ function Preloader({ onDone }: { onDone: () => void }) {
         Loading
       </div>
 
-      <div
-        ref={contentRef}
-        aria-hidden
-        className="absolute inset-0 flex flex-col items-center justify-center gap-8"
-      >
-        <div ref={logoWrapRef} className="relative flex h-[200px] w-[200px] items-center justify-center sm:h-[260px] sm:w-[260px]">
-          <GoldRing circleRef={ringCircleRef} dotRef={dotRef} outerRef={outerRingRef} className="absolute inset-0 h-full w-full" />
+      <div ref={contentRef} aria-hidden className="absolute inset-0 flex flex-col items-center justify-center gap-8">
+        <div
+          ref={logoWrapRef}
+          className="relative flex h-[200px] w-[200px] items-center justify-center sm:h-[260px] sm:w-[260px]"
+        >
+          <GoldRing
+            circleRef={ringCircleRef}
+            dotRef={dotRef}
+            outerRef={outerRingRef}
+            className="absolute inset-0 h-full w-full"
+          />
           <div className="relative h-[120px] w-[120px] overflow-hidden sm:h-[160px] sm:w-[160px]">
             <GoldLogo ref={logoRef} className="h-full w-full" />
             <div

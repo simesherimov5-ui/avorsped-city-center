@@ -65,15 +65,18 @@ export function BuildingDirectory({
                 <span
                   className={cn(
                     "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
-                    isActive || isHovered
-                      ? "border-accent bg-accent text-chrome"
-                      : "border-line text-ink/50"
+                    isActive || isHovered ? "border-accent bg-accent text-chrome" : "border-line text-ink/50"
                   )}
                 >
                   {floor.number}
                 </span>
                 <span className="flex flex-1 flex-col gap-0.5">
-                  <span className={cn("text-base transition-colors", isActive || isHovered ? "font-semibold text-charcoal" : "text-ink/75")}>
+                  <span
+                    className={cn(
+                      "text-base transition-colors",
+                      isActive || isHovered ? "font-semibold text-charcoal" : "text-ink/75"
+                    )}
+                  >
                     {floor.label}
                   </span>
                   <span className="text-xs text-ink/45">{floor.meta}</span>

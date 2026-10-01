@@ -8,12 +8,16 @@ import { forwardRef } from "react";
  * stroke here rather than a fill — a placeholder "JS" monogram would have
  * been a brand inconsistency once a real mark already exists.
  */
-export const GoldLogo = forwardRef<SVGSVGElement, { className?: string }>(function GoldLogo(
-  { className },
-  ref
-) {
+export const GoldLogo = forwardRef<SVGSVGElement, { className?: string }>(function GoldLogo({ className }, ref) {
   return (
-    <svg ref={ref} viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+    <svg
+      ref={ref}
+      viewBox="0 0 40 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
       <defs>
         <linearGradient id="goldGradient" x1="0" y1="0" x2="40" y2="56" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#8E7240" />
