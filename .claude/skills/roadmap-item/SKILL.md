@@ -13,4 +13,12 @@ Work on roadmap item **$item** from `docs/roadmap.md`.
 3. **Plan, then stop.** List the files you will create or change, the approach, the risks, the tests you will add, and how you will know it is done. Flag anything under "Ask first" in `CLAUDE.md`. Wait for approval before editing anything.
 4. Implement in small commits, one concern each, with imperative messages. After each commit run `npm run check`. Run `npm run build` when routes, config or data change. For UI changes, run the dev server and load the route; if you can't, say so.
 5. Update `docs/roadmap.md` if a decision changed or a known gap closed.
-6. Finish with: what changed; what you verified (with the command output) and what you did not; and the next roadmap item. Don't merge. Open a pull request only if asked.
+6. Don't merge. Open a pull request only if asked; `/pr-ready` does it.
+
+**Done when:** the item's "Done when" in `docs/roadmap.md` is met, `npm run check` (and `npm run build` where relevant) passes, and `docs/roadmap.md` reflects the change.
+
+**Finish with a report:**
+
+- **Verified:** what changed, with the command output.
+- **Not verified:** anything needing a browser, a deployment or another OS.
+- **Next:** the next roadmap item.

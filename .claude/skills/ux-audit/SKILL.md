@@ -22,3 +22,11 @@ For each finding give: the route or `file:line`; what is wrong; **evidence** (se
 Findings that would change the visual direction go under "Needs client decision". Do not implement them without an approved entry in `docs/design-brief.md`.
 
 If you can run `npm run dev` and view the page, do. Otherwise state clearly that every finding comes from reading the code only.
+
+**Done when:** `docs/ux-audit.md` exists with every finding in the format above, `git diff --name-only` lists only that file, and `npm run check` passes.
+
+**Finish with a report:**
+
+- **Verified:** what you saw in the browser or ran.
+- **Not verified:** every finding that comes from reading the code only.
+- **Needs the client:** the decisions under "Needs client decision".
