@@ -163,7 +163,9 @@ export default function DevelopmentPage() {
           Филтрирајте секој стан од сите шест згради по големина, буџет и достапност.
         </p>
         <div className="mt-8">
-          <Button href="/apartments" variant="primary">Пронајди го твојот стан</Button>
+          <Button href="/apartments" variant="primary">
+            Пронајди го твојот стан
+          </Button>
         </div>
       </section>
 

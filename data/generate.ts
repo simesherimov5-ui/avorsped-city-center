@@ -64,7 +64,10 @@ function generateRooms(bedrooms: number, area: number, balconyArea: number): Roo
   const remaining = area - living - kitchen - hallway - bathroomEach * bathroomCount;
   const bedroomEach = Math.round((remaining / bedrooms) * 10) / 10;
 
-  const rooms: Room[] = [{ name: "Дневна соба", area: living }, { name: "Кујна", area: kitchen }];
+  const rooms: Room[] = [
+    { name: "Дневна соба", area: living },
+    { name: "Кујна", area: kitchen },
+  ];
   for (let i = 1; i <= bedrooms; i++) {
     rooms.push({ name: `Спална соба ${i}`, area: bedroomEach - (i - 1) * 0.6 });
   }
@@ -299,8 +302,7 @@ function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[
     const area = Math.round(unit.rooms.reduce((sum, r) => sum + r.area, 0) * 100) / 100;
     const orientation = ORIENTATIONS[Math.floor(seeded(5, floor, idx, 8) * ORIENTATIONS.length)];
     const orientationPremium = orientation.includes("South") ? 1.04 : 1;
-    const price =
-      Math.round((area * BASE_RATE_EUR_PER_SQM * (1 + floor * 0.006) * orientationPremium) / 500) * 500;
+    const price = Math.round((area * BASE_RATE_EUR_PER_SQM * (1 + floor * 0.006) * orientationPremium) / 500) * 500;
     const id = `${buildingId}-f${floor}-${unit.number}`;
 
     return {
@@ -416,9 +418,8 @@ export function generateDevelopment(): GeneratedDevelopment {
         const id = `${buildingId}-f${f}-${number}`;
         const floorPremium = 1 + f * 0.006;
         const orientationPremium = orientation.includes("South") ? 1.04 : 1;
-        const price = Math.round(
-          (unitType.area * BASE_RATE_EUR_PER_SQM * floorPremium * orientationPremium) / 500
-        ) * 500;
+        const price =
+          Math.round((unitType.area * BASE_RATE_EUR_PER_SQM * floorPremium * orientationPremium) / 500) * 500;
 
         const apartment: Apartment = {
           id,

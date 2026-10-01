@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+coverage
+package-lock.json
+public
+next-env.d.ts
+*.tsbuildinfo
+
+# Tool-generated or hand-maintained agent instructions
+AGENTS.md
+CLAUDE.md

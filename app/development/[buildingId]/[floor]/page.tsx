@@ -26,11 +26,7 @@ function hasRegion(a: Apartment): a is Apartment & { realPlanRegion: NonNullable
   return Boolean(a.realPlanRegion);
 }
 
-export default async function FloorPage({
-  params,
-}: {
-  params: Promise<{ buildingId: string; floor: string }>;
-}) {
+export default async function FloorPage({ params }: { params: Promise<{ buildingId: string; floor: string }> }) {
   const { buildingId, floor: floorParam } = await params;
   const building = getBuilding(buildingId);
   const floorNum = Number(floorParam);
@@ -96,8 +92,8 @@ export default async function FloorPage({
             <div className="eyebrow text-gold-deep">Официјална документација</div>
             <h2 className="mt-1.5 font-display text-2xl">Официјална основа на катот</h2>
             <p className="mt-2 max-w-lg text-sm text-ink/60">
-              Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги
-              контролите за зум за да ги разгледате деталите.
+              Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги контролите за
+              зум за да ги разгледате деталите.
             </p>
             <div className="mt-6 max-w-4xl">
               <RealFloorPlanViewer image={overview} imageWidth={overview.width} imageHeight={overview.height} />

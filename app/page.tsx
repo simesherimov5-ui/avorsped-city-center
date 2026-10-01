@@ -15,7 +15,11 @@ const WHY_US = [
   { icon: Landmark, title: "Внимание на деталите", desc: "Од пропорцијата на фасадата до изборот на арматура." },
 ];
 
-const CTA_IMAGE = { src: "/images/exteriors/exterior-01-dusk.jpg", alt: "Јавор Шпед — вечерна визуелизација", isPlaceholder: false };
+const CTA_IMAGE = {
+  src: "/images/exteriors/exterior-01-dusk.jpg",
+  alt: "Јавор Шпед — вечерна визуелизација",
+  isPlaceholder: false,
+};
 
 export default function HomePage() {
   return (
@@ -73,8 +77,12 @@ export default function HomePage() {
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
-              <Button href="/consultation" variant="primary">Закажи консултација</Button>
-              <Button href="/projects" variant="secondary" tone="dark">Погледни ги проектите</Button>
+              <Button href="/consultation" variant="primary">
+                Закажи консултација
+              </Button>
+              <Button href="/projects" variant="secondary" tone="dark">
+                Погледни ги проектите
+              </Button>
             </div>
             <div className="mt-8 text-sm text-on-chrome/50">
               {companyInfo.phone} · {companyInfo.email}

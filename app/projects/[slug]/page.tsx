@@ -17,11 +17,7 @@ export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   return { title: project ? project.name : "Проект" };
@@ -35,7 +31,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   return (
     <div className="pt-28">
       <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
-        <Link href="/projects" className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal">
+        <Link
+          href="/projects"
+          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+        >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектите
         </Link>
       </div>
@@ -83,7 +82,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">Кликнете на просторија за да пуштите кратко видео разгледување.</p>
+                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                    Кликнете на просторија за да пуштите кратко видео разгледување.
+                  </p>
                   <div className="mt-6">
                     <RoomVideoTour rooms={project.roomTour} />
                   </div>
@@ -95,7 +96,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Распоред на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">Кликнете на број за да пуштите видео од таа просторија.</p>
+                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                    Кликнете на број за да пуштите видео од таа просторија.
+                  </p>
                   <div className="mt-6">
                     <InteractiveFloorPlan {...project.floorPlanExplorer} />
                   </div>

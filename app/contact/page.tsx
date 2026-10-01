@@ -47,7 +47,9 @@ export default function ContactPage() {
             </div>
 
             <div className="mt-8">
-              <Button href="/consultation" variant="primary">Закажи консултација</Button>
+              <Button href="/consultation" variant="primary">
+                Закажи консултација
+              </Button>
             </div>
           </div>
 

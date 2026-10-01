@@ -21,9 +21,7 @@ export function CompareBar() {
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
-            <span className="eyebrow shrink-0 text-ink/50">
-              Споредба ({ids.length}/3)
-            </span>
+            <span className="eyebrow shrink-0 text-ink/50">Споредба ({ids.length}/3)</span>
             {ids.map((id) => {
               const apt = getApartment(id);
               if (!apt) return null;

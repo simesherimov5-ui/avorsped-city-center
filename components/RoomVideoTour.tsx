@@ -24,14 +24,7 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
           className="focus-ring group relative block aspect-[4/3] overflow-hidden border border-line bg-chrome text-left"
         >
           {active === i ? (
-            <video
-              src={room.video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="h-full w-full object-cover"
-            />
+            <video src={room.video} autoPlay loop muted playsInline className="h-full w-full object-cover" />
           ) : (
             <>
               <Media

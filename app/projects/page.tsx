@@ -27,7 +27,11 @@ export default function ProjectsPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
-        <SectionHeading eyebrow="Портфолио" title="Нашите проекти" description="Од нашата прва станбена зграда до City Center." />
+        <SectionHeading
+          eyebrow="Портфолио"
+          title="Нашите проекти"
+          description="Од нашата прва станбена зграда до City Center."
+        />
 
         <div className="mt-10 flex flex-wrap gap-2">
           {TABS.map((t) => (
@@ -36,7 +40,9 @@ export default function ProjectsPage() {
               onClick={() => setTab(t.value)}
               className={cn(
                 "focus-ring border px-4 py-2 text-sm",
-                tab === t.value ? "border-accent bg-accent/10 text-charcoal" : "border-line text-ink/60 hover:border-accent/50"
+                tab === t.value
+                  ? "border-accent bg-accent/10 text-charcoal"
+                  : "border-line text-ink/60 hover:border-accent/50"
               )}
             >
               {t.label}

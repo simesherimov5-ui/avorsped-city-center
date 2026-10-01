@@ -31,12 +31,7 @@ export function ProjectCard({ project }: { project: Project }) {
           fit={project.imageFit}
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
-        <span
-          className={cn(
-            "eyebrow absolute left-3 top-3 px-2.5 py-1",
-            STATUS_STYLE[project.status]
-          )}
-        >
+        <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>
           {(() => {
             const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
             return project.typeLabel ? `${project.typeLabel} · ${statusText}` : statusText;

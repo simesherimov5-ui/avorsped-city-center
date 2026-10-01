@@ -26,8 +26,7 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
     return (
       <div className="border border-dashed border-concrete bg-cream p-8 text-center">
         <p className="text-sm text-ink/60">
-          Сè уште нема снимено 360° внатрешна тура за овој стан. Штом стане достапна, ќе се
-          прикаже автоматски овде.
+          Сè уште нема снимено 360° внатрешна тура за овој стан. Штом стане достапна, ќе се прикаже автоматски овде.
         </p>
       </div>
     );
