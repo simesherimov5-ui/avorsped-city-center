@@ -248,5 +248,8 @@ export const companyInfo = {
   // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
   // empty, the Контакт page leaves that row out rather than guessing a number.
   messengerNumber: "",
+  // Where the map pin sits: Global Trade Center on Ленинова, Струмица, from OpenStreetMap.
+  // TODO(client): confirm the exact entrance of the sales office.
+  coordinates: { lat: 41.4389708, lng: 22.6390034 },
   hours: "Пон–Пет 09:00–18:00, Саб 10:00–14:00",
 };

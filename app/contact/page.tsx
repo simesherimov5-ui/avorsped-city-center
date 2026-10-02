@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { companyInfo, development, getApartment, getBuilding, projects } from "@/data";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { GuidedBooking, type Interest } from "@/components/contact/GuidedBooking";
+import { companyInfo, getApartment, getBuilding, projects } from "@/data";
+import { ContactForm, type Interest } from "@/components/contact/ContactForm";
+import { ContactStage } from "@/components/contact/ContactStage";
 import { DirectPanel } from "@/components/contact/DirectPanel";
+import "@/components/black/black.css";
+import "@/components/contact/contact.css";
 
 export const metadata: Metadata = {
   title: "Контакт",
@@ -21,29 +23,48 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const building = getBuilding(first(params.building) ?? apartment?.buildingId ?? "");
   const project = projects.find((p) => p.id === first(params.project));
   const asked = first(params.interest) as Interest | undefined;
-  const initialInterest: Interest = asked && INTERESTS.includes(asked) ? asked : "apartment";
-  const reference =
-    [apartment && `Стан ${apartment.number}`, building?.name, project?.name].filter(Boolean).join(" · ") || undefined;
+  const label = [apartment && `Стан ${apartment.number}`, building?.name, project?.name].filter(Boolean).join(" · ");
+  const hasReference = Boolean(label);
+  const initialInterest: Interest | undefined =
+    asked && INTERESTS.includes(asked) ? asked : hasReference ? "apartment" : undefined;
   const initialRooms =
     apartment && apartment.bedrooms >= 1 ? (apartment.bedrooms >= 4 ? "4+" : String(apartment.bedrooms)) : undefined;
+  const reference = hasReference
+    ? { label, project: project?.id, building: building?.id, apartment: apartment?.id }
+    : undefined;
 
   return (
-    <div className="pt-24 sm:pt-28">
-      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:px-10">
-        <SectionHeading eyebrow="Стапете во контакт" title="Контактирајте нè" />
+    <div data-theme="black" className="bk-page">
+      <ContactStage>
+        <header className="ct-head">
+          <div data-seq="eyebrow" className="bk-eyebrow ct-pre">
+            Контакт
+          </div>
+          <h1 data-seq="h1" className="ct-h1 bk-serif ct-pre">
+            Закажете <em>приватна</em> консултација.
+          </h1>
+          <p data-seq="lead" className="ct-lead ct-pre">
+            Четири кратки чекори. Ние ќе ви се јавиме за потврда на терминот.
+          </p>
+        </header>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[6fr_5fr] lg:gap-16">
-          <GuidedBooking initialInterest={initialInterest} initialRooms={initialRooms} reference={reference} />
+        <div className="ct-cols">
+          <ContactForm
+            initialInterest={initialInterest}
+            initialRooms={initialRooms}
+            reference={reference}
+            phone={companyInfo.phone}
+          />
           <DirectPanel
             phone={companyInfo.phone}
             email={companyInfo.email}
             hours={companyInfo.hours}
             address={companyInfo.address}
             messengerNumber={companyInfo.messengerNumber}
-            mapQuery={development.mapQuery}
+            coordinates={companyInfo.coordinates}
           />
         </div>
-      </section>
+      </ContactStage>
     </div>
   );
 }

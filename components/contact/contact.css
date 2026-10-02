@@ -1,0 +1,549 @@
+/* "Контакт": the guided booking form and the direct-contact panel, on the all-black theme. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ct-pre,
+  [data-seq="step"] {
+    opacity: 0;
+  }
+  .ct-rule {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes ct-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ct-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+/* A chosen chip settles in from a touch smaller. */
+@keyframes ct-settle {
+  from {
+    transform: scale(0.94);
+  }
+}
+
+/* B1 — header */
+.ct-head {
+  padding: clamp(56px, 6vw, 92px) var(--bk-px) clamp(40px, 4vw, 60px);
+}
+.ct-h1 {
+  margin: 24px 0 20px;
+  font-size: clamp(40px, 5.6vw, 84px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.ct-lead {
+  max-width: 54ch;
+  margin: 0;
+  font-size: 17px;
+  color: var(--mute);
+}
+
+/* B2 — layout */
+.ct-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(32px, 5.5vw, 96px);
+  align-items: start;
+  padding: 0 var(--bk-px) clamp(72px, 8vw, 120px);
+}
+@media (max-width: 980px) {
+  .ct-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* B3 — the form */
+.ct-form {
+  min-width: 0;
+}
+.ct-step {
+  position: relative;
+  padding: 30px 0;
+}
+.ct-step.is-leaving {
+  animation: ct-fade-out 0.3s forwards;
+}
+.ct-step.is-entering {
+  animation: ct-fade 0.3s;
+}
+.ct-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-line);
+  transform-origin: left center;
+}
+.ct-step-h {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin: 0 0 22px;
+}
+.ct-step-n {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+}
+
+.ct-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin: 0 0 24px;
+  padding: 0 0 0 16px;
+  border: 1px solid var(--gold-line);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.ct-tag button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.ct-tag button:hover {
+  color: var(--color-gold-light);
+}
+.ct-tag button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -4px;
+}
+
+.ct-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.ct-chip {
+  min-width: 64px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-paper);
+  font:
+    400 14px var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
+}
+.ct-chip:hover {
+  border-color: var(--color-gold);
+}
+.ct-chip:active {
+  transform: scale(0.96);
+}
+.ct-chip:focus-visible,
+.ct-day:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.ct-chip[aria-checked="true"] {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--black);
+  font-weight: 500;
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-chip.is-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 300;
+}
+.ct-chip.is-mono[aria-checked="true"] {
+  font-weight: 400;
+}
+
+.ct-days,
+.ct-slots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.ct-days-box {
+  min-height: 104px;
+  margin-bottom: 16px;
+}
+.ct-slots .ct-chip {
+  min-width: 0;
+  padding: 0;
+}
+.ct-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 6px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
+}
+.ct-day:hover {
+  border-color: var(--color-gold);
+}
+.ct-day:active {
+  transform: scale(0.96);
+}
+.ct-day small {
+  font:
+    400 11px var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.ct-day-d {
+  font:
+    300 30px/1.1 var(--font-mono),
+    ui-monospace,
+    monospace;
+}
+.ct-day[aria-checked="true"] {
+  border-color: var(--color-gold);
+  background: var(--color-ink);
+  color: var(--color-gold);
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-day[aria-checked="true"] small {
+  color: var(--color-gold);
+}
+
+.ct-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.ct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.ct-input {
+  position: relative;
+}
+.ct-input input {
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-paper);
+  font:
+    400 18px var(--font-sans),
+    system-ui,
+    sans-serif;
+  outline: none;
+}
+.ct-input input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-paper);
+  box-shadow: 0 0 0 1000px var(--black) inset;
+}
+/* The gold underline grows from the left on focus. */
+.ct-input::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-input:focus-within::after {
+  transform: scaleX(1);
+}
+
+.ct-error {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--color-gold-light);
+  animation: ct-fade 0.3s;
+}
+.ct-submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 28px;
+  margin-top: 36px;
+}
+.ct-submit .bk-btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: progress;
+}
+.ct-sum {
+  min-height: 1.6em;
+  font-size: 13px;
+  color: var(--mute);
+}
+.ct-sum > span {
+  animation: ct-fade 0.18s;
+}
+.ct-fail {
+  margin: 20px 0 0;
+  color: var(--color-gold-light);
+}
+.ct-fail a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .ct-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ct-days,
+  .ct-slots {
+    gap: 6px;
+  }
+  .ct-day-d {
+    font-size: 22px;
+  }
+  .ct-day small {
+    letter-spacing: 0.08em;
+  }
+}
+
+/* B4 — the direct panel */
+.ct-side {
+  position: sticky;
+  top: 120px;
+  padding: clamp(24px, 3vw, 44px);
+  border: 1px solid var(--gold-line);
+  background: var(--color-ink);
+}
+@media (max-width: 980px) {
+  .ct-side {
+    position: static;
+  }
+}
+.ct-rows {
+  margin-top: 18px;
+}
+.ct-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding: 18px 0;
+  border-top: 1px solid var(--color-line);
+}
+.ct-row:first-child {
+  border-top: 0;
+}
+.ct-val {
+  display: inline-block;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--color-paper);
+  text-align: right;
+  transition:
+    color 0.3s,
+    transform 0.3s;
+}
+a.ct-val:hover,
+a.ct-val:focus-visible {
+  color: var(--color-gold);
+  transform: translateX(6px);
+}
+a.ct-val:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+.ct-val-lines span {
+  display: block;
+  white-space: nowrap;
+}
+.ct-map {
+  position: relative;
+  height: 300px;
+  margin-top: 20px;
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  background: var(--black);
+}
+.ct-addr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--mute);
+}
+.ct-addr a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.ct-addr a:hover {
+  color: var(--color-gold-light);
+}
+@media (max-width: 560px) {
+  .ct-val {
+    font-size: 22px;
+  }
+  .ct-val-lines {
+    text-align: left;
+  }
+}
+
+/* The map: Leaflet on the dark CARTO tiles, restyled to the black theme (square corners, no shadows). */
+.ct-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+.ct-map .leaflet-bar {
+  border: 1px solid var(--gold-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+.ct-map .leaflet-bar a,
+.ct-map .leaflet-bar a:hover {
+  width: 34px;
+  height: 34px;
+  border-bottom: 1px solid var(--gold-line);
+  border-radius: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  line-height: 34px;
+}
+.ct-map .leaflet-bar a:hover {
+  color: var(--color-gold);
+}
+.ct-map .leaflet-bar a:last-child {
+  border-bottom: 0;
+}
+.ct-map .leaflet-control-attribution {
+  background: color-mix(in srgb, var(--black) 75%, transparent);
+  color: var(--mute);
+  font-size: 10px;
+}
+.ct-map .leaflet-control-attribution a {
+  color: var(--color-paper);
+}
+.ct-pin {
+  position: relative;
+  background: none;
+  border: 0;
+}
+.ct-pin svg {
+  display: block;
+  animation: ct-drop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ct-pin path {
+  fill: var(--color-ink);
+  stroke: var(--color-gold);
+  stroke-width: 1;
+}
+.ct-pin circle {
+  fill: var(--color-gold);
+}
+/* A thin gold ring pulses slowly around the pin's base. */
+.ct-pin-ring {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 44px;
+  height: 14px;
+  margin-left: -22px;
+  border: 1px solid var(--color-gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ct-pulse 2.6s ease-out 1s infinite;
+}
+@keyframes ct-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+@keyframes ct-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* The booking confirmation pop-up */
+.ct-confirm {
+  width: min(520px, calc(100vw - 40px));
+  padding: clamp(32px, 6vw, 52px) clamp(24px, 5vw, 44px);
+  border: 1px solid var(--gold-line);
+  background: var(--color-ink);
+  text-align: center;
+}
+.ct-ring {
+  display: block;
+  margin: 0 auto 26px;
+  overflow: visible;
+}
+.ct-ring circle,
+.ct-ring path {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ct-confirm h2 {
+  margin: 16px 0 0;
+  font-size: clamp(32px, 5vw, 44px);
+  line-height: 1.1;
+}
+.ct-confirm-sum {
+  margin: 20px 0 0;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--color-gold);
+}
+.ct-confirm p {
+  margin: 14px 0 32px;
+  color: var(--mute);
+}
