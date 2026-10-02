@@ -78,6 +78,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Not project source: the design pack that was handed over, and a stray copy of the whole project
+    // (with its build output) left inside this folder. Neither is tracked by git.
+    "javor-sped-complete/**",
+    "meridian/**",
   ]),
 ]);
 

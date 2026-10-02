@@ -14,3 +14,8 @@ CLAUDE.md
 
 # Delivered design previews (large generated HTML, not source)
 components/**/preview*.html
+
+# Not project source (see eslint.config.mjs)
+javor-sped-complete
+meridian
+.agents
