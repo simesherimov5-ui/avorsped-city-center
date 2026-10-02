@@ -10,6 +10,7 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { isBlackPage } from "@/lib/theme";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
@@ -48,6 +49,8 @@ export function Navbar() {
   const activeHref = tabFor(transition?.target ?? pathname);
 
   const isHome = pathname === "/";
+  // The all-black pages (За нас, Контакт) get a black bar with a hairline, and an outline consultation button.
+  const black = isBlackPage(pathname);
 
   // Entrance: hidden while the loading screen is up, then the bar fades down
   // with its links staggering in as the screen opens. Mounting after the
@@ -176,7 +179,11 @@ export function Navbar() {
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(
             "border-b transition-colors duration-500",
-            solid ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md" : "border-transparent bg-transparent"
+            black
+              ? "border-paper/12 bg-black"
+              : solid
+                ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md"
+                : "border-transparent bg-transparent"
           )}
         >
           <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
@@ -218,9 +225,15 @@ export function Navbar() {
             </div>
 
             <div className="nav-link hidden items-center gap-4 lg:flex">
-              <Button href="/consultation" variant="primary" size="sm">
-                {t("nav.consultation")}
-              </Button>
+              {black ? (
+                <Link href="/consultation" onPointerDown={spawnClickPulse} className="bk-btn relative isolate">
+                  {t("nav.consultation")}
+                </Link>
+              ) : (
+                <Button href="/consultation" variant="primary" size="sm">
+                  {t("nav.consultation")}
+                </Button>
+              )}
             </div>
 
             <div className="flex items-center lg:hidden">

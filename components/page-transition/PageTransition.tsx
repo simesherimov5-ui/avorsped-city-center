@@ -43,6 +43,16 @@ export function usePageTransition() {
   return useContext(PageTransitionContext);
 }
 
+/**
+ * True once the page is actually on screen: false while the curtain runs (a page that has just been routed to is
+ * already mounted underneath it), always true on a first load or outside the provider. Entrance animations wait
+ * for it, so they play in view instead of behind the curtain.
+ */
+export function usePageReady() {
+  const api = useContext(PageTransitionContext);
+  return api === null || api.target === null;
+}
+
 export function PageTransition({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();

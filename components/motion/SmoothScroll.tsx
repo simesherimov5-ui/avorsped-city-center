@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { setLenis } from "@/lib/lenis";
 
 /**
  * Side-effect only — renders nothing, wraps nothing. Lenis runs against the
@@ -17,6 +18,7 @@ export function SmoothScroll() {
     if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    setLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);
 
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -25,6 +27,7 @@ export function SmoothScroll() {
 
     return () => {
       gsap.ticker.remove(tick);
+      setLenis(null);
       lenis.destroy();
     };
   }, []);

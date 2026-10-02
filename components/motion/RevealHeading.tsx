@@ -13,10 +13,18 @@ export function RevealHeading({
   as: Tag = "h2",
   className,
   children,
+  duration = 1,
+  ease = "power3.out",
+  from = 110,
 }: {
   as?: ElementType;
   className?: string;
   children: ReactNode;
+  /** Seconds each line takes to rise. */
+  duration?: number;
+  ease?: string;
+  /** Starting offset of a line, in % of its own height. */
+  from?: number;
 }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -31,13 +39,13 @@ export function RevealHeading({
       (fonts ? fonts.ready : Promise.resolve()).then(() => {
         if (cancelled) return;
         split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "reveal-line" });
-        gsap.set(split.lines, { yPercent: 110 });
+        gsap.set(split.lines, { yPercent: from });
         gsap.set(el, { autoAlpha: 1 });
         gsap.to(split.lines, {
           yPercent: 0,
-          duration: 1,
+          duration,
           stagger: 0.12,
-          ease: "power3.out",
+          ease,
           scrollTrigger: { trigger: el, start: "top 88%", once: true },
         });
       });
@@ -46,7 +54,7 @@ export function RevealHeading({
         split?.revert();
       };
     },
-    { scope: ref }
+    { scope: ref, dependencies: [duration, ease, from] }
   );
 
   return (

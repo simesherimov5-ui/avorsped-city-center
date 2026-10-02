@@ -1,0 +1,192 @@
+/*
+ * The all-black theme, used by the За нас and Контакт pages only (a `data-theme="black"` wrapper).
+ * No paper backgrounds here. Colours come from the site tokens; --black, --mute, --gold-line and the
+ * --color-line override below exist only inside this theme. Gold stays a small share of the page: eyebrows,
+ * mono numbers, hairlines, one italic phrase per headline, selected states and one filled button.
+ */
+[data-theme="black"] {
+  --color-line: rgba(250, 248, 245, 0.12);
+  --color-line-dark: rgba(250, 248, 245, 0.12);
+  --gold-line: rgba(201, 164, 92, 0.3);
+  --mute: rgba(250, 248, 245, 0.64);
+  --bk-px: clamp(20px, 5.5vw, 96px);
+  --bk-gap: clamp(72px, 9.7vw, 140px);
+  color: var(--color-paper);
+}
+[data-theme="black"] ::selection {
+  background: var(--color-gold);
+  color: var(--black);
+}
+.bk-page {
+  background: var(--black);
+  /* The fixed navbar is solid on these pages, so content starts below it. */
+  padding-top: var(--nav-h);
+  overflow-x: clip;
+}
+
+/* Type */
+[data-theme="black"] .bk-serif {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+}
+[data-theme="black"] .bk-serif em,
+[data-theme="black"] .bk-gold-i {
+  color: var(--color-gold);
+  font-style: italic;
+}
+[data-theme="black"] .bk-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="black"] .bk-h1 {
+  margin: 0;
+  font-size: clamp(44px, 7vw, 108px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+[data-theme="black"] .bk-h2 {
+  margin: 22px 0 clamp(36px, 4vw, 56px);
+  font-size: clamp(34px, 4.4vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Eyebrow: a 40px gold line, then the label. Centred eyebrows get a line on both sides. */
+.bk-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-gold);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.bk-eyebrow::before,
+.bk-eyebrow.is-center::after {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 1px;
+  background: var(--color-gold);
+}
+.bk-eyebrow.is-center {
+  justify-content: center;
+}
+
+/* Small label */
+.bk-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* Buttons: outline (48px) and the one filled button per page (56px). */
+.bk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 26px;
+  border: 1px solid var(--color-gold);
+  background: transparent;
+  color: var(--color-gold);
+  font:
+    500 12px/1 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s,
+    transform 0.2s;
+}
+.bk-btn:hover {
+  background: var(--color-gold);
+  color: var(--black);
+}
+.bk-btn:active {
+  transform: scale(0.98);
+}
+.bk-btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.bk-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.bk-btn svg {
+  flex: none;
+  transition: transform 0.3s;
+}
+.bk-btn:hover svg {
+  transform: translateX(6px);
+}
+.bk-btn--fill {
+  min-height: 56px;
+  padding: 0 40px;
+  background: var(--color-gold);
+  color: var(--black);
+}
+.bk-btn--fill:hover {
+  background: var(--color-gold-light);
+  border-color: var(--color-gold-light);
+}
+@media (max-width: 760px) {
+  .bk-btn--fill {
+    width: 100%;
+  }
+}
+
+/* Shared page padding and section rhythm */
+.bk-px {
+  padding-left: var(--bk-px);
+  padding-right: var(--bk-px);
+}
+.bk-section {
+  padding-bottom: var(--bk-gap);
+}
+
+/* Pop-ups (the shared <Modal>) */
+.bk-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--gold-line);
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+.bk-modal-close:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+.bk-modal-close:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bk-btn:active {
+    transform: none;
+  }
+  .bk-btn:hover svg {
+    transform: none;
+  }
+}

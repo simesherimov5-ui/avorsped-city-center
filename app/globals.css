@@ -14,6 +14,10 @@
   --color-gold-dark: #8e7240; /* gradient depth (logo/ring gradients only, never text) */
   --color-line: rgba(20, 20, 20, 0.1);
   --color-line-dark: rgba(250, 248, 245, 0.12);
+  /* The page background of the all-black pages (За нас, Контакт) — a deeper shade of ink, used nowhere else. */
+  --black: #0c0c0c;
+  /* Height of the fixed navbar, for pages that start right below it. */
+  --nav-h: 61px;
 
   /*
    * Legacy names kept as exact aliases of the three colors above, so the
@@ -51,6 +55,7 @@
   --color-gold-dark: var(--color-gold-dark);
   --color-line: var(--color-line);
   --color-line-dark: var(--color-line-dark);
+  --color-black: var(--black);
   --color-cream: var(--color-cream);
   --color-warm-white: var(--color-warm-white);
   --color-silver: var(--color-silver);
@@ -63,6 +68,17 @@
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-mono);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --nav-h: 69px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --nav-h: 89px;
+  }
 }
 
 * {
