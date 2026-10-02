@@ -21,12 +21,10 @@ export default function ProjectsPage() {
   const filtered = tab === "all" ? projects : projects.filter((p) => p.status === tab);
 
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-7xl px-6 pt-8 lg:px-10">
-        <ProjectSlideshow projects={projects} />
-      </section>
+    <div className="pt-[93px] sm:pt-[117px] lg:pt-[157px]">
+      <ProjectSlideshow projects={projects} />
 
-      <section className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading
           eyebrow="Портфолио"
           title="Нашите проекти"
@@ -39,7 +37,7 @@ export default function ProjectsPage() {
               key={t.value}
               onClick={() => setTab(t.value)}
               className={cn(
-                "focus-ring border px-4 py-2 text-sm",
+                "focus-ring min-h-11 border px-4 py-2 text-base sm:text-sm",
                 tab === t.value
                   ? "border-accent bg-accent/10 text-charcoal"
                   : "border-line text-ink/60 hover:border-accent/50"

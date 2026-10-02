@@ -36,7 +36,7 @@ export function FloorList({
             href={`${basePath}/${floor.number}`}
             label={floor.label}
             aria-current={isActive ? "page" : undefined}
-            className="focus-ring group relative flex items-start gap-4 py-2 transition-transform active:scale-[0.99]"
+            className="focus-ring group relative flex min-h-14 items-start gap-4 py-2 transition-transform active:scale-[0.99]"
           >
             <span
               className={cn(

@@ -28,18 +28,18 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
   const project = projects.find((p) => p.id === "dojranski-raj")!;
 
   return (
-    <ZoomEnter className="pt-28">
-      <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
+    <ZoomEnter className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <ZoomNavLink
           href="/dojran"
           label="Дојрански Рај"
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон Дојрански Рај
         </ZoomNavLink>
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <SectionHeading eyebrow="Дојрански Рај" title={floor.label} description={`${floor.unitsHint} на овој кат.`} />
 
         <div className="mt-10 grid gap-10 lg:grid-cols-3">

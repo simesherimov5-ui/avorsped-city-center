@@ -12,24 +12,31 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-16 lg:px-10">
         <SectionHeading eyebrow="Стапете во контакт" title="Контактирајте нè" />
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2">
           <div>
-            <ul className="space-y-5 text-sm">
+            <ul className="space-y-5 text-base sm:text-sm">
               <li className="flex gap-3">
                 <MapPin className="h-4 w-4 shrink-0 text-gold-deep" />
                 <span>{companyInfo.address}</span>
               </li>
               <li className="flex gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-gold-deep" />
-                <a href={`tel:${companyInfo.phone}`}>{companyInfo.phone}</a>
+                <a
+                  href={`tel:${companyInfo.phone.replace(/ /g, "")}`}
+                  className="focus-ring -my-3 flex min-h-11 items-center"
+                >
+                  {companyInfo.phone}
+                </a>
               </li>
               <li className="flex gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-gold-deep" />
-                <a href={`mailto:${companyInfo.email}`}>{companyInfo.email}</a>
+                <a href={`mailto:${companyInfo.email}`} className="focus-ring -my-3 flex min-h-11 items-center">
+                  {companyInfo.email}
+                </a>
               </li>
               <li className="flex gap-3">
                 <Clock className="h-4 w-4 shrink-0 text-gold-deep" />

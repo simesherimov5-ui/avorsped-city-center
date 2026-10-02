@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 pt-28 text-center">
+    <div className="flex min-h-[70dvh] flex-col items-center justify-center px-5 pt-24 sm:px-8 sm:pt-28 text-center">
       <div className="eyebrow text-gold-deep">404</div>
       <h1 className="mt-3 font-display text-3xl">Оваа страница не е пронајдена</h1>
       <p className="mt-3 max-w-sm text-sm text-ink/60">Страницата што ја барате не постои или е преместена.</p>

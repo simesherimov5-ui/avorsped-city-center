@@ -45,7 +45,7 @@ export function ApartmentFilters({
           <button
             type="button"
             onClick={() => onChange({})}
-            className="focus-ring mt-1 flex items-center gap-1.5 text-xs text-ink/50 transition-colors hover:text-charcoal"
+            className="focus-ring -mr-2 mt-1 flex min-h-11 items-center gap-1.5 px-2 text-sm text-ink/60 transition-colors hover:text-charcoal"
           >
             <X className="h-3.5 w-3.5" /> Исчисти
           </button>
@@ -76,7 +76,7 @@ export function ApartmentFilters({
                 type="button"
                 onClick={() => onChange({ ...value, bedrooms: value.bedrooms === n ? undefined : n })}
                 className={cn(
-                  "focus-ring border px-3 py-1.5 text-sm transition-colors",
+                  "focus-ring min-h-11 min-w-11 border px-3 py-1.5 text-base transition-colors sm:min-h-0 sm:min-w-0 sm:text-sm",
                   value.bedrooms === n
                     ? "border-accent bg-accent/10 text-charcoal"
                     : "border-line text-ink/70 hover:border-accent/50"
@@ -176,8 +176,9 @@ export function ApartmentFilters({
           width: 100%;
           border: 1px solid var(--color-line);
           background: var(--color-warm-white);
+          min-height: 3rem;
           padding: 0.5rem 0.75rem;
-          font-size: 0.875rem;
+          font-size: 1rem;
           transition: border-color 0.2s ease;
         }
         .filter-input:hover {

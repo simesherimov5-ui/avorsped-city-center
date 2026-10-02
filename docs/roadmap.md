@@ -40,9 +40,9 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 - Forms (consultation, contact) are mocks.
 - Two animation systems coexist: Framer Motion (`components/ui/Reveal.tsx`, older pages) and GSAP + Lenis (`components/motion/`, `components/intro/`, `lib/gsap.ts`).
   `components/ui/SmoothScroll.tsx` appears unused (only the `components/motion/` version is imported). Decide whether to consolidate.
-- Hex colours outside the tokens: `FloorPlan.tsx`, `intro/GoldLogo.tsx`, `intro/GoldRing.tsx`, `intro/Preloader.tsx` (baseline in `eslint.config.mjs`).
-- Two `eslint-disable react-hooks/set-state-in-effect` lines are deliberate post-mount syncs (`app/apartments/page.tsx`, `components/intro/Preloader.tsx`).
-  `useSyncExternalStore` would remove them but needs a browser test.
+- Hex colours outside the tokens: `FloorPlan.tsx` (baseline in `eslint.config.mjs`).
+- One `eslint-disable react-hooks/set-state-in-effect` line is a deliberate post-mount sync (`app/apartments/page.tsx`).
+  `useSyncExternalStore` would remove it but needs a browser test.
 
 ## Sequence
 

@@ -146,6 +146,73 @@ h4 {
   }
 }
 
+/* Phones. Unlayered, so these beat the Tailwind utilities they refine. */
+html,
+body {
+  overflow-x: clip;
+}
+.mobile-menu {
+  animation: menu-in 0.22s ease-out;
+}
+/* The slider's gold dash: fills over the slide's 4s; its end advances the slide. */
+.slide-progress {
+  transform-origin: left center;
+  animation: slide-progress linear forwards;
+}
+@keyframes slide-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+  }
+}
+/* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */
+.grid > * {
+  min-width: 0;
+}
+@media (max-width: 767px) {
+  /* Small utility sizes step up a little on phones; uppercase labels stay compact. */
+  .text-xs {
+    font-size: 0.8125rem;
+  }
+  [class*="text-[11px]"],
+  [class*="text-[10px]"] {
+    font-size: 0.75rem;
+  }
+  /* Body copy is at least 16px; the small utilities only apply from tablets up. */
+  p.text-xs,
+  p.text-sm,
+  li.text-sm,
+  dd.text-sm,
+  dd.text-xs {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
+  /* Long Macedonian words never push a headline past the screen. */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  h1 {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+  }
+  h2 {
+    font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  }
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

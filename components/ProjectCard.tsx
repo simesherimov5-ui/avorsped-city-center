@@ -39,7 +39,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && (
               <div className="font-display text-sm text-on-chrome sm:text-base">{project.tagline}</div>
             )}

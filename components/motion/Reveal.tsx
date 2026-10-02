@@ -20,11 +20,13 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
         return;
       }
 
-      gsap.set(ref.current, { opacity: 0, y: 40 });
+      // Lighter on phones: shorter travel, shorter duration.
+      const phone = window.innerWidth < 768;
+      gsap.set(ref.current, { opacity: 0, y: phone ? 20 : 40 });
       gsap.to(ref.current, {
         opacity: 1,
         y: 0,
-        duration: 1,
+        duration: phone ? 0.6 : 1,
         delay,
         ease: "power3.out",
         scrollTrigger: {

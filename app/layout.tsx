@@ -4,11 +4,12 @@ import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import CompanyTicker from "@/components/ticker/CompanyTicker";
 import { I18nProvider } from "@/lib/i18n";
 import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
 import { TransitionOverlayProvider } from "@/components/ui/ZoomTransition";
-import { IntroProvider } from "@/components/intro/Preloader";
+import { IntroProvider } from "@/components/intro/IntroProvider";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 
@@ -25,7 +26,7 @@ const fraunces = Fraunces({
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["300", "400", "500"],
   variable: "--font-mono",
 });
 
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <Navbar />
                   <main>{children}</main>
                   <Footer />
+                  <CompanyTicker />
                   <CompareBar />
                 </CompareProvider>
               </I18nProvider>

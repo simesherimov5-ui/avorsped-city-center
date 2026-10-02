@@ -85,8 +85,8 @@ export default function ApartmentsPage() {
   }, [filters]);
 
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 lg:px-10">
         <SectionHeading
           eyebrow="Пронаоѓач на станови"
           title="Пронајди го твојот стан"
@@ -107,7 +107,7 @@ export default function ApartmentsPage() {
               <button
                 type="button"
                 onClick={() => setSheetOpen(true)}
-                className="focus-ring flex items-center gap-2 border border-line px-4 py-2 text-sm font-medium transition-colors hover:border-accent/50"
+                className="focus-ring flex min-h-11 items-center gap-2 border border-line px-4 py-2 text-base font-medium transition-colors hover:border-accent/50 sm:text-sm"
               >
                 <SlidersHorizontal className="h-4 w-4" /> Филтри
               </button>
@@ -124,7 +124,7 @@ export default function ApartmentsPage() {
                 ))}
               </div>
             ) : (
-              <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-20 text-center">
+              <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
                 <SearchX className="h-8 w-8 text-ink/30" strokeWidth={1.5} />
                 <div>
                   <div className="font-display text-xl">Нема станови за овие филтри</div>
@@ -158,7 +158,7 @@ export default function ApartmentsPage() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col rounded-t-xl bg-cream"
+              className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-xl bg-cream"
             >
               <div className="flex items-center justify-between border-b border-line px-6 py-4">
                 <span className="font-display text-lg">Филтри</span>

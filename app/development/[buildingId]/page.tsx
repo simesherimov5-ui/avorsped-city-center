@@ -38,17 +38,17 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
   const counts = availabilityCounts(units);
 
   return (
-    <ZoomEnter className="pt-28">
-      <div className="mx-auto max-w-7xl px-6 pt-6 lg:px-10">
+    <ZoomEnter className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/development"
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектот
         </Link>
       </div>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <Media image={building.exteriorImage} className="aspect-[4/3]" />
           <div>
@@ -67,7 +67,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
       </section>
 
       <section className="bg-cream py-16">
-        <div className="mx-auto max-w-3xl px-6 lg:px-10">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8 lg:px-10">
           <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
           <div className="mt-10">
             <BuildingDirectory

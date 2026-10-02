@@ -22,9 +22,9 @@ export default function DevelopmentPage() {
   const soldPct = 100 - availablePct - reservedPct;
 
   return (
-    <div className="pt-28">
+    <div className="pt-24 sm:pt-28">
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
-      <section className="mx-auto max-w-7xl px-6 pb-20 pt-16 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-20 pt-16 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <Reveal>
             <div className="eyebrow text-gold-deep">{development.location}</div>
@@ -46,8 +46,8 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Masterplan — six buildings around a shared courtyard */}
-      <section className="bg-cream py-20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+      <section className="bg-cream py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
               eyebrow="Ситуационен план"
@@ -72,7 +72,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Availability — real-time breakdown across all six buildings */}
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-16 sm:py-20 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <Reveal>
             <div>
@@ -108,8 +108,8 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Construction progress */}
-      <section className="bg-cream py-20">
-        <div className="mx-auto max-w-5xl px-6 lg:px-10">
+      <section className="bg-cream py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading eyebrow="Напредок" title="Тек на изградба" />
           </Reveal>
@@ -122,7 +122,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Location */}
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-16 sm:py-20 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <div>
@@ -157,7 +157,7 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <section className="bg-chrome py-20 text-center text-on-chrome">
+      <section className="bg-chrome py-16 sm:py-20 text-center text-on-chrome">
         <h2 className="font-display text-3xl">Не сте сигурни која зграда?</h2>
         <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
           Филтрирајте секој стан од сите шест згради по големина, буџет и достапност.

@@ -69,7 +69,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
           <Link
             href={`/apartments/${apartment.id}`}
             aria-label={`Погледни го стан ${apartment.number}`}
-            className="focus-ring mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
+            className="focus-ring mb-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
           >
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -77,7 +77,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
 
         <label
           className={cn(
-            "mt-4 flex cursor-pointer items-center gap-2 border-t border-line pt-4 text-xs text-ink/50 transition-opacity",
+            "mt-4 flex min-h-11 cursor-pointer items-center gap-3 border-t border-line pt-4 text-sm text-ink/60 transition-opacity sm:text-xs",
             !selected && isFull && "cursor-not-allowed opacity-40"
           )}
         >
@@ -86,7 +86,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
             checked={selected}
             disabled={!selected && isFull}
             onChange={() => toggle(apartment.id)}
-            className="h-3.5 w-3.5 accent-[color:var(--color-accent)]"
+            className="h-5 w-5 accent-[color:var(--color-accent)] sm:h-3.5 sm:w-3.5"
           />
           {selected ? "Додаден за споредба" : "Додади за споредба"}
         </label>

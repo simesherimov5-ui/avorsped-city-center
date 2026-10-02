@@ -29,17 +29,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   return (
-    <div className="pt-28">
-      <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/projects"
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектите
         </Link>
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <Reveal>
           {project.gallery.length > 0 ? (
             <PhotoCarousel
@@ -70,8 +70,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
+          <div className="min-w-0 lg:col-span-2">
             <Reveal delay={0.1}>
               <div className="eyebrow text-gold-deep">{project.location}</div>
               <h1 className="mt-1 font-display text-4xl sm:text-5xl">{project.name}</h1>

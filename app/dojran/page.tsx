@@ -18,8 +18,8 @@ export default function DojranPage() {
   const project = projects.find((p) => p.id === "dojranski-raj")!;
 
   return (
-    <ZoomEnter className="pt-28">
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-10">
+    <ZoomEnter className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-16 pt-10 lg:px-10">
         <div className="mx-auto max-w-6xl">
           <DojranFacade image={project.heroImage} />
         </div>
@@ -39,7 +39,7 @@ export default function DojranPage() {
               ))}
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button href="/consultation" variant="primary" size="sm">
                 Закажи консултација
               </Button>

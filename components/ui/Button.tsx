@@ -29,7 +29,7 @@ export function Button({
   disabled,
 }: ButtonProps) {
   const base = cn(
-    "relative isolate inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
+    "relative isolate inline-flex min-h-12 items-center justify-center lg:min-h-0 gap-2 whitespace-nowrap font-medium uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
     size === "sm" ? "px-5 py-2.5 text-[11px] tracking-[0.14em]" : "px-7 py-3.5 text-xs tracking-[0.16em]"
   );
   const styles = {

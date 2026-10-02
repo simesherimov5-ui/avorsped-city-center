@@ -14,8 +14,8 @@ export default function CompletedProjectsPage() {
   const completed = projects.filter((p) => p.status === "completed");
 
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading
           eyebrow="Портфолио"
           title="Завршени проекти"

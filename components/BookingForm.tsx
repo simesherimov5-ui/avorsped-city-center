@@ -13,7 +13,7 @@ interface BookingFormProps {
   compact?: boolean;
 }
 
-const inputClass = "w-full border border-line bg-warm-white px-3.5 py-2.5 text-sm focus-ring";
+const inputClass = "min-h-12 w-full border border-line bg-warm-white px-3.5 py-2.5 text-base focus-ring";
 const labelClass = "eyebrow text-ink/50";
 
 // Real weekday business hours (see companyInfo.hours: "Пон–Пет 09:00–18:00"),
@@ -96,6 +96,7 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
           <span className={labelClass}>Име *</span>
           <input
             required
+            autoComplete="given-name"
             className={inputClass}
             value={values.firstName}
             onChange={(e) => update("firstName", e.target.value)}
@@ -105,6 +106,7 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
           <span className={labelClass}>Презиме *</span>
           <input
             required
+            autoComplete="family-name"
             className={inputClass}
             value={values.lastName}
             onChange={(e) => update("lastName", e.target.value)}
@@ -115,6 +117,8 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
           <input
             required
             type="email"
+            inputMode="email"
+            autoComplete="email"
             className={inputClass}
             value={values.email}
             onChange={(e) => update("email", e.target.value)}
@@ -125,6 +129,8 @@ export function BookingForm({ defaultValues, kind = "consultation", compact = fa
           <input
             required
             type="tel"
+            inputMode="tel"
+            autoComplete="tel"
             className={inputClass}
             value={values.phone}
             onChange={(e) => update("phone", e.target.value)}
@@ -241,7 +247,7 @@ function TimeSlotRow({
 }) {
   return (
     <div>
-      <div className="mb-1.5 text-[11px] text-ink/40">{label}</div>
+      <div className="mb-1.5 text-xs text-ink/50">{label}</div>
       <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-8">
         {slots.map((t) => {
           const isSelected = value === t;
@@ -253,7 +259,7 @@ function TimeSlotRow({
               aria-checked={isSelected}
               onClick={() => onChange(isSelected ? "" : t)}
               className={cn(
-                "focus-ring border px-2 py-2 text-center text-sm tabular-nums transition-colors active:scale-95",
+                "focus-ring min-h-11 border px-2 py-2 text-center text-base tabular-nums transition-colors active:scale-95 sm:text-sm",
                 isSelected
                   ? "border-accent bg-accent/10 font-medium text-charcoal"
                   : "border-line text-ink/70 hover:border-accent/50"

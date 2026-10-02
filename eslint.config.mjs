@@ -26,12 +26,7 @@ const NO_LABEL_LITERAL = ["Literal", "JSXText"].map((node) => ({
   message: "Status labels come from lib/format.ts (statusLabel).",
 }));
 
-const HEX_BASELINE = [
-  "components/FloorPlan.tsx",
-  "components/intro/GoldLogo.tsx",
-  "components/intro/GoldRing.tsx",
-  "components/intro/Preloader.tsx",
-];
+const HEX_BASELINE = ["components/FloorPlan.tsx"];
 const LABEL_BASELINE = ["components/ApartmentFilters.tsx"];
 
 // Components must not import the dataset; pages pass plain props (roadmap item 3).
