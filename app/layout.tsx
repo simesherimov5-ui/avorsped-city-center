@@ -4,7 +4,7 @@ import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import CompanyTicker from "@/components/ticker/CompanyTicker";
+import CompanyTicker from "@/components/company-ticker/CompanyTicker";
 import { I18nProvider } from "@/lib/i18n";
 import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
