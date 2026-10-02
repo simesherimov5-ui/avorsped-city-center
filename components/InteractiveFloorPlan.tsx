@@ -32,7 +32,8 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
               onMouseLeave={() => setHovered(null)}
               aria-label={room ? `Пушти видео — ${room.label}` : undefined}
               className={cn(
-                "focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform",
+                // 44px hit area around the 32px marker
+                "focus-ring absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-transform",
                 isClickable ? "cursor-pointer" : "cursor-default"
               )}
               style={{ top: spot.top, left: spot.left }}
@@ -78,7 +79,7 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
                 type="button"
                 onClick={() => setActiveRoom(null)}
                 aria-label="Затвори"
-                className="focus-ring flex h-8 w-8 items-center justify-center rounded-full bg-on-chrome/90 text-chrome"
+                className="focus-ring flex h-11 w-11 items-center justify-center rounded-full bg-on-chrome/90 text-chrome"
               >
                 <X className="h-4 w-4" />
               </button>

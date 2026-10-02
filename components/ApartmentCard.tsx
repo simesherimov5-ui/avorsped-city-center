@@ -77,7 +77,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
 
         <label
           className={cn(
-            "mt-4 flex min-h-11 cursor-pointer items-center gap-3 border-t border-line pt-4 text-sm text-ink/60 transition-opacity sm:text-xs",
+            "mt-4 flex min-h-11 cursor-pointer items-center gap-3 border-t border-line pt-4 text-sm text-ink/60 transition-opacity lg:text-xs",
             !selected && isFull && "cursor-not-allowed opacity-40"
           )}
         >
@@ -86,7 +86,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
             checked={selected}
             disabled={!selected && isFull}
             onChange={() => toggle(apartment.id)}
-            className="h-5 w-5 accent-[color:var(--color-accent)] sm:h-3.5 sm:w-3.5"
+            className="h-5 w-5 accent-[color:var(--color-accent)] lg:h-3.5 lg:w-3.5"
           />
           {selected ? "Додаден за споредба" : "Додади за споредба"}
         </label>
