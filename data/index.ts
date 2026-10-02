@@ -1,5 +1,5 @@
 import { generateDevelopment } from "./generate";
-import type { Apartment, Building, CompanyStat, Project } from "@/types";
+import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
 
 const generated = generateDevelopment();
 
@@ -195,6 +195,16 @@ export const companyStats: CompanyStat[] = [
   { value: "6", label: "Згради во изградба" },
 ];
 
+/**
+ * The "Нашиот пат" timeline on the About page — the one place to add milestones.
+ * Only what the client has confirmed is listed: the founding, and the current City Center project.
+ * TODO(client): add the other milestones (year + one short sentence each) as they are confirmed.
+ */
+export const companyTimeline: CompanyMilestone[] = [
+  { year: "1994", text: "Основање на Јавор Шпед." },
+  { year: "2026", text: "City Center — шест згради во изградба." },
+];
+
 export const companyInfo = {
   name: "Јавор Шпед",
   shortName: "Јавор Шпед",
@@ -220,17 +230,6 @@ export const companyInfo = {
       title: "Транспарентност",
       description: "Јасни цени, искрена достапност и директна комуникација со купувачите.",
     },
-  ],
-  groupCompanies: [
-    "Јавор Шпед Ол",
-    "СДА Јавор",
-    "Дисмак Ол",
-    "Дисмак Транспорт",
-    "Јавор Транс",
-    "СИМ Инженеринг",
-    "Хели-Центрум",
-    "Енерџи Холдинг",
-    "Exclusive Building",
   ],
   address: "Ул. Ленинова, ГТЦ Глобал, 4-ти кат, Струмица",
   phone: "+389 2 3123 456",

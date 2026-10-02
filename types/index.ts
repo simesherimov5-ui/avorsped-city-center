@@ -127,6 +127,12 @@ export interface FloorPlanExplorerData {
   rooms: Record<string, { label: string; video: string }>;
 }
 
+/** One entry of the About page timeline. */
+export interface CompanyMilestone {
+  year: string;
+  text: string;
+}
+
 export interface Project {
   id: string;
   slug: string;

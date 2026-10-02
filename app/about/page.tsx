@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import { companyInfo, companyStats, projects } from "@/data";
+import { companyInfo, companyStats, companyTimeline, projects } from "@/data";
+import { COMPANIES, THIS_COMPANY } from "@/components/company-ticker/companies";
 import { Media } from "@/components/ui/Media";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { CountUp } from "@/components/ui/CountUp";
+import { RevealHeading } from "@/components/motion/RevealHeading";
 import { ProjectCard } from "@/components/ProjectCard";
+import { StatsRow } from "@/components/about/StatsRow";
+import { ValueCards } from "@/components/about/ValueCards";
+import { Timeline } from "@/components/about/Timeline";
+import { CompanyBoxes } from "@/components/about/CompanyBoxes";
 
 export const metadata: Metadata = {
   title: "За нас",
@@ -20,17 +24,25 @@ const BRAND_IMAGE = {
   isPlaceholder: false,
 };
 
+// Section rhythm: 140px between sections on desktop, 72px on phones. Bands (ink) carry the full padding;
+// paper sections carry half, so two paper sections in a row are still 140 / 72 apart.
+const BAND = "py-[72px] lg:py-[140px]";
+const PAPER = "py-9 lg:py-[70px]";
+const WRAP = "mx-auto max-w-6xl px-5 sm:px-8 lg:px-10";
+
 export default function AboutPage() {
   return (
     <div>
-      <section className="bg-ink pb-20 pt-32 text-paper lg:pb-28 lg:pt-36">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16 lg:px-10">
+      <section className="bg-ink pb-[72px] pt-32 text-paper lg:pb-[140px] lg:pt-40">
+        <div className={`${WRAP} grid items-center gap-12 lg:grid-cols-2 lg:gap-16`}>
           <Reveal>
             <Media image={BRAND_IMAGE} tone="dark" className="aspect-[4/5]" />
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="eyebrow text-gold">Основано 1994</div>
-            <h1 className="mt-5 font-display text-4xl leading-[1.1] sm:text-5xl">Три децении на Јавор Шпед.</h1>
+            <div className="eyebrow eyebrow-ruled text-gold">Основано 1994</div>
+            <RevealHeading as="h1" className="mt-5 font-display text-4xl leading-[1.1] sm:text-5xl">
+              Три децении на Јавор Шпед.
+            </RevealHeading>
             <p className="mt-6 max-w-lg text-lead leading-relaxed text-paper/70">{companyInfo.story}</p>
             <Link
               href="/projects"
@@ -42,77 +54,72 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-cream py-16">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <Reveal>
-              <div>
-                <div className="eyebrow text-gold-deep">Мисија</div>
-                <p className="mt-3 max-w-md font-display text-2xl leading-snug">{companyInfo.mission}</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 sm:divide-x sm:divide-line">
-                {companyStats.map((s, i) => (
-                  <div key={s.label} className={i > 0 ? "sm:pl-6" : undefined}>
-                    <div className="font-display text-4xl text-gold-deep">
-                      <CountUp value={s.value} />
-                    </div>
-                    <div className="eyebrow mt-1.5 text-ink/50">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+      <section className={PAPER}>
+        <div className={WRAP}>
+          <Reveal>
+            <div className="eyebrow eyebrow-ruled text-gold-deep">Мисија</div>
+            <p className="mt-5 max-w-3xl font-display text-2xl leading-snug lg:text-[2rem]">{companyInfo.mission}</p>
+          </Reveal>
+          <div className="mt-12 lg:mt-16">
+            <StatsRow stats={companyStats} />
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-16 lg:px-10">
-        <Reveal>
-          <SectionHeading eyebrow="Нашите вредности" title="За што се залагаме" />
-        </Reveal>
-        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {companyInfo.values.map((v, i) => (
-            <Reveal key={v.title} delay={i * 0.06}>
-              <div className="border-t border-line pt-4">
-                <div className="font-display text-lg">{v.title}</div>
-                <p className="mt-2 text-sm text-ink/60">{v.description}</p>
-              </div>
-            </Reveal>
-          ))}
+      <section className={PAPER}>
+        <div className={WRAP}>
+          <div className="eyebrow eyebrow-ruled text-gold-deep">Нашите вредности</div>
+          <RevealHeading as="h2" className="mt-4 font-display text-3xl sm:text-[2.75rem]">
+            За што се залагаме
+          </RevealHeading>
+          <div className="mt-10 lg:mt-14">
+            <ValueCards values={companyInfo.values} />
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-16 lg:px-10">
-        <Reveal>
-          <SectionHeading eyebrow="Групацијата" title="Дел од Јавор Шпед" />
-          <p className="mt-4 max-w-2xl text-sm text-ink/60">
-            Exclusive Building работи заедно со овие компании во рамки на групацијата Јавор Шпед.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 text-sm text-ink/70">
-            {companyInfo.groupCompanies.map((name) => (
-              <span key={name} className="border border-line px-3 py-1.5">
-                {name}
-              </span>
+      <section className={`bg-ink text-paper ${BAND}`}>
+        <div className={WRAP}>
+          <div className="eyebrow eyebrow-ruled text-gold">Историја</div>
+          <RevealHeading as="h2" className="mt-4 font-display text-3xl sm:text-[2.75rem]">
+            Нашиот пат
+          </RevealHeading>
+          <div className="mt-10 lg:mt-14">
+            <Timeline milestones={companyTimeline} />
+          </div>
+
+          <div className="mt-[72px] lg:mt-[140px]">
+            <div className="eyebrow eyebrow-ruled text-gold">Групацијата</div>
+            <RevealHeading as="h2" className="mt-4 font-display text-3xl sm:text-[2.75rem]">
+              Дел од Јавор Шпед
+            </RevealHeading>
+            <p className="mt-4 max-w-2xl text-base text-paper/70">
+              Exclusive Building работи заедно со овие компании во рамки на групацијата Јавор Шпед.
+            </p>
+            <div className="mt-10 lg:mt-14">
+              <CompanyBoxes companies={COMPANIES} highlight={THIS_COMPANY} thisLabel="Оваа компанија" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={PAPER}>
+        <div className={WRAP}>
+          <div className="eyebrow eyebrow-ruled text-gold-deep">Портфолио</div>
+          <RevealHeading as="h2" className="mt-4 font-display text-3xl sm:text-[2.75rem]">
+            Она што го градиме сега
+          </RevealHeading>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p, i) => (
+              <Reveal key={p.id} delay={i * 0.08}>
+                <ProjectCard project={p} />
+              </Reveal>
             ))}
           </div>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-16 lg:px-10">
-        <Reveal>
-          <SectionHeading eyebrow="Портфолио" title="Она што го градиме сега" />
-        </Reveal>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => (
-            <Reveal key={p.id} delay={i * 0.08}>
-              <ProjectCard project={p} />
-            </Reveal>
-          ))}
         </div>
       </section>
 
-      <section className="bg-chrome py-16 sm:py-20 text-center text-on-chrome">
+      <section className="bg-chrome py-16 text-center text-on-chrome sm:py-20">
         <h2 className="font-display text-3xl">Сакате да дознаете повеќе?</h2>
         <div className="mt-8">
           <Button href="/contact" variant="primary">

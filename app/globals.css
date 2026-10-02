@@ -112,6 +112,29 @@ h4 {
   text-transform: uppercase;
 }
 
+/* A 40px gold rule before an eyebrow label. */
+.eyebrow-ruled::before {
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  margin-right: 16px;
+  vertical-align: middle;
+  background: var(--color-gold);
+}
+
+/* Thin gold scrollbar for sideways-scrolling rows. */
+.gold-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gold) transparent;
+}
+.gold-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+.gold-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+}
+
 /* Counters, stats, measurements — IBM Plex Mono at the weight/spacing the
    design system reserves for numbers, with tabular-nums so digits don't
    shift width as they change (preloader counter, stat count-ups). */
