@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -10,6 +10,7 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 
@@ -20,6 +21,10 @@ const LINKS = [
   { href: "/about", key: "nav.about" },
   { href: "/contact", key: "nav.contact" },
 ];
+
+// Which tab a path belongs to ("/projects/city-center" is under "Проекти"); null when it is none of them.
+const tabFor = (path: string) =>
+  LINKS.find((l) => (l.href === "/" ? path === "/" : path === l.href || path.startsWith(l.href + "/")))?.href ?? null;
 
 // The bar slides away once the visitor has scrolled this far down, and comes back on any scroll up.
 const HIDE_AFTER_PX = 160;
@@ -34,6 +39,13 @@ export function Navbar() {
   // Tied to the page it was set on, so every new page starts with the bar showing.
   const [hideState, setHideState] = useState({ hidden: false, path: pathname });
   const navRef = useRef<HTMLElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLSpanElement>(null);
+  const linkEls = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const linePlaced = useRef(false);
+  const transition = usePageTransition();
+  // While the curtain runs, the line already points at the tab that was clicked.
+  const activeHref = tabFor(transition?.target ?? pathname);
 
   const isHome = pathname === "/";
 
@@ -92,6 +104,36 @@ export function Navbar() {
     };
   }, [isHome]);
 
+  // The gold underline is one element that slides to the active tab (0.6s); it jumps there on first
+  // paint and on resize, and fades out on pages that are not one of the tabs.
+  useEffect(() => {
+    const place = (animate: boolean) => {
+      const line = lineRef.current;
+      const group = linksRef.current;
+      if (!line || !group) return;
+      const el = activeHref ? linkEls.current[activeHref] : null;
+      if (!el) {
+        gsap.to(line, { opacity: 0, duration: animate ? 0.3 : 0, overwrite: true });
+        return;
+      }
+      const g = group.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      gsap.to(line, {
+        x: r.left - g.left,
+        width: r.width,
+        opacity: 1,
+        duration: animate ? 0.6 : 0,
+        ease: "power3.inOut",
+        overwrite: true,
+      });
+    };
+    place(linePlaced.current);
+    linePlaced.current = true;
+    const onResize = () => place(false);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeHref]);
+
   // Hide on scroll down (after HIDE_AFTER_PX), show on scroll up. It never hides while the phone menu is
   // open or while a nav link has keyboard focus (a mouse click's focus doesn't count, or it would never hide).
   useEffect(() => {
@@ -148,27 +190,31 @@ export function Navbar() {
               <Logo variant="icon" />
             </Link>
 
-            <div className="hidden flex-1 items-center justify-center gap-7 lg:flex xl:gap-9">
-              {LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onPointerDown={spawnClickPulse}
-                  className={cn(
-                    "nav-link group relative isolate whitespace-nowrap py-1 text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-on-chrome",
-                    pathname === link.href && "text-on-chrome"
-                  )}
-                >
-                  {t(link.key)}
-                  <span
+            <div className="hidden flex-1 items-center justify-center lg:flex">
+              <div ref={linksRef} className="relative flex gap-7 xl:gap-9">
+                {LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    ref={(el) => {
+                      linkEls.current[link.href] = el;
+                    }}
+                    onPointerDown={spawnClickPulse}
+                    aria-current={pathname === link.href ? "page" : undefined}
                     className={cn(
-                      "absolute inset-x-0 -bottom-0.5 h-px scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100",
-                      pathname === link.href && "scale-x-100"
+                      "nav-link relative isolate whitespace-nowrap py-1 text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-on-chrome",
+                      activeHref === link.href && "text-on-chrome"
                     )}
-                    aria-hidden
-                  />
-                </Link>
-              ))}
+                  >
+                    {t(link.key)}
+                  </Link>
+                ))}
+                <span
+                  ref={lineRef}
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-0.5 left-0 h-px w-0 bg-accent opacity-0"
+                />
+              </div>
             </div>
 
             <div className="nav-link hidden items-center gap-4 lg:flex">

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { companyInfo } from "@/data";
 
 export function Footer() {

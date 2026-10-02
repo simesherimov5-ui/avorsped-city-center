@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { projectStatusLabel } from "@/lib/format";

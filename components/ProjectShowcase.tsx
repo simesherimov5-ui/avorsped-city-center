@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ArrowRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";

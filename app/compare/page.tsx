@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
 import { getApartment, getBuilding } from "@/data";

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { BedDouble, Compass, Ruler, ArrowRight } from "lucide-react";
 import type { Apartment } from "@/types";
 import { formatArea, formatPrice, orientationLabel } from "@/lib/format";

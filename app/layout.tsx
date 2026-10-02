@@ -10,6 +10,7 @@ import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
 import { TransitionOverlayProvider } from "@/components/ui/ZoomTransition";
 import { IntroProvider } from "@/components/intro/IntroProvider";
+import { PageTransition } from "@/components/page-transition/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 
@@ -67,13 +68,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <IntroProvider>
               <I18nProvider>
                 <CompareProvider>
-                  <SmoothScroll />
-                  <GrayscaleToggle />
-                  <Navbar />
-                  <main>{children}</main>
-                  <Footer />
-                  <CompanyTicker />
-                  <CompareBar />
+                  <PageTransition>
+                    <SmoothScroll />
+                    <GrayscaleToggle />
+                    <Navbar />
+                    <main>{children}</main>
+                    <Footer />
+                    <CompanyTicker />
+                    <CompareBar />
+                  </PageTransition>
                 </CompareProvider>
               </I18nProvider>
             </IntroProvider>
