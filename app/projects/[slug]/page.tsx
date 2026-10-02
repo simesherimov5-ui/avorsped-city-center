@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
 import { projects } from "@/data";
 import { Media } from "@/components/ui/Media";
@@ -9,7 +9,8 @@ import { RoomVideoTour } from "@/components/RoomVideoTour";
 import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { ConstructionTimeline } from "@/components/ConstructionTimeline";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
+import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 
@@ -29,17 +30,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   return (
-    <div className="pt-28">
-      <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/projects"
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектите
         </Link>
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <Reveal>
           {project.gallery.length > 0 ? (
             <PhotoCarousel
@@ -70,8 +71,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
+          <div className="min-w-0 lg:col-span-2">
             <Reveal delay={0.1}>
               <div className="eyebrow text-gold-deep">{project.location}</div>
               <h1 className="mt-1 font-display text-4xl sm:text-5xl">{project.name}</h1>
@@ -125,15 +126,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               )
             )}
 
-            {project.constructionStages && (
-              <Reveal>
-                <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="font-display text-2xl">Тек на изградба</h2>
-                  <div className="mt-6">
-                    <ConstructionTimeline stages={project.constructionStages} />
-                  </div>
-                </div>
-              </Reveal>
+            {showsConstructionProgress(project) && (
+              <div className="mt-14 border-t border-line pt-12">
+                <ConstructionProgress project={project} />
+              </div>
             )}
           </div>
 
@@ -155,7 +151,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   Истражи го проектот
                 </Button>
               )}
-              <Button href="/contact" variant="secondary" className="w-full">
+              <Button href={`/contact?project=${project.id}`} variant="secondary" className="w-full">
                 Контактирај за овој проект
               </Button>
             </aside>

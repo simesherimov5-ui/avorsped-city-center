@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { projectStatusLabel } from "@/lib/format";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
@@ -39,7 +40,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && (
               <div className="font-display text-sm text-on-chrome sm:text-base">{project.tagline}</div>
             )}
@@ -60,6 +61,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <span>{project.year}</span>
           <span>{project.units} станови</span>
         </div>
+        <ConstructionProgress project={project} variant="compact" className="mt-4 border-t border-line pt-4" />
       </div>
     </Link>
   );

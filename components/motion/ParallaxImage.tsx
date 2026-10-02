@@ -28,25 +28,30 @@ export function ParallaxImage({ children, className }: { children: ReactNode; cl
       gsap.set(clipRef.current, { clipPath: "inset(100% 0 0 0)" });
       gsap.to(clipRef.current, {
         clipPath: "inset(0% 0 0 0)",
-        duration: 1.1,
+        duration: window.innerWidth < 768 ? 0.7 : 1.1,
         ease: "power3.out",
         scrollTrigger: { trigger: clipRef.current, start: "top 90%", once: true },
       });
 
-      gsap.fromTo(
-        parallaxRef.current,
-        { yPercent: -8 },
-        {
-          yPercent: 8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: clipRef.current.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
+      // Parallax is for pointer devices with room for it — phones get the wipe only.
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        gsap.fromTo(
+          parallaxRef.current,
+          { yPercent: -8 },
+          {
+            yPercent: 8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: clipRef.current?.parentElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        );
+      });
+      return () => mm.revert();
     },
     { scope: clipRef }
   );

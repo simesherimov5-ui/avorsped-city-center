@@ -24,8 +24,14 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
 
   return (
     <div>
-      <div className="border border-line bg-warm-white p-3 sm:p-6">
-        <svg viewBox="0 0 100 100" className="w-full" role="img" aria-label="Основа на кат со кликабилни станови">
+      {/* On a phone the plan keeps a readable size and scrolls sideways inside this box. */}
+      <div className="overflow-x-auto border border-line bg-warm-white p-3 sm:p-6">
+        <svg
+          viewBox="0 0 100 100"
+          className="w-full min-w-[480px] sm:min-w-0"
+          role="img"
+          aria-label="Основа на кат со кликабилни станови"
+        >
           <rect x="0" y="0" width="100" height="100" fill="none" stroke="#dedad0" strokeWidth="0.5" />
           {apartments.map((apt) => {
             const [p0, p1, p2, p3] = apt.shape.points;
@@ -80,10 +86,19 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <StatusLegend />
-        <div className="text-sm text-ink/60 min-h-[1.25rem]">
-          {activeApt
-            ? `Стан ${activeApt.number} — ${typeLabel(activeApt.type)}, ${formatArea(activeApt.area)}, ${statusLabel(activeApt.status)}`
-            : "Задржете го покажувачот или кликнете на стан за детали"}
+        <div className="min-h-[1.25rem] text-base text-ink/60 sm:text-sm">
+          {activeApt ? (
+            `Стан ${activeApt.number} — ${typeLabel(activeApt.type)}, ${formatArea(activeApt.area)}, ${statusLabel(activeApt.status)}`
+          ) : (
+            <>
+              <span className="[@media(hover:none)]:hidden">
+                Задржете го покажувачот или кликнете на стан за детали
+              </span>
+              <span className="hidden [@media(hover:none)]:inline">
+                Допрете стан за детали (основата се движи настрана)
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

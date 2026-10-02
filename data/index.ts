@@ -1,5 +1,5 @@
 import { generateDevelopment } from "./generate";
-import type { Apartment, Building, CompanyStat, Project } from "@/types";
+import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
 
 const generated = generateDevelopment();
 
@@ -54,6 +54,9 @@ export const projects: Project[] = [
     ],
     href: "/development",
     constructionStages: development.constructionStages,
+    // Derived from the stage data above: foundations are done and the structure is at 90%.
+    // TODO(client): confirm the real phase and percentage, and add "updated" (YYYY-MM-DD) to show a date.
+    construction: { currentPhase: "structure", percent: 90, handover: development.expectedCompletion },
     buildings: development.buildings,
     capabilities: { hasMasterplan: true, hasBuildings: true, hasApartmentSelection: true },
   },
@@ -195,6 +198,16 @@ export const companyStats: CompanyStat[] = [
   { value: "6", label: "Згради во изградба" },
 ];
 
+/**
+ * The "Нашиот пат" timeline on the About page — the one place to add milestones.
+ * Only what the client has confirmed is listed: the founding, and the current City Center project.
+ * TODO(client): add the other milestones (year + one short sentence each) as they are confirmed.
+ */
+export const companyTimeline: CompanyMilestone[] = [
+  { year: "1994", text: "Основање на Јавор Шпед." },
+  { year: "2026", text: "City Center — шест згради во изградба." },
+];
+
 export const companyInfo = {
   name: "Јавор Шпед",
   shortName: "Јавор Шпед",
@@ -221,19 +234,11 @@ export const companyInfo = {
       description: "Јасни цени, искрена достапност и директна комуникација со купувачите.",
     },
   ],
-  groupCompanies: [
-    "Јавор Шпед Ол",
-    "СДА Јавор",
-    "Дисмак Ол",
-    "Дисмак Транспорт",
-    "Јавор Транс",
-    "СИМ Инженеринг",
-    "Хели-Центрум",
-    "Енерџи Холдинг",
-    "Exclusive Building",
-  ],
   address: "Ул. Ленинова, ГТЦ Глобал, 4-ти кат, Струмица",
   phone: "+389 2 3123 456",
   email: "info@javorsped.mk",
+  // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
+  // empty, the Контакт page leaves that row out rather than guessing a number.
+  messengerNumber: "",
   hours: "Пон–Пет 09:00–18:00, Саб 10:00–14:00",
 };

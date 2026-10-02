@@ -50,7 +50,7 @@ export function Media({
         sizes={sizes}
         className={fit === "contain" ? "object-contain" : "object-cover"}
         priority={priority}
-        quality={priority ? 100 : 90}
+        quality={90}
       />
     </div>
   );

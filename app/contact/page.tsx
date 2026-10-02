@@ -1,61 +1,47 @@
 import type { Metadata } from "next";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { companyInfo, development } from "@/data";
+import { companyInfo, development, getApartment, getBuilding, projects } from "@/data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { BookingForm } from "@/components/BookingForm";
-import { Button } from "@/components/ui/Button";
+import { GuidedBooking, type Interest } from "@/components/contact/GuidedBooking";
+import { DirectPanel } from "@/components/contact/DirectPanel";
 
 export const metadata: Metadata = {
   title: "Контакт",
-  description: "Контактирајте нè: Јавор Шпед. Адреса, телефон, е-пошта и контакт формулар.",
+  description: "Контактирајте нè: Јавор Шпед. Закажете консултација, адреса, телефон и е-пошта.",
 };
 
-export default function ContactPage() {
+type Params = Record<string, string | string[] | undefined>;
+const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+const INTERESTS: Interest[] = ["apartment", "commercial", "parking"];
+
+export default async function ContactPage({ searchParams }: { searchParams: Promise<Params> }) {
+  const params = await searchParams;
+
+  // Arriving from an apartment or project page: pre-select the interest and carry the reference along.
+  const apartment = getApartment(first(params.apartment) ?? "");
+  const building = getBuilding(first(params.building) ?? apartment?.buildingId ?? "");
+  const project = projects.find((p) => p.id === first(params.project));
+  const asked = first(params.interest) as Interest | undefined;
+  const initialInterest: Interest = asked && INTERESTS.includes(asked) ? asked : "apartment";
+  const reference =
+    [apartment && `Стан ${apartment.number}`, building?.name, project?.name].filter(Boolean).join(" · ") || undefined;
+  const initialRooms =
+    apartment && apartment.bedrooms >= 1 ? (apartment.bedrooms >= 4 ? "4+" : String(apartment.bedrooms)) : undefined;
+
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-6xl px-6 py-16 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:px-10">
         <SectionHeading eyebrow="Стапете во контакт" title="Контактирајте нè" />
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-2">
-          <div>
-            <ul className="space-y-5 text-sm">
-              <li className="flex gap-3">
-                <MapPin className="h-4 w-4 shrink-0 text-gold-deep" />
-                <span>{companyInfo.address}</span>
-              </li>
-              <li className="flex gap-3">
-                <Phone className="h-4 w-4 shrink-0 text-gold-deep" />
-                <a href={`tel:${companyInfo.phone}`}>{companyInfo.phone}</a>
-              </li>
-              <li className="flex gap-3">
-                <Mail className="h-4 w-4 shrink-0 text-gold-deep" />
-                <a href={`mailto:${companyInfo.email}`}>{companyInfo.email}</a>
-              </li>
-              <li className="flex gap-3">
-                <Clock className="h-4 w-4 shrink-0 text-gold-deep" />
-                <span>{companyInfo.hours}</span>
-              </li>
-            </ul>
-
-            <div className="mt-8 aspect-[4/3] border border-line">
-              <iframe
-                title="Мапа со локација на канцеларијата"
-                className="h-full w-full grayscale"
-                loading="lazy"
-                src={`https://www.google.com/maps?q=${encodeURIComponent(development.mapQuery)}&output=embed`}
-              />
-            </div>
-
-            <div className="mt-8">
-              <Button href="/consultation" variant="primary">
-                Закажи консултација
-              </Button>
-            </div>
-          </div>
-
-          <div>
-            <BookingForm kind="info-request" compact />
-          </div>
+        <div className="mt-12 grid gap-12 lg:grid-cols-[6fr_5fr] lg:gap-16">
+          <GuidedBooking initialInterest={initialInterest} initialRooms={initialRooms} reference={reference} />
+          <DirectPanel
+            phone={companyInfo.phone}
+            email={companyInfo.email}
+            hours={companyInfo.hours}
+            address={companyInfo.address}
+            messengerNumber={companyInfo.messengerNumber}
+            mapQuery={development.mapQuery}
+          />
         </div>
       </section>
     </div>

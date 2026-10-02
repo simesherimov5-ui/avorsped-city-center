@@ -21,6 +21,8 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
 
   return (
     <div className="relative self-start">
+      {/* The floor bands over the photo are slivers a finger can't hit on a phone, and their labels only
+          show on hover — phones use the floor list below the photo instead (md and up keep the bands). */}
       <Media image={image} label="Дојрански Рај — фасада" className="aspect-[16/8]" sizes="100vw" />
       {BANDS.map((band) => {
         const floor = dojranFloors.find((f) => f.number === band.number);
@@ -37,7 +39,7 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
             onFocus={() => setHovered(band.number)}
             onBlur={() => setHovered(null)}
             aria-label={floor.label}
-            className="focus-ring absolute inset-x-0 flex items-center justify-center"
+            className="focus-ring absolute inset-x-0 hidden items-center justify-center md:flex"
             style={{ top: band.top, height: band.height }}
           >
             <div

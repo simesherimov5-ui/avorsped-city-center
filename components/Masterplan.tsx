@@ -109,7 +109,7 @@ export function Masterplan({
                 }}
                 aria-pressed={isSelected}
                 aria-label={`${building.name} — детали`}
-                className="focus-ring group absolute -translate-x-1/2 -translate-y-1/2 active:scale-90"
+                className="focus-ring group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center active:scale-90"
                 style={spot}
               >
                 <motion.div
@@ -191,7 +191,7 @@ export function Masterplan({
                       }}
                       onMouseEnter={() => setHovered(b.id)}
                       onMouseLeave={() => setHovered(null)}
-                      className="focus-ring flex h-9 w-9 items-center justify-center border border-line text-sm font-medium text-ink/60 transition-colors hover:border-accent hover:text-gold-deep"
+                      className="focus-ring flex h-11 w-11 items-center justify-center border border-line text-base font-medium text-ink/60 transition-colors hover:border-accent hover:text-gold-deep"
                     >
                       {b.shortLabel}
                     </button>
@@ -217,7 +217,7 @@ export function Masterplan({
                   setSelected((current) => (current === building.id ? null : building.id));
                 }}
                 className={cn(
-                  "focus-ring flex shrink-0 items-center gap-2.5 border px-4 py-2.5 text-sm transition-colors active:scale-[0.97]",
+                  "focus-ring flex min-h-12 shrink-0 items-center gap-2.5 border px-4 py-2.5 text-base transition-colors active:scale-[0.97]",
                   isSelected ? "border-accent bg-accent/10 text-charcoal" : "border-line text-ink/60"
                 )}
               >

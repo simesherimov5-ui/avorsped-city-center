@@ -50,17 +50,17 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   });
 
   return (
-    <ZoomEnter className="pt-28">
+    <ZoomEnter className="pt-24 sm:pt-28">
       {/* A quiet wayfinding line, not a spec header — the visitor already
           arrived through the building, so it doesn't need repeating as a
           prominent heading. The floor plan and its apartments are the
           actual content of this page. */}
-      <div className="mx-auto max-w-7xl px-6 pt-8 lg:px-10">
-        <nav aria-label="Патека" className="flex items-center gap-1.5 text-xs text-ink/40">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-8 lg:px-10">
+        <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-ink/50 sm:text-xs">
           <ZoomNavLink
             href={`/development/${building.id}`}
             label={building.name}
-            className="focus-ring transition-colors hover:text-charcoal"
+            className="focus-ring inline-flex min-h-11 items-center px-1 transition-colors hover:text-charcoal"
           >
             {building.name}
           </ZoomNavLink>
@@ -70,7 +70,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
         <h1 className="mt-3 font-display text-3xl text-charcoal sm:text-4xl">Изберете го вашиот стан</h1>
       </div>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
           <div>
             {hasRealPlan && overview ? (

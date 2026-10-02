@@ -38,23 +38,23 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const floorPlanImage = floorPlanImageForApartment(apartment);
   const cityCenterId = projects.find((p) => p.id === "city-center")?.id ?? "";
 
-  const inquiryHref = `/consultation?kind=apartment-inquiry&project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
+  const inquiryHref = `/contact?project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
 
   const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
 
   return (
-    <ZoomEnter className="pt-28">
-      <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-10">
+    <ZoomEnter className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <ZoomNavLink
           href={`/development/${apartment.buildingId}/${apartment.floor}`}
           label={building?.name}
-          className="focus-ring inline-flex items-center gap-1 text-sm text-ink/50 hover:text-charcoal"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон основата на катот
         </ZoomNavLink>
       </div>
 
-      <section className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="eyebrow text-ink/50">
@@ -170,7 +170,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             </div>
             <a
               href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}
-              className="focus-ring flex items-center justify-center gap-2 border-t border-line pt-5 text-sm text-ink/60 transition-colors hover:text-charcoal"
+              className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-ink/60 transition-colors hover:text-charcoal sm:text-sm"
             >
               <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
               Или нè јавете: {companyInfo.phone}

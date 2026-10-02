@@ -3,12 +3,12 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
 import { CountUp } from "@/components/ui/CountUp";
-import { useIntro } from "@/components/intro/Preloader";
+import { useIntro } from "@/components/intro/IntroProvider";
 import { companyStats } from "@/data";
 import { gsap, SplitText } from "@/lib/gsap";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 // A company-wide hero, not a single-project pitch: the portfolio holds
 // several developments and this is their shared front door.
@@ -20,113 +20,87 @@ const HERO_IMAGE = {
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
-  const { ready, instant } = useIntro();
+  const isPhone = useMediaQuery("(max-width: 767px)");
+  const { revealing, instant } = useIntro();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   // The photo drifts slightly slower than the scroll (classic parallax depth)
   // but only across the hero's own height — it settles the instant the next
   // section starts, so it never reaches into content below.
-  const photoY = useTransform(scrollYProgress, [0, 1], ["0%", reduceMotion ? "0%" : "14%"]);
+  const photoY = useTransform(scrollYProgress, [0, 1], ["0%", reduceMotion || isPhone ? "0%" : "14%"]);
 
-  // Entrance timeline — separate from the Framer parallax/Ken-Burns above, on
-  // their own DOM nodes, so the two engines never fight over the same
-  // element's transform. Gated on the preloader: `ready` false means still
-  // preloading (stay hidden); `instant` true means the intro was skipped
-  // (repeat visit this session) so we snap straight to the final state.
-  const imageWrapRef = useRef<HTMLDivElement>(null);
+  // One entrance, tied to the opening. The photo is never animated here: it is
+  // already fully loaded and visible under the black screen, which simply
+  // opens over it. The text and stats stay hidden until the screen starts to
+  // open (`revealing`), then come in; mounting after the intro is over
+  // (navigating back to the homepage) just shows the final state. The Framer
+  // parallax above only reacts to scrolling and runs on its own DOM node.
+  const revealedAtMount = useRef(revealing);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
-  const actionsRef = useRef<HTMLDivElement>(null);
-  const ctaFrameRef = useRef<SVGRectElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      if (!ready) return;
-      const targets = [
-        imageWrapRef.current,
-        eyebrowRef.current,
-        headlineRef.current,
-        actionsRef.current,
-        statsBarRef.current,
-        scrollIndicatorRef.current,
-      ];
-      if (targets.some((t) => !t)) return;
+      const eyebrow = eyebrowRef.current;
+      const headline = headlineRef.current;
+      const stats = statsBarRef.current;
+      const scrollCue = scrollIndicatorRef.current;
+      if (!eyebrow || !headline || !stats || !scrollCue) return;
 
-      const split = new SplitText(headlineRef.current, { type: "lines", mask: "lines", linesClass: "line" });
-      const frameLength = ctaFrameRef.current?.getTotalLength() ?? 0;
-      if (ctaFrameRef.current) {
-        gsap.set(ctaFrameRef.current, { strokeDasharray: frameLength, strokeDashoffset: frameLength });
+      if (!revealing) {
+        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 0 });
+        gsap.set([eyebrow, stats, scrollCue], { y: 14 });
+        return;
       }
 
-      if (instant) {
-        gsap.set(imageWrapRef.current, { scale: 1, opacity: 1 });
-        gsap.set(eyebrowRef.current, { opacity: 1, y: 0 });
-        gsap.set(split.lines, { yPercent: 0 });
-        gsap.set(actionsRef.current, { opacity: 1, y: 0 });
-        gsap.set(statsBarRef.current, { opacity: 1, y: 0 });
-        gsap.set(scrollIndicatorRef.current, { opacity: 1, y: 0 });
-        if (ctaFrameRef.current) gsap.set(ctaFrameRef.current, { strokeDashoffset: 0 });
-        return () => split.revert();
+      if (instant || revealedAtMount.current) {
+        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 1, y: 0 });
+        return;
       }
 
-      gsap.set(imageWrapRef.current, { scale: 1.2, opacity: 0.7 });
-      gsap.set(eyebrowRef.current, { opacity: 0, y: 12 });
+      const split = new SplitText(headline, { type: "lines", mask: "lines", linesClass: "line" });
       gsap.set(split.lines, { yPercent: 110 });
-      gsap.set(actionsRef.current, { opacity: 0, y: 16 });
-      gsap.set(statsBarRef.current, { opacity: 0, y: 16 });
-      gsap.set(scrollIndicatorRef.current, { opacity: 0, y: 16 });
+      gsap.set(headline, { opacity: 1 });
 
       const tl = gsap.timeline();
-      tl.to(imageWrapRef.current, { scale: 1, opacity: 1, duration: 2, ease: "power3.out" }, 0)
-        .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.6 }, 0)
+      tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1)
         .to(split.lines, { yPercent: 0, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.3)
-        .to(actionsRef.current, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 1.1)
-        .to(ctaFrameRef.current, { strokeDashoffset: 0, duration: 0.8, ease: "power2.out" }, 1.3)
-        .to(statsBarRef.current, { opacity: 1, y: 0, duration: 0.7 }, 1.5)
-        .to(scrollIndicatorRef.current, { opacity: 1, y: 0, duration: 0.7 }, 1.7);
+        .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1)
+        .to(scrollCue, { opacity: 1, y: 0, duration: 0.7 }, 1.3);
 
       return () => {
         split.revert();
         tl.kill();
       };
     },
-    { scope: sectionRef, dependencies: [ready, instant] }
+    { scope: sectionRef, dependencies: [revealing, instant] }
   );
 
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100svh] min-h-[640px] flex-col overflow-hidden bg-ink text-paper"
+      className="relative flex h-[100dvh] min-h-[560px] flex-col overflow-hidden bg-ink text-paper"
     >
       <motion.div style={{ y: photoY }} className="absolute inset-0">
-        <div ref={imageWrapRef} className="h-full w-full">
-          {/* Settle-in on load, then an almost imperceptible continuous drift —
-              a restrained Ken Burns effect rather than a looping video, so the
-              architecture reads as a still photograph that's quietly alive.
-              Skipped entirely under reduced-motion: it's decorative, not
-              informational, so there's nothing to preserve by keeping it. */}
-          <motion.div
-            animate={reduceMotion ? undefined : { scale: [1, 1.045, 1] }}
-            transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
-            className="h-full w-full"
-          >
-            {/* Focal point pinned toward the top: the source photo only has
-                sky down to about 35% of its own height before the tallest
-                roofline starts, and object-cover's default centered crop
-                throws part of that away on any viewport wider than the
-                photo's own ~16:9 (cropping equally off the top and bottom).
-                Anchoring near the top instead keeps the full sky band and
-                crops the parking lot at the bottom, which nothing here needs. */}
-            <Media
-              image={HERO_IMAGE}
-              tone="dark"
-              className="h-full w-full [&_img]:object-[50%_12%]"
-              priority
-              sizes="100vw"
-            />
-          </motion.div>
+        {/* No entrance animation on the photo itself. data-hero-image marks it so the
+            opening can wait until it is loaded before the black screen opens. */}
+        <div data-hero-image className="h-full w-full">
+          {/* Focal point pinned toward the top: the source photo only has
+              sky down to about 35% of its own height before the tallest
+              roofline starts, and object-cover's default centered crop
+              throws part of that away on any viewport wider than the
+              photo's own ~16:9 (cropping equally off the top and bottom).
+              Anchoring near the top instead keeps the full sky band and
+              crops the parking lot at the bottom, which nothing here needs. */}
+          <Media
+            image={HERO_IMAGE}
+            tone="dark"
+            className="h-full w-full [&_img]:object-[50%_12%]"
+            priority
+            sizes="100vw"
+          />
         </div>
 
         {/*
@@ -159,63 +133,37 @@ export function Hero() {
 
         <div
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-2xl text-lg font-medium uppercase leading-tight tracking-[0.14em] text-paper sm:text-2xl sm:tracking-[0.2em] lg:text-3xl"
+          className="mx-auto mt-3 max-w-2xl text-[clamp(1.25rem,5.6vw,1.5rem)] font-medium uppercase leading-tight tracking-[0.06em] text-paper sm:text-2xl sm:tracking-[0.2em] lg:text-3xl"
         >
           Добредојдовте во вашиот нов дом
         </div>
       </div>
 
-      {/* Actions — grounded near the bottom, separate from the headline. */}
-      <div className="relative flex flex-1 flex-col items-center justify-end px-6 pb-14 text-center sm:pb-16">
-        <div ref={actionsRef} className="flex flex-wrap justify-center gap-4">
-          <span className="relative inline-flex">
-            <Button href="/projects" variant="primary">
-              Погледни ги проектите
-            </Button>
-            {/* Gold frame that draws in around the primary CTA as it settles — a
-                decorative entrance flourish, independent of the button's own
-                permanent gold fill. */}
-            <svg className="pointer-events-none absolute -inset-1.5" aria-hidden>
-              <rect
-                ref={ctaFrameRef}
-                x="1"
-                y="1"
-                width="calc(100% - 2px)"
-                height="calc(100% - 2px)"
-                fill="none"
-                stroke="var(--color-gold)"
-                strokeWidth="1"
-              />
-            </svg>
-          </span>
-          <Button href="/consultation" variant="secondary" tone="dark">
-            Закажи консултација
-          </Button>
-        </div>
-      </div>
+      {/* Spacer that keeps the stats strip pinned to the bottom of the hero. */}
+      <div className="flex-1" />
 
       {/* Company footprint — real, portfolio-wide numbers, not one project's. */}
       <div ref={statsBarRef} className="relative border-t border-line-dark">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] uppercase tracking-[0.2em] text-paper/55 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px]">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-5 py-4 text-center text-xs uppercase tracking-[0.14em] text-paper/65 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px] sm:tracking-[0.2em]">
           <span>Струмица, Северна Македонија</span>
           <span className="flex items-center gap-3 sm:gap-5">
             <span>
               <span className="mono-stat text-gold">
-                {instant ? companyStats[0].value : ready ? <CountUp value={companyStats[0].value} /> : null}
+                {instant ? companyStats[0].value : revealing ? <CountUp value={companyStats[0].value} /> : null}
               </span>{" "}
               {companyStats[0].label}
             </span>
             <span className="h-3 w-px bg-line-dark" aria-hidden />
             <span>
               <span className="mono-stat text-gold">
-                {instant ? companyStats[1].value : ready ? <CountUp value={companyStats[1].value} /> : null}
+                {instant ? companyStats[1].value : revealing ? <CountUp value={companyStats[1].value} /> : null}
               </span>{" "}
               {companyStats[1].label}
             </span>
             <span className="hidden h-3 w-px bg-line-dark sm:block" aria-hidden />
             <span className="hidden sm:inline">
               <span className="mono-stat text-gold">
-                {instant ? companyStats[2].value : ready ? <CountUp value={companyStats[2].value} /> : null}
+                {instant ? companyStats[2].value : revealing ? <CountUp value={companyStats[2].value} /> : null}
               </span>{" "}
               {companyStats[2].label}
             </span>

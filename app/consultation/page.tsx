@@ -17,8 +17,8 @@ export default async function ConsultationPage({
   const kind = (params.kind as ConsultationRequest["kind"]) ?? "consultation";
 
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-2xl px-6 py-16 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-2xl px-5 sm:px-8 py-16 lg:px-10">
         <SectionHeading
           eyebrow="Стапете во контакт"
           title={kind === "apartment-inquiry" ? "Прашај за овој стан" : "Закажи консултација"}

@@ -40,7 +40,7 @@ export function PhotoCarousel({
         type="button"
         onClick={() => go(-1)}
         aria-label="Претходна слика"
-        className="focus-ring absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
+        className="focus-ring absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -48,20 +48,27 @@ export function PhotoCarousel({
         type="button"
         onClick={() => go(1)}
         aria-label="Следна слика"
-        className="focus-ring absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
+        className="focus-ring absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-chrome/50 text-on-chrome transition-colors hover:bg-chrome/80"
       >
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      <div className="absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2">
         {photos.map((photo, i) => (
           <button
             key={photo.src}
             type="button"
             onClick={() => goTo(i)}
             aria-label={`Слика ${i + 1}`}
-            className={cn("h-1.5 w-6 rounded-full transition-colors", i === index ? "bg-accent" : "bg-on-chrome/50")}
-          />
+            className="focus-ring flex h-11 w-11 items-center justify-center"
+          >
+            <span
+              className={cn(
+                "block h-1.5 w-6 rounded-full transition-colors",
+                i === index ? "bg-accent" : "bg-on-chrome/50"
+              )}
+            />
+          </button>
         ))}
       </div>
     </div>

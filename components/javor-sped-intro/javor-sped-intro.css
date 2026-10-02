@@ -1,0 +1,124 @@
+/* Logo → JS → JAVOR → JAVOR-SPED intro. Colours come from the tokens in app/globals.css.
+   Every class is prefixed jsi- so none can collide with Tailwind utilities (".ring" is one). */
+.jsi {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+.jsi-bg-top,
+.jsi-bg-bot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--color-ink);
+}
+.jsi-bg-top {
+  top: 0;
+}
+.jsi-bg-bot {
+  bottom: 0;
+}
+.jsi-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.jsi-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+}
+.jsi-ring circle {
+  fill: none;
+}
+.jsi-ring-base {
+  stroke: color-mix(in srgb, var(--color-gold) 22%, transparent);
+  stroke-width: 1;
+}
+.jsi-ring-prog {
+  stroke: var(--color-gold);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+.jsi-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 62px;
+  height: 84px;
+  margin: -42px 0 0 -31px;
+  opacity: 0;
+}
+.jsi-count {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 100px);
+  transform: translateX(-50%);
+  font:
+    300 12px var(--font-mono),
+    monospace;
+  letter-spacing: 0.3em;
+  color: var(--color-gold);
+  font-variant-numeric: tabular-nums;
+  padding-left: 0.3em;
+}
+.jsi-wm {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: clamp(34px, 4.6vw, 60px);
+  line-height: 1.1;
+  color: var(--color-gold);
+}
+.jsi-wm span {
+  display: inline-block;
+}
+.jsi-gold {
+  background: linear-gradient(
+    120deg,
+    var(--color-gold-dark) 0%,
+    var(--color-gold) 35%,
+    var(--color-gold-light) 60%,
+    var(--color-gold) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Hidden from the first paint, so nothing flashes before the animation code runs. */
+.jsi-j,
+.jsi-s {
+  opacity: 0;
+}
+.jsi-x {
+  clip-path: inset(-30% 0);
+  width: 0;
+  opacity: 0;
+}
+@media (max-width: 767px) {
+  .jsi-ring {
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 0 -60px;
+  }
+  .jsi-logo {
+    width: 50px;
+    height: 68px;
+    margin: -34px 0 0 -25px;
+  }
+  .jsi-count {
+    top: calc(50% + 82px);
+  }
+}

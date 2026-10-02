@@ -7,7 +7,9 @@
       "Bash(npm run typecheck)",
       "Bash(npm run format)",
       "Bash(npm run build)",
-      "Bash(npm test*)",
+      "Bash(npm test *)",
+      "Bash(npm outdated)",
+      "Bash(npm view *)",
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
@@ -22,7 +24,15 @@
       "Bash(git push origin main*)",
       "Bash(git push origin HEAD:main*)"
     ],
-    "ask": ["Edit(/public/**)", "Edit(/package-lock.json)", "Edit(/next.config.ts)", "Edit(/.github/**)"]
+    "ask": [
+      "Edit(/public/**)",
+      "Edit(/package-lock.json)",
+      "Edit(/next.config.ts)",
+      "Edit(/.github/**)",
+      "Edit(/data/generate.ts)",
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/hooks/**)"
+    ]
   },
   "hooks": {
     "SessionStart": [
@@ -32,6 +42,18 @@
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.mjs\"",
             "timeout": 600
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-git.mjs\"",
+            "timeout": 10
           }
         ]
       }

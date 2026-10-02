@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
 import { getApartment, getBuilding } from "@/data";
@@ -27,12 +27,12 @@ export default function ComparePage() {
   const selected = ids.map(getApartment).filter((a): a is NonNullable<typeof a> => Boolean(a));
 
   return (
-    <div className="pt-28">
-      <section className="mx-auto max-w-5xl px-6 py-14 lg:px-10">
+    <div className="pt-24 sm:pt-28">
+      <section className="mx-auto max-w-5xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading eyebrow="Споредба" title="Спореди станови" />
 
         {selected.length === 0 ? (
-          <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-20 text-center">
+          <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
             <Layers className="h-8 w-8 text-ink/30" strokeWidth={1.5} />
             <div>
               <div className="font-display text-xl">Сè уште немате избрано станови</div>
