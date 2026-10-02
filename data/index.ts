@@ -54,6 +54,9 @@ export const projects: Project[] = [
     ],
     href: "/development",
     constructionStages: development.constructionStages,
+    // Derived from the stage data above: foundations are done and the structure is at 90%.
+    // TODO(client): confirm the real phase and percentage, and add "updated" (YYYY-MM-DD) to show a date.
+    construction: { currentPhase: "structure", percent: 90, handover: development.expectedCompletion },
     buildings: development.buildings,
     capabilities: { hasMasterplan: true, hasBuildings: true, hasApartmentSelection: true },
   },

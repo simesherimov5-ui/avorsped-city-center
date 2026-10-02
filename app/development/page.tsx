@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
-import { ConstructionTimeline } from "@/components/ConstructionTimeline";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
+import { showsConstructionProgress } from "@/components/construction/phases";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
@@ -8,7 +9,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { DOT_COLOR } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
-import { development, availabilityCounts, apartments, buildings } from "@/data";
+import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
 
 export const metadata: Metadata = {
   title: "Тековен проект — City Center",
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function DevelopmentPage() {
+  const cityCenter = projects.find((p) => p.id === "city-center");
   const counts = availabilityCounts(apartments);
   const availablePct = Math.round((counts.available / counts.total) * 100);
   const reservedPct = Math.round((counts.reserved / counts.total) * 100);
@@ -108,18 +110,13 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Construction progress */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
-          <Reveal>
-            <SectionHeading eyebrow="Напредок" title="Тек на изградба" />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-14">
-              <ConstructionTimeline stages={development.constructionStages} />
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {cityCenter && showsConstructionProgress(cityCenter) && (
+        <section className="bg-cream py-16 sm:py-20">
+          <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
+            <ConstructionProgress project={cityCenter} />
+          </div>
+        </section>
+      )}
 
       {/* Location */}
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-16 sm:py-20 lg:px-10">

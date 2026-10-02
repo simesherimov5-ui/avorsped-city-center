@@ -4,6 +4,7 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { projectStatusLabel } from "@/lib/format";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
@@ -60,6 +61,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <span>{project.year}</span>
           <span>{project.units} станови</span>
         </div>
+        <ConstructionProgress project={project} variant="compact" className="mt-4 border-t border-line pt-4" />
       </div>
     </Link>
   );

@@ -9,7 +9,8 @@ import { RoomVideoTour } from "@/components/RoomVideoTour";
 import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { ConstructionTimeline } from "@/components/ConstructionTimeline";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
+import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 
@@ -125,15 +126,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               )
             )}
 
-            {project.constructionStages && (
-              <Reveal>
-                <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="font-display text-2xl">Тек на изградба</h2>
-                  <div className="mt-6">
-                    <ConstructionTimeline stages={project.constructionStages} />
-                  </div>
-                </div>
-              </Reveal>
+            {showsConstructionProgress(project) && (
+              <div className="mt-14 border-t border-line pt-12">
+                <ConstructionProgress project={project} />
+              </div>
             )}
           </div>
 

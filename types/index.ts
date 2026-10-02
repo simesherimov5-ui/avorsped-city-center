@@ -88,6 +88,23 @@ export interface ConstructionStage {
   image: { src: string; alt: string; isPlaceholder: boolean };
 }
 
+/** The five phases every building project goes through, in order. */
+export type ConstructionPhase = "foundation" | "structure" | "facade" | "interior" | "handover";
+
+/**
+ * Where a building project stands, kept next to the project so it is updated in one place.
+ * Every phase before `currentPhase` is shown as done, every one after it as upcoming.
+ */
+export interface ConstructionProgressData {
+  currentPhase: ConstructionPhase;
+  /** 0–100: how far along the current phase is. */
+  percent: number;
+  /** Handover, shown under the last phase, e.g. "2027" or "Q2 2027". */
+  handover: string;
+  /** ISO date (YYYY-MM-DD) of the last update; "Ажурирано: …" is only shown when this is set. */
+  updated?: string;
+}
+
 export interface Development {
   id: string;
   name: string;
@@ -164,6 +181,8 @@ export interface Project {
   floorPlanExplorer?: FloorPlanExplorerData;
   /** Optional construction-progress timeline, shown on the generic project page when present. */
   constructionStages?: ConstructionStage[];
+  /** Phase-by-phase progress; shown on the page and card of any project whose status is "under-construction". */
+  construction?: ConstructionProgressData;
   /** Optional buildings for projects with building-level selection (e.g. the consultation form's dependent "building of interest" field). */
   buildings?: Building[];
   /**
