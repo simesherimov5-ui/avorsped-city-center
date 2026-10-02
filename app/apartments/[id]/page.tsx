@@ -38,7 +38,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const floorPlanImage = floorPlanImageForApartment(apartment);
   const cityCenterId = projects.find((p) => p.id === "city-center")?.id ?? "";
 
-  const inquiryHref = `/consultation?kind=apartment-inquiry&project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
+  const inquiryHref = `/contact?project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
 
   const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
 

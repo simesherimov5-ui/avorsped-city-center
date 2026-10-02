@@ -155,7 +155,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   Истражи го проектот
                 </Button>
               )}
-              <Button href="/contact" variant="secondary" className="w-full">
+              <Button href={`/contact?project=${project.id}`} variant="secondary" className="w-full">
                 Контактирај за овој проект
               </Button>
             </aside>

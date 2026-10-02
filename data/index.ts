@@ -234,5 +234,8 @@ export const companyInfo = {
   address: "Ул. Ленинова, ГТЦ Глобал, 4-ти кат, Струмица",
   phone: "+389 2 3123 456",
   email: "info@javorsped.mk",
+  // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
+  // empty, the Контакт page leaves that row out rather than guessing a number.
+  messengerNumber: "",
   hours: "Пон–Пет 09:00–18:00, Саб 10:00–14:00",
 };
