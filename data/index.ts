@@ -204,8 +204,16 @@ export const companyStats: CompanyStat[] = [
  * TODO(client): add the other milestones (year + one short sentence each) as they are confirmed.
  */
 export const companyTimeline: CompanyMilestone[] = [
-  { year: "1994", text: "Основање на Јавор Шпед." },
-  { year: "2026", text: "City Center — шест згради во изградба." },
+  {
+    year: "1994",
+    text: "Основање на Јавор Шпед.",
+    image: { src: "/images/brand/holding-since-1994.jpg", alt: "Јавор Шпед, основан 1994" },
+  },
+  {
+    year: "2026",
+    text: "City Center — шест згради во изградба.",
+    image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
+  },
 ];
 
 export const companyInfo = {

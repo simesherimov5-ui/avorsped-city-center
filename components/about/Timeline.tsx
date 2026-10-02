@@ -1,85 +1,105 @@
 "use client";
 
-import { useRef, type PointerEvent } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
+import { Plus } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { Media } from "@/components/ui/Media";
+import { cn } from "@/lib/cn";
+import { PhotoViewer } from "./PhotoViewer";
 
-type Milestone = { year: string; text: string };
+export type Milestone = { year: string; text: string; image?: { src: string; alt: string } };
 
 /**
- * Horizontal company timeline: milestones on one gold line with gold dots. The line draws left to right as
- * it scrolls into view and the milestones fade up; when there are more than fit, the row scrolls sideways
- * (swipe on touch, drag with a mouse, thin gold scrollbar). Sits on an ink background.
+ * "Нашиот пат": a row of milestone cards (4:3 photo, the year in gold mono, one sentence). Four columns on
+ * desktop; with more than four milestones the row becomes a scroll-snap strip you can drag or swipe, two
+ * columns on tablets and one on phones. Each card is a button that opens the photo viewer.
  */
 export function Timeline({ milestones }: { milestones: Milestone[] }) {
-  const scroller = useRef<HTMLDivElement>(null);
-  const line = useRef<HTMLDivElement>(null);
-  const items = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLUListElement>(null);
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
   const drag = useRef<{ x: number; left: number } | null>(null);
+  const scrolls = milestones.length > 4;
 
+  // Cards fade up one after another when the row scrolls in.
   useGSAP(
     () => {
-      if (prefersReducedMotion() || !line.current || !items.current || !scroller.current) return;
-      const trigger = { trigger: scroller.current, start: "top 85%", once: true } as const;
-      gsap.from(line.current, {
-        scaleX: 0,
-        transformOrigin: "left center",
-        duration: 1.4,
-        ease: "power3.inOut",
-        scrollTrigger: trigger,
-      });
-      gsap.from(items.current.children, {
-        opacity: 0,
-        y: 24,
-        duration: 0.8,
-        stagger: 0.18,
-        delay: 0.3,
+      const el = list.current;
+      if (!el || prefersReducedMotion()) return;
+      gsap.set(el.children, { opacity: 0, y: 40 });
+      gsap.to(el.children, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.1,
         ease: "power3.out",
-        scrollTrigger: trigger,
+        scrollTrigger: { trigger: el, start: "top 85%", once: true },
       });
     },
-    { scope: scroller }
+    { scope: list }
   );
 
-  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse" || !scroller.current) return;
-    drag.current = { x: e.clientX, left: scroller.current.scrollLeft };
-    scroller.current.setPointerCapture(e.pointerId);
-  };
-  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (drag.current && scroller.current)
-      scroller.current.scrollLeft = drag.current.left - (e.clientX - drag.current.x);
-  };
-  const endDrag = () => {
-    drag.current = null;
-  };
-
   return (
-    <div
-      ref={scroller}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      tabIndex={0}
-      role="region"
-      aria-label="Нашиот пат"
-      className="gold-scrollbar focus-ring cursor-grab overflow-x-auto pb-4 active:cursor-grabbing"
-    >
-      <div className="relative min-w-max pt-1">
-        <div ref={line} aria-hidden className="absolute left-0 right-0 top-1 h-px bg-gold/50" />
-        <div ref={items} className="flex">
-          {milestones.map((m) => (
-            <div key={m.year + m.text} className="relative w-[260px] shrink-0 pr-7 pt-8">
-              <span aria-hidden className="absolute left-0 top-[-1px] h-[9px] w-[9px] rounded-full bg-gold" />
-              <div className="mono-stat text-[30px] leading-none text-gold" style={{ letterSpacing: 0 }}>
-                {m.year}
+    <>
+      <ul
+        ref={list}
+        className={cn("ab-strip", scrolls && "is-scroll")}
+        onPointerDown={(e) => {
+          if (!scrolls || e.pointerType !== "mouse" || !list.current) return;
+          drag.current = { x: e.clientX, left: list.current.scrollLeft };
+        }}
+        onPointerMove={(e) => {
+          if (drag.current && list.current) list.current.scrollLeft = drag.current.left - (e.clientX - drag.current.x);
+        }}
+        onPointerUp={() => (drag.current = null)}
+        onPointerLeave={() => (drag.current = null)}
+      >
+        {milestones.map((m, i) => (
+          <li key={m.year + m.text}>
+            <button
+              type="button"
+              className="ab-card"
+              aria-label={`${m.year}. ${m.text} Отвори`}
+              onClick={() => {
+                setIndex(i);
+                setOpen(true);
+              }}
+            >
+              <div className={cn("ab-card-photo", !m.image && "is-empty bk-mono")}>
+                {m.image ? (
+                  <>
+                    <div className="ab-card-img">
+                      <Media
+                        image={{ ...m.image, isPlaceholder: false }}
+                        tone="dark"
+                        sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 25vw"
+                        className="h-full w-full"
+                      />
+                    </div>
+                    <div aria-hidden className="ab-card-veil" />
+                    <span aria-hidden className="ab-card-plus">
+                      <Plus className="h-4 w-4" strokeWidth={1.5} />
+                    </span>
+                  </>
+                ) : (
+                  m.year
+                )}
               </div>
-              <p className="mt-3 text-base leading-relaxed text-paper/75">{m.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+              <span className="ab-card-year bk-mono">{m.year}</span>
+              <p>{m.text}</p>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <PhotoViewer
+        milestones={milestones}
+        index={index}
+        open={open}
+        onIndex={setIndex}
+        onClose={() => setOpen(false)}
+      />
+    </>
   );
 }

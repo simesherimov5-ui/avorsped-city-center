@@ -148,6 +148,8 @@ export interface FloorPlanExplorerData {
 export interface CompanyMilestone {
   year: string;
   text: string;
+  /** Optional photo of the milestone; without one the card shows the year in a frame. */
+  image?: { src: string; alt: string };
 }
 
 export interface Project {
