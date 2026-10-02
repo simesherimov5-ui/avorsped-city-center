@@ -21,6 +21,9 @@ const LINKS = [
   { href: "/contact", key: "nav.contact" },
 ];
 
+// The bar slides away once the visitor has scrolled this far down, and comes back on any scroll up.
+const HIDE_AFTER_PX = 160;
+
 export function Navbar() {
   const pathname = usePathname();
   const { t } = useI18n();
@@ -28,6 +31,8 @@ export function Navbar() {
   const revealedAtMount = useRef(revealing);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Tied to the page it was set on, so every new page starts with the bar showing.
+  const [hideState, setHideState] = useState({ hidden: false, path: pathname });
   const navRef = useRef<HTMLElement>(null);
 
   const isHome = pathname === "/";
@@ -87,6 +92,27 @@ export function Navbar() {
     };
   }, [isHome]);
 
+  // Hide on scroll down (after HIDE_AFTER_PX), show on scroll up. It never hides while the phone menu is
+  // open or while a nav link has keyboard focus (a mouse click's focus doesn't count, or it would never hide).
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const set = (hidden: boolean) =>
+      setHideState((s) => (s.hidden === hidden && s.path === pathname ? s : { hidden, path: pathname }));
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      const active = document.activeElement;
+      const keyboardFocus = Boolean(navRef.current?.contains(active) && active?.matches(":focus-visible"));
+      if (y < HIDE_AFTER_PX || keyboardFocus) set(false);
+      else if (dy > 1) set(true);
+      else if (dy < -1) set(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [pathname]);
+  const hidden = hideState.hidden && hideState.path === pathname && !open;
+
   // Overlay the hero when we're at the top of the homepage; everywhere else
   // (and once scrolled past the hero, or with the mobile menu open) the bar
   // is solid so it always reads against light page backgrounds.
@@ -94,66 +120,77 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        ref={navRef}
+      {/* The hide/show slide lives on this wrapper, not on the header: GSAP animates the header's own
+          transform for the entrance and writes `translate: none` onto it, which would cancel the slide. */}
+      <div
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-500",
-          solid ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md" : "border-transparent bg-transparent"
+          "fixed inset-x-0 top-0 z-50 transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          hidden ? "-translate-y-full" : "translate-y-0"
         )}
       >
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
-          <Link
-            id="site-logo"
-            href="/"
-            onPointerDown={spawnClickPulse}
-            className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
-            aria-label="Јавор Шпед — почетна"
-          >
-            <Logo variant="icon" />
-          </Link>
-
-          <div className="hidden flex-1 items-center justify-center gap-7 lg:flex xl:gap-9">
-            {LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onPointerDown={spawnClickPulse}
-                className={cn(
-                  "nav-link group relative isolate whitespace-nowrap py-1 text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-on-chrome",
-                  pathname === link.href && "text-on-chrome"
-                )}
-              >
-                {t(link.key)}
-                <span
-                  className={cn(
-                    "absolute inset-x-0 -bottom-0.5 h-px scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100",
-                    pathname === link.href && "scale-x-100"
-                  )}
-                  aria-hidden
-                />
-              </Link>
-            ))}
-          </div>
-
-          <div className="nav-link hidden items-center gap-4 lg:flex">
-            <Button href="/consultation" variant="primary" size="sm">
-              {t("nav.consultation")}
-            </Button>
-          </div>
-
-          <div className="flex items-center lg:hidden">
-            <button
-              className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center text-on-chrome"
-              aria-controls="mobile-menu"
-              onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Затвори мени" : "Отвори мени"}
-              aria-expanded={open}
+        <header
+          ref={navRef}
+          // Keyboard focus anywhere in the bar brings it back.
+          onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
+          className={cn(
+            "border-b transition-colors duration-500",
+            solid ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md" : "border-transparent bg-transparent"
+          )}
+        >
+          <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
+            <Link
+              id="site-logo"
+              href="/"
+              onPointerDown={spawnClickPulse}
+              className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
+              aria-label="Јавор Шпед — почетна"
             >
-              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </nav>
-      </header>
+              <Logo variant="icon" />
+            </Link>
+
+            <div className="hidden flex-1 items-center justify-center gap-7 lg:flex xl:gap-9">
+              {LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onPointerDown={spawnClickPulse}
+                  className={cn(
+                    "nav-link group relative isolate whitespace-nowrap py-1 text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-on-chrome",
+                    pathname === link.href && "text-on-chrome"
+                  )}
+                >
+                  {t(link.key)}
+                  <span
+                    className={cn(
+                      "absolute inset-x-0 -bottom-0.5 h-px scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100",
+                      pathname === link.href && "scale-x-100"
+                    )}
+                    aria-hidden
+                  />
+                </Link>
+              ))}
+            </div>
+
+            <div className="nav-link hidden items-center gap-4 lg:flex">
+              <Button href="/consultation" variant="primary" size="sm">
+                {t("nav.consultation")}
+              </Button>
+            </div>
+
+            <div className="flex items-center lg:hidden">
+              <button
+                className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center text-on-chrome"
+                aria-controls="mobile-menu"
+                onClick={() => setOpen((v) => !v)}
+                aria-label={open ? "Затвори мени" : "Отвори мени"}
+                aria-expanded={open}
+              >
+                {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </nav>
+        </header>
+      </div>
 
       {open && (
         <div
