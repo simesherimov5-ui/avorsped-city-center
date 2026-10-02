@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import JavorSpedIntro from "./JavorSpedIntro";
+import JavorSpedIntro from "@/components/javor-sped-intro/JavorSpedIntro";
 
 const SESSION_FLAG = "js_intro_seen";
 
