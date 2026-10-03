@@ -42,7 +42,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/development"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектот
         </Link>
@@ -52,7 +52,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <Media image={building.exteriorImage} className="aspect-[4/3]" />
           <div>
-            <div className="eyebrow text-ink/40">Вие сте овде</div>
+            <div className="eyebrow text-muted">Вие сте овде</div>
             <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
             <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
               <Stat label="Катови" value={String(building.floors.length)} />
@@ -94,7 +94,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <div className="font-display text-2xl">{value}</div>
-      <div className="eyebrow mt-1 text-ink/50">{label}</div>
+      <div className="eyebrow mt-1 text-muted">{label}</div>
     </div>
   );
 }

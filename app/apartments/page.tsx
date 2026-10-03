@@ -102,7 +102,7 @@ export default function ApartmentsPage() {
             <div className="flex items-center justify-between gap-4 border-b border-line pb-4 lg:hidden">
               <div>
                 <span className="font-display text-2xl text-gold-deep">{results.length}</span>
-                <span className="ml-2 text-sm text-ink/60">станови одговараат</span>
+                <span className="ml-2 text-sm text-muted">станови одговараат</span>
               </div>
               <button
                 type="button"
@@ -113,7 +113,7 @@ export default function ApartmentsPage() {
               </button>
             </div>
 
-            <div className="mt-6 hidden text-sm text-ink/50 lg:block">
+            <div className="mt-6 hidden text-sm text-muted lg:block">
               Прикажани се сите станови што одговараат на избраните филтри.
             </div>
 
@@ -125,10 +125,10 @@ export default function ApartmentsPage() {
               </div>
             ) : (
               <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
-                <SearchX className="h-8 w-8 text-ink/30" strokeWidth={1.5} />
+                <SearchX className="h-8 w-8 text-muted" strokeWidth={1.5} />
                 <div>
                   <div className="font-display text-xl">Нема станови за овие филтри</div>
-                  <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
+                  <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                     Обидете се со поширок опсег — на пример зголемете ја максималната цена, површината или изберете
                     друга зграда.
                   </p>
@@ -166,7 +166,7 @@ export default function ApartmentsPage() {
                   type="button"
                   onClick={() => setSheetOpen(false)}
                   aria-label="Затвори"
-                  className="focus-ring flex h-8 w-8 items-center justify-center text-ink/60"
+                  className="focus-ring flex h-8 w-8 items-center justify-center text-muted"
                 >
                   <X className="h-5 w-5" />
                 </button>

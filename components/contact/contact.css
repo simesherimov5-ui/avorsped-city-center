@@ -108,7 +108,7 @@
   margin: 0 0 16px;
   padding: 0 0 0 16px;
   border: 1px solid var(--gold-line);
-  font-size: 10.5px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-gold);
@@ -221,7 +221,7 @@
 }
 .ct-day small {
   font:
-    400 10px/1.2 var(--font-sans),
+    400 11px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: 0.2em;

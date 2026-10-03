@@ -48,7 +48,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         <ZoomNavLink
           href={`/development/${apartment.buildingId}/${apartment.floor}`}
           label={building?.name}
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон основата на катот
         </ZoomNavLink>
@@ -57,7 +57,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
       <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="eyebrow text-ink/50">
+            <div className="eyebrow text-muted">
               {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
             <h1 className="mt-1.5 font-display text-4xl sm:text-5xl">Стан {apartment.number}</h1>
@@ -71,7 +71,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
               <h2 className="font-display text-2xl">Архитектонска основа</h2>
               <div className="mt-6 grid gap-8 lg:grid-cols-[3fr_2fr]">
                 <div className="relative border border-line bg-cream">
-                  <span className="eyebrow absolute left-4 top-4 z-10 bg-warm-white/90 px-2.5 py-1 text-ink/60">
+                  <span className="eyebrow absolute left-4 top-4 z-10 bg-warm-white/90 px-2.5 py-1 text-muted">
                     Основа
                   </span>
                   <Media
@@ -97,7 +97,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                       </tr>
                     </tbody>
                   </table>
-                  <p className="mt-3 text-xs leading-relaxed text-ink/40">
+                  <p className="mt-3 text-xs leading-relaxed text-muted">
                     {floorPlanImage.isExactMatch
                       ? `Точна архитектонска основа за Стан ${apartment.number}.`
                       : `Основата е пример за овој тип на стан. Мерењата во табелата се специфични за Стан ${apartment.number}.`}
@@ -126,7 +126,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             {apartment.tour?.available && (
               <div>
                 <h2 className="font-display text-2xl">Истражи го станот</h2>
-                <p className="mt-2 text-sm text-ink/60">
+                <p className="mt-2 text-sm text-muted">
                   {apartment.tour?.available
                     ? "Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите."
                     : "360° виртуелна тура ќе биде додадена штом се направат внатрешни фотографии за оваа единица."}
@@ -151,9 +151,9 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
           <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
             <div>
-              <div className="eyebrow text-ink/40">Цена</div>
+              <div className="eyebrow text-muted">Цена</div>
               <div className="mt-1.5 font-display text-4xl text-gold-deep">{formatPrice(apartment.price)}</div>
-              <div className="mt-1.5 text-xs text-ink/50">Индикативна цена, подложна на конечна спецификација</div>
+              <div className="mt-1.5 text-xs text-muted">Индикативна цена, подложна на конечна спецификација</div>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
               <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
@@ -172,7 +172,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             </div>
             <a
               href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}
-              className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-ink/60 transition-colors hover:text-charcoal sm:text-sm"
+              className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-muted transition-colors hover:text-charcoal sm:text-sm"
             >
               <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
               Или нè јавете: {companyInfo.phone}
@@ -193,7 +193,7 @@ function roomLabelForGalleryIndex(i: number) {
 function Spec({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="eyebrow text-ink/40">{label}</dt>
+      <dt className="eyebrow text-muted">{label}</dt>
       <dd className="mt-0.5 font-medium capitalize">{value}</dd>
     </div>
   );

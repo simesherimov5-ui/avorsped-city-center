@@ -82,7 +82,7 @@ export default function DevelopmentPage() {
               <h2 className="mt-4 font-display text-3xl sm:text-4xl">
                 {counts.available} од {counts.total} станови сè уште се достапни
               </h2>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
                 Статусот на секој стан во сите шест згради се ажурира во реално време.
               </p>
               <div className="mt-8">
@@ -133,9 +133,9 @@ export default function DevelopmentPage() {
                   >
                     <span>
                       <span className="text-charcoal">{point.name}</span>
-                      <span className="ml-2 text-ink/40">· {point.category}</span>
+                      <span className="ml-2 text-muted">· {point.category}</span>
                     </span>
-                    <span className="shrink-0 text-ink/50">{point.distance}</span>
+                    <span className="shrink-0 text-muted">{point.distance}</span>
                   </li>
                 ))}
               </ul>
@@ -177,7 +177,7 @@ function Stat({ label, value, className }: { label: string; value: string; class
       <div className="font-display text-4xl text-gold-deep sm:text-5xl">
         <CountUp value={value} />
       </div>
-      <div className="eyebrow mt-2 text-ink/50">{label}</div>
+      <div className="eyebrow mt-2 text-muted">{label}</div>
     </div>
   );
 }
@@ -186,7 +186,7 @@ function MeterLabel({ color, label, value }: { color: string; label: string; val
   return (
     <div className="flex items-center gap-2">
       <span className={cn("h-2 w-2 rounded-full", color)} aria-hidden />
-      <span className="text-ink/60">{label}</span>
+      <span className="text-muted">{label}</span>
       <span className="font-medium text-charcoal">{value}</span>
     </div>
   );

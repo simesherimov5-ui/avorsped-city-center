@@ -53,7 +53,7 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3.5 border-t border-line pt-6">
                   <item.icon className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
                   <div className="font-display text-xl">{item.title}</div>
-                  <p className="text-sm leading-relaxed text-ink/60">{item.desc}</p>
+                  <p className="text-sm leading-relaxed text-muted">{item.desc}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -91,7 +91,7 @@ export default function HomePage() {
               >
                 {companyInfo.phone}
               </a>
-              <span className="hidden text-on-chrome/30 sm:inline" aria-hidden>
+              <span className="hidden text-on-chrome/62 sm:inline" aria-hidden>
                 ·
               </span>
               <a

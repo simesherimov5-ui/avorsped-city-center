@@ -56,7 +56,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           prominent heading. The floor plan and its apartments are the
           actual content of this page. */}
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-8 lg:px-10">
-        <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-ink/50 sm:text-xs">
+        <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-muted sm:text-xs">
           <ZoomNavLink
             href={`/development/${building.id}`}
             label={building.name}
@@ -65,7 +65,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             {building.name}
           </ZoomNavLink>
           <ChevronRight className="h-3 w-3" aria-hidden />
-          <span className="text-ink/60">{floor.label}</span>
+          <span className="text-muted">{floor.label}</span>
         </nav>
         <h1 className="mt-3 font-display text-3xl text-charcoal sm:text-4xl">Изберете го вашиот стан</h1>
       </div>
@@ -86,7 +86,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             )}
           </div>
           <div>
-            <div className="eyebrow mb-3 text-ink/50">Други катови</div>
+            <div className="eyebrow mb-3 text-muted">Други катови</div>
             <FloorList basePath={`/development/${building.id}`} activeFloor={floorNum} floors={floorNavItems} />
           </div>
         </div>
@@ -95,7 +95,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           <div className="mt-16 border-t border-line pt-12">
             <div className="eyebrow text-gold-deep">Официјална документација</div>
             <h2 className="mt-1.5 font-display text-2xl">Официјална основа на катот</h2>
-            <p className="mt-2 max-w-lg text-sm text-ink/60">
+            <p className="mt-2 max-w-lg text-sm text-muted">
               Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги контролите за
               зум за да ги разгледате деталите.
             </p>

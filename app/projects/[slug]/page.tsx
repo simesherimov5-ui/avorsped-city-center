@@ -37,7 +37,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/projects"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектите
         </Link>
@@ -64,14 +64,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-ink/50 sm:text-sm">
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-muted sm:text-sm">
             <span className="sr-only">Метаподатоци</span>
             <span>{project.location}</span>
-            <span className="text-line">·</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
             <span>{project.year}</span>
-            <span className="text-line">·</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
             <span>{project.statusLabelOverride ?? projectStatusLabel(project.status)}</span>
-            <span className="text-line">·</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
             <span>{project.units} станови</span>
           </div>
         </Reveal>
@@ -88,7 +94,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                  <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на просторија за да пуштите кратко видео разгледување.
                   </p>
                   <div className="mt-6">
@@ -102,7 +108,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Распоред на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                  <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на број за да пуштите видео од таа просторија.
                   </p>
                   <div className="mt-6">
@@ -141,11 +147,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <Reveal delay={0.15}>
             <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
               <div>
-                <div className="eyebrow text-ink/40">Спецификации</div>
+                <div className="eyebrow text-muted">Спецификации</div>
                 <dl className="mt-4 space-y-3.5">
                   {project.specifications.map((s) => (
                     <div key={s.label} className="flex justify-between gap-4 border-b border-line pb-3 text-sm">
-                      <dt className="eyebrow pt-0.5 text-ink/40">{s.label}</dt>
+                      <dt className="eyebrow pt-0.5 text-muted">{s.label}</dt>
                       <dd className="text-right font-medium text-charcoal">{s.value}</dd>
                     </div>
                   ))}

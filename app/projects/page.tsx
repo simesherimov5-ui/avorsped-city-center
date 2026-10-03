@@ -40,7 +40,7 @@ export default function ProjectsPage() {
                 "focus-ring min-h-11 border px-4 py-2 text-base sm:text-sm",
                 tab === t.value
                   ? "border-accent bg-accent/10 text-charcoal"
-                  : "border-line text-ink/60 hover:border-accent/50"
+                  : "border-line text-muted hover:border-accent/50"
               )}
             >
               {t.label}

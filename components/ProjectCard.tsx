@@ -41,7 +41,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && (
               <div className="font-display text-sm text-on-chrome sm:text-base">{project.tagline}</div>
             )}
@@ -57,8 +57,8 @@ export function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className="border-t border-line p-6">
         <div className="font-display text-xl">{project.name}</div>
-        <div className="mt-1.5 text-sm text-ink/50">{project.location}</div>
-        <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-ink/60">
+        <div className="mt-1.5 text-sm text-muted">{project.location}</div>
+        <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">
           <span>{project.year}</span>
           <span>{project.units} станови</span>
         </div>

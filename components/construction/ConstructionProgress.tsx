@@ -151,7 +151,7 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
         })}
       </ol>
 
-      {data.updated && <p className="mt-8 text-sm text-ink/60">Ажурирано: {formatUpdated(data.updated)}</p>}
+      {data.updated && <p className="mt-8 text-sm text-muted">Ажурирано: {formatUpdated(data.updated)}</p>}
     </section>
   );
 }

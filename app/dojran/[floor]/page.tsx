@@ -33,7 +33,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
         <ZoomNavLink
           href="/dojran"
           label="Дојрански Рај"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон Дојрански Рај
         </ZoomNavLink>
@@ -46,7 +46,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
           <div className="lg:col-span-2">
             <div className="border border-dashed border-line bg-cream p-8 text-center">
               <div className="font-display text-xl">Наскоро</div>
-              <p className="mx-auto mt-2 max-w-sm text-sm text-ink/60">
+              <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
                 Детални планови и фотографии за становите на {floor.label.toLowerCase()} следуваат наскоро.
                 Контактирајте нè за најнови информации и достапност.
               </p>
@@ -63,7 +63,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
           </div>
 
           <aside>
-            <div className="eyebrow mb-4 text-ink/40">Изберете кат</div>
+            <div className="eyebrow mb-4 text-muted">Изберете кат</div>
             <FloorList
               basePath="/dojran"
               activeFloor={floorNum}

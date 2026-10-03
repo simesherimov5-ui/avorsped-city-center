@@ -59,12 +59,11 @@
   background: none;
   border: 0;
   color: var(--color-gold);
-  opacity: 0.6;
   cursor: pointer;
   font-size: 11px;
 }
 .ctk-pause:hover {
-  opacity: 1;
+  color: var(--color-gold-light);
 }
 @media (max-width: 767px) {
   .ctk {

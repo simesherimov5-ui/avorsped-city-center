@@ -54,6 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="mk" className={`${inter.variable} ${playfair.variable} ${ibmPlexMono.variable}`}>
       <body className="antialiased">
+        {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
+        <a href="#main" className="skip-link">
+          Прескокни до содржината
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -76,7 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <SmoothScroll />
                     <GrayscaleToggle />
                     <Navbar />
-                    <main>{children}</main>
+                    <main id="main" tabIndex={-1} className="outline-none">
+                      {children}
+                    </main>
                     <Footer />
                     <CompanyTicker />
                     <CompareBar />

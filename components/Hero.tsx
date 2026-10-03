@@ -119,6 +119,12 @@ export function Hero() {
         */}
         <div className="hero-scrim absolute inset-0" />
         <div className="hero-scrim-radial absolute inset-0" />
+        {/* A top scrim under the navbar and the eyebrow: ink at 70% (55% fell just short of 4.5:1 on phones) fading to nothing over the top 180px, so the
+            gold eyebrow and the nav links read against the sky. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-ink/70 to-ink/0"
+        />
       </motion.div>
 
       {/* A dark scrim behind the info strip: ink fading in from nothing at the top of its 240px to 80% at the
@@ -185,7 +191,7 @@ export function Hero() {
       {/* Scroll indicator — a thin gold line pulsing downward in a loop. */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-28 right-6 flex flex-col items-center gap-3 text-paper/45 sm:bottom-20 lg:right-10"
+        className="absolute bottom-28 right-6 flex flex-col items-center gap-3 text-paper/62 sm:bottom-20 lg:right-10"
       >
         <span className="relative h-9 w-px overflow-hidden bg-line-dark">
           <motion.span

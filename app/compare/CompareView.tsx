@@ -60,10 +60,10 @@ export function CompareView() {
 
         {selected.length === 0 ? (
           <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
-            <Layers className="h-8 w-8 text-ink/30" strokeWidth={1.5} />
+            <Layers className="h-8 w-8 text-muted" strokeWidth={1.5} />
             <div>
               <div className="font-display text-xl">Сè уште немате избрано станови</div>
-              <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
+              <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                 Додајте до 3 станови за споредба од листата со достапни единици.
               </p>
             </div>
@@ -95,7 +95,7 @@ export function CompareView() {
                   const isPrice = row.label === "Цена";
                   return (
                     <tr key={row.label} className="border-b border-line">
-                      <td className="eyebrow py-3 pr-4 text-ink/40">{row.label}</td>
+                      <td className="eyebrow py-3 pr-4 text-muted">{row.label}</td>
                       {selected.map((a) => (
                         <td
                           key={a.id}
@@ -112,7 +112,7 @@ export function CompareView() {
                 })}
               </tbody>
             </table>
-            <button onClick={clear} className="focus-ring mt-6 text-sm text-ink/50 hover:text-charcoal">
+            <button onClick={clear} className="focus-ring mt-6 text-sm text-muted hover:text-charcoal">
               Исчисти споредба
             </button>
           </div>

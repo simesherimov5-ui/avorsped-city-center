@@ -33,7 +33,11 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
           <Media
             image={floorPlanImageForApartment(apartment)}
             fit="contain"
-            className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            // A sold apartment's picture is dimmed; its status label, name and price stay at full contrast.
+            className={cn(
+              "aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]",
+              apartment.status === "sold" && "opacity-50"
+            )}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-on-chrome/95" />
@@ -44,30 +48,30 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
         <div className="flex items-start justify-between gap-2">
           <div>
             <div className="font-display text-xl">Стан {apartment.number}</div>
-            <div className="mt-1 text-xs text-ink/50">
+            <div className="mt-1 text-xs text-muted">
               {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-line pt-4 text-xs text-ink/60">
+        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-line pt-4 text-xs text-muted">
           <span className="flex items-center gap-1.5">
-            <BedDouble className="h-3.5 w-3.5 text-ink/35" strokeWidth={1.5} />
+            <BedDouble className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
             {apartment.bedrooms === 0 ? "Студио" : `${apartment.bedrooms} соби`}
           </span>
           <span className="flex items-center gap-1.5">
-            <Ruler className="h-3.5 w-3.5 text-ink/35" strokeWidth={1.5} />
+            <Ruler className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
             {formatArea(apartment.area)}
           </span>
           <span className="flex items-center gap-1.5">
-            <Compass className="h-3.5 w-3.5 text-ink/35" strokeWidth={1.5} />
+            <Compass className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
             {orientationLabel(apartment.orientation)}
           </span>
         </div>
 
         <div className="mt-4 flex items-end justify-between gap-2 border-t border-line pt-4">
           <div>
-            <div className="text-[10px] uppercase tracking-widest text-ink/40">Цена</div>
+            <div className="text-[11px] uppercase tracking-widest text-muted">Цена</div>
             <div className="mt-0.5 font-display text-2xl text-charcoal">{formatPrice(apartment.price)}</div>
           </div>
           <Link
@@ -81,7 +85,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
 
         <label
           className={cn(
-            "mt-4 flex min-h-11 cursor-pointer items-center gap-3 border-t border-line pt-4 text-sm text-ink/60 transition-opacity lg:text-xs",
+            "mt-4 flex min-h-11 cursor-pointer items-center gap-3 border-t border-line pt-4 text-sm text-muted transition-opacity lg:text-xs",
             !selected && isFull && "cursor-not-allowed opacity-40"
           )}
         >

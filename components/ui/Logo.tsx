@@ -47,7 +47,7 @@ export function Logo({
       <div className="text-sm font-semibold uppercase tracking-[0.4em] sm:text-base">Holding</div>
       <BuildingMark className="my-3 h-10 w-10 sm:h-12 sm:w-12" />
       <div className="font-display text-3xl font-normal uppercase tracking-wide sm:text-4xl">Javor Sped</div>
-      <div className="mt-1.5 text-[10px] uppercase tracking-[0.3em] text-accent/70 sm:text-xs">Since 1994</div>
+      <div className="mt-1.5 text-[11px] uppercase tracking-[0.3em] text-accent sm:text-xs">Since 1994</div>
     </div>
   );
 }

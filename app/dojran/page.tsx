@@ -34,7 +34,7 @@ export default function DojranPage() {
               {project.specifications.map((s) => (
                 <div key={s.label}>
                   <div className="font-display text-sm text-gold-deep">{s.value}</div>
-                  <div className="eyebrow mt-1 text-ink/50">{s.label}</div>
+                  <div className="eyebrow mt-1 text-muted">{s.label}</div>
                 </div>
               ))}
             </div>

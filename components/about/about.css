@@ -53,9 +53,27 @@
 }
 .ab-hero-body {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: clamp(16px, 2.4vw, 32px);
+}
+/* A darker band behind the text block (it follows the block, so it holds at any width): the eyebrow, headline and
+   meta row always sit on the dark part. It reaches the screen edges and fades out above the eyebrow. */
+.ab-hero-body::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -200px;
+  bottom: calc(-1 * clamp(32px, 4vw, 56px));
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--black) 0%, transparent) 0,
+    color-mix(in srgb, var(--black) 70%, transparent) 200px,
+    color-mix(in srgb, var(--black) 82%, transparent) 100%
+  );
 }
 .ab-meta {
   display: flex;
