@@ -14,6 +14,7 @@ import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
+import { unitsText } from "@/lib/plural";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -86,7 +87,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <span aria-hidden className="text-line">
               ·
             </span>
-            <span>{project.units} станови</span>
+            <span>{unitsText(project.units)}</span>
           </div>
         </Reveal>
 

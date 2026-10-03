@@ -7,6 +7,7 @@ import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { availableWord, floorsText, unitsText } from "@/lib/plural";
 
 interface Rect {
   x: number;
@@ -143,9 +144,11 @@ export function Masterplan({
                   <div className="font-display text-base">{building.name}</div>
                   <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
                     <div>
-                      {building.floors.length} ката · {building.totalApartments} станови
+                      {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
-                    <div>{building.available} достапни сега</div>
+                    <div>
+                      {building.available} {availableWord(building.available)} сега
+                    </div>
                     <div>{STATUS_LABEL[building.status]}</div>
                   </div>
                 </motion.div>

@@ -11,6 +11,7 @@ import { ApartmentCard } from "@/components/ApartmentCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { SORT_OPTIONS, isApartmentSort, sortApartments, type ApartmentSort } from "@/lib/apartment-sort";
+import { plural, unitsText } from "@/lib/plural";
 
 // The list shows this many at a time, then "Прикажи повеќе": 184 cards at once made the page tens of thousands of
 // pixels tall and its HTML hundreds of kilobytes.
@@ -144,7 +145,9 @@ export default function ApartmentsPage() {
             <div className="flex items-center justify-between gap-4 border-b border-line pb-4 lg:hidden">
               <div>
                 <span className="font-display text-2xl text-gold-deep">{results.length}</span>
-                <span className="ml-2 text-sm text-muted">станови одговараат</span>
+                <span className="ml-2 text-sm text-muted">
+                  {plural(results.length, "стан одговара", "станови одговараат")}
+                </span>
               </div>
               <button
                 type="button"
@@ -169,7 +172,7 @@ export default function ApartmentsPage() {
                 </div>
                 <div className="mt-10 flex flex-col items-center gap-4">
                   <p role="status" aria-live="polite" className="text-sm text-muted">
-                    Прикажани се {shown.length} од {results.length} станови
+                    {plural(shown.length, "Прикажан е", "Прикажани се")} {shown.length} од {unitsText(results.length)}
                   </p>
                   {visible < results.length && (
                     <Button variant="secondary" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
@@ -231,7 +234,7 @@ export default function ApartmentsPage() {
               </div>
               <div className="border-t border-line p-4">
                 <Button variant="primary" className="w-full" onClick={() => setSheetOpen(false)}>
-                  Прикажи {results.length} станови
+                  Прикажи {unitsText(results.length)}
                 </Button>
               </div>
             </motion.div>

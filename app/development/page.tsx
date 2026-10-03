@@ -11,7 +11,7 @@ import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
 import { pageMetadata } from "@/lib/seo";
-import { availableWord, plural } from "@/lib/plural";
+import { availableWord, plural, unitsText } from "@/lib/plural";
 
 export const metadata: Metadata = pageMetadata({
   title: "City Center — станбен комплекс во Струмица",
@@ -84,7 +84,8 @@ export default function DevelopmentPage() {
             <div>
               <div className="eyebrow text-gold-deep">Достапност</div>
               <h2 className="mt-4 font-display text-3xl sm:text-4xl">
-                {counts.available} од {counts.total} станови сè уште се достапни
+                {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
+                {availableWord(counts.available)}
               </h2>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
                 Статусот на секој стан во сите шест згради се ажурира во реално време.

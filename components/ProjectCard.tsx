@@ -7,6 +7,7 @@ import { projectStatusLabel } from "@/lib/format";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { unitsText } from "@/lib/plural";
 
 // Never color-code project phase — "completed" is distinguished by shape
 // (a bordered pill) rather than a hue that would break the 3-color palette.
@@ -66,7 +67,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="mt-1.5 text-sm text-muted">{project.location}</div>
         <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">
           <span>{project.year}</span>
-          <span>{project.units} станови</span>
+          <span>{unitsText(project.units)}</span>
         </div>
         <ConstructionProgress project={project} variant="compact" className="mt-4 border-t border-line pt-4" />
       </div>

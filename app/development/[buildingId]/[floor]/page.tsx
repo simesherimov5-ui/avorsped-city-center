@@ -58,7 +58,11 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   const floorNavItems = building.floors.map((f) => {
     const floorUnits = apartments.filter((a) => a.buildingId === building.id && a.floor === f.number);
     const available = floorUnits.filter((a) => a.status === "available").length;
-    return { number: f.number, label: f.label, meta: `${floorUnits.length} станови · ${available} достапни` };
+    return {
+      number: f.number,
+      label: f.label,
+      meta: `${unitsText(floorUnits.length)} · ${available} ${availableWord(available)}`,
+    };
   });
 
   return (

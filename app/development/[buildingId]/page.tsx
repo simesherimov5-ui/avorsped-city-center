@@ -93,7 +93,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                 return {
                   number: floor.number,
                   label: floor.label,
-                  meta: `${units.length} станови · ${available} достапни`,
+                  meta: `${unitsText(units.length)} · ${available} ${availableWord(available)}`,
                 };
               })}
             />
