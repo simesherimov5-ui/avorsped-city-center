@@ -33,16 +33,16 @@ export default function DevelopmentPage() {
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
       <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-20 pt-16 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-          <Reveal>
+          <Reveal immediate>
             <div className="eyebrow text-gold-deep">{development.location}</div>
             <h1 className="mt-4 font-display text-5xl sm:text-6xl">{development.name}</h1>
           </Reveal>
-          <Reveal delay={0.08}>
+          <Reveal immediate delay={0.08}>
             <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
           </Reveal>
         </div>
 
-        <Reveal delay={0.16}>
+        <Reveal immediate delay={0.16}>
           <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
             <Stat label="Згради" value="6" />
             <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />

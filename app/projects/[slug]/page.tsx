@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </div>
 
       <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
-        <Reveal>
+        <Reveal immediate>
           {project.gallery.length > 0 ? (
             <PhotoCarousel
               photos={project.gallery}
@@ -72,7 +72,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
         </Reveal>
 
-        <Reveal delay={0.08}>
+        <Reveal immediate delay={0.08}>
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-muted sm:text-sm">
             <span className="sr-only">Метаподатоци</span>
             <span>{project.location}</span>
