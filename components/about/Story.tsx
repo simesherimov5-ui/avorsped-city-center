@@ -46,26 +46,28 @@ export function Story({ eyebrow, statement, gold, more = [] }: Props) {
   );
 
   return (
-    <section className="ab-story">
-      <div className="bk-eyebrow is-center">{eyebrow}</div>
-      <p ref={text} className="ab-story-text bk-serif">
-        {words.map((w, i) => (
-          <Fragment key={i}>
-            <span data-word className={cn(w.gold && "bk-gold-i")}>
-              {w.word}
-            </span>{" "}
-          </Fragment>
-        ))}
-      </p>
-      {more.length > 0 && (
-        <Reveal>
-          <div className="ab-story-rest">
-            {more.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-            ))}
-          </div>
-        </Reveal>
-      )}
+    <section className="ab-story bk-wrap">
+      <div className="ab-story-inner">
+        <div className="bk-eyebrow is-center">{eyebrow}</div>
+        <p ref={text} className="ab-story-text bk-serif">
+          {words.map((w, i) => (
+            <Fragment key={i}>
+              <span data-word className={cn(w.gold && "bk-gold-i")}>
+                {w.word}
+              </span>{" "}
+            </Fragment>
+          ))}
+        </p>
+        {more.length > 0 && (
+          <Reveal>
+            <div className="ab-story-rest">
+              {more.map((paragraph) => (
+                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+              ))}
+            </div>
+          </Reveal>
+        )}
+      </div>
     </section>
   );
 }

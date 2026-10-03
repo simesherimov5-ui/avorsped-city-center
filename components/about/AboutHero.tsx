@@ -102,38 +102,42 @@ export function AboutHero({ image, eyebrow, lines, stats }: Props) {
       </div>
       <div aria-hidden className="ab-hero-shade" />
 
-      <div data-hero="eyebrow" className="bk-eyebrow ab-pre">
-        {eyebrow}
-      </div>
-      <h1 data-hero="h1" className="bk-h1 bk-serif ab-pre">
-        {lines[0]}
-        <br />
-        <em>{lines[1]}</em>
-      </h1>
-      <div data-hero="meta" className="ab-meta bk-mono ab-pre">
-        {stats.map((stat) => {
-          const match = stat.value.match(/^(\d+)(.*)$/);
-          const digits = match ? match[1] : stat.value;
-          const suffix = match ? match[2] : "";
-          return (
-            <span key={stat.value + (stat.label ?? "")}>
-              {stat.lead && <>{stat.lead} </>}
-              <b>
-                {/* The number's width is reserved (monospace digits), so counting never shifts the row. */}
-                <span
-                  className="ab-num"
-                  data-count={match ? digits : undefined}
-                  data-from={digits.length === 4 ? 1900 : 0}
-                  style={{ minWidth: `${digits.length}ch` }}
-                >
-                  {digits}
+      <div className="bk-wrap">
+        <div className="ab-hero-body">
+          <div data-hero="eyebrow" className="bk-eyebrow ab-pre">
+            {eyebrow}
+          </div>
+          <h1 data-hero="h1" className="bk-h1 bk-serif ab-pre">
+            {lines[0]}
+            <br />
+            <em>{lines[1]}</em>
+          </h1>
+          <div data-hero="meta" className="ab-meta bk-mono ab-pre">
+            {stats.map((stat) => {
+              const match = stat.value.match(/^(\d+)(.*)$/);
+              const digits = match ? match[1] : stat.value;
+              const suffix = match ? match[2] : "";
+              return (
+                <span key={stat.value + (stat.label ?? "")}>
+                  {stat.lead && <>{stat.lead} </>}
+                  <b>
+                    {/* The number's width is reserved (monospace digits), so counting never shifts the row. */}
+                    <span
+                      className="ab-num"
+                      data-count={match ? digits : undefined}
+                      data-from={digits.length === 4 ? 1900 : 0}
+                      style={{ minWidth: `${digits.length}ch` }}
+                    >
+                      {digits}
+                    </span>
+                    {suffix}
+                  </b>
+                  {stat.label && <> {stat.label}</>}
                 </span>
-                {suffix}
-              </b>
-              {stat.label && <> {stat.label}</>}
-            </span>
-          );
-        })}
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

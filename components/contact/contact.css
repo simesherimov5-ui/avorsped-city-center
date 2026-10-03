@@ -1,4 +1,5 @@
-/* "Контакт": the guided booking form and the direct-contact panel, on the all-black theme. */
+/* "Контакт": the guided booking form and the direct-contact panel, on the all-black theme.
+   Content sits in the .bk-wrap container (max 1240px). */
 
 @media (prefers-reduced-motion: no-preference) {
   .ct-pre,
@@ -29,42 +30,45 @@
 
 /* B1 — header */
 .ct-head {
-  padding: clamp(56px, 6vw, 92px) var(--bk-px) clamp(40px, 4vw, 60px);
+  padding-top: clamp(44px, 5vw, 72px);
+  padding-bottom: clamp(26px, 3vw, 40px);
 }
 .ct-h1 {
-  margin: 24px 0 20px;
-  font-size: clamp(40px, 5.6vw, 84px);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  margin: 16px 0 12px;
+  font-size: clamp(30px, 3.7vw, 54px);
+  line-height: 1.14;
 }
 .ct-lead {
   max-width: 54ch;
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   color: var(--mute);
 }
 
-/* B2 — layout */
+/* B2 — layout: the form on the left (max 680px), the panel on the right (max 420px), free space between */
 .ct-cols {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  gap: clamp(32px, 5.5vw, 96px);
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: 32px;
   align-items: start;
-  padding: 0 var(--bk-px) clamp(72px, 8vw, 120px);
+  padding-bottom: clamp(56px, 6vw, 96px);
 }
 @media (max-width: 980px) {
   .ct-cols {
     grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
   }
 }
 
 /* B3 — the form */
 .ct-form {
+  width: 100%;
+  max-width: 680px;
   min-width: 0;
 }
 .ct-step {
   position: relative;
-  padding: 30px 0;
+  padding: 24px 0;
 }
 .ct-step.is-leaving {
   animation: ct-fade-out 0.3s forwards;
@@ -82,16 +86,16 @@
   transform-origin: left center;
 }
 .ct-step-h {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 16px;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.6;
-  display: flex;
-  align-items: baseline;
-  gap: 18px;
-  margin: 0 0 22px;
 }
 .ct-step-n {
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   color: var(--color-gold);
 }
@@ -101,10 +105,10 @@
   align-items: center;
   gap: 4px;
   min-height: 44px;
-  margin: 0 0 24px;
+  margin: 0 0 16px;
   padding: 0 0 0 16px;
   border: 1px solid var(--gold-line);
-  font-size: 11px;
+  font-size: 10.5px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-gold);
@@ -131,12 +135,12 @@
 .ct-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 .ct-chip {
-  min-width: 64px;
-  min-height: 48px;
-  padding: 0 24px;
+  min-width: 56px;
+  min-height: 44px;
+  padding: 0 20px;
   border: 1px solid var(--color-line);
   background: transparent;
   color: var(--color-paper);
@@ -144,7 +148,7 @@
     400 14px var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   cursor: pointer;
   transition:
     border-color 0.25s,
@@ -172,6 +176,7 @@
 }
 .ct-chip.is-mono {
   font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
   font-weight: 300;
 }
 .ct-chip.is-mono[aria-checked="true"] {
@@ -182,10 +187,10 @@
 .ct-slots {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
 }
 .ct-days-box {
-  min-height: 104px;
+  min-height: 78px;
   margin-bottom: 16px;
 }
 .ct-slots .ct-chip {
@@ -197,7 +202,7 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 16px 6px;
+  padding: 12px 4px;
   border: 1px solid var(--color-line);
   background: transparent;
   color: var(--color-paper);
@@ -216,7 +221,7 @@
 }
 .ct-day small {
   font:
-    400 11px var(--font-sans),
+    400 10px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: 0.2em;
@@ -225,7 +230,7 @@
 }
 .ct-day-d {
   font:
-    300 30px/1.1 var(--font-mono),
+    300 22px/1.1 var(--font-mono),
     ui-monospace,
     monospace;
 }
@@ -242,12 +247,12 @@
 .ct-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
+  gap: 24px;
 }
 .ct-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 .ct-input {
@@ -255,14 +260,16 @@
 }
 .ct-input input {
   width: 100%;
-  padding: 12px 0;
+  min-height: 44px;
+  padding: 10px 0;
   border: 0;
   border-bottom: 1px solid var(--color-line);
   border-radius: 0;
   background: transparent;
   color: var(--color-paper);
+  /* 16px at least, or iOS zooms the page when a field is focused */
   font:
-    400 18px var(--font-sans),
+    400 16px var(--font-sans),
     system-ui,
     sans-serif;
   outline: none;
@@ -298,8 +305,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 20px 28px;
-  margin-top: 36px;
+  gap: 16px 24px;
+  margin-top: 48px;
 }
 .ct-submit .bk-btn[aria-disabled="true"] {
   opacity: 0.6;
@@ -307,14 +314,14 @@
 }
 .ct-sum {
   min-height: 1.6em;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--mute);
 }
 .ct-sum > span {
   animation: ct-fade 0.18s;
 }
 .ct-fail {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   color: var(--color-gold-light);
 }
 .ct-fail a {
@@ -331,10 +338,16 @@
     gap: 6px;
   }
   .ct-day-d {
-    font-size: 22px;
+    font-size: 20px;
   }
   .ct-day small {
     letter-spacing: 0.08em;
+  }
+  .ct-chip.is-mono {
+    font-size: 12.5px;
+  }
+  .ct-submit {
+    margin-top: 32px;
   }
 }
 
@@ -342,40 +355,58 @@
 .ct-side {
   position: sticky;
   top: 120px;
-  padding: clamp(24px, 3vw, 44px);
+  justify-self: end;
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+  padding: clamp(22px, 2.4vw, 32px);
   border: 1px solid var(--gold-line);
   background: var(--color-ink);
 }
 @media (max-width: 980px) {
   .ct-side {
     position: static;
+    justify-self: stretch;
+    max-width: none;
   }
 }
 .ct-rows {
-  margin-top: 18px;
+  margin-top: 12px;
 }
+/* A label and its value on one line; if they don't fit, the value drops under the label. */
 .ct-row {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px 20px;
-  padding: 18px 0;
+  gap: 4px 16px;
+  padding: 14px 0;
   border-top: 1px solid var(--color-line);
 }
 .ct-row:first-child {
   border-top: 0;
 }
+.ct-row > .bk-label {
+  flex: none;
+}
 .ct-val {
   display: inline-block;
+  min-width: 0;
+  max-width: 100%;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 26px;
-  line-height: 1.2;
+  font-size: 18px;
+  line-height: 1.3;
   color: var(--color-paper);
   text-align: right;
+  overflow-wrap: anywhere;
   transition:
     color 0.3s,
     transform 0.3s;
+}
+/* A 44px tap target without changing the row: the padding is cancelled by the negative margin. */
+a.ct-val {
+  padding-block: 11px;
+  margin-block: -11px;
 }
 a.ct-val:hover,
 a.ct-val:focus-visible {
@@ -386,14 +417,27 @@ a.ct-val:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 4px;
 }
-.ct-val-lines span {
-  display: block;
-  white-space: nowrap;
+/* Working hours: one line per range, the days on the left and the times on the right. */
+.ct-hours {
+  flex: 1 1 100%;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ct-hours li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0;
+  font-size: 14px;
+}
+.ct-hours .bk-mono {
+  font-size: 14px;
 }
 .ct-map {
   position: relative;
-  height: 300px;
-  margin-top: 20px;
+  height: 230px;
+  margin-top: 16px;
   border: 1px solid var(--color-line);
   overflow: hidden;
   background: var(--black);
@@ -403,8 +447,8 @@ a.ct-val:focus-visible {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 4px 16px;
-  margin-top: 14px;
+  gap: 0 16px;
+  margin-top: 12px;
   font-size: 14px;
   color: var(--mute);
 }
@@ -419,16 +463,8 @@ a.ct-val:focus-visible {
 .ct-addr a:hover {
   color: var(--color-gold-light);
 }
-@media (max-width: 560px) {
-  .ct-val {
-    font-size: 22px;
-  }
-  .ct-val-lines {
-    text-align: left;
-  }
-}
 
-/* The map: Leaflet on the dark CARTO tiles, restyled to the black theme (square corners, no shadows). */
+/* The map: Leaflet on dark tiles, restyled to the black theme (square corners, no shadows). */
 .ct-map .leaflet-container {
   width: 100%;
   height: 100%;
@@ -442,19 +478,27 @@ a.ct-val:focus-visible {
 }
 .ct-map .leaflet-bar a,
 .ct-map .leaflet-bar a:hover {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-bottom: 1px solid var(--gold-line);
   border-radius: 0;
   background: var(--color-ink);
   color: var(--color-paper);
-  line-height: 34px;
+  line-height: 32px;
 }
 .ct-map .leaflet-bar a:hover {
   color: var(--color-gold);
 }
 .ct-map .leaflet-bar a:last-child {
   border-bottom: 0;
+}
+@media (pointer: coarse) {
+  .ct-map .leaflet-bar a,
+  .ct-map .leaflet-bar a:hover {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
 }
 .ct-map .leaflet-control-attribution {
   background: color-mix(in srgb, var(--black) 75%, transparent);
@@ -513,15 +557,17 @@ a.ct-val:focus-visible {
 
 /* The booking confirmation pop-up */
 .ct-confirm {
-  width: min(520px, calc(100vw - 40px));
-  padding: clamp(32px, 6vw, 52px) clamp(24px, 5vw, 44px);
+  width: min(460px, calc(100vw - 40px));
+  padding: clamp(32px, 6vw, 48px) clamp(24px, 5vw, 40px);
   border: 1px solid var(--gold-line);
   background: var(--color-ink);
   text-align: center;
 }
 .ct-ring {
   display: block;
-  margin: 0 auto 26px;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 24px;
   overflow: visible;
 }
 .ct-ring circle,
@@ -533,17 +579,18 @@ a.ct-val:focus-visible {
   stroke-linejoin: round;
 }
 .ct-confirm h2 {
-  margin: 16px 0 0;
-  font-size: clamp(32px, 5vw, 44px);
-  line-height: 1.1;
+  margin: 12px 0 0;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.12;
 }
 .ct-confirm-sum {
-  margin: 20px 0 0;
-  font-size: 14px;
+  margin: 16px 0 0;
+  font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--color-gold);
 }
 .ct-confirm p {
-  margin: 14px 0 32px;
+  margin: 12px 0 24px;
+  font-size: 15px;
   color: var(--mute);
 }

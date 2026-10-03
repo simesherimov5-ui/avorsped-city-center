@@ -40,7 +40,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   return (
     <div data-theme="black" className="bk-page">
       <ContactStage>
-        <header className="ct-head">
+        <header className="ct-head bk-wrap">
           <div data-seq="eyebrow" className="bk-eyebrow ct-pre">
             Контакт
           </div>
@@ -52,7 +52,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           </p>
         </header>
 
-        <div className="ct-cols">
+        <div className="ct-cols bk-wrap">
           <ContactForm
             initialInterest={initialInterest}
             initialRooms={initialRooms}

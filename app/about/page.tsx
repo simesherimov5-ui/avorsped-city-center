@@ -63,7 +63,7 @@ export default function AboutPage() {
         more={[story.rest, companyInfo.mission].filter(Boolean)}
       />
 
-      <section className="bk-px bk-section">
+      <section className="bk-wrap bk-section">
         <Values
           eyebrow="За што се залагаме"
           heading="Четири вредности."
@@ -74,7 +74,7 @@ export default function AboutPage() {
 
       {/* TODO(client): a real quote with name and role. Until one is given the quote band is left out. */}
 
-      <section className="bk-px bk-section">
+      <section className="bk-wrap bk-section">
         <div className="bk-eyebrow">Нашиот пат</div>
         <RevealHeading as="h2" className="bk-h2 bk-serif" duration={1.1} ease="power4.out" from={115}>
           Од 1994 до денес.
@@ -82,7 +82,7 @@ export default function AboutPage() {
         <Timeline milestones={companyTimeline} />
       </section>
 
-      <section className="bk-px bk-section">
+      <section className="bk-wrap bk-section">
         <Companies
           eyebrow="Дел од Јавор Шпед"
           companies={[THIS_COMPANY, ...COMPANIES.filter((c) => c !== THIS_COMPANY)]}

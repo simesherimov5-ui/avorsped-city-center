@@ -204,17 +204,17 @@ export function ContactForm({
   return (
     <>
       <form ref={form} className="ct-form" noValidate onSubmit={onSubmit} aria-label="Закажете консултација">
-        {reference && showReference && (
-          <div className="ct-tag bk-mono">
-            <span>За: {reference.label}</span>
-            <button type="button" onClick={() => setShowReference(false)} aria-label="Отстрани ја референцата">
-              <X className="h-4 w-4" strokeWidth={1.25} aria-hidden />
-            </button>
-          </div>
-        )}
-
         <section data-step="interest" data-seq="step" className="ct-step">
           <StepRule />
+          {/* Inside the first step, under its hairline, so the panel on the right lines up with that line. */}
+          {reference && showReference && (
+            <div className="ct-tag bk-mono">
+              <span>За: {reference.label}</span>
+              <button type="button" onClick={() => setShowReference(false)} aria-label="Отстрани ја референцата">
+                <X className="h-4 w-4" strokeWidth={1.25} aria-hidden />
+              </button>
+            </div>
+          )}
           <h2 className="ct-step-h bk-label" id="ct-h-interest">
             <b className="ct-step-n bk-mono">{n()}</b>
             <span>Што ве интересира?</span>

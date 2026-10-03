@@ -77,7 +77,7 @@ export function PhotoViewer({
           <Media
             image={{ ...m.image, isPlaceholder: false }}
             tone="dark"
-            sizes="(max-width: 1100px) 100vw, 1100px"
+            sizes="(max-width: 920px) 100vw, 920px"
             className="h-full w-full"
           />
         ) : (
@@ -97,7 +97,7 @@ export function PhotoViewer({
       label={`${current.year}. ${current.text}`}
       overlay={0.95}
       closeIn="screen"
-      className="w-full max-w-[1100px]"
+      className="w-full max-w-[920px]"
     >
       <div
         ref={root}

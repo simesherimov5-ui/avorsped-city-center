@@ -47,12 +47,18 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber, coo
         </div>
         <div className="ct-row">
           <span className="bk-label">Работно време</span>
-          {/* one range per line, so "09:00–18:00" never breaks in the middle */}
-          <span className="ct-val ct-val-lines">
-            {hours.split(", ").map((range) => (
-              <span key={range}>{range}</span>
-            ))}
-          </span>
+          {/* One line per range ("Пон–Пет 09:00–18:00"): the days on the left, the times on the right. */}
+          <ul className="ct-hours">
+            {hours.split(", ").map((range) => {
+              const split = range.lastIndexOf(" ");
+              return (
+                <li key={range}>
+                  <span>{range.slice(0, split)}</span>
+                  <span className="bk-mono">{range.slice(split + 1)}</span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
 
