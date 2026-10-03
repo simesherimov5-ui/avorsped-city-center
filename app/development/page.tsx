@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
+import { ClickToLoadMap } from "@/components/ui/ClickToLoadMap";
 import { DOT_COLOR } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
@@ -148,10 +149,9 @@ export default function DevelopmentPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="aspect-[4/3] border border-line lg:aspect-auto lg:h-full">
-              <iframe
+              <ClickToLoadMap
                 title="Мапа со локација на City Center"
-                className="h-full w-full grayscale"
-                loading="lazy"
+                place={development.mapQuery}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(development.mapQuery)}&output=embed`}
               />
             </div>
