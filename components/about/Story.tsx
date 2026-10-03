@@ -24,8 +24,13 @@ function tokenize(text: string, gold?: string) {
   return words.map((word, i) => ({ word, gold: start >= 0 && i >= start && i < start + goldWords.length }));
 }
 
+// Not yet read: the dimmed words must still read at 4.5:1 on the black page (at 25% they did not). Paper words
+// manage that at half brightness; the gold ones need three quarters.
+const DIM = 0.5;
+const DIM_GOLD = 0.75;
+
 /**
- * One big centred statement. Word by word it brightens from 25% to 100% as it scrolls through the screen
+ * One big centred statement. Word by word it brightens from 50% (gold words 75%) to 100% as it scrolls through the screen
  * (scrubbed to the scroll); with reduced motion it is simply shown.
  */
 export function Story({ eyebrow, statement, gold, more = [] }: Props) {
@@ -37,7 +42,7 @@ export function Story({ eyebrow, statement, gold, more = [] }: Props) {
       const el = text.current;
       if (!el || prefersReducedMotion()) return;
       const spans = el.querySelectorAll<HTMLElement>("[data-word]");
-      gsap.set(spans, { opacity: 0.25 });
+      gsap.set(spans, { opacity: (_, el: HTMLElement) => (el.classList.contains("bk-gold-i") ? DIM_GOLD : DIM) });
       gsap
         .timeline({ scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 50%", scrub: true } })
         .to(spans, { opacity: 1, ease: "none", stagger: 0.25, duration: 0.5 });

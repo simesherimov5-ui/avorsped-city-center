@@ -106,9 +106,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <div className="font-display text-2xl">{value}</div>
-      <div className="eyebrow mt-1 text-muted">{label}</div>
+    // dt (name) then dd (value) is the order a description list needs; the value is shown above its name
+    <div className="flex flex-col-reverse">
+      <dt className="eyebrow mt-1 text-muted">{label}</dt>
+      <dd className="font-display text-2xl">{value}</dd>
     </div>
   );
 }

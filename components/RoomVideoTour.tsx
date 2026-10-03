@@ -37,7 +37,8 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
           ) : (
             <>
               <Media
-                image={room.image}
+                // the button is named by its label, so the picture inside needs no second description
+                image={{ ...room.image, alt: "" }}
                 className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, 240px"
               />
