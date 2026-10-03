@@ -2,7 +2,7 @@
 
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { useI18n } from "@/lib/i18n";
@@ -11,6 +11,7 @@ import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 import { isBlackPage } from "@/lib/theme";
+import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
@@ -51,6 +52,16 @@ export function Navbar() {
   const isHome = pathname === "/";
   // The all-black pages (За нас, Контакт) get a black bar with a hairline, and an outline consultation button.
   const black = isBlackPage(pathname);
+  // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
+  // at. On the Контакт page itself it scrolls to the booking form and focuses its first step instead.
+  const onContact = pathname === "/contact";
+  const consultHref = contactHref(pathname);
+  const consultClick = onContact
+    ? (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        scrollToBookingForm();
+      }
+    : undefined;
 
   // Entrance: hidden while the loading screen is up, then the bar fades down
   // with its links staggering in as the screen opens. Mounting after the
@@ -226,11 +237,16 @@ export function Navbar() {
 
             <div className="nav-link hidden items-center gap-4 lg:flex">
               {black ? (
-                <Link href="/consultation" onPointerDown={spawnClickPulse} className="bk-btn relative isolate">
+                <Link
+                  href={consultHref}
+                  onClick={consultClick}
+                  onPointerDown={spawnClickPulse}
+                  className="bk-btn relative isolate"
+                >
                   {t("nav.consultation")}
                 </Link>
               ) : (
-                <Button href="/consultation" variant="primary" size="sm">
+                <Button href={consultHref} onClick={consultClick} variant="primary" size="sm">
                   {t("nav.consultation")}
                 </Button>
               )}
@@ -278,7 +294,19 @@ export function Navbar() {
             ))}
           </nav>
           <div className="mt-8">
-            <Button href="/consultation" variant="primary" className="w-full" onClick={() => setOpen(false)}>
+            <Button
+              href={consultHref}
+              variant="primary"
+              className="w-full"
+              onClick={(e) => {
+                setOpen(false);
+                if (onContact) {
+                  e.preventDefault();
+                  // Wait for the menu to close and release its scroll lock, then scroll.
+                  setTimeout(scrollToBookingForm, 120);
+                }
+              }}
+            >
               {t("nav.consultation")}
             </Button>
           </div>

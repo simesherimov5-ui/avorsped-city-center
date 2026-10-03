@@ -40,11 +40,8 @@ export default function DojranPage() {
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button href="/consultation" variant="primary" size="sm">
+              <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
                 Закажи консултација
-              </Button>
-              <Button href="/contact" variant="secondary" size="sm">
-                Контактирај нè
               </Button>
             </div>
           </div>

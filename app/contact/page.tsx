@@ -20,8 +20,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
   // Arriving from an apartment or project page: pre-select the interest and carry the reference along.
   const apartment = getApartment(first(params.apartment) ?? "");
-  const building = getBuilding(first(params.building) ?? apartment?.buildingId ?? "");
-  const project = projects.find((p) => p.id === first(params.project));
+  const building = getBuilding(apartment?.buildingId ?? first(params.building) ?? "");
+  // The project comes from the data: whichever project owns the apartment's or building's building. Only a bare
+  // project link (no apartment or building) names a project directly, so a reference can never carry a wrong name.
+  const project =
+    (building && projects.find((p) => p.buildings?.some((b) => b.id === building.id))) ||
+    projects.find((p) => p.id === first(params.project));
   const asked = first(params.interest) as Interest | undefined;
   const label = [apartment && `Стан ${apartment.number}`, building?.name, project?.name].filter(Boolean).join(" · ");
   const hasReference = Boolean(label);

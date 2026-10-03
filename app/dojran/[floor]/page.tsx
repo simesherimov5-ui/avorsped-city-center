@@ -51,7 +51,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
                 Контактирајте нè за најнови информации и достапност.
               </p>
               <div className="mt-6">
-                <Button href="/consultation" variant="primary">
+                <Button href="/contact?project=dojranski-raj" variant="primary">
                   Закажи консултација
                 </Button>
               </div>

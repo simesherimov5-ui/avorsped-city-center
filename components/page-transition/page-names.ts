@@ -7,7 +7,6 @@ const NAMES: [prefix: string, name: string][] = [
   ["/contact", "Контакт"],
   ["/apartments", "Пронајди стан"],
   ["/compare", "Споредба"],
-  ["/consultation", "Консултација"],
   ["/development", "City Center"],
   ["/dojran", "Дојрански Рај"],
 ];

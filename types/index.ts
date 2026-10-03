@@ -206,20 +206,6 @@ export interface CompanyStat {
   label: string;
 }
 
-export interface ConsultationRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  preferredDate?: string;
-  preferredTime?: string;
-  project?: string;
-  buildingId?: string;
-  apartmentId?: string;
-  message?: string;
-  kind: "consultation" | "call-request" | "info-request" | "apartment-inquiry";
-}
-
 export interface ApartmentFilterState {
   buildingId?: string;
   floor?: number;

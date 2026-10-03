@@ -33,7 +33,6 @@ const LABEL_BASELINE = ["components/ApartmentFilters.tsx"];
 const DATA_IMPORT_BASELINE = [
   "components/ApartmentCard.tsx",
   "components/ApartmentFilters.tsx",
-  "components/BookingForm.tsx",
   "components/CompareBar.tsx",
   "components/DojranFacade.tsx",
   "components/Footer.tsx",

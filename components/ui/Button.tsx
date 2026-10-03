@@ -1,14 +1,14 @@
 "use client";
 
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
 interface ButtonProps {
   children: ReactNode;
   href?: string;
-  onClick?: () => void;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
   variant?: "primary" | "secondary" | "ghost";
   tone?: "light" | "dark";
   size?: "sm" | "md";

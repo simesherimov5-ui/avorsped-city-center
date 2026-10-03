@@ -164,9 +164,6 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
               <Button href={inquiryHref} variant="primary" className="w-full">
                 Прашај за овој стан
               </Button>
-              <Button href="/consultation" variant="secondary" className="w-full">
-                Закажи консултација
-              </Button>
             </div>
             <a
               href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}

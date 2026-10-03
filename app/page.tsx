@@ -77,7 +77,7 @@ export default function HomePage() {
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>
             <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
-              <Button href="/consultation" variant="primary">
+              <Button href="/contact" variant="primary">
                 Закажи консултација
               </Button>
               <Button href="/projects" variant="secondary" tone="dark">

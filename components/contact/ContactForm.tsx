@@ -28,10 +28,10 @@ type Errors = Partial<Record<Field, string>>;
 
 const MESSAGES: Record<Field, string> = {
   interest: "Изберете што ве интересира.",
-  rooms: "Изберете колку соби.",
+  rooms: "Изберете број на соби.",
   when: "Изберете ден и час.",
   name: "Внесете име и презиме.",
-  phone: "Внесете телефон со најмалку 8 цифри.",
+  phone: "Внесете телефонски број со најмалку 8 цифри.",
 };
 
 // "Today" in the booking time zone as a string snapshot: the server renders no days (its clock is not the
