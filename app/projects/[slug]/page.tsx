@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
@@ -28,6 +28,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
+  // A project with its own page (City Center → /development, Дојрански Рај → /dojran) has no second copy here: the
+  // address permanently redirects to the main one, so each project has one page for search engines and sharing.
+  if (project.href) permanentRedirect(project.href);
 
   return (
     <div className="pt-24 sm:pt-28">
@@ -62,7 +65,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
         <Reveal delay={0.08}>
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-ink/50 sm:text-sm">
-            <span className="eyebrow text-ink/40">Метаподатоци</span>
+            <span className="sr-only">Метаподатоци</span>
             <span>{project.location}</span>
             <span className="text-line">·</span>
             <span>{project.year}</span>
