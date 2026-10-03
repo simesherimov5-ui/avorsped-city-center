@@ -308,7 +308,7 @@
   gap: 16px 24px;
   margin-top: 48px;
 }
-.ct-submit .bk-btn[aria-disabled="true"] {
+.ct-submit .bk-btn:disabled {
   opacity: 0.6;
   cursor: progress;
 }
@@ -471,13 +471,13 @@ a.ct-val:focus-visible {
   background: var(--black);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
-.ct-map .leaflet-bar {
+.ct-map .leaflet-container .leaflet-bar {
   border: 1px solid var(--gold-line);
   border-radius: 0;
   box-shadow: none;
 }
-.ct-map .leaflet-bar a,
-.ct-map .leaflet-bar a:hover {
+.ct-map .leaflet-container .leaflet-bar a,
+.ct-map .leaflet-container .leaflet-bar a:hover {
   width: 32px;
   height: 32px;
   border-bottom: 1px solid var(--gold-line);
@@ -486,26 +486,34 @@ a.ct-val:focus-visible {
   color: var(--color-paper);
   line-height: 32px;
 }
-.ct-map .leaflet-bar a:hover {
+.ct-map .leaflet-container .leaflet-bar a:hover {
   color: var(--color-gold);
 }
-.ct-map .leaflet-bar a:last-child {
+.ct-map .leaflet-container .leaflet-bar a:last-child {
   border-bottom: 0;
 }
 @media (pointer: coarse) {
-  .ct-map .leaflet-bar a,
-  .ct-map .leaflet-bar a:hover {
+  .ct-map .leaflet-container .leaflet-bar a,
+  .ct-map .leaflet-container .leaflet-bar a:hover {
     width: 44px;
     height: 44px;
     line-height: 44px;
   }
 }
-.ct-map .leaflet-control-attribution {
-  background: color-mix(in srgb, var(--black) 75%, transparent);
-  color: var(--mute);
-  font-size: 10px;
+/* The map credits stay readable: an ink box at 85%, paper text at 75%, 11px. */
+.ct-map .leaflet-container .leaflet-control-attribution {
+  padding: 2px 6px;
+  background: color-mix(in srgb, var(--color-ink) 85%, transparent);
+  color: color-mix(in srgb, var(--color-paper) 75%, transparent);
+  font-size: 11px;
+  line-height: 1.5;
 }
-.ct-map .leaflet-control-attribution a {
+.ct-map .leaflet-container .leaflet-control-attribution a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ct-map .leaflet-container .leaflet-control-attribution a:hover {
   color: var(--color-paper);
 }
 .ct-pin {

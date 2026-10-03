@@ -30,6 +30,9 @@ export default function ContactMap({ lat, lng }: { lat: number; lng: number }) {
     // Wheel zoom is off, and on touch screens one finger scrolls the page (two fingers still pinch to zoom).
     const touch = window.matchMedia("(pointer: coarse)").matches;
     const map = L.map(el, { center: [lat, lng], zoom: TILES.zoom, scrollWheelZoom: false, dragging: !touch });
+    // Leaflet's own "Leaflet" prefix carries a blue-and-yellow flag, which is outside the site's colours; the tile
+    // and data credits stay.
+    map.attributionControl.setPrefix(false);
     L.tileLayer(TILES.url, {
       attribution: TILES.attribution,
       maxNativeZoom: TILES.maxNativeZoom,

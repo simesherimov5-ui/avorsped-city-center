@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useSyncExternalStore, type AnimationEvent, type FormEvent } from "react";
+import { flushSync } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
@@ -101,6 +102,7 @@ export function ContactForm({
   if (isApartment && !roomsMounted) setRoomsMounted(true);
 
   const form = useRef<HTMLFormElement>(null);
+  const submitButton = useRef<HTMLButtonElement>(null);
 
   const today = useSyncExternalStore(subscribeNever, () => todayIso(), noToday);
   const days = useMemo(() => nextWorkingDays(today), [today]);
@@ -181,12 +183,18 @@ export function ContactForm({
       reference: showReference ? reference : undefined,
     };
     setStatus("sending");
+    // The button is really disabled while sending, which drops focus; it gets focus back (once enabled again)
+    // before the pop-up opens, so the pop-up can return focus to it when it closes.
+    const settle = (next: "idle" | "failed") => {
+      flushSync(() => setStatus(next));
+      submitButton.current?.focus({ preventScroll: true });
+    };
     try {
       await sendBooking(request);
-      setStatus("idle");
+      settle("idle");
       setConfirmation({ open: true, summary });
     } catch {
-      setStatus("failed");
+      settle("failed");
     }
   }
 
@@ -340,6 +348,7 @@ export function ContactForm({
               <div className="ct-input">
                 <input
                   id="ct-name"
+                  name="name"
                   type="text"
                   autoComplete="name"
                   value={name}
@@ -361,6 +370,7 @@ export function ContactForm({
               <div className="ct-input">
                 <input
                   id="ct-phone"
+                  name="phone"
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
@@ -379,7 +389,13 @@ export function ContactForm({
           </div>
 
           <div className="ct-submit">
-            <button type="submit" className="bk-btn bk-btn--fill" aria-disabled={status === "sending"}>
+            <button
+              ref={submitButton}
+              type="submit"
+              className="bk-btn bk-btn--fill"
+              disabled={status === "sending"}
+              aria-busy={status === "sending"}
+            >
               {status === "sending" ? (
                 "Се испраќа…"
               ) : (
