@@ -129,6 +129,7 @@ export default function ApartmentsPage() {
     <div className="pt-24 sm:pt-28">
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 lg:px-10">
         <SectionHeading
+          as="h1"
           eyebrow="Пронаоѓач на станови"
           title="Пронајди го твојот стан"
           description="Филтрирај секоја единица низ сите шест згради по големина, буџет, соби и достапност."

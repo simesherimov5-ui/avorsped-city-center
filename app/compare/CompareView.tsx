@@ -56,7 +56,7 @@ export function CompareView() {
   return (
     <div className="pt-24 sm:pt-28">
       <section className="mx-auto max-w-5xl px-5 sm:px-8 py-14 lg:px-10">
-        <SectionHeading eyebrow="Споредба" title="Спореди станови" />
+        <SectionHeading as="h1" eyebrow="Споредба" title="Спореди станови" />
 
         {selected.length === 0 ? (
           <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">

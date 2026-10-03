@@ -5,6 +5,7 @@ import { PRIVACY_PUBLISHED, privacyPolicy } from "@/components/privacy/privacy-c
 export const metadata: Metadata = {
   title: "Политика за приватност",
   description: "Како Јавор Шпед ги собира, користи и чува вашите податоци.",
+  alternates: { canonical: "/privacy" },
 };
 
 /**

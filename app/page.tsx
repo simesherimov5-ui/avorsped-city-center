@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { projects, companyInfo } from "@/data";
+import type { Metadata } from "next";
 
 const WHY_US = [
   { icon: Building2, title: "Квалитетна градба", desc: "Строга контрола на квалитет во секоја фаза на градбата." },
@@ -20,6 +21,9 @@ const CTA_IMAGE = {
   alt: "Јавор Шпед — вечерна визуелизација",
   isPlaceholder: false,
 };
+
+// The home page keeps the site-wide title and description from the layout; it only needs its own canonical link.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (

@@ -13,6 +13,7 @@ import { ConstructionProgress } from "@/components/construction/ConstructionProg
 import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -21,7 +22,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  return { title: project ? project.name : "Проект" };
+  if (!project) return { title: "Проект", robots: { index: false } };
+  return pageMetadata({
+    title: project.name,
+    description: `${project.name}, ${project.location}. ${project.description}`,
+    path: `/projects/${project.slug}`,
+    image: null,
+  });
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {

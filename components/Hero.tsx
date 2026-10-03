@@ -41,7 +41,7 @@ export function Hero() {
   // parallax above only reacts to scrolling and runs on its own DOM node.
   const revealedAtMount = useRef(revealing);
   const eyebrowRef = useRef<HTMLDivElement>(null);
-  const headlineRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
@@ -148,12 +148,14 @@ export function Hero() {
           Exclusive Building · Основано 1994
         </div>
 
-        <div
+        {/* The page's h1. The site's global h1 style (the serif, its size, its spacing) is switched off here with
+            the important modifiers, so the headline keeps the look it had as a plain block. */}
+        <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-2xl text-[clamp(1.25rem,5.6vw,1.5rem)] font-medium uppercase leading-tight tracking-[0.06em] text-paper sm:text-2xl sm:tracking-[0.2em] lg:text-3xl"
+          className="mx-auto mt-3 max-w-2xl font-sans! text-[clamp(1.25rem,5.6vw,1.5rem)]! font-medium! uppercase leading-tight! tracking-[0.06em]! text-paper sm:text-2xl! sm:tracking-[0.2em]! lg:text-3xl!"
         >
           Добредојдовте во вашиот нов дом
-        </div>
+        </h1>
       </div>
 
       {/* Spacer that keeps the stats strip pinned to the bottom of the hero. */}

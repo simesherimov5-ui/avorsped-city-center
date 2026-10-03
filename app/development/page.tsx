@@ -10,11 +10,15 @@ import { DOT_COLOR } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
+import { pageMetadata } from "@/lib/seo";
+import { availableWord, plural } from "@/lib/plural";
 
-export const metadata: Metadata = {
-  title: "Тековен проект — City Center",
-  description: "Истражете го проектот City Center со шест згради: зданија, катови и достапност на станови.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "City Center — станбен комплекс во Струмица",
+  description: `City Center е станбен комплекс од ${buildings.length} згради во Струмица. Изберете зграда и кат и погледнете ги ${availabilityCounts().available} ${availableWord(availabilityCounts().available)} ${plural(availabilityCounts().available, "стан", "станови")}.`,
+  path: "/development",
+  image: null,
+});
 
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");

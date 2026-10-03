@@ -20,6 +20,7 @@ import { ApartmentCard } from "@/components/ApartmentCard";
 import { Button } from "@/components/ui/Button";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { cn } from "@/lib/cn";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return apartments.map((a) => ({ id: a.id }));
@@ -28,7 +29,16 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const apt = getApartment(id);
-  return { title: apt ? `Стан ${apt.number} — ${development.name}` : "Стан" };
+  if (!apt) return { title: "Стан", robots: { index: false } };
+  const building = getBuilding(apt.buildingId);
+  const where = building ? `Зграда ${building.shortLabel}` : "";
+  const bedrooms = apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type);
+  return pageMetadata({
+    // no price in the text: it is indicative and changes, and a search result would keep showing the old one
+    title: `Стан ${apt.number}, ${where} — ${development.name}`,
+    description: `${bedrooms} стан ${apt.number} во ${where}, ${apt.floor === 0 ? "приземје" : `кат ${apt.floor}`}: ${formatArea(apt.area)} површина, ориентација ${orientationLabel(apt.orientation).toLowerCase()}. Погледнете го распоредот и закажете консултација.`,
+    path: `/apartments/${apt.id}`,
+  });
 }
 
 export default async function ApartmentPage({ params }: { params: Promise<{ id: string }> }) {

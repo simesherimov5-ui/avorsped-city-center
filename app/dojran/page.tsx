@@ -7,12 +7,15 @@ import { OtherProjects } from "@/components/OtherProjects";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { projects } from "@/data";
 import { dojranFloors } from "@/data/dojran";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Дојрански Рај — Стар Дојран",
+export const metadata: Metadata = pageMetadata({
+  title: "Дојрански Рај — гарсоњери во Стар Дојран",
   description:
-    "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите достапните станови.",
-};
+    "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите становите.",
+  path: "/dojran",
+  image: null,
+});
 
 export default function DojranPage() {
   const project = projects.find((p) => p.id === "dojranski-raj")!;

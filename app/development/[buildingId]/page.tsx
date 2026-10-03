@@ -9,6 +9,8 @@ import { BuildingDirectory } from "@/components/BuildingDirectory";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
+import { pageMetadata } from "@/lib/seo";
+import { availableWord, floorsText, unitsText } from "@/lib/plural";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -26,7 +28,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ buildingId: string }> }): Promise<Metadata> {
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name} — ${development.name}` : "Зграда" };
+  if (!building) return { title: "Зграда", robots: { index: false } };
+  const counts = availabilityCounts(apartments.filter((a) => a.buildingId === building.id));
+  return pageMetadata({
+    title: `${building.name} — ${development.name}`,
+    description: `${building.name} во ${development.name}: ${floorsText(building.floors.length)} и ${unitsText(building.totalApartments)}, од кои ${counts.available} ${availableWord(counts.available)}. Изберете кат за да ги видите становите.`,
+    path: `/development/${building.id}`,
+    image: "/development/opengraph-image",
+  });
 }
 
 export default async function BuildingPage({ params }: { params: Promise<{ buildingId: string }> }) {
@@ -58,7 +67,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           />
           <div>
             <div className="eyebrow text-muted">Вие сте овде</div>
-            <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
+            <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
             <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
               <Stat label="Катови" value={String(building.floors.length)} />
               <Stat label="Станови" value={String(building.totalApartments)} />

@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronRight } from "lucide-react";
 import type { Apartment } from "@/types";
-import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
+import { getBuilding, getApartmentsForFloor, buildings, apartments, development, availabilityCounts } from "@/data";
+import { availableWord, unitsText } from "@/lib/plural";
+import { pageMetadata } from "@/lib/seo";
 import { FloorPlan } from "@/components/FloorPlan";
 import { RealFloorPlanViewer } from "@/components/RealFloorPlanViewer";
 import { FloorList } from "@/components/FloorList";
@@ -19,7 +21,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { buildingId, floor } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name}, Кат ${floor} — ${development.name}` : "Кат" };
+  const floorNumber = Number(floor);
+  const level = building?.floors.find((f) => f.number === floorNumber);
+  if (!building || !level) return { title: "Кат", robots: { index: false } };
+  const units = getApartmentsForFloor(building.id, floorNumber);
+  const open = availabilityCounts(units).available;
+  return pageMetadata({
+    title: `${building.name}, ${level.label} — ${development.name}`,
+    description: `${level.label} во ${building.name}: ${unitsText(units.length)}, од кои ${open} ${availableWord(open)}. Изберете стан на основата на катот.`,
+    path: `/development/${building.id}/${floorNumber}`,
+    image: "/development/opengraph-image",
+  });
 }
 
 function hasRegion(a: Apartment): a is Apartment & { realPlanRegion: NonNullable<Apartment["realPlanRegion"]> } {

@@ -11,12 +11,13 @@ import { ClosingCta } from "@/components/about/ClosingCta";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 import "@/components/black/black.css";
 import "@/components/about/about.css";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "За нас",
-  description:
-    "Дознајте повеќе за Јавор Шпед и Exclusive Building — нашата приказна, мисија, вредности и завршени проекти.",
-};
+  description: `Јавор Шпед работи од ${companyInfo.founded} година. Exclusive Building ја носи истата дисциплина во станбената градба: приказна, вредности и пат до City Center.`,
+  path: "/about",
+});
 
 // Photography: existing project renders. TODO(client): the hero photo (or a short silent video), the values
 // photos (one per value is supported) and the closing photo.

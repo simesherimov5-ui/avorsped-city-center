@@ -5,11 +5,14 @@ import { ContactStage } from "@/components/contact/ContactStage";
 import { DirectPanel } from "@/components/contact/DirectPanel";
 import "@/components/black/black.css";
 import "@/components/contact/contact.css";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Контакт",
-  description: "Контактирајте нè: Јавор Шпед. Закажете консултација, адреса, телефон и е-пошта.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Контакт и консултација",
+  description:
+    "Закажете консултација за стан во City Center или пишете ни: адреса, телефон и е-пошта на Јавор Шпед во Струмица.",
+  path: "/contact",
+});
 
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);

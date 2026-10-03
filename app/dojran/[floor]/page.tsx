@@ -8,6 +8,7 @@ import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { dojranFloors, getDojranFloor } from "@/data/dojran";
 import { projects } from "@/data";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return dojranFloors.map((f) => ({ floor: String(f.number) }));
@@ -16,7 +17,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ floor: string }> }): Promise<Metadata> {
   const { floor: floorParam } = await params;
   const floor = getDojranFloor(Number(floorParam));
-  return { title: floor ? `${floor.label} — Дојрански Рај` : "Дојрански Рај" };
+  if (!floor) return { title: "Дојрански Рај", robots: { index: false } };
+  return pageMetadata({
+    title: `${floor.label} — Дојрански Рај`,
+    description: `${floor.label} во Дојрански Рај, Стар Дојран: ${floor.unitsHint}. Погледнете ги фотографиите и поставката на становите.`,
+    path: `/dojran/${floor.number}`,
+    image: "/dojran/opengraph-image",
+  });
 }
 
 export default async function DojranFloorPage({ params }: { params: Promise<{ floor: string }> }) {
@@ -40,7 +47,12 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
       </div>
 
       <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
-        <SectionHeading eyebrow="Дојрански Рај" title={floor.label} description={`${floor.unitsHint} на овој кат.`} />
+        <SectionHeading
+          as="h1"
+          eyebrow="Дојрански Рај"
+          title={floor.label}
+          description={`${floor.unitsHint} на овој кат.`}
+        />
 
         <div className="mt-10 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
