@@ -250,6 +250,26 @@ h4 {
   }
 }
 
+/* The opening entrance of a page, in plain CSS: the same fade and rise as components/ui/Reveal.tsx (0.5s, 24px, the site
+   ease; phones 0.3s, 12px, no delay), but it plays from the first paint, so the first text does not wait for the
+   scripts to load. Used for what is on screen when a page opens; everything below keeps the scroll reveal. */
+@keyframes enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--enter-distance, 24px));
+  }
+}
+.enter {
+  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+}
+@media (max-width: 767px) {
+  .enter {
+    --enter-distance: 12px;
+    --enter-stagger: 0;
+    animation-duration: 0.3s;
+  }
+}
+
 /* Phones. Unlayered, so these beat the Tailwind utilities they refine. */
 html,
 body {
