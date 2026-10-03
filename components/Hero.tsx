@@ -177,8 +177,8 @@ export function Hero() {
               </span>{" "}
               {companyStats[1].label}
             </span>
-            <span className="hidden h-3 w-px bg-gold/60 sm:block" aria-hidden />
-            <span className="hidden sm:inline">
+            <span className="h-3 w-px bg-gold/60 max-sm:hidden" aria-hidden />
+            <span>
               <span className="mono-stat text-gold" style={STAT_NUMBER}>
                 {instant ? companyStats[2].value : revealing ? <CountUp value={companyStats[2].value} /> : null}
               </span>{" "}
