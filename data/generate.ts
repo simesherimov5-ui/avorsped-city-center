@@ -297,13 +297,50 @@ const REAL_B06_F3_UNITS: RealUnitDef[] = [
   },
 ];
 
+// An apartment id goes into a URL, so it is plain ASCII: the unit number "21а" (its last letter is Cyrillic) becomes
+// "21a" in the id and stays "21а" only as the label shown to visitors.
+const CYRILLIC_TO_ASCII: Record<string, string> = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  ѓ: "gj",
+  е: "e",
+  ж: "zh",
+  з: "z",
+  ѕ: "dz",
+  и: "i",
+  ј: "j",
+  к: "k",
+  л: "l",
+  љ: "lj",
+  м: "m",
+  н: "n",
+  њ: "nj",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  ќ: "kj",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "c",
+  ч: "ch",
+  џ: "dzh",
+  ш: "sh",
+};
+export const unitSlug = (number: string) => [...number.toLowerCase()].map((ch) => CYRILLIC_TO_ASCII[ch] ?? ch).join("");
+
 function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[] {
   return REAL_B06_F3_UNITS.map((unit, idx) => {
     const area = Math.round(unit.rooms.reduce((sum, r) => sum + r.area, 0) * 100) / 100;
     const orientation = ORIENTATIONS[Math.floor(seeded(5, floor, idx, 8) * ORIENTATIONS.length)];
     const orientationPremium = orientation.includes("South") ? 1.04 : 1;
     const price = Math.round((area * BASE_RATE_EUR_PER_SQM * (1 + floor * 0.006) * orientationPremium) / 500) * 500;
-    const id = `${buildingId}-f${floor}-${unit.number}`;
+    const id = `${buildingId}-f${floor}-${unitSlug(unit.number)}`;
 
     return {
       id,
