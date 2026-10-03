@@ -14,7 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/dojran",
     "/about",
     "/contact",
-    ...projects.map((p) => `/projects/${p.slug}`),
+    // a project that has its own page (City Center, Дојрански Рај) redirects from /projects/…, so only the others
+    ...projects.filter((p) => !p.href).map((p) => `/projects/${p.slug}`),
     ...buildings.map((b) => `/development/${b.id}`),
     ...apartments.map((a) => `/apartments/${a.id}`),
     ...dojranFloors.map((f) => `/dojran/${f.number}`),
