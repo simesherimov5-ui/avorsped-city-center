@@ -19,6 +19,7 @@ import { ApartmentTour } from "@/components/ApartmentTour";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { Button } from "@/components/ui/Button";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
+import { cn } from "@/lib/cn";
 
 export function generateStaticParams() {
   return apartments.map((a) => ({ id: a.id }));
@@ -41,6 +42,40 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const inquiryHref = `/contact?project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
 
   const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
+
+  // The price, the specifications and the enquiry buttons. On a computer this is the sticky column on the right; on a
+  // phone the same block comes straight after the floor plan, not after everything else on the page.
+  const renderAside = (extraClass: string) => (
+    <aside className={cn("h-fit space-y-6 border border-line bg-warm-white p-6", extraClass)}>
+      <div>
+        <div className="eyebrow text-muted">Цена</div>
+        <div className="mt-1.5 font-display text-4xl text-gold-deep">{formatPrice(apartment.price)}</div>
+        <div className="mt-1.5 text-xs text-muted">Индикативна цена, подложна на конечна спецификација</div>
+      </div>
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
+        <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
+        <Spec label="Спални соби" value={String(apartment.bedrooms)} />
+        <Spec label="Бањи" value={String(apartment.bathrooms)} />
+        <Spec label="Површина" value={formatArea(apartment.area)} />
+        <Spec label="Балкон" value={formatArea(apartment.balconyArea)} />
+        <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />
+        <Spec label="Кат" value={apartment.floor === 0 ? "Приземје" : String(apartment.floor)} />
+        <Spec label="Статус" value={statusLabel(apartment.status)} />
+      </dl>
+      <div className="space-y-3 border-t border-line pt-6">
+        <Button href={inquiryHref} variant="primary" className="w-full">
+          Прашај за овој стан
+        </Button>
+      </div>
+      <a
+        href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}
+        className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-muted transition-colors hover:text-charcoal sm:text-sm"
+      >
+        <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
+        Или нè јавете: {companyInfo.phone}
+      </a>
+    </aside>
+  );
 
   return (
     <ZoomEnter className="pt-24 sm:pt-28">
@@ -108,6 +143,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
               </div>
             </div>
 
+            {renderAside("lg:hidden")}
+
             {/* The room photos and the 360° tour show only once real media exists: no empty boxes for visitors. */}
             {apartment.gallery.some((img) => !img.isPlaceholder) && (
               <div>
@@ -151,35 +188,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             )}
           </div>
 
-          <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
-            <div>
-              <div className="eyebrow text-muted">Цена</div>
-              <div className="mt-1.5 font-display text-4xl text-gold-deep">{formatPrice(apartment.price)}</div>
-              <div className="mt-1.5 text-xs text-muted">Индикативна цена, подложна на конечна спецификација</div>
-            </div>
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
-              <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
-              <Spec label="Спални соби" value={String(apartment.bedrooms)} />
-              <Spec label="Бањи" value={String(apartment.bathrooms)} />
-              <Spec label="Површина" value={formatArea(apartment.area)} />
-              <Spec label="Балкон" value={formatArea(apartment.balconyArea)} />
-              <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />
-              <Spec label="Кат" value={apartment.floor === 0 ? "Приземје" : String(apartment.floor)} />
-              <Spec label="Статус" value={statusLabel(apartment.status)} />
-            </dl>
-            <div className="space-y-3 border-t border-line pt-6">
-              <Button href={inquiryHref} variant="primary" className="w-full">
-                Прашај за овој стан
-              </Button>
-            </div>
-            <a
-              href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}
-              className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-muted transition-colors hover:text-charcoal sm:text-sm"
-            >
-              <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Или нè јавете: {companyInfo.phone}
-            </a>
-          </aside>
+          {renderAside("hidden lg:sticky lg:top-28 lg:block")}
         </div>
       </section>
     </ZoomEnter>
