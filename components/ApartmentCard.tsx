@@ -5,7 +5,8 @@ import { BedDouble, Compass, Ruler, ArrowRight } from "lucide-react";
 import type { Apartment } from "@/types";
 import { formatArea, formatPrice, orientationLabel } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Placeholder } from "@/components/ui/Placeholder";
+import { Media } from "@/components/ui/Media";
+import { floorPlanImageForApartment } from "@/lib/assets";
 import { getBuilding } from "@/data";
 import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
@@ -28,9 +29,12 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
     >
       <Link href={`/apartments/${apartment.id}`} className="focus-ring block">
         <div className="relative overflow-hidden">
-          <Placeholder
-            label={`Стан ${apartment.number} — основа`}
+          {/* The apartment's own floor plan (or, for units without one, the plan of their type) is the thumbnail. */}
+          <Media
+            image={floorPlanImageForApartment(apartment)}
+            fit="contain"
             className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-on-chrome/95" />
         </div>

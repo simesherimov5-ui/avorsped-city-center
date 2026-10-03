@@ -106,31 +106,36 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
               </div>
             </div>
 
-            <div>
-              <h2 className="font-display text-2xl">Простории</h2>
-              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {apartment.gallery.map((img, i) => (
-                  <Media
-                    key={i}
-                    image={img}
-                    label={`Стан ${apartment.number} — ${roomLabelForGalleryIndex(i)}`}
-                    className="aspect-square"
-                  />
-                ))}
+            {/* The room photos and the 360° tour show only once real media exists: no empty boxes for visitors. */}
+            {apartment.gallery.some((img) => !img.isPlaceholder) && (
+              <div>
+                <h2 className="font-display text-2xl">Простории</h2>
+                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {apartment.gallery.map((img, i) => (
+                    <Media
+                      key={i}
+                      image={img}
+                      label={`Стан ${apartment.number} — ${roomLabelForGalleryIndex(i)}`}
+                      className="aspect-square"
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div>
-              <h2 className="font-display text-2xl">Истражи го станот</h2>
-              <p className="mt-2 text-sm text-ink/60">
-                {apartment.tour?.available
-                  ? "Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите."
-                  : "360° виртуелна тура ќе биде додадена штом се направат внатрешни фотографии за оваа единица."}
-              </p>
-              <div className="mt-6">
-                <ApartmentTour hasTour={Boolean(apartment.tour?.available)} />
+            {apartment.tour?.available && (
+              <div>
+                <h2 className="font-display text-2xl">Истражи го станот</h2>
+                <p className="mt-2 text-sm text-ink/60">
+                  {apartment.tour?.available
+                    ? "Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите."
+                    : "360° виртуелна тура ќе биде додадена штом се направат внатрешни фотографии за оваа единица."}
+                </p>
+                <div className="mt-6">
+                  <ApartmentTour hasTour={Boolean(apartment.tour?.available)} />
+                </div>
               </div>
-            </div>
+            )}
 
             {others.length > 0 && (
               <div>
