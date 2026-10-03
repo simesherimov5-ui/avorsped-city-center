@@ -88,4 +88,4 @@ Trigger: a hosting decision, a launch date, or the first non-developer who must 
 - Locales: `mk` (default) and `en`. Library: `next-intl` with `app/[locale]` routing (verify against its current docs when implementing).
 - UI strings live in `messages/mk.json` and `messages/en.json`; components contain no literal user-facing text.
 - Open: whether URL slugs stay Latin.
-- The display font (Fraunces) has no Cyrillic subset, and Inter is loaded without its Cyrillic subset; see `docs/design-brief.md`.
+- Fonts: the display font is Playfair Display and all three families load their Cyrillic subsets; see `docs/design-brief.md`.

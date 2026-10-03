@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Playfair_Display, IBM_Plex_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -14,19 +14,23 @@ import { PageTransition } from "@/components/page-transition/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 
+// All three families are loaded with their Cyrillic letters: the site is in Macedonian, and a family loaded without
+// them silently falls back to a different system font on every device.
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   variable: "--font-inter",
 });
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-fraunces",
+// The heading serif (it replaced Fraunces, which has no Cyrillic). Regular and regular italic only.
+const playfair = Playfair_Display({
+  subsets: ["latin", "cyrillic"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   weight: ["300", "400", "500"],
   variable: "--font-mono",
 });
@@ -48,7 +52,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}>
+    <html lang="mk" className={`${inter.variable} ${playfair.variable} ${ibmPlexMono.variable}`}>
       <body className="antialiased">
         <script
           type="application/ld+json"

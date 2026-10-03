@@ -21,15 +21,17 @@ Facts read from the code, not decisions.
 - Palette tokens in `app/globals.css` (`:root`, lines 9-16): `paper`, `ink`, `gold`, `gold-deep`, `gold-light`, `gold-dark`, `line`, `line-dark`.
   The older names `cream`, `warm-white`, `silver`, `concrete`, `charcoal`, `accent`, `accent-soft` are aliases of these.
   The README describes the palette as off-white, charcoal and a gold accent.
-- Typefaces: Fraunces (display), Inter (body) and IBM Plex Mono, loaded with `next/font` and `subsets: ["latin"]` only (`app/layout.tsx`).
+- Typefaces: Playfair Display (display, 400 and 400 italic), Inter (body) and IBM Plex Mono, all loaded with `next/font` and `subsets: ["latin", "cyrillic"]` (`app/layout.tsx`).
 - Motion: two systems coexist. Framer Motion scroll reveals (`components/ui/Reveal.tsx`) and GSAP + Lenis (`components/motion/`, `components/intro/`). Both respect reduced-motion.
 - Language: Macedonian (`<html lang="mk">`); English is planned.
 
 ## Known issues needing a client decision
 
-- **Cyrillic typography.** Fraunces has no Cyrillic subset (Next's bundled font data lists latin, latin-ext, vietnamese), and Inter is loaded without its Cyrillic subset.
-  Macedonian text therefore most likely renders in a fallback system font, not the intended typefaces. This was not checked in a browser.
-  Decision needed: pick a display typeface with Cyrillic coverage, or accept the fallback.
+- **Cyrillic typography.** Resolved on 2026-10-04: the old display font (Fraunces) had no Cyrillic letters, so every Macedonian
+  heading fell back to a different system serif on each device while Latin words rendered in Fraunces. The headings now use
+  Playfair Display, and Inter and IBM Plex Mono are loaded with their Cyrillic subsets too. Checked in a browser with
+  `CSS.getPlatformFontsForNode`: every heading renders in Playfair Display, body text in Inter. Candidates compared: Playfair
+  Display (chosen by default), Cormorant Garamond, Source Serif 4.
 - **Direction history.** The first week of work explored several directions (editorial, cinematic, portfolio-first homepage).
   This brief starts the record; later changes are logged below.
 
@@ -55,6 +57,6 @@ No proposals yet.
 
 ## Decision log
 
-| Date | Decision | Approved by | Notes |
-| ---- | -------- | ----------- | ----- |
-|      |          |             |       |
+| Date       | Decision                                                                                                     | Approved by                                       | Notes                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-04 | Heading font: Playfair Display (400, 400 italic), with Cyrillic. Inter and IBM Plex Mono also load Cyrillic. | Client (default choice stated in the audit brief) | Replaces Fraunces. Cormorant Garamond and Source Serif 4 were shown side by side; the client can still pick one of them (one constant in `app/layout.tsx` and `--font-display` in `app/globals.css`). |
