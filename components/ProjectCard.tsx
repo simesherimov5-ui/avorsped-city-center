@@ -31,6 +31,12 @@ export function ProjectCard({ project }: { project: Project }) {
           label={`${project.name} — визуелизација`}
           fit={project.imageFit}
           focus={project.imageFocus}
+          // a 2:1 photo in a 4:3 frame is drawn about 1.5x wider than the card, so the sizes allow for the crop
+          sizes={
+            project.imageFit === "contain"
+              ? "(max-width: 640px) 80vw, 320px"
+              : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
+          }
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>

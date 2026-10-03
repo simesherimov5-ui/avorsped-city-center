@@ -50,7 +50,12 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <Media image={building.exteriorImage} className="aspect-[4/3]" />
+          <Media
+            image={building.exteriorImage}
+            className="aspect-[4/3]"
+            sizes="(max-width: 1024px) 155vw, 870px"
+            priority
+          />
           <div>
             <div className="eyebrow text-muted">Вие сте овде</div>
             <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />

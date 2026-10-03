@@ -141,7 +141,7 @@ export interface FloorPlanHotspot {
 export interface FloorPlanExplorerData {
   image: { src: string; alt: string; isPlaceholder: boolean };
   hotspots: FloorPlanHotspot[];
-  rooms: Record<string, { label: string; video: string }>;
+  rooms: Record<string, { label: string; video: string; /** Still shown until the video plays. */ poster?: string }>;
 }
 
 /** One entry of the About page timeline. */

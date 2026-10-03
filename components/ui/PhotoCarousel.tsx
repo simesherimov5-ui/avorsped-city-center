@@ -12,12 +12,15 @@ export function PhotoCarousel({
   className,
   fit,
   focus,
+  sizes = "(max-width: 672px) 100vw, 672px",
 }: {
   photos: { src: string; alt: string }[];
   className?: string;
   fit?: "cover" | "contain";
   /** The project's framing of its photos (see ImageFocus). */
   focus?: ImageFocus;
+  /** The width the carousel is really shown at; the default matches its default max-w-2xl (672px). */
+  sizes?: string;
 }) {
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0]);
 
@@ -39,9 +42,11 @@ export function PhotoCarousel({
           <Media
             image={{ ...photos[index], isPlaceholder: false }}
             className="h-full w-full"
-            sizes="100vw"
+            sizes={sizes}
+            priority={index === 0}
             fit={fit}
-            focus={focus}
+            // a carousel mixes photos of different shapes, so only the project's one-photo framing is not applied here
+            focus={fit === "contain" ? undefined : focus}
           />
         </motion.div>
       </AnimatePresence>

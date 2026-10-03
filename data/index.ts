@@ -72,6 +72,8 @@ export const projects: Project[] = [
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
     imageFit: "contain",
+    // The hero photo is portrait (1730 × 1787), so cards and the slider show it whole, over a blurred copy of itself.
+    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
     heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
     gallery: [
       { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
@@ -103,9 +105,17 @@ export const projects: Project[] = [
         isPlaceholder: false,
       },
       rooms: {
-        "dnevna-soba": { label: "Дневна соба", video: "/videos/stanbena-zgrada/dnevna-soba.mp4" },
-        kujna: { label: "Кујна и трпезарија", video: "/videos/stanbena-zgrada/kujna.mp4" },
-        dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4" },
+        "dnevna-soba": {
+          label: "Дневна соба",
+          video: "/videos/stanbena-zgrada/dnevna-soba.mp4",
+          poster: "/images/stanbena-zgrada/dnevna-soba.jpg",
+        },
+        kujna: {
+          label: "Кујна и трпезарија",
+          video: "/videos/stanbena-zgrada/kujna.mp4",
+          poster: "/images/stanbena-zgrada/kujna.jpg",
+        },
+        dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4", poster: "/images/stanbena-zgrada/dvor.jpg" },
       },
       // Numbered badges on the floor-plan image, matched by eye to the render.
       // Only numbers with a linked room are clickable; the rest are shown as-is.

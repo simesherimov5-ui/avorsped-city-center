@@ -22,7 +22,7 @@ export function ClosingCta({
         <Media
           image={{ ...image, alt: "", isPlaceholder: false }}
           tone="dark"
-          sizes="100vw"
+          sizes="(max-width: 767px) 160vw, 100vw"
           className="h-full w-full"
         />
       </div>

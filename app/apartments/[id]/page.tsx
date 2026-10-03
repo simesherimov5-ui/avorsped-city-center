@@ -78,6 +78,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     image={floorPlanImage}
                     label={`Архитектонска основа на стан ${apartment.number}`}
                     className="aspect-[4/3]"
+                    sizes="(max-width: 1024px) 100vw, 560px"
+                    priority
                   />
                 </div>
                 <div className="flex flex-col">

@@ -49,7 +49,17 @@ export function Media({
   // uncovered edges are filled with a blurred, darkened copy of the same photo, and the picture's own edges fade
   // into it. The sizes use container units of the frame (this component's root), so no layout script is needed.
   const out = fit === "cover" && focus !== undefined && focus.zoom < 1;
+  // A photo shown whole in a frame of another shape ("contain", e.g. a portrait picture in a wide card) gets the same
+  // treatment instead of flat bars: the picture sits in the middle with a blurred, darkened copy behind it.
+  const contained = fit === "contain";
+  const sizedPicture = out || (contained && focus?.aspect !== undefined);
   const aspect = focus?.aspect ?? 1.5;
+  const fade = {
+    maskImage: EDGE_FADE,
+    WebkitMaskImage: EDGE_FADE,
+    maskComposite: "intersect",
+    WebkitMaskComposite: "source-in",
+  };
   const picture: CSSProperties | undefined =
     out && focus
       ? ({
@@ -58,12 +68,18 @@ export function Media({
           height: `calc(var(--w) / ${aspect})`,
           left: `calc((100cqw - var(--w)) * ${focus.x / 100})`,
           top: `calc((100cqh - var(--w) / ${aspect}) * ${focus.y / 100})`,
-          maskImage: EDGE_FADE,
-          WebkitMaskImage: EDGE_FADE,
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
+          ...fade,
         } as CSSProperties)
-      : undefined;
+      : contained && focus?.aspect !== undefined
+        ? ({
+            "--w": `min(100cqw, 100cqh * ${aspect})`,
+            width: "var(--w)",
+            height: `calc(var(--w) / ${aspect})`,
+            left: "calc((100cqw - var(--w)) / 2)",
+            top: "calc((100cqh - var(--w) / " + aspect + ") / 2)",
+            ...fade,
+          } as CSSProperties)
+        : undefined;
   // Zoomed in (above 1) or just re-centred: the same cover crop, around the focal point.
   const framing: CSSProperties | undefined =
     fit === "cover" && focus && !out
@@ -77,24 +93,24 @@ export function Media({
     <div
       className={cn(
         "relative overflow-hidden",
-        out && "[container-type:size]",
+        sizedPicture && "[container-type:size]",
         fit === "contain" && (tone === "dark" ? "bg-chrome" : "bg-silver"),
         className
       )}
     >
-      {out && (
+      {(out || contained) && (
         <div aria-hidden className="absolute inset-0 scale-[1.2] [filter:blur(40px)_brightness(0.55)]">
           <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={75} />
         </div>
       )}
-      {out ? (
+      {sizedPicture ? (
         <div className="absolute" style={picture}>
           <Image
             src={image.src}
             alt={image.alt}
             fill
             sizes={sizes}
-            className="object-cover"
+            className={contained ? "object-contain" : "object-cover"}
             priority={priority}
             quality={90}
           />

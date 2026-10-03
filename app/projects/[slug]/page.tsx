@@ -49,6 +49,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <PhotoCarousel
               photos={project.gallery}
               className={project.imageFit === "contain" ? "max-w-4xl" : undefined}
+              sizes={project.imageFit === "contain" ? "(max-width: 896px) 55vw, 490px" : undefined}
               fit={project.imageFit}
               focus={project.imageFocus}
             />

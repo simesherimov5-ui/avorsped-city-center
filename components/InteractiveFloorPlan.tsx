@@ -67,6 +67,8 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
             <video
               key={rooms[activeRoom].video}
               src={rooms[activeRoom].video}
+              poster={rooms[activeRoom].poster}
+              preload="none"
               autoPlay
               loop
               muted

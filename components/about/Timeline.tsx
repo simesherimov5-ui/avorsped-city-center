@@ -73,7 +73,7 @@ export function Timeline({ milestones }: { milestones: Milestone[] }) {
                       <Media
                         image={{ ...m.image, isPlaceholder: false }}
                         tone="dark"
-                        sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 25vw"
+                        sizes="(max-width: 560px) 133vw, (max-width: 900px) 67vw, 34vw"
                         className="h-full w-full"
                       />
                     </div>

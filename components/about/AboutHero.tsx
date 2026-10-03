@@ -95,7 +95,7 @@ export function AboutHero({ image, eyebrow, lines, stats }: Props) {
         <Media
           image={{ ...image, isPlaceholder: false }}
           priority
-          sizes="100vw"
+          sizes="(max-width: 767px) 160vw, 100vw"
           tone="dark"
           className="h-full w-full"
         />

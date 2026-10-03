@@ -93,7 +93,7 @@ export function Values({ eyebrow, heading, values, images }: Props) {
             <Media
               image={{ ...image, isPlaceholder: false }}
               tone="dark"
-              sizes="(max-width: 900px) 100vw, 45vw"
+              sizes="(max-width: 900px) 133vw, 1150px"
               className="h-full w-full"
             />
           </div>

@@ -103,7 +103,7 @@ export function Hero() {
             tone="dark"
             className="h-full w-full [&_img]:object-[50%_12%]"
             priority
-            sizes="100vw"
+            sizes="(max-width: 767px) 160vw, 100vw"
           />
         </div>
 

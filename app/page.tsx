@@ -65,7 +65,12 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-chrome py-28 text-center text-on-chrome sm:py-36">
         <div className="absolute inset-0">
           <ParallaxImage>
-            <Media image={CTA_IMAGE} tone="dark" className="h-full w-full opacity-35" />
+            <Media
+              image={CTA_IMAGE}
+              tone="dark"
+              className="h-full w-full opacity-35"
+              sizes="(max-width: 767px) 160vw, 100vw"
+            />
           </ParallaxImage>
           <div className="absolute inset-0 bg-chrome/70" />
         </div>
