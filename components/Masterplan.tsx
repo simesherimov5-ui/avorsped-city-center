@@ -185,6 +185,8 @@ export function Masterplan({
                     <button
                       key={b.id}
                       type="button"
+                      aria-pressed={selected === b.id}
+                      aria-label={`Зграда ${b.shortLabel}`}
                       onClick={(e) => {
                         setSelectedRect(rectOf(e.currentTarget));
                         setSelected(b.id);

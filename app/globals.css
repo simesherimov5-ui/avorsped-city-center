@@ -166,6 +166,17 @@ h4 {
   color: var(--color-paper);
 }
 
+/* Floor-plan apartments (SVG polygons): a clear 2px stroke when reached with the keyboard. gold-deep is the gold
+   that reads on paper; the stroke keeps its screen width however the plan is scaled. */
+.fp-poly {
+  outline: none;
+}
+.fp-poly:focus-visible {
+  stroke: var(--color-gold-deep);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
 .focus-ring {
   outline: none;
 }

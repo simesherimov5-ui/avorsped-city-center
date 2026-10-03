@@ -74,6 +74,7 @@ export function ApartmentFilters({
               <button
                 key={n}
                 type="button"
+                aria-pressed={value.bedrooms === n}
                 onClick={() => onChange({ ...value, bedrooms: value.bedrooms === n ? undefined : n })}
                 className={cn(
                   "focus-ring min-h-11 min-w-11 border px-3 py-1.5 text-base transition-colors sm:min-h-0 sm:min-w-0 sm:text-sm",

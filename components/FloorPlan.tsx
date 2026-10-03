@@ -29,7 +29,8 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
         <svg
           viewBox="0 0 100 100"
           className="w-full min-w-[480px] sm:min-w-0"
-          role="img"
+          // a group, not an image: role="img" would hide the apartments inside it from assistive technology
+          role="group"
           aria-label="Основа на кат со кликабилни станови"
         >
           <rect x="0" y="0" width="100" height="100" fill="none" stroke="#dedad0" strokeWidth="0.5" />
@@ -45,7 +46,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
                   fillOpacity={isActive ? 0.3 : 1}
                   stroke={STROKE[apt.status]}
                   strokeWidth={isActive ? 0.8 : 0.4}
-                  className="cursor-pointer transition-all"
+                  className="fp-poly cursor-pointer transition-all"
                   tabIndex={0}
                   role="button"
                   aria-label={`Стан ${apt.number}, ${statusLabel(apt.status)}, ${formatArea(apt.area)}`}
