@@ -84,7 +84,7 @@ export function Media({
     >
       {out && (
         <div aria-hidden className="absolute inset-0 scale-[1.2] [filter:blur(40px)_brightness(0.55)]">
-          <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={40} />
+          <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={75} />
         </div>
       )}
       {out ? (
