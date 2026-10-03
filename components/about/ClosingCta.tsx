@@ -22,6 +22,7 @@ export function ClosingCta({
         <Media
           image={{ ...image, alt: "", isPlaceholder: false }}
           tone="dark"
+          defer
           sizes="(max-width: 767px) 160vw, 100vw"
           className="h-full w-full"
         />

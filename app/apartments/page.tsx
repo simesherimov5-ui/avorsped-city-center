@@ -166,8 +166,8 @@ export default function ApartmentsPage() {
             {results.length > 0 ? (
               <>
                 <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {shown.map((apt) => (
-                    <ApartmentCard key={apt.id} apartment={apt} />
+                  {shown.map((apt, i) => (
+                    <ApartmentCard key={apt.id} apartment={apt} priority={i === 0} />
                   ))}
                 </div>
                 <div className="mt-10 flex flex-col items-center gap-4">

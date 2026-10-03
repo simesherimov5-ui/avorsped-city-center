@@ -26,6 +26,7 @@ export function Media({
   tone,
   label,
   priority,
+  defer,
   fit = "cover",
   focus,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
@@ -35,6 +36,8 @@ export function Media({
   tone?: "light" | "dark";
   label?: string;
   priority?: boolean;
+  /** A photo further down the page: it is fetched at low priority so it does not compete with the first photo. */
+  defer?: boolean;
   fit?: "cover" | "contain";
   /** A project's framing (zoom below 1 shows more of the photo, with a blurred copy behind it). */
   focus?: ImageFocus;
@@ -112,6 +115,7 @@ export function Media({
             sizes={sizes}
             className={contained ? "object-contain" : "object-cover"}
             priority={priority}
+            fetchPriority={defer ? "low" : undefined}
             quality={90}
           />
         </div>
@@ -124,6 +128,7 @@ export function Media({
           className={fit === "contain" ? "object-contain" : "object-cover"}
           style={framing}
           priority={priority}
+          fetchPriority={defer ? "low" : undefined}
           quality={90}
         />
       )}

@@ -12,7 +12,7 @@ import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
-export function ApartmentCard({ apartment }: { apartment: Apartment }) {
+export function ApartmentCard({ apartment, priority }: { apartment: Apartment; priority?: boolean }) {
   const building = getBuilding(apartment.buildingId);
   const { ids, toggle, isFull } = useCompare();
   const selected = ids.includes(apartment.id);
@@ -33,6 +33,7 @@ export function ApartmentCard({ apartment }: { apartment: Apartment }) {
           <Media
             image={floorPlanImageForApartment(apartment)}
             fit="contain"
+            priority={priority}
             // A sold apartment's picture is dimmed; its status label, name and price stay at full contrast.
             className={cn(
               "aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]",
