@@ -10,6 +10,11 @@ import { ApartmentFilters } from "@/components/ApartmentFilters";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { SORT_OPTIONS, isApartmentSort, sortApartments, type ApartmentSort } from "@/lib/apartment-sort";
+
+// The list shows this many at a time, then "Прикажи повеќе": 184 cards at once made the page tens of thousands of
+// pixels tall and its HTML hundreds of kilobytes.
+const PAGE_SIZE = 12;
 
 // Keeps the filter state shareable: a link with a query string reopens to
 // the same search. Only fields with a real value are written, so a fresh
@@ -30,8 +35,9 @@ function filtersFromParams(params: URLSearchParams): ApartmentFilterState {
   return state;
 }
 
-function paramsFromFilters(filters: ApartmentFilterState): string {
+function paramsFromFilters(filters: ApartmentFilterState, sort: ApartmentSort | ""): string {
   const params = new URLSearchParams();
+  if (sort) params.set("sort", sort);
   for (const key of NUM_KEYS) {
     const v = filters[key];
     if (v !== undefined) params.set(key, String(v));
@@ -52,26 +58,42 @@ export default function ApartmentsPage() {
   // boundary, which flashes blank on first load instead of showing the
   // server-rendered list immediately.
   const [filters, setFiltersState] = useState<ApartmentFilterState>({});
+  const [sort, setSortState] = useState<ApartmentSort | "">("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   useEffect(() => {
-    const fromUrl = filtersFromParams(new URLSearchParams(window.location.search));
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = filtersFromParams(params);
+    const sortFromUrl = params.get("sort");
     // eslint-disable-next-line react-hooks/set-state-in-effect -- deliberate post-mount URL sync (see comment above)
     if (Object.keys(fromUrl).length > 0) setFiltersState(fromUrl);
+    if (isApartmentSort(sortFromUrl)) setSortState(sortFromUrl);
   }, []);
 
   // router.replace (not push) so adjusting a filter never spams browser history.
   const setFilters = useCallback(
     (next: ApartmentFilterState) => {
       setFiltersState(next);
-      const qs = paramsFromFilters(next);
+      setVisible(PAGE_SIZE);
+      const qs = paramsFromFilters(next, sort);
       router.replace(qs ? `/apartments?${qs}` : "/apartments", { scroll: false });
     },
-    [router]
+    [router, sort]
+  );
+
+  const setSort = useCallback(
+    (next: ApartmentSort | "") => {
+      setSortState(next);
+      setVisible(PAGE_SIZE);
+      const qs = paramsFromFilters(filters, next);
+      router.replace(qs ? `/apartments?${qs}` : "/apartments", { scroll: false });
+    },
+    [router, filters]
   );
 
   const results = useMemo(() => {
-    return apartments.filter((a) => {
+    const matching = apartments.filter((a) => {
       if (filters.buildingId && a.buildingId !== filters.buildingId) return false;
       if (filters.floor !== undefined && a.floor !== filters.floor) return false;
       if (filters.bedrooms !== undefined && a.bedrooms !== filters.bedrooms) return false;
@@ -82,7 +104,26 @@ export default function ApartmentsPage() {
       if (filters.maxPrice !== undefined && a.price > filters.maxPrice) return false;
       return true;
     });
-  }, [filters]);
+    return sortApartments(matching, sort);
+  }, [filters, sort]);
+  const shown = results.slice(0, visible);
+
+  const sortSelect = (
+    <label className="flex items-center gap-3 text-sm text-muted">
+      <span className="shrink-0">Подреди</span>
+      <select
+        value={sort}
+        onChange={(e) => setSort(isApartmentSort(e.target.value) ? e.target.value : "")}
+        className="filter-input min-h-11 py-2 text-ink"
+      >
+        {SORT_OPTIONS.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 
   return (
     <div className="pt-24 sm:pt-28">
@@ -113,16 +154,29 @@ export default function ApartmentsPage() {
               </button>
             </div>
 
-            <div className="mt-6 hidden text-sm text-muted lg:block">
-              Прикажани се сите станови што одговараат на избраните филтри.
+            <div className="mt-4 flex items-center justify-between gap-4 lg:mt-6">
+              <div className="hidden text-sm text-muted lg:block">Станови што одговараат на избраните филтри.</div>
+              <div className="ml-auto">{sortSelect}</div>
             </div>
 
             {results.length > 0 ? (
-              <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {results.map((apt) => (
-                  <ApartmentCard key={apt.id} apartment={apt} />
-                ))}
-              </div>
+              <>
+                <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {shown.map((apt) => (
+                    <ApartmentCard key={apt.id} apartment={apt} />
+                  ))}
+                </div>
+                <div className="mt-10 flex flex-col items-center gap-4">
+                  <p role="status" aria-live="polite" className="text-sm text-muted">
+                    Прикажани се {shown.length} од {results.length} станови
+                  </p>
+                  {visible < results.length && (
+                    <Button variant="secondary" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+                      Прикажи повеќе
+                    </Button>
+                  )}
+                </div>
+              </>
             ) : (
               <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
                 <SearchX className="h-8 w-8 text-muted" strokeWidth={1.5} />
