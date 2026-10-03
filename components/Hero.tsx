@@ -18,6 +18,10 @@ const HERO_IMAGE = {
   isPlaceholder: false,
 };
 
+// The strip's numbers read first: gold, IBM Plex Mono at weight 400 and 16px (the .mono-stat class is lighter and
+// more widely spaced, so these override it).
+const STAT_NUMBER = { fontWeight: 400, fontSize: "16px", letterSpacing: "0.02em" } as const;
+
 export function Hero() {
   const reduceMotion = useReducedMotion();
   const isPhone = useMediaQuery("(max-width: 767px)");
@@ -117,6 +121,13 @@ export function Hero() {
         <div className="hero-scrim-radial absolute inset-0" />
       </motion.div>
 
+      {/* A dark scrim behind the info strip: ink fading in from nothing at the top of its 240px to 80% at the
+          bottom, above the photo and under the text, so the strip's labels always sit on the dark part. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[240px] bg-gradient-to-b from-ink/0 to-ink/80 max-sm:to-ink/90"
+      />
+
       {/* Sky text — the eyebrow and headline sit in the cloud band right
           below the nav, not stamped over the building. Kept deliberately
           compact (small top offset, tight eyebrow-to-headline gap): the
@@ -143,26 +154,26 @@ export function Hero() {
       <div className="flex-1" />
 
       {/* Company footprint — real, portfolio-wide numbers, not one project's. */}
-      <div ref={statsBarRef} className="relative border-t border-line-dark">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-5 py-4 text-center text-xs uppercase tracking-[0.14em] text-paper/65 sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[11px] sm:tracking-[0.2em]">
+      <div ref={statsBarRef} className="relative border-t border-paper/35">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-5 py-4 text-center text-[12px] font-medium uppercase tracking-[0.24em] text-paper sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[13px]">
           <span>Струмица, Северна Македонија</span>
-          <span className="flex items-center gap-3 sm:gap-5">
+          <span className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 sm:flex-nowrap sm:justify-end sm:gap-5">
             <span>
-              <span className="mono-stat text-gold">
+              <span className="mono-stat text-gold" style={STAT_NUMBER}>
                 {instant ? companyStats[0].value : revealing ? <CountUp value={companyStats[0].value} /> : null}
               </span>{" "}
               {companyStats[0].label}
             </span>
-            <span className="h-3 w-px bg-line-dark" aria-hidden />
+            <span className="h-3 w-px bg-gold/60 max-sm:hidden" aria-hidden />
             <span>
-              <span className="mono-stat text-gold">
+              <span className="mono-stat text-gold" style={STAT_NUMBER}>
                 {instant ? companyStats[1].value : revealing ? <CountUp value={companyStats[1].value} /> : null}
               </span>{" "}
               {companyStats[1].label}
             </span>
-            <span className="hidden h-3 w-px bg-line-dark sm:block" aria-hidden />
+            <span className="hidden h-3 w-px bg-gold/60 sm:block" aria-hidden />
             <span className="hidden sm:inline">
-              <span className="mono-stat text-gold">
+              <span className="mono-stat text-gold" style={STAT_NUMBER}>
                 {instant ? companyStats[2].value : revealing ? <CountUp value={companyStats[2].value} /> : null}
               </span>{" "}
               {companyStats[2].label}
