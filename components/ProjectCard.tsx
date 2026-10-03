@@ -30,6 +30,7 @@ export function ProjectCard({ project }: { project: Project }) {
           image={project.heroImage}
           label={`${project.name} — визуелизација`}
           fit={project.imageFit}
+          focus={project.imageFocus}
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>

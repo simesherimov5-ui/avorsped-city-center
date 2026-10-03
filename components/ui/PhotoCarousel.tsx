@@ -5,15 +5,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
+import type { ImageFocus } from "@/types";
 
 export function PhotoCarousel({
   photos,
   className,
   fit,
+  focus,
 }: {
   photos: { src: string; alt: string }[];
   className?: string;
   fit?: "cover" | "contain";
+  /** The project's framing of its photos (see ImageFocus). */
+  focus?: ImageFocus;
 }) {
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0]);
 
@@ -32,7 +36,13 @@ export function PhotoCarousel({
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
-          <Media image={{ ...photos[index], isPlaceholder: false }} className="h-full w-full" sizes="100vw" fit={fit} />
+          <Media
+            image={{ ...photos[index], isPlaceholder: false }}
+            className="h-full w-full"
+            sizes="100vw"
+            fit={fit}
+            focus={focus}
+          />
         </motion.div>
       </AnimatePresence>
 

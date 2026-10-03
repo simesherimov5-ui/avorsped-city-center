@@ -23,6 +23,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                 label={`${project.name} — визуелизација`}
                 tone="dark"
                 fit={project.imageFit ?? "cover"}
+                focus={project.imageFocus}
                 className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
                 sizes="100vw"
               />

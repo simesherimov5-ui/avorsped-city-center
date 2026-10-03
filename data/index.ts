@@ -171,6 +171,9 @@ export const projects: Project[] = [
     tagline: "Дојран како никогаш досега",
     distanceHighlights: ["На плажа Фук Так", "Чекор до Дојранското Езеро"],
     href: "/dojran",
+    // The frames are wider than the photos (the slider is about 3.6:1, the photos 2:1), so a plain cover crop cut
+    // off the roof. Show it a little further out; the edges are filled with a blurred copy of the photo.
+    imageFocus: { zoom: 0.87, x: 50, y: 46, aspect: 2 },
     heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
     gallery: [
       { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },

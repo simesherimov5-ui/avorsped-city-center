@@ -47,10 +47,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               photos={project.gallery}
               className={project.imageFit === "contain" ? "max-w-4xl" : undefined}
               fit={project.imageFit}
+              focus={project.imageFocus}
             />
           ) : (
             <Media
               image={project.heroImage}
+              focus={project.imageFocus}
               label={`${project.name} — насловна визуелизација`}
               className="aspect-[16/7]"
               sizes="100vw"

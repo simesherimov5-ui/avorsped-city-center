@@ -58,7 +58,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
             </div>
 
             <div className="mt-10">
-              <PhotoCarousel photos={project.gallery} />
+              <PhotoCarousel photos={project.gallery} focus={project.imageFocus} />
             </div>
           </div>
 

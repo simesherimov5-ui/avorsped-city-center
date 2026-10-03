@@ -118,6 +118,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
               image={project.heroImage}
               tone="dark"
               fit={project.imageFit ?? "cover"}
+              focus={project.imageFocus}
               className="h-full w-full !bg-transparent"
               sizes="100vw"
               priority={index === 0}
@@ -151,7 +152,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
 
       {/* Preloads the next photo so the crossfade never waits on the network. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
-        <Media image={next.heroImage} fit={next.imageFit ?? "cover"} sizes="100vw" priority />
+        <Media image={next.heroImage} fit={next.imageFit ?? "cover"} focus={next.imageFocus} sizes="100vw" priority />
       </div>
 
       <button

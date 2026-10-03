@@ -152,6 +152,18 @@ export interface CompanyMilestone {
   image?: { src: string; alt: string };
 }
 
+/**
+ * How a project's photos sit in their frames. zoom 1 fills the frame (the default); below 1 shows more of the
+ * photo (the picture sits inside the frame with a blurred copy behind it); x and y are the focal point in %.
+ */
+export interface ImageFocus {
+  zoom: number;
+  x: number;
+  y: number;
+  /** Width ÷ height of the project's photos (3200 × 1600 is 2). Lets the picture be sized from the frame alone. */
+  aspect?: number;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -166,6 +178,8 @@ export interface Project {
   specifications: { label: string; value: string }[];
   /** How gallery/hero images should fit their frame — "contain" for near-square source photos that would otherwise be aggressively cropped. */
   imageFit?: "cover" | "contain";
+  /** Per-project framing of every photo of the project (see ImageFocus). Projects without it keep zoom 1. */
+  imageFocus?: ImageFocus;
   typeLabel?: string;
   statusLabelOverride?: string;
   tagline?: string;
