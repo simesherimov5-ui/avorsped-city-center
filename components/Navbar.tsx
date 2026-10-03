@@ -50,7 +50,7 @@ export function Navbar() {
   const activeHref = tabFor(transition?.target ?? pathname);
 
   const isHome = pathname === "/";
-  // The all-black pages (За нас, Контакт) get a black bar with a hairline, and an outline consultation button.
+  // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
   const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
   // at. On the Контакт page itself it scrolls to the booking form and focuses its first step instead.
@@ -190,8 +190,9 @@ export function Navbar() {
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(
             "border-b transition-colors duration-500",
+            // The black pages only swap the bar's fill for pure black; the hairline and blur stay the same.
             black
-              ? "border-paper/12 bg-black"
+              ? "border-on-chrome/10 bg-black backdrop-blur-md"
               : solid
                 ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md"
                 : "border-transparent bg-transparent"
@@ -236,20 +237,10 @@ export function Navbar() {
             </div>
 
             <div className="nav-link hidden items-center gap-4 lg:flex">
-              {black ? (
-                <Link
-                  href={consultHref}
-                  onClick={consultClick}
-                  onPointerDown={spawnClickPulse}
-                  className="bk-btn relative isolate"
-                >
-                  {t("nav.consultation")}
-                </Link>
-              ) : (
-                <Button href={consultHref} onClick={consultClick} variant="primary" size="sm">
-                  {t("nav.consultation")}
-                </Button>
-              )}
+              {/* One button, one style, on every page (the black pages only change the bar's background). */}
+              <Button href={consultHref} onClick={consultClick} variant="primary" size="sm">
+                {t("nav.consultation")}
+              </Button>
             </div>
 
             <div className="flex items-center lg:hidden">
