@@ -42,7 +42,7 @@ export function CompareBar() {
             <Button variant="ghost" size="sm" onClick={clear} className="!px-3">
               Исчисти
             </Button>
-            <Button href="/compare" variant="primary" size="sm">
+            <Button href={`/compare?ids=${encodeURIComponent(ids.join(","))}`} variant="primary" size="sm">
               Спореди
             </Button>
           </div>

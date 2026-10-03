@@ -1,8 +1,11 @@
 "use client";
 
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
+import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
+import { idsToParam, parseIds, writeStored } from "@/lib/compare-store";
 import { getApartment, getBuilding } from "@/data";
 import { formatArea, formatPrice, orientationLabel, typeLabel } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -22,9 +25,33 @@ const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment
   { label: "Цена", get: (a) => formatPrice(a.price) },
 ];
 
-export default function ComparePage() {
-  const { ids, clear } = useCompare();
+/**
+ * The comparison table. Its list comes from the address (/compare?ids=a,b,c) when it has one, so a link can be
+ * shared, and from the saved selection otherwise, so a reload keeps it. The two are kept in step: opening a shared
+ * link makes it the saved selection, and a saved selection puts itself into the address.
+ */
+export function CompareView() {
+  const { ids: stored, clear } = useCompare();
+  const fromAddress = parseIds(useSearchParams().get("ids"));
+  const ids = fromAddress.length > 0 ? fromAddress : stored;
   const selected = ids.map(getApartment).filter((a): a is NonNullable<typeof a> => Boolean(a));
+  const addressKey = idsToParam(fromAddress);
+  const storedKey = idsToParam(stored);
+
+  // Opening a shared link makes it the saved selection (only on arrival: afterwards the saved selection leads, or
+  // clearing it would be undone by the address that has not caught up yet). A saved selection puts itself into the
+  // address. writeStored also updates the address while this page is open.
+  const arrived = useRef(false);
+  useEffect(() => {
+    if (!arrived.current) {
+      arrived.current = true;
+      if (addressKey && addressKey !== storedKey) {
+        writeStored(parseIds(addressKey));
+        return;
+      }
+    }
+    if (!addressKey && storedKey) writeStored(parseIds(storedKey));
+  }, [addressKey, storedKey]);
 
   return (
     <div className="pt-24 sm:pt-28">
