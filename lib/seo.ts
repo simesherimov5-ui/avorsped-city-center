@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { truncate } from "@/lib/truncate";
 
 export const SITE_NAME = "Јавор Шпед";
 
@@ -14,13 +15,8 @@ export function siteUrl(): string {
   return "http://localhost:3000";
 }
 
-/** Cuts a description to about `max` characters at a word boundary (search results show roughly 155–160). */
-export function truncate(text: string, max = 158): string {
-  const clean = text.replace(/\s+/g, " ").trim();
-  if (clean.length <= max) return clean;
-  const cut = clean.slice(0, max - 1);
-  return cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 30)).replace(/[\s,;:.—-]+$/, "") + "…";
-}
+// Lives in its own file so a client component can use it without pulling in the rest of this one.
+export { truncate };
 
 /**
  * The metadata every page needs, in one place: its own title and description, a canonical link, and matching Open

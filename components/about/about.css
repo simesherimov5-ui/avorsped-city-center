@@ -332,36 +332,341 @@
   }
 }
 
-/* A6 — the quiet company line */
-.ab-inline {
+/* A6 — the companies as a circle */
+.co {
+  container: co / inline-size;
+  text-align: center;
+}
+.co-wrap {
+  position: relative;
+  max-width: 940px;
+  margin: 10px auto 0;
+}
+.co-stage {
+  container-type: inline-size;
+  position: relative;
+  height: 620px;
+}
+/* One plane holds the ring, the points and the centre. --r is the ring's radius: 230px, or 43% of the stage on
+   phones and tablets. The points are placed from their number (--k) and the company count (--n) with CSS
+   trigonometry, so any number of companies gives an even ring that starts at the top and runs clockwise. */
+.co-plane {
+  position: absolute;
+  inset: 0;
+  --r: 230px;
+}
+.co-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  transform: translate(-50%, -50%) rotate(-90deg);
+  overflow: visible;
+}
+/* The circles are sized from the svg itself in percent (no viewBox, so one unit is one pixel and a 1px line stays 1px). */
+.co-ring circle,
+.co-arc circle {
+  fill: none;
+  stroke-width: 1px;
+}
+.co-ring circle {
+  stroke: color-mix(in srgb, var(--color-gold) 32%, transparent);
+}
+/* The inner ring: 78% of the outer one, dashed, one very slow turn in 120s. */
+.co-dashed {
+  position: absolute;
+  left: calc(50% - var(--r) * 0.78);
+  top: calc(50% - var(--r) * 0.78);
+  width: calc(var(--r) * 1.56);
+  height: calc(var(--r) * 1.56);
+  border: 1px dashed color-mix(in srgb, var(--color-gold) 20%, transparent);
+  border-radius: 50%;
+  animation: co-spin 120s linear infinite;
+}
+@keyframes co-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The points: a 44px button around an 11px dot (a numbered 34px circle on phones). */
+.co-n {
+  --a: calc(-90deg + var(--k) * 360deg / var(--n));
+  position: absolute;
+  left: calc(50% + var(--r) * cos(var(--a)));
+  top: calc(50% + var(--r) * sin(var(--a)));
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  gap: 16px 0;
-  margin: 24px 0 0;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
   padding: 0;
-  list-style: none;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  --arc: 26px;
 }
-.ab-inline li {
-  padding: 0 22px;
-  border-left: 1px solid var(--gold-line);
+.co-n:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+.co-dot {
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--color-gold);
+  border-radius: 50%;
+  background: var(--black);
+  transition:
+    background 0.3s,
+    box-shadow 0.4s,
+    transform 0.4s;
+}
+.co-n:hover .co-dot {
+  transform: scale(1.3);
+}
+.co-n.is-on .co-dot {
+  background: var(--color-gold);
+}
+.co-ix {
+  display: none;
+}
+.co-lb {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 11px;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--mute);
+  color: color-mix(in srgb, var(--color-paper) 66%, transparent);
+  transition: color 0.3s;
 }
-.ab-inline li:first-child {
-  border-left: 0;
+.co-n[data-side="r"] .co-lb {
+  left: 42px;
+}
+.co-n[data-side="l"] .co-lb {
+  right: 42px;
+}
+.co-n[data-side="t"] .co-lb {
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.co-n[data-side="b"] .co-lb {
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.co-n:hover .co-lb {
+  color: var(--color-paper);
+}
+.co-n.is-on .co-lb {
   color: var(--color-gold);
 }
-@media (max-width: 560px) {
-  .ab-inline {
-    flex-direction: column;
-    align-items: center;
+/* The timer: a 1px gold arc drawn around the selected point, starting at the top of it. */
+.co-arc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--arc);
+  height: var(--arc);
+  margin: calc(var(--arc) / -2) 0 0 calc(var(--arc) / -2);
+  transform: rotate(-90deg);
+  overflow: visible;
+  pointer-events: none;
+}
+.co-arc circle {
+  stroke: var(--color-gold);
+}
+
+/* The centre */
+.co-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 320px;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.co-in,
+.co-below {
+  transition:
+    opacity 0.22s,
+    transform 0.22s;
+}
+.co-in.is-out,
+.co-below.is-out {
+  opacity: 0;
+  transform: scale(0.97);
+}
+.co-k {
+  color: var(--color-gold);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+}
+.co-name {
+  margin: 10px 0 12px;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.15;
+}
+.co-me {
+  display: inline-block;
+  margin: -2px 0 12px;
+  padding: 3px 8px;
+  border: 1px solid var(--gold-line);
+  color: var(--color-gold);
+  font:
+    500 9.5px var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.co-desc {
+  margin: 0 0 16px;
+  color: color-mix(in srgb, var(--color-paper) 66%, transparent);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.co-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-gold);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.co-more svg {
+  transition: transform 0.3s;
+}
+.co-more:hover svg {
+  transform: translateX(5px);
+}
+.co-more:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+/* Pause / play: bottom-right of the stage (under the ring on phones). */
+.co-toggle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--color-paper) 25%, transparent);
+  border-radius: 50%;
+  background: none;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+.co-toggle:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+.co-toggle:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.co-below {
+  display: none;
+}
+
+/* Phones and tablets: the section's own content is under 880px wide. */
+@container co (max-width: 879.98px) {
+  .co-wrap {
+    max-width: 440px;
   }
-  .ab-inline li {
-    padding: 0;
-    border-left: 0;
+  .co-stage {
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .co-plane {
+    --r: 43cqw;
+  }
+  .co-n {
+    --arc: 42px;
+  }
+  .co-dot,
+  .co-lb {
+    display: none;
+  }
+  .co-ix {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--gold-line);
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--mute);
+    font-size: 11px;
+    transition:
+      background 0.3s,
+      border-color 0.3s,
+      color 0.3s;
+  }
+  .co-n.is-on .co-ix {
+    border-color: var(--color-gold);
+    background: var(--color-gold);
+    color: var(--black);
+    font-weight: 400;
+  }
+  .co-center {
+    width: 58%;
+  }
+  .co-text {
+    display: none;
+  }
+  .co-name {
+    margin-bottom: 0;
+  }
+  .co-me {
+    margin: 10px 0 0;
+  }
+  .co-below {
+    display: block;
+    max-width: 46ch;
+    margin: 22px auto 0;
+  }
+  .co-below .co-desc {
+    margin-bottom: 18px;
+  }
+  .co-toggle {
+    position: static;
+    margin: 14px auto 0;
+  }
+}
+
+/* Reduced motion: no timer, no arc, no button, no spinning: the selected point just has a soft halo. */
+@media (prefers-reduced-motion: reduce) {
+  .co-arc,
+  .co-toggle {
+    display: none;
+  }
+  .co-dashed {
+    animation: none;
+  }
+  .co-n.is-on .co-dot {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-gold) 16%, transparent);
+  }
+  .co-in,
+  .co-below {
+    transition: none;
   }
 }
 
