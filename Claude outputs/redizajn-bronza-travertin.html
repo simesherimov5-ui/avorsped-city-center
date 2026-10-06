@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Редизајн — Бронза и Травертин (референца)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───────── The six colours. Nothing else: every other shade is one of these at an opacity. ───────── */
+:root{
+  --onyx:#14110F;       /* Оникс — main dark background */
+  --espresso:#221C17;   /* Еспресо — cards and surfaces on dark */
+  --travertine:#F4EFE7; /* Травертин — light background, text on dark */
+  --limestone:#E6DCCD;  /* Варовник — surfaces on light, form fields */
+  --bronze:#6D533E;     /* Бронза — accent and labels ON LIGHT only (6.2:1 on travertine) */
+  --copper:#DDB28E;     /* Светол бакар — accent ON DARK only (9.7:1 on onyx) */
+
+  --line-d:rgba(244,239,231,.12);  /* hairline on dark */
+  --line-l:rgba(20,17,15,.12);     /* hairline on light */
+  --mute-d:rgba(244,239,231,.64);  /* secondary text on dark (6.9:1) */
+  --mute-l:rgba(20,17,15,.68);     /* secondary text on light */
+  --serif:'Playfair Display','Times New Roman',serif;
+  --sans:'Montserrat','Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{font-family:var(--sans)}
+body{margin:0;background:var(--onyx);color:var(--travertine);font-weight:300;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0}
+.wrap{max-width:1248px;margin:0 auto;padding:0 24px}
+section{padding:72px 0;border-top:1px solid var(--line-d)}
+section.light{background:var(--travertine);color:var(--onyx);border-top:0}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--copper)}
+.light .eyebrow{color:var(--bronze)}
+.h1,.h2,.h3{font-family:var(--serif);font-weight:400}
+.h1{font-size:clamp(40px,7.2vw,104px);line-height:1;letter-spacing:-.015em}
+.h2{font-size:clamp(32px,3.9vw,56px);line-height:1.1}
+.h3{font-size:clamp(24px,2.1vw,30px);line-height:1.2;font-weight:500}
+.h1 em,.h2 em{font-style:italic;color:var(--copper)}
+.light .h1 em,.light .h2 em{color:var(--bronze)}
+.lead{color:var(--mute-d);max-width:640px;margin:20px 0 0}
+.light .lead{color:var(--mute-l)}
+.small{font-size:13px;font-weight:400;line-height:1.5;letter-spacing:.04em;color:var(--mute-d)}
+.light .small{color:var(--mute-l)}
+.note{font-size:13px;font-weight:400;line-height:1.6;color:var(--mute-d);margin-top:18px;max-width:720px}
+.light .note{color:var(--mute-l)}
+.head{display:flex;flex-direction:column;gap:14px;margin-bottom:40px}
+.grid{display:grid;gap:24px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.stage{background:var(--onyx);border:1px solid var(--line-d);min-height:300px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:24px}
+.card{background:var(--espresso)}
+.card .cap{padding:22px 26px 26px}
+.replay{margin-top:14px;background:none;border:0;padding:12px 0;min-height:44px;font:600 11px var(--sans);letter-spacing:.24em;color:var(--copper);cursor:pointer;text-transform:uppercase}
+.replay:focus-visible,.floor:focus-visible,.fbtn:focus-visible,.unit:focus-visible,.hcard:focus-visible{outline:2px solid var(--copper);outline-offset:3px}
+.light .fbtn:focus-visible{outline-color:var(--bronze)}
+
+/* ───────── 1. Palette ───────── */
+.sw{display:flex;flex-direction:column;gap:12px}
+.sw i{display:block;height:130px;border:1px solid var(--line-d)}
+.sw b{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.2}
+.sw code{font:400 13px var(--sans);letter-spacing:.12em;color:var(--copper)}
+.pairs{margin-top:40px;border-top:1px solid var(--line-d)}
+.pairs div{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:14px 0;border-bottom:1px solid var(--line-d);font-size:14px;font-weight:400}
+.pairs div span:first-child{color:var(--copper);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding-top:3px}
+
+/* ───────── 2. Type scale ───────── */
+.type{display:grid;grid-template-columns:160px 1fr;gap:8px 32px;align-items:baseline}
+.type>span{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--mute-d);padding:14px 0}
+.type>div{padding:14px 0;border-bottom:1px solid var(--line-d)}
+.type .btntxt{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+
+/* ───────── 3. Fill button ("копче што се полни") ───────── */
+.fbtn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:18px;padding:22px 36px;min-height:44px;border:1px solid var(--copper);color:var(--copper);background:none;text-decoration:none;font:600 13px var(--sans);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.fbtn .ffill{position:absolute;inset:0;background:var(--copper);transform:scaleX(0);transform-origin:left center;transition:transform .7s cubic-bezier(.77,0,.18,1)}
+.fbtn .ftxt,.fbtn .farr{position:relative;transition:color .5s ease .15s,transform .7s var(--ease)}
+.fbtn .farr{width:30px;height:30px;border-radius:50%;border:1px solid currentColor;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fbtn:hover .ffill,.fbtn:focus-visible .ffill,.fbtn:active .ffill{transform:scaleX(1)}
+.fbtn:hover .ftxt,.fbtn:hover .farr,.fbtn:focus-visible .ftxt,.fbtn:focus-visible .farr,.fbtn:active .ftxt,.fbtn:active .farr{color:var(--onyx)}
+.fbtn:hover .farr,.fbtn:focus-visible .farr,.fbtn:active .farr{transform:translateX(6px) rotate(-45deg)}
+/* on light: bronze border and text, bronze fill, travertine text */
+.light .fbtn{border-color:var(--bronze);color:var(--bronze)}
+.light .fbtn .ffill{background:var(--bronze)}
+.light .fbtn:hover .ftxt,.light .fbtn:hover .farr,.light .fbtn:focus-visible .ftxt,.light .fbtn:focus-visible .farr,.light .fbtn:active .ftxt,.light .fbtn:active .farr{color:var(--travertine)}
+
+/* ───────── 4. Floor picker ("избор на стан по кат") ───────── */
+.picker{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);border:1px solid var(--line-d);background:var(--espresso)}
+.facade{background:var(--onyx);padding:48px 32px;display:flex;flex-direction:column;align-items:center}
+.cap-top{width:120px;height:28px;border:1px solid var(--line-d);border-bottom:0}
+.floors{width:min(360px,100%);display:flex;flex-direction:column;gap:6px;padding:10px;border:1px solid var(--line-d)}
+.floor{height:46px;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border:1px solid var(--line-d);background:color-mix(in srgb,var(--espresso) 45%,var(--onyx));color:var(--mute-d);font:600 11px var(--sans);letter-spacing:.3em;cursor:pointer;transition:background .4s ease,color .4s ease,border-color .4s ease}
+.floor .wins{display:flex;gap:10px}
+.floor .wins i{width:26px;height:14px;border:1px solid var(--line-d);display:block;transition:border-color .4s ease}
+.floor[aria-pressed="true"]{background:var(--copper);border-color:var(--copper);color:var(--onyx)}
+.floor[aria-pressed="true"] .wins i{border-color:var(--onyx)}
+.base{width:min(440px,100%);height:10px;background:var(--line-d)}
+.panel{padding:48px 44px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.panel .title{font-family:var(--serif);font-size:clamp(44px,4.6vw,64px);line-height:1}
+.units{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.unit{border:1px solid var(--line-d);padding:16px;display:flex;flex-direction:column;gap:6px;color:inherit;text-decoration:none;transition:border-color .4s ease}
+.unit:hover{border-color:var(--copper)}
+.unit b{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2}
+.unit .st{font-size:10px;font-weight:600;letter-spacing:.24em;display:flex;align-items:center;gap:8px}
+.unit .st::before{content:"";width:7px;height:7px;border-radius:50%;flex:none}
+.st.free{color:var(--copper)}            .st.free::before{background:var(--copper)}
+.st.reserved{color:var(--travertine)}    .st.reserved::before{border:1px solid var(--travertine)}
+.st.sold{color:rgba(244,239,231,.55)}    .st.sold::before{width:9px;height:1px;border-radius:0;background:currentColor}
+
+/* ───────── 5. Logo builds ("логото се гради") — plays ONCE on the site; loops here only as a demo ───────── */
+.slat{opacity:0;animation:slatIn 6s var(--ease) infinite}
+@keyframes slatIn{0%{opacity:0;transform:translateX(-10px)}10%{opacity:1;transform:none}82%{opacity:1}94%,100%{opacity:0}}
+.fadeword{opacity:0;animation:fadeWord 6s ease infinite;font-size:12px;font-weight:600;letter-spacing:.5em;padding-left:.5em;color:var(--travertine)}
+@keyframes fadeWord{0%,22%{opacity:0;letter-spacing:.2em}36%,82%{opacity:1;letter-spacing:.5em}94%,100%{opacity:0}}
+
+/* ───────── 6. Year counter ("бројач на години") ───────── */
+.years{display:flex;flex-direction:column;align-items:center;gap:14px;width:90%}
+.years .n{font-family:var(--serif);font-size:120px;line-height:1;font-variant-numeric:tabular-nums}
+.years .rule{width:100%;height:1px;background:var(--line-d);position:relative}
+.years .rule i{position:absolute;left:0;top:0;height:1px;width:0;background:var(--copper)}
+.years .lbl{font-size:11px;font-weight:600;letter-spacing:.32em;padding-left:.32em;color:var(--copper);text-align:center}
+
+/* ───────── 7. Metallic sheen ("метален сјај") — one place on the whole site ───────── */
+.sheen{white-space:nowrap;font-size:clamp(20px,2.1vw,30px);font-weight:600;letter-spacing:.32em;padding-left:.32em;background:linear-gradient(110deg,var(--bronze) 0%,var(--copper) 38%,var(--travertine) 50%,var(--copper) 62%,var(--bronze) 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 4.5s ease-in-out infinite}
+@keyframes sheen{0%{background-position:100% 0}60%,100%{background-position:0% 0}}
+
+/* ───────── 8. Location map ("локација на мапа") ───────── */
+.map{position:absolute;inset:0;width:100%;height:100%}
+.route{stroke-dasharray:1;stroke-dashoffset:1;animation:route 7s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes route{0%,12%{stroke-dashoffset:1;opacity:1}38%,88%{stroke-dashoffset:0;opacity:1}98%,100%{opacity:0}}
+.poi{opacity:0;animation:poi 7s ease infinite}
+@keyframes poi{0%,20%{opacity:0}34%,88%{opacity:1}98%,100%{opacity:0}}
+.pin{animation:pin 7s var(--ease) infinite}
+@keyframes pin{0%{transform:translateY(-60px);opacity:0}12%,88%{transform:none;opacity:1}98%,100%{opacity:0}}
+.ripple{transform-origin:200px 140px;transform-box:view-box;animation:rip 3s ease-out infinite}
+.ripple.r2{animation-delay:1.5s}
+@keyframes rip{0%{transform:scale(1);opacity:.8}100%{transform:scale(5);opacity:0}}
+
+/* ───────── 9. Project card on hover ───────── */
+.hcard{display:flex;flex-direction:column;gap:14px;width:78%;text-decoration:none;color:var(--travertine)}
+.hcard .frame{height:170px;overflow:hidden;position:relative;background:var(--espresso)}
+.hcard .himg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.24em;color:var(--mute-d);transition:transform 1.4s var(--ease)}
+.hcard:hover .himg{transform:scale(1.08)}
+.hcard .row{display:flex;justify-content:space-between;align-items:baseline}
+.hcard .row span:first-child{font-family:var(--serif);font-size:24px}
+.hcard .harrow{color:var(--copper);font-size:18px;transition:transform .8s var(--ease)}
+.hcard:hover .harrow{transform:translateX(8px)}
+.hcard .hr{height:1px;background:var(--line-d);position:relative}
+.hcard .hr i{position:absolute;left:0;top:0;height:1px;width:0;background:var(--copper);transition:width 1s var(--ease)}
+.hcard:hover .hr i{width:100%}
+
+@media (max-width:880px){
+  section{padding:56px 0}
+  .g2,.g3{grid-template-columns:1fr}
+  .g6{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .picker{grid-template-columns:1fr}
+  .facade{padding:32px 16px}
+  .panel{padding:32px 20px}
+  .units{grid-template-columns:1fr}
+  .pairs div,.type{grid-template-columns:1fr}
+  .type>span{padding-bottom:0}
+  .fbtn{padding:18px 22px;gap:12px;letter-spacing:.14em;font-size:12px}
+  .years .n{font-size:88px}
+  .hcard{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .slat,.fadeword,.sheen,.route,.poi,.pin,.ripple{animation:none;opacity:1;transform:none;stroke-dashoffset:0}
+  .ripple{opacity:0}
+  .fbtn .ffill,.fbtn .ftxt,.fbtn .farr,.hcard .himg,.hcard .harrow,.hcard .hr i{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap" style="padding-top:72px;padding-bottom:56px">
+  <div class="eyebrow">Javor Sped Holding · Редизајн · Референца</div>
+  <h1 class="h1" style="margin-top:20px">Бронза <em>&amp;</em> Травертин</h1>
+  <p class="lead">Шест бои, два фонта и шест елементи. Сè на оваа страница е изработено само со избраните шест бои — другите нијанси се истите бои со проѕирност.</p>
+</header>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">01 · Бои</div><h2 class="h2">Шесте бои</h2></div>
+  <div class="grid g6">
+    <div class="sw"><i style="background:#14110F"></i><b>Оникс</b><code>#14110F</code><span class="small">Главна темна позадина.</span></div>
+    <div class="sw"><i style="background:#221C17"></i><b>Еспресо</b><code>#221C17</code><span class="small">Картички и површини врз темно.</span></div>
+    <div class="sw"><i style="background:#F4EFE7"></i><b>Травертин</b><code>#F4EFE7</code><span class="small">Светла позадина. Текст врз темно.</span></div>
+    <div class="sw"><i style="background:#E6DCCD"></i><b>Варовник</b><code>#E6DCCD</code><span class="small">Површини и полиња врз светло.</span></div>
+    <div class="sw"><i style="background:#6D533E"></i><b>Бронза</b><code>#6D533E</code><span class="small">Акцент и етикети врз светло.</span></div>
+    <div class="sw"><i style="background:#DDB28E"></i><b>Светол бакар</b><code>#DDB28E</code><span class="small">Акцент врз темно: копчиња, линкови, бројки.</span></div>
+  </div>
+  <div class="pairs">
+    <div><span>Врз Оникс / Еспресо</span><span>Текст: Травертин. Спореден текст: Травертин 64%. Акцент: Светол бакар. Линии: Травертин 12%.</span></div>
+    <div><span>Врз Травертин / Варовник</span><span>Текст: Оникс. Спореден текст: Оникс 68%. Акцент: Бронза. Линии: Оникс 12%.</span></div>
+    <div><span>Врз Светол бакар</span><span>Текст: Оникс.</span></div>
+    <div><span>Врз Бронза</span><span>Текст: Травертин.</span></div>
+    <div><span>Никогаш</span><span>Светол бакар како текст врз светло (1.7:1). Бронза како текст врз темно (2.7:1).</span></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">02 · Фонтови</div><h2 class="h2">Playfair Display <em>&amp;</em> Montserrat</h2></div>
+  <div class="type">
+    <span>H1 · херо</span><div class="h1" style="font-size:clamp(40px,5.6vw,80px)">Градиме адреси <em>што остануваат.</em></div>
+    <span>H2</span><div class="h2">Избрани проекти</div>
+    <span>H3</span><div class="h3" style="font-family:var(--serif)">Стан А-12, трет кат</div>
+    <span>Етикета</span><div class="eyebrow">Проекти · Станови · 360°</div>
+    <span>Текст</span><div>Прошетајте низ становите и закажете средба.</div>
+    <span>Копче</span><div class="btntxt">Закажи консултација</div>
+    <span>Мал текст</span><div class="small">Локација · Година · Статус</div>
+  </div>
+  <p class="note">H1: Playfair 400, 64–104px на десктоп, проред 1.0, размак −0.015em. Акцент: Playfair курзив, еден збор или фраза по наслов, во бојата за акцент. H2: Playfair 400, 40–56px, 1.1. H3: Playfair 500, 26–30px, 1.2. Етикета: Montserrat 600, 12px, ГОЛЕМИ, 0.32em. Текст: Montserrat 300, 16–18px, 1.7. Копче: Montserrat 600, 13px, ГОЛЕМИ, 0.2em. Мал текст: Montserrat 400, 12–13px, 1.5.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">03 · Копче што се полни</div><h2 class="h2">Главното копче</h2></div>
+  <div class="grid g2">
+    <div class="stage"><a href="#" class="fbtn" onclick="return false"><span class="ffill"></span><span class="ftxt">Закажи консултација</span><span class="farr" aria-hidden="true">→</span></a></div>
+    <div class="stage light" style="background:var(--travertine);border-color:var(--line-l)"><a href="#" class="fbtn" onclick="return false"><span class="ffill"></span><span class="ftxt">Закажи консултација</span><span class="farr" aria-hidden="true">→</span></a></div>
+  </div>
+  <p class="note">Бојата го полни копчето од лево (scaleX 0→1, 0.7s, cubic-bezier(.77,0,.18,1)). Текстот ја менува бојата (0.5s, доцнење 0.15s). Стрелката се поместува 6px десно и се врти −45°. Истото се случува и на фокус од тастатура и на допир.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">04 · Избор на стан по кат</div><h2 class="h2">Зградата како мени</h2></div>
+  <div class="picker">
+    <div class="facade">
+      <div class="cap-top"></div>
+      <div class="floors" id="floors" role="group" aria-label="Катови"></div>
+      <div class="base"></div>
+    </div>
+    <div class="panel" aria-live="polite">
+      <div class="eyebrow">Избор на стан по кат</div>
+      <div class="title" id="floorTitle">Кат 4</div>
+      <div class="units" id="units"></div>
+      <div class="small" style="letter-spacing:0;font-size:14px;line-height:1.7">Помини или кликни на кат од зградата. Десно се становите на тој кат; секоја картичка води до страницата на станот.</div>
+    </div>
+  </div>
+  <p class="note">Кат: 46px висок, размак 6px, Montserrat 600 11px, 0.3em. Избран кат: позадина Светол бакар, текст Оникс. Еден прозорец (26×14px) за секој стан на катот. Статус: Слободен = Светол бакар со полна точка; Резервиран = Травертин со празен круг; Продаден = Травертин 55% со цртичка. Статусот никогаш не се разликува само по боја.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">05 – 07 · Логото, бројачот и сјајот</div><h2 class="h2">Три тивки <em>анимации</em></h2></div>
+  <div class="grid g3">
+    <div class="card">
+      <div class="stage"><div style="display:flex;flex-direction:column;align-items:center;gap:14px" id="logoDemo">
+        <svg viewBox="50 60 170 240" style="width:150px;height:auto" fill="none" stroke="#DDB28E" stroke-width="5" id="logoSvg" role="img" aria-label="Javor Sped"></svg>
+        <div class="fadeword">JAVOR SPED</div>
+      </div></div>
+      <div class="cap"><div class="h3">Логото се гради</div><p class="small" style="margin:10px 0 0;letter-spacing:0">Ламелите на зградата се редат една по една, па се појавува името. Вкупно околу 2 секунди. На сајтот се пушта еднаш; овде се повторува само за приказ.</p></div>
+    </div>
+    <div class="card">
+      <div class="stage"><div class="years"><div class="n" id="yearsN">0</div><div class="rule"><i id="yearsBar"></i></div><div class="lbl">ГОДИНИ ГРАДИМЕ · ОД 1994</div></div></div>
+      <div class="cap"><div class="h3">Бројач на години</div><p class="small" style="margin:10px 0 0;letter-spacing:0">Бројката расте од 0 до (тековна година − 1994) за 1.6s и застанува, а линијата се полни заедно со неа.</p><button class="replay" type="button" id="yearsReplay">Пушти пак</button></div>
+    </div>
+    <div class="card">
+      <div class="stage"><div class="sheen">JAVOR SPED</div></div>
+      <div class="cap"><div class="h3">Метален сјај</div><p class="small" style="margin:10px 0 0;letter-spacing:0">Мек сјај што поминува преку името, еднаш на секои 4.5s. Само на едно место на целиот сајт.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><div class="eyebrow">08 – 09 · Мапа и картичка</div><h2 class="h2">Локација <em>на мапа</em></h2></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="stage" style="padding:0;aspect-ratio:4/3;min-height:0"><svg class="map" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Шематска мапа на локацијата">
+        <g stroke="rgba(244,239,231,.07)" stroke-width="1" id="mapGrid"></g>
+        <path d="M0 220 C 90 190, 140 260, 230 230 S 360 170, 400 200" stroke="rgba(244,239,231,.12)" stroke-width="14" fill="none"/>
+        <path class="route" pathLength="1" d="M200 140 L200 62 L296 62" stroke="#DDB28E" stroke-width="1.5" fill="none" style="animation-delay:.6s"/>
+        <path class="route" pathLength="1" d="M200 140 L108 140 L108 214" stroke="#DDB28E" stroke-width="1.5" fill="none" style="animation-delay:.9s"/>
+        <path class="route" pathLength="1" d="M200 140 L338 140 L338 254" stroke="#DDB28E" stroke-width="1.5" fill="none" style="animation-delay:1.2s"/>
+        <g class="poi" style="animation-delay:1.4s"><circle cx="296" cy="62" r="4" fill="#DDB28E"/><text x="306" y="58" fill="rgba(244,239,231,.86)" font-family="Montserrat, Arial" font-size="9" letter-spacing="1">[МЕСТО]</text><text x="306" y="70" fill="rgba(244,239,231,.64)" font-family="Montserrat, Arial" font-size="8">[ ] мин</text></g>
+        <g class="poi" style="animation-delay:1.7s"><circle cx="108" cy="214" r="4" fill="#DDB28E"/><text x="118" y="210" fill="rgba(244,239,231,.86)" font-family="Montserrat, Arial" font-size="9" letter-spacing="1">[МЕСТО]</text><text x="118" y="222" fill="rgba(244,239,231,.64)" font-family="Montserrat, Arial" font-size="8">[ ] мин</text></g>
+        <g class="poi" style="animation-delay:2s"><circle cx="338" cy="254" r="4" fill="#DDB28E"/><text x="270" y="282" fill="rgba(244,239,231,.86)" font-family="Montserrat, Arial" font-size="9" letter-spacing="1">[МЕСТО] · [ ] мин</text></g>
+        <circle class="ripple" cx="200" cy="140" r="10" fill="none" stroke="#DDB28E" stroke-width="1"/>
+        <circle class="ripple r2" cx="200" cy="140" r="10" fill="none" stroke="#DDB28E" stroke-width="1"/>
+        <g class="pin"><path d="M200 140 c -12 -16 -14 -22 -14 -28 a 14 14 0 0 1 28 0 c 0 6 -2 12 -14 28 z" fill="#DDB28E"/><circle cx="200" cy="112" r="5" fill="#14110F"/></g>
+      </svg></div>
+      <div class="cap"><div class="h3">Локација на мапа</div><p class="small" style="margin:10px 0 0;letter-spacing:0">Иглата паѓа, бранови се шират, а линии водат до важни места со минути пешачење. Местата и минутите се празни додека не ги испрати клиентот. На сајтот се пушта еднаш кога ќе се појави на екранот; брановите продолжуваат.</p></div>
+    </div>
+    <div class="card">
+      <div class="stage" style="aspect-ratio:4/3;min-height:0"><a href="#" class="hcard" onclick="return false">
+        <div class="frame"><div class="himg">[ ФОТОГРАФИЈА ]</div></div>
+        <div class="row"><span>[Име на проект]</span><span class="harrow" aria-hidden="true">→</span></div>
+        <div class="hr"><i></i></div>
+      </a></div>
+      <div class="cap"><div class="h3">Картичка на допир</div><p class="small" style="margin:10px 0 0;letter-spacing:0">Сликата полека се зумира (1.08, 1.4s), линијата се шири (1s), стрелката се поместува 8px (0.8s).</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="light"><div class="wrap">
+  <div class="head"><div class="eyebrow">Светла секција</div><h2 class="h2">Истиот систем <em>врз Травертин</em></h2></div>
+  <p class="lead" style="margin-top:0">Врз светло акцентот е Бронза, текстот е Оникс, а површините се Варовник.</p>
+  <div class="grid g3" style="margin-top:36px">
+    <div style="background:var(--limestone);padding:26px"><div class="eyebrow">Стан</div><div class="h3" style="margin-top:10px">А-42</div><div class="small" style="margin-top:6px">[m²] · [соби] · кат 4</div></div>
+    <div style="background:var(--limestone);padding:26px"><div class="eyebrow">Стан</div><div class="h3" style="margin-top:10px">А-43</div><div class="small" style="margin-top:6px">[m²] · [соби] · кат 4</div></div>
+    <div style="display:flex;align-items:center;justify-content:center"><a href="#" class="fbtn" onclick="return false"><span class="ffill"></span><span class="ftxt">Погледни стан</span><span class="farr" aria-hidden="true">→</span></a></div>
+  </div>
+</div></section>
+
+<script>
+// 04 · floor picker — rows come from data, not from a fixed list of eight
+(function(){
+  var FLOORS=[8,7,6,5,4,3,2,1], cur=4;
+  var ST=[['СЛОБОДЕН','free'],['РЕЗЕРВИРАН','reserved'],['ПРОДАДЕН','sold']];
+  var box=document.getElementById('floors'), title=document.getElementById('floorTitle'), units=document.getElementById('units');
+  FLOORS.forEach(function(n){
+    var b=document.createElement('button');
+    b.type='button'; b.className='floor';
+    b.innerHTML='<span>КАТ '+n+'</span><span class="wins" aria-hidden="true"><i></i><i></i><i></i></span>';
+    b.addEventListener('click',function(){pick(n,true)});
+    b.addEventListener('mouseenter',function(){pick(n,false)});
+    box.appendChild(b);
+  });
+  function render(){
+    FLOORS.forEach(function(n,i){ box.children[i].setAttribute('aria-pressed', n===cur?'true':'false'); });
+    title.textContent='Кат '+cur;
+    units.innerHTML=[1,2,3].map(function(i){var s=ST[(cur+i)%3];
+      return '<a class="unit" href="#" onclick="return false"><b>А-'+cur+i+'</b><span class="small">[m²] · [соби]</span><span class="st '+s[1]+'">'+s[0]+'</span></a>';}).join('');
+  }
+  function pick(n,focus){ if(n===cur) return; cur=n; render(); if(focus){var i=FLOORS.indexOf(n); box.children[i].focus();} }
+  box.addEventListener('keydown',function(e){
+    var i=FLOORS.indexOf(cur);
+    if(e.key==='ArrowUp'&&i>0){e.preventDefault();pick(FLOORS[i-1],true);}
+    if(e.key==='ArrowDown'&&i<FLOORS.length-1){e.preventDefault();pick(FLOORS[i+1],true);}
+  });
+  render();
+})();
+
+// 05 · logo: the slats of the building, left and right, bottom rows later
+(function(){
+  var svg=document.getElementById('logoSvg'), NS='http://www.w3.org/2000/svg', html='';
+  html+='<path class="slat" d="M60 300 V70 H110" style="animation-delay:0s"/>';
+  html+='<path class="slat" d="M134 300 V62" style="animation-delay:.05s"/>';
+  for(var i=0;i<10;i++){
+    var y=136+i*18;
+    html+='<line class="slat" x1="70" y1="'+y+'" x2="128" y2="'+(y-26)+'" style="animation-delay:'+(i*0.09).toFixed(2)+'s"/>';
+    html+='<line class="slat" x1="140" y1="'+(y-30)+'" x2="200" y2="'+y+'" opacity=".6" style="animation-delay:'+(i*0.09+0.05).toFixed(2)+'s"/>';
+  }
+  svg.innerHTML=html;
+})();
+
+// 06 · year counter: 0 → (this year − 1994) in 1.6s, ease-out, the line fills with it
+(function(){
+  var n=document.getElementById('yearsN'), bar=document.getElementById('yearsBar');
+  var target=new Date().getFullYear()-1994, D=1600, raf;
+  function run(){
+    cancelAnimationFrame(raf);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){n.textContent=target;bar.style.width='100%';return;}
+    var t0=performance.now();
+    (function tick(t){
+      var p=Math.min(1,(t-t0)/D), e=1-Math.pow(1-p,3);
+      n.textContent=Math.round(target*e); bar.style.width=(e*100)+'%';
+      if(p<1) raf=requestAnimationFrame(tick);
+    })(t0);
+  }
+  var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){run();io.disconnect();} },{threshold:.5});
+  io.observe(n);
+  document.getElementById('yearsReplay').addEventListener('click',run);
+})();
+
+// 08 · map grid
+(function(){
+  var g=document.getElementById('mapGrid'), h='';
+  for(var x=20;x<400;x+=46) h+='<path d="M'+x+' 0 V300"/>';
+  for(var y=14;y<300;y+=38) h+='<path d="M0 '+y+' H400"/>';
+  g.innerHTML=h;
+})();
+</script>
+</body>
+</html>
