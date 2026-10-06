@@ -327,6 +327,137 @@ h4 {
   outline-offset: 3px;
 }
 
+/* The primary button, "копче што се полни". At rest: an outline and a circled
+   arrow in the accent. On hover, keyboard focus and press the accent fills in
+   from the left and the text and arrow take the fill's text colour. Light
+   surfaces: Бронза fill, Травертин text. Dark surfaces (data-tone="dark"):
+   Светол бакар fill, Оникс text. Used by <Button> and by the form submit. */
+.btn-primary {
+  --btn-c: var(--color-bronze);
+  --btn-on: var(--color-travertine);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 44px;
+  padding: 22px 36px;
+  border: 1px solid var(--btn-c);
+  border-radius: 0;
+  background: none;
+  color: var(--btn-c);
+  font:
+    600 13px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+}
+.btn-primary[data-tone="dark"] {
+  --btn-c: var(--color-copper);
+  --btn-on: var(--color-onyx);
+}
+.btn-primary--sm {
+  padding: 14px 22px;
+  font-size: 12px;
+}
+.btn-primary__fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-c);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.btn-primary__label,
+.btn-primary__arrow {
+  position: relative;
+  transition:
+    color 0.5s ease 0.15s,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-primary__arrow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--btn-c);
+  outline-offset: 3px;
+}
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill,
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+  transform: scaleX(1);
+}
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+  color: var(--btn-on);
+}
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+  transform: translateX(6px) rotate(-45deg);
+}
+/* Touch has no hover, so hover only counts where there is a pointer. */
+@media (hover: hover) {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+    transform: scaleX(1);
+  }
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+    color: var(--btn-on);
+  }
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+    transform: translateX(6px) rotate(-45deg);
+  }
+}
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* Phones: tighter, so "ЗАКАЖИ КОНСУЛТАЦИЈА" fits at 360px; a longer label wraps rather than overflows. */
+@media (max-width: 640px) {
+  .btn-primary {
+    gap: 12px;
+    padding: 18px 22px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .btn-primary--sm {
+    padding: 14px 22px;
+  }
+  .btn-primary:not(.btn-primary--sm) {
+    white-space: normal;
+    text-align: left;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary__fill,
+  .btn-primary__arrow {
+    transition: none;
+  }
+  .btn-primary__label {
+    transition: color 0.2s linear;
+  }
+  .btn-primary:is(:hover, :focus-visible, :active):not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

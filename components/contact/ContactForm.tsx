@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { cn } from "@/lib/cn";
-import { Arrow } from "@/components/black/Arrow";
+import { PrimaryFace } from "@/components/ui/Button";
 import { RadioGroup } from "./RadioGroup";
 import { BookingConfirmation } from "./BookingConfirmation";
 import { buildSlots, nextWorkingDays, todayIso } from "./booking-config";
@@ -392,18 +392,12 @@ export function ContactForm({
             <button
               ref={submitButton}
               type="submit"
-              className="bk-btn bk-btn--fill"
+              className="btn-primary"
+              data-tone="dark"
               disabled={status === "sending"}
               aria-busy={status === "sending"}
             >
-              {status === "sending" ? (
-                "Се испраќа…"
-              ) : (
-                <>
-                  Закажи
-                  <Arrow />
-                </>
-              )}
+              <PrimaryFace>{status === "sending" ? "Се испраќа…" : "Закажи"}</PrimaryFace>
             </button>
             <span className="ct-sum bk-mono" aria-live="polite">
               <span key={summary}>{summary}</span>

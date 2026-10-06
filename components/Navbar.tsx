@@ -238,7 +238,7 @@ export function Navbar() {
 
             <div className="nav-link hidden items-center gap-4 lg:flex">
               {/* One button, one style, on every page (the black pages only change the bar's background). */}
-              <Button href={consultHref} onClick={consultClick} variant="primary" size="sm">
+              <Button href={consultHref} onClick={consultClick} variant="primary" size="sm" tone="dark">
                 {t("nav.consultation")}
               </Button>
             </div>
@@ -288,6 +288,7 @@ export function Navbar() {
             <Button
               href={consultHref}
               variant="primary"
+              tone="dark"
               className="w-full"
               onClick={(e) => {
                 setOpen(false);

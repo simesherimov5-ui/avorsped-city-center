@@ -138,6 +138,7 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
                 <Button
                   href={project.href ?? `/projects/${project.slug}`}
                   variant="primary"
+                  tone="dark"
                   className="w-full sm:w-auto"
                 >
                   Погледни го проектот

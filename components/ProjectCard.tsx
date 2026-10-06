@@ -38,7 +38,7 @@ export function ProjectCard({ project }: { project: Project }) {
               ? "(max-width: 640px) 80vw, 320px"
               : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
           }
-          className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className="aspect-[4/3] transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
         />
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>
           {(() => {
@@ -61,8 +61,21 @@ export function ProjectCard({ project }: { project: Project }) {
         )}
       </div>
       <div className="border-t border-line p-6">
-        <div className="t-h3">{project.name}</div>
-        <div className="mt-1.5 text-sm text-muted">{project.location}</div>
+        <div className="flex items-baseline justify-between gap-4">
+          <div className="t-h3">{project.name}</div>
+          <span
+            aria-hidden
+            className="shrink-0 text-bronze transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2"
+          >
+            <svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" strokeWidth="1">
+              <path d="M0 5h17M13 1l4 4-4 4" />
+            </svg>
+          </span>
+        </div>
+        <div className="relative mt-3 h-px bg-line">
+          <i className="absolute left-0 top-0 h-px w-0 bg-bronze transition-[width] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
+        </div>
+        <div className="mt-3 text-sm text-muted">{project.location}</div>
         <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">
           <span>{project.year}</span>
           <span>{unitsText(project.units)}</span>

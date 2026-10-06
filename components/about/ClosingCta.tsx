@@ -2,9 +2,9 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { Media } from "@/components/ui/Media";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 import { Reveal } from "@/components/motion/Reveal";
-import { Arrow } from "@/components/black/Arrow";
+import { PrimaryFace } from "@/components/ui/Button";
 
-/** The closing call to action: a darkened photo, one headline and one outline button to the Контакт page. */
+/** The closing call to action: a darkened photo, one headline and one filling button to the Контакт page. */
 export function ClosingCta({
   image,
   heading,
@@ -33,9 +33,8 @@ export function ClosingCta({
           {heading}
         </RevealHeading>
         <Reveal>
-          <Link href={href} className="bk-btn">
-            {label}
-            <Arrow />
+          <Link href={href} className="btn-primary" data-tone="dark">
+            <PrimaryFace>{label}</PrimaryFace>
           </Link>
         </Reveal>
       </div>

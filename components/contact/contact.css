@@ -320,8 +320,7 @@
   gap: 16px 24px;
   margin-top: 48px;
 }
-.ct-submit .bk-btn:disabled {
-  opacity: 0.6;
+.ct-submit .btn-primary:disabled {
   cursor: progress;
 }
 .ct-sum {
@@ -362,6 +361,9 @@
   }
   .ct-submit {
     margin-top: 32px;
+  }
+  .ct-submit .btn-primary {
+    width: 100%;
   }
 }
 
