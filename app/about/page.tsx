@@ -7,6 +7,7 @@ import { Story } from "@/components/about/Story";
 import { Values } from "@/components/about/Values";
 import { Timeline } from "@/components/about/Timeline";
 import { Companies } from "@/components/about/Companies";
+import { orderCompanies } from "@/components/about/companies-layout";
 import { ClosingCta } from "@/components/about/ClosingCta";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 import "@/components/black/black.css";
@@ -84,10 +85,7 @@ export default function AboutPage() {
       </section>
 
       <section className="bk-wrap bk-section">
-        <Companies
-          eyebrow="Дел од Јавор Шпед"
-          companies={[THIS_COMPANY, ...COMPANIES.filter((c) => c !== THIS_COMPANY)]}
-        />
+        <Companies eyebrow="Дел од Јавор Шпед" companies={orderCompanies(COMPANIES, THIS_COMPANY)} />
       </section>
 
       <ClosingCta

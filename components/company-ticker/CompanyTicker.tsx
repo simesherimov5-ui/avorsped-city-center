@@ -7,7 +7,7 @@ import "./company-ticker.css";
 function Group({ hidden = false }: { hidden?: boolean }) {
   return (
     <div className="ctk-group" aria-hidden={hidden || undefined}>
-      {COMPANIES.map((name) => (
+      {COMPANIES.map(({ name }) => (
         <span key={name} className="ctk-pair">
           <span className="ctk-item">{name}</span>
           <span className="ctk-sep" aria-hidden="true" />

@@ -49,8 +49,15 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 1.7 Spelling of the company names
 
-- **Where:** `COMPANIES` in `components/company-ticker/companies.ts` (used by the ticker at the bottom of every page and the boxes on За нас).
+- **Where:** `COMPANIES` in `components/company-ticker/companies.ts` (used by the ticker at the bottom of every page and the circle on За нас).
 - **Format:** the nine names exactly as they are registered, in Cyrillic or Latin as the company writes them.
+
+### 1.8 Company descriptions and website links
+
+- **Where:** each entry of `COMPANIES` in `components/company-ticker/companies.ts`: the optional fields `description` and `url`. The circle on За нас shows them in its centre when a company is selected. Until a company has a description, its centre shows only the number and the name; without a `url` there is no link.
+- **Format:** description: plain text, **at most 280 characters** (longer text is cut at a word and ends with "…"), 2–3 sentences in the present tense, what the company does and its role in the group. Link: the full address with `https://`, opens in a new tab.
+- **Example shape:** `description: "<What the company does. Its role in the group.>"` and `url: "https://<company-website>"`.
+- **For:** all nine companies (Exclusive Building is first in the circle and carries the tag "Оваа компанија").
 
 ---
 
