@@ -128,10 +128,10 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
               <motion.span {...textIn(0)} className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
                 {statusText}
               </motion.span>
-              <motion.h2 {...textIn(1)} className="mt-3 font-display text-[clamp(1.75rem,6vw,2.75rem)] leading-tight">
+              <motion.h2 {...textIn(1)} className="t-h2 mt-3">
                 {project.name}
               </motion.h2>
-              <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/75 sm:text-sm">
+              <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
                 {project.location}
               </motion.div>
               <motion.div {...textIn(3)} className="mt-4 sm:mt-5">

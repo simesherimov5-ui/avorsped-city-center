@@ -57,7 +57,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
         <div className="mt-10 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="border border-dashed border-line bg-cream p-8 text-center">
-              <div className="font-display text-xl">Наскоро</div>
+              <div className="t-h3">Наскоро</div>
               <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
                 Детални планови и фотографии за становите на {floor.label.toLowerCase()} следуваат наскоро.
                 Контактирајте нè за најнови информации и достапност.

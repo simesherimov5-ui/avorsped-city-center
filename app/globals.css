@@ -93,9 +93,9 @@
   --color-accent-soft: var(--color-accent-soft);
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
+  /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-mono);
+  --font-sans: var(--font-montserrat);
 }
 
 @media (min-width: 640px) {
@@ -121,6 +121,7 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300; /* body text is Montserrat 300 at 16–18px; anything smaller is 400 or heavier (see the base layer below) */
   font-size: var(--text-body-size);
   line-height: var(--text-body-leading);
   -webkit-font-smoothing: antialiased;
@@ -137,6 +138,65 @@ h4 {
   line-height: 1.12;
 }
 
+/* The heading scale. Phones keep the sizes they had (the h1/h2 rules in the phone block below); from 768px up:
+   H1 Playfair 400, 64–104px, line 1.0, −0.015em · H2 Playfair 400, 40–56px, line 1.1 · H3 Playfair 500, 26–30px,
+   line 1.2. They are classes, not element rules, so a small heading inside a card can stay small. */
+.t-h1,
+.t-h2,
+.t-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  overflow-wrap: break-word;
+}
+.t-h1 {
+  font-size: clamp(2rem, 9vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+.t-h2 {
+  font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+.t-h3 {
+  font-size: 1.625rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+@media (min-width: 768px) {
+  .t-h1 {
+    font-size: clamp(64px, 7.2vw, 104px);
+  }
+  .t-h2 {
+    font-size: clamp(40px, 3.9vw, 56px);
+  }
+  .t-h3 {
+    font-size: clamp(26px, 2.1vw, 30px);
+  }
+}
+
+/* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
+   explicit font-weight utility on the element still wins, because this is the base layer. */
+@layer base {
+  [class*="text-xs"],
+  [class*="text-sm"],
+  [class*="text-caption"],
+  small,
+  [class*="text-[9"],
+  [class*="text-[10"],
+  [class*="text-[11"],
+  [class*="text-[12"],
+  [class*="text-[13"],
+  [class*="text-[14"],
+  [class*="text-[15"],
+  [class*="text-[0."],
+  [class*="text-[."] {
+    font-weight: 400;
+  }
+}
+
 .text-lead {
   font-size: var(--text-lead-size);
   line-height: var(--text-lead-leading);
@@ -150,10 +210,15 @@ h4 {
 /* Small uppercase label used above headings and on section eyebrows —
    one consistent size/tracking pair instead of ad hoc tracking-widest calls. */
 .eyebrow {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
+}
+
+/* For a label in a narrow column ("Ориентација" in a two-column grid): the same label with the letters closer. */
+.eyebrow-tight {
+  letter-spacing: 0.16em;
 }
 
 /* A 40px gold rule before an eyebrow label. */
@@ -179,13 +244,12 @@ h4 {
   background: var(--color-gold);
 }
 
-/* Counters, stats, measurements — IBM Plex Mono at the weight/spacing the
-   design system reserves for numbers, with tabular-nums so digits don't
-   shift width as they change (preloader counter, stat count-ups). */
+/* Counters, stats, measurements: Montserrat 500 with tabular numbers, so digits don't shift width as they
+   change (stat count-ups). The old name stays; there is no monospace font any more. */
 .mono-stat {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-weight: 300;
-  letter-spacing: 0.3em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
 }
 

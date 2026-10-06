@@ -34,7 +34,15 @@ export default function CompanyTicker() {
         onClick={() => setPaused((p) => !p)}
         aria-label={paused ? "Продолжи" : "Пауза"}
       >
-        {paused ? "▶" : "❚❚"}
+        {paused ? (
+          <svg width="10" height="12" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true">
+            <path d="M1 0.8v12.4L11 7z" />
+          </svg>
+        ) : (
+          <svg width="10" height="12" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true">
+            <path d="M1 1h3.2v12H1zM7.8 1H11v12H7.8z" />
+          </svg>
+        )}
       </button>
     </div>
   );

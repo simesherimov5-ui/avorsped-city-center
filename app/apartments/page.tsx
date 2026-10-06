@@ -144,7 +144,7 @@ export default function ApartmentsPage() {
           <div>
             <div className="flex items-center justify-between gap-4 border-b border-line pb-4 lg:hidden">
               <div>
-                <span className="font-display text-2xl text-gold-deep">{results.length}</span>
+                <span className="text-2xl font-medium tabular-nums text-gold-deep">{results.length}</span>
                 <span className="ml-2 text-sm text-muted">
                   {plural(results.length, "стан одговара", "станови одговараат")}
                 </span>
@@ -185,7 +185,7 @@ export default function ApartmentsPage() {
               <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
                 <SearchX className="h-8 w-8 text-muted" strokeWidth={1.5} />
                 <div>
-                  <div className="font-display text-xl">Нема станови за овие филтри</div>
+                  <div className="t-h3">Нема станови за овие филтри</div>
                   <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                     Обидете се со поширок опсег — на пример зголемете ја максималната цена, површината или изберете
                     друга зграда.
@@ -219,7 +219,7 @@ export default function ApartmentsPage() {
               className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col bg-cream"
             >
               <div className="flex items-center justify-between border-b border-line px-6 py-4">
-                <span className="font-display text-lg">Филтри</span>
+                <span className="text-lg font-medium">Филтри</span>
                 <button
                   type="button"
                   onClick={() => setSheetOpen(false)}

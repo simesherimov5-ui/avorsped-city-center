@@ -95,14 +95,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="min-w-0 lg:col-span-2">
             <Reveal delay={0.1}>
               <div className="eyebrow text-gold-deep">{project.location}</div>
-              <h1 className="mt-1 font-display text-4xl sm:text-5xl">{project.name}</h1>
+              <h1 className="t-h1 mt-1">{project.name}</h1>
               <p className="mt-5 max-w-xl text-lead leading-relaxed text-ink/70">{project.description}</p>
             </Reveal>
 
             {project.roomTour && (
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
+                  <h2 className="t-h3">Видео разгледување на просториите</h2>
                   <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на просторија за да пуштите кратко видео разгледување.
                   </p>
@@ -116,7 +116,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             {project.floorPlanExplorer ? (
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="font-display text-2xl">Распоред на просториите</h2>
+                  <h2 className="t-h3">Распоред на просториите</h2>
                   <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на број за да пуштите видео од таа просторија.
                   </p>
@@ -129,7 +129,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               project.apartmentTypes && (
                 <Reveal>
                   <div className="mt-14 border-t border-line pt-12">
-                    <h2 className="font-display text-2xl">Распоред на станови</h2>
+                    <h2 className="t-h3">Распоред на станови</h2>
                     <div className="mt-6 space-y-8">
                       {project.apartmentTypes.map((type) => (
                         <div key={type.label}>

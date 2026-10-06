@@ -30,13 +30,13 @@ export default function DojranPage() {
         <div className="mt-12 grid gap-12 lg:grid-cols-2">
           <div>
             <div className="eyebrow text-gold-deep">{project.location}</div>
-            <h1 className="mt-1.5 font-display text-2xl sm:text-3xl">{project.name}</h1>
+            <h1 className="t-h1 mt-1.5">{project.name}</h1>
             <p className="mt-3 text-sm leading-relaxed text-ink/70">{project.description}</p>
 
             <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 sm:grid-cols-4">
               {project.specifications.map((s) => (
                 <div key={s.label}>
-                  <div className="font-display text-sm text-gold-deep">{s.value}</div>
+                  <div className="text-sm font-medium text-gold-deep">{s.value}</div>
                   <div className="eyebrow mt-1 text-muted">{s.label}</div>
                 </div>
               ))}

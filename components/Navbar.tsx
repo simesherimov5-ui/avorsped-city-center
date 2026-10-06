@@ -275,7 +275,7 @@ export function Navbar() {
                 onPointerDown={spawnClickPulse}
                 aria-current={pathname === link.href ? "page" : undefined}
                 className={cn(
-                  "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-display text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
+                  "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-sans font-normal text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
                   pathname === link.href ? "text-gold" : "text-paper"
                 )}
               >

@@ -46,7 +46,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
       <div className="p-5">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <div className="font-display text-xl">Стан {apartment.number}</div>
+            <div className="t-h3">Стан {apartment.number}</div>
             <div className="mt-1 text-xs text-muted">
               {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
@@ -71,7 +71,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
         <div className="mt-4 flex items-end justify-between gap-2 border-t border-line pt-4">
           <div>
             <div className="text-[11px] uppercase tracking-widest text-muted">Цена</div>
-            <div className="mt-0.5 font-display text-2xl text-charcoal">{formatPrice(apartment.price)}</div>
+            <div className="mt-0.5 text-2xl font-medium tabular-nums text-charcoal">{formatPrice(apartment.price)}</div>
           </div>
           <Link
             href={`/apartments/${apartment.id}`}

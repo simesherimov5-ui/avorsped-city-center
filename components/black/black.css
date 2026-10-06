@@ -17,6 +17,7 @@
   --bk-gap: clamp(64px, 7.5vw, 112px);
   color: var(--color-paper);
   font-size: 15px;
+  font-weight: 400;
   line-height: 1.6;
 }
 [data-theme="black"] ::selection {
@@ -52,19 +53,29 @@
   font-style: italic;
 }
 [data-theme="black"] .bk-mono {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-weight: 300;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 [data-theme="black"] .bk-h1 {
   margin: 0;
-  font-size: clamp(30px, 4vw, 58px);
-  line-height: 1.1;
+  font-size: clamp(2rem, 9vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
 }
 [data-theme="black"] .bk-h2 {
   margin: 16px 0 clamp(24px, 3vw, 48px);
-  font-size: clamp(24px, 2.6vw, 36px);
-  line-height: 1.15;
+  font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  line-height: 1.1;
+}
+/* The heading scale from 768px up (H1 64–104px, H2 40–56px); phones keep the sizes above. */
+@media (min-width: 768px) {
+  [data-theme="black"] .bk-h1 {
+    font-size: clamp(64px, 7.2vw, 104px);
+  }
+  [data-theme="black"] .bk-h2 {
+    font-size: clamp(40px, 3.9vw, 56px);
+  }
 }
 
 /* Eyebrow: a 32px gold line, then the label. Centred eyebrows get a line on both sides. */
@@ -74,9 +85,9 @@
   gap: 12px;
   color: var(--color-gold);
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.3em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
 }
 .bk-eyebrow::before,
@@ -93,8 +104,9 @@
 
 /* Small label */
 .bk-label {
-  font-size: 11px;
-  letter-spacing: 0.3em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--mute);
 }
@@ -153,6 +165,7 @@
   background: var(--color-gold);
   color: var(--black);
   font-size: 12px;
+  font-weight: 400;
 }
 .bk-btn--fill:hover {
   background: var(--color-gold-light);

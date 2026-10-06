@@ -83,7 +83,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           <ChevronRight className="h-3 w-3" aria-hidden />
           <span className="text-muted">{floor.label}</span>
         </nav>
-        <h1 className="mt-3 font-display text-3xl text-charcoal sm:text-4xl">Изберете го вашиот стан</h1>
+        <h1 className="t-h1 mt-3 text-charcoal">Изберете го вашиот стан</h1>
       </div>
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
@@ -110,7 +110,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
         {overview && (
           <div className="mt-16 border-t border-line pt-12">
             <div className="eyebrow text-gold-deep">Официјална документација</div>
-            <h2 className="mt-1.5 font-display text-2xl">Официјална основа на катот</h2>
+            <h2 className="t-h3 mt-1.5">Официјална основа на катот</h2>
             <p className="mt-2 max-w-lg text-sm text-muted">
               Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги контролите за
               зум за да ги разгледате деталите.

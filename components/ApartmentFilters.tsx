@@ -38,7 +38,7 @@ export function ApartmentFilters({
         <div>
           <div className="eyebrow text-muted">Резултати</div>
           {resultsCount !== undefined && (
-            <div className="mt-1.5 font-display text-3xl text-gold-deep">{resultsCount}</div>
+            <div className="mt-1.5 text-3xl font-medium tabular-nums text-gold-deep">{resultsCount}</div>
           )}
         </div>
         {hasFilters && (
@@ -197,7 +197,7 @@ export function ApartmentFilters({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="eyebrow text-muted">{label}</span>
+      <span className="eyebrow eyebrow-tight text-muted">{label}</span>
       {children}
     </label>
   );

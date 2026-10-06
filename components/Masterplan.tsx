@@ -140,7 +140,7 @@ export function Masterplan({
                   animate={{ opacity: isHovered && !isSelected ? 1 : 0, y: isHovered && !isSelected ? 0 : 6 }}
                   className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
-                  <div className="font-display text-base">{building.name}</div>
+                  <div className="text-base font-medium">{building.name}</div>
                   <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
                     <div>
                       {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
@@ -288,7 +288,7 @@ function BuildingPanel({
       </div>
       <div className="mt-5">
         <div className="eyebrow text-gold-deep">Зграда {building.shortLabel}</div>
-        <h3 className="mt-1.5 font-display text-2xl">{building.name}</h3>
+        <h3 className="t-h3 mt-1.5">{building.name}</h3>
       </div>
       <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5 text-sm">
         <PanelStat label="Катови" value={String(building.floors.length)} />
@@ -312,7 +312,7 @@ function PanelStat({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="eyebrow text-muted">{label}</dt>
-      <dd className="mt-1 font-display text-lg">{value}</dd>
+      <dd className="mt-1 text-lg font-medium tabular-nums">{value}</dd>
     </div>
   );
 }

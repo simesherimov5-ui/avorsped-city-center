@@ -59,7 +59,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     <aside className={cn("h-fit space-y-6 border border-line bg-warm-white p-6", extraClass)}>
       <div>
         <div className="eyebrow text-muted">Цена</div>
-        <div className="mt-1.5 font-display text-4xl text-gold-deep">{formatPrice(apartment.price)}</div>
+        <div className="mt-1.5 text-4xl font-medium tabular-nums text-gold-deep">{formatPrice(apartment.price)}</div>
         <div className="mt-1.5 text-xs text-muted">Индикативна цена, подложна на конечна спецификација</div>
       </div>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
@@ -105,7 +105,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             <div className="eyebrow text-muted">
               {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
-            <h1 className="mt-1.5 font-display text-4xl sm:text-5xl">Стан {apartment.number}</h1>
+            <h1 className="t-h1 mt-1.5">Стан {apartment.number}</h1>
           </div>
           <StatusBadge status={apartment.status} variant="pill" className="mt-2" />
         </div>
@@ -113,7 +113,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         <div className="mt-10 grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-12">
             <div>
-              <h2 className="font-display text-2xl">Архитектонска основа</h2>
+              <h2 className="t-h3">Архитектонска основа</h2>
               <div className="mt-6 grid gap-8 lg:grid-cols-[3fr_2fr]">
                 <div className="relative border border-line bg-cream">
                   <span className="eyebrow absolute left-4 top-4 z-10 bg-warm-white/90 px-2.5 py-1 text-muted">
@@ -138,7 +138,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                       ))}
                       <tr>
                         <td className="py-3 font-medium">Вкупна внатрешна површина</td>
-                        <td className="py-3 text-right font-display text-lg text-gold-deep">
+                        <td className="whitespace-nowrap py-3 pl-3 text-right text-lg font-medium tabular-nums text-gold-deep">
                           {formatArea(apartment.area)}
                         </td>
                       </tr>
@@ -158,7 +158,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             {/* The room photos and the 360° tour show only once real media exists: no empty boxes for visitors. */}
             {apartment.gallery.some((img) => !img.isPlaceholder) && (
               <div>
-                <h2 className="font-display text-2xl">Простории</h2>
+                <h2 className="t-h3">Простории</h2>
                 <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {apartment.gallery.map((img, i) => (
                     <Media
@@ -174,7 +174,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             {apartment.tour?.available && (
               <div>
-                <h2 className="font-display text-2xl">Истражи го станот</h2>
+                <h2 className="t-h3">Истражи го станот</h2>
                 <p className="mt-2 text-sm text-muted">
                   {apartment.tour?.available
                     ? "Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите."
@@ -188,7 +188,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             {others.length > 0 && (
               <div>
-                <h2 className="font-display text-2xl">Други станови на овој кат</h2>
+                <h2 className="t-h3">Други станови на овој кат</h2>
                 <div className="mt-6 grid gap-6 sm:grid-cols-2">
                   {others.slice(0, 2).map((a) => (
                     <ApartmentCard key={a.id} apartment={a} />
@@ -214,7 +214,7 @@ function roomLabelForGalleryIndex(i: number) {
 function Spec({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="eyebrow text-muted">{label}</dt>
+      <dt className="eyebrow eyebrow-tight text-muted">{label}</dt>
       <dd className="mt-0.5 font-medium capitalize">{value}</dd>
     </div>
   );

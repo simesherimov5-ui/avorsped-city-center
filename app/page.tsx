@@ -56,7 +56,7 @@ export default function HomePage() {
               <ScrollReveal key={item.title} delay={i * 0.06}>
                 <div className="flex flex-col gap-3.5 border-t border-line pt-6">
                   <item.icon className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
-                  <div className="font-display text-xl">{item.title}</div>
+                  <div className="t-h3">{item.title}</div>
                   <p className="text-sm leading-relaxed text-muted">{item.desc}</p>
                 </div>
               </ScrollReveal>
@@ -81,7 +81,7 @@ export default function HomePage() {
         <ScrollReveal>
           <div className="relative mx-auto max-w-xl px-5 sm:px-8 lg:px-10">
             <div className="eyebrow text-accent">Следен чекор</div>
-            <h2 className="mt-4 font-display text-4xl sm:text-5xl">Закажи консултација</h2>
+            <h2 className="t-h2 mt-4">Закажи консултација</h2>
             <p className="mx-auto mt-5 max-w-md text-on-chrome/70">
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>

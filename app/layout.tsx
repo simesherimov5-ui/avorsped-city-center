@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display, IBM_Plex_Mono } from "next/font/google";
+import { Montserrat, Playfair_Display } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -16,25 +16,22 @@ import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 import { companyInfo, projects } from "@/data";
 import { SITE_NAME, siteUrl } from "@/lib/seo";
 
-// All three families are loaded with their Cyrillic letters: the site is in Macedonian, and a family loaded without
-// them silently falls back to a different system font on every device.
-const inter = Inter({
+// Exactly two families on the whole site (the identity "Бронза & Травертин"), both loaded with their Cyrillic letters:
+// the site is in Macedonian, and a family loaded without them silently falls back to a different system font on every
+// device. Playfair Display is for headings and large display numbers; Montserrat is for everything else (text, labels,
+// menus, buttons, prices, areas and every number that used to be set in a monospace font).
+const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-montserrat",
 });
 
-// The heading serif (it replaced Fraunces, which has no Cyrillic). Regular and regular italic only.
+// 400 and 500 upright, and the italic (400) for the one emphasised word of a heading.
 const playfair = Playfair_Display({
   subsets: ["latin", "cyrillic"],
-  weight: "400",
+  weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-playfair",
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500"],
-  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -61,7 +58,7 @@ export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${inter.variable} ${playfair.variable} ${ibmPlexMono.variable}`}>
+    <html lang="mk" className={`${montserrat.variable} ${playfair.variable}`}>
       <body className="antialiased">
         {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
         <a href="#main" className="skip-link">

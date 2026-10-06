@@ -223,10 +223,10 @@ export function ContactForm({
               </button>
             </div>
           )}
-          <h2 className="ct-step-h bk-label" id="ct-h-interest">
+          <div className="ct-step-h bk-label" id="ct-h-interest" role="heading" aria-level={2}>
             <b className="ct-step-n bk-mono">{n()}</b>
             <span>Што ве интересира?</span>
-          </h2>
+          </div>
           <div data-shake>
             <RadioGroup
               groupId="interest"
@@ -257,10 +257,10 @@ export function ContactForm({
             }}
           >
             <StepRule />
-            <h2 className="ct-step-h bk-label">
+            <div className="ct-step-h bk-label" role="heading" aria-level={2}>
               <b className="ct-step-n bk-mono">{n()}</b>
               <span>Колку соби?</span>
-            </h2>
+            </div>
             <div data-shake>
               <RadioGroup
                 groupId="rooms"
@@ -283,10 +283,10 @@ export function ContactForm({
 
         <section data-step="when" data-seq="step" className="ct-step">
           <StepRule />
-          <h2 className="ct-step-h bk-label">
+          <div className="ct-step-h bk-label" role="heading" aria-level={2}>
             <b className="ct-step-n bk-mono">{n()}</b>
             <span>Изберете ден и час</span>
-          </h2>
+          </div>
           <div data-shake>
             <div className="ct-days-box">
               {days.length > 0 && (
@@ -336,10 +336,10 @@ export function ContactForm({
 
         <section data-seq="step" className="ct-step">
           <StepRule />
-          <h2 className="ct-step-h bk-label">
+          <div className="ct-step-h bk-label" role="heading" aria-level={2}>
             <b className="ct-step-n bk-mono">{n()}</b>
             <span>Ваши податоци</span>
-          </h2>
+          </div>
           <div className="ct-fields">
             <div className="ct-field" data-step="name">
               <label htmlFor="ct-name" className="bk-label">

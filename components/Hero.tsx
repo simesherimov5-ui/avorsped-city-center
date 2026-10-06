@@ -18,9 +18,8 @@ const HERO_IMAGE = {
   isPlaceholder: false,
 };
 
-// The strip's numbers read first: gold, IBM Plex Mono at weight 400 and 16px (the .mono-stat class is lighter and
-// more widely spaced, so these override it).
-const STAT_NUMBER = { fontWeight: 400, fontSize: "16px", letterSpacing: "0.02em" } as const;
+// The strip's numbers read first: the accent colour, Montserrat 500 with tabular numbers, 16px.
+const STAT_NUMBER = { fontWeight: 500, fontSize: "16px", letterSpacing: "0.02em" } as const;
 
 export function Hero() {
   const reduceMotion = useReducedMotion();

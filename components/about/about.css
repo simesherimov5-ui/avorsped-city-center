@@ -86,6 +86,7 @@
   padding: 0 24px;
   border-left: 1px solid var(--gold-line);
   font-size: 11px;
+  font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
 }
@@ -127,13 +128,22 @@
 }
 .ab-story-text {
   margin: 24px 0 0;
+  /* The statement is a long text, so it is Montserrat (Playfair is for headings); its accent words are coloured, not
+     italic (there is no Montserrat italic). */
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
   font-size: clamp(19px, 1.9vw, 26px);
-  line-height: 1.45;
+  line-height: 1.5;
+}
+.ab-story-text .bk-gold-i {
+  font-style: normal;
+  font-weight: 400;
 }
 .ab-story-rest {
   max-width: 62ch;
   margin: 32px auto 0;
   font-size: 15px;
+  font-weight: 400;
   color: var(--mute);
 }
 .ab-story-rest p + p {
@@ -172,20 +182,22 @@
 .ab-v-n {
   padding-top: 8px;
   font-size: 12px;
+  font-weight: 400;
   color: var(--color-gold);
 }
 .ab-v h3 {
   margin: 0 0 8px;
   font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0;
-  font-size: clamp(20px, 1.9vw, 26px);
-  line-height: 1.15;
+  font-size: clamp(26px, 2.1vw, 30px);
+  line-height: 1.2;
   transition: color 0.4s;
 }
 .ab-v p {
   margin: 0;
   font-size: 14.5px;
+  font-weight: 400;
   color: var(--mute);
 }
 .ab-v:hover {
@@ -314,6 +326,7 @@
 .ab-card p {
   margin: 0;
   font-size: 14px;
+  font-weight: 400;
 }
 @media (max-width: 900px) {
   .ab-strip {
@@ -439,6 +452,7 @@
   white-space: nowrap;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 11px;
+  font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--color-paper) 66%, transparent);
@@ -505,12 +519,19 @@
 .co-k {
   color: var(--color-gold);
   font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.2em;
 }
 .co-name {
   margin: 10px 0 12px;
-  font-size: clamp(22px, 2.4vw, 30px);
-  line-height: 1.15;
+  font-weight: 500;
+  font-size: 22px; /* phones keep their size; the heading scale (H3 26-30px) applies on the desktop circle */
+  line-height: 1.2;
+}
+@container co (min-width: 880px) {
+  .co-name {
+    font-size: clamp(26px, 2.1vw, 30px);
+  }
 }
 .co-me {
   display: inline-block;
@@ -529,6 +550,7 @@
   margin: 0 0 16px;
   color: color-mix(in srgb, var(--color-paper) 66%, transparent);
   font-size: 13.5px;
+  font-weight: 400;
   line-height: 1.55;
 }
 .co-more {
@@ -615,6 +637,7 @@
     background: var(--black);
     color: var(--mute);
     font-size: 11px;
+    font-weight: 400;
     transition:
       background 0.3s,
       border-color 0.3s,
@@ -696,8 +719,14 @@
 .ab-cta h2 {
   max-width: 640px;
   margin: 0 auto 34px;
-  font-size: clamp(25px, 3vw, 40px);
-  line-height: 1.15;
+  font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  line-height: 1.1;
+}
+@media (min-width: 768px) {
+  .ab-cta h2 {
+    max-width: 880px;
+    font-size: clamp(40px, 3.9vw, 56px);
+  }
 }
 
 /* The photo viewer pop-up */
@@ -741,6 +770,8 @@
 }
 .ab-viewer-text {
   margin: 8px 0 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
   font-size: clamp(20px, 2.2vw, 28px);
   line-height: 1.3;
 }
@@ -753,6 +784,7 @@
   min-width: 88px;
   text-align: center;
   font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.2em;
   color: var(--mute);
 }

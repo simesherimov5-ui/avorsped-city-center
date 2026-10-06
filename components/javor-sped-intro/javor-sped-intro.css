@@ -64,8 +64,8 @@
   top: calc(50% + 100px);
   transform: translateX(-50%);
   font:
-    300 12px var(--font-mono),
-    monospace;
+    500 12px var(--font-sans),
+    sans-serif;
   letter-spacing: 0.3em;
   color: var(--color-gold);
   font-variant-numeric: tabular-nums;
@@ -85,7 +85,7 @@
   right: 0;
   margin-top: calc(var(--wm) * 0.12);
   text-align: center;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 500;
   font-size: calc(var(--wm) * 0.28);
   letter-spacing: 0.5em;
@@ -98,7 +98,7 @@
   display: inline-flex;
   align-items: baseline;
   white-space: nowrap;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: 0.02em;
   font-size: var(--wm);

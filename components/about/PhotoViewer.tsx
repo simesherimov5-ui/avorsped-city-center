@@ -118,7 +118,7 @@ export function PhotoViewer({
         </div>
         <div className="ab-viewer-caption" aria-live="polite">
           <span className="ab-viewer-year bk-mono">{current.year}</span>
-          <p className="ab-viewer-text bk-serif">{current.text}</p>
+          <p className="ab-viewer-text">{current.text}</p>
         </div>
         {count > 1 && (
           <div className="ab-viewer-nav">

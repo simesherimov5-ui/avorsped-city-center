@@ -30,7 +30,11 @@ Facts read from the code, not decisions.
   `accent` = Светол бакар, `gold-deep` and `gold-dark` = Бронза, `gold-light` and `accent-soft` = Травертин, `warm-white` and
   `silver` = Варовник, `cream` = Травертин, `charcoal` and `chrome` = Оникс, `on-chrome` = Травертин. `line` is Оникс at 12%,
   `line-dark` Травертин at 12%, `muted` Оникс at 68%.
-- Typefaces: Playfair Display (display, 400 and 400 italic), Inter (body) and IBM Plex Mono, all loaded with `next/font` and `subsets: ["latin", "cyrillic"]` (`app/layout.tsx`).
+- Typefaces: exactly two, both loaded with `next/font` and `subsets: ["latin", "cyrillic"]` (`app/layout.tsx`): Playfair Display (400,
+  500 and 400 italic) for H1–H3 and large display numbers, and Montserrat (300, 400, 500, 600) for everything else. Every number that used
+  the monospace font (stat numbers, "05 / 09", floor numbers) is Montserrat 500 with tabular numbers; there is no monospace font.
+  The scale (`.t-h1` 64–104px, `.t-h2` 40–56px, `.t-h3` 26–30px from 768px up; phones keep their old heading sizes) is in
+  `app/globals.css`. Body text is weight 300 at 16–18px; text under 16px is weight 400 or heavier.
 - Motion: two systems coexist. Framer Motion scroll reveals (`components/ui/Reveal.tsx`) and GSAP + Lenis (`components/motion/`, `components/intro/`). Both respect reduced-motion.
 - Language: Macedonian (`<html lang="mk">`); English is planned.
 

@@ -62,7 +62,7 @@ export function CompareView() {
           <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
             <Layers className="h-8 w-8 text-muted" strokeWidth={1.5} />
             <div>
-              <div className="font-display text-xl">Сè уште немате избрано станови</div>
+              <div className="t-h3">Сè уште немате избрано станови</div>
               <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                 Додајте до 3 станови за споредба од листата со достапни единици.
               </p>
@@ -81,7 +81,7 @@ export function CompareView() {
                     <th key={a.id} className="border-b border-line px-4 pb-4 text-left align-top">
                       <Link
                         href={`/apartments/${a.id}`}
-                        className="focus-ring block font-display text-lg hover:text-gold-deep"
+                        className="focus-ring block text-lg font-medium hover:text-gold-deep"
                       >
                         Стан {a.number}
                       </Link>
@@ -101,7 +101,7 @@ export function CompareView() {
                           key={a.id}
                           className={cn(
                             "px-4 py-3 capitalize",
-                            isPrice ? "font-display text-lg text-gold-deep" : "text-ink/80"
+                            isPrice ? "text-lg font-medium tabular-nums text-gold-deep" : "text-ink/80"
                           )}
                         >
                           {row.get(a)}
