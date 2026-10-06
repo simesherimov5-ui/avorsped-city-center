@@ -1,0 +1,14 @@
+/* Company ticker, "quiet luxury". Colors: ink #141414, gold #C9A45C, paper #FAF8F5 */
+.ctk{display:flex;align-items:center;height:56px;background:#141414;border-top:1px solid rgba(250,248,245,.12)}
+.ctk-view{flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.ctk-track{display:flex;width:max-content;animation:ctk-run 70s linear infinite}
+.ctk:hover .ctk-track,.ctk.is-paused .ctk-track{animation-play-state:paused}
+@keyframes ctk-run{to{transform:translateX(-50%)}}
+.ctk-group{display:flex;align-items:center;flex-shrink:0}
+.ctk-pair{display:inline-flex;align-items:center}
+.ctk-item{white-space:nowrap;font-family:Inter,system-ui,sans-serif;font-size:11px;font-weight:400;letter-spacing:.38em;text-transform:uppercase;color:rgba(250,248,245,.82)}
+.ctk-sep{display:inline-block;width:22px;height:1px;margin:0 34px;background:#C9A45C}
+.ctk-pause{flex-shrink:0;width:44px;height:100%;background:none;border:0;color:#C9A45C;opacity:.6;cursor:pointer;font-size:11px}
+.ctk-pause:hover{opacity:1}
+@media (max-width:767px){.ctk{height:48px}.ctk-item{letter-spacing:.3em}.ctk-sep{margin:0 24px}}
+@media (prefers-reduced-motion:reduce){.ctk-track{animation:none}.ctk-view{overflow-x:auto}}
