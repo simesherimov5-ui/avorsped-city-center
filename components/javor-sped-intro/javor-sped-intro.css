@@ -1,4 +1,4 @@
-/* Logo → JS → JAVOR → JAVOR-SPED intro. Colours come from the tokens in app/globals.css.
+/* Logo → JS → JAVOR → JAVOR SPED → HOLDING intro. Colours come from the tokens in app/globals.css.
    Every class is prefixed jsi- so none can collide with Tailwind utilities (".ring" is one). */
 .jsi {
   position: fixed;
@@ -71,6 +71,29 @@
   font-variant-numeric: tabular-nums;
   padding-left: 0.3em;
 }
+/* The wordmark and "HOLDING" lift away together. --wm is the wordmark's size; "HOLDING" is 28% of it and hangs
+   below without moving the wordmark, so the wordmark stays exactly where it always was. */
+.jsi-lock {
+  --wm: clamp(34px, 4.6vw, 60px);
+  position: relative;
+  display: inline-block;
+}
+.jsi-hold {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: calc(var(--wm) * 0.12);
+  text-align: center;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: calc(var(--wm) * 0.28);
+  letter-spacing: 0.5em;
+  padding-left: 0.5em; /* the spacing after the last letter, so the word sits centred under the wordmark */
+  text-transform: uppercase;
+  color: var(--color-gold);
+  opacity: 0;
+}
 .jsi-wm {
   display: inline-flex;
   align-items: baseline;
@@ -78,7 +101,7 @@
   font-family: var(--font-inter), system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: 0.02em;
-  font-size: clamp(34px, 4.6vw, 60px);
+  font-size: var(--wm);
   line-height: 1.1;
   color: var(--color-gold);
 }
@@ -101,6 +124,10 @@
 .jsi-j,
 .jsi-s {
   opacity: 0;
+}
+/* The space between JAVOR and SPED is a no-break space; pre keeps it from collapsing to nothing. */
+.jsi-gap {
+  white-space: pre;
 }
 .jsi-x {
   clip-path: inset(-30% 0);

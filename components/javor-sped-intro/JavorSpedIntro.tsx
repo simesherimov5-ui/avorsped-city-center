@@ -20,8 +20,8 @@ type Props = {
  * 1. The logo loads inside a gold ring that draws as a 000–100 counter runs
  * 2. The logo fades and "JS" rises into the ring
  * 3. JS → JAVOR (the S steps out, AVOR unfolds after the J)
- * 4. JAVOR → JAVOR-SPED
- * 5. The wordmark lifts away, then the black screen opens exactly as the site always has:
+ * 4. JAVOR → JAVOR SPED (two words), then "HOLDING" fades in under it
+ * 5. The wordmark and "HOLDING" lift away together, as the black screen opens exactly as the site always has:
  *    top half up, bottom half down, 1.1s on the "premium" curve.
  * The hero photo is already rendered underneath; this only uncovers it.
  */
@@ -58,6 +58,7 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
       const c = { v: 0 };
       gsap.set(prog, { strokeDasharray: len, strokeDashoffset: len });
       gsap.set(q(".jsi-j, .jsi-s"), { yPercent: 60, opacity: 0 });
+      gsap.set(q(".jsi-hold"), { opacity: 0, y: 8 });
       gsap.set(q(".jsi-logo"), { opacity: 0, scale: 0.92, transformOrigin: "50% 50%" });
 
       let tl: gsap.core.Timeline | null = null;
@@ -97,21 +98,12 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
           // 3 · JS → JAVOR
           .to(q(".jsi-s"), { width: 0, opacity: 0, duration: 0.6, ease: "power3.inOut" }, 3.6)
           .to(q(".jsi-avor"), { width: "auto", opacity: 1, duration: 0.9, ease: "power3.inOut" }, 3.6)
-          // 4 · JAVOR → JAVOR-SPED
-          .to(
-            q(".jsi-dash"),
-            {
-              width: "auto",
-              opacity: 1,
-              paddingLeft: ".1em",
-              paddingRight: ".1em",
-              duration: 0.5,
-              ease: "power3.inOut",
-            },
-            4.7
-          )
+          // 4 · JAVOR → JAVOR SPED: a space opens between the words
+          .to(q(".jsi-gap"), { width: "auto", opacity: 1, duration: 0.5, ease: "power3.inOut" }, 4.7)
           .to(q(".jsi-s"), { width: "auto", opacity: 1, duration: 0.6, ease: "power3.inOut" }, 4.8)
           .to(q(".jsi-ped"), { width: "auto", opacity: 1, duration: 0.8, ease: "power3.inOut" }, 4.9)
+          // "HOLDING" fades in and rises 8px under the finished wordmark, 0.25s after JAVOR SPED is complete (4.9 + 0.8)
+          .to(q(".jsi-hold"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 5.95)
           // Hold here, if needed, until the hero photo underneath is loaded and decoded.
           .add(() => {
             if (!waitFor) return;
@@ -119,9 +111,11 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
             waitFor().then(() => {
               if (!cancelled) t.resume();
             });
-          }, 5.9)
-          // 5 · the wordmark lifts away, then the screen opens: top half up, bottom half down
-          .to(q(".jsi-wm"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, 6.0)
+          }, 6.25)
+          // 5 · both lines lift away together as the screen opens: top half up, bottom half down. The lift used to start
+          // at 6.0; it now starts with the opening (6.3), which is where the time for "HOLDING" comes from, so the
+          // intro is still 7.4s long.
+          .to(q(".jsi-lock"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, 6.3)
           .add(() => onReveal?.(), 6.3)
           .to(q(".jsi-bg-top"), { yPercent: -100, duration: 1.1, ease: PREMIUM_EASE }, 6.3)
           .to(q(".jsi-bg-bot"), { yPercent: 100, duration: 1.1, ease: PREMIUM_EASE }, 6.3)
@@ -141,7 +135,7 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
 
   if (gone) return null;
   return (
-    <div ref={root} className="jsi" aria-hidden="true">
+    <div ref={root} className="jsi" role="img" aria-label="Javor Sped Holding">
       <div className="jsi-bg-top" />
       <div className="jsi-bg-bot" />
       <svg className="jsi-ring" viewBox="0 0 150 150">
@@ -161,12 +155,16 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
       </svg>
       <div className="jsi-count">000</div>
       <div className="jsi-stage">
-        <div className="jsi-wm">
-          <span className="jsi-gold jsi-j">J</span>
-          <span className="jsi-gold jsi-x jsi-avor">AVOR</span>
-          <span className="jsi-gold jsi-x jsi-dash">-</span>
-          <span className="jsi-gold jsi-s">S</span>
-          <span className="jsi-gold jsi-x jsi-ped">PED</span>
+        <div className="jsi-lock">
+          <div className="jsi-wm">
+            <span className="jsi-gold jsi-j">J</span>
+            <span className="jsi-gold jsi-x jsi-avor">AVOR</span>
+            {/* The space between the two words: a no-break space, so it keeps its width (prettier writes it as the literal character). */}
+            <span className="jsi-gold jsi-x jsi-gap">{" "}</span>
+            <span className="jsi-gold jsi-s">S</span>
+            <span className="jsi-gold jsi-x jsi-ped">PED</span>
+          </div>
+          <div className="jsi-hold">HOLDING</div>
         </div>
       </div>
     </div>
