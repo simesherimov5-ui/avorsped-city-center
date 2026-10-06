@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, PREMIUM_EASE } from "@/lib/gsap";
-import { LOGO_GRADIENT, LOGO_PATH, LOGO_TRANSFORM, LOGO_VIEWBOX } from "./logo-mark";
+import { LOGO_PATH, LOGO_TRANSFORM, LOGO_VIEWBOX } from "./logo-mark";
 import "./javor-sped-intro.css";
 
 type Props = {
@@ -143,15 +143,7 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
         <circle className="jsi-ring-prog" cx="75" cy="75" r="72" />
       </svg>
       <svg className="jsi-logo" viewBox={LOGO_VIEWBOX}>
-        <defs>
-          <linearGradient id="introGold" gradientUnits="userSpaceOnUse" {...LOGO_GRADIENT}>
-            <stop offset="0" style={{ stopColor: "var(--color-gold-dark)" }} />
-            <stop offset=".4" style={{ stopColor: "var(--color-gold)" }} />
-            <stop offset=".65" style={{ stopColor: "var(--color-gold-light)" }} />
-            <stop offset="1" style={{ stopColor: "var(--color-gold)" }} />
-          </linearGradient>
-        </defs>
-        <path transform={LOGO_TRANSFORM} fill="url(#introGold)" d={LOGO_PATH} />
+        <path transform={LOGO_TRANSFORM} fill="var(--color-copper)" d={LOGO_PATH} />
       </svg>
       <div className="jsi-count">000</div>
       <div className="jsi-stage">

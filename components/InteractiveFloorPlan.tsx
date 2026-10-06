@@ -40,12 +40,12 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
             >
               <span
                 className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-md text-sm font-semibold shadow-md transition-all",
+                  "flex h-8 w-8 items-center justify-center border text-sm font-semibold transition-all",
                   isClickable
                     ? isHovered
-                      ? "scale-110 bg-accent text-chrome ring-4 ring-accent/30"
-                      : "bg-chrome/80 text-on-chrome ring-2 ring-on-chrome/60"
-                    : "bg-chrome/75 text-on-chrome"
+                      ? "scale-110 border-accent bg-accent text-chrome"
+                      : "border-on-chrome/60 bg-chrome/80 text-on-chrome"
+                    : "border-transparent bg-chrome/75 text-on-chrome"
                 )}
               >
                 {spot.number}
@@ -61,7 +61,7 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
           onClick={() => setActiveRoom(null)}
         >
           <div
-            className="relative w-full max-w-2xl overflow-hidden border border-line bg-chrome shadow-xl"
+            className="relative w-full max-w-2xl overflow-hidden border border-line bg-chrome"
             onClick={(e) => e.stopPropagation()}
           >
             <video

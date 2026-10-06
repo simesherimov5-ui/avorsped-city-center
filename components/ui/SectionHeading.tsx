@@ -20,9 +20,7 @@ export function SectionHeading({
 }) {
   return (
     <div className={cn(align === "center" && "mx-auto max-w-2xl text-center", className)}>
-      {eyebrow && (
-        <div className={cn("eyebrow", tone === "dark" ? "text-accent-soft" : "text-gold-deep")}>{eyebrow}</div>
-      )}
+      {eyebrow && <div className={cn("eyebrow", tone === "dark" ? "text-accent" : "text-gold-deep")}>{eyebrow}</div>}
       <Heading
         className={cn(
           "mt-4 font-display text-3xl sm:text-[2.75rem]",

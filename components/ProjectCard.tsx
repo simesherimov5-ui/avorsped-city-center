@@ -24,7 +24,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <Link
       href={project.href ?? `/projects/${project.slug}`}
       onPointerDown={spawnClickPulse}
-      className="focus-ring group relative isolate block border border-line bg-warm-white transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.35)]"
+      className="focus-ring group relative isolate block border border-line bg-warm-white transition-colors duration-300 hover:border-ink/30"
     >
       <div className="relative overflow-hidden">
         <Media

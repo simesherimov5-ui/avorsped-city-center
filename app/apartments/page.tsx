@@ -216,7 +216,7 @@ export default function ApartmentsPage() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-xl bg-cream"
+              className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col bg-cream"
             >
               <div className="flex items-center justify-between border-b border-line px-6 py-4">
                 <span className="font-display text-lg">Филтри</span>

@@ -22,9 +22,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
       onPointerDown={spawnClickPulse}
       className={cn(
         "group relative isolate border bg-warm-white transition-all duration-300",
-        selected
-          ? "border-accent shadow-[0_18px_40px_-24px_rgba(184,150,46,0.45)]"
-          : "border-line hover:border-charcoal/20 hover:shadow-[0_18px_40px_-24px_rgba(27,26,24,0.3)]"
+        selected ? "border-gold-deep" : "border-line hover:border-ink/30"
       )}
     >
       <Link href={`/apartments/${apartment.id}`} className="focus-ring block">

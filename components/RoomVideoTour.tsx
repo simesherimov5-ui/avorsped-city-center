@@ -44,7 +44,7 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
               />
               <div className="absolute inset-0 bg-chrome/25 transition-colors duration-300 group-hover:bg-chrome/40" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-on-chrome/90 text-chrome shadow-md transition-transform duration-300 group-hover:scale-110">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-on-chrome/90 text-chrome transition-transform duration-300 group-hover:scale-110">
                   <Play className="h-5 w-5 translate-x-0.5" fill="currentColor" />
                 </span>
               </div>

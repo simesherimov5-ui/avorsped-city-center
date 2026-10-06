@@ -56,7 +56,7 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
             >
               <span
                 className={cn(
-                  "rounded-full bg-chrome px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-on-chrome shadow-md transition-opacity",
+                  "bg-chrome px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-on-chrome transition-opacity",
                   isHovered ? "opacity-100" : "opacity-0"
                 )}
               >

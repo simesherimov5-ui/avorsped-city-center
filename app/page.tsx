@@ -80,7 +80,7 @@ export default function HomePage() {
         </div>
         <ScrollReveal>
           <div className="relative mx-auto max-w-xl px-5 sm:px-8 lg:px-10">
-            <div className="eyebrow text-accent-soft">Следен чекор</div>
+            <div className="eyebrow text-accent">Следен чекор</div>
             <h2 className="mt-4 font-display text-4xl sm:text-5xl">Закажи консултација</h2>
             <p className="mx-auto mt-5 max-w-md text-on-chrome/70">
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.

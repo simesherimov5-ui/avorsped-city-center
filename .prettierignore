@@ -19,3 +19,6 @@ components/**/preview*.html
 javor-sped-complete
 meridian
 .agents
+
+# A stray copy of a reference file that was committed with the design pack; not project source.
+Claude outputs

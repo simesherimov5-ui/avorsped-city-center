@@ -117,12 +117,11 @@ export function Masterplan({
                   animate={{
                     scale: isSelected ? 1.25 : isHovered ? 1.15 : 1,
                     opacity: isDimmed ? 0.45 : 1,
-                    boxShadow:
-                      isSelected || isHovered ? "0 0 0 9px rgba(184,150,46,0.28)" : "0 0 0 0px rgba(184,150,46,0)",
                   }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-9 sm:w-9 sm:text-sm",
+                    (isSelected || isHovered) && "outline outline-1 outline-offset-4 outline-accent/50",
                     isSelected
                       ? "border-accent bg-accent text-chrome"
                       : isUnavailable
@@ -139,7 +138,7 @@ export function Masterplan({
                 <motion.div
                   initial={false}
                   animate={{ opacity: isHovered && !isSelected ? 1 : 0, y: isHovered && !isSelected ? 0 : 6 }}
-                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)]"
+                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="font-display text-base">{building.name}</div>
                   <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">

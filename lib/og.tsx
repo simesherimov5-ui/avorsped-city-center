@@ -3,14 +3,18 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 // (next/og draws with Satori: absolutely placed boxes need explicit top / left / right / bottom, not `inset`.)
-// The social share image (1200 × 630): a darkened photo of the project, a gold rule, and the name in Playfair Display.
-// Colours are the site's three (paper, ink, gold), written as rgb() because an image has no CSS variables.
+// The social share image (1200 × 630): a darkened photo of the project, a copper rule, and the name in Playfair Display.
+// Colours are three of the site's six (Травертин, Оникс, Светол бакар), written as rgb() because an image has no CSS
+// variables: keep them equal to the tokens in app/globals.css.
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_TYPE = "image/png";
 
-const PAPER = "rgb(250, 248, 245)";
-const INK = "rgb(20, 20, 20)";
-const GOLD = "rgb(201, 164, 92)";
+const TRAVERTINE_RGB = "244, 239, 231";
+const ONYX_RGB = "20, 17, 15";
+const COPPER_RGB = "221, 178, 142";
+const PAPER = `rgb(${TRAVERTINE_RGB})`;
+const INK = `rgb(${ONYX_RGB})`;
+const GOLD = `rgb(${COPPER_RGB})`;
 
 type OgOptions = {
   /** Small label above the title, e.g. "Јавор Шпед · Exclusive Building". */
@@ -57,8 +61,7 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage:
-            "linear-gradient(to top, rgba(20,20,20,0.94) 0%, rgba(20,20,20,0.72) 45%, rgba(20,20,20,0.3) 100%)",
+          backgroundImage: `linear-gradient(to top, rgba(${ONYX_RGB},0.94) 0%, rgba(${ONYX_RGB},0.72) 45%, rgba(${ONYX_RGB},0.3) 100%)`,
         }}
       />
       <div
@@ -68,7 +71,7 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
           left: 28,
           right: 28,
           bottom: 28,
-          border: "1px solid rgba(201,164,92,0.45)",
+          border: `1px solid rgba(${COPPER_RGB},0.45)`,
           display: "flex",
         }}
       />
@@ -80,7 +83,13 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
         <div style={{ fontSize: 78, lineHeight: 1.08, display: "flex" }}>{title}</div>
         {subtitle && (
           <div
-            style={{ fontSize: 32, lineHeight: 1.3, marginTop: 20, color: "rgba(250,248,245,0.78)", display: "flex" }}
+            style={{
+              fontSize: 32,
+              lineHeight: 1.3,
+              marginTop: 20,
+              color: `rgba(${TRAVERTINE_RGB},0.78)`,
+              display: "flex",
+            }}
           >
             {subtitle}
           </div>

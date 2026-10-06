@@ -123,9 +123,8 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
                 aria-hidden
                 className={cn(
                   "absolute left-0 top-[3px] h-[11px] w-[11px] rounded-full md:top-[4px]",
-                  state === "done" && "border border-gold bg-gold",
-                  state === "current" &&
-                    "border-2 border-gold bg-paper shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-gold)_25%,transparent)]",
+                  state === "done" && "border border-gold-deep bg-gold-deep",
+                  state === "current" && "border-2 border-gold-deep bg-paper outline outline-4 outline-gold-deep/25",
                   state === "upcoming" && "border border-ink/40 bg-paper"
                 )}
               />

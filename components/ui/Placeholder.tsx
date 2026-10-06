@@ -26,8 +26,8 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
         className={cn(
           "absolute inset-0",
           isDark
-            ? "bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.04)_0px,rgba(255,255,255,0.04)_1px,transparent_1px,transparent_16px)]"
-            : "bg-[repeating-linear-gradient(135deg,rgba(0,0,0,0.03)_0px,rgba(0,0,0,0.03)_1px,transparent_1px,transparent_16px)]"
+            ? "bg-[repeating-linear-gradient(135deg,color-mix(in_srgb,var(--color-travertine)_4%,transparent)_0px,color-mix(in_srgb,var(--color-travertine)_4%,transparent)_1px,transparent_1px,transparent_16px)]"
+            : "bg-[repeating-linear-gradient(135deg,color-mix(in_srgb,var(--color-onyx)_3%,transparent)_0px,color-mix(in_srgb,var(--color-onyx)_3%,transparent)_1px,transparent_1px,transparent_16px)]"
         )}
       />
       <div

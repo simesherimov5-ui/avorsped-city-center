@@ -56,8 +56,8 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-// The browser bar on phones takes the site's ink colour.
-export const viewport: Viewport = { themeColor: "rgb(20, 20, 20)" };
+// The browser bar on phones takes the site's dark (Оникс).
+export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

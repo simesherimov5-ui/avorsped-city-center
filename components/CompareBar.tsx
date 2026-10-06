@@ -17,7 +17,7 @@ export function CompareBar() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-warm-white/95 backdrop-blur px-4 py-3 shadow-[0_-6px_24px_rgba(0,0,0,0.08)] sm:px-8"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-warm-white/95 backdrop-blur px-4 py-3 sm:px-8"
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">

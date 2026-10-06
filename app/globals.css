@@ -2,42 +2,60 @@
 
 :root {
   /*
-   * Exactly three colors on this whole site: paper, ink and gold — plus
-   * tints/gradients of those (never a new hue). One fixed palette, no
-   * light/dark flip — see the design-system brief this implements.
+   * Exactly six colours on this whole site (the identity "Бронза и Травертин", decided in docs/design-brief.md).
+   * Every other shade is one of these at an opacity, never a new hue.
+   *
+   *   Оникс         main dark background
+   *   Еспресо       cards and surfaces on dark
+   *   Травертин     light background; text on dark
+   *   Варовник      surfaces and form fields on light
+   *   Бронза        accent and labels on LIGHT only (6.2:1 on Травертин)
+   *   Светол бакар  accent on DARK only: buttons, links, numbers (9.7:1 on Оникс)
+   *
+   * On Оникс / Еспресо: text Травертин, accent Светол бакар. On Травертин / Варовник: text Оникс, accent Бронза.
+   * On a Светол бакар fill: text Оникс. On a Бронза fill: text Травертин.
+   * Never Светол бакар as text on light (1.7:1), never Бронза as text on dark (2.7:1).
    */
-  --color-paper: #faf8f5;
-  --color-ink: #141414;
-  --color-gold: #c9a45c;
-  --color-gold-deep: #7a6136; /* gold text on paper — the only gold that's readable there (5.5:1) */
-  --color-gold-light: #e6cf9a; /* highlights/shimmer on ink only */
-  --color-gold-dark: #8e7240; /* gradient depth (logo/ring gradients only, never text) */
-  --color-line: rgba(20, 20, 20, 0.1);
-  /* The one muted-text colour on paper pages: ink at 62% (about #6B6B6B, 5:1 on paper). Lighter greys are for
-     borders and fills only, never for text. */
-  --color-muted: color-mix(in srgb, var(--color-ink) 62%, var(--color-paper));
-  --color-line-dark: rgba(250, 248, 245, 0.12);
-  /* The page background of the all-black pages (За нас, Контакт) — a deeper shade of ink, used nowhere else. */
-  --black: #0c0c0c;
+  --color-onyx: #14110f;
+  --color-espresso: #221c17;
+  --color-travertine: #f4efe7;
+  --color-limestone: #e6dccd;
+  --color-bronze: #6d533e;
+  --color-copper: #ddb28e;
+
+  /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
+     paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
+  --color-paper: var(--color-travertine);
+  --color-ink: var(--color-onyx);
+  --color-gold: var(--color-copper);
+  --color-gold-deep: var(--color-bronze); /* the accent as text on light: Бронза */
+  --color-gold-dark: var(--color-bronze);
+  --color-gold-light: var(--color-travertine); /* highlights on dark */
+  /* Hairlines: Оникс at 12% on light, Травертин at 12% on dark. */
+  --color-line: color-mix(in srgb, var(--color-onyx) 12%, transparent);
+  --color-line-dark: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  /* The one muted-text colour on light pages: Оникс at 68% (5.7:1 or better on Травертин and Варовник). On dark pages
+     muted text is Травертин at 64% (--mute in components/black/black.css). */
+  --color-muted: color-mix(in srgb, var(--color-onyx) 68%, transparent);
+  /* The page background of the all-dark pages (За нас, Контакт): the same Оникс as everywhere, one dark, not two. */
+  --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
   --nav-h: 61px;
 
   /*
-   * Legacy names kept as exact aliases of the three colors above, so the
-   * rest of the codebase (still using cream/warm-white/silver/charcoal/
-   * chrome/on-chrome/accent/accent-soft class names) renders the correct
-   * palette without a mechanical rename of every file. New components use
-   * paper/ink/gold directly.
+   * Older names, kept as aliases so the rest of the codebase (cream/warm-white/silver/charcoal/chrome/on-chrome/
+   * accent/accent-soft class names) renders the new palette without a mechanical rename of every file.
+   * cream is the light page (Травертин); warm-white and silver are the surfaces on light (Варовник).
    */
-  --color-cream: var(--color-paper);
-  --color-warm-white: var(--color-paper);
-  --color-silver: var(--color-paper);
-  --color-concrete: rgba(20, 20, 20, 0.14);
-  --color-charcoal: var(--color-ink);
-  --color-accent: var(--color-gold);
-  --color-accent-soft: var(--color-gold-light);
-  --color-chrome: var(--color-ink);
-  --color-on-chrome: var(--color-paper);
+  --color-cream: var(--color-travertine);
+  --color-warm-white: var(--color-limestone);
+  --color-silver: var(--color-limestone);
+  --color-concrete: color-mix(in srgb, var(--color-onyx) 14%, transparent);
+  --color-charcoal: var(--color-onyx);
+  --color-accent: var(--color-copper);
+  --color-accent-soft: var(--color-travertine);
+  --color-chrome: var(--color-onyx);
+  --color-on-chrome: var(--color-travertine);
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
@@ -50,6 +68,12 @@
 }
 
 @theme inline {
+  --color-onyx: var(--color-onyx);
+  --color-espresso: var(--color-espresso);
+  --color-travertine: var(--color-travertine);
+  --color-limestone: var(--color-limestone);
+  --color-bronze: var(--color-bronze);
+  --color-copper: var(--color-copper);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
@@ -166,14 +190,14 @@ h4 {
 }
 
 ::selection {
-  background: var(--color-gold);
-  color: var(--color-paper);
+  background: var(--color-copper);
+  color: var(--color-onyx);
 }
 
-/* Floor-plan apartments (SVG polygons). Status reads from the pattern, not from a hue: available is a gold
-   outline with a light gold fill, reserved is hatched, sold is dimmed (and the text legend stays). With the keyboard,
-   a polygon gets a clear 2px stroke; gold-deep is the gold that reads on paper, and the stroke keeps its screen
-   width however the plan is scaled. */
+/* Floor-plan apartments (SVG polygons), drawn on light. Status reads from the pattern, not from a hue: available is a
+   Бронза outline with a light Светол бакар fill, reserved is hatched, sold is dimmed (and the text legend stays). With
+   the keyboard, a polygon gets a clear 2px stroke; Бронза is the accent that reads on light, and the stroke keeps its
+   screen width however the plan is scaled. */
 .fp-poly {
   outline: none;
   stroke-width: 1px;
@@ -351,8 +375,8 @@ body {
 .hatch-ink {
   background-image: repeating-linear-gradient(
     45deg,
-    rgba(20, 20, 20, 0.15) 0,
-    rgba(20, 20, 20, 0.15) 1px,
+    color-mix(in srgb, var(--color-onyx) 15%, transparent) 0,
+    color-mix(in srgb, var(--color-onyx) 15%, transparent) 1px,
     transparent 1px,
     transparent 6px
   );
@@ -374,7 +398,7 @@ body {
 .click-pulse {
   position: absolute;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(201, 164, 92, 0.45) 0%, rgba(201, 164, 92, 0) 72%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-copper) 45%, transparent) 0%, transparent 72%);
   transform: scale(0);
   opacity: 0.6;
   animation: click-pulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -404,16 +428,20 @@ body {
 .hero-scrim {
   background: linear-gradient(
     to bottom,
-    rgba(20, 20, 20, 0.44) 0%,
-    rgba(20, 20, 20, 0.58) 10%,
-    rgba(20, 20, 20, 0.5) 22%,
-    rgba(20, 20, 20, 0.3) 32%,
-    rgba(20, 20, 20, 0.1) 42%,
-    rgba(20, 20, 20, 0) 55%,
-    rgba(20, 20, 20, 0.2) 80%,
-    rgba(20, 20, 20, 0.4) 100%
+    color-mix(in srgb, var(--color-onyx) 44%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 58%, transparent) 10%,
+    color-mix(in srgb, var(--color-onyx) 50%, transparent) 22%,
+    color-mix(in srgb, var(--color-onyx) 30%, transparent) 32%,
+    color-mix(in srgb, var(--color-onyx) 10%, transparent) 42%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 20%, transparent) 80%,
+    color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
   );
 }
 .hero-scrim-radial {
-  background: radial-gradient(ellipse 70% 46% at 50% 14%, rgba(20, 20, 20, 0.3), transparent 72%);
+  background: radial-gradient(
+    ellipse 70% 46% at 50% 14%,
+    color-mix(in srgb, var(--color-onyx) 30%, transparent),
+    transparent 72%
+  );
 }

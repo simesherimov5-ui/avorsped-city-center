@@ -109,16 +109,7 @@
   display: inline-block;
 }
 .jsi-gold {
-  background: linear-gradient(
-    120deg,
-    var(--color-gold-dark) 0%,
-    var(--color-gold) 35%,
-    var(--color-gold-light) 60%,
-    var(--color-gold) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-copper);
 }
 /* Hidden from the first paint, so nothing flashes before the animation code runs. */
 .jsi-j,

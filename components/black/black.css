@@ -1,17 +1,18 @@
 /*
- * The all-black theme, used by the За нас and Контакт pages only (a `data-theme="black"` wrapper).
- * No paper backgrounds here. Colours come from the site tokens; --black, --mute, --gold-line and the
- * --color-line override below exist only inside this theme. Gold stays a small share of the page: eyebrows,
- * mono numbers, hairlines, one italic phrase per headline, selected states and one filled button.
+ * The all-dark theme, used by the За нас and Контакт pages only (a `data-theme="black"` wrapper). It is the same Оникс
+ * as every other dark surface on the site: one dark, not two.
+ * No light backgrounds here. Colours come from the site tokens; --mute and --gold-line below exist only inside this
+ * theme. The accent (Светол бакар) stays a small share of the page: eyebrows, numbers, hairlines, one italic phrase
+ * per headline, selected states and one filled button.
  *
  * Sizes: every size is capped, so nothing grows with the window above ~1440px, and gaps come from one scale
  * (4, 8, 12, 16, 24, 32, 48, 64px) except where the brief gives an exact number.
  */
 [data-theme="black"] {
-  --color-line: rgba(250, 248, 245, 0.12);
-  --color-line-dark: rgba(250, 248, 245, 0.12);
-  --gold-line: rgba(201, 164, 92, 0.3);
-  --mute: rgba(250, 248, 245, 0.64);
+  --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --color-line-dark: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --gold-line: color-mix(in srgb, var(--color-copper) 30%, transparent);
+  --mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
   --bk-px: clamp(20px, 5vw, 64px);
   --bk-gap: clamp(64px, 7.5vw, 112px);
   color: var(--color-paper);
@@ -19,8 +20,8 @@
   line-height: 1.6;
 }
 [data-theme="black"] ::selection {
-  background: var(--color-gold);
-  color: var(--black);
+  background: var(--color-copper);
+  color: var(--color-onyx);
 }
 .bk-page {
   background: var(--black);

@@ -142,7 +142,10 @@ export function Hero() {
           on short/wide viewports, not just the tall ones. */}
       <div
         className="relative px-6 pt-16 text-center sm:pt-20 lg:pt-24"
-        style={{ textShadow: "0 1px 3px rgba(0,0,0,0.55), 0 4px 20px rgba(0,0,0,0.4)" }}
+        style={{
+          textShadow:
+            "0 1px 3px color-mix(in srgb, var(--color-onyx) 55%, transparent), 0 4px 20px color-mix(in srgb, var(--color-onyx) 40%, transparent)",
+        }}
       >
         <div ref={eyebrowRef} className="eyebrow text-gold">
           Exclusive Building · Основано 1994

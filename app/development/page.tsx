@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
 import { ClickToLoadMap } from "@/components/ui/ClickToLoadMap";
-import { DOT_COLOR } from "@/components/ui/StatusBadge";
+import { DOT_COLOR, StatusMarker } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
-import { cn } from "@/lib/cn";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
 import { pageMetadata } from "@/lib/seo";
+import type { UnitStatus } from "@/types";
 import { availableWord, plural, unitsText } from "@/lib/plural";
 
 export const metadata: Metadata = pageMetadata({
@@ -106,9 +106,9 @@ export default function DevelopmentPage() {
                 <div style={{ width: `${soldPct}%` }} className={DOT_COLOR.sold} />
               </div>
               <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-                <MeterLabel color={DOT_COLOR.available} label="Достапни" value={counts.available} />
-                <MeterLabel color={DOT_COLOR.reserved} label="Резервирани" value={counts.reserved} />
-                <MeterLabel color={DOT_COLOR.sold} label="Продадени" value={counts.sold} />
+                <MeterLabel status="available" label="Достапни" value={counts.available} />
+                <MeterLabel status="reserved" label="Резервирани" value={counts.reserved} />
+                <MeterLabel status="sold" label="Продадени" value={counts.sold} />
               </div>
             </div>
           </Reveal>
@@ -187,10 +187,12 @@ function Stat({ label, value, className }: { label: string; value: string; class
   );
 }
 
-function MeterLabel({ color, label, value }: { color: string; label: string; value: number }) {
+function MeterLabel({ status, label, value }: { status: UnitStatus; label: string; value: number }) {
   return (
     <div className="flex items-center gap-2">
-      <span className={cn("h-2 w-2 rounded-full", color)} aria-hidden />
+      <span className={status === "available" ? "text-gold-deep" : status === "reserved" ? "text-ink" : "text-muted"}>
+        <StatusMarker status={status} />
+      </span>
       <span className="text-muted">{label}</span>
       <span className="font-medium text-charcoal">{value}</span>
     </div>

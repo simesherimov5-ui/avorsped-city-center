@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Plus, Minus, Maximize2, X, ArrowRight } from "lucide-react";
 import type { Apartment, MediaImage, PlanRegion } from "@/types";
 import { formatArea, formatPrice, statusLabel, typeLabel } from "@/lib/format";
-import { DOT_COLOR } from "@/components/ui/StatusBadge";
+import { StatusMarker } from "@/components/ui/StatusBadge";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { DURATION, EASE } from "@/lib/motion";
 import { cn } from "@/lib/cn";
@@ -286,14 +286,13 @@ export function RealFloorPlanViewer({
                     className={cn(
                       "absolute inset-0 transition-colors duration-150",
                       isSelected
-                        ? "bg-accent/[0.14]"
+                        ? "bg-accent/[0.14] outline outline-1 -outline-offset-1 outline-gold-deep/45"
                         : isHovered
                           ? "bg-accent/[0.07]"
                           : unavailable
                             ? "bg-ink/[0.025]"
                             : "bg-transparent"
                     )}
-                    style={isSelected ? { boxShadow: "inset 0 0 0 1px rgba(184,150,46,0.45)" } : undefined}
                   />
 
                   {/* Corner brackets, counter-scaled to a constant on-screen size
@@ -322,7 +321,7 @@ export function RealFloorPlanViewer({
                   >
                     <span
                       className={cn(
-                        "flex h-6 min-w-6 items-center justify-center whitespace-nowrap rounded-full border px-1.5 text-[11px] font-semibold shadow-sm transition-colors duration-150",
+                        "flex h-6 min-w-6 items-center justify-center whitespace-nowrap border px-1.5 text-[11px] font-semibold transition-colors duration-150",
                         isSelected || isHovered
                           ? "border-accent bg-accent text-chrome"
                           : "border-charcoal/20 bg-warm-white/90 text-charcoal/70"
@@ -353,7 +352,7 @@ export function RealFloorPlanViewer({
               transition={{ duration: DURATION.fast, ease: EASE }}
               style={{ left: cardPos.x, top: cardPos.y, width: CARD_W }}
               className={cn(
-                "pointer-events-none absolute z-20 hidden border bg-warm-white/95 px-4 py-3 shadow-[0_16px_32px_-18px_rgba(27,26,24,0.4)] backdrop-blur-sm sm:block",
+                "pointer-events-none absolute z-20 hidden border bg-warm-white/95 px-4 py-3 backdrop-blur-sm sm:block",
                 selectedId === cardApartment.id ? "border-accent/50" : "border-line"
               )}
             >
@@ -364,7 +363,7 @@ export function RealFloorPlanViewer({
                 {cardApartment.bathrooms} {cardApartment.bathrooms === 1 ? "бања" : "бањи"}
               </div>
               <div className="mt-1.5 flex items-center gap-1.5 text-xs text-ink/70">
-                <span className={cn("h-1.5 w-1.5 rounded-full", DOT_COLOR[cardApartment.status])} />
+                <StatusMarker status={cardApartment.status} className="h-1.5 w-1.5" />
                 {statusLabel(cardApartment.status)}
               </div>
               {selectedId === cardApartment.id && (
@@ -402,7 +401,7 @@ export function RealFloorPlanViewer({
             onClick={() => zoomTo(zoom + 0.6)}
             disabled={zoom >= MAX_ZOOM}
             aria-label="Зумирај"
-            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal shadow-sm transition-colors hover:border-accent active:scale-90 disabled:opacity-30 disabled:active:scale-100"
+            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal transition-colors hover:border-gold-deep active:scale-90 disabled:opacity-30 disabled:active:scale-100"
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -411,7 +410,7 @@ export function RealFloorPlanViewer({
             onClick={() => zoomTo(zoom - 0.6)}
             disabled={zoom <= MIN_ZOOM}
             aria-label="Одзумирај"
-            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal shadow-sm transition-colors hover:border-accent active:scale-90 disabled:opacity-30 disabled:active:scale-100"
+            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal transition-colors hover:border-gold-deep active:scale-90 disabled:opacity-30 disabled:active:scale-100"
           >
             <Minus className="h-4 w-4" />
           </button>
@@ -419,7 +418,7 @@ export function RealFloorPlanViewer({
             type="button"
             onClick={reset}
             aria-label="Прикажи ја целата основа"
-            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal shadow-sm transition-colors hover:border-accent active:scale-90"
+            className="focus-ring flex h-9 w-9 items-center justify-center rounded-full border border-line bg-warm-white text-charcoal transition-colors hover:border-gold-deep active:scale-90"
           >
             <Maximize2 className="h-3.5 w-3.5" />
           </button>
@@ -451,7 +450,7 @@ export function RealFloorPlanViewer({
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ duration: DURATION.slow, ease: EASE }}
-                className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-warm-white p-6 pb-8 shadow-[0_-12px_32px_rgba(0,0,0,0.12)]"
+                className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-warm-white p-6 pb-8"
               >
                 <div className="flex items-start justify-between gap-4">
                   <AnimatePresence mode="wait">
@@ -506,7 +505,7 @@ function ApartmentSummary({ apartment }: { apartment: Apartment }) {
         </span>
       </div>
       <div className="mt-2 flex items-center gap-2 text-sm">
-        <span className={cn("h-2 w-2 rounded-full", DOT_COLOR[apartment.status])} />
+        <StatusMarker status={apartment.status} />
         <span className="text-ink/70">{statusLabel(apartment.status)}</span>
         <span className="text-line">·</span>
         <span className="font-medium text-charcoal">{formatPrice(apartment.price)}</span>

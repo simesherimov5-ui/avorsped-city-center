@@ -6,21 +6,30 @@ layout concept, motion style) without an approved entry in the decision log belo
 
 ## Direction
 
-Status: **to be confirmed by the client.**
+Status: **the identity «Бронза & Травертин» was approved on 2026-10-06** (decision log below). The reference is
+`javor-sped-complete/reference/redizajn-bronza-travertin.html`; the numbers in the redesign brief are the source of truth.
 
-- In one sentence, what should the site feel like?
-- Three to five tone words:
-- Reference sites (links) and what to take from each:
-- Audience and the primary action (for example: buyers explore units and book a consultation):
-- What is explicitly out of scope:
+- **Six colours, nothing else** (every other shade is one of them at an opacity): Оникс `#14110F` (main dark), Еспресо
+  `#221C17` (cards and surfaces on dark), Травертин `#F4EFE7` (light background; text on dark), Варовник `#E6DCCD`
+  (surfaces and form fields on light), Бронза `#6D533E` (accent on light only), Светол бакар `#DDB28E` (accent on dark only).
+  On dark: text Травертин, accent Светол бакар. On light: text Оникс, accent Бронза. Never Светол бакар as text on light,
+  never Бронза as text on dark. Every page keeps the light or dark surface it has.
+- **Two typefaces:** Playfair Display for headings and large display numbers; Montserrat for everything else.
+- **Shape and motion:** square corners (0–2px), no shadows, no gradients except photo scrims and the one sheen in the footer;
+  slow and calm motion (0.8–1.4s, `cubic-bezier(.22,1,.36,1)`, no bounce or overshoot), at most one large animated moment per section.
+- **Components:** the filling primary button, the floor picker on the building page, the self-drawing logo in the opening, the
+  year counter, the metallic sheen on the footer name, the schematic location map, and the project card hover.
+- Still open (not decided): tone words, reference sites, audience and primary action, what is out of scope.
 
 ## As built today
 
 Facts read from the code, not decisions.
 
-- Palette tokens in `app/globals.css` (`:root`, lines 9-16): `paper`, `ink`, `gold`, `gold-deep`, `gold-light`, `gold-dark`, `line`, `line-dark`.
-  The older names `cream`, `warm-white`, `silver`, `concrete`, `charcoal`, `accent`, `accent-soft` are aliases of these.
-  The README describes the palette as off-white, charcoal and a gold accent.
+- Palette tokens in `app/globals.css` (`:root`): the six colours `onyx`, `espresso`, `travertine`, `limestone`, `bronze`, `copper`.
+  The names the code already used are aliases of them: `paper` = Травертин, `ink` = Оникс, `--black` = Оникс, `gold` and
+  `accent` = Светол бакар, `gold-deep` and `gold-dark` = Бронза, `gold-light` and `accent-soft` = Травертин, `warm-white` and
+  `silver` = Варовник, `cream` = Травертин, `charcoal` and `chrome` = Оникс, `on-chrome` = Травертин. `line` is Оникс at 12%,
+  `line-dark` Травертин at 12%, `muted` Оникс at 68%.
 - Typefaces: Playfair Display (display, 400 and 400 italic), Inter (body) and IBM Plex Mono, all loaded with `next/font` and `subsets: ["latin", "cyrillic"]` (`app/layout.tsx`).
 - Motion: two systems coexist. Framer Motion scroll reveals (`components/ui/Reveal.tsx`) and GSAP + Lenis (`components/motion/`, `components/intro/`). Both respect reduced-motion.
 - Language: Macedonian (`<html lang="mk">`); English is planned.
@@ -61,3 +70,4 @@ No proposals yet.
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2026-10-04 | Heading font: Playfair Display (400, 400 italic), with Cyrillic. Inter and IBM Plex Mono also load Cyrillic.                                                                                                                                                  | Client (default choice stated in the audit brief) | Replaces Fraunces. Cormorant Garamond and Source Serif 4 were shown side by side; the client can still pick one of them (one constant in `app/layout.tsx` and `--font-display` in `app/globals.css`). |
 | 2026-10-06 | За нас: the group's companies as a clickable circle (nine points on a gold ring, the selected company described in the middle, autoplay every 7 s) instead of the single line of names. Reference: `javor-sped-complete/reference/za-nas-kompanii-krug.html`. | Sime, 2026-10-06                                  | Colours, fonts and tokens unchanged. Texts and links come later (`docs/content-needed.md` 1.8). Reduced motion: no autoplay, no arc, no pause button.                                                 |
+| 2026-10-06 | New identity «Бронза & Травертин»: six colours, Playfair Display + Montserrat, components per `javor-sped-complete/reference/redizajn-bronza-travertin.html`.                                                                                                 | Sime                                              | Phases: 1 colours, 2 fonts, 3 primary button, 4 floor picker, 5 opening, 6 year counter, 7 footer sheen, 8 location map. Page layouts, texts, data and routes stay as they are.                       |
