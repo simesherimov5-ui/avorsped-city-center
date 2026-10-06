@@ -36,7 +36,7 @@ export function ApartmentFilters({
     <div className="border border-line bg-warm-white p-6">
       <div className="flex items-start justify-between gap-3 border-b border-line pb-5">
         <div>
-          <div className="eyebrow text-ink/40">Резултати</div>
+          <div className="eyebrow text-muted">Резултати</div>
           {resultsCount !== undefined && (
             <div className="mt-1.5 font-display text-3xl text-gold-deep">{resultsCount}</div>
           )}
@@ -45,7 +45,7 @@ export function ApartmentFilters({
           <button
             type="button"
             onClick={() => onChange({})}
-            className="focus-ring -mr-2 mt-1 flex min-h-11 items-center gap-1.5 px-2 text-sm text-ink/60 transition-colors hover:text-charcoal"
+            className="focus-ring -mr-2 mt-1 flex min-h-11 items-center gap-1.5 px-2 text-sm text-muted transition-colors hover:text-charcoal"
           >
             <X className="h-3.5 w-3.5" /> Исчисти
           </button>
@@ -74,6 +74,7 @@ export function ApartmentFilters({
               <button
                 key={n}
                 type="button"
+                aria-pressed={value.bedrooms === n}
                 onClick={() => onChange({ ...value, bedrooms: value.bedrooms === n ? undefined : n })}
                 className={cn(
                   "focus-ring min-h-11 min-w-11 border px-3 py-1.5 text-base transition-colors sm:min-h-0 sm:min-w-0 sm:text-sm",
@@ -196,7 +197,7 @@ export function ApartmentFilters({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="eyebrow text-ink/50">{label}</span>
+      <span className="eyebrow text-muted">{label}</span>
       {children}
     </label>
   );

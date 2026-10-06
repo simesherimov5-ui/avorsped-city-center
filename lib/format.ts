@@ -11,7 +11,8 @@ export function formatPrice(value: number): string {
 }
 
 export function formatArea(value: number): string {
-  return `${value.toFixed(1)} м²`;
+  // Decimal comma, as written in Macedonian; done by hand for the same reason as formatPrice.
+  return `${value.toFixed(1).replace(".", ",")} м²`;
 }
 
 export function statusLabel(status: "available" | "reserved" | "sold"): string {

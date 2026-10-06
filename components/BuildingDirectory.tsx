@@ -34,7 +34,7 @@ export function BuildingDirectory({
 
   return (
     <div className="mx-auto max-w-xl overflow-hidden border border-line bg-warm-white">
-      <div className="flex items-center gap-2.5 border-b border-line bg-cream px-5 py-3 text-ink/50">
+      <div className="flex items-center gap-2.5 border-b border-line bg-cream px-5 py-3 text-muted">
         <Building2 className="h-4 w-4" strokeWidth={1.5} />
         <span className="eyebrow">{buildingName} · Директориум на катови</span>
       </div>
@@ -65,7 +65,7 @@ export function BuildingDirectory({
                 <span
                   className={cn(
                     "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
-                    isActive || isHovered ? "border-accent bg-accent text-chrome" : "border-line text-ink/50"
+                    isActive || isHovered ? "border-accent bg-accent text-chrome" : "border-line text-muted"
                   )}
                 >
                   {floor.number}
@@ -79,7 +79,7 @@ export function BuildingDirectory({
                   >
                     {floor.label}
                   </span>
-                  <span className="text-xs text-ink/45">{floor.meta}</span>
+                  <span className="text-xs text-muted">{floor.meta}</span>
                 </span>
               </motion.span>
               <motion.span

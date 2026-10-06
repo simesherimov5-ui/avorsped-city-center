@@ -26,6 +26,7 @@ export default function ProjectsPage() {
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading
+          as="h1"
           eyebrow="Портфолио"
           title="Нашите проекти"
           description="Од нашата прва станбена зграда до City Center."
@@ -40,7 +41,7 @@ export default function ProjectsPage() {
                 "focus-ring min-h-11 border px-4 py-2 text-base sm:text-sm",
                 tab === t.value
                   ? "border-accent bg-accent/10 text-charcoal"
-                  : "border-line text-ink/60 hover:border-accent/50"
+                  : "border-line text-muted hover:border-accent/50"
               )}
             >
               {t.label}

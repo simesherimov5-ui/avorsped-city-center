@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
@@ -13,6 +13,8 @@ import { ConstructionProgress } from "@/components/construction/ConstructionProg
 import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
+import { pageMetadata } from "@/lib/seo";
+import { unitsText } from "@/lib/plural";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -21,36 +23,48 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  return { title: project ? project.name : "Проект" };
+  if (!project) return { title: "Проект", robots: { index: false } };
+  return pageMetadata({
+    title: project.name,
+    description: `${project.name}, ${project.location}. ${project.description}`,
+    path: `/projects/${project.slug}`,
+    image: null,
+  });
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
+  // A project with its own page (City Center → /development, Дојрански Рај → /dojran) has no second copy here: the
+  // address permanently redirects to the main one, so each project has one page for search engines and sharing.
+  if (project.href) permanentRedirect(project.href);
 
   return (
     <div className="pt-24 sm:pt-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/projects"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектите
         </Link>
       </div>
 
       <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
-        <Reveal>
+        <Reveal immediate>
           {project.gallery.length > 0 ? (
             <PhotoCarousel
               photos={project.gallery}
               className={project.imageFit === "contain" ? "max-w-4xl" : undefined}
+              sizes={project.imageFit === "contain" ? "(max-width: 896px) 55vw, 490px" : undefined}
               fit={project.imageFit}
+              focus={project.imageFocus}
             />
           ) : (
             <Media
               image={project.heroImage}
+              focus={project.imageFocus}
               label={`${project.name} — насловна визуелизација`}
               className="aspect-[16/7]"
               sizes="100vw"
@@ -58,16 +72,22 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
         </Reveal>
 
-        <Reveal delay={0.08}>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-ink/50 sm:text-sm">
-            <span className="eyebrow text-ink/40">Метаподатоци</span>
+        <Reveal immediate delay={0.08}>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-muted sm:text-sm">
+            <span className="sr-only">Метаподатоци</span>
             <span>{project.location}</span>
-            <span className="text-line">·</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
             <span>{project.year}</span>
-            <span className="text-line">·</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
             <span>{project.statusLabelOverride ?? projectStatusLabel(project.status)}</span>
-            <span className="text-line">·</span>
-            <span>{project.units} станови</span>
+            <span aria-hidden className="text-line">
+              ·
+            </span>
+            <span>{unitsText(project.units)}</span>
           </div>
         </Reveal>
 
@@ -83,7 +103,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Видео разгледување на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                  <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на просторија за да пуштите кратко видео разгледување.
                   </p>
                   <div className="mt-6">
@@ -97,7 +117,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Reveal>
                 <div className="mt-14 border-t border-line pt-12">
                   <h2 className="font-display text-2xl">Распоред на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-ink/60">
+                  <p className="mt-2 max-w-md text-sm text-muted">
                     Кликнете на број за да пуштите видео од таа просторија.
                   </p>
                   <div className="mt-6">
@@ -136,11 +156,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <Reveal delay={0.15}>
             <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
               <div>
-                <div className="eyebrow text-ink/40">Спецификации</div>
+                <div className="eyebrow text-muted">Спецификации</div>
                 <dl className="mt-4 space-y-3.5">
                   {project.specifications.map((s) => (
                     <div key={s.label} className="flex justify-between gap-4 border-b border-line pb-3 text-sm">
-                      <dt className="eyebrow pt-0.5 text-ink/40">{s.label}</dt>
+                      <dt className="eyebrow pt-0.5 text-muted">{s.label}</dt>
                       <dd className="text-right font-medium text-charcoal">{s.value}</dd>
                     </div>
                   ))}

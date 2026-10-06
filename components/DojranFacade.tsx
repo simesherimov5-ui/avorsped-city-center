@@ -23,7 +23,13 @@ export function DojranFacade({ image }: { image: { src: string; alt: string; isP
     <div className="relative self-start">
       {/* The floor bands over the photo are slivers a finger can't hit on a phone, and their labels only
           show on hover — phones use the floor list below the photo instead (md and up keep the bands). */}
-      <Media image={image} label="Дојрански Рај — фасада" className="aspect-[16/8]" sizes="100vw" />
+      <Media
+        image={image}
+        label="Дојрански Рај — фасада"
+        className="aspect-[16/8]"
+        sizes="(max-width: 1152px) 100vw, 1152px"
+        priority
+      />
       {BANDS.map((band) => {
         const floor = dojranFloors.find((f) => f.number === band.number);
         if (!floor) return null;

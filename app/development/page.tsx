@@ -6,15 +6,20 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
+import { ClickToLoadMap } from "@/components/ui/ClickToLoadMap";
 import { DOT_COLOR } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { cn } from "@/lib/cn";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
+import { pageMetadata } from "@/lib/seo";
+import { availableWord, plural, unitsText } from "@/lib/plural";
 
-export const metadata: Metadata = {
-  title: "Тековен проект — City Center",
-  description: "Истражете го проектот City Center со шест згради: зданија, катови и достапност на станови.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "City Center — станбен комплекс во Струмица",
+  description: `City Center е станбен комплекс од ${buildings.length} згради во Струмица. Изберете зграда и кат и погледнете ги ${availabilityCounts().available} ${availableWord(availabilityCounts().available)} ${plural(availabilityCounts().available, "стан", "станови")}.`,
+  path: "/development",
+  image: null,
+});
 
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
@@ -28,16 +33,16 @@ export default function DevelopmentPage() {
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
       <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-20 pt-16 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-          <Reveal>
+          <Reveal immediate>
             <div className="eyebrow text-gold-deep">{development.location}</div>
             <h1 className="mt-4 font-display text-5xl sm:text-6xl">{development.name}</h1>
           </Reveal>
-          <Reveal delay={0.08}>
+          <Reveal immediate delay={0.08}>
             <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
           </Reveal>
         </div>
 
-        <Reveal delay={0.16}>
+        <Reveal immediate delay={0.16}>
           <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
             <Stat label="Згради" value="6" />
             <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
@@ -80,9 +85,10 @@ export default function DevelopmentPage() {
             <div>
               <div className="eyebrow text-gold-deep">Достапност</div>
               <h2 className="mt-4 font-display text-3xl sm:text-4xl">
-                {counts.available} од {counts.total} станови сè уште се достапни
+                {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
+                {availableWord(counts.available)}
               </h2>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
                 Статусот на секој стан во сите шест згради се ажурира во реално време.
               </p>
               <div className="mt-8">
@@ -133,9 +139,9 @@ export default function DevelopmentPage() {
                   >
                     <span>
                       <span className="text-charcoal">{point.name}</span>
-                      <span className="ml-2 text-ink/40">· {point.category}</span>
+                      <span className="ml-2 text-muted">· {point.category}</span>
                     </span>
-                    <span className="shrink-0 text-ink/50">{point.distance}</span>
+                    <span className="shrink-0 text-muted">{point.distance}</span>
                   </li>
                 ))}
               </ul>
@@ -143,10 +149,9 @@ export default function DevelopmentPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div className="aspect-[4/3] border border-line lg:aspect-auto lg:h-full">
-              <iframe
+              <ClickToLoadMap
                 title="Мапа со локација на City Center"
-                className="h-full w-full grayscale"
-                loading="lazy"
+                place={development.mapQuery}
                 src={`https://www.google.com/maps?q=${encodeURIComponent(development.mapQuery)}&output=embed`}
               />
             </div>
@@ -177,7 +182,7 @@ function Stat({ label, value, className }: { label: string; value: string; class
       <div className="font-display text-4xl text-gold-deep sm:text-5xl">
         <CountUp value={value} />
       </div>
-      <div className="eyebrow mt-2 text-ink/50">{label}</div>
+      <div className="eyebrow mt-2 text-muted">{label}</div>
     </div>
   );
 }
@@ -186,7 +191,7 @@ function MeterLabel({ color, label, value }: { color: string; label: string; val
   return (
     <div className="flex items-center gap-2">
       <span className={cn("h-2 w-2 rounded-full", color)} aria-hidden />
-      <span className="text-ink/60">{label}</span>
+      <span className="text-muted">{label}</span>
       <span className="font-medium text-charcoal">{value}</span>
     </div>
   );

@@ -359,7 +359,7 @@ export function RealFloorPlanViewer({
             >
               <div className="eyebrow text-gold-deep">Стан {cardApartment.number}</div>
               <div className="mt-1.5 font-display text-xl text-charcoal">{formatArea(cardApartment.area)}</div>
-              <div className="mt-1 text-xs text-ink/60">
+              <div className="mt-1 text-xs text-muted">
                 {cardApartment.bedrooms} {cardApartment.bedrooms === 1 ? "спална" : "спални"} ·{" "}
                 {cardApartment.bathrooms} {cardApartment.bathrooms === 1 ? "бања" : "бањи"}
               </div>
@@ -385,7 +385,7 @@ export function RealFloorPlanViewer({
                     type="button"
                     onClick={() => setSelectedId(null)}
                     aria-label="Затвори"
-                    className="focus-ring flex h-8 w-8 shrink-0 items-center justify-center text-ink/40 hover:text-charcoal"
+                    className="focus-ring flex h-8 w-8 shrink-0 items-center justify-center text-muted hover:text-charcoal"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -426,7 +426,7 @@ export function RealFloorPlanViewer({
         </div>
 
         {apartments.length > 0 && (
-          <p className="pointer-events-none absolute left-3 top-3 hidden text-[11px] text-ink/40 sm:block">
+          <p className="pointer-events-none absolute left-3 top-3 hidden text-[11px] text-muted sm:block">
             Задржете го покажувачот или кликнете на стан
           </p>
         )}
@@ -469,7 +469,7 @@ export function RealFloorPlanViewer({
                     type="button"
                     onClick={() => setSelectedId(null)}
                     aria-label="Затвори"
-                    className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center text-ink/40"
+                    className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center text-muted"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -500,7 +500,7 @@ function ApartmentSummary({ apartment }: { apartment: Apartment }) {
       <div className="eyebrow text-gold-deep">Стан {apartment.number}</div>
       <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className="font-display text-2xl">{formatArea(apartment.area)}</span>
-        <span className="text-sm text-ink/60">
+        <span className="text-sm text-muted">
           {typeLabel(apartment.type)} · {apartment.bedrooms} {apartment.bedrooms === 1 ? "спална соба" : "спални соби"}{" "}
           · {apartment.bathrooms} {apartment.bathrooms === 1 ? "бања" : "бањи"}
         </span>

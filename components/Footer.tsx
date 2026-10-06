@@ -1,4 +1,5 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
+import { ConsultationLink } from "@/components/ConsultationLink";
 import { companyInfo } from "@/data";
 
 export function Footer() {
@@ -55,12 +56,9 @@ export function Footer() {
           <p className="mt-5 text-sm leading-relaxed text-on-chrome/60">
             Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
           </p>
-          <Link
-            href="/consultation"
-            className="mt-5 inline-flex min-h-12 items-center border border-on-chrome/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-on-chrome/60 hover:bg-on-chrome/10"
-          >
+          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-on-chrome/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-on-chrome/60 hover:bg-on-chrome/10">
             Закажи консултација
-          </Link>
+          </ConsultationLink>
         </div>
       </div>
       <div className="border-t border-on-chrome/10 px-5 sm:px-8 py-6 text-xs text-on-chrome/60 lg:px-10">

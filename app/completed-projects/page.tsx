@@ -4,11 +4,13 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Завршени проекти",
-  description: "Завршените станбени проекти на Јавор Шпед.",
-};
+  description: "Станбените проекти што Јавор Шпед ги заврши и ги предаде на купувачите.",
+  path: "/completed-projects",
+});
 
 export default function CompletedProjectsPage() {
   const completed = projects.filter((p) => p.status === "completed");
@@ -17,6 +19,7 @@ export default function CompletedProjectsPage() {
     <div className="pt-24 sm:pt-28">
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading
+          as="h1"
           eyebrow="Портфолио"
           title="Завршени проекти"
           description="Проекти на Јавор Шпед со завршена изградба, целосно предадени на сопствениците."

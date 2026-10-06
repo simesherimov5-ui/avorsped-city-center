@@ -1,0 +1,203 @@
+/*
+ * The all-black theme, used by the За нас and Контакт pages only (a `data-theme="black"` wrapper).
+ * No paper backgrounds here. Colours come from the site tokens; --black, --mute, --gold-line and the
+ * --color-line override below exist only inside this theme. Gold stays a small share of the page: eyebrows,
+ * mono numbers, hairlines, one italic phrase per headline, selected states and one filled button.
+ *
+ * Sizes: every size is capped, so nothing grows with the window above ~1440px, and gaps come from one scale
+ * (4, 8, 12, 16, 24, 32, 48, 64px) except where the brief gives an exact number.
+ */
+[data-theme="black"] {
+  --color-line: rgba(250, 248, 245, 0.12);
+  --color-line-dark: rgba(250, 248, 245, 0.12);
+  --gold-line: rgba(201, 164, 92, 0.3);
+  --mute: rgba(250, 248, 245, 0.64);
+  --bk-px: clamp(20px, 5vw, 64px);
+  --bk-gap: clamp(64px, 7.5vw, 112px);
+  color: var(--color-paper);
+  font-size: 15px;
+  line-height: 1.6;
+}
+[data-theme="black"] ::selection {
+  background: var(--color-gold);
+  color: var(--black);
+}
+.bk-page {
+  background: var(--black);
+  /* The fixed navbar is solid on these pages, so content starts below it. */
+  padding-top: var(--nav-h);
+  overflow-x: clip;
+}
+
+/* The content container: content is at most 1240px wide, centred, with side padding clamp(20px, 5vw, 64px).
+   Above ~1370px the page stops growing. Full-bleed parts (photos, bands) sit outside it. */
+.bk-wrap {
+  width: 100%;
+  max-width: calc(1240px + 2 * var(--bk-px));
+  margin-inline: auto;
+  padding-inline: var(--bk-px);
+}
+
+/* Type */
+[data-theme="black"] .bk-serif {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+[data-theme="black"] .bk-serif em,
+[data-theme="black"] .bk-gold-i {
+  color: var(--color-gold);
+  font-style: italic;
+}
+[data-theme="black"] .bk-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="black"] .bk-h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.1;
+}
+[data-theme="black"] .bk-h2 {
+  margin: 16px 0 clamp(24px, 3vw, 48px);
+  font-size: clamp(24px, 2.6vw, 36px);
+  line-height: 1.15;
+}
+
+/* Eyebrow: a 32px gold line, then the label. Centred eyebrows get a line on both sides. */
+.bk-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-gold);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.bk-eyebrow::before,
+.bk-eyebrow.is-center::after {
+  content: "";
+  flex: none;
+  width: 32px;
+  height: 1px;
+  background: var(--color-gold);
+}
+.bk-eyebrow.is-center {
+  justify-content: center;
+}
+
+/* Small label */
+.bk-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* Buttons: outline (44px) and the one filled button per page (52px). */
+.bk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--color-gold);
+  background: transparent;
+  color: var(--color-gold);
+  font:
+    500 11px/1 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s,
+    transform 0.2s;
+}
+.bk-btn:hover {
+  background: var(--color-gold);
+  color: var(--black);
+}
+.bk-btn:active {
+  transform: scale(0.98);
+}
+.bk-btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.bk-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.bk-btn svg {
+  flex: none;
+  transition: transform 0.3s;
+}
+.bk-btn:hover svg {
+  transform: translateX(6px);
+}
+.bk-btn--fill {
+  min-height: 52px;
+  padding: 0 36px;
+  background: var(--color-gold);
+  color: var(--black);
+  font-size: 12px;
+}
+.bk-btn--fill:hover {
+  background: var(--color-gold-light);
+  border-color: var(--color-gold-light);
+}
+@media (max-width: 760px) {
+  .bk-btn--fill {
+    width: 100%;
+  }
+}
+
+/* Section rhythm */
+.bk-section {
+  padding-bottom: var(--bk-gap);
+}
+
+/* Pop-ups (the shared <Modal>) */
+.bk-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--gold-line);
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+.bk-modal-close:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+.bk-modal-close:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bk-btn:active {
+    transform: none;
+  }
+  .bk-btn:hover svg {
+    transform: none;
+  }
+}

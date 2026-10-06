@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { projects, companyInfo } from "@/data";
+import type { Metadata } from "next";
 
 const WHY_US = [
   { icon: Building2, title: "Квалитетна градба", desc: "Строга контрола на квалитет во секоја фаза на градбата." },
@@ -20,6 +21,9 @@ const CTA_IMAGE = {
   alt: "Јавор Шпед — вечерна визуелизација",
   isPlaceholder: false,
 };
+
+// The home page keeps the site-wide title and description from the layout; it only needs its own canonical link.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (
@@ -53,7 +57,7 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3.5 border-t border-line pt-6">
                   <item.icon className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
                   <div className="font-display text-xl">{item.title}</div>
-                  <p className="text-sm leading-relaxed text-ink/60">{item.desc}</p>
+                  <p className="text-sm leading-relaxed text-muted">{item.desc}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -65,7 +69,12 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-chrome py-28 text-center text-on-chrome sm:py-36">
         <div className="absolute inset-0">
           <ParallaxImage>
-            <Media image={CTA_IMAGE} tone="dark" className="h-full w-full opacity-35" />
+            <Media
+              image={CTA_IMAGE}
+              tone="dark"
+              className="h-full w-full opacity-35"
+              sizes="(max-width: 767px) 160vw, 100vw"
+            />
           </ParallaxImage>
           <div className="absolute inset-0 bg-chrome/70" />
         </div>
@@ -77,7 +86,7 @@ export default function HomePage() {
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>
             <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
-              <Button href="/consultation" variant="primary">
+              <Button href="/contact" variant="primary">
                 Закажи консултација
               </Button>
               <Button href="/projects" variant="secondary" tone="dark">
@@ -91,7 +100,7 @@ export default function HomePage() {
               >
                 {companyInfo.phone}
               </a>
-              <span className="hidden text-on-chrome/30 sm:inline" aria-hidden>
+              <span className="hidden text-on-chrome/62 sm:inline" aria-hidden>
                 ·
               </span>
               <a

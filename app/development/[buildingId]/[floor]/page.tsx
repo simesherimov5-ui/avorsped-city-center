@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronRight } from "lucide-react";
 import type { Apartment } from "@/types";
-import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
+import { getBuilding, getApartmentsForFloor, buildings, apartments, development, availabilityCounts } from "@/data";
+import { availableWord, unitsText } from "@/lib/plural";
+import { pageMetadata } from "@/lib/seo";
 import { FloorPlan } from "@/components/FloorPlan";
 import { RealFloorPlanViewer } from "@/components/RealFloorPlanViewer";
 import { FloorList } from "@/components/FloorList";
@@ -19,7 +21,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { buildingId, floor } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name}, Кат ${floor} — ${development.name}` : "Кат" };
+  const floorNumber = Number(floor);
+  const level = building?.floors.find((f) => f.number === floorNumber);
+  if (!building || !level) return { title: "Кат", robots: { index: false } };
+  const units = getApartmentsForFloor(building.id, floorNumber);
+  const open = availabilityCounts(units).available;
+  return pageMetadata({
+    title: `${building.name}, ${level.label} — ${development.name}`,
+    description: `${level.label} во ${building.name}: ${unitsText(units.length)}, од кои ${open} ${availableWord(open)}. Изберете стан на основата на катот.`,
+    path: `/development/${building.id}/${floorNumber}`,
+    image: "/development/opengraph-image",
+  });
 }
 
 function hasRegion(a: Apartment): a is Apartment & { realPlanRegion: NonNullable<Apartment["realPlanRegion"]> } {
@@ -46,7 +58,11 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   const floorNavItems = building.floors.map((f) => {
     const floorUnits = apartments.filter((a) => a.buildingId === building.id && a.floor === f.number);
     const available = floorUnits.filter((a) => a.status === "available").length;
-    return { number: f.number, label: f.label, meta: `${floorUnits.length} станови · ${available} достапни` };
+    return {
+      number: f.number,
+      label: f.label,
+      meta: `${unitsText(floorUnits.length)} · ${available} ${availableWord(available)}`,
+    };
   });
 
   return (
@@ -56,7 +72,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           prominent heading. The floor plan and its apartments are the
           actual content of this page. */}
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-8 lg:px-10">
-        <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-ink/50 sm:text-xs">
+        <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-muted sm:text-xs">
           <ZoomNavLink
             href={`/development/${building.id}`}
             label={building.name}
@@ -65,7 +81,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             {building.name}
           </ZoomNavLink>
           <ChevronRight className="h-3 w-3" aria-hidden />
-          <span className="text-ink/60">{floor.label}</span>
+          <span className="text-muted">{floor.label}</span>
         </nav>
         <h1 className="mt-3 font-display text-3xl text-charcoal sm:text-4xl">Изберете го вашиот стан</h1>
       </div>
@@ -86,7 +102,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             )}
           </div>
           <div>
-            <div className="eyebrow mb-3 text-ink/50">Други катови</div>
+            <div className="eyebrow mb-3 text-muted">Други катови</div>
             <FloorList basePath={`/development/${building.id}`} activeFloor={floorNum} floors={floorNavItems} />
           </div>
         </div>
@@ -95,7 +111,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           <div className="mt-16 border-t border-line pt-12">
             <div className="eyebrow text-gold-deep">Официјална документација</div>
             <h2 className="mt-1.5 font-display text-2xl">Официјална основа на катот</h2>
-            <p className="mt-2 max-w-lg text-sm text-ink/60">
+            <p className="mt-2 max-w-lg text-sm text-muted">
               Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги контролите за
               зум за да ги разгледате деталите.
             </p>

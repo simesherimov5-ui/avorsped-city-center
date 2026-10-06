@@ -7,6 +7,7 @@ import { projectStatusLabel } from "@/lib/format";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { unitsText } from "@/lib/plural";
 
 // Never color-code project phase — "completed" is distinguished by shape
 // (a bordered pill) rather than a hue that would break the 3-color palette.
@@ -30,6 +31,13 @@ export function ProjectCard({ project }: { project: Project }) {
           image={project.heroImage}
           label={`${project.name} — визуелизација`}
           fit={project.imageFit}
+          focus={project.imageFocus}
+          // a 2:1 photo in a 4:3 frame is drawn about 1.5x wider than the card, so the sizes allow for the crop
+          sizes={
+            project.imageFit === "contain"
+              ? "(max-width: 640px) 80vw, 320px"
+              : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
+          }
           className="aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>
@@ -40,7 +48,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/90 via-chrome/55 to-transparent p-4 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && (
               <div className="font-display text-sm text-on-chrome sm:text-base">{project.tagline}</div>
             )}
@@ -56,10 +64,10 @@ export function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className="border-t border-line p-6">
         <div className="font-display text-xl">{project.name}</div>
-        <div className="mt-1.5 text-sm text-ink/50">{project.location}</div>
-        <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-ink/60">
+        <div className="mt-1.5 text-sm text-muted">{project.location}</div>
+        <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">
           <span>{project.year}</span>
-          <span>{project.units} станови</span>
+          <span>{unitsText(project.units)}</span>
         </div>
         <ConstructionProgress project={project} variant="compact" className="mt-4 border-t border-line pt-4" />
       </div>

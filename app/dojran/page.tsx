@@ -7,12 +7,15 @@ import { OtherProjects } from "@/components/OtherProjects";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { projects } from "@/data";
 import { dojranFloors } from "@/data/dojran";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Дојрански Рај — Стар Дојран",
+export const metadata: Metadata = pageMetadata({
+  title: "Дојрански Рај — гарсоњери во Стар Дојран",
   description:
-    "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите достапните станови.",
-};
+    "Гарсоњери на чекор од Дојранското Езеро, во Сретеново, Стар Дојран. Изберете кат за да ги видите становите.",
+  path: "/dojran",
+  image: null,
+});
 
 export default function DojranPage() {
   const project = projects.find((p) => p.id === "dojranski-raj")!;
@@ -34,17 +37,14 @@ export default function DojranPage() {
               {project.specifications.map((s) => (
                 <div key={s.label}>
                   <div className="font-display text-sm text-gold-deep">{s.value}</div>
-                  <div className="eyebrow mt-1 text-ink/50">{s.label}</div>
+                  <div className="eyebrow mt-1 text-muted">{s.label}</div>
                 </div>
               ))}
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button href="/consultation" variant="primary" size="sm">
+              <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
                 Закажи консултација
-              </Button>
-              <Button href="/contact" variant="secondary" size="sm">
-                Контактирај нè
               </Button>
             </div>
           </div>

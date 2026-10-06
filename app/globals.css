@@ -13,7 +13,14 @@
   --color-gold-light: #e6cf9a; /* highlights/shimmer on ink only */
   --color-gold-dark: #8e7240; /* gradient depth (logo/ring gradients only, never text) */
   --color-line: rgba(20, 20, 20, 0.1);
+  /* The one muted-text colour on paper pages: ink at 62% (about #6B6B6B, 5:1 on paper). Lighter greys are for
+     borders and fills only, never for text. */
+  --color-muted: color-mix(in srgb, var(--color-ink) 62%, var(--color-paper));
   --color-line-dark: rgba(250, 248, 245, 0.12);
+  /* The page background of the all-black pages (За нас, Контакт) — a deeper shade of ink, used nowhere else. */
+  --black: #0c0c0c;
+  /* Height of the fixed navbar, for pages that start right below it. */
+  --nav-h: 61px;
 
   /*
    * Legacy names kept as exact aliases of the three colors above, so the
@@ -50,7 +57,9 @@
   --color-gold-light: var(--color-gold-light);
   --color-gold-dark: var(--color-gold-dark);
   --color-line: var(--color-line);
+  --color-muted: var(--color-muted);
   --color-line-dark: var(--color-line-dark);
+  --color-black: var(--black);
   --color-cream: var(--color-cream);
   --color-warm-white: var(--color-warm-white);
   --color-silver: var(--color-silver);
@@ -60,9 +69,20 @@
   --color-accent-soft: var(--color-accent-soft);
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-playfair);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-mono);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --nav-h: 69px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --nav-h: 85px;
+  }
 }
 
 * {
@@ -88,7 +108,7 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display), Georgia, serif;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.005em;
   line-height: 1.12;
 }
@@ -150,6 +170,67 @@ h4 {
   color: var(--color-paper);
 }
 
+/* Floor-plan apartments (SVG polygons). Status reads from the pattern, not from a hue: available is a gold
+   outline with a light gold fill, reserved is hatched, sold is dimmed (and the text legend stays). With the keyboard,
+   a polygon gets a clear 2px stroke; gold-deep is the gold that reads on paper, and the stroke keeps its screen
+   width however the plan is scaled. */
+.fp-poly {
+  outline: none;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill 0.2s,
+    stroke 0.2s;
+}
+.fp-poly[data-status="available"] {
+  fill: color-mix(in srgb, var(--color-gold) 20%, transparent);
+  stroke: var(--color-gold-deep);
+}
+.fp-poly[data-status="available"][data-active] {
+  fill: color-mix(in srgb, var(--color-gold) 42%, transparent);
+  stroke-width: 1.5px;
+}
+.fp-poly[data-status="reserved"] {
+  fill: url(#fp-hatch);
+  stroke: color-mix(in srgb, var(--color-ink) 60%, transparent);
+}
+.fp-poly[data-status="reserved"][data-active] {
+  stroke: var(--color-ink);
+  stroke-width: 1.5px;
+}
+.fp-poly[data-status="sold"] {
+  fill: color-mix(in srgb, var(--color-ink) 7%, transparent);
+  stroke: color-mix(in srgb, var(--color-ink) 28%, transparent);
+}
+.fp-poly[data-status="sold"][data-active] {
+  fill: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  stroke-width: 1.5px;
+}
+.fp-poly:focus-visible {
+  stroke: var(--color-gold-deep);
+  stroke-width: 2px;
+}
+
+/* "Skip to content": hidden above the screen until it receives keyboard focus. */
+.skip-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--color-gold);
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 0.2s;
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
 .focus-ring {
   outline: none;
 }
@@ -166,6 +247,26 @@ h4 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* The opening entrance of a page, in plain CSS: the same fade and rise as components/ui/Reveal.tsx (0.5s, 24px, the site
+   ease; phones 0.3s, 12px, no delay), but it plays from the first paint, so the first text does not wait for the
+   scripts to load. Used for what is on screen when a page opens; everything below keeps the scroll reveal. */
+@keyframes enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--enter-distance, 24px));
+  }
+}
+.enter {
+  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+}
+@media (max-width: 767px) {
+  .enter {
+    --enter-distance: 12px;
+    --enter-stagger: 0;
+    animation-duration: 0.3s;
   }
 }
 

@@ -1,14 +1,34 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { DURATION, EASE, REVEAL_DISTANCE } from "@/lib/motion";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 
-export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+/**
+ * Fades and rises into place as it scrolls into view. With `immediate` (for what is on screen when the page opens)
+ * it plays at once in plain CSS instead (`.enter` in globals.css), so the text does not wait for the scripts.
+ */
+export function Reveal({
+  children,
+  delay = 0,
+  immediate = false,
+}: {
+  children: ReactNode;
+  delay?: number;
+  immediate?: boolean;
+}) {
   const reduceMotion = useReducedMotion();
   // Lighter on phones: shorter travel, shorter duration, no stagger delay.
   const isPhone = useMediaQuery("(max-width: 767px)");
+
+  if (immediate) {
+    return (
+      <div className="enter" style={{ "--enter-delay": `${delay}s` } as CSSProperties}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div

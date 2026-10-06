@@ -1,0 +1,604 @@
+/* "Контакт": the guided booking form and the direct-contact panel, on the all-black theme.
+   Content sits in the .bk-wrap container (max 1240px). */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ct-pre,
+  [data-seq="step"] {
+    opacity: 0;
+  }
+  .ct-rule {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes ct-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ct-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+/* A chosen chip settles in from a touch smaller. */
+@keyframes ct-settle {
+  from {
+    transform: scale(0.94);
+  }
+}
+
+/* B1 — header */
+.ct-head {
+  padding-top: clamp(44px, 5vw, 72px);
+  padding-bottom: clamp(26px, 3vw, 40px);
+}
+.ct-h1 {
+  margin: 16px 0 12px;
+  font-size: clamp(30px, 3.7vw, 54px);
+  line-height: 1.14;
+}
+.ct-lead {
+  max-width: 54ch;
+  margin: 0;
+  font-size: 16px;
+  color: var(--mute);
+}
+
+/* B2 — layout: the form on the left (max 680px), the panel on the right (max 420px), free space between */
+.ct-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  padding-bottom: clamp(56px, 6vw, 96px);
+}
+@media (max-width: 980px) {
+  .ct-cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+/* B3 — the form */
+.ct-form {
+  width: 100%;
+  max-width: 680px;
+  min-width: 0;
+}
+.ct-step {
+  position: relative;
+  padding: 24px 0;
+}
+.ct-step.is-leaving {
+  animation: ct-fade-out 0.3s forwards;
+}
+.ct-step.is-entering {
+  animation: ct-fade 0.3s;
+}
+.ct-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-line);
+  transform-origin: left center;
+}
+.ct-step-h {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 16px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.ct-step-n {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+}
+
+.ct-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin: 0 0 16px;
+  padding: 0 0 0 16px;
+  border: 1px solid var(--gold-line);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.ct-tag button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.ct-tag button:hover {
+  color: var(--color-gold-light);
+}
+.ct-tag button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -4px;
+}
+
+.ct-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ct-chip {
+  min-width: 56px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-paper);
+  font:
+    400 14px var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
+}
+.ct-chip:hover {
+  border-color: var(--color-gold);
+}
+.ct-chip:active {
+  transform: scale(0.96);
+}
+.ct-chip:focus-visible,
+.ct-day:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.ct-chip[aria-checked="true"] {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--black);
+  font-weight: 500;
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-chip.is-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 300;
+}
+.ct-chip.is-mono[aria-checked="true"] {
+  font-weight: 400;
+}
+
+.ct-days,
+.ct-slots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.ct-days-box {
+  min-height: 78px;
+  margin-bottom: 16px;
+}
+.ct-slots .ct-chip {
+  min-width: 0;
+  padding: 0;
+}
+.ct-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
+}
+.ct-day:hover {
+  border-color: var(--color-gold);
+}
+.ct-day:active {
+  transform: scale(0.96);
+}
+.ct-day small {
+  font:
+    400 11px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.ct-day-d {
+  font:
+    300 22px/1.1 var(--font-mono),
+    ui-monospace,
+    monospace;
+}
+.ct-day[aria-checked="true"] {
+  border-color: var(--color-gold);
+  background: var(--color-ink);
+  color: var(--color-gold);
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-day[aria-checked="true"] small {
+  color: var(--color-gold);
+}
+
+.ct-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.ct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ct-input {
+  position: relative;
+}
+.ct-input input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-paper);
+  /* 16px at least, or iOS zooms the page when a field is focused */
+  font:
+    400 16px var(--font-sans),
+    system-ui,
+    sans-serif;
+  outline: none;
+}
+.ct-input input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-paper);
+  box-shadow: 0 0 0 1000px var(--black) inset;
+}
+/* The gold underline grows from the left on focus. */
+.ct-input::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-input:focus-within::after {
+  transform: scaleX(1);
+}
+
+.ct-error {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--color-gold-light);
+  animation: ct-fade 0.3s;
+}
+.ct-submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-top: 48px;
+}
+.ct-submit .bk-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.ct-sum {
+  min-height: 1.6em;
+  font-size: 12px;
+  color: var(--mute);
+}
+.ct-sum > span {
+  animation: ct-fade 0.18s;
+}
+.ct-fail {
+  margin: 16px 0 0;
+  color: var(--color-gold-light);
+}
+.ct-fail a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .ct-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ct-days,
+  .ct-slots {
+    gap: 6px;
+  }
+  .ct-day-d {
+    font-size: 20px;
+  }
+  .ct-day small {
+    letter-spacing: 0.08em;
+  }
+  .ct-chip.is-mono {
+    font-size: 12.5px;
+  }
+  .ct-submit {
+    margin-top: 32px;
+  }
+}
+
+/* B4 — the direct panel */
+.ct-side {
+  position: sticky;
+  top: 120px;
+  justify-self: end;
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+  padding: clamp(22px, 2.4vw, 32px);
+  border: 1px solid var(--gold-line);
+  background: var(--color-ink);
+}
+@media (max-width: 980px) {
+  .ct-side {
+    position: static;
+    justify-self: stretch;
+    max-width: none;
+  }
+}
+.ct-rows {
+  margin-top: 12px;
+}
+/* A label and its value on one line; if they don't fit, the value drops under the label. */
+.ct-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-line);
+}
+.ct-row:first-child {
+  border-top: 0;
+}
+.ct-row > .bk-label {
+  flex: none;
+}
+.ct-val {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--color-paper);
+  text-align: right;
+  overflow-wrap: anywhere;
+  transition:
+    color 0.3s,
+    transform 0.3s;
+}
+/* A 44px tap target without changing the row: the padding is cancelled by the negative margin. */
+a.ct-val {
+  padding-block: 11px;
+  margin-block: -11px;
+}
+a.ct-val:hover,
+a.ct-val:focus-visible {
+  color: var(--color-gold);
+  transform: translateX(6px);
+}
+a.ct-val:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+/* Working hours: one line per range, the days on the left and the times on the right. */
+.ct-hours {
+  flex: 1 1 100%;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ct-hours li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0;
+  font-size: 14px;
+}
+.ct-hours .bk-mono {
+  font-size: 14px;
+}
+.ct-map {
+  position: relative;
+  height: 230px;
+  margin-top: 16px;
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  background: var(--black);
+}
+.ct-addr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 16px;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--mute);
+}
+.ct-addr a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.ct-addr a:hover {
+  color: var(--color-gold-light);
+}
+
+/* The map: Leaflet on dark tiles, restyled to the black theme (square corners, no shadows). */
+.ct-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+.ct-map .leaflet-container .leaflet-bar {
+  border: 1px solid var(--gold-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+.ct-map .leaflet-container .leaflet-bar a,
+.ct-map .leaflet-container .leaflet-bar a:hover {
+  width: 32px;
+  height: 32px;
+  border-bottom: 1px solid var(--gold-line);
+  border-radius: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  line-height: 32px;
+}
+.ct-map .leaflet-container .leaflet-bar a:hover {
+  color: var(--color-gold);
+}
+.ct-map .leaflet-container .leaflet-bar a:last-child {
+  border-bottom: 0;
+}
+@media (pointer: coarse) {
+  .ct-map .leaflet-container .leaflet-bar a,
+  .ct-map .leaflet-container .leaflet-bar a:hover {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+}
+/* The map credits stay readable: an ink box at 85%, paper text at 75%, 11px. */
+.ct-map .leaflet-container .leaflet-control-attribution {
+  padding: 2px 6px;
+  background: color-mix(in srgb, var(--color-ink) 85%, transparent);
+  color: color-mix(in srgb, var(--color-paper) 75%, transparent);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.ct-map .leaflet-container .leaflet-control-attribution a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ct-map .leaflet-container .leaflet-control-attribution a:hover {
+  color: var(--color-paper);
+}
+.ct-pin {
+  position: relative;
+  background: none;
+  border: 0;
+}
+.ct-pin svg {
+  display: block;
+  animation: ct-drop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ct-pin path {
+  fill: var(--color-ink);
+  stroke: var(--color-gold);
+  stroke-width: 1;
+}
+.ct-pin circle {
+  fill: var(--color-gold);
+}
+/* A thin gold ring pulses slowly around the pin's base. */
+.ct-pin-ring {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 44px;
+  height: 14px;
+  margin-left: -22px;
+  border: 1px solid var(--color-gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ct-pulse 2.6s ease-out 1s infinite;
+}
+@keyframes ct-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+@keyframes ct-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* The booking confirmation pop-up */
+.ct-confirm {
+  width: min(460px, calc(100vw - 40px));
+  padding: clamp(32px, 6vw, 48px) clamp(24px, 5vw, 40px);
+  border: 1px solid var(--gold-line);
+  background: var(--color-ink);
+  text-align: center;
+}
+.ct-ring {
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 24px;
+  overflow: visible;
+}
+.ct-ring circle,
+.ct-ring path {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ct-confirm h2 {
+  margin: 12px 0 0;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.12;
+}
+.ct-confirm-sum {
+  margin: 16px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--color-gold);
+}
+.ct-confirm p {
+  margin: 12px 0 24px;
+  font-size: 15px;
+  color: var(--mute);
+}

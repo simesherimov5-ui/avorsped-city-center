@@ -7,6 +7,7 @@ import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { availableWord, floorsText, unitsText } from "@/lib/plural";
 
 interface Rect {
   x: number;
@@ -125,7 +126,7 @@ export function Masterplan({
                     isSelected
                       ? "border-accent bg-accent text-chrome"
                       : isUnavailable
-                        ? "border-on-chrome/20 bg-ink/20 text-on-chrome/40"
+                        ? "border-on-chrome/20 bg-ink/20 text-on-chrome/62"
                         : isHovered
                           ? "border-accent bg-accent/25 text-chrome"
                           : "border-on-chrome/50 bg-chrome/85 text-on-chrome"
@@ -143,9 +144,11 @@ export function Masterplan({
                   <div className="font-display text-base">{building.name}</div>
                   <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
                     <div>
-                      {building.floors.length} ката · {building.totalApartments} станови
+                      {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
-                    <div>{building.available} достапни сега</div>
+                    <div>
+                      {building.available} {availableWord(building.available)} сега
+                    </div>
                     <div>{STATUS_LABEL[building.status]}</div>
                   </div>
                 </motion.div>
@@ -177,7 +180,7 @@ export function Masterplan({
                 transition={{ duration: 0.3 }}
                 className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center"
               >
-                <p className="text-sm leading-relaxed text-ink/50">
+                <p className="text-sm leading-relaxed text-muted">
                   Изберете зграда од планот за катови, достапност и фаза на изградба.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -185,13 +188,15 @@ export function Masterplan({
                     <button
                       key={b.id}
                       type="button"
+                      aria-pressed={selected === b.id}
+                      aria-label={`Зграда ${b.shortLabel}`}
                       onClick={(e) => {
                         setSelectedRect(rectOf(e.currentTarget));
                         setSelected(b.id);
                       }}
                       onMouseEnter={() => setHovered(b.id)}
                       onMouseLeave={() => setHovered(null)}
-                      className="focus-ring flex h-11 w-11 items-center justify-center border border-line text-base font-medium text-ink/60 transition-colors hover:border-accent hover:text-gold-deep"
+                      className="focus-ring flex h-11 w-11 items-center justify-center border border-line text-base font-medium text-muted transition-colors hover:border-accent hover:text-gold-deep"
                     >
                       {b.shortLabel}
                     </button>
@@ -218,13 +223,13 @@ export function Masterplan({
                 }}
                 className={cn(
                   "focus-ring flex min-h-12 shrink-0 items-center gap-2.5 border px-4 py-2.5 text-base transition-colors active:scale-[0.97]",
-                  isSelected ? "border-accent bg-accent/10 text-charcoal" : "border-line text-ink/60"
+                  isSelected ? "border-accent bg-accent/10 text-charcoal" : "border-line text-muted"
                 )}
               >
                 <span
                   className={cn(
                     "flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
-                    isSelected ? "border-accent bg-accent text-chrome" : "border-line text-ink/50"
+                    isSelected ? "border-accent bg-accent text-chrome" : "border-line text-muted"
                   )}
                 >
                   {building.shortLabel}
@@ -248,7 +253,7 @@ export function Masterplan({
               <BuildingPanel building={active} basePath={basePath} originRect={selectedRect} />
             </motion.div>
           ) : (
-            <p className="mt-4 text-sm text-ink/50">
+            <p className="mt-4 text-sm text-muted">
               Допрете на зграда погоре за катови, достапност и фаза на изградба.
             </p>
           )}
@@ -256,7 +261,7 @@ export function Masterplan({
       </div>
 
       {variant === "full" && !active && (
-        <p className="mx-auto mt-6 hidden max-w-md text-center text-sm text-ink/40 lg:block">
+        <p className="mx-auto mt-6 hidden max-w-md text-center text-sm text-muted lg:block">
           Сите згради се достапни за истражување — изберете од планот или од листата.
         </p>
       )}
@@ -307,7 +312,7 @@ function BuildingPanel({
 function PanelStat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="eyebrow text-ink/40">{label}</dt>
+      <dt className="eyebrow text-muted">{label}</dt>
       <dd className="mt-1 font-display text-lg">{value}</dd>
     </div>
   );

@@ -45,7 +45,7 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
                     ? isHovered
                       ? "scale-110 bg-accent text-chrome ring-4 ring-accent/30"
                       : "bg-chrome/80 text-on-chrome ring-2 ring-on-chrome/60"
-                    : "bg-chrome/60 text-on-chrome/90"
+                    : "bg-chrome/75 text-on-chrome"
                 )}
               >
                 {spot.number}
@@ -67,6 +67,8 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
             <video
               key={rooms[activeRoom].video}
               src={rooms[activeRoom].video}
+              poster={rooms[activeRoom].poster}
+              preload="none"
               autoPlay
               loop
               muted

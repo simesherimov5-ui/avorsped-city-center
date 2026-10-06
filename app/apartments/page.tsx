@@ -10,6 +10,12 @@ import { ApartmentFilters } from "@/components/ApartmentFilters";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { SORT_OPTIONS, isApartmentSort, sortApartments, type ApartmentSort } from "@/lib/apartment-sort";
+import { plural, unitsText } from "@/lib/plural";
+
+// The list shows this many at a time, then "Прикажи повеќе": 184 cards at once made the page tens of thousands of
+// pixels tall and its HTML hundreds of kilobytes.
+const PAGE_SIZE = 12;
 
 // Keeps the filter state shareable: a link with a query string reopens to
 // the same search. Only fields with a real value are written, so a fresh
@@ -30,8 +36,9 @@ function filtersFromParams(params: URLSearchParams): ApartmentFilterState {
   return state;
 }
 
-function paramsFromFilters(filters: ApartmentFilterState): string {
+function paramsFromFilters(filters: ApartmentFilterState, sort: ApartmentSort | ""): string {
   const params = new URLSearchParams();
+  if (sort) params.set("sort", sort);
   for (const key of NUM_KEYS) {
     const v = filters[key];
     if (v !== undefined) params.set(key, String(v));
@@ -52,26 +59,42 @@ export default function ApartmentsPage() {
   // boundary, which flashes blank on first load instead of showing the
   // server-rendered list immediately.
   const [filters, setFiltersState] = useState<ApartmentFilterState>({});
+  const [sort, setSortState] = useState<ApartmentSort | "">("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   useEffect(() => {
-    const fromUrl = filtersFromParams(new URLSearchParams(window.location.search));
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = filtersFromParams(params);
+    const sortFromUrl = params.get("sort");
     // eslint-disable-next-line react-hooks/set-state-in-effect -- deliberate post-mount URL sync (see comment above)
     if (Object.keys(fromUrl).length > 0) setFiltersState(fromUrl);
+    if (isApartmentSort(sortFromUrl)) setSortState(sortFromUrl);
   }, []);
 
   // router.replace (not push) so adjusting a filter never spams browser history.
   const setFilters = useCallback(
     (next: ApartmentFilterState) => {
       setFiltersState(next);
-      const qs = paramsFromFilters(next);
+      setVisible(PAGE_SIZE);
+      const qs = paramsFromFilters(next, sort);
       router.replace(qs ? `/apartments?${qs}` : "/apartments", { scroll: false });
     },
-    [router]
+    [router, sort]
+  );
+
+  const setSort = useCallback(
+    (next: ApartmentSort | "") => {
+      setSortState(next);
+      setVisible(PAGE_SIZE);
+      const qs = paramsFromFilters(filters, next);
+      router.replace(qs ? `/apartments?${qs}` : "/apartments", { scroll: false });
+    },
+    [router, filters]
   );
 
   const results = useMemo(() => {
-    return apartments.filter((a) => {
+    const matching = apartments.filter((a) => {
       if (filters.buildingId && a.buildingId !== filters.buildingId) return false;
       if (filters.floor !== undefined && a.floor !== filters.floor) return false;
       if (filters.bedrooms !== undefined && a.bedrooms !== filters.bedrooms) return false;
@@ -82,12 +105,32 @@ export default function ApartmentsPage() {
       if (filters.maxPrice !== undefined && a.price > filters.maxPrice) return false;
       return true;
     });
-  }, [filters]);
+    return sortApartments(matching, sort);
+  }, [filters, sort]);
+  const shown = results.slice(0, visible);
+
+  const sortSelect = (
+    <label className="flex items-center gap-3 text-sm text-muted">
+      <span className="shrink-0">Подреди</span>
+      <select
+        value={sort}
+        onChange={(e) => setSort(isApartmentSort(e.target.value) ? e.target.value : "")}
+        className="filter-input min-h-11 py-2 text-ink"
+      >
+        {SORT_OPTIONS.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 
   return (
     <div className="pt-24 sm:pt-28">
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 lg:px-10">
         <SectionHeading
+          as="h1"
           eyebrow="Пронаоѓач на станови"
           title="Пронајди го твојот стан"
           description="Филтрирај секоја единица низ сите шест згради по големина, буџет, соби и достапност."
@@ -102,7 +145,9 @@ export default function ApartmentsPage() {
             <div className="flex items-center justify-between gap-4 border-b border-line pb-4 lg:hidden">
               <div>
                 <span className="font-display text-2xl text-gold-deep">{results.length}</span>
-                <span className="ml-2 text-sm text-ink/60">станови одговараат</span>
+                <span className="ml-2 text-sm text-muted">
+                  {plural(results.length, "стан одговара", "станови одговараат")}
+                </span>
               </div>
               <button
                 type="button"
@@ -113,22 +158,35 @@ export default function ApartmentsPage() {
               </button>
             </div>
 
-            <div className="mt-6 hidden text-sm text-ink/50 lg:block">
-              Прикажани се сите станови што одговараат на избраните филтри.
+            <div className="mt-4 flex items-center justify-between gap-4 lg:mt-6">
+              <div className="hidden text-sm text-muted lg:block">Станови што одговараат на избраните филтри.</div>
+              <div className="ml-auto">{sortSelect}</div>
             </div>
 
             {results.length > 0 ? (
-              <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {results.map((apt) => (
-                  <ApartmentCard key={apt.id} apartment={apt} />
-                ))}
-              </div>
+              <>
+                <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {shown.map((apt, i) => (
+                    <ApartmentCard key={apt.id} apartment={apt} priority={i === 0} />
+                  ))}
+                </div>
+                <div className="mt-10 flex flex-col items-center gap-4">
+                  <p role="status" aria-live="polite" className="text-sm text-muted">
+                    {plural(shown.length, "Прикажан е", "Прикажани се")} {shown.length} од {unitsText(results.length)}
+                  </p>
+                  {visible < results.length && (
+                    <Button variant="secondary" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+                      Прикажи повеќе
+                    </Button>
+                  )}
+                </div>
+              </>
             ) : (
               <div className="mt-6 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
-                <SearchX className="h-8 w-8 text-ink/30" strokeWidth={1.5} />
+                <SearchX className="h-8 w-8 text-muted" strokeWidth={1.5} />
                 <div>
                   <div className="font-display text-xl">Нема станови за овие филтри</div>
-                  <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink/60">
+                  <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                     Обидете се со поширок опсег — на пример зголемете ја максималната цена, површината или изберете
                     друга зграда.
                   </p>
@@ -166,7 +224,7 @@ export default function ApartmentsPage() {
                   type="button"
                   onClick={() => setSheetOpen(false)}
                   aria-label="Затвори"
-                  className="focus-ring flex h-8 w-8 items-center justify-center text-ink/60"
+                  className="focus-ring flex h-8 w-8 items-center justify-center text-muted"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -176,7 +234,7 @@ export default function ApartmentsPage() {
               </div>
               <div className="border-t border-line p-4">
                 <Button variant="primary" className="w-full" onClick={() => setSheetOpen(false)}>
-                  Прикажи {results.length} станови
+                  Прикажи {unitsText(results.length)}
                 </Button>
               </div>
             </motion.div>

@@ -26,14 +26,12 @@ const NO_LABEL_LITERAL = ["Literal", "JSXText"].map((node) => ({
   message: "Status labels come from lib/format.ts (statusLabel).",
 }));
 
-const HEX_BASELINE = ["components/FloorPlan.tsx"];
 const LABEL_BASELINE = ["components/ApartmentFilters.tsx"];
 
 // Components must not import the dataset; pages pass plain props (roadmap item 3).
 const DATA_IMPORT_BASELINE = [
   "components/ApartmentCard.tsx",
   "components/ApartmentFilters.tsx",
-  "components/BookingForm.tsx",
   "components/CompareBar.tsx",
   "components/DojranFacade.tsx",
   "components/Footer.tsx",
@@ -63,7 +61,6 @@ const eslintConfig = defineConfig([
     rules: { "no-restricted-imports": ["error", { ...noNextImage, ...noDataImport }] },
   },
   // Baselines and sanctioned homes. Later blocks replace the rule, so each lists what still applies.
-  { files: HEX_BASELINE, rules: { "no-restricted-syntax": ["error", ...NO_LABEL_LITERAL] } },
   { files: LABEL_BASELINE, rules: { "no-restricted-syntax": ["error", ...NO_HEX_COLOUR] } },
   {
     files: DATA_IMPORT_BASELINE,
@@ -78,6 +75,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Not project source: the design pack that was handed over, and a stray copy of the whole project
+    // (with its build output) left inside this folder. Neither is tracked by git.
+    "javor-sped-complete/**",
+    "meridian/**",
   ]),
 ]);
 

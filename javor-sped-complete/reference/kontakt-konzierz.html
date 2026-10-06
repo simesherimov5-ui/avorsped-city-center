@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Контакт — Конзиерж (reference)</title>
+<!-- REFERENCE MOCKUP for Claude Code. Text in [brackets] is a placeholder for real content. The serif here (Cormorant Garamond) stands in for the site's existing heading serif. -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0C0C0C}
+a{color:#C9A45C;text-decoration:none}a:hover{color:#E6CF9A}
+.pg{--gold:#C9A45C;--bg:#0C0C0C;--panel:#141414;--paper:#FAF8F5;--mute:rgba(250,248,245,.64);--line:rgba(250,248,245,.14);--gline:rgba(201,164,92,.3);--px:clamp(20px,5.5vw,96px);background:var(--bg);color:var(--paper);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.pg *{box-sizing:border-box}
+.serif{font-family:'Cormorant Garamond','Times New Roman',serif;font-weight:400}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:300;font-variant-numeric:tabular-nums}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px var(--px);border-bottom:1px solid var(--line)}
+.brand{display:flex;flex-direction:column;gap:3px;color:var(--gold);font-weight:600;font-size:15px;letter-spacing:.28em;line-height:1.2}
+.brand small{font-size:9px;letter-spacing:.42em;font-weight:400;opacity:.75}
+.links{display:flex;align-items:center;gap:40px}
+.links a.l{color:var(--paper);font-size:12px;letter-spacing:.24em;text-transform:uppercase;padding:14px 0;border-bottom:1px solid transparent}
+.links a.l:hover{color:var(--gold)}
+.links a.on{color:var(--gold);border-bottom-color:var(--gold)}
+.btn.menu{display:none}
+.btn{display:inline-flex;align-items:center;gap:14px;min-height:48px;padding:0 26px;border:1px solid var(--gold);color:var(--gold);background:transparent;font:500 12px/1 'Inter',sans-serif;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s}
+.btn:hover{background:var(--gold);color:#0C0C0C}
+.btn.fill{background:var(--gold);color:#0C0C0C;min-height:56px;padding:0 40px}
+.btn.fill:hover{background:#E6CF9A;border-color:#E6CF9A}
+.eye{display:flex;align-items:center;gap:16px;color:var(--gold);font-size:11px;letter-spacing:.34em;text-transform:uppercase}
+.eye::before{content:"";width:40px;height:1px;background:var(--gold)}
+.tag{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:28px var(--px);border-top:1px solid var(--line);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute)}
+
+.head{padding:clamp(56px,6vw,92px) var(--px) clamp(40px,4vw,60px)}
+.h1{font-size:clamp(40px,5.6vw,84px);line-height:1.05;letter-spacing:-.01em;margin:24px 0 20px}
+.h1 em{color:var(--gold)}
+.lead{color:var(--mute);max-width:54ch;margin:0;font-size:17px}
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(32px,5.5vw,96px);padding:0 var(--px) clamp(72px,8vw,120px);align-items:start}
+.step{padding:30px 0;border-top:1px solid var(--line)}
+.step-h{display:flex;gap:18px;align-items:baseline;margin-bottom:22px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+.step-h b{color:var(--gold);font:300 13px 'IBM Plex Mono',monospace;letter-spacing:.1em}
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chip{min-height:48px;min-width:64px;padding:0 24px;border:1px solid var(--line);background:transparent;color:var(--paper);font:400 14px 'Inter',sans-serif;letter-spacing:.06em;cursor:pointer;transition:border-color .25s,background .25s,color .25s}
+.chip:hover{border-color:var(--gold)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#0C0C0C;font-weight:500}
+.chip.t{font-family:'IBM Plex Mono',monospace;font-weight:300}
+.chip.t.on{font-weight:400}
+.slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.slots .chip{min-width:0;padding:0}
+.days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 6px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;transition:border-color .25s,background .25s,color .25s}
+.day:hover{border-color:var(--gold)}
+.day small{font:400 11px 'Inter',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.day .d{font:300 30px/1.1 'IBM Plex Mono',monospace}
+.day.on{border-color:var(--gold);background:var(--panel);color:var(--gold)}
+.day.on small{color:var(--gold)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+.field input{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;color:var(--paper);font:400 18px 'Inter',sans-serif;padding:12px 0;outline:none}
+.field input:focus{border-bottom-color:var(--gold)}
+.submit{display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;margin-top:36px}
+.sum{font-size:13px;color:var(--mute)}
+.side{background:var(--panel);border:1px solid var(--gline);padding:clamp(24px,3vw,44px)}
+.d-row{display:flex;justify-content:space-between;gap:20px;align-items:baseline;flex-wrap:wrap;padding:18px 0;border-top:1px solid var(--line)}
+.d-row a,.d-row .val{font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.2;color:var(--paper)}
+.d-row a:hover{color:var(--gold)}
+.map{position:relative;height:300px;margin-top:20px;border:1px solid var(--line);overflow:hidden;background:linear-gradient(115deg,transparent 48.6%,rgba(250,248,245,.1) 48.6% 49.4%,transparent 49.4%),linear-gradient(25deg,transparent 61.5%,rgba(250,248,245,.07) 61.5% 62%,transparent 62%),repeating-linear-gradient(0deg,rgba(250,248,245,.05) 0 1px,transparent 1px 46px),repeating-linear-gradient(90deg,rgba(250,248,245,.05) 0 1px,transparent 1px 62px),#101010}
+.map svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%)}
+.map .lab{position:absolute;left:16px;bottom:14px;right:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);font:300 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
+@media(max-width:980px){.cols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){
+.links a.l,.links a.btn{display:none}.btn.menu{display:inline-flex}
+.fields{grid-template-columns:minmax(0,1fr)}
+.days,.slots{gap:6px}.day .d{font-size:22px}.day small{letter-spacing:.08em}
+.btn.fill{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div class="pg">
+  <header class="nav">
+    <a class="brand" href="za-nas-kinematska.html">JAVOR SPED<small>SINCE 1994</small></a>
+    <nav class="links">
+      <a class="l" href="#top">Проекти</a>
+      <a class="l" href="za-nas-kinematska.html">За нас</a>
+      <a class="l on" href="#top">Контакт</a>
+      <a class="btn" href="#top">Консултација</a>
+      <button class="btn menu" type="button">Мени</button>
+    </nav>
+  </header>
+
+  <section class="head" id="top">
+    <div class="eye">Контакт</div>
+    <h1 class="h1 serif">Закажете <em>приватна</em> консултација.</h1>
+    <p class="lead">Четири кратки чекори. Ние ќе ви се јавиме за потврда на терминот.</p>
+  </section>
+
+  <div class="cols">
+    <form>
+      <div class="step">
+        <div class="step-h"><b>01</b><span>Што ве интересира?</span></div>
+        <div class="chips">
+          <button class="chip on" type="button" data-g="interest" data-v="Стан" aria-pressed="true">Стан</button><button class="chip" type="button" data-g="interest" data-v="Деловен простор" aria-pressed="false">Деловен простор</button><button class="chip" type="button" data-g="interest" data-v="Паркинг" aria-pressed="false">Паркинг</button>
+        </div>
+      </div>
+
+      <div id="rooms-step">
+        <div class="step">
+          <div class="step-h"><b>02</b><span>Колку соби?</span></div>
+          <div class="chips">
+            <button class="chip t" type="button" data-g="rooms" data-v="1" aria-pressed="false">1</button><button class="chip t on" type="button" data-g="rooms" data-v="2" aria-pressed="true">2</button><button class="chip t" type="button" data-g="rooms" data-v="3" aria-pressed="false">3</button><button class="chip t" type="button" data-g="rooms" data-v="4+" aria-pressed="false">4+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-h"><b>03</b><span>Изберете ден и час</span></div>
+        <div class="days" id="days">
+          
+        </div>
+        <div class="slots">
+          <button class="chip t" type="button" data-g="time" data-v="09:00" aria-pressed="false">09:00</button><button class="chip t" type="button" data-g="time" data-v="09:30" aria-pressed="false">09:30</button><button class="chip t" type="button" data-g="time" data-v="10:00" aria-pressed="false">10:00</button><button class="chip t" type="button" data-g="time" data-v="10:30" aria-pressed="false">10:30</button><button class="chip t" type="button" data-g="time" data-v="11:00" aria-pressed="false">11:00</button><button class="chip t" type="button" data-g="time" data-v="11:30" aria-pressed="false">11:30</button><button class="chip t on" type="button" data-g="time" data-v="12:00" aria-pressed="true">12:00</button><button class="chip t" type="button" data-g="time" data-v="12:30" aria-pressed="false">12:30</button><button class="chip t" type="button" data-g="time" data-v="13:00" aria-pressed="false">13:00</button><button class="chip t" type="button" data-g="time" data-v="13:30" aria-pressed="false">13:30</button><button class="chip t" type="button" data-g="time" data-v="14:00" aria-pressed="false">14:00</button><button class="chip t" type="button" data-g="time" data-v="14:30" aria-pressed="false">14:30</button><button class="chip t" type="button" data-g="time" data-v="15:00" aria-pressed="false">15:00</button><button class="chip t" type="button" data-g="time" data-v="15:30" aria-pressed="false">15:30</button><button class="chip t" type="button" data-g="time" data-v="16:00" aria-pressed="false">16:00</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-h"><b>04</b><span>Ваши податоци</span></div>
+        <div class="fields">
+          <div class="field"><label for="ca-name">Име и презиме</label><input id="ca-name" type="text" autocomplete="name"></div>
+          <div class="field"><label for="ca-tel">Телефон</label><input id="ca-tel" type="tel" inputmode="tel" autocomplete="tel"></div>
+        </div>
+        <div class="submit">
+          <button class="btn fill" type="button">Закажи</button>
+          <span class="sum mono" id="sum"></span>
+        </div>
+      </div>
+    </form>
+
+    <aside class="side">
+      <div class="eye" style="margin-bottom: 18px">Директно</div>
+      <div class="d-row" style="border-top: 0"><span class="tag">Телефон</span><a href="#top">[телефон]</a></div>
+      <div class="d-row"><span class="tag">Viber / WhatsApp</span><a href="#top">[број]</a></div>
+      <div class="d-row"><span class="tag">Е-пошта</span><a href="#top">[е-пошта]</a></div>
+      <div class="d-row"><span class="tag">Работно време</span><span class="val">[работно време]</span></div>
+      <div class="map">
+        <svg width="28" height="38" viewBox="0 0 28 38" fill="none" aria-hidden="true"><path d="M14 37C14 37 27 23.5 27 14A13 13 0 1 0 1 14C1 23.5 14 37 14 37Z" stroke="#C9A45C" stroke-width="1"></path><circle cx="14" cy="14" r="4" fill="#C9A45C"></circle></svg>
+        <div class="lab"><span>[Вградена мапа · темен стил]</span><span>[адреса]</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="foot"><span>© Јавор Шпед</span><span>Од 1994</span></footer>
+</div>
+<script>
+(function(){
+  var st={interest:'Стан',rooms:'2',day:0,time:'12:00'};
+  var wd=['Нед','Пон','Вто','Сре','Чет','Пет','Саб'];
+  var mo=['јан','фев','мар','апр','мај','јун','јул','авг','сеп','окт','ное','дек'];
+  var days=[],d=new Date();
+  while(days.length<5){d.setDate(d.getDate()+1);var w=d.getDay();if(w===0||w===6)continue;
+    days.push({wd:wd[w],num:String(d.getDate()).padStart(2,'0'),mo:mo[d.getMonth()]});}
+  var box=document.getElementById('days');
+  days.forEach(function(x,i){var b=document.createElement('button');b.type='button';b.className='day';b.dataset.g='day';b.dataset.v=i;
+    b.innerHTML='<small>'+x.wd+'</small><span class="d">'+x.num+'</span><small>'+x.mo+'</small>';box.appendChild(b);});
+  function paint(){
+    document.querySelectorAll('[data-g]').forEach(function(b){var on=String(st[b.dataset.g])===b.dataset.v;
+      b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
+    var apt=st.interest==='Стан';
+    document.getElementById('rooms-step').style.display=apt?'':'none';
+    var x=days[st.day];
+    document.getElementById('sum').textContent=st.interest+(apt?' · '+st.rooms+(st.rooms==='1'?' соба':' соби'):'')+' · '+x.wd+' '+x.num+' '+x.mo+' · '+st.time;
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-g]');if(!b)return;
+    st[b.dataset.g]=b.dataset.g==='day'?Number(b.dataset.v):b.dataset.v;paint();});
+  paint();
+})();
+</script>
+</body>
+</html>

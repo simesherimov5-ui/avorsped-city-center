@@ -23,8 +23,13 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                 label={`${project.name} — визуелизација`}
                 tone="dark"
                 fit={project.imageFit ?? "cover"}
+                focus={project.imageFocus}
                 className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="100vw"
+                sizes={
+                  project.imageFit === "contain"
+                    ? "(max-width: 639px) 100vw, 600px"
+                    : "(max-width: 639px) 150vw, (max-width: 1280px) 100vw, 1200px"
+                }
               />
             </ParallaxImage>
             <div className="absolute inset-0 bg-gradient-to-t from-chrome/85 via-chrome/15 to-transparent transition-colors duration-500 group-hover:from-chrome/95" />

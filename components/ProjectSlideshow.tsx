@@ -11,6 +11,11 @@ import type { Project } from "@/types";
 
 const AUTOPLAY_MS = 4000;
 const FADE_S = 1.2;
+
+// A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
+// as wide as its frame is tall.
+const slideSizes = (project: Project) =>
+  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 400px" : "(max-width: 767px) 160vw, 100vw";
 const SWIPE_PX = 50;
 
 const subscribeVisibility = (onChange: () => void) => {
@@ -97,13 +102,6 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
           transition={{ duration: reduceMotion ? 0 : FADE_S, ease: "easeInOut" }}
           className="absolute inset-0"
         >
-          {/* A portrait photo shown in full (imageFit "contain") would leave flat bars at the sides, and
-              cropping it would cut the building — so the bars get a soft, dark blur of the same photo. */}
-          {project.imageFit === "contain" && (
-            <div aria-hidden className="absolute inset-0 scale-125 opacity-45 blur-2xl">
-              <Media image={project.heroImage} tone="dark" fit="cover" className="h-full w-full" sizes="50vw" />
-            </div>
-          )}
           <motion.div
             className="absolute inset-0"
             initial={{ scale: reduceMotion ? 1 : 1.08 }}
@@ -118,8 +116,9 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
               image={project.heroImage}
               tone="dark"
               fit={project.imageFit ?? "cover"}
+              focus={project.imageFocus}
               className="h-full w-full !bg-transparent"
-              sizes="100vw"
+              sizes={slideSizes(project)}
               priority={index === 0}
             />
           </motion.div>
@@ -151,7 +150,14 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
 
       {/* Preloads the next photo so the crossfade never waits on the network. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
-        <Media image={next.heroImage} fit={next.imageFit ?? "cover"} sizes="100vw" priority />
+        <Media
+          image={next.heroImage}
+          fit={next.imageFit ?? "cover"}
+          focus={next.imageFocus}
+          className="h-full w-full"
+          sizes={slideSizes(next)}
+          priority
+        />
       </div>
 
       <button

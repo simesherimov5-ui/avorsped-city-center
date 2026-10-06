@@ -1,30 +1,40 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-
-const MAX_COMPARE = 3;
+import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { MAX_COMPARE, parseIds, readStored, subscribe, writeStored } from "@/lib/compare-store";
 
 interface CompareContextValue {
   ids: string[];
   toggle: (id: string) => void;
   clear: () => void;
+  /** Replaces the whole selection (a shared /compare?ids=… link). */
+  set: (ids: string[]) => void;
   isFull: boolean;
 }
 
 const CompareContext = createContext<CompareContextValue | null>(null);
 
 export function CompareProvider({ children }: { children: ReactNode }) {
-  const [ids, setIds] = useState<string[]>([]);
+  // The server has no selection; the browser reads it from localStorage after hydration.
+  const stored = useSyncExternalStore(subscribe, readStored, () => "");
+  const ids = useMemo(() => parseIds(stored), [stored]);
 
   const value = useMemo<CompareContextValue>(
     () => ({
       ids,
       isFull: ids.length >= MAX_COMPARE,
-      toggle: (id: string) =>
-        setIds((prev) =>
-          prev.includes(id) ? prev.filter((x) => x !== id) : prev.length >= MAX_COMPARE ? prev : [...prev, id]
-        ),
-      clear: () => setIds([]),
+      toggle: (id: string) => {
+        const current = parseIds(readStored());
+        writeStored(
+          current.includes(id)
+            ? current.filter((x) => x !== id)
+            : current.length >= MAX_COMPARE
+              ? current
+              : [...current, id]
+        );
+      },
+      clear: () => writeStored([]),
+      set: (next: string[]) => writeStored(parseIds(next.join(","))),
     }),
     [ids]
   );

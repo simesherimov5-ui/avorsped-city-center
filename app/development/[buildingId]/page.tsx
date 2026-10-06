@@ -9,6 +9,8 @@ import { BuildingDirectory } from "@/components/BuildingDirectory";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
+import { pageMetadata } from "@/lib/seo";
+import { availableWord, floorsText, unitsText } from "@/lib/plural";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -26,7 +28,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ buildingId: string }> }): Promise<Metadata> {
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
-  return { title: building ? `${building.name} — ${development.name}` : "Зграда" };
+  if (!building) return { title: "Зграда", robots: { index: false } };
+  const counts = availabilityCounts(apartments.filter((a) => a.buildingId === building.id));
+  return pageMetadata({
+    title: `${building.name} — ${development.name}`,
+    description: `${building.name} во ${development.name}: ${floorsText(building.floors.length)} и ${unitsText(building.totalApartments)}, од кои ${counts.available} ${availableWord(counts.available)}. Изберете кат за да ги видите становите.`,
+    path: `/development/${building.id}`,
+    image: "/development/opengraph-image",
+  });
 }
 
 export default async function BuildingPage({ params }: { params: Promise<{ buildingId: string }> }) {
@@ -42,7 +51,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/development"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/60 hover:text-charcoal sm:text-sm"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
           <ChevronLeft className="h-4 w-4" /> Назад кон проектот
         </Link>
@@ -50,10 +59,15 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <Media image={building.exteriorImage} className="aspect-[4/3]" />
+          <Media
+            image={building.exteriorImage}
+            className="aspect-[4/3]"
+            sizes="(max-width: 1024px) 155vw, 870px"
+            priority
+          />
           <div>
-            <div className="eyebrow text-ink/40">Вие сте овде</div>
-            <SectionHeading eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
+            <div className="eyebrow text-muted">Вие сте овде</div>
+            <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
             <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
               <Stat label="Катови" value={String(building.floors.length)} />
               <Stat label="Станови" value={String(building.totalApartments)} />
@@ -79,7 +93,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                 return {
                   number: floor.number,
                   label: floor.label,
-                  meta: `${units.length} станови · ${available} достапни`,
+                  meta: `${unitsText(units.length)} · ${available} ${availableWord(available)}`,
                 };
               })}
             />
@@ -92,9 +106,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <div className="font-display text-2xl">{value}</div>
-      <div className="eyebrow mt-1 text-ink/50">{label}</div>
+    // dt (name) then dd (value) is the order a description list needs; the value is shown above its name
+    <div className="flex flex-col-reverse">
+      <dt className="eyebrow mt-1 text-muted">{label}</dt>
+      <dd className="font-display text-2xl">{value}</dd>
     </div>
   );
 }

@@ -66,12 +66,13 @@ export const projects: Project[] = [
     name: "Станбена Куќа",
     location: "Ул. Цветан Димов бр. 16, Струмица, Северна Македонија",
     status: "upcoming",
-    statusLabelOverride: "Coming soon",
     year: 2028,
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
     imageFit: "contain",
+    // The hero photo is portrait (1730 × 1787), so cards and the slider show it whole, over a blurred copy of itself.
+    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
     heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
     gallery: [
       { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
@@ -103,9 +104,17 @@ export const projects: Project[] = [
         isPlaceholder: false,
       },
       rooms: {
-        "dnevna-soba": { label: "Дневна соба", video: "/videos/stanbena-zgrada/dnevna-soba.mp4" },
-        kujna: { label: "Кујна и трпезарија", video: "/videos/stanbena-zgrada/kujna.mp4" },
-        dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4" },
+        "dnevna-soba": {
+          label: "Дневна соба",
+          video: "/videos/stanbena-zgrada/dnevna-soba.mp4",
+          poster: "/images/stanbena-zgrada/dnevna-soba.jpg",
+        },
+        kujna: {
+          label: "Кујна и трпезарија",
+          video: "/videos/stanbena-zgrada/kujna.mp4",
+          poster: "/images/stanbena-zgrada/kujna.jpg",
+        },
+        dvor: { label: "Двор", video: "/videos/stanbena-zgrada/dvor.mp4", poster: "/images/stanbena-zgrada/dvor.jpg" },
       },
       // Numbered badges on the floor-plan image, matched by eye to the render.
       // Only numbers with a linked room are clickable; the rest are shown as-is.
@@ -167,10 +176,13 @@ export const projects: Project[] = [
     year: 2027,
     units: 30,
     description:
-      "Гарсоњери од 27 до 41 м2 на чекор од Дојранското Езеро, во Сретеново, Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
+      "Гарсоњери од 27 до 41 м² на чекор од Дојранското Езеро, во Сретеново, Стар Дојран (плажа Фук Так). Природа, сонце, чист воздух и медитеранска клима — совршена локација за одмор и живот без грижа.",
     tagline: "Дојран како никогаш досега",
     distanceHighlights: ["На плажа Фук Так", "Чекор до Дојранското Езеро"],
     href: "/dojran",
+    // The frames are wider than the photos (the slider is about 3.6:1, the photos 2:1), so a plain cover crop cut
+    // off the roof. Show it a little further out; the edges are filled with a blurred copy of the photo.
+    imageFocus: { zoom: 0.87, x: 50, y: 46, aspect: 2 },
     heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
     gallery: [
       { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
@@ -182,8 +194,8 @@ export const projects: Project[] = [
     ],
     specifications: [
       { label: "Локација", value: "Стар Дојран, Сретеново (плажа Фук Так)" },
-      { label: "Површини", value: "27 до 41 м2" },
-      { label: "Цена", value: "1 250 до 1 350 €/м2 со ДДВ" },
+      { label: "Површини", value: "27 до 41 м²" },
+      { label: "Цена", value: "1 250 до 1 350 €/м² со ДДВ" },
       { label: "Вселување", value: "Јули 2027" },
       { label: "Контакт", value: "071/333-088" },
     ],
@@ -204,8 +216,16 @@ export const companyStats: CompanyStat[] = [
  * TODO(client): add the other milestones (year + one short sentence each) as they are confirmed.
  */
 export const companyTimeline: CompanyMilestone[] = [
-  { year: "1994", text: "Основање на Јавор Шпед." },
-  { year: "2026", text: "City Center — шест згради во изградба." },
+  {
+    year: "1994",
+    text: "Основање на Јавор Шпед.",
+    image: { src: "/images/brand/holding-since-1994.jpg", alt: "Јавор Шпед, основан 1994" },
+  },
+  {
+    year: "2026",
+    text: "City Center — шест згради во изградба.",
+    image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
+  },
 ];
 
 export const companyInfo = {
@@ -240,5 +260,8 @@ export const companyInfo = {
   // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
   // empty, the Контакт page leaves that row out rather than guessing a number.
   messengerNumber: "",
+  // Where the map pin sits: Global Trade Center on Ленинова, Струмица, from OpenStreetMap.
+  // TODO(client): confirm the exact entrance of the sales office.
+  coordinates: { lat: 41.4389708, lng: 22.6390034 },
   hours: "Пон–Пет 09:00–18:00, Саб 10:00–14:00",
 };

@@ -9,6 +9,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type AnchorHTMLAttributes,
   type ReactNode,
 } from "react";
@@ -177,10 +178,20 @@ export function ZoomNavLink({
   );
 }
 
+const noSubscription = () => () => {};
+
 /** Wraps a destination page's primary content: settles into place and clears the overlay reveal on mount. */
 export function ZoomEnter({ children, className }: { children: ReactNode; className?: string }) {
   const { clear } = useTransitionOverlay();
   const reduceMotion = useReducedMotion();
+  // True while the page is the server's own HTML being picked up by the browser (a direct load or a refresh): then
+  // there is no overlay to reveal from, and starting invisible would hide the page until the scripts have loaded.
+  // A page reached by zooming in is mounted fresh in the browser, so it still settles in from the overlay.
+  const fromServer = useSyncExternalStore(
+    noSubscription,
+    () => false,
+    () => true
+  );
 
   useEffect(() => {
     clear();
@@ -189,7 +200,7 @@ export function ZoomEnter({ children, className }: { children: ReactNode; classN
 
   return (
     <motion.div
-      initial={reduceMotion ? undefined : { opacity: 0, scale: 1.035 }}
+      initial={reduceMotion || fromServer ? false : { opacity: 0, scale: 1.035 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: DURATION.zoomReveal, ease: EASE }}
       className={className}

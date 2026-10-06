@@ -16,8 +16,8 @@ describe("formatPrice", () => {
 
 describe("formatArea", () => {
   it("uses one decimal and the м² unit", () => {
-    expect(formatArea(79.72)).toBe("79.7 м²");
-    expect(formatArea(28.7)).toBe("28.7 м²");
+    expect(formatArea(79.72)).toBe("79,7 м²");
+    expect(formatArea(28.7)).toBe("28,7 м²");
   });
 });
 

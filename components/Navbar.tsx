@@ -2,7 +2,7 @@
 
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { useI18n } from "@/lib/i18n";
@@ -10,6 +10,8 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { isBlackPage } from "@/lib/theme";
+import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
@@ -48,6 +50,18 @@ export function Navbar() {
   const activeHref = tabFor(transition?.target ?? pathname);
 
   const isHome = pathname === "/";
+  // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
+  const black = isBlackPage(pathname);
+  // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
+  // at. On the Контакт page itself it scrolls to the booking form and focuses its first step instead.
+  const onContact = pathname === "/contact";
+  const consultHref = contactHref(pathname);
+  const consultClick = onContact
+    ? (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        scrollToBookingForm();
+      }
+    : undefined;
 
   // Entrance: hidden while the loading screen is up, then the bar fades down
   // with its links staggering in as the screen opens. Mounting after the
@@ -176,7 +190,12 @@ export function Navbar() {
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(
             "border-b transition-colors duration-500",
-            solid ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md" : "border-transparent bg-transparent"
+            // The black pages only swap the bar's fill for pure black; the hairline and blur stay the same.
+            black
+              ? "border-on-chrome/10 bg-black backdrop-blur-md"
+              : solid
+                ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md"
+                : "border-transparent bg-transparent"
           )}
         >
           <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
@@ -218,7 +237,8 @@ export function Navbar() {
             </div>
 
             <div className="nav-link hidden items-center gap-4 lg:flex">
-              <Button href="/consultation" variant="primary" size="sm">
+              {/* One button, one style, on every page (the black pages only change the bar's background). */}
+              <Button href={consultHref} onClick={consultClick} variant="primary" size="sm">
                 {t("nav.consultation")}
               </Button>
             </div>
@@ -265,7 +285,19 @@ export function Navbar() {
             ))}
           </nav>
           <div className="mt-8">
-            <Button href="/consultation" variant="primary" className="w-full" onClick={() => setOpen(false)}>
+            <Button
+              href={consultHref}
+              variant="primary"
+              className="w-full"
+              onClick={(e) => {
+                setOpen(false);
+                if (onContact) {
+                  e.preventDefault();
+                  // Wait for the menu to close and release its scroll lock, then scroll.
+                  setTimeout(scrollToBookingForm, 120);
+                }
+              }}
+            >
               {t("nav.consultation")}
             </Button>
           </div>

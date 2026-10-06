@@ -2,20 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Apartment, UnitStatus } from "@/types";
+import type { Apartment } from "@/types";
 import { formatArea, statusLabel, typeLabel } from "@/lib/format";
 import { StatusLegend } from "@/components/ui/StatusBadge";
-
-const FILL: Record<UnitStatus, string> = {
-  available: "rgba(5,150,105,0.16)",
-  reserved: "rgba(245,158,11,0.18)",
-  sold: "rgba(185,28,28,0.14)",
-};
-const STROKE: Record<UnitStatus, string> = {
-  available: "#059669",
-  reserved: "#d97706",
-  sold: "#b91c1c",
-};
 
 export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
   const router = useRouter();
@@ -29,10 +18,17 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
         <svg
           viewBox="0 0 100 100"
           className="w-full min-w-[480px] sm:min-w-0"
-          role="img"
+          // a group, not an image: role="img" would hide the apartments inside it from assistive technology
+          role="group"
           aria-label="Основа на кат со кликабилни станови"
         >
-          <rect x="0" y="0" width="100" height="100" fill="none" stroke="#dedad0" strokeWidth="0.5" />
+          <defs>
+            {/* Reserved units are hatched: diagonal ink lines, so the status never depends on colour alone. */}
+            <pattern id="fp-hatch" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="3" className="stroke-ink" strokeOpacity="0.45" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="100" height="100" fill="none" className="stroke-line" strokeWidth="0.5" />
           {apartments.map((apt) => {
             const [p0, p1, p2, p3] = apt.shape.points;
             const points = [p0, p1, p2, p3].map((p) => p.join(",")).join(" ");
@@ -41,11 +37,9 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
               <g key={apt.id}>
                 <polygon
                   points={points}
-                  fill={isActive ? STROKE[apt.status] : FILL[apt.status]}
-                  fillOpacity={isActive ? 0.3 : 1}
-                  stroke={STROKE[apt.status]}
-                  strokeWidth={isActive ? 0.8 : 0.4}
-                  className="cursor-pointer transition-all"
+                  data-status={apt.status}
+                  data-active={isActive || undefined}
+                  className="fp-poly cursor-pointer"
                   tabIndex={0}
                   role="button"
                   aria-label={`Стан ${apt.number}, ${statusLabel(apt.status)}, ${formatArea(apt.area)}`}
@@ -63,8 +57,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
                   y={apt.shape.labelPosition[1]}
                   textAnchor="middle"
                   fontSize="3.2"
-                  fill="#2b2a26"
-                  className="pointer-events-none select-none"
+                  className="pointer-events-none select-none fill-ink"
                 >
                   {apt.number}
                 </text>
@@ -73,8 +66,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
                   y={apt.shape.labelPosition[1] + 5}
                   textAnchor="middle"
                   fontSize="2.4"
-                  fill="#6b6960"
-                  className="pointer-events-none select-none"
+                  className="pointer-events-none select-none fill-muted"
                 >
                   {formatArea(apt.area)}
                 </text>
@@ -86,7 +78,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <StatusLegend />
-        <div className="min-h-[1.25rem] text-base text-ink/60 sm:text-sm">
+        <div className="min-h-[1.25rem] text-base text-muted sm:text-sm">
           {activeApt ? (
             `Стан ${activeApt.number} — ${typeLabel(activeApt.type)}, ${formatArea(activeApt.area)}, ${statusLabel(activeApt.status)}`
           ) : (

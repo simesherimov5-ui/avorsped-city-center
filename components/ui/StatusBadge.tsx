@@ -12,13 +12,14 @@ import { statusLabel } from "@/lib/format";
 export const DOT_COLOR: Record<UnitStatus, string> = {
   available: "bg-gold",
   reserved: "hatch-ink bg-ink/5",
-  sold: "bg-ink/20",
+  sold: "bg-ink/30",
 };
 
 const PILL_STYLE: Record<UnitStatus, string> = {
   available: "border-gold text-ink",
   reserved: "hatch-ink border-ink/40 text-ink/70",
-  sold: "border-ink/15 text-ink/40 opacity-35 pointer-events-none",
+  // Sold is quieter by its border and dot only: the label itself keeps full contrast.
+  sold: "border-ink/25 text-ink/70",
 };
 
 export function StatusBadge({

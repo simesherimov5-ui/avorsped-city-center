@@ -15,7 +15,8 @@ const FLOOR_PLAN_IMAGE: Record<Apartment["type"], { src: string; alt: string }> 
 // the project's real architectural documentation (not a type-matched example).
 const REAL_FLOOR_PLAN_BY_ID: Record<string, { src: string; alt: string }> = Object.fromEntries(
   ["21", "21а", "22", "23", "24", "25", "26", "27", "28", "29", "30"].map((number) => [
-    `b06-f3-${number}`,
+    // keyed by the apartment's id, which is plain ASCII ("21а" is "21a" there)
+    `b06-f3-${number.replace("а", "a")}`,
     {
       src: `/images/floorplans/b06-f3/apt-${number.replace("а", "a")}.png`,
       alt: `Архитектонска основа на стан ${number}, Зграда 06, Кат 3`,

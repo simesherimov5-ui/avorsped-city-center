@@ -24,12 +24,23 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
           className="focus-ring group relative block aspect-[4/3] overflow-hidden border border-line bg-chrome text-left"
         >
           {active === i ? (
-            <video src={room.video} autoPlay loop muted playsInline className="h-full w-full object-cover" />
+            <video
+              src={room.video}
+              poster={room.image.src}
+              preload="none"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            />
           ) : (
             <>
               <Media
-                image={room.image}
+                // the button is named by its label, so the picture inside needs no second description
+                image={{ ...room.image, alt: "" }}
                 className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, 240px"
               />
               <div className="absolute inset-0 bg-chrome/25 transition-colors duration-300 group-hover:bg-chrome/40" />
               <div className="absolute inset-0 flex items-center justify-center">
