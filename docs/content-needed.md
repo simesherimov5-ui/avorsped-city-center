@@ -47,18 +47,6 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Format:** latitude and longitude, or just "drop a pin" in Google Maps and send the link. **Example shape:** `41.4390, 22.6390`.
 - **Today:** the pin is on the building (Global Trade Center), not the office entrance.
 
-### 1.7 Spelling of the company names
-
-- **Where:** `COMPANIES` in `components/company-ticker/companies.ts` (used by the ticker above the footer on every page and the circle on За нас).
-- **Format:** the nine names exactly as they are registered, in Cyrillic or Latin as the company writes them.
-
-### 1.8 Company descriptions and website links
-
-- **Where:** each entry of `COMPANIES` in `components/company-ticker/companies.ts`: the optional fields `description` and `url`. The circle on За нас shows them in its centre when a company is selected. Until a company has a description, its centre shows only the number and the name; without a `url` there is no link.
-- **Format:** description: plain text, **at most 280 characters** (longer text is cut at a word and ends with "…"), 2–3 sentences in the present tense, what the company does and its role in the group. Link: the full address with `https://`, opens in a new tab.
-- **Example shape:** `description: "<What the company does. Its role in the group.>"` and `url: "https://<company-website>"`.
-- **For:** all nine companies (Exclusive Building is first in the circle and carries the tag "Оваа компанија").
-
 ---
 
 ## 2. За нас (About)
@@ -102,7 +90,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 2.7 Company name in the «За нас» text
 
-- **Where:** `ABOUT_TEXT` in `app/about/page.tsx`, first sentence ("Нашата компанија … е вашиот доверлив партнер"). The text was sent with a blank; it prints "Exclusive Building" for now.
+- **Where:** `ABOUT_TEXT` in `app/about/page.tsx`, first sentence ("Нашата компанија … е вашиот доверлив партнер"). The text was sent with a blank; it prints "Јавор Шпед" for now.
 - **Needed:** confirm that name, or send the one to print there.
 
 ---

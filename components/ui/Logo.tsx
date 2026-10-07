@@ -35,7 +35,7 @@ export function Logo({
   className?: string;
 }) {
   if (variant === "icon") {
-    return <BuildingMark className={cn("h-10 w-auto text-accent", className)} />;
+    return <BuildingMark className={cn("h-10 w-auto text-brass", className)} />;
   }
 
   if (variant === "inline") {

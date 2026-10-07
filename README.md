@@ -1,6 +1,6 @@
 # Јавор Шпед — City Center Prototype
 
-A premium digital sales experience prototype for Exclusive Building (Јавор Шпед Holding), built around the six-building **City Center** residential development in Strumica. Buyers can explore the masterplan, drill into a building → floor → apartment, filter and compare units, and book a consultation — all pre-filled with the context they were browsing.
+A premium digital sales experience prototype for Јавор Шпед Holding, built around the six-building **City Center** residential development in Strumica. Buyers can explore the masterplan, drill into a building → floor → apartment, filter and compare units, and book a consultation — all pre-filled with the context they were browsing.
 
 ## Stack
 

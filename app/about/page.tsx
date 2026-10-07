@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { companyInfo, companyStats, companyTimeline } from "@/data";
-import { COMPANIES, THIS_COMPANY } from "@/components/company-ticker/companies";
 import { AboutHero, type HeroStat } from "@/components/about/AboutHero";
 import { ReadingProgress } from "@/components/about/ReadingProgress";
 import { Story } from "@/components/about/Story";
 import { Values } from "@/components/about/Values";
 import { Timeline } from "@/components/about/Timeline";
-import { Companies } from "@/components/about/Companies";
-import { orderCompanies } from "@/components/about/companies-layout";
 import { ClosingCta } from "@/components/about/ClosingCta";
 import { Prose } from "@/components/about/Prose";
 import { PullQuote } from "@/components/ui/PullQuote";
@@ -18,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "За нас",
-  description: `Јавор Шпед работи од ${companyInfo.founded} година. Exclusive Building ја носи истата дисциплина во станбената градба: приказна, вредности и пат до City Center.`,
+  description: `Јавор Шпед работи од ${companyInfo.founded} година и ја носи истата дисциплина во станбената градба: приказна, вредности и пат до City Center.`,
   path: "/about",
 });
 
@@ -37,10 +34,10 @@ function splitStory(text: string) {
   return end < 0 ? { lead: text, rest: "" } : { lead: text.slice(0, end + 1), rest: text.slice(end + 1).trim() };
 }
 
-// The company in its own words. TODO(client): the first sentence names the company; confirm that "Exclusive Building"
-// is the name to print there (the text was sent with a blank).
+// The company in its own words. TODO(client): the first sentence names the company; confirm "Јавор Шпед" is the name to
+// print there (the text was sent with a blank).
 const ABOUT_TEXT = [
-  "Нашата компанија Exclusive Building е вашиот доверлив партнер во создавање на домови со највисок квалитет. Со долгогодишно искуство во изградба на станбени објекти во регионот, нашиот тим е посветен на исполнување на вашите соништа за идеален дом.",
+  "Нашата компанија Јавор Шпед е вашиот доверлив партнер во создавање на домови со највисок квалитет. Со долгогодишно искуство во изградба на станбени објекти во регионот, нашиот тим е посветен на исполнување на вашите соништа за идеален дом.",
   "Наша главна цел е да обезбедиме изградба на објекти кои не само што ги задоволуваат, туку и надминуваат очекувањата на нашите клиенти. Користиме само најквалитетни материјали, што ни овозможува да гарантираме долговечност и безбедност во секој наш проект.",
   "Со гордост ја истакнуваме нашата тимска работа. Нашиот инженерски тим е составен од врвни професионалци со десетици успешно завршени проекти зад себе. Ние веруваме во важноста на иновацијата и креативноста во секој аспект на изградбата, за да создадеме уникатни простори кои ќе одговараат на вашите потреби.",
   "Избирајќи не нас, избирате квалитет, доверба и професионализам. Вашиот дом не е само наш проект – тоа е наша голема одговорност.",
@@ -144,10 +141,6 @@ export default function AboutPage() {
           Од 1994 до денес.
         </RevealHeading>
         <Timeline milestones={companyTimeline} />
-      </section>
-
-      <section className="bk-wrap bk-section">
-        <Companies eyebrow="Дел од Јавор Шпед" companies={orderCompanies(COMPANIES, THIS_COMPANY)} />
       </section>
 
       <ClosingCta

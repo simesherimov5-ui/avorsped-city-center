@@ -25,7 +25,7 @@ const subscribeVisibility = (onChange: () => void) => {
 
 /**
  * Full-width projects slider. Each slide lasts `autoplayMs` (4s unless the page says otherwise) and its gold dash fills in step; the dash's own
- * animation ends the slide, so pausing (hover, keyboard focus, hidden tab) freezes both and any
+ * animation ends the slide, so pausing (keyboard focus, hidden tab; not hover) freezes both and any
  * arrow, dash, swipe or key restarts the timer. Slides crossfade over 1.2s while the new photo
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
  * autoplay, no zoom, no text animation.
@@ -46,7 +46,6 @@ export function ProjectSlideshow({
   // server's HTML and triggers a hydration mismatch. This hook starts false and then follows the setting.
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [index, setIndex] = useState(0);
-  const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const tabHidden = useSyncExternalStore(
     subscribeVisibility,
@@ -56,7 +55,7 @@ export function ProjectSlideshow({
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const go = (dir: 1 | -1) => setIndex((i) => (i + dir + projects.length) % projects.length);
-  const paused = hovered || focused || tabHidden;
+  const paused = focused || tabHidden;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
   const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
@@ -95,8 +94,6 @@ export function ProjectSlideshow({
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerCancel={() => (swipeStart.current = null)}
-      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
-      onPointerLeave={(e) => e.pointerType === "mouse" && setHovered(false)}
       onFocus={(e) => setFocused(e.target.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
       className="focus-ring relative h-[clamp(400px,60dvh,520px)] w-full touch-pan-y overflow-hidden bg-ink md:h-[clamp(380px,28vw,560px)]"

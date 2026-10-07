@@ -22,6 +22,8 @@
   --color-limestone: #e6dccd;
   --color-bronze: #6d533e;
   --color-copper: #bc9676;
+  /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
+  --color-brass: #c4a454;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
@@ -74,6 +76,7 @@
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
+  --color-brass: var(--color-brass);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
@@ -624,9 +627,9 @@ body {
   background: linear-gradient(
     110deg,
     var(--color-bronze) 0%,
-    var(--color-copper) 38%,
+    var(--color-brass) 38%,
     var(--color-travertine) 50%,
-    var(--color-copper) 62%,
+    var(--color-brass) 62%,
     var(--color-bronze) 100%
   );
   background-size: 260% 100%;
@@ -648,7 +651,7 @@ body {
   .footer-sheen {
     animation: none;
     background: none;
-    color: var(--color-copper);
+    color: var(--color-brass);
   }
 }
 

@@ -16,7 +16,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
   return renderOg({
-    label: "Јавор Шпед · Exclusive Building",
+    label: "Јавор Шпед",
     title: project.name,
     subtitle: project.tagline ?? project.location,
     photo: project.heroImage.src,

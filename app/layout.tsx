@@ -4,7 +4,6 @@ import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import CompanyTicker from "@/components/company-ticker/CompanyTicker";
 import { I18nProvider } from "@/lib/i18n";
 import { CompareProvider } from "@/lib/compare-context";
 import { CompareBar } from "@/components/CompareBar";
@@ -38,13 +37,13 @@ export const metadata: Metadata = {
   // The public address (see lib/seo.ts): canonical links, the sitemap and share images are built from it.
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Јавор Шпед — Exclusive Building",
+    default: "Јавор Шпед",
     template: "%s | Јавор Шпед",
   },
   description:
-    "Exclusive Building, огранокот за недвижности на Јавор Шпед, гради премиум станбени згради и станови. Истражете го City Center — станбен комплекс од шест згради — и пронајдете го вашиот нов дом.",
+    "Јавор Шпед гради премиум станбени згради и станови. Истражете го City Center — станбен комплекс од шест згради — и пронајдете го вашиот нов дом.",
   openGraph: {
-    title: "Јавор Шпед — Exclusive Building",
+    title: "Јавор Шпед",
     description: "Премиум станбени проекти. Истражете го City Center и пронајдете го вашиот стан.",
     siteName: SITE_NAME,
     locale: "mk_MK",
@@ -73,8 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               name: SITE_NAME,
               url: siteUrl(),
               logo: `${siteUrl()}/apple-icon.png`,
-              description:
-                "Exclusive Building, огранокот за недвижности и градежништво на Јавор Шпед, испорачува премиум станбени станови.",
+              description: "Јавор Шпед испорачува премиум станбени станови.",
               areaServed: "Северна Македонија",
               telephone: companyInfo.phone,
               email: companyInfo.email,
@@ -114,7 +112,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <main id="main" tabIndex={-1} className="outline-none">
                       {children}
                     </main>
-                    <CompanyTicker />
                     <Footer />
                     <CompareBar />
                   </PageTransition>

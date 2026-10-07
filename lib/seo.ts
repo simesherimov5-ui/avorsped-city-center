@@ -44,9 +44,7 @@ export function pageMetadata({
 }): Metadata {
   const text = truncate(description);
   const social = `${title} | ${SITE_NAME}`;
-  const images = image
-    ? [{ url: image, width: 1200, height: 630, alt: `${SITE_NAME} — Exclusive Building` }]
-    : undefined;
+  const images = image ? [{ url: image, width: 1200, height: 630, alt: SITE_NAME }] : undefined;
   return {
     title,
     description: text,

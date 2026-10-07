@@ -150,7 +150,7 @@ export function Hero() {
         }}
       >
         <div ref={eyebrowRef} className="eyebrow text-gold">
-          Exclusive Building · Основано 1994
+          Основано 1994
         </div>
 
         {/* The page's h1, in the display serif: the last words in italic Светол бакар. It sits in the sky band above the
@@ -173,7 +173,7 @@ export function Hero() {
         className="relative px-6 pb-8 text-center"
         style={{ textShadow: "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent)" }}
       >
-        <div className="text-[11px] font-semibold uppercase tracking-[0.5em] text-gold sm:text-[12px]">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
           — Javor Sped Holding
         </div>
         <p className="mx-auto mt-2 max-w-md text-[14px] font-light leading-[1.65] text-paper sm:text-[15px]">

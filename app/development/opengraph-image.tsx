@@ -8,7 +8,7 @@ export const contentType = OG_TYPE;
 export default function Image() {
   const project = projects.find((p) => p.id === "city-center");
   return renderOg({
-    label: "Јавор Шпед · Exclusive Building",
+    label: "Јавор Шпед",
     title: project?.name ?? "City Center",
     subtitle: project?.tagline ?? project?.location,
     photo: project?.heroImage.src,

@@ -32,7 +32,5 @@ The site must not go live until every item under "Blocking" is done. Tick them o
 - [ ] Which words of the story are set in gold (`STORY_GOLD` in `app/about/page.tsx`).
 - [ ] A founder / management quote with name and role, or confirmation to leave the quote band out.
 - [ ] Public holidays for `CLOSED_DATES` in `components/contact/booking-config.ts`.
-- [ ] Spelling of the nine company names (`components/company-ticker/companies.ts`).
-- [ ] A description (up to 280 characters) and a website link for each of the nine companies: the circle on За нас shows only number and name until they exist (`components/company-ticker/companies.ts`, see `docs/content-needed.md` 1.8).
 - [ ] The real City Center construction phase and percent, and the Дојрански Рај data (see the TODOs in `data/index.ts`).
 - [ ] The final name for "Станбена Куќа" (its address is still `/projects/vista-heights`); the old address then redirects permanently.

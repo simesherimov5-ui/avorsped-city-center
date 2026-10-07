@@ -17,7 +17,7 @@ const INK = `rgb(${ONYX_RGB})`;
 const GOLD = `rgb(${COPPER_RGB})`;
 
 type OgOptions = {
-  /** Small label above the title, e.g. "Јавор Шпед · Exclusive Building". */
+  /** Small label above the title, e.g. "Јавор Шпед". */
   label: string;
   title: string;
   subtitle?: string;

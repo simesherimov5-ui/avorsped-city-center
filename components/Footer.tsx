@@ -12,8 +12,7 @@ export function Footer() {
             <div className="eyebrow mt-2 text-on-chrome/60">Holding</div>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-on-chrome/60">
-            Exclusive Building, дел од {companyInfo.name} Холдинг — градиме станбени простори од {companyInfo.founded}{" "}
-            година.
+            {companyInfo.name} Холдинг — градиме станбени простори од {companyInfo.founded} година.
           </p>
         </div>
 
