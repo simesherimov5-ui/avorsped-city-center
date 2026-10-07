@@ -7,25 +7,24 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { pageName } from "./page-names";
 
 /**
- * Every timing of the curtain, in seconds (the one place to tune it). On desktop the whole thing is
- * about 2.8s; phones play the same timeline faster so it takes about 1.8s.
+ * Every timing of the curtain, in seconds (the one place to tune it). The curtain is a plain wipe: it rises over the old
+ * page, the new page is put in place underneath, and it carries on up and off to uncover it. Nothing fades in over the
+ * dark, so no half-transparent page ever shows against the curtain's colour. About 1.5s on a desktop with the next page
+ * ready; phones play the same timeline faster.
  */
 export const TRANSITION = {
-  coverDuration: 0.9, // the ink panel rises over the old page
+  coverDuration: 0.55, // the ink panel rises over the old page
   coverEase: "power3.inOut",
-  nameInDuration: 0.5, // the destination's name fades up in gold…
-  nameInOverlap: 0.25, // …starting this long before the panel has finished rising
+  nameInDuration: 0.35, // the destination's name fades up in gold…
+  nameInOverlap: 0.2, // …starting this long before the panel has finished rising
   ruleWidth: 120, // px — the 1px gold line drawn under the name
-  ruleDuration: 0.6,
-  holdAfterRoute: 0.45, // fully covered, new page in place, before the name leaves
-  nameOutDuration: 0.3,
-  revealDuration: 0.9, // the panel continues up and off the top
+  ruleDuration: 0.4,
+  holdAfterRoute: 0.1, // fully covered, new page in place, before the name leaves
+  nameOutDuration: 0.2,
+  revealDuration: 0.65, // the panel continues up and off the top
   revealOverlap: 0.1,
-  pageEnterDuration: 0.8, // the new page fades up…
-  pageEnterOverlap: 0.5, // …starting this long before the panel has cleared
-  pageEnterDistance: 24, // px
-  phoneTimeScale: 2.8 / 1.8,
-  backForwardFade: 0.3, // browser back/forward: just a quick fade, no curtain
+  readyAfterReveal: 0.2, // pages that animate their own entrance start this long into the reveal
+  phoneTimeScale: 1.25,
   routeTimeoutMs: 8000, // never leave the curtain down forever if a page fails to load
 } as const;
 
@@ -44,9 +43,9 @@ export function usePageTransition() {
 }
 
 /**
- * True once the page is actually on screen: false while the curtain runs (a page that has just been routed to is
- * already mounted underneath it), always true on a first load or outside the provider. Entrance animations wait
- * for it, so they play in view instead of behind the curtain.
+ * True once the page is on screen: false while the curtain covers it (a page that has just been routed to is already
+ * mounted underneath), true again as the curtain starts to clear, and always true on a first load or outside the
+ * provider. Entrance animations wait for it, so they play in view instead of behind the curtain.
  */
 export function usePageReady() {
   const api = useContext(PageTransitionContext);
@@ -65,8 +64,6 @@ export function PageTransition({ children }: { children: ReactNode }) {
   const busyRef = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const arrivalRef = useRef<{ path: string; resolve: () => void } | null>(null);
-  const poppedRef = useRef(false);
-  const mountedRef = useRef(false);
   const pathRef = useRef(pathname);
   const readyRef = useRef(ready);
 
@@ -78,31 +75,19 @@ export function PageTransition({ children }: { children: ReactNode }) {
   // transform), otherwise GSAP's yPercent would stack on top of it and strand the panel over the page.
   useEffect(() => {
     if (curtainRef.current) gsap.set(curtainRef.current, { yPercent: 100 });
-    const onPop = () => {
-      poppedRef.current = true;
-    };
-    window.addEventListener("popstate", onPop);
     return () => {
-      window.removeEventListener("popstate", onPop);
       timelineRef.current?.kill();
     };
   }, []);
 
-  // A new route has rendered: release the waiting curtain, or — for browser back/forward — a quick fade.
+  // A new route has rendered: release the waiting curtain. (Browser back and forward swap pages with no curtain and no fade.)
   useEffect(() => {
     pathRef.current = pathname;
     const arrival = arrivalRef.current;
     if (arrival && arrival.path === pathname) {
       arrivalRef.current = null;
       arrival.resolve();
-    } else if (mountedRef.current && poppedRef.current && !busyRef.current) {
-      const main = document.querySelector("main");
-      if (main && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.fromTo(main, { opacity: 0 }, { opacity: 1, duration: TRANSITION.backForwardFade, clearProps: "opacity" });
-      }
     }
-    poppedRef.current = false;
-    mountedRef.current = true;
   }, [pathname]);
 
   const navigate = useCallback(
@@ -125,6 +110,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       }
 
       const C = TRANSITION;
+      router.prefetch(url.pathname + url.search); // on touch screens there was no hover to start this
       busyRef.current = true;
       setTarget(url.pathname);
       nameEl.textContent = pageName(url.pathname);
@@ -132,11 +118,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       gsap.set(rule, { width: 0 });
       gsap.set(nameEl, { opacity: 0, y: 12 });
 
-      // While the new page is still invisible (it fades up as the curtain clears), what shows through the
-      // gap is the page background — keep it ink so the curtain's colour carries on, not a paper-white flash.
-      document.body.style.backgroundColor = "var(--color-ink)";
       const finish = () => {
-        document.body.style.backgroundColor = "";
         gsap.set(curtain, { yPercent: 100, visibility: "hidden", pointerEvents: "none" });
         busyRef.current = false;
         setTarget(null);
@@ -163,8 +145,6 @@ export function PageTransition({ children }: { children: ReactNode }) {
             requestAnimationFrame(() =>
               requestAnimationFrame(() => {
                 window.scrollTo({ top: 0, left: 0, behavior: "instant" }); // scroll resets while covered
-                const main = document.querySelector("main");
-                if (main) gsap.set(main, { opacity: 0, y: C.pageEnterDistance });
                 tl.resume();
               })
             );
@@ -172,19 +152,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
         })
         .to(nameEl, { opacity: 0, y: -10, duration: C.nameOutDuration, ease: "power2.in" }, `+=${C.holdAfterRoute}`)
         .to(curtain, { yPercent: -100, duration: C.revealDuration, ease: C.coverEase }, `-=${C.revealOverlap}`)
-        // The new page's heading and content fade up as the curtain clears.
-        .add(() => {
-          const main = document.querySelector("main");
-          if (main) {
-            gsap.to(main, {
-              opacity: 1,
-              y: 0,
-              duration: C.pageEnterDuration,
-              ease: "power3.out",
-              clearProps: "opacity,transform",
-            });
-          }
-        }, `-=${C.pageEnterOverlap}`);
+        // Pages that play their own entrance wait for this (usePageReady): it starts as the curtain clears.
+        .add(() => setTarget(null), `<${C.readyAfterReveal}`);
     },
     [router]
   );
