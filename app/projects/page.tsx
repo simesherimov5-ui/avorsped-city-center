@@ -6,6 +6,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectSlideshow } from "@/components/ProjectSlideshow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PullQuote } from "@/components/ui/PullQuote";
 import { cn } from "@/lib/cn";
 import type { ProjectStatus } from "@/types";
 
@@ -62,6 +63,17 @@ export default function ProjectsPage() {
             description="Сите наши проекти во моментов се во изградба или во планирање."
           />
         )}
+      </section>
+
+      {/* Where the projects end: what we think of each one */}
+      <section className="bg-warm-white py-16 sm:py-24">
+        <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
+          <PullQuote tone="light">„Секој проект започнува со прашањето: како ќе се живее тука?“</PullQuote>
+          <p className="mt-8 max-w-[56ch] text-base leading-[1.75] text-ink/80">
+            Секој проект го гледаме како можност да оставиме траен печат и да придонесеме за подобра заедница. Вашето
+            задоволство е наш приоритет!
+          </p>
+        </div>
       </section>
     </div>
   );

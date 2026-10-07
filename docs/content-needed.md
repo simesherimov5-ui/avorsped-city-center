@@ -95,10 +95,15 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 2.6 Management quote (optional)
 
-- **Where:** the marked place in `app/about/page.tsx` (the quote band is left out until it exists).
+- **Where:** the marked place in `app/about/page.tsx` (a band with the company's line «Делата зборуваат за нас…» stands there until a real quote exists).
 - **Needed:** the quote, the person's name and role, and a portrait photo if wanted.
 - **Format:** quote up to 200 characters; portrait 1:1, at least 800 × 800 px. **Example shape:** `„<quote>" — <name>, <role>`.
 - **Or:** confirm that there should be no quote.
+
+### 2.7 Company name in the «За нас» text
+
+- **Where:** `ABOUT_TEXT` in `app/about/page.tsx`, first sentence ("Нашата компанија … е вашиот доверлив партнер"). The text was sent with a blank; it prints "Exclusive Building" for now.
+- **Needed:** confirm that name, or send the one to print there.
 
 ---
 

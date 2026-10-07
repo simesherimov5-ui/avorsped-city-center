@@ -9,6 +9,8 @@ import { Timeline } from "@/components/about/Timeline";
 import { Companies } from "@/components/about/Companies";
 import { orderCompanies } from "@/components/about/companies-layout";
 import { ClosingCta } from "@/components/about/ClosingCta";
+import { Prose } from "@/components/about/Prose";
+import { PullQuote } from "@/components/ui/PullQuote";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 import "@/components/black/black.css";
 import "@/components/about/about.css";
@@ -35,6 +37,30 @@ function splitStory(text: string) {
   return end < 0 ? { lead: text, rest: "" } : { lead: text.slice(0, end + 1), rest: text.slice(end + 1).trim() };
 }
 
+// The company in its own words. TODO(client): the first sentence names the company; confirm that "Exclusive Building"
+// is the name to print there (the text was sent with a blank).
+const ABOUT_TEXT = [
+  "Нашата компанија Exclusive Building е вашиот доверлив партнер во создавање на домови со највисок квалитет. Со долгогодишно искуство во изградба на станбени објекти во регионот, нашиот тим е посветен на исполнување на вашите соништа за идеален дом.",
+  "Наша главна цел е да обезбедиме изградба на објекти кои не само што ги задоволуваат, туку и надминуваат очекувањата на нашите клиенти. Користиме само најквалитетни материјали, што ни овозможува да гарантираме долговечност и безбедност во секој наш проект.",
+  "Со гордост ја истакнуваме нашата тимска работа. Нашиот инженерски тим е составен од врвни професионалци со десетици успешно завршени проекти зад себе. Ние веруваме во важноста на иновацијата и креативноста во секој аспект на изградбата, за да создадеме уникатни простори кои ќе одговараат на вашите потреби.",
+  "Избирајќи не нас, избирате квалитет, доверба и професионализам. Вашиот дом не е само наш проект – тоа е наша голема одговорност.",
+];
+
+const VISION_TEXT =
+  "Нашата визија е да станеме лидер во создавање на современи и одржливи станбени решенија, кои ќе ги задоволат потребите на заедницата и ќе придонесат за подобрување на животната средина. Посветени сме на иновации и квалитет, со цел да обезбедиме уникатни домови кои ќе ги обединат луѓето и ќе создадат позитивна атмосфера за живеење.";
+
+const VISION_AIMS = [
+  "Да станеме синоним за квалитетна изградба и иновации во недвижности, создавајќи заедници кои се спој на удобност, стил и одржливост.",
+  "Да ги водиме трендовите во архитектурата и изградбата, развивајќи уникатни проекти кои ќе инспирираат нови генерации да ја откриваат убавината на живеењето во нашиот простор.",
+  "Да изградиме иднина во која секој дом е не само физички простор, туку и место за инспирација, безбедност и пријателство.",
+];
+
+const MISSION_TEXT = [
+  "Нашата мисија е да ја оправдаме довербата на луѓето кои со нас го избираат својот дом. Тоа го остваруваме преку одговорна изградба, промислени архитектонски решенија и посветеност на квалитетот во секоја фаза од работата.",
+  "Свесни за значењето што го има купувањето дом, кон секој проект пристапуваме со професионалност и со почит кон вложувањето и очекувањата на нашите купувачи. Создаваме станбени простори со трајна вредност, кои го унапредуваат секојдневното живеење и придонесуваат за развојот на заедницата.",
+  "За нас, секој изграден дом е долгорочна одговорност — кон луѓето што ќе живеат во него и кон градот чиј дел станува.",
+];
+
 const stat = (label: string) => companyStats.find((s) => s.label === label);
 
 export default function AboutPage() {
@@ -58,12 +84,11 @@ export default function AboutPage() {
         stats={heroStats}
       />
 
-      <Story
-        eyebrow="Приказна"
-        statement={story.lead}
-        gold={STORY_GOLD}
-        more={[story.rest, companyInfo.mission].filter(Boolean)}
-      />
+      <Story eyebrow="Приказна" statement={story.lead} gold={STORY_GOLD} more={[story.rest].filter(Boolean)} />
+
+      <section className="bk-wrap bk-section">
+        <Prose heading="За нас" paragraphs={ABOUT_TEXT} />
+      </section>
 
       <section className="bk-wrap bk-section">
         <Values
@@ -74,7 +99,24 @@ export default function AboutPage() {
         />
       </section>
 
-      {/* TODO(client): a real quote with name and role. Until one is given the quote band is left out. */}
+      {/* Two lines the company stands behind. TODO(client): a real quote with name and role could replace this one. */}
+      <section className="bk-wrap bk-section">
+        <PullQuote tone="dark">„Делата зборуваат за нас. Довербата нè води понатаму.“</PullQuote>
+      </section>
+
+      <section className="bk-wrap bk-section">
+        <Prose heading="Визија" paragraphs={[VISION_TEXT]}>
+          <ul className="ab-aims">
+            {VISION_AIMS.map((aim) => (
+              <li key={aim.slice(0, 24)}>{aim}</li>
+            ))}
+          </ul>
+        </Prose>
+      </section>
+
+      <section className="bk-wrap bk-section">
+        <Prose heading="Нашата мисија" paragraphs={MISSION_TEXT} />
+      </section>
 
       <section className="bk-wrap bk-section">
         <div className="bk-eyebrow">Нашиот пат</div>
@@ -90,7 +132,7 @@ export default function AboutPage() {
 
       <ClosingCta
         image={CLOSING_PHOTO}
-        heading="Дојдете да ги видите становите одблизу."
+        heading="„Вашиот дом е голема животна одлука. Нашата посветеност започнува токму тука.“"
         label="Закажи консултација"
         href="/contact"
       />

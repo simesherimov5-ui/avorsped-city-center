@@ -9,21 +9,21 @@ import { pageName } from "./page-names";
 /**
  * Every timing of the curtain, in seconds (the one place to tune it). The curtain is a plain wipe: it rises over the old
  * page, the new page is put in place underneath, and it carries on up and off to uncover it. Nothing fades in over the
- * dark, so no half-transparent page ever shows against the curtain's colour. About 1.5s on a desktop with the next page
- * ready; phones play the same timeline faster.
+ * dark, so no half-transparent page ever shows against the curtain's colour. About 2.7s on a desktop with the next page
+ * ready (1.2s longer than the first version of the wipe, at the owner's request); phones play the same timeline faster.
  */
 export const TRANSITION = {
-  coverDuration: 0.55, // the ink panel rises over the old page
+  coverDuration: 0.95, // the ink panel rises over the old page
   coverEase: "power3.inOut",
   nameInDuration: 0.35, // the destination's name fades up in gold…
   nameInOverlap: 0.2, // …starting this long before the panel has finished rising
   ruleWidth: 120, // px — the 1px gold line drawn under the name
   ruleDuration: 0.4,
-  holdAfterRoute: 0.1, // fully covered, new page in place, before the name leaves
+  holdAfterRoute: 0.5, // fully covered, new page in place, before the name leaves
   nameOutDuration: 0.2,
-  revealDuration: 0.65, // the panel continues up and off the top
+  revealDuration: 1.05, // the panel continues up and off the top
   revealOverlap: 0.1,
-  readyAfterReveal: 0.2, // pages that animate their own entrance start this long into the reveal
+  readyAfterReveal: 0.3, // pages that animate their own entrance start this long into the reveal
   phoneTimeScale: 1.25,
   routeTimeoutMs: 8000, // never leave the curtain down forever if a page fails to load
 } as const;

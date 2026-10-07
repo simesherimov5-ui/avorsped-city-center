@@ -21,6 +21,16 @@ export const metadata: Metadata = pageMetadata({
   image: null,
 });
 
+// The location in the company's own words.
+const LOCATION_TEXT = {
+  title: "Исклучителна локација — блиску до сè што ви е важно",
+  paragraphs: [
+    "Вистинската локација му дава поинаков ритам на секојдневието — повеќе време за себе и за најблиските, помалку време во движење и слобода да уживате во градот. Сместен во атрактивен дел од градот, надвор од најголемиот метеж, станбениот комплекс City ја обединува удобноста на мирното живеење со близината на сите важни содржини.",
+    "Градскиот парк, супермаркетите, спортските игралишта, болницата и градинката се во непосредна близина, а развиената инфраструктура и директниот пристап до булеварите овозможуваат едноставно поврзување со останатите делови на градот. Така, секојдневните обврски стануваат полесни, а можностите за одмор и рекреација — поблиски.",
+    "Внимателната поставеност и ориентација на комплексот, природното проветрување и широките, непречени погледи дополнително го збогатуваат квалитетот на живеењето. Сето тоа создава простор во кој поврзаноста со градот и чувството на спокој се во природна рамнотежа.",
+  ],
+};
+
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
   const counts = availabilityCounts(apartments);
@@ -129,9 +139,14 @@ export default function DevelopmentPage() {
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <div>
-              <div className="eyebrow text-gold-deep">Локација</div>
-              <h2 className="t-h2 mt-4">{development.location}</h2>
-              <ul className="mt-8 space-y-4">
+              <div className="eyebrow text-gold-deep">Локација · {development.location}</div>
+              <h2 className="t-h2 mt-4">{LOCATION_TEXT.title}</h2>
+              <div className="mt-6 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
+                {LOCATION_TEXT.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                ))}
+              </div>
+              <ul className="mt-10 space-y-4">
                 {development.nearbyPoints.map((point) => (
                   <li
                     key={point.name}

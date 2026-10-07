@@ -150,6 +150,54 @@
   margin-top: 1em;
 }
 
+/* The running texts (За нас, Визија, Мисија): the heading on the left, the words on the right */
+.ab-prose {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.ab-prose-body {
+  max-width: 64ch;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-paper) 82%, transparent);
+}
+.ab-prose-body p + p {
+  margin-top: 1.1em;
+}
+.ab-prose-lead {
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.6;
+  color: var(--color-paper);
+}
+/* the vision's three aims: three columns, each under a thin rule */
+.ab-aims {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-aims li {
+  padding-top: 20px;
+  border-top: 1px solid var(--color-gold);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+@media (max-width: 880px) {
+  .ab-prose {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ab-aims {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 32px;
+  }
+}
+
 /* A3 — values: a sticky photo beside the list */
 .ab-duo {
   display: grid;
