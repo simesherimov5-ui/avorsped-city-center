@@ -30,7 +30,15 @@ const subscribeVisibility = (onChange: () => void) => {
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
  * autoplay, no zoom, no text animation.
  */
-export function ProjectSlideshow({ projects }: { projects: Project[] }) {
+export function ProjectSlideshow({
+  projects,
+  headingAs = "h2",
+}: {
+  projects: Project[];
+  /** The slide's project name is a heading: "h3" where the page already has an h2 above the slider. */
+  headingAs?: "h2" | "h3";
+}) {
+  const Heading = headingAs === "h3" ? motion.h3 : motion.h2;
   // Not Framer's useReducedMotion: it reports the real value during hydration, which differs from the
   // server's HTML and triggers a hydration mismatch. This hook starts false and then follows the setting.
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -122,15 +130,18 @@ export function ProjectSlideshow({ projects }: { projects: Project[] }) {
               priority={index === 0}
             />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/25 to-chrome/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/55 to-chrome/20" />
           <div className="absolute inset-x-0 bottom-0">
             <div className="mx-auto max-w-7xl px-5 pb-14 text-on-chrome sm:px-8 sm:pb-16 lg:px-10">
               <motion.span {...textIn(0)} className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
                 {statusText}
               </motion.span>
-              <motion.h2 {...textIn(1)} className="t-h2 mt-3">
+              <Heading
+                {...textIn(1)}
+                className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]"
+              >
                 {project.name}
-              </motion.h2>
+              </Heading>
               <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
                 {project.location}
               </motion.div>

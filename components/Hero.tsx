@@ -41,7 +41,6 @@ export function Hero() {
   const revealedAtMount = useRef(revealing);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const signatureRef = useRef<HTMLDivElement>(null);
   const invitationRef = useRef<HTMLDivElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
@@ -50,20 +49,19 @@ export function Hero() {
     () => {
       const eyebrow = eyebrowRef.current;
       const headline = headlineRef.current;
-      const signature = signatureRef.current;
       const invitation = invitationRef.current;
       const stats = statsBarRef.current;
       const scrollCue = scrollIndicatorRef.current;
-      if (!eyebrow || !headline || !signature || !invitation || !stats || !scrollCue) return;
+      if (!eyebrow || !headline || !invitation || !stats || !scrollCue) return;
 
       if (!revealing) {
-        gsap.set([eyebrow, headline, signature, invitation, stats, scrollCue], { opacity: 0 });
-        gsap.set([eyebrow, signature, invitation, stats, scrollCue], { y: 14 });
+        gsap.set([eyebrow, headline, invitation, stats, scrollCue], { opacity: 0 });
+        gsap.set([eyebrow, invitation, stats, scrollCue], { y: 14 });
         return;
       }
 
       if (instant || revealedAtMount.current) {
-        gsap.set([eyebrow, headline, signature, invitation, stats, scrollCue], { opacity: 1, y: 0 });
+        gsap.set([eyebrow, headline, invitation, stats, scrollCue], { opacity: 1, y: 0 });
         return;
       }
 
@@ -74,7 +72,6 @@ export function Hero() {
       const tl = gsap.timeline();
       tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1)
         .to(split.lines, { yPercent: 0, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.3)
-        .to(signature, { opacity: 1, y: 0, duration: 0.7 }, 0.9)
         .to(invitation, { opacity: 1, y: 0, duration: 0.7 }, 1.0)
         .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1)
         .to(scrollCue, { opacity: 1, y: 0, duration: 0.7 }, 1.3);
@@ -132,11 +129,11 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* A dark scrim behind the info strip: ink fading in from nothing at the top of its 240px to 80% at the
-          bottom, above the photo and under the text, so the strip's labels always sit on the dark part. */}
+      {/* A dark scrim behind the invitation and the info strip: ink fading in from nothing at the top of its 460px to
+          85% at the bottom, above the photo and under the text, so their text always sits on the dark part. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[240px] bg-gradient-to-b from-ink/0 to-ink/80 max-sm:to-ink/90"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[460px] bg-gradient-to-b from-ink/0 via-ink/55 to-ink/85 max-sm:to-ink/90"
       />
 
       {/* Sky text — the eyebrow and headline sit in the cloud band right
@@ -162,26 +159,27 @@ export function Hero() {
           ref={headlineRef}
           className="mx-auto mt-3 max-w-4xl text-[clamp(1.75rem,3vw,2.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
         >
-          Добредојдовте во <br />
-          <em className="font-normal italic text-gold">вашиот нов дом</em>
+          Добредојдовте во вашиот <br />
+          <em className="font-normal italic text-gold">нов дом</em>
         </h1>
-
-        <div
-          ref={signatureRef}
-          className="mt-4 text-[11px] font-semibold uppercase tracking-[0.5em] text-gold sm:text-[12px]"
-        >
-          — Javor Sped Holding
-        </div>
-        <p
-          ref={invitationRef}
-          className="mx-auto mt-2 max-w-md text-[14px] font-light leading-[1.65] text-paper sm:text-[15px]"
-        >
-          Секоја адреса има своја приказна. Откријте ја вашата.
-        </p>
       </div>
 
       {/* Spacer that keeps the stats strip pinned to the bottom of the hero. */}
       <div className="flex-1" />
+
+      {/* The signature and the sentence that asks the visitor to look further, just above the strip. */}
+      <div
+        ref={invitationRef}
+        className="relative px-6 pb-8 text-center"
+        style={{ textShadow: "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent)" }}
+      >
+        <div className="text-[11px] font-semibold uppercase tracking-[0.5em] text-gold sm:text-[12px]">
+          — Javor Sped Holding
+        </div>
+        <p className="mx-auto mt-2 max-w-md text-[14px] font-light leading-[1.65] text-paper sm:text-[15px]">
+          Секоја адреса има своја приказна. Откријте ја вашата.
+        </p>
+      </div>
 
       {/* Company footprint — real, portfolio-wide numbers, not one project's. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">

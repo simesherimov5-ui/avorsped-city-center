@@ -1,16 +1,16 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import { ProjectShowcase } from "@/components/ProjectShowcase";
+import { ProjectSlideshow } from "@/components/ProjectSlideshow";
 import { Reveal } from "@/components/motion/Reveal";
 import type { Project } from "@/types";
 
 /**
- * "Во изградба сега": the projects being built now, one large photo after another (the same slideshow the homepage
- * has always used), each with its status, name and place, and a way in.
+ * "Во изградба сега": the projects being built now, in the same full-width slideshow as the Проекти page: one project
+ * at a time with its status, name, place and a way in.
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
   return (
-    <section id="new" className="bg-chrome text-on-chrome">
-      <div className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24 lg:px-10">
+    <section id="new" className="bg-chrome pb-16 text-on-chrome sm:pb-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
@@ -30,12 +30,12 @@ export function NewProjects({ projects }: { projects: Project[] }) {
             </Link>
           </div>
         </Reveal>
-        <Reveal delay={0.1}>
-          <div className="mt-10">
-            <ProjectShowcase projects={projects} />
-          </div>
-        </Reveal>
       </div>
+      <Reveal delay={0.1}>
+        <div className="mt-10">
+          <ProjectSlideshow projects={projects} headingAs="h3" />
+        </div>
+      </Reveal>
     </section>
   );
 }
