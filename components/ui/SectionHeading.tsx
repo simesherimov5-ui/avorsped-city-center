@@ -27,7 +27,10 @@ export function SectionHeading({
       <Heading
         className={cn(
           size === "compact"
-            ? "mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]"
+            ? cn(
+                "mt-3 font-display font-normal leading-[1.1]",
+                Heading === "h1" ? "text-[clamp(30px,3.4vw,48px)]" : "text-[clamp(26px,2.8vw,40px)]"
+              )
             : cn("mt-4", Heading === "h1" ? "t-h1" : "t-h2"),
           tone === "dark" ? "text-on-chrome" : "text-charcoal"
         )}

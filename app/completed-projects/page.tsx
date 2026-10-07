@@ -22,6 +22,7 @@ export default function CompletedProjectsPage() {
           as="h1"
           eyebrow="Портфолио"
           title="Завршени проекти"
+          size="compact"
           description="Проекти на Јавор Шпед со завршена изградба, целосно предадени на сопствениците."
         />
 

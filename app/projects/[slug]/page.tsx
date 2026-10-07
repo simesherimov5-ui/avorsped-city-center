@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
 import { projects } from "@/data";
@@ -7,14 +8,14 @@ import { Media } from "@/components/ui/Media";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { RoomVideoTour } from "@/components/RoomVideoTour";
 import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
-import { Button } from "@/components/ui/Button";
+import { ProjectHeader } from "@/components/project/ProjectHeader";
+import { ProjectCta } from "@/components/project/ProjectCta";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { showsConstructionProgress } from "@/components/construction/phases";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
-import { unitsText } from "@/lib/plural";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -40,9 +41,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   // address permanently redirects to the main one, so each project has one page for search engines and sharing.
   if (project.href) permanentRedirect(project.href);
 
+  const facts = [
+    // the address is already the line above the name
+    ...project.specifications.filter((spec) => spec.label !== "Локација"),
+    { label: "Година", value: String(project.year) },
+    { label: "Статус", value: project.statusLabelOverride ?? projectStatusLabel(project.status) },
+  ];
+
   return (
     <div className="pt-24 sm:pt-28">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
+      <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
         <Link
           href="/projects"
           className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
@@ -51,7 +59,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </Link>
       </div>
 
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
+      <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
         <Reveal immediate>
           {project.gallery.length > 0 ? (
             <PhotoCarousel
@@ -71,115 +79,76 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             />
           )}
         </Reveal>
-
-        <Reveal immediate delay={0.08}>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-line py-4 text-xs text-muted sm:text-sm">
-            <span className="sr-only">Метаподатоци</span>
-            <span>{project.location}</span>
-            <span aria-hidden className="text-line">
-              ·
-            </span>
-            <span>{project.year}</span>
-            <span aria-hidden className="text-line">
-              ·
-            </span>
-            <span>{project.statusLabelOverride ?? projectStatusLabel(project.status)}</span>
-            <span aria-hidden className="text-line">
-              ·
-            </span>
-            <span>{unitsText(project.units)}</span>
-          </div>
-        </Reveal>
-
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
-          <div className="min-w-0 lg:col-span-2">
-            <Reveal delay={0.1}>
-              <div className="eyebrow text-gold-deep">{project.location}</div>
-              <h1 className="t-h1 mt-1">{project.name}</h1>
-              <p className="mt-5 max-w-xl text-lead leading-relaxed text-ink/70">{project.description}</p>
-            </Reveal>
-
-            {project.roomTour && (
-              <Reveal>
-                <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="t-h3">Видео разгледување на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-muted">
-                    Кликнете на просторија за да пуштите кратко видео разгледување.
-                  </p>
-                  <div className="mt-6">
-                    <RoomVideoTour rooms={project.roomTour} />
-                  </div>
-                </div>
-              </Reveal>
-            )}
-
-            {project.floorPlanExplorer ? (
-              <Reveal>
-                <div className="mt-14 border-t border-line pt-12">
-                  <h2 className="t-h3">Распоред на просториите</h2>
-                  <p className="mt-2 max-w-md text-sm text-muted">
-                    Кликнете на број за да пуштите видео од таа просторија.
-                  </p>
-                  <div className="mt-6">
-                    <InteractiveFloorPlan {...project.floorPlanExplorer} />
-                  </div>
-                </div>
-              </Reveal>
-            ) : (
-              project.apartmentTypes && (
-                <Reveal>
-                  <div className="mt-14 border-t border-line pt-12">
-                    <h2 className="t-h3">Распоред на станови</h2>
-                    <div className="mt-6 space-y-8">
-                      {project.apartmentTypes.map((type) => (
-                        <div key={type.label}>
-                          <Media image={type.image} label={type.label} className="aspect-[16/11]" />
-                          <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
-                            <div className="font-medium">{type.label}</div>
-                            <div className="text-sm text-gold-deep">{type.area}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Reveal>
-              )
-            )}
-
-            {showsConstructionProgress(project) && (
-              <div className="mt-14 border-t border-line pt-12">
-                <ConstructionProgress project={project} />
-              </div>
-            )}
-          </div>
-
-          <Reveal delay={0.15}>
-            <aside className="h-fit space-y-6 border border-line bg-warm-white p-6 lg:sticky lg:top-28">
-              <div>
-                <div className="eyebrow text-muted">Спецификации</div>
-                <dl className="mt-4 space-y-3.5">
-                  {project.specifications.map((s) => (
-                    <div key={s.label} className="flex justify-between gap-4 border-b border-line pb-3 text-sm">
-                      <dt className="eyebrow pt-0.5 text-muted">{s.label}</dt>
-                      <dd className="text-right font-medium text-charcoal">{s.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-              {project.href && (
-                <Button href={project.href} variant="primary" className="w-full">
-                  Истражи го проектот
-                </Button>
-              )}
-              <Button href={`/contact?project=${project.id}`} variant="secondary" className="w-full">
-                Контактирај за овој проект
-              </Button>
-            </aside>
-          </Reveal>
-        </div>
       </section>
+
+      <section className="mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10">
+        <Reveal immediate delay={0.08}>
+          <ProjectHeader
+            eyebrow={project.location}
+            name={project.name}
+            description={project.description}
+            facts={facts}
+          />
+        </Reveal>
+      </section>
+
+      {project.roomTour && (
+        <Band
+          title="Видео разгледување на просториите"
+          note="Кликнете на просторија за да пуштите кратко видео разгледување."
+        >
+          <RoomVideoTour rooms={project.roomTour} />
+        </Band>
+      )}
+
+      {project.floorPlanExplorer ? (
+        <Band title="Распоред на просториите" note="Кликнете на број за да пуштите видео од таа просторија.">
+          <InteractiveFloorPlan {...project.floorPlanExplorer} />
+        </Band>
+      ) : (
+        project.apartmentTypes && (
+          <Band title="Распоред на станови">
+            <div className="grid gap-8 sm:grid-cols-2">
+              {project.apartmentTypes.map((type) => (
+                <div key={type.label}>
+                  <Media image={type.image} label={type.label} className="aspect-[16/11]" />
+                  <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+                    <div className="font-medium">{type.label}</div>
+                    <div className="text-sm text-gold-deep">{type.area}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Band>
+        )
+      )}
+
+      {showsConstructionProgress(project) && (
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
+            <ConstructionProgress project={project} />
+          </div>
+        </section>
+      )}
+
+      <ProjectCta projectId={project.id} />
 
       <OtherProjects currentProjectId={project.id} />
     </div>
+  );
+}
+
+/** One section of a project page: a rule, a heading in the display serif, an optional line under it, then the content. */
+function Band({ title, note, children }: { title: string; note?: string; children: ReactNode }) {
+  return (
+    <section className="border-t border-line">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
+        <Reveal>
+          <h2 className="font-display text-[clamp(22px,2.2vw,30px)] font-normal leading-[1.15]">{title}</h2>
+          {note && <p className="mt-2 max-w-md text-sm text-muted">{note}</p>}
+          <div className="mt-8 max-w-3xl">{children}</div>
+        </Reveal>
+      </div>
+    </section>
   );
 }

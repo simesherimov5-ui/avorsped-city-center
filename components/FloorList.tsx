@@ -42,8 +42,8 @@ export function FloorList({
               className={cn(
                 "relative z-10 mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
                 isActive
-                  ? "border-accent bg-accent text-chrome"
-                  : "border-line bg-warm-white text-muted group-hover:border-accent/50 group-hover:text-charcoal"
+                  ? "border-gold-deep bg-gold-deep text-paper"
+                  : "border-line bg-warm-white text-muted group-hover:border-gold-deep/60 group-hover:text-charcoal"
               )}
             >
               {floor.number}

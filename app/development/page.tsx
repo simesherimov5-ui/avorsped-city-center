@@ -10,6 +10,7 @@ import { LocationMap } from "@/components/location-map/LocationMap";
 import { DOT_COLOR, StatusMarker } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
+import { CITY_CENTER } from "@/lib/locations";
 import { pageMetadata } from "@/lib/seo";
 import type { UnitStatus } from "@/types";
 import { availableWord, plural, unitsText } from "@/lib/plural";
@@ -21,10 +22,9 @@ export const metadata: Metadata = pageMetadata({
   image: null,
 });
 
-// City Center on the map: the coordinates are the centre of the Google Maps view the owner sent, and the spots are where
+// City Center on the map: the coordinates are in lib/locations.ts, and the spots are where
 // each nearby place sits on the 400 × 300 drawing (the pin is at 200, 140), placed from the same map. A place that is
 // not listed here is left off the drawing; its distance comes from the data.
-const CITY_CENTER_COORDINATES = { lat: 41.4478557, lng: 22.6406895 };
 const PLACE_SPOTS: Record<string, { x: number; y: number; side: "left" | "right" }> = {
   "Автопат А4": { x: 290, y: 78, side: "left" },
   "Бела Река": { x: 330, y: 168, side: "left" },
@@ -154,7 +154,7 @@ export default function DevelopmentPage() {
               <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 text-sm">
                 <span className="text-muted">{development.mapQuery}</span>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${CITY_CENTER_COORDINATES.lat},${CITY_CENTER_COORDINATES.lng}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${CITY_CENTER.lat},${CITY_CENTER.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="focus-ring inline-flex min-h-11 items-center text-gold-deep underline underline-offset-4"

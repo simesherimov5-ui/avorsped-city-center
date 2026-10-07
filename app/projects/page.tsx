@@ -30,6 +30,7 @@ export default function ProjectsPage() {
           as="h1"
           eyebrow="Портфолио"
           title="Нашите проекти"
+          size="compact"
           description="Од нашата прва станбена зграда до City Center."
         />
 
@@ -39,10 +40,10 @@ export default function ProjectsPage() {
               key={t.value}
               onClick={() => setTab(t.value)}
               className={cn(
-                "focus-ring min-h-11 border px-4 py-2 text-base sm:text-sm",
+                "focus-ring min-h-11 border px-4 py-2 text-base transition-colors duration-300 sm:text-sm",
                 tab === t.value
-                  ? "border-accent bg-accent/10 text-charcoal"
-                  : "border-line text-muted hover:border-accent/50"
+                  ? "border-charcoal bg-charcoal text-paper"
+                  : "border-line text-muted hover:border-gold-deep hover:text-charcoal"
               )}
             >
               {t.label}

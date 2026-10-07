@@ -1,4 +1,5 @@
 import { LocationMap } from "@/components/location-map/LocationMap";
+import { CITY_CENTER, distanceLabel, kilometres, spotOnDrawing } from "@/lib/locations";
 
 type Props = {
   phone: string;
@@ -62,7 +63,18 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber, coo
         </div>
       </div>
 
-      <LocationMap label="Мапа со локација" className="mt-4" />
+      <LocationMap
+        label="Мапа со локација"
+        className="mt-4"
+        places={[
+          {
+            name: CITY_CENTER.name,
+            detail: distanceLabel(kilometres(coordinates, CITY_CENTER)),
+            ...spotOnDrawing(coordinates, CITY_CENTER),
+            side: "right",
+          },
+        ]}
+      />
       <div className="ct-addr">
         <span>{address}</span>
         <a href={mapsHref} target="_blank" rel="noopener noreferrer">

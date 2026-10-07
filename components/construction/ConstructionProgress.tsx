@@ -64,7 +64,7 @@ function Compact({ data, className }: { data: ConstructionProgressData; classNam
         aria-valuenow={Math.round(overall(data) * 100)}
         className="mt-2 h-[3px] bg-ink/12"
       >
-        <span className="block h-full bg-gold" style={{ width: `${overall(data) * 100}%` }} />
+        <span className="block h-full bg-gold-deep" style={{ width: `${overall(data) * 100}%` }} />
       </div>
     </div>
   );
@@ -136,7 +136,7 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
                 >
                   <span
                     data-frac={frac}
-                    className="absolute inset-0 origin-top scale-y-[var(--p)] bg-gold md:origin-left md:scale-x-[var(--p)] md:scale-y-100"
+                    className="absolute inset-0 origin-top scale-y-[var(--p)] bg-gold-deep md:origin-left md:scale-x-[var(--p)] md:scale-y-100"
                     style={{ "--p": frac } as CSSProperties}
                   />
                 </span>

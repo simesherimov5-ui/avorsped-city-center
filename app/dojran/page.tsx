@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { ProjectHeader } from "@/components/project/ProjectHeader";
 import { FloorList } from "@/components/FloorList";
 import { DojranFacade } from "@/components/DojranFacade";
 import { OtherProjects } from "@/components/OtherProjects";
@@ -28,31 +29,22 @@ export default function DojranPage() {
         </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2">
-          <div>
-            <div className="eyebrow text-gold-deep">{project.location}</div>
-            <h1 className="t-h1 mt-1.5">{project.name}</h1>
-            <p className="mt-3 text-sm leading-relaxed text-ink/70">{project.description}</p>
-
-            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-5 sm:grid-cols-4">
-              {project.specifications.map((s) => (
-                <div key={s.label}>
-                  <div className="text-sm font-medium text-gold-deep">{s.value}</div>
-                  <div className="eyebrow mt-1 text-muted">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
-                Закажи консултација
-              </Button>
-            </div>
-          </div>
+          <ProjectHeader
+            eyebrow={project.location}
+            name={project.name}
+            description={project.description}
+            facts={project.specifications}
+          >
+            <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
+              Закажи консултација
+            </Button>
+          </ProjectHeader>
 
           <div>
             <SectionHeading
               eyebrow="Една зграда"
               title="Изберете кат"
+              size="compact"
               description="Кликнете на кат — на сликата погоре или во листата — за да ги видите достапните станови на тој кат."
             />
             <div className="mt-6">
