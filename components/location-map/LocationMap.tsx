@@ -4,12 +4,16 @@ import "./location-map.css";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
-/** A place near the pin: its name, the walking time, and where it sits on the 400 × 300 drawing. */
+/**
+ * A place near the pin: its name, the line under it (how far away it is, or how long it takes to walk there), and where
+ * it sits on the 400 × 300 drawing. `side` is which side of its dot the text goes on (it keeps clear of the lines).
+ */
 export interface MapPlace {
   name: string;
-  minutes: number;
+  detail: string;
   x: number;
   y: number;
+  side?: "left" | "right";
 }
 
 const PIN = { x: 200, y: 140 };
@@ -29,7 +33,7 @@ const GRID = [
 /**
  * A schematic of where the place is, not a real map: a dark 4:3 drawing with a faint grid and one soft band, a
  * Светол бакар pin in the middle with two rings spreading from it, and, when `places` are given, a thin right-angled
- * line from the pin to each one with its name and walking time. It plays once, when 40% of it is on screen: the pin
+ * line from the pin to each one with its name and how far it is. It plays once, when 40% of it is on screen: the pin
  * drops, the lines draw, the labels fade in. The rings keep going. With reduced motion everything is shown, without
  * rings. The caller puts the address and the link to Google Maps under it.
  */
@@ -76,7 +80,7 @@ export function LocationMap({
           />
         ))}
         {places.map((place, i) => {
-          const left = place.x > 270;
+          const left = place.side ? place.side === "left" : place.x > 270;
           const textX = left ? place.x - 10 : place.x + 10;
           return (
             <g key={`place-${place.name}`} className="lm-place" style={{ animationDelay: `${2.8 + i * 0.3}s` }}>
@@ -85,7 +89,7 @@ export function LocationMap({
                 {place.name}
               </text>
               <text className="lm-min" x={textX} y={place.y + 8} textAnchor={left ? "end" : "start"}>
-                {place.minutes} мин
+                {place.detail}
               </text>
             </g>
           );

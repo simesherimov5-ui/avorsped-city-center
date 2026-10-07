@@ -21,6 +21,17 @@ export const metadata: Metadata = pageMetadata({
   image: null,
 });
 
+// City Center on the map: the coordinates are the centre of the Google Maps view the owner sent, and the spots are where
+// each nearby place sits on the 400 × 300 drawing (the pin is at 200, 140), placed from the same map. A place that is
+// not listed here is left off the drawing; its distance comes from the data.
+const CITY_CENTER_COORDINATES = { lat: 41.4478557, lng: 22.6406895 };
+const PLACE_SPOTS: Record<string, { x: number; y: number; side: "left" | "right" }> = {
+  "Автопат А4": { x: 290, y: 78, side: "left" },
+  "Бела Река": { x: 330, y: 168, side: "left" },
+  "Стадион Младост": { x: 118, y: 226, side: "left" },
+  "Спортска сала Парк": { x: 170, y: 272, side: "left" },
+};
+
 // The location in the company's own words.
 const LOCATION_TEXT = {
   title: "Исклучителна локација — блиску до сè што ви е важно",
@@ -133,11 +144,17 @@ export default function DevelopmentPage() {
           </Reveal>
           <Reveal delay={0.1}>
             <div>
-              <LocationMap label="Мапа со локација на City Center" />
+              <LocationMap
+                label="Мапа со локација на City Center"
+                places={development.nearbyPoints.flatMap((point) => {
+                  const spot = PLACE_SPOTS[point.name];
+                  return spot ? [{ name: point.name, detail: point.distance, ...spot }] : [];
+                })}
+              />
               <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 text-sm">
                 <span className="text-muted">{development.mapQuery}</span>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(development.mapQuery)}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${CITY_CENTER_COORDINATES.lat},${CITY_CENTER_COORDINATES.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="focus-ring inline-flex min-h-11 items-center text-gold-deep underline underline-offset-4"

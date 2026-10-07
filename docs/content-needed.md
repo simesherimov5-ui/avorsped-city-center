@@ -138,12 +138,12 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Where:** `development.mapQuery` in `data/generate.ts`.
 - **Format:** the street address as it should be searched, or a Google Maps link to the building site.
 
-### 3.6 Nearby places with walking minutes
+### 3.6 Nearby places on the location map
 
-- **Where:** a new `places` list for the office (`companyInfo`) and for each project (`development` for City Center, and the others), read by `components/location-map/LocationMap.tsx` (its `places` prop). Until it exists the map shows only the grid, the pin and the address under it: no lines, no places, no minutes.
-- **Needed:** for the sales office and for each project, 3 to 5 places that matter to a buyer (a park, a school, the town centre, a pharmacy...), each with its name and the walking time in minutes.
-- **Format:** name up to 24 characters (it is set at 9px on the drawing), minutes as a whole number. Where the place sits on the drawing (a position on a 400 × 300 canvas, the pin being at the centre, 200 × 140) is a design choice we make once we have the list.
-- **Example shape:** `<place name> · <number> мин`
+- **City Center:** done. The map on `/development` draws four of the places from `development.nearbyPoints` (Автопат А4, Бела Река, Стадион Младост, Спортска сала Парк) with their distances, placed from the Google Maps view the owner sent (`PLACE_SPOTS` and `CITY_CENTER_COORDINATES` in `app/development/page.tsx`). Ул. Климент Охридски and Макпетрол 051 are in the data but have no spot on the drawing yet.
+- **Still needed:** the same for the sales office on Контакт and for each other project: 3 to 5 places that matter to a buyer, each with its name and either the distance or the walking time in minutes (the map takes any short line, for example `450 м` or `5 мин`). Until it exists those maps show only the grid, the pin and the address.
+- **Format:** name up to 24 characters (it is set at 9px on the drawing). Where each place sits on the drawing (a position on a 400 × 300 canvas, the pin being at 200 × 140) is a design choice we make once we have the list.
+- **Check:** the coordinates of City Center are the centre of the Google Maps view the owner sent, which is close to but not exactly on the site; send the exact pin if the link should land on the building.
 
 ### 3.7 Homepage: what the board asks for and the site does not have yet
 
