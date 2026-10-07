@@ -9,7 +9,7 @@ import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
 
-const AUTOPLAY_MS = 4000;
+const DEFAULT_AUTOPLAY_MS = 4000;
 const FADE_S = 1.2;
 
 // A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
@@ -24,7 +24,7 @@ const subscribeVisibility = (onChange: () => void) => {
 };
 
 /**
- * Full-width projects slider. Each slide lasts 4s and its gold dash fills in step; the dash's own
+ * Full-width projects slider. Each slide lasts `autoplayMs` (4s unless the page says otherwise) and its gold dash fills in step; the dash's own
  * animation ends the slide, so pausing (hover, keyboard focus, hidden tab) freezes both and any
  * arrow, dash, swipe or key restarts the timer. Slides crossfade over 1.2s while the new photo
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
@@ -33,8 +33,11 @@ const subscribeVisibility = (onChange: () => void) => {
 export function ProjectSlideshow({
   projects,
   headingAs = "h2",
+  autoplayMs = DEFAULT_AUTOPLAY_MS,
 }: {
   projects: Project[];
+  /** How long each slide stays before the next one starts to fade in. */
+  autoplayMs?: number;
   /** The slide's project name is a heading: "h3" where the page already has an h2 above the slider. */
   headingAs?: "h2" | "h3";
 }) {
@@ -115,8 +118,8 @@ export function ProjectSlideshow({
             initial={{ scale: reduceMotion ? 1 : 1.08 }}
             animate={{ scale: reduceMotion ? 1 : [1.08, 1, 1.05] }}
             transition={{
-              duration: FADE_S + AUTOPLAY_MS / 1000,
-              times: [0, FADE_S / (FADE_S + AUTOPLAY_MS / 1000), 1],
+              duration: FADE_S + autoplayMs / 1000,
+              times: [0, FADE_S / (FADE_S + autoplayMs / 1000), 1],
               ease: ["easeOut", "linear"],
             }}
           >
@@ -210,7 +213,7 @@ export function ProjectSlideshow({
                       key={index}
                       className="slide-progress absolute inset-0 bg-gold"
                       style={{
-                        animationDuration: `${AUTOPLAY_MS}ms`,
+                        animationDuration: `${autoplayMs}ms`,
                         animationPlayState: paused ? "paused" : "running",
                       }}
                       onAnimationEnd={() => go(1)}

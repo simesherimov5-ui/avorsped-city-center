@@ -33,7 +33,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
       </div>
       <Reveal delay={0.1}>
         <div className="mt-10">
-          <ProjectSlideshow projects={projects} headingAs="h3" />
+          <ProjectSlideshow projects={projects} headingAs="h3" autoplayMs={3000} />
         </div>
       </Reveal>
     </section>
