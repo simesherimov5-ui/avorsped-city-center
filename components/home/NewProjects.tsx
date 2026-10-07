@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import type { Project } from "@/types";
 
 /**
- * "Во изградба сега": the projects being built now, in the same full-width slideshow as the Проекти page: one project
+ * "Во изградба сега": the company's current projects, in the same full-width slideshow as the Проекти page: one project
  * at a time with its status, name, place and a way in.
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
