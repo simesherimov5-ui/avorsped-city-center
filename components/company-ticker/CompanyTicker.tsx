@@ -17,7 +17,7 @@ function Group({ hidden = false }: { hidden?: boolean }) {
   );
 }
 
-/** "Quiet luxury" company ticker: the last strip on every page, below the footer. */
+/** "Quiet luxury" company ticker: a strip on every page, between the page and the footer. */
 export default function CompanyTicker() {
   const [paused, setPaused] = useState(false);
   return (

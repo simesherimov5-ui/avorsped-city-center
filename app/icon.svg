@@ -1,4 +1,27 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" fill="#14110F"/>
-  <text x="32" y="42" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="400" fill="#DDB28E" text-anchor="middle">JS</text>
+<svg width="64" height="64" viewBox="-20 31 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect x="-20" y="31" width="300" height="300" fill="#14110F"/>
+  <g fill="none" stroke="#DDB28E" stroke-width="10">
+    <path d="M60 300 V70 H110"/>
+    <path d="M134 300 V62"/>
+    <path d="M70 136 L128 110"/>
+    <path d="M70 154 L128 128"/>
+    <path d="M70 172 L128 146"/>
+    <path d="M70 190 L128 164"/>
+    <path d="M70 208 L128 182"/>
+    <path d="M70 226 L128 200"/>
+    <path d="M70 244 L128 218"/>
+    <path d="M70 262 L128 236"/>
+    <path d="M70 280 L128 254"/>
+    <path d="M70 298 L128 272"/>
+    <path d="M140 106 L200 136" opacity=".6"/>
+    <path d="M140 124 L200 154" opacity=".6"/>
+    <path d="M140 142 L200 172" opacity=".6"/>
+    <path d="M140 160 L200 190" opacity=".6"/>
+    <path d="M140 178 L200 208" opacity=".6"/>
+    <path d="M140 196 L200 226" opacity=".6"/>
+    <path d="M140 214 L200 244" opacity=".6"/>
+    <path d="M140 232 L200 262" opacity=".6"/>
+    <path d="M140 250 L200 280" opacity=".6"/>
+    <path d="M140 268 L200 298" opacity=".6"/>
+  </g>
 </svg>

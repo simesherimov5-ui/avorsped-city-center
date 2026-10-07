@@ -5,6 +5,7 @@
   height: 56px;
   background: var(--color-ink);
   border-top: 1px solid color-mix(in srgb, var(--color-paper) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-paper) 12%, transparent);
 }
 .ctk-view {
   flex: 1;

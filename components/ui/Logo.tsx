@@ -1,13 +1,21 @@
 import { cn } from "@/lib/cn";
+import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
 
+/** The building mark: the same drawing the opening builds. Takes its colour from the text colour (`currentColor`). */
 export function BuildingMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
-      <path d="M20 2 L36 15 V54 H4 V15 L20 2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M4 15 L20 27 L36 15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-      <path d="M20 27 V54" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M12 34 V54" stroke="currentColor" strokeWidth="1" />
-      <path d="M28 34 V54" stroke="currentColor" strokeWidth="1" />
+    <svg
+      viewBox={MARK_VIEWBOX}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="6"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      {MARK_STROKES.map((s) => (
+        <path key={s.d} d={s.d} opacity={s.opacity === 1 ? undefined : s.opacity} />
+      ))}
     </svg>
   );
 }
@@ -27,7 +35,7 @@ export function Logo({
   className?: string;
 }) {
   if (variant === "icon") {
-    return <BuildingMark className={cn("h-8 w-8 text-accent", className)} />;
+    return <BuildingMark className={cn("h-10 w-auto text-accent", className)} />;
   }
 
   if (variant === "inline") {

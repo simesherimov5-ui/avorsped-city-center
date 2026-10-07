@@ -49,7 +49,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 1.7 Spelling of the company names
 
-- **Where:** `COMPANIES` in `components/company-ticker/companies.ts` (used by the ticker at the bottom of every page and the circle on За нас).
+- **Where:** `COMPANIES` in `components/company-ticker/companies.ts` (used by the ticker above the footer on every page and the circle on За нас).
 - **Format:** the nine names exactly as they are registered, in Cyrillic or Latin as the company writes them.
 
 ### 1.8 Company descriptions and website links

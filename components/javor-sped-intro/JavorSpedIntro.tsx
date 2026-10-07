@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, CALM_EASE, PREMIUM_EASE } from "@/lib/gsap";
+import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
 import "./javor-sped-intro.css";
 
 type Props = {
@@ -13,21 +14,6 @@ type Props = {
   /** The opening holds (just before the mark lifts away) until this resolves, e.g. the hero photo is loaded. */
   waitFor?: () => Promise<void>;
 };
-
-/**
- * The mark of the building, drawn stroke by stroke. Frame, spine and the ten slats on each side; `delay` is when
- * a stroke starts (seconds), `opacity` where it ends. Left slats run top to bottom 0.09s apart, each right slat
- * follows its left partner by 0.05s and rests at 60%.
- */
-const SLAT_ROWS = Array.from({ length: 10 }, (_, i) => 136 + i * 18);
-const STROKES: { d: string; delay: number; opacity: number }[] = [
-  { d: "M60 300 V70 H110", delay: 0, opacity: 1 },
-  { d: "M134 300 V62", delay: 0.05, opacity: 1 },
-  ...SLAT_ROWS.flatMap((y, i) => [
-    { d: `M70 ${y} L128 ${y - 26}`, delay: i * 0.09, opacity: 1 },
-    { d: `M140 ${y - 30} L200 ${y}`, delay: i * 0.09 + 0.05, opacity: 0.6 },
-  ]),
-];
 
 /**
  * Homepage opening on a black screen (about 2.6 seconds before it opens):
@@ -126,8 +112,8 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
       <div className="jsi-bg-bot" />
       <div className="jsi-stage">
         <div className="jsi-lock">
-          <svg className="jsi-mark" viewBox="50 60 170 240" aria-hidden>
-            {STROKES.map((s) => (
+          <svg className="jsi-mark" viewBox={MARK_VIEWBOX} aria-hidden>
+            {MARK_STROKES.map((s) => (
               <path key={s.d} className="jsi-st" d={s.d} data-delay={s.delay} data-opacity={s.opacity} />
             ))}
           </svg>

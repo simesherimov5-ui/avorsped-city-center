@@ -114,8 +114,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <main id="main" tabIndex={-1} className="outline-none">
                       {children}
                     </main>
-                    <Footer />
                     <CompanyTicker />
+                    <Footer />
                     <CompareBar />
                   </PageTransition>
                 </CompareProvider>
