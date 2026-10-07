@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
-import { ClickToLoadMap } from "@/components/ui/ClickToLoadMap";
+import { LocationMap } from "@/components/location-map/LocationMap";
 import { DOT_COLOR, StatusMarker } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
@@ -148,12 +148,19 @@ export default function DevelopmentPage() {
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="aspect-[4/3] border border-line lg:aspect-auto lg:h-full">
-              <ClickToLoadMap
-                title="Мапа со локација на City Center"
-                place={development.mapQuery}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(development.mapQuery)}&output=embed`}
-              />
+            <div>
+              <LocationMap label="Мапа со локација на City Center" />
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 text-sm">
+                <span className="text-muted">{development.mapQuery}</span>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(development.mapQuery)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus-ring inline-flex min-h-11 items-center text-gold-deep underline underline-offset-4"
+                >
+                  Отвори во Google Maps
+                </a>
+              </div>
             </div>
           </Reveal>
         </div>

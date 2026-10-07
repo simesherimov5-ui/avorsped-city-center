@@ -1,4 +1,4 @@
-import { LazyMap } from "./LazyMap";
+import { LocationMap } from "@/components/location-map/LocationMap";
 
 type Props = {
   phone: string;
@@ -62,7 +62,7 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber, coo
         </div>
       </div>
 
-      <LazyMap lat={coordinates.lat} lng={coordinates.lng} />
+      <LocationMap label="Мапа со локација" className="mt-4" />
       <div className="ct-addr">
         <span>{address}</span>
         <a href={mapsHref} target="_blank" rel="noopener noreferrer">

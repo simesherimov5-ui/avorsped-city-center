@@ -5,7 +5,7 @@ The site must not go live until every item under "Blocking" is done. Tick them o
 ## Blocking
 
 - [ ] **Sending bookings.** `components/contact/send-booking.ts` only waits: no booking reaches the sales team, yet the confirmation promises a call back. Wire it to the chosen service (Web3Forms) and test one real booking from a normal visit and one from an apartment page.
-- [ ] **Map tiles.** `components/contact/ContactMap.tsx` uses Esri's dark gray tiles because CARTO "Dark Matter" answers "API KEY REQUIRED" without a key. Switch to CARTO with a key (or another provider whose terms cover a company website) and keep the attribution visible.
+- [x] **Map tiles.** Closed by the redesign: the map on Контакт and on the development page is now a drawing of the site's own (`components/location-map/LocationMap.tsx`), so there are no tiles, no provider and no key to choose.
 - [ ] **Map pin / real entrance.** `companyInfo.coordinates` in `data/index.ts` points at Global Trade Center on Ленинова (from OpenStreetMap). Confirm it is the entrance of the sales office.
 - [ ] **B1 — Completed projects contradict themselves.** The homepage hero says "5 завршени проекти" and "540+ изградени станови", but the "Завршени проекти" page says there is no completed project yet, and the "Завршено" filter on Проекти is empty. Needs the completed projects (name, year, place, photo). Until then nothing is removed.
 - [ ] **B2 — Phone and e-mail look like placeholders.** `+389 2 3123 456` (footer, Контакт, apartment pages) uses the Skopje prefix, while the Дојрански Рај page shows `071/333-088`. Needs the real phone and e-mail, kept in ONE config (`companyInfo`) and used everywhere, including the Дојрански Рај specifications.
@@ -13,7 +13,7 @@ The site must not go live until every item under "Blocking" is done. Tick them o
 - [ ] **B4 — City Center progress.** The project shows "Конструкција во тек · 90%, Фасада следно" while buildings 01–02 are at "Внатрешно доуредување" and 03–04 at "Фасада". Needs the real phase of each building; the project-level phase is then derived from them. Also reword "Статусот на секој стан … се ажурира во реално време" to "Последно ажурирање: <date>" unless the data becomes live.
 - [ ] **B5 — Apartment data.** Prices, areas and statuses are generated mock data (except Building 06, floor 3). Confirm or replace them before launch.
 - [ ] **Public address.** `metadataBase`, the sitemap, canonical links and share images need the public address (no custom domain yet). Set `NEXT_PUBLIC_SITE_URL` in Vercel; until then they use Vercel's own address.
-- [ ] **Google map cookies.** The map on the development page now loads only after a click, but Google still sets its cookies at that moment. Decide with the lawyer whether the line under the button is enough or a consent step is needed (goes with the privacy policy).
+- [x] **Google map cookies.** Closed by the redesign: the Google embed is gone. The page only links to Google Maps (a plain link that opens in a new tab), so nothing of Google's loads on the site.
 - [ ] **Privacy policy.** The form collects a name and a phone number. The page structure is ready but unpublished (`components/privacy/privacy-content.ts`): it needs the text, then it must be linked from the footer and mentioned under the form.
 
 ## Should be done soon after launch

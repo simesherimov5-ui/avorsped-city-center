@@ -133,6 +133,13 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Where:** `development.mapQuery` in `data/generate.ts`.
 - **Format:** the street address as it should be searched, or a Google Maps link to the building site.
 
+### 3.6 Nearby places with walking minutes
+
+- **Where:** a new `places` list for the office (`companyInfo`) and for each project (`development` for City Center, and the others), read by `components/location-map/LocationMap.tsx` (its `places` prop). Until it exists the map shows only the grid, the pin and the address under it: no lines, no places, no minutes.
+- **Needed:** for the sales office and for each project, 3 to 5 places that matter to a buyer (a park, a school, the town centre, a pharmacy...), each with its name and the walking time in minutes.
+- **Format:** name up to 24 characters (it is set at 9px on the drawing), minutes as a whole number. Where the place sits on the drawing (a position on a 400 × 300 canvas, the pin being at the centre, 200 × 140) is a design choice we make once we have the list.
+- **Example shape:** `<place name> · <number> мин`
+
 ---
 
 ## 4. Дојрански Рај (before-launch B3)
@@ -166,8 +173,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 6.3 Map provider
 
-- **Where:** `components/contact/ContactMap.tsx` (separate follow-up).
-- **Needed:** a decision on the map provider and its key (CARTO, or another whose terms cover a company website).
+- **Closed by the redesign.** The maps are now a drawing of the site's own, with no tile provider and no key (`components/location-map/LocationMap.tsx`). Nothing is needed here any more; the Leaflet package is still in `package.json` and can be removed in a separate change.
 
 ### 6.4 Public address
 
