@@ -145,6 +145,16 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Format:** name up to 24 characters (it is set at 9px on the drawing), minutes as a whole number. Where the place sits on the drawing (a position on a 400 × 300 canvas, the pin being at the centre, 200 × 140) is a design choice we make once we have the list.
 - **Example shape:** `<place name> · <number> мин`
 
+### 3.7 Homepage: what the board asks for and the site does not have yet
+
+- **Film «Три децении, во една минута»:** a film of about one minute, 1994 to today, all projects. `Film` in `components/home/Film.tsx` shows a still until you pass it `src` (`FILM_STILL` and the call are in `app/page.tsx`). The hero button «Гледај видео» from the board is left out until the film exists.
+- **«Избрани адреси» (3 most beautiful completed projects):** there is no completed project in the data yet, so the section is not shown. Needed: which 3 completed buildings go there, with name, settlement, year and a photo each.
+- **«Ново · во продажба»:** it shows the projects that are under construction (City Center, Дојрански Рај). Confirm which 1–2 projects are the new ones.
+- **Numbers «Изградени на доверба»:** `FIGURES` in `app/page.tsx` holds 40 completed buildings and 8.000+ m², both marked provisional in the text document; they also disagree with the strip in the hero («5 завршени проекти»). Send the exact figures. The fourth number, the cities, has no value yet, so it is not shown.
+- **Quotes from residents:** the section is hidden until 3 real statements with a name and a building arrive (never invented ones).
+- **Three detail photos** (material, interior, view from the terrace) for the band the board shows between the details and «Наскоро».
+- **«Наскоро» sign-up:** the board has an input for an e-mail or phone; the site has nowhere to send it, so the button leads to the form on Контакт. Decide where the waiting list should go.
+
 ---
 
 ## 4. Дојрански Рај (before-launch B3)

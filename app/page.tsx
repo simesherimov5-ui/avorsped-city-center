@@ -1,33 +1,26 @@
 import { Hero } from "@/components/Hero";
-import { ProjectShowcase } from "@/components/ProjectShowcase";
 import { Media } from "@/components/ui/Media";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import { YearCounter } from "@/components/YearCounter";
 import { PullQuote } from "@/components/ui/PullQuote";
+import { Manifest } from "@/components/home/Manifest";
+import { Film } from "@/components/home/Film";
+import { NewProjects } from "@/components/home/NewProjects";
+import { Numbers } from "@/components/home/Numbers";
+import { Differences } from "@/components/home/Differences";
+import { Soon } from "@/components/home/Soon";
 import { projects, companyInfo } from "@/data";
 import type { Metadata } from "next";
 
-// Two things a buyer should know about how we build, each in the company's own words.
-const WHY_US = [
-  {
-    title: "Квалитетна изградба",
-    paragraphs: [
-      "Квалитетот на еден дом се препознава во вниманието со кое е создаден и во вредноста што ја задржува низ годините. Затоа, на секој наш проект му пристапуваме со одговорност и посветеност — од првичната замисла и изборот на материјали до прецизната изведба на секој детал.",
-      "Со внимателно планирање и високи стандарди во изградбата, создаваме домови во кои естетиката, функционалноста и долготрајноста се надополнуваат. Зад секоја наша одлука стои јасна цел: да ви обезбедиме сигурен и удобен простор за живеење, во кој вие и вашето семејство ќе ја градите својата иднина со доверба.",
-    ],
-  },
-  {
-    title: "Уникатни решенија и удобност",
-    paragraphs: [
-      "Добрата архитектура се чувствува во леснотијата со која го користите просторот. Во распоредот што ви одговара, во можноста да го уредите според својот вкус и во удобноста што останува подеднакво важна низ годините.",
-      "Нашите станбени решенија произлегуваат од внимателно разгледување на различните потреби на современото живеење. Заедно со архитекти и дизајнери, ги усогласуваме пропорциите, намената и поврзаноста на просториите, за секој стан да понуди практичност, приватност и слобода во уредувањето.",
-      "Резултатот е простор со сопствен архитектонски израз, кој ви остава доволно слобода да го внесете својот. Бидејќи вистинската вредност на едно решение се открива тогаш кога ќе стане дел од вашиот живот.",
-    ],
-  },
+// TODO(client): the film is not made yet; until it is, the frame shows this aerial view of City Center.
+const FILM_STILL = { src: "/images/site/masterplan-aerial.jpg", alt: "City Center — поглед од воздух" };
+
+// TODO(client): these two numbers are provisional (docs/content-needed.md); the years are counted from the founding year.
+const FIGURES = [
+  { value: "40", label: "Завршени објекти" },
+  { value: "8.000+", label: "m² изградени" },
 ];
 
 const CTA_IMAGE = {
@@ -45,45 +38,45 @@ export default function HomePage() {
       {/* 1. Hero — who we are */}
       <Hero />
 
-      {/* 2. Portfolio — the primary path into any project */}
-      <section className="bg-chrome py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      {/* 2. What we believe */}
+      <Manifest />
+
+      {/* 3. The film */}
+      <Film still={FILM_STILL} />
+
+      {/* 4. What is being built now */}
+      <NewProjects projects={projects.filter((p) => p.status === "under-construction")} />
+
+      {/* 5. The numbers */}
+      <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
           <ScrollReveal>
-            <SectionHeading eyebrow="Портфолио" title="Нашите проекти" tone="dark" />
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
+                <h2 className="mt-4 font-display text-[clamp(34px,4.2vw,60px)] font-normal leading-[1.04]">
+                  Изградени <em className="italic text-accent">на доверба.</em>
+                </h2>
+              </div>
+              <Link
+                href="/about"
+                className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              >
+                Нашата приказна
+              </Link>
+            </div>
           </ScrollReveal>
-        </div>
-        <ScrollReveal delay={0.1}>
-          <div className="mx-auto mt-12 max-w-7xl px-5 sm:px-8 lg:px-10">
-            <ProjectShowcase projects={projects} />
+          <div className="mt-14">
+            <Numbers founded={companyInfo.founded} figures={FIGURES} />
           </div>
-        </ScrollReveal>
+        </div>
       </section>
 
-      {/* 4. Why us — condensed trust, no repeated stats */}
-      <section className="bg-cream py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <ScrollReveal>
-            <SectionHeading eyebrow="Зошто нас" title="Изградени на искуство, не на кратенки." align="center" />
-          </ScrollReveal>
-          <div className="mt-12">
-            <YearCounter founded={companyInfo.founded} />
-          </div>
-          <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
-            {WHY_US.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.08}>
-                <div className="border-t border-line pt-8">
-                  <h3 className="t-h3">{item.title}</h3>
-                  <div className="mt-5 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
-                    {item.paragraphs.map((paragraph) => (
-                      <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-                    ))}
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 6. What sets us apart */}
+      <Differences />
+
+      {/* 7. Something new is coming */}
+      <Soon />
 
       {/* A line the company stands behind, on the dark */}
       <section className="bg-chrome py-24 text-on-chrome sm:py-32">
