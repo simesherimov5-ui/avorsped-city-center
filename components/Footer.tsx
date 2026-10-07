@@ -8,7 +8,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 py-16 sm:py-20 lg:grid-cols-4 lg:gap-8 lg:px-10">
         <div>
           <div className="leading-none">
-            <div className="text-xl font-semibold uppercase tracking-[0.32em]">{companyInfo.shortName}</div>
+            <div className="footer-sheen">Javor Sped</div>
             <div className="eyebrow mt-2 text-on-chrome/60">Holding</div>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-on-chrome/60">

@@ -611,6 +611,47 @@ body {
   }
 }
 
+/* The metallic sheen — one place on the whole site, the footer wordmark. The text is filled with a bronze-to-copper
+   gradient with a bright band that sweeps across during the first 60% of each 4.5s loop and then rests. Not on the
+   hero: the headline there sits on a photo. Reduced motion: no movement, plain Светол бакар. */
+.footer-sheen {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: clamp(20px, 2.1vw, 30px);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    110deg,
+    var(--color-bronze) 0%,
+    var(--color-copper) 38%,
+    var(--color-travertine) 50%,
+    var(--color-copper) 62%,
+    var(--color-bronze) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: footer-sheen 4.5s ease-in-out infinite;
+}
+@keyframes footer-sheen {
+  0% {
+    background-position: 100% 0;
+  }
+  60%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-sheen {
+    animation: none;
+    background: none;
+    color: var(--color-copper);
+  }
+}
+
 /* Hero legibility scrim — content-anchored behind the sky band where the
    eyebrow/headline actually sit now, not a flat veil. Sampling the source
    photo's luminance in the top 45% of the frame under a simulated
