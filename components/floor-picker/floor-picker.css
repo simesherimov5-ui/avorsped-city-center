@@ -1,0 +1,227 @@
+/* The floor picker on the building page: the building on the left, the apartments of the chosen floor on the right.
+   It sits in a dark band, so every colour here is the dark-surface pair: Травертин text, Светол бакар accent. */
+.fp {
+  --fp-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --fp-mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  border: 1px solid var(--fp-line);
+  background: var(--color-espresso);
+  color: var(--color-travertine);
+  text-align: left;
+}
+
+/* The building */
+.fp-facade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 32px;
+  background: var(--color-onyx);
+}
+.fp-cap {
+  width: 120px;
+  height: 28px;
+  border: 1px solid var(--fp-line);
+  border-bottom: 0;
+}
+.fp-floors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: min(360px, 100%);
+  padding: 10px;
+  border: 1px solid var(--fp-line);
+}
+.fp-floor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--fp-line);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
+  color: var(--fp-mute);
+  font:
+    600 11px/1 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease;
+}
+.fp-floor:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 2px;
+}
+.fp-floor[aria-pressed="true"] {
+  border-color: var(--color-copper);
+  background: var(--color-copper);
+  color: var(--color-onyx);
+}
+.fp-wins {
+  display: flex;
+  min-width: 0;
+  gap: 10px;
+}
+.fp-wins.is-dense {
+  gap: 4px;
+}
+.fp-wins i {
+  display: block;
+  flex: 0 1 26px;
+  min-width: 3px;
+  height: 14px;
+  border: 1px solid var(--fp-line);
+  transition: border-color 0.4s ease;
+}
+.fp-floor[aria-pressed="true"] .fp-wins i {
+  border-color: var(--color-onyx);
+}
+.fp-base {
+  width: min(440px, 100%);
+  height: 10px;
+  background: var(--fp-line);
+}
+
+/* The panel */
+.fp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+  min-width: 0;
+  padding: 48px 44px;
+}
+.fp-label {
+  color: var(--color-copper);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.fp-title {
+  margin: 0;
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-size: clamp(44px, 4.6vw, 64px);
+  font-weight: 400;
+  line-height: 1;
+}
+.fp-units {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fp-unit {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 16px;
+  border: 1px solid var(--fp-line);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.4s ease;
+}
+.fp-unit:hover {
+  border-color: var(--color-copper);
+}
+.fp-unit:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 2px;
+}
+.fp-unit-no {
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-size: 22px;
+  font-variant-numeric: lining-nums;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.fp-unit-spec {
+  color: var(--fp-mute);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.fp-unit-st {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.fp-unit-st.is-available {
+  color: var(--color-copper);
+}
+.fp-unit-st.is-reserved {
+  color: var(--color-travertine);
+}
+.fp-unit-st.is-sold {
+  color: color-mix(in srgb, var(--color-travertine) 55%, transparent);
+}
+.fp-floorlink {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--color-copper);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.fp-floorlink svg {
+  flex: none;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fp-floorlink:hover svg {
+  transform: translateX(6px);
+}
+.fp-floorlink:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 3px;
+}
+
+@media (min-width: 560px) {
+  .fp-units {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .fp-units {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 879px) {
+  .fp {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fp-facade {
+    padding: 32px 16px;
+  }
+  .fp-floor {
+    padding: 0 14px;
+  }
+  .fp-panel {
+    padding: 32px 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fp-floorlink:hover svg {
+    transform: none;
+  }
+}

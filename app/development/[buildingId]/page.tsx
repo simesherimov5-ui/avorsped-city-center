@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { getBuilding, apartments, buildings, development } from "@/data";
 import { availabilityCounts } from "@/data";
 import { Media } from "@/components/ui/Media";
-import { BuildingDirectory } from "@/components/BuildingDirectory";
+import { FloorPicker } from "@/components/floor-picker/FloorPicker";
 import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
@@ -80,22 +80,25 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         </div>
       </section>
 
-      <section className="bg-cream py-16">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 lg:px-10">
-          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
+      <section className="bg-chrome py-16 text-on-chrome sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" tone="dark" />
           <div className="mt-10">
-            <BuildingDirectory
-              buildingName={building.name}
+            <FloorPicker
               basePath={`/development/${building.id}`}
-              floors={building.floors.map((floor) => {
-                const units = apartments.filter((a) => a.buildingId === building.id && a.floor === floor.number);
-                const available = units.filter((a) => a.status === "available").length;
-                return {
-                  number: floor.number,
-                  label: floor.label,
-                  meta: `${unitsText(units.length)} · ${available} ${availableWord(available)}`,
-                };
-              })}
+              floors={building.floors.map((floor) => ({
+                number: floor.number,
+                label: floor.label,
+                apartments: units
+                  .filter((a) => a.floor === floor.number)
+                  .map((a) => ({
+                    id: a.id,
+                    number: a.number,
+                    area: a.area,
+                    bedrooms: a.bedrooms,
+                    status: a.status,
+                  })),
+              }))}
             />
           </div>
         </div>
