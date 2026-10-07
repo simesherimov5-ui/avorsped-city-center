@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, PREMIUM_EASE } from "@/lib/gsap";
-import { LOGO_PATH, LOGO_TRANSFORM, LOGO_VIEWBOX } from "./logo-mark";
+import { gsap, CALM_EASE, PREMIUM_EASE } from "@/lib/gsap";
 import "./javor-sped-intro.css";
 
 type Props = {
@@ -11,17 +10,30 @@ type Props = {
   onReveal?: () => void;
   /** Called when the intro is completely finished and removed. */
   onDone?: () => void;
-  /** The opening holds (just before the wordmark lifts away) until this resolves, e.g. the hero photo is loaded. */
+  /** The opening holds (just before the mark lifts away) until this resolves, e.g. the hero photo is loaded. */
   waitFor?: () => Promise<void>;
 };
 
 /**
- * Homepage opening sequence on a black screen (about 7 seconds):
- * 1. The logo loads inside a gold ring that draws as a 000–100 counter runs
- * 2. The logo fades and "JS" rises into the ring
- * 3. JS → JAVOR (the S steps out, AVOR unfolds after the J)
- * 4. JAVOR → JAVOR SPED (two words), then "HOLDING" fades in under it
- * 5. The wordmark and "HOLDING" lift away together, as the black screen opens exactly as the site always has:
+ * The mark of the building, drawn stroke by stroke. Frame, spine and the ten slats on each side; `delay` is when
+ * a stroke starts (seconds), `opacity` where it ends. Left slats run top to bottom 0.09s apart, each right slat
+ * follows its left partner by 0.05s and rests at 60%.
+ */
+const SLAT_ROWS = Array.from({ length: 10 }, (_, i) => 136 + i * 18);
+const STROKES: { d: string; delay: number; opacity: number }[] = [
+  { d: "M60 300 V70 H110", delay: 0, opacity: 1 },
+  { d: "M134 300 V62", delay: 0.05, opacity: 1 },
+  ...SLAT_ROWS.flatMap((y, i) => [
+    { d: `M70 ${y} L128 ${y - 26}`, delay: i * 0.09, opacity: 1 },
+    { d: `M140 ${y - 30} L200 ${y}`, delay: i * 0.09 + 0.05, opacity: 0.6 },
+  ]),
+];
+
+/**
+ * Homepage opening on a black screen (about 2.6 seconds before it opens):
+ * 1. The building draws itself in Светол бакар: frame, spine, then the slats from the top down.
+ * 2. "JAVOR SPED" fades in under it while its letters spread apart; "HOLDING" follows under the name.
+ * 3. A short hold, then the mark and the name lift away as the black screen opens exactly as the site always has:
  *    top half up, bottom half down, 1.1s on the "premium" curve.
  * The hero photo is already rendered underneath; this only uncovers it.
  */
@@ -52,76 +64,50 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
         return;
       }
 
-      const prog = el.querySelector(".jsi-ring-prog") as SVGCircleElement;
-      const count = el.querySelector(".jsi-count") as HTMLElement;
-      const len = 2 * Math.PI * 72;
-      const c = { v: 0 };
-      gsap.set(prog, { strokeDasharray: len, strokeDashoffset: len });
-      gsap.set(q(".jsi-j, .jsi-s"), { yPercent: 60, opacity: 0 });
       gsap.set(q(".jsi-hold"), { opacity: 0, y: 8 });
-      gsap.set(q(".jsi-logo"), { opacity: 0, scale: 0.92, transformOrigin: "50% 50%" });
+      gsap.set(q(".jsi-word"), { opacity: 0, letterSpacing: "0.2em", paddingLeft: "0.2em" });
 
       let tl: gsap.core.Timeline | null = null;
       let cancelled = false;
       const run = () => {
         if (cancelled) return;
         const t = gsap.timeline();
-        // Phones get a brisker sequence (about 6s instead of 7.4s).
-        if (window.innerWidth < 768) t.timeScale(1.25);
         tl = t;
+        // 1 · the building draws itself: each stroke fades in while it slides 10px into place
+        q(".jsi-st").forEach((stroke) => {
+          const { delay, opacity } = (stroke as HTMLElement).dataset;
+          t.fromTo(
+            stroke,
+            { opacity: 0, x: -10 },
+            { opacity: Number(opacity), x: 0, duration: 0.6, ease: CALM_EASE },
+            Number(delay)
+          );
+        });
         t
-          // 1 · the logo loads inside the ring
-          .to(q(".jsi-logo"), { opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" }, 0.15)
-          .to(prog, { strokeDashoffset: 0, duration: 1.8, ease: "power1.inOut" }, 0.2)
+          // 2 · the name opens up under the mark (the padding keeps the trailing letter-space from pulling it off-centre)
           .to(
-            c,
-            {
-              v: 100,
-              duration: 1.8,
-              ease: "power1.inOut",
-              onUpdate: () => {
-                count.textContent = String(Math.round(c.v)).padStart(3, "0");
-              },
-            },
-            0.2
+            q(".jsi-word"),
+            { opacity: 1, letterSpacing: "0.5em", paddingLeft: "0.5em", duration: 0.85, ease: CALM_EASE },
+            1.3
           )
-          .to(q(".jsi-count"), { opacity: 0, duration: 0.4 }, 2.0)
-          .to(q(".jsi-logo"), { opacity: 0, scale: 0.94, duration: 0.45, ease: "power2.in" }, 2.05)
-          // 2 · JS rises into the ring
-          .to(q(".jsi-j"), { yPercent: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 2.45)
-          .to(q(".jsi-s"), { yPercent: 0, opacity: 1, duration: 0.65, ease: "power3.out" }, 2.6)
-          .to(
-            q(".jsi-ring"),
-            { opacity: 0, scale: 1.12, duration: 0.5, ease: "power2.in", transformOrigin: "50% 50%" },
-            3.35
-          )
-          // 3 · JS → JAVOR
-          .to(q(".jsi-s"), { width: 0, opacity: 0, duration: 0.6, ease: "power3.inOut" }, 3.6)
-          .to(q(".jsi-avor"), { width: "auto", opacity: 1, duration: 0.9, ease: "power3.inOut" }, 3.6)
-          // 4 · JAVOR → JAVOR SPED: a space opens between the words
-          .to(q(".jsi-gap"), { width: "auto", opacity: 1, duration: 0.5, ease: "power3.inOut" }, 4.7)
-          .to(q(".jsi-s"), { width: "auto", opacity: 1, duration: 0.6, ease: "power3.inOut" }, 4.8)
-          .to(q(".jsi-ped"), { width: "auto", opacity: 1, duration: 0.8, ease: "power3.inOut" }, 4.9)
-          // "HOLDING" fades in and rises 8px under the finished wordmark, 0.25s after JAVOR SPED is complete (4.9 + 0.8)
-          .to(q(".jsi-hold"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 5.95)
-          // Hold here, if needed, until the hero photo underneath is loaded and decoded.
+          // "HOLDING" fades in and rises 8px under the name as it settles
+          .to(q(".jsi-hold"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.95)
+          // Hold here (0.4s after the name is complete), and if needed until the hero photo underneath is loaded and decoded.
           .add(() => {
             if (!waitFor) return;
             t.pause();
             waitFor().then(() => {
               if (!cancelled) t.resume();
             });
-          }, 6.25)
-          // 5 · both lines lift away together as the screen opens: top half up, bottom half down. The lift used to start
-          // at 6.0; it now starts with the opening (6.3), which is where the time for "HOLDING" comes from, so the
-          // intro is still 7.4s long.
-          .to(q(".jsi-lock"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, 6.3)
-          .add(() => onReveal?.(), 6.3)
-          .to(q(".jsi-bg-top"), { yPercent: -100, duration: 1.1, ease: PREMIUM_EASE }, 6.3)
-          .to(q(".jsi-bg-bot"), { yPercent: 100, duration: 1.1, ease: PREMIUM_EASE }, 6.3)
-          .add(finish, 7.4);
+          }, 2.55)
+          // 3 · the mark and the name lift away as the screen opens: top half up, bottom half down
+          .to(q(".jsi-lock"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, 2.6)
+          .add(() => onReveal?.(), 2.6)
+          .to(q(".jsi-bg-top"), { yPercent: -100, duration: 1.1, ease: PREMIUM_EASE }, 2.6)
+          .to(q(".jsi-bg-bot"), { yPercent: 100, duration: 1.1, ease: PREMIUM_EASE }, 2.6)
+          .add(finish, 3.7);
       };
-      // wait for the fonts so the letter widths are measured correctly
+      // wait for the fonts so the name is measured with the right letters
       const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
       (fonts ? fonts.ready : Promise.resolve()).then(run);
 
@@ -138,25 +124,17 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
     <div ref={root} className="jsi" role="img" aria-label="Javor Sped Holding">
       <div className="jsi-bg-top" />
       <div className="jsi-bg-bot" />
-      <svg className="jsi-ring" viewBox="0 0 150 150">
-        <circle className="jsi-ring-base" cx="75" cy="75" r="72" />
-        <circle className="jsi-ring-prog" cx="75" cy="75" r="72" />
-      </svg>
-      <svg className="jsi-logo" viewBox={LOGO_VIEWBOX}>
-        <path transform={LOGO_TRANSFORM} fill="var(--color-copper)" d={LOGO_PATH} />
-      </svg>
-      <div className="jsi-count">000</div>
       <div className="jsi-stage">
         <div className="jsi-lock">
-          <div className="jsi-wm">
-            <span className="jsi-gold jsi-j">J</span>
-            <span className="jsi-gold jsi-x jsi-avor">AVOR</span>
-            {/* The space between the two words: a no-break space, so it keeps its width (prettier writes it as the literal character). */}
-            <span className="jsi-gold jsi-x jsi-gap">{" "}</span>
-            <span className="jsi-gold jsi-s">S</span>
-            <span className="jsi-gold jsi-x jsi-ped">PED</span>
+          <svg className="jsi-mark" viewBox="50 60 170 240" aria-hidden>
+            {STROKES.map((s) => (
+              <path key={s.d} className="jsi-st" d={s.d} data-delay={s.delay} data-opacity={s.opacity} />
+            ))}
+          </svg>
+          <div className="jsi-name">
+            <span className="jsi-word">JAVOR SPED</span>
+            <div className="jsi-hold">HOLDING</div>
           </div>
-          <div className="jsi-hold">HOLDING</div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
-/* Logo → JS → JAVOR → JAVOR SPED → HOLDING intro. Colours come from the tokens in app/globals.css.
-   Every class is prefixed jsi- so none can collide with Tailwind utilities (".ring" is one). */
+/* The opening: the building draws itself, then "JAVOR SPED" and "HOLDING". Colours come from the tokens in app/globals.css.
+   Every class is prefixed jsi- so none can collide with Tailwind utilities. */
 .jsi {
   position: fixed;
   inset: 0;
@@ -27,116 +27,70 @@
   align-items: center;
   justify-content: center;
 }
-.jsi-ring {
-  position: absolute;
-  left: 50%;
-  top: 50%;
+/* The mark and the name lift away together. */
+.jsi-lock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.jsi-mark {
   width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
-}
-.jsi-ring circle {
+  height: auto;
+  overflow: visible;
   fill: none;
+  stroke: var(--color-copper);
+  stroke-width: 5;
 }
-.jsi-ring-base {
-  stroke: color-mix(in srgb, var(--color-gold) 22%, transparent);
-  stroke-width: 1;
-}
-.jsi-ring-prog {
-  stroke: var(--color-gold);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-.jsi-logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 62px;
-  height: 84px;
-  margin: -42px 0 0 -31px;
+/* Hidden from the first paint, so nothing flashes before the animation code runs. */
+.jsi-st {
   opacity: 0;
 }
-.jsi-count {
-  position: absolute;
-  left: 50%;
-  top: calc(50% + 100px);
-  transform: translateX(-50%);
-  font:
-    500 12px var(--font-sans),
-    sans-serif;
-  letter-spacing: 0.3em;
-  color: var(--color-gold);
-  font-variant-numeric: tabular-nums;
-  padding-left: 0.3em;
-}
-/* The wordmark and "HOLDING" lift away together. --wm is the wordmark's size; "HOLDING" is 28% of it and hangs
-   below without moving the wordmark, so the wordmark stays exactly where it always was. */
-.jsi-lock {
-  --wm: clamp(34px, 4.6vw, 60px);
+.jsi-name {
   position: relative;
-  display: inline-block;
+  text-align: center;
 }
+.jsi-word {
+  display: block;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  padding-left: 0.2em; /* the spacing after the last letter, so the name sits centred under the mark */
+  text-transform: uppercase;
+  color: var(--color-travertine);
+  white-space: nowrap;
+}
+/* "HOLDING" hangs under the name without moving it. */
 .jsi-hold {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: calc(var(--wm) * 0.12);
+  margin-top: 14px;
   text-align: center;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 500;
-  font-size: calc(var(--wm) * 0.28);
+  font-size: 10px;
   letter-spacing: 0.5em;
-  padding-left: 0.5em; /* the spacing after the last letter, so the word sits centred under the wordmark */
+  padding-left: 0.5em; /* the spacing after the last letter, so the word sits centred under the name */
   text-transform: uppercase;
-  color: var(--color-gold);
-  opacity: 0;
-}
-.jsi-wm {
-  display: inline-flex;
-  align-items: baseline;
-  white-space: nowrap;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  font-size: var(--wm);
-  line-height: 1.1;
-  color: var(--color-gold);
-}
-.jsi-wm span {
-  display: inline-block;
-}
-.jsi-gold {
   color: var(--color-copper);
-}
-/* Hidden from the first paint, so nothing flashes before the animation code runs. */
-.jsi-j,
-.jsi-s {
-  opacity: 0;
-}
-/* The space between JAVOR and SPED is a no-break space; pre keeps it from collapsing to nothing. */
-.jsi-gap {
-  white-space: pre;
-}
-.jsi-x {
-  clip-path: inset(-30% 0);
-  width: 0;
   opacity: 0;
 }
 @media (max-width: 767px) {
-  .jsi-ring {
+  .jsi-lock {
+    gap: 24px;
+  }
+  .jsi-mark {
     width: 120px;
-    height: 120px;
-    margin: -60px 0 0 -60px;
   }
-  .jsi-logo {
-    width: 50px;
-    height: 68px;
-    margin: -34px 0 0 -25px;
+  .jsi-word {
+    font-size: 12px;
   }
-  .jsi-count {
-    top: calc(50% + 82px);
+  .jsi-hold {
+    margin-top: 12px;
+    font-size: 9px;
   }
 }
