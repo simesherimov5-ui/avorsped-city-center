@@ -6,6 +6,7 @@ import { ParallaxImage } from "@/components/motion/ParallaxImage";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
+import { YearCounter } from "@/components/YearCounter";
 import { projects, companyInfo } from "@/data";
 import type { Metadata } from "next";
 
@@ -51,6 +52,9 @@ export default function HomePage() {
           <ScrollReveal>
             <SectionHeading eyebrow="Зошто нас" title="Изградени на искуство, не на кратенки." align="center" />
           </ScrollReveal>
+          <div className="mt-12">
+            <YearCounter founded={companyInfo.founded} />
+          </div>
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {WHY_US.map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.06}>
