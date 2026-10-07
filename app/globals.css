@@ -10,7 +10,7 @@
    *   Травертин     light background; text on dark
    *   Варовник      surfaces and form fields on light
    *   Бронза        accent and labels on LIGHT only (6.2:1 on Травертин)
-   *   Светол бакар  accent on DARK only: buttons, links, numbers (9.7:1 on Оникс)
+   *   Светол бакар  accent on DARK only: buttons, links, numbers (6.9:1 on Оникс)
    *
    * On Оникс / Еспресо: text Травертин, accent Светол бакар. On Травертин / Варовник: text Оникс, accent Бронза.
    * On a Светол бакар fill: text Оникс. On a Бронза fill: text Травертин.
@@ -21,7 +21,7 @@
   --color-travertine: #f4efe7;
   --color-limestone: #e6dccd;
   --color-bronze: #6d533e;
-  --color-copper: #ddb28e;
+  --color-copper: #bc9676;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
