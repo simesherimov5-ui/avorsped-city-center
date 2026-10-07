@@ -4,31 +4,43 @@ import { useLayoutEffect, useRef } from "react";
 
 const DURATION = 1600;
 
-type Figure = { value: string; label: string };
+type Figure = { target: number; suffix?: string; label: string };
+
+/** 8000 becomes "8.000": the thousands separator is written by hand so the server and the browser agree. */
+const format = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 /**
  * "Изградени на доверба": large numbers, each with a short rule and its label. The first is the years since the
- * company was founded (this year minus `founded`): the server HTML holds the final number, and when half of the row is
- * on screen it counts up from 0 in 1.6s (ease-out cubic), once. With reduced motion it stays as rendered.
+ * company was founded (this year minus `founded`); `figures` follow it. The server HTML holds every final number, and
+ * when half of the row is on screen they all count up from 0 in 1.6s (ease-out cubic), once. With reduced motion they
+ * stay as rendered.
  */
 export function Numbers({ founded, figures }: { founded: number; figures: Figure[] }) {
   const root = useRef<HTMLDivElement>(null);
-  const years = useRef<HTMLDivElement>(null);
-  const initial = new Date().getFullYear() - founded;
+  const cells = useRef<(HTMLSpanElement | null)[]>([]);
+  const yearsNow = new Date().getFullYear() - founded;
+  const items: Figure[] = [{ target: yearsNow, label: "Години искуство" }, ...figures];
 
   useLayoutEffect(() => {
     const block = root.current;
-    const n = years.current;
-    if (!block || !n || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!block || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const target = new Date().getFullYear() - founded;
-    n.textContent = "0";
+    // The years are counted from the visitor's own clock; the other figures are fixed.
+    const targets = [new Date().getFullYear() - founded, ...figures.map((f) => f.target)];
+    const suffixes = ["", ...figures.map((f) => f.suffix ?? "")];
+    const show = (i: number, value: number) => {
+      const el = cells.current[i];
+      if (el) el.textContent = format(value) + suffixes[i];
+    };
+    targets.forEach((_, i) => show(i, 0));
+
     let raf = 0;
     const run = () => {
       const t0 = performance.now();
       const tick = (now: number) => {
         const p = Math.min(1, (now - t0) / DURATION);
-        n.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        const eased = 1 - Math.pow(1 - p, 3);
+        targets.forEach((target, i) => show(i, Math.round(target * eased)));
         if (p < 1) raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
@@ -46,27 +58,28 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [founded]);
-
-  const numberClass = "font-display text-[clamp(56px,6.5vw,100px)] leading-[0.9] text-on-chrome";
-  const numberStyle = { fontVariantNumeric: "lining-nums tabular-nums" } as const;
+  }, [founded, figures]);
 
   return (
-    <div ref={root} className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-      <div className="flex flex-col gap-3">
-        <div ref={years} suppressHydrationWarning className={numberClass} style={numberStyle}>
-          {initial}
-        </div>
-        <div aria-hidden className="h-px w-12 bg-accent" />
-        <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-on-chrome/70">Години искуство</div>
-      </div>
-      {figures.map((figure) => (
-        <div key={figure.label} className="flex flex-col gap-3">
-          <div className={numberClass} style={numberStyle}>
-            {figure.value}
+    <div ref={root} className="grid gap-9 sm:grid-cols-3 sm:gap-8 lg:gap-12">
+      {items.map((item, i) => (
+        <div key={item.label} className="flex flex-col gap-3">
+          <div
+            className="font-display text-[clamp(44px,4.8vw,72px)] leading-[0.95] text-on-chrome"
+            style={{ fontVariantNumeric: "lining-nums tabular-nums" }}
+          >
+            <span
+              ref={(el) => {
+                cells.current[i] = el;
+              }}
+              suppressHydrationWarning
+            >
+              {format(item.target)}
+              {item.suffix}
+            </span>
           </div>
           <div aria-hidden className="h-px w-12 bg-accent" />
-          <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-on-chrome/70">{figure.label}</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-on-chrome/70">{item.label}</div>
         </div>
       ))}
     </div>

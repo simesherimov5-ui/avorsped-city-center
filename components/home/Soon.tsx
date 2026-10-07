@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/Button";
 export function Soon() {
   return (
     <section className="bg-espresso text-on-chrome">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-10 px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
         <Reveal>
           <div className="max-w-2xl">
             <div className="eyebrow text-accent">Наскоро</div>
-            <p className="mt-4 font-display text-[clamp(30px,3.6vw,48px)] leading-[1.08]">
+            <p className="mt-4 font-display text-[clamp(22px,2.4vw,32px)] leading-[1.15]">
               Нешто ново се подготвува. <em className="italic text-accent">Бидете први што ќе ги дознаете деталите.</em>
             </p>
           </div>

@@ -9,12 +9,12 @@ import { Reveal } from "@/components/motion/Reveal";
 export function Film({ still, src }: { still: { src: string; alt: string }; src?: string }) {
   return (
     <section id="film" className="bg-chrome text-on-chrome">
-      <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="eyebrow text-accent">Филм</div>
-              <h2 className="mt-4 font-display text-[clamp(34px,4.2vw,60px)] font-normal leading-[1.04]">
+              <h2 className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
                 Три децении, <em className="italic text-accent">во една минута.</em>
               </h2>
             </div>
@@ -22,7 +22,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso lg:mt-12 lg:aspect-auto lg:h-[560px]">
+          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso lg:mt-10 lg:aspect-auto lg:h-[480px]">
             {src ? (
               <video
                 controls

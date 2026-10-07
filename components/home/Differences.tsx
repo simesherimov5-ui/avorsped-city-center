@@ -27,11 +27,11 @@ const ITEMS = [
 export function Differences() {
   return (
     <section className="bg-cream text-charcoal">
-      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:flex-row lg:gap-16 lg:px-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-5 py-16 sm:px-8 sm:py-24 lg:flex-row lg:gap-14 lg:px-10">
         <Reveal>
-          <div className="lg:w-[340px] lg:shrink-0">
+          <div className="lg:w-[300px] lg:shrink-0">
             <div className="eyebrow text-gold-deep">Што нè разликува</div>
-            <h2 className="mt-5 font-display text-[clamp(34px,4.2vw,60px)] font-normal leading-[1.04]">
+            <h2 className="mt-4 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
               Деталите
               <br />
               <em className="italic text-gold-deep">се сè.</em>
@@ -41,14 +41,14 @@ export function Differences() {
         <div className="grid min-w-0 flex-1 gap-x-10 sm:grid-cols-2">
           {ITEMS.map((item, i) => (
             <Reveal key={item.lead} delay={i * 0.06}>
-              <div className="flex flex-col gap-3.5 border-t border-line py-7">
+              <div className="flex flex-col gap-3 border-t border-line py-6">
                 <div className="eyebrow text-gold-deep">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="font-display text-[26px] font-normal leading-[1.15] sm:text-[30px]">
+                <h3 className="font-display text-[21px] font-normal leading-[1.2] sm:text-[24px]">
                   {item.lead}
                   <br />
                   <em className="italic text-gold-deep">{item.accent}</em>
                 </h3>
-                <p className="text-sm font-light leading-[1.7] text-ink/75">{item.text}</p>
+                <p className="text-[13.5px] font-light leading-[1.7] text-ink/75">{item.text}</p>
               </div>
             </Reveal>
           ))}

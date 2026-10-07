@@ -15,7 +15,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
           <Link
             key={project.id}
             href={project.href ?? `/projects/${project.slug}`}
-            className="focus-ring group relative block aspect-[4/3] overflow-hidden border-t border-line first:border-t-0 sm:aspect-[21/9]"
+            className="focus-ring group relative block aspect-[4/3] overflow-hidden border-t border-line first:border-t-0 sm:aspect-[5/2]"
           >
             <ParallaxImage>
               <Media
@@ -37,7 +37,9 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
             <div className="absolute inset-0 flex items-end justify-between gap-4 p-6 sm:p-12">
               <div className="text-on-chrome">
                 <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">{statusText}</span>
-                <h3 className="t-h2 mt-4">{project.name}</h3>
+                <h3 className="mt-3 font-display text-[clamp(24px,2.5vw,36px)] font-normal leading-[1.1]">
+                  {project.name}
+                </h3>
                 <div className="mt-2 text-sm tracking-wide text-on-chrome">{project.location}</div>
               </div>
 

@@ -19,8 +19,8 @@ const FILM_STILL = { src: "/images/site/masterplan-aerial.jpg", alt: "City Cente
 
 // TODO(client): these two numbers are provisional (docs/content-needed.md); the years are counted from the founding year.
 const FIGURES = [
-  { value: "40", label: "Завршени објекти" },
-  { value: "8.000+", label: "m² изградени" },
+  { target: 40, label: "Завршени објекти" },
+  { target: 8000, suffix: "+", label: "m² изградени" },
 ];
 
 const CTA_IMAGE = {
@@ -49,12 +49,12 @@ export default function HomePage() {
 
       {/* 5. The numbers */}
       <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
           <ScrollReveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
-                <h2 className="mt-4 font-display text-[clamp(34px,4.2vw,60px)] font-normal leading-[1.04]">
+                <h2 className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
                   Изградени <em className="italic text-accent">на доверба.</em>
                 </h2>
               </div>
@@ -66,7 +66,7 @@ export default function HomePage() {
               </Link>
             </div>
           </ScrollReveal>
-          <div className="mt-14">
+          <div className="mt-12">
             <Numbers founded={companyInfo.founded} figures={FIGURES} />
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function HomePage() {
       <Soon />
 
       {/* A line the company stands behind, on the dark */}
-      <section className="bg-chrome py-24 text-on-chrome sm:py-32">
+      <section className="bg-chrome py-20 text-on-chrome sm:py-28">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
@@ -94,7 +94,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. Final CTA — a clear, project-agnostic path to contact */}
-      <section className="relative overflow-hidden bg-chrome py-28 text-center text-on-chrome sm:py-36">
+      <section className="relative overflow-hidden bg-chrome py-24 text-center text-on-chrome sm:py-28">
         <div className="absolute inset-0">
           <ParallaxImage>
             <Media
@@ -109,7 +109,9 @@ export default function HomePage() {
         <ScrollReveal>
           <div className="relative mx-auto max-w-xl px-5 sm:px-8 lg:px-10">
             <div className="eyebrow text-accent">Следен чекор</div>
-            <h2 className="t-h2 mt-4">„Вашето следно поглавје започнува тука.“</h2>
+            <h2 className="mt-4 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.15]">
+              „Вашето следно поглавје започнува тука.“
+            </h2>
             <p className="mx-auto mt-5 max-w-md text-on-chrome/70">
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>

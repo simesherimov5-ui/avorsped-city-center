@@ -25,7 +25,7 @@ export function PullQuote({
       />
       <blockquote
         className={cn(
-          "mt-8 font-display text-[clamp(30px,4vw,56px)] font-normal italic leading-[1.2] text-balance",
+          "mt-8 font-display text-[clamp(23px,2.8vw,38px)] font-normal italic leading-[1.2] text-balance",
           tone === "dark" ? "text-on-chrome" : "text-charcoal"
         )}
       >
