@@ -65,13 +65,17 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber, coo
 
       <LocationMap
         label="Мапа со локација"
+        pinLabel="ГТЦ Глобал"
         className="mt-4"
         places={[
           {
             name: CITY_CENTER.name,
             detail: distanceLabel(kilometres(coordinates, CITY_CENTER)),
             ...spotOnDrawing(coordinates, CITY_CENTER),
+            // kept to the right of the pin so the line clears the name above it
+            x: 290,
             side: "right",
+            bend: "horizontal",
           },
         ]}
       />

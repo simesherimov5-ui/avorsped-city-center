@@ -54,6 +54,14 @@
     sans-serif;
   letter-spacing: 1px;
 }
+.lm-pinlabel {
+  fill: var(--color-travertine);
+  font:
+    600 10px var(--font-sans),
+    sans-serif;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
 .lm-min {
   fill: color-mix(in srgb, var(--color-travertine) 64%, transparent);
   font:

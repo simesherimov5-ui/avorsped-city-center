@@ -14,13 +14,15 @@ export interface MapPlace {
   x: number;
   y: number;
   side?: "left" | "right";
+  /** Which way the line leaves the pin first: "horizontal" keeps it clear of a label above the pin. */
+  bend?: "horizontal" | "vertical";
 }
 
 const PIN = { x: 200, y: 140 };
 
 /** A right-angled line from the pin to the place: along the longer way first, then the shorter. */
 function routeTo(place: MapPlace) {
-  const vertical = Math.abs(place.y - PIN.y) >= Math.abs(place.x - PIN.x);
+  const vertical = place.bend ? place.bend === "vertical" : Math.abs(place.y - PIN.y) >= Math.abs(place.x - PIN.x);
   return vertical ? `M${PIN.x} ${PIN.y} V${place.y} H${place.x}` : `M${PIN.x} ${PIN.y} H${place.x} V${place.y}`;
 }
 
@@ -39,11 +41,14 @@ const GRID = [
  */
 export function LocationMap({
   label,
+  pinLabel,
   places = [],
   className,
 }: {
   /** What a screen reader calls the drawing. */
   label: string;
+  /** Text set above the pin (the name of the place the pin marks). */
+  pinLabel?: string;
   places?: MapPlace[];
   className?: string;
 }) {
@@ -99,6 +104,11 @@ export function LocationMap({
         <g className="lm-pin">
           <path d="M200 140 c -12 -16 -14 -22 -14 -28 a 14 14 0 0 1 28 0 c 0 6 -2 12 -14 28 z" />
           <circle className="lm-pin-eye" cx="200" cy="112" r="5" />
+          {pinLabel && (
+            <text className="lm-pinlabel" x="200" y="88" textAnchor="middle">
+              {pinLabel}
+            </text>
+          )}
         </g>
       </svg>
     </div>
