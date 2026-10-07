@@ -35,6 +35,11 @@ Facts read from the code, not decisions.
   the monospace font (stat numbers, "05 / 09", floor numbers) is Montserrat 500 with tabular numbers; there is no monospace font.
   The scale (`.t-h1` 64–104px, `.t-h2` 40–56px, `.t-h3` 26–30px from 768px up; phones keep their old heading sizes) is in
   `app/globals.css`. Body text is weight 300 at 16–18px; text under 16px is weight 400 or heavier.
+- Components of the identity: the filling primary button (`.btn-primary` in `app/globals.css`, used by `components/ui/Button.tsx`,
+  the form submit and the closing call to action; `data-tone="dark"` on dark surfaces), the floor picker on the building page
+  (`components/floor-picker/`), the opening where the logo builds itself (`components/javor-sped-intro/`), the year counter in
+  "Зошто нас" (`components/YearCounter.tsx`), the sheen on the footer wordmark (`.footer-sheen`) and the schematic location map
+  (`components/location-map/`), which replaced the Leaflet and Google maps. Gradients and shadows: only photo scrims and that sheen.
 - Motion: two systems coexist. Framer Motion scroll reveals (`components/ui/Reveal.tsx`) and GSAP + Lenis (`components/motion/`, `components/intro/`). Both respect reduced-motion.
 - Language: Macedonian (`<html lang="mk">`); English is planned.
 
