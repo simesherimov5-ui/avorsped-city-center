@@ -7,7 +7,6 @@ import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { YearCounter } from "@/components/YearCounter";
-import { ProjectMarquee } from "@/components/home/ProjectMarquee";
 import { PullQuote } from "@/components/ui/PullQuote";
 import { projects, companyInfo } from "@/data";
 import type { Metadata } from "next";
@@ -45,9 +44,6 @@ export default function HomePage() {
     <>
       {/* 1. Hero — who we are */}
       <Hero />
-
-      {/* The portfolio's names, running slowly under the hero */}
-      <ProjectMarquee names={projects.map((p) => p.name)} />
 
       {/* 2. Portfolio — the primary path into any project */}
       <section className="bg-chrome py-16 sm:py-24">
