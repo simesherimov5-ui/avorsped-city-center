@@ -41,11 +41,13 @@ export default function DevelopmentPage() {
   return (
     <div className="pt-24 sm:pt-28">
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-20 pt-16 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-12 pt-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <Reveal immediate>
             <div className="eyebrow text-gold-deep">{development.location}</div>
-            <h1 className="t-h1 mt-4">{development.name}</h1>
+            <h1 className="mt-3 font-display text-[clamp(34px,4.4vw,60px)] font-normal leading-[1.04] tracking-[-0.01em]">
+              {development.name}
+            </h1>
           </Reveal>
           <Reveal immediate delay={0.08}>
             <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
@@ -53,7 +55,7 @@ export default function DevelopmentPage() {
         </div>
 
         <Reveal immediate delay={0.16}>
-          <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
+          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
             <Stat label="Згради" value="6" />
             <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
             <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
@@ -62,39 +64,13 @@ export default function DevelopmentPage() {
         </Reveal>
       </section>
 
-      {/* Masterplan — six buildings around a shared courtyard */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Ситуационен план"
-              title="Шест згради, еден заеднички двор"
-              description="Комплексот е распореден околу централен пејзажиран двор — секоја зграда гледа кон зеленило наместо кон паркинг или улица."
-              className="max-w-2xl"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-12">
-              <Masterplan
-                variant="full"
-                buildings={buildings}
-                apartments={apartments}
-                image={development.masterplanImage}
-                hotspots={development.buildingHotspots}
-                basePath="/development"
-              />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* Availability — real-time breakdown across all six buildings */}
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-16 sm:py-20 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-16 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <Reveal>
             <div>
               <div className="eyebrow text-gold-deep">Достапност</div>
-              <h2 className="t-h2 mt-4">
+              <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1] mt-3">
                 {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
                 {availableWord(counts.available)}
               </h2>
@@ -125,22 +101,15 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      {/* Construction progress */}
-      {cityCenter && showsConstructionProgress(cityCenter) && (
-        <section className="bg-cream py-16 sm:py-20">
-          <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
-            <ConstructionProgress project={cityCenter} />
-          </div>
-        </section>
-      )}
-
       {/* Location */}
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-16 sm:py-20 lg:px-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-16 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <div>
               <div className="eyebrow text-gold-deep">Локација · {development.location}</div>
-              <h2 className="t-h2 mt-4">{LOCATION_TEXT.title}</h2>
+              <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1] mt-3">
+                {LOCATION_TEXT.title}
+              </h2>
               <div className="mt-6 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
                 {LOCATION_TEXT.paragraphs.map((paragraph) => (
                   <p key={paragraph.slice(0, 24)}>{paragraph}</p>
@@ -181,8 +150,46 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <section className="bg-chrome py-16 sm:py-20 text-center text-on-chrome">
-        <h2 className="t-h2">Не сте сигурни која зграда?</h2>
+      {/* Construction progress */}
+      {cityCenter && showsConstructionProgress(cityCenter) && (
+        <section className="bg-cream py-12 sm:py-16">
+          <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
+            <ConstructionProgress project={cityCenter} />
+          </div>
+        </section>
+      )}
+
+      {/* Masterplan — six buildings around a shared courtyard */}
+      <section className="bg-cream py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Ситуационен план"
+              title="Шест згради, еден заеднички двор"
+              description="Комплексот е распореден околу централен пејзажиран двор — секоја зграда гледа кон зеленило наместо кон паркинг или улица."
+              size="compact"
+              className="max-w-2xl"
+            />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="mt-12">
+              <Masterplan
+                variant="full"
+                buildings={buildings}
+                apartments={apartments}
+                image={development.masterplanImage}
+                hotspots={development.buildingHotspots}
+                basePath="/development"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-chrome py-12 sm:py-16 text-center text-on-chrome">
+        <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
+          Не сте сигурни која зграда?
+        </h2>
         <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
           Филтрирајте секој стан од сите шест згради по големина, буџет и достапност.
         </p>
@@ -201,7 +208,7 @@ export default function DevelopmentPage() {
 function Stat({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
     <div className={className}>
-      <div className="font-display text-4xl text-gold-deep sm:text-5xl">
+      <div className="font-display text-3xl text-gold-deep sm:text-4xl">
         <CountUp value={value} />
       </div>
       <div className="eyebrow eyebrow-tight mt-2 text-muted">{label}</div>

@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
-import { EASE } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 import { availableWord, floorsText, unitsText } from "@/lib/plural";
 
@@ -66,7 +65,6 @@ export function Masterplan({
   }));
 
   const active = buildingStats.find((b) => b.id === selected) ?? null;
-  const zoomSpot = active ? hotspots[active.id] : null;
 
   return (
     <div className="w-full">
@@ -78,14 +76,9 @@ export function Masterplan({
             className ?? "max-w-4xl"
           )}
         >
-          <motion.div
-            className="absolute inset-0"
-            style={{ transformOrigin: zoomSpot ? `${zoomSpot.left} ${zoomSpot.top}` : "50% 50%" }}
-            animate={{ scale: zoomSpot ? 1.32 : 1 }}
-            transition={{ duration: 1.1, ease: EASE }}
-          >
+          <div className="absolute inset-0">
             <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 1024px" />
-          </motion.div>
+          </div>
 
           {buildingStats.map((building) => {
             const spot = hotspots[building.id];
