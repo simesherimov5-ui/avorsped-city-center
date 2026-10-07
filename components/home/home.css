@@ -1,0 +1,57 @@
+/* The project-name strip under the homepage hero. Colours come from the tokens in app/globals.css. */
+.pm {
+  overflow: hidden;
+  padding-block: 36px;
+  background: var(--color-onyx);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-travertine) 12%, transparent);
+}
+.pm-track {
+  display: flex;
+  width: max-content;
+  animation: pm-run 60s linear infinite;
+}
+.pm-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+.pm-pair {
+  display: inline-flex;
+  align-items: center;
+}
+.pm-name {
+  padding-inline: 44px;
+  white-space: nowrap;
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--color-travertine);
+}
+/* a small diamond between the names */
+.pm-dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  background: var(--color-copper);
+  transform: rotate(45deg);
+}
+@keyframes pm-run {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pm-track {
+    animation: none;
+  }
+}
+@media (max-width: 767px) {
+  .pm {
+    padding-block: 26px;
+  }
+  .pm-name {
+    padding-inline: 28px;
+  }
+}

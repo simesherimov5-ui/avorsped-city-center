@@ -150,13 +150,14 @@ export function Hero() {
           Exclusive Building · Основано 1994
         </div>
 
-        {/* The page's h1. The site's global h1 style (the serif, its size, its spacing) is switched off here with
-            the important modifiers, so the headline keeps the look it had as a plain block. */}
+        {/* The page's h1, in the display serif: the last words in italic Светол бакар. It sits in the sky band above the
+            roofline, so its size is capped to keep both lines inside it. */}
         <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-2xl font-sans! text-[clamp(1.25rem,5.6vw,1.5rem)]! font-medium! uppercase leading-tight! tracking-[0.06em]! text-paper sm:text-2xl! sm:tracking-[0.2em]! lg:text-3xl!"
+          className="mx-auto mt-4 max-w-4xl text-[clamp(2.25rem,5.2vw,4.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
         >
-          Добредојдовте во вашиот нов дом
+          Добредојдовте во <br />
+          <em className="font-normal italic text-gold">вашиот нов дом</em>
         </h1>
       </div>
 

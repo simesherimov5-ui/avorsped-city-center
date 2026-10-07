@@ -1,4 +1,3 @@
-import { Building2, Sparkles, Ruler, Landmark } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { ProjectShowcase } from "@/components/ProjectShowcase";
 import { Media } from "@/components/ui/Media";
@@ -6,15 +5,30 @@ import { ParallaxImage } from "@/components/motion/ParallaxImage";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { YearCounter } from "@/components/YearCounter";
+import { ProjectMarquee } from "@/components/home/ProjectMarquee";
+import { PullQuote } from "@/components/ui/PullQuote";
 import { projects, companyInfo } from "@/data";
 import type { Metadata } from "next";
 
+// Two things a buyer should know about how we build, each in the company's own words.
 const WHY_US = [
-  { icon: Building2, title: "Квалитетна градба", desc: "Строга контрола на квалитет во секоја фаза на градбата." },
-  { icon: Sparkles, title: "Современа архитектура", desc: "Современ дизајн, никогаш типско решение." },
-  { icon: Ruler, title: "Премиум материјали", desc: "Издржливи завршни работи со висока спецификација." },
-  { icon: Landmark, title: "Внимание на деталите", desc: "Од пропорцијата на фасадата до изборот на арматура." },
+  {
+    title: "Квалитетна изградба",
+    paragraphs: [
+      "Квалитетот на еден дом се препознава во вниманието со кое е создаден и во вредноста што ја задржува низ годините. Затоа, на секој наш проект му пристапуваме со одговорност и посветеност — од првичната замисла и изборот на материјали до прецизната изведба на секој детал.",
+      "Со внимателно планирање и високи стандарди во изградбата, создаваме домови во кои естетиката, функционалноста и долготрајноста се надополнуваат. Зад секоја наша одлука стои јасна цел: да ви обезбедиме сигурен и удобен простор за живеење, во кој вие и вашето семејство ќе ја градите својата иднина со доверба.",
+    ],
+  },
+  {
+    title: "Уникатни решенија и удобност",
+    paragraphs: [
+      "Добрата архитектура се чувствува во леснотијата со која го користите просторот. Во распоредот што ви одговара, во можноста да го уредите според својот вкус и во удобноста што останува подеднакво важна низ годините.",
+      "Нашите станбени решенија произлегуваат од внимателно разгледување на различните потреби на современото живеење. Заедно со архитекти и дизајнери, ги усогласуваме пропорциите, намената и поврзаноста на просториите, за секој стан да понуди практичност, приватност и слобода во уредувањето.",
+      "Резултатот е простор со сопствен архитектонски израз, кој ви остава доволно слобода да го внесете својот. Бидејќи вистинската вредност на едно решение се открива тогаш кога ќе стане дел од вашиот живот.",
+    ],
+  },
 ];
 
 const CTA_IMAGE = {
@@ -31,6 +45,9 @@ export default function HomePage() {
     <>
       {/* 1. Hero — who we are */}
       <Hero />
+
+      {/* The portfolio's names, running slowly under the hero */}
+      <ProjectMarquee names={projects.map((p) => p.name)} />
 
       {/* 2. Portfolio — the primary path into any project */}
       <section className="bg-chrome py-16 sm:py-24">
@@ -55,17 +72,35 @@ export default function HomePage() {
           <div className="mt-12">
             <YearCounter founded={companyInfo.founded} />
           </div>
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
             {WHY_US.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.06}>
-                <div className="flex flex-col gap-3.5 border-t border-line pt-6">
-                  <item.icon className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
-                  <div className="t-h3">{item.title}</div>
-                  <p className="text-sm leading-relaxed text-muted">{item.desc}</p>
+              <ScrollReveal key={item.title} delay={i * 0.08}>
+                <div className="border-t border-line pt-8">
+                  <h3 className="t-h3">{item.title}</h3>
+                  <div className="mt-5 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
+                    {item.paragraphs.map((paragraph) => (
+                      <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
               </ScrollReveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* A line the company stands behind, on the dark */}
+      <section className="bg-chrome py-24 text-on-chrome sm:py-32">
+        <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
+          <ScrollReveal>
+            <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
+            <Link
+              href="/about"
+              className="focus-ring mt-10 inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+            >
+              За нас
+            </Link>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -85,7 +120,7 @@ export default function HomePage() {
         <ScrollReveal>
           <div className="relative mx-auto max-w-xl px-5 sm:px-8 lg:px-10">
             <div className="eyebrow text-accent">Следен чекор</div>
-            <h2 className="t-h2 mt-4">Закажи консултација</h2>
+            <h2 className="t-h2 mt-4">„Вашето следно поглавје започнува тука.“</h2>
             <p className="mx-auto mt-5 max-w-md text-on-chrome/70">
               Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
             </p>
