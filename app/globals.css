@@ -29,7 +29,7 @@
   /* The filling button on dark surfaces (set by the owner, to try). */
   --color-button: #fcb16a;
   /* The «Завршено» chip of a finished project (set by the owner: green). */
-  --color-done: #2f7d4f;
+  --color-done: #2a7348;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
