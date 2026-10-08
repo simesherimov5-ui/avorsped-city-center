@@ -24,6 +24,8 @@
   --color-copper: #bc9676;
   /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
   --color-brass: #c4a454;
+  /* The filling button on dark surfaces (set by the owner, to try). */
+  --color-button: #baab02;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
@@ -363,7 +365,7 @@ h4 {
   outline: none;
 }
 .btn-primary[data-tone="dark"] {
-  --btn-c: var(--color-copper);
+  --btn-c: var(--color-button);
   --btn-on: var(--color-onyx);
 }
 .btn-primary--sm {

@@ -22,7 +22,7 @@ export default function ProjectsPage() {
   const filtered = tab === "all" ? projects : projects.filter((p) => p.status === tab);
 
   return (
-    <div className="pt-[93px] sm:pt-[117px] lg:pt-[157px]">
+    <div className="pt-[61px] sm:pt-[69px] lg:pt-[85px]">
       <ProjectSlideshow projects={projects} />
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">

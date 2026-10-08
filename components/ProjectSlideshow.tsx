@@ -46,6 +46,8 @@ export function ProjectSlideshow({
   // server's HTML and triggers a hydration mismatch. This hook starts false and then follows the setting.
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [index, setIndex] = useState(0);
+  // Once the visitor moves the slides themselves (arrows, keys, swipe, dots) the show stops for good.
+  const [stopped, setStopped] = useState(false);
   const [focused, setFocused] = useState(false);
   const tabHidden = useSyncExternalStore(
     subscribeVisibility,
@@ -54,7 +56,10 @@ export function ProjectSlideshow({
   );
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
-  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + projects.length) % projects.length);
+  const go = (dir: 1 | -1, byVisitor = true) => {
+    if (byVisitor) setStopped(true);
+    setIndex((i) => (i + dir + projects.length) % projects.length);
+  };
   const paused = focused || tabHidden;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
@@ -196,14 +201,17 @@ export function ProjectSlideshow({
             <button
               key={p.id}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setStopped(true);
+                setIndex(i);
+              }}
               aria-label={p.name}
               aria-current={active}
               className="focus-ring group flex h-11 w-12 items-center justify-center"
             >
               <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
                 {active &&
-                  (reduceMotion ? (
+                  (reduceMotion || stopped ? (
                     <span className="absolute inset-0 bg-gold" />
                   ) : (
                     <span
@@ -213,7 +221,7 @@ export function ProjectSlideshow({
                         animationDuration: `${autoplayMs}ms`,
                         animationPlayState: paused ? "paused" : "running",
                       }}
-                      onAnimationEnd={() => go(1)}
+                      onAnimationEnd={() => go(1, false)}
                     />
                   ))}
               </span>
