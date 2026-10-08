@@ -18,7 +18,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
                 Три децении, <em className="italic text-accent">во една минута.</em>
               </h2>
             </div>
-            <p className="max-w-[340px] text-sm font-light leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>
+            <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>
           </div>
         </Reveal>
         <Reveal delay={0.1}>

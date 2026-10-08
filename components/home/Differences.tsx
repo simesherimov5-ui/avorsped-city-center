@@ -48,7 +48,7 @@ export function Differences() {
                   <br />
                   <em className="italic text-gold-deep">{item.accent}</em>
                 </h3>
-                <p className="text-[13.5px] font-light leading-[1.7] text-ink/75">{item.text}</p>
+                <p className="text-[14px] font-normal leading-[1.7] text-ink/75">{item.text}</p>
               </div>
             </Reveal>
           ))}

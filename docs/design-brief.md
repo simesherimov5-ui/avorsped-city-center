@@ -33,7 +33,7 @@ Facts read from the code, not decisions.
 - Typefaces: exactly two, both loaded with `next/font` and `subsets: ["latin", "cyrillic"]` (`app/layout.tsx`): Playfair Display (400,
   500 and 400 italic) for H1–H3 and large display numbers, and Montserrat (300, 400, 500, 600) for everything else. Every number that used
   the monospace font (stat numbers, "05 / 09", floor numbers) is Montserrat 500 with tabular numbers; there is no monospace font.
-  The scale (`.t-h1` 64–104px, `.t-h2` 40–56px, `.t-h3` 26–30px from 768px up; phones keep their old heading sizes) is in
+  The scale (`.t-h1` 40–68px, `.t-h2` 30–42px, `.t-h3` 26–30px from 768px up; phones keep their old heading sizes) is in
   `app/globals.css`. Body text is weight 300 at 16–18px; text under 16px is weight 400 or heavier.
 - Components of the identity: the filling primary button (`.btn-primary` in `app/globals.css`, used by `components/ui/Button.tsx`,
   the form submit and the closing call to action; `data-tone="dark"` on dark surfaces), the floor picker on the building page

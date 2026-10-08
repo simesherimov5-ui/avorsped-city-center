@@ -857,6 +857,7 @@
   background: color-mix(in srgb, var(--color-sand) 85%, transparent);
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
   font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.1em;
   pointer-events: none;
 }

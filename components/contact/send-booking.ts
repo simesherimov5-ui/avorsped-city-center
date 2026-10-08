@@ -1,15 +1,19 @@
 export type BookingRequest = {
-  interest: string;
-  /** Only for an apartment: "1", "2", "3" or "4+". */
-  rooms?: string;
+  /** The project the visitor is looking at: its name and id in the data. */
+  project: string;
+  projectId: string;
+  /** Only when the project has buildings (City Center). */
+  building?: string;
+  buildingId?: string;
+  /** A specific apartment, if the visitor has one in mind: its label ("Стан 21 · Кат 3") and, if picked from the list, its id. */
+  unit?: string;
+  unitId?: string;
   /** ISO date and the readable label the visitor saw ("Пон 05 окт"). */
   date: string;
   dateLabel: string;
   time: string;
   name: string;
   phone: string;
-  /** What the visitor came from, if anything, e.g. "Стан 203 · Зграда 03 · City Center". */
-  reference?: { label: string; project?: string; building?: string; apartment?: string };
 };
 
 /**

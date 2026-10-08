@@ -6,9 +6,6 @@
   [data-seq="step"] {
     opacity: 0;
   }
-  .ct-rule {
-    transform: scaleX(0);
-  }
 }
 
 @keyframes ct-fade {
@@ -31,18 +28,18 @@
 /* B1 — header */
 .ct-head {
   padding-top: clamp(44px, 5vw, 72px);
-  padding-bottom: clamp(26px, 3vw, 40px);
+  padding-bottom: clamp(22px, 2.6vw, 34px);
 }
 .ct-h1 {
   margin: 16px 0 12px;
-  font-size: clamp(2rem, 9vw, 2.75rem);
-  line-height: 1;
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  line-height: 1.04;
   letter-spacing: -0.015em;
 }
-/* The heading scale from 768px up: H1 64–104px; phones keep the size above. */
+/* The heading scale from 768px up: H1 40–68px; phones keep the size above. */
 @media (min-width: 768px) {
   .ct-h1 {
-    font-size: clamp(64px, 7.2vw, 104px);
+    font-size: clamp(40px, 4.6vw, 68px);
   }
 }
 .ct-lead {
@@ -67,30 +64,112 @@
   }
 }
 
-/* B3 — the form */
-.ct-form {
+/* B3 — the form: a bordered panel like the «Директно» card (same border, padding and surface), the lead inside it */
+.ct-panel {
   width: 100%;
   max-width: 680px;
   min-width: 0;
+  padding: clamp(22px, 2.4vw, 32px);
+  border: 1px solid var(--gold-line);
+  background: var(--color-ink);
+}
+.ct-form .ct-lead {
+  max-width: none;
+  margin: 0 0 clamp(16px, 2vw, 24px);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--mute);
+}
+/* A step opens and folds with its height animating; the padding keeps focus outlines from being clipped. */
+.ct-collapse {
+  margin: -6px;
+  padding: 6px;
+  overflow: hidden;
 }
 .ct-step {
   position: relative;
   padding: 24px 0;
+  border-top: 1px solid var(--color-line);
 }
-.ct-step.is-leaving {
-  animation: ct-fade-out 0.3s forwards;
+/* The options of a step come in one after another. */
+@keyframes ct-opt-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
-.ct-step.is-entering {
-  animation: ct-fade 0.3s;
+@media (prefers-reduced-motion: no-preference) {
+  [data-stagger] > * {
+    animation: ct-opt-in 0.4s ease-out both;
+  }
 }
-.ct-rule {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--color-line);
-  transform-origin: left center;
+/* An answered step folded into one row: number, question, answer, «Измени». */
+.ct-sumrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 12px 0;
+}
+.ct-sumrow-label {
+  flex: none;
+  color: var(--mute);
+}
+.ct-sumrow-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-paper);
+  overflow-wrap: anywhere;
+}
+.ct-edit {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -12px 0;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--color-gold);
+  font:
+    400 13px var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.ct-edit:hover {
+  color: var(--color-gold-light);
+}
+.ct-edit:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+.ct-sub {
+  padding-top: 20px;
+}
+.ct-sub-label {
+  margin: 0 0 10px;
+  color: var(--mute);
+}
+.ct-sub-label:not(:first-child) {
+  margin-top: 20px;
+}
+.ct-unit-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 20px;
+}
+.ct-unit-text .ct-field {
+  flex: 1 1 220px;
+}
+.ct-go:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 .ct-step-h {
   display: flex;
@@ -106,39 +185,6 @@
   font-weight: 400;
   letter-spacing: 0.1em;
   color: var(--color-gold);
-}
-
-.ct-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  min-height: 44px;
-  margin: 0 0 16px;
-  padding: 0 0 0 16px;
-  border: 1px solid var(--gold-line);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-}
-.ct-tag button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-}
-.ct-tag button:hover {
-  color: var(--color-gold-light);
-}
-.ct-tag button:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: -4px;
 }
 
 .ct-chips {

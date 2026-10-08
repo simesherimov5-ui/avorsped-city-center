@@ -168,7 +168,7 @@ export function Hero() {
             <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
               — Javor Sped Holding
             </span>
-            <span className="text-[14px] font-light leading-[1.5] text-paper sm:text-[15px]">
+            <span className="text-[14px] font-normal leading-[1.5] text-paper sm:text-[15px]">
               Секоја адреса има своја приказна. Откријте ја вашата.
             </span>
           </span>

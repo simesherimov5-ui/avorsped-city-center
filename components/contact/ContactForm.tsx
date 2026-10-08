@@ -1,38 +1,39 @@
 "use client";
 
-import { useMemo, useRef, useState, useSyncExternalStore, type AnimationEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
 import { flushSync } from "react-dom";
-import { useGSAP } from "@gsap/react";
-import { X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
-import { cn } from "@/lib/cn";
+import { formatArea } from "@/lib/format";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { PrimaryFace } from "@/components/ui/Button";
 import { RadioGroup } from "./RadioGroup";
 import { BookingConfirmation } from "./BookingConfirmation";
 import { buildSlots, nextWorkingDays, todayIso } from "./booking-config";
 import { sendBooking, type BookingRequest } from "./send-booking";
 
-export type Interest = "apartment" | "commercial" | "parking";
+/** A project the visitor can ask about, with its buildings if it has any. Passed in by the page, from the data. */
+export type ProjectOption = { id: string; name: string; buildings: { id: string; name: string }[] };
+/** An apartment that can be asked about (available, or the one the visitor came from). */
+export type UnitOption = { id: string; buildingId: string; floor: number; number: string; area: number };
+export type BookingStart = { projectId?: string; buildingId?: string; unitId?: string };
 
-const INTERESTS: { id: Interest; label: string }[] = [
-  { id: "apartment", label: "Стан" },
-  { id: "commercial", label: "Деловен простор" },
-  { id: "parking", label: "Паркинг" },
-];
-const ROOMS = ["1", "2", "3", "4+"];
-const SLOTS = buildSlots();
-
-type Reference = { label: string; project?: string; building?: string; apartment?: string };
-type Field = "interest" | "rooms" | "when" | "name" | "phone";
+type StepId = "project" | "building" | "unit" | "when" | "details";
+type Field = "name" | "phone";
 type Errors = Partial<Record<Field, string>>;
 
+const SLOTS = buildSlots();
 const MESSAGES: Record<Field, string> = {
-  interest: "Изберете што ве интересира.",
-  rooms: "Изберете број на соби.",
-  when: "Изберете ден и час.",
   name: "Внесете име и презиме.",
   phone: "Внесете телефонски број со најмалку 8 цифри.",
+};
+const TITLES: Record<StepId, string> = {
+  project: "Каде барате?",
+  building: "Која зграда?",
+  unit: "Дали имате конкретен стан?",
+  when: "Изберете ден и час",
+  details: "Ваши податоци",
 };
 
 // "Today" in the booking time zone as a string snapshot: the server renders no days (its clock is not the
@@ -40,7 +41,7 @@ const MESSAGES: Record<Field, string> = {
 const subscribeNever = () => () => {};
 const noToday = () => "";
 
-const roomsLabel = (rooms: string) => `${rooms} ${rooms === "1" ? "соба" : "соби"}`;
+const floorLabel = (floor: number) => (floor === 0 ? "Приземје" : `Кат ${floor}`);
 
 /** Slides a field 6px each way once, gently, to point at what is missing. */
 function shake(el: Element | null) {
@@ -52,54 +53,76 @@ function shake(el: Element | null) {
   );
 }
 
-/** A step's hairline: drawn from the left as the step scrolls into view. */
-function StepRule() {
-  const ref = useRef<HTMLSpanElement>(null);
-  useGSAP(() => {
-    const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
-    gsap.to(el, {
-      scaleX: 1,
-      duration: 1.1,
-      ease: "power3.out",
-      scrollTrigger: { trigger: el, start: "top 90%", once: true },
-    });
-  });
-  return <span ref={ref} aria-hidden className="ct-rule" />;
+/**
+ * Opens and closes its content with the height animating (no jump). `enter` is the slower arrival of a whole new step
+ * (it also rises 12px); otherwise it is the quick 0.3s of a collapse. With reduced motion it is instant.
+ */
+function Collapse({
+  show,
+  reduce,
+  enter = false,
+  children,
+}: {
+  show: boolean;
+  reduce: boolean;
+  enter?: boolean;
+  children: ReactNode;
+}) {
+  const t = reduce ? 0 : enter ? 0.45 : 0.3;
+  return (
+    <AnimatePresence initial={false}>
+      {show && (
+        <motion.div
+          key="content"
+          className="ct-collapse"
+          initial={reduce ? false : { height: 0, opacity: 0, y: enter ? 12 : 0 }}
+          animate={{ height: "auto", opacity: 1, y: 0 }}
+          exit={{ height: 0, opacity: 0, y: 0 }}
+          transition={{ duration: t, ease: "easeOut" }}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }
 
 /**
- * The guided booking form: what you are after, how many rooms (apartments only), which day and time, then
- * name and phone. The days are the next five working days, computed in the browser every time the page opens.
+ * The guided booking form. It asks one thing at a time: the project, the building (only for a project that has
+ * buildings), whether the visitor has a specific apartment in mind (and which), the day and time, then name and phone.
+ * An answered step folds into one summary row with «Измени»; changing an answer clears the answers that depended on it.
  */
 export function ContactForm({
-  initialInterest,
-  initialRooms,
-  reference,
+  projects,
+  units,
+  start,
   phone: officePhone,
 }: {
-  /** Set when the visitor arrives from an apartment or project page; otherwise nothing is pre-selected. */
-  initialInterest?: Interest;
-  initialRooms?: string;
-  reference?: Reference;
+  projects: ProjectOption[];
+  units: UnitOption[];
+  /** Set when the visitor arrives from an apartment, building or project page. */
+  start?: BookingStart;
   /** The office phone, shown if sending fails. */
   phone: string;
 }) {
-  const startsWithRooms = initialInterest === "apartment";
-  const [interest, setInterest] = useState<Interest | "">(initialInterest ?? "");
-  const [rooms, setRooms] = useState(initialRooms ?? "");
+  const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const startUnit = units.find((u) => u.id === start?.unitId);
+  const [projectId, setProjectId] = useState(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
+  const [buildingId, setBuildingId] = useState(start?.buildingId ?? "");
+  const [hasUnit, setHasUnit] = useState<"" | "yes" | "no">(startUnit ? "yes" : "");
+  const [floor, setFloor] = useState(startUnit ? String(startUnit.floor) : "");
+  const [unitId, setUnitId] = useState(startUnit?.id ?? "");
+  // Without a list of apartments for the project the visitor types the number, and confirms it.
+  const [unitText, setUnitText] = useState("");
+  const [unitTextOk, setUnitTextOk] = useState(false);
   const [dayIso, setDayIso] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [showReference, setShowReference] = useState(Boolean(reference));
+  const [editing, setEditing] = useState<StepId | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "failed">("idle");
   const [confirmation, setConfirmation] = useState<{ open: boolean; summary: string }>({ open: false, summary: "" });
-  // The rooms step stays mounted while it fades out (0.3s), so the numbers below follow it, not the choice.
-  const [roomsMounted, setRoomsMounted] = useState(startsWithRooms);
-  const isApartment = interest === "apartment";
-  if (isApartment && !roomsMounted) setRoomsMounted(true);
 
   const form = useRef<HTMLFormElement>(null);
   const submitButton = useRef<HTMLButtonElement>(null);
@@ -108,58 +131,171 @@ export function ContactForm({
   const days = useMemo(() => nextWorkingDays(today), [today]);
   const day = days.find((d) => d.iso === dayIso);
 
+  const project = projects.find((p) => p.id === projectId);
+  const needsBuilding = (project?.buildings.length ?? 0) > 0;
+  const building = project?.buildings.find((b) => b.id === buildingId);
+  // The apartments the visitor can pick: those of the chosen building. A project with no list gets the text field.
+  const pool = needsBuilding && building ? units.filter((u) => u.buildingId === building.id) : [];
+  const floors = [...new Set(pool.map((u) => u.floor))].sort((a, b) => a - b);
+  const floorUnits = pool.filter((u) => String(u.floor) === floor);
+  const unit = pool.find((u) => u.id === unitId);
+  const unitLabel = unit
+    ? `Стан ${unit.number} · ${floorLabel(unit.floor)}`
+    : unitTextOk && unitText.trim()
+      ? `Стан ${unitText.trim()}`
+      : "";
+
+  // Which steps are answered, and so which are on screen: every step up to the first unanswered one.
+  const order: StepId[] = ["project", ...(needsBuilding ? (["building"] as const) : []), "unit", "when", "details"];
+  const answered: Record<StepId, boolean> = {
+    project: Boolean(project),
+    building: Boolean(building),
+    unit: hasUnit === "no" || (hasUnit === "yes" && Boolean(unit || unitTextOk)),
+    when: Boolean(day && time),
+    details: false,
+  };
+  const visible: StepId[] = [];
+  for (const id of order) {
+    visible.push(id);
+    if (!answered[id]) break;
+  }
+  const firstOpen = visible.find((id) => !answered[id]) ?? "details";
+  const openId: StepId = editing && visible.includes(editing) ? editing : firstOpen;
+
+  const summaryOf = (id: StepId) => {
+    if (id === "project") return project?.name ?? "";
+    if (id === "building") return building?.name ?? "";
+    if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
+    if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
+    return "";
+  };
   const summary = [
-    INTERESTS.find((i) => i.id === interest)?.label,
-    isApartment && rooms ? roomsLabel(rooms) : undefined,
+    project?.name,
+    building?.name,
+    hasUnit === "yes" ? unitLabel : undefined,
     day?.label,
     time || undefined,
   ]
     .filter(Boolean)
     .join(" · ");
 
-  const clear = (field: Field) => setErrors((e) => (e[field] ? { ...e, [field]: undefined } : e));
+  // ---- answers: each one clears what depended on it
+  const clearUnit = () => {
+    setFloor("");
+    setUnitId("");
+    setUnitText("");
+    setUnitTextOk(false);
+  };
+  const pickProject = (id: string) => {
+    if (id !== projectId) {
+      setProjectId(id);
+      setBuildingId("");
+      setHasUnit("");
+      clearUnit();
+    }
+    setEditing(null);
+  };
+  const pickBuilding = (id: string) => {
+    if (id !== buildingId) {
+      setBuildingId(id);
+      setHasUnit("");
+      clearUnit();
+    }
+    setEditing(null);
+  };
+  const pickHasUnit = (value: "yes" | "no") => {
+    if (value !== hasUnit) clearUnit();
+    setHasUnit(value);
+    setEditing(null);
+  };
+  const pickFloor = (value: string) => {
+    if (value !== floor) setUnitId("");
+    setFloor(value);
+  };
+  const pickUnit = (id: string) => {
+    setUnitId(id);
+    setEditing(null);
+  };
+  const pickDay = (iso: string) => {
+    setDayIso(iso);
+    if (iso !== dayIso) setTime("");
+  };
+  const pickTime = (value: string) => {
+    setTime(value);
+    setEditing(null);
+  };
+
+  // ---- a step that has just opened: scroll it into view (below the header) and move focus into it
+  const seen = useRef<StepId | null>(null);
+  useEffect(() => {
+    if (seen.current === null) {
+      seen.current = openId; // the first showing: nothing to reveal
+      return;
+    }
+    if (seen.current === openId) return;
+    seen.current = openId;
+    const timer = window.setTimeout(
+      () => {
+        const step = form.current?.querySelector<HTMLElement>(`[data-step="${openId}"]`);
+        if (!step) return;
+        const header = document.querySelector("header");
+        const headerH = header ? header.getBoundingClientRect().height : 0;
+        const rect = step.getBoundingClientRect();
+        if (rect.top < headerH + 16 || rect.bottom > window.innerHeight - 8) {
+          const y = rect.top + window.scrollY - headerH - 24;
+          const lenis = getLenis();
+          if (lenis) lenis.scrollTo(y, { duration: reduce ? 0 : 0.9, immediate: reduce });
+          else window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+        }
+        step
+          .querySelector<HTMLElement>('[role="radio"][tabindex="0"], input, button.ct-go')
+          ?.focus({ preventScroll: true });
+      },
+      reduce ? 0 : 340
+    );
+    return () => window.clearTimeout(timer);
+  }, [openId, reduce]);
+
+  const clearError = (field: Field) => setErrors((e) => (e[field] ? { ...e, [field]: undefined } : e));
 
   function reset() {
-    setInterest(initialInterest ?? "");
-    setRooms(initialRooms ?? "");
+    setProjectId(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
+    setBuildingId(start?.buildingId ?? "");
+    setHasUnit(startUnit ? "yes" : "");
+    setFloor(startUnit ? String(startUnit.floor) : "");
+    setUnitId(startUnit?.id ?? "");
+    setUnitText("");
+    setUnitTextOk(false);
     setDayIso("");
     setTime("");
     setName("");
     setPhone("");
-    setShowReference(Boolean(reference));
+    setEditing(null);
     setErrors({});
     setStatus("idle");
   }
 
   function validate(): Errors {
     const next: Errors = {};
-    if (!interest) next.interest = MESSAGES.interest;
-    if (isApartment && !rooms) next.rooms = MESSAGES.rooms;
-    if (!day || !time) next.when = MESSAGES.when;
     if (name.trim().length < 2) next.name = MESSAGES.name;
     const digits = phone.replace(/\D/g, "");
     if (digits.length < 8 || digits.length > 15 || !/^[+\d\s()/.-]+$/.test(phone.trim())) next.phone = MESSAGES.phone;
     return next;
   }
 
-  /** Scrolls to the first missing step, moves focus into it and shakes it once. */
+  /** Moves focus into the first field that is missing and shakes it once. */
   function showFirstError(next: Errors) {
-    const first = (["interest", "rooms", "when", "name", "phone"] as Field[]).find((f) => next[f]);
-    const root = form.current;
-    if (!first || !root) return;
-    const step = root.querySelector<HTMLElement>(`[data-step="${first}"]`);
-    if (!step) return;
-    // For the day-and-time step, focus the group that is still empty.
-    const group = first === "when" ? (dayIso ? "time" : "day") : first;
-    const target =
-      first === "name" || first === "phone"
-        ? step.querySelector<HTMLElement>("input")
-        : step.querySelector<HTMLElement>(`[data-group="${group}"] [role="radio"][tabindex="0"]`);
+    const first = (["name", "phone"] as Field[]).find((f) => next[f]);
+    const field = first && form.current?.querySelector<HTMLElement>(`[data-step="${first}"]`);
+    if (!first || !field) return;
+    field.querySelector<HTMLElement>("input")?.focus({ preventScroll: true });
+    const header = document.querySelector("header");
+    const y =
+      field.getBoundingClientRect().top + window.scrollY - (header ? header.getBoundingClientRect().height : 0) - 120;
     const lenis = getLenis();
-    if (lenis) lenis.scrollTo(step, { offset: -140, duration: 0.9 });
-    else step.scrollIntoView({ block: "center", behavior: prefersReducedMotion() ? "auto" : "smooth" });
-    target?.focus({ preventScroll: true });
-    shake(step.querySelector(first === "name" || first === "phone" ? ".ct-field" : "[data-shake]") ?? step);
+    if (lenis) lenis.scrollTo(y, { duration: 0.9 });
+    else window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+    shake(field);
   }
 
   async function onSubmit(e: FormEvent) {
@@ -171,16 +307,20 @@ export function ContactForm({
       showFirstError(next);
       return;
     }
-    if (!interest || !day) return;
+    // every earlier step must be answered (they always are once this step is on screen)
+    if (!project || !day || !time || (needsBuilding && !building) || !answered.unit) return;
     const request: BookingRequest = {
-      interest: INTERESTS.find((i) => i.id === interest)?.label ?? interest,
-      rooms: isApartment ? rooms : undefined,
+      project: project.name,
+      projectId: project.id,
+      building: building?.name,
+      buildingId: building?.id,
+      unit: hasUnit === "yes" ? unitLabel || undefined : undefined,
+      unitId: hasUnit === "yes" ? unit?.id : undefined,
       date: day.iso,
       dateLabel: day.label,
       time,
       name: name.trim(),
       phone: phone.trim(),
-      reference: showReference ? reference : undefined,
     };
     setStatus("sending");
     // The button is really disabled while sending, which drops focus; it gets focus back (once enabled again)
@@ -198,9 +338,6 @@ export function ContactForm({
     }
   }
 
-  // Step numbers follow what is on screen: without the rooms step the rest are 01, 02, 03.
-  let number = 0;
-  const n = () => String(++number).padStart(2, "0");
   const describe = (field: Field) => (errors[field] ? `ct-err-${field}` : undefined);
   const error = (field: Field) =>
     errors[field] ? (
@@ -209,85 +346,181 @@ export function ContactForm({
       </p>
     ) : null;
 
+  /** One step: a summary row when answered and closed, the question itself when open, nothing before its turn. */
+  const step = (id: StepId, body: ReactNode) => {
+    const index = visible.indexOf(id);
+    if (index < 0) return null;
+    const number = String(index + 1).padStart(2, "0");
+    const isOpen = openId === id;
+    const isFolded = !isOpen && answered[id];
+    return (
+      <div key={id} className="ct-step-wrap" data-step-wrap={id}>
+        <Collapse show={isOpen} reduce={reduce} enter>
+          <section data-step={id} className="ct-step" aria-labelledby={`ct-h-${id}`}>
+            <div className="ct-step-h bk-label" id={`ct-h-${id}`} role="heading" aria-level={2}>
+              <b className="ct-step-n bk-mono">{number}</b>
+              <span>{TITLES[id]}</span>
+            </div>
+            {body}
+          </section>
+        </Collapse>
+        <Collapse show={isFolded} reduce={reduce}>
+          <div className="ct-step ct-sumrow">
+            <b className="ct-step-n bk-mono">{number}</b>
+            <span className="ct-sumrow-label bk-label">{TITLES[id]}</span>
+            <span className="ct-sumrow-value">{summaryOf(id)}</span>
+            <button
+              type="button"
+              className="ct-edit"
+              aria-label={`Измени: ${TITLES[id]}`}
+              onClick={() => setEditing(id)}
+            >
+              Измени
+            </button>
+          </div>
+        </Collapse>
+      </div>
+    );
+  };
+
   return (
     <>
-      <form ref={form} className="ct-form" noValidate onSubmit={onSubmit} aria-label="Закажете консултација">
-        <section data-step="interest" data-seq="step" className="ct-step">
-          <StepRule />
-          {/* Inside the first step, under its hairline, so the panel on the right lines up with that line. */}
-          {reference && showReference && (
-            <div className="ct-tag bk-mono">
-              <span>За: {reference.label}</span>
-              <button type="button" onClick={() => setShowReference(false)} aria-label="Отстрани ја референцата">
-                <X className="h-4 w-4" strokeWidth={1.25} aria-hidden />
-              </button>
-            </div>
-          )}
-          <div className="ct-step-h bk-label" id="ct-h-interest" role="heading" aria-level={2}>
-            <b className="ct-step-n bk-mono">{n()}</b>
-            <span>Што ве интересира?</span>
-          </div>
-          <div data-shake>
-            <RadioGroup
-              groupId="interest"
-              label="Што ве интересира?"
-              className="ct-chips"
-              itemClassName="ct-chip"
-              describedBy={describe("interest")}
-              invalid={Boolean(errors.interest)}
-              value={interest}
-              onChange={(v) => {
-                setInterest(v as Interest);
-                clear("interest");
-              }}
-              options={INTERESTS.map((i) => ({ value: i.id, label: i.label, content: i.label }))}
-            />
-          </div>
-          {error("interest")}
-        </section>
+      <form
+        ref={form}
+        className="ct-panel ct-form"
+        data-seq="step"
+        noValidate
+        onSubmit={onSubmit}
+        aria-label="Закажете консултација"
+      >
+        <p className="ct-lead">Неколку кратки чекори. Ние ќе ви се јавиме за потврда на терминот.</p>
 
-        {roomsMounted && (
-          <section
-            data-step="rooms"
-            data-seq={startsWithRooms ? "step" : undefined}
-            className={cn("ct-step", !isApartment ? "is-leaving" : !startsWithRooms && "is-entering")}
-            onAnimationEnd={(e: AnimationEvent) => {
-              if (e.target === e.currentTarget && e.animationName === "ct-fade-out" && !isApartment)
-                setRoomsMounted(false);
-            }}
-          >
-            <StepRule />
-            <div className="ct-step-h bk-label" role="heading" aria-level={2}>
-              <b className="ct-step-n bk-mono">{n()}</b>
-              <span>Колку соби?</span>
-            </div>
-            <div data-shake>
-              <RadioGroup
-                groupId="rooms"
-                label="Колку соби?"
-                className="ct-chips"
-                itemClassName="ct-chip is-mono"
-                describedBy={describe("rooms")}
-                invalid={Boolean(errors.rooms)}
-                value={rooms}
-                onChange={(v) => {
-                  setRooms(v);
-                  clear("rooms");
-                }}
-                options={ROOMS.map((r) => ({ value: r, label: roomsLabel(r), content: r }))}
-              />
-            </div>
-            {error("rooms")}
-          </section>
+        {step(
+          "project",
+          <RadioGroup
+            groupId="project"
+            label={TITLES.project}
+            className="ct-chips"
+            itemClassName="ct-chip"
+            stagger
+            value={projectId}
+            onChange={pickProject}
+            options={projects.map((p) => ({ value: p.id, label: p.name, content: p.name }))}
+          />
         )}
 
-        <section data-step="when" data-seq="step" className="ct-step">
-          <StepRule />
-          <div className="ct-step-h bk-label" role="heading" aria-level={2}>
-            <b className="ct-step-n bk-mono">{n()}</b>
-            <span>Изберете ден и час</span>
-          </div>
-          <div data-shake>
+        {needsBuilding &&
+          step(
+            "building",
+            <RadioGroup
+              groupId="building"
+              label={TITLES.building}
+              className="ct-chips"
+              itemClassName="ct-chip"
+              stagger
+              value={buildingId}
+              onChange={pickBuilding}
+              options={(project?.buildings ?? []).map((b) => ({ value: b.id, label: b.name, content: b.name }))}
+            />
+          )}
+
+        {step(
+          "unit",
+          <>
+            <RadioGroup
+              groupId="has-unit"
+              label={TITLES.unit}
+              className="ct-chips"
+              itemClassName="ct-chip"
+              stagger
+              value={hasUnit}
+              onChange={(v) => pickHasUnit(v as "yes" | "no")}
+              options={[
+                { value: "yes", label: "Да", content: "Да" },
+                { value: "no", label: "Не", content: "Не" },
+              ]}
+            />
+            <Collapse show={hasUnit === "yes"} reduce={reduce}>
+              <div className="ct-sub">
+                {pool.length > 0 ? (
+                  <>
+                    <div className="ct-sub-label bk-label">Кат</div>
+                    <RadioGroup
+                      groupId="floor"
+                      label="Кат"
+                      className="ct-chips"
+                      itemClassName="ct-chip"
+                      stagger
+                      value={floor}
+                      onChange={pickFloor}
+                      options={floors.map((f) => ({ value: String(f), label: floorLabel(f), content: floorLabel(f) }))}
+                    />
+                    <Collapse show={floorUnits.length > 0} reduce={reduce}>
+                      <div className="ct-sub-label bk-label">Стан</div>
+                      <RadioGroup
+                        groupId="unit"
+                        label="Стан"
+                        className="ct-chips"
+                        itemClassName="ct-chip is-mono"
+                        stagger
+                        value={unitId}
+                        onChange={pickUnit}
+                        options={floorUnits.map((u) => ({
+                          value: u.id,
+                          label: `Стан ${u.number}, ${formatArea(u.area)}`,
+                          content: u.number,
+                        }))}
+                      />
+                    </Collapse>
+                  </>
+                ) : (
+                  <div className="ct-unit-text">
+                    <div className="ct-field">
+                      <label htmlFor="ct-unit-text" className="bk-label">
+                        Број на стан
+                      </label>
+                      <div className="ct-input">
+                        <input
+                          id="ct-unit-text"
+                          type="text"
+                          inputMode="text"
+                          autoComplete="off"
+                          value={unitText}
+                          onChange={(e) => {
+                            setUnitText(e.target.value);
+                            setUnitTextOk(false);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && unitText.trim()) {
+                              e.preventDefault();
+                              setUnitTextOk(true);
+                              setEditing(null);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="ct-chip ct-go"
+                      disabled={!unitText.trim()}
+                      onClick={() => {
+                        setUnitTextOk(true);
+                        setEditing(null);
+                      }}
+                    >
+                      Продолжи
+                    </button>
+                  </div>
+                )}
+              </div>
+            </Collapse>
+          </>
+        )}
+
+        {step(
+          "when",
+          <>
             <div className="ct-days-box">
               {days.length > 0 && (
                 <RadioGroup
@@ -295,13 +528,9 @@ export function ContactForm({
                   label="Ден"
                   className="ct-days"
                   itemClassName="ct-day"
-                  describedBy={describe("when")}
-                  invalid={Boolean(errors.when && !dayIso)}
+                  stagger
                   value={dayIso}
-                  onChange={(v) => {
-                    setDayIso(v);
-                    clear("when");
-                  }}
+                  onChange={pickDay}
                   options={days.map((d) => ({
                     value: d.iso,
                     label: d.label,
@@ -316,100 +545,95 @@ export function ContactForm({
                 />
               )}
             </div>
-            <RadioGroup
-              groupId="time"
-              label="Час"
-              className="ct-slots"
-              itemClassName="ct-chip is-mono"
-              describedBy={describe("when")}
-              invalid={Boolean(errors.when && !time)}
-              value={time}
-              onChange={(v) => {
-                setTime(v);
-                clear("when");
-              }}
-              options={SLOTS.map((s) => ({ value: s, label: s, content: s }))}
-            />
-          </div>
-          {error("when")}
-        </section>
+            <Collapse show={Boolean(day)} reduce={reduce}>
+              <RadioGroup
+                groupId="time"
+                label="Час"
+                className="ct-slots"
+                itemClassName="ct-chip is-mono"
+                stagger
+                value={time}
+                onChange={pickTime}
+                options={SLOTS.map((s) => ({ value: s, label: s, content: s }))}
+              />
+            </Collapse>
+          </>
+        )}
 
-        <section data-seq="step" className="ct-step">
-          <StepRule />
-          <div className="ct-step-h bk-label" role="heading" aria-level={2}>
-            <b className="ct-step-n bk-mono">{n()}</b>
-            <span>Ваши податоци</span>
-          </div>
-          <div className="ct-fields">
-            <div className="ct-field" data-step="name">
-              <label htmlFor="ct-name" className="bk-label">
-                Име и презиме
-              </label>
-              <div className="ct-input">
-                <input
-                  id="ct-name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  value={name}
-                  aria-required="true"
-                  aria-invalid={errors.name ? true : undefined}
-                  aria-describedby={describe("name")}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    clear("name");
-                  }}
-                />
+        {step(
+          "details",
+          <>
+            <div className="ct-fields">
+              <div className="ct-field" data-step="name">
+                <label htmlFor="ct-name" className="bk-label">
+                  Име и презиме
+                </label>
+                <div className="ct-input">
+                  <input
+                    id="ct-name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    value={name}
+                    aria-required="true"
+                    aria-invalid={errors.name ? true : undefined}
+                    aria-describedby={describe("name")}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      clearError("name");
+                    }}
+                  />
+                </div>
+                {error("name")}
               </div>
-              {error("name")}
-            </div>
-            <div className="ct-field" data-step="phone">
-              <label htmlFor="ct-phone" className="bk-label">
-                Телефон
-              </label>
-              <div className="ct-input">
-                <input
-                  id="ct-phone"
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  value={phone}
-                  aria-required="true"
-                  aria-invalid={errors.phone ? true : undefined}
-                  aria-describedby={describe("phone")}
-                  onChange={(e) => {
-                    setPhone(e.target.value);
-                    clear("phone");
-                  }}
-                />
+              <div className="ct-field" data-step="phone">
+                <label htmlFor="ct-phone" className="bk-label">
+                  Телефон
+                </label>
+                <div className="ct-input">
+                  <input
+                    id="ct-phone"
+                    name="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={phone}
+                    aria-required="true"
+                    aria-invalid={errors.phone ? true : undefined}
+                    aria-describedby={describe("phone")}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                      clearError("phone");
+                    }}
+                  />
+                </div>
+                {error("phone")}
               </div>
-              {error("phone")}
             </div>
-          </div>
 
-          <div className="ct-submit">
-            <button
-              ref={submitButton}
-              type="submit"
-              className="btn-primary"
-              data-tone="dark"
-              disabled={status === "sending"}
-              aria-busy={status === "sending"}
-            >
-              <PrimaryFace>{status === "sending" ? "Се испраќа…" : "Закажи"}</PrimaryFace>
-            </button>
-            <span className="ct-sum bk-mono" aria-live="polite">
-              <span key={summary}>{summary}</span>
-            </span>
-          </div>
-          {status === "failed" && (
-            <p role="alert" className="ct-fail">
-              Барањето не беше испратено. Вашите одговори се зачувани: обидете се повторно или повикајте нè на{" "}
-              <a href={`tel:${officePhone.replace(/ /g, "")}`}>{officePhone}</a>.
-            </p>
-          )}
-        </section>
+            <div className="ct-submit">
+              <button
+                ref={submitButton}
+                type="submit"
+                className="btn-primary"
+                data-tone="dark"
+                disabled={status === "sending"}
+                aria-busy={status === "sending"}
+              >
+                <PrimaryFace>{status === "sending" ? "Се испраќа…" : "Закажи"}</PrimaryFace>
+              </button>
+              <span className="ct-sum bk-mono" aria-live="polite">
+                <span key={summary}>{summary}</span>
+              </span>
+            </div>
+            {status === "failed" && (
+              <p role="alert" className="ct-fail">
+                Барањето не беше испратено. Вашите одговори се зачувани: обидете се повторно или повикајте нè на{" "}
+                <a href={`tel:${officePhone.replace(/ /g, "")}`}>{officePhone}</a>.
+              </p>
+            )}
+          </>
+        )}
       </form>
 
       <BookingConfirmation

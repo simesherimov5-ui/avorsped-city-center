@@ -59,22 +59,22 @@
 }
 [data-theme="black"] .bk-h1 {
   margin: 0;
-  font-size: clamp(2rem, 9vw, 2.75rem);
-  line-height: 1;
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  line-height: 1.04;
   letter-spacing: -0.015em;
 }
 [data-theme="black"] .bk-h2 {
   margin: 16px 0 clamp(24px, 3vw, 48px);
-  font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  font-size: clamp(1.5rem, 6.4vw, 2rem);
   line-height: 1.1;
 }
-/* The heading scale from 768px up (H1 64–104px, H2 40–56px); phones keep the sizes above. */
+/* The heading scale from 768px up (H1 40–68px, H2 30–42px); phones keep the sizes above. */
 @media (min-width: 768px) {
   [data-theme="black"] .bk-h1 {
-    font-size: clamp(64px, 7.2vw, 104px);
+    font-size: clamp(40px, 4.6vw, 68px);
   }
   [data-theme="black"] .bk-h2 {
-    font-size: clamp(40px, 3.9vw, 56px);
+    font-size: clamp(30px, 3vw, 42px);
   }
 }
 
