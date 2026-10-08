@@ -169,9 +169,13 @@ export interface Project {
   slug: string;
   name: string;
   location: string;
+  /** The town the project is in (the projects page groups by it). */
+  city: string;
   status: ProjectStatus;
-  year: number;
-  units: number;
+  /** Hidden where not known. */
+  year?: number;
+  /** Number of apartments; hidden where not known. */
+  units?: number;
   description: string;
   heroImage: { src: string; alt: string; isPlaceholder: boolean };
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
@@ -181,6 +185,8 @@ export interface Project {
   /** Per-project framing of every photo of the project (see ImageFocus). Projects without it keep zoom 1. */
   imageFocus?: ImageFocus;
   typeLabel?: string;
+  /** The credit line under the photos, in pieces: plain text and links (licence terms require it). */
+  photoCredit?: { text: string; href?: string }[];
   statusLabelOverride?: string;
   tagline?: string;
   distanceHighlights?: string[];

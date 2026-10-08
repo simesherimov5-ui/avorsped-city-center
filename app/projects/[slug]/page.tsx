@@ -41,10 +41,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   // address permanently redirects to the main one, so each project has one page for search engines and sharing.
   if (project.href) permanentRedirect(project.href);
 
+  const completed = project.status === "completed";
+  const hasPhotos = project.gallery.length > 0 || !project.heroImage.isPlaceholder;
   const facts = [
+    ...(project.typeLabel ? [{ label: "Тип", value: project.typeLabel }] : []),
     // the address is already the line above the name
     ...project.specifications.filter((spec) => spec.label !== "Локација"),
-    { label: "Година", value: String(project.year) },
+    ...(project.year ? [{ label: "Година", value: String(project.year) }] : []),
     { label: "Статус", value: project.statusLabelOverride ?? projectStatusLabel(project.status) },
   ];
 
@@ -59,29 +62,56 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </Link>
       </div>
 
-      <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
-        <Reveal immediate>
-          {project.gallery.length > 0 ? (
-            <PhotoCarousel
-              photos={project.gallery}
-              className={project.imageFit === "contain" ? "max-w-4xl" : undefined}
-              sizes={project.imageFit === "contain" ? "(max-width: 896px) 55vw, 490px" : undefined}
-              fit={project.imageFit}
-              focus={project.imageFocus}
-            />
-          ) : (
-            <Media
-              image={project.heroImage}
-              focus={project.imageFocus}
-              label={`${project.name} — насловна визуелизација`}
-              className="aspect-[16/7]"
-              sizes="100vw"
-            />
+      {hasPhotos && (
+        <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
+          <Reveal immediate>
+            {project.gallery.length > 0 ? (
+              <PhotoCarousel
+                photos={project.gallery}
+                className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
+                sizes={
+                  project.imageFit === "contain"
+                    ? "(max-width: 896px) 55vw, 490px"
+                    : completed
+                      ? "(max-width: 896px) 100vw, 896px"
+                      : undefined
+                }
+                fit={project.imageFit}
+                focus={project.imageFocus}
+              />
+            ) : (
+              <Media
+                image={project.heroImage}
+                focus={project.imageFocus}
+                label={`${project.name} — насловна визуелизација`}
+                className="aspect-[16/7]"
+                sizes="100vw"
+              />
+            )}
+          </Reveal>
+          {project.photoCredit && (
+            <p className="mt-4 text-[12px] leading-relaxed text-muted">
+              {project.photoCredit.map((part, i) =>
+                part.href ? (
+                  <a
+                    key={i}
+                    href={part.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-charcoal"
+                  >
+                    {part.text}
+                  </a>
+                ) : (
+                  <span key={i}>{part.text}</span>
+                )
+              )}
+            </p>
           )}
-        </Reveal>
-      </section>
+        </section>
+      )}
 
-      <section className="mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10">
+      <section className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}>
         <Reveal immediate delay={0.08}>
           <ProjectHeader
             eyebrow={project.location}
@@ -125,13 +155,19 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {project.floors && <FloorPickerSection floors={project.floors.map((floor) => ({ ...floor, apartments: [] }))} />}
 
-      <section className="border-t border-line">
-        <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
-          <ConstructionProgress project={project} always />
-        </div>
-      </section>
+      {!completed && (
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
+            <ConstructionProgress project={project} always />
+          </div>
+        </section>
+      )}
 
-      <ProjectCta projectId={project.id} />
+      {completed ? (
+        <ProjectCta projectId={project.id} label="Закажи консултација" href="/contact" />
+      ) : (
+        <ProjectCta projectId={project.id} />
+      )}
 
       <OtherProjects currentProjectId={project.id} />
     </div>

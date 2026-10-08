@@ -3,6 +3,7 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
+import { NoPhoto } from "@/components/ui/NoPhoto";
 import { projectStatusLabel } from "@/lib/format";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { cn } from "@/lib/cn";
@@ -12,7 +13,7 @@ import { unitsText } from "@/lib/plural";
 // Never color-code project phase — "completed" is distinguished by shape
 // (a bordered pill) rather than a hue that would break the 3-color palette.
 const STATUS_STYLE: Record<Project["status"], string> = {
-  completed: "border border-gold bg-cream text-ink",
+  completed: "bg-done text-paper",
   "under-construction": "bg-accent text-chrome",
   upcoming: "bg-chrome text-on-chrome",
 };
@@ -27,23 +28,30 @@ export function ProjectCard({ project }: { project: Project }) {
       className="focus-ring group relative isolate block border border-line bg-warm-white transition-colors duration-300 hover:border-ink/30"
     >
       <div className="relative overflow-hidden">
-        <Media
-          image={project.heroImage}
-          label={`${project.name} — визуелизација`}
-          fit={project.imageFit}
-          focus={project.imageFocus}
-          // a 2:1 photo in a 4:3 frame is drawn about 1.5x wider than the card, so the sizes allow for the crop
-          sizes={
-            project.imageFit === "contain"
-              ? "(max-width: 640px) 80vw, 320px"
-              : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
-          }
-          className="aspect-[4/3] transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
-        />
+        {project.heroImage.isPlaceholder ? (
+          <NoPhoto className="aspect-[4/3]" />
+        ) : (
+          <Media
+            image={project.heroImage}
+            label={`${project.name} — визуелизација`}
+            fit={project.imageFit}
+            focus={project.imageFocus}
+            // a 2:1 photo in a 4:3 frame is drawn about 1.5x wider than the card, so the sizes allow for the crop
+            sizes={
+              project.imageFit === "contain"
+                ? "(max-width: 640px) 80vw, 320px"
+                : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
+            }
+            className="aspect-[4/3] transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
+          />
+        )}
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>
           {(() => {
             const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
-            return project.typeLabel ? `${project.typeLabel} · ${statusText}` : statusText;
+            // a finished project's chip says only «Завршено»; its type is on its own page
+            return project.typeLabel && project.status !== "completed"
+              ? `${project.typeLabel} · ${statusText}`
+              : statusText;
           })()}
         </span>
 
@@ -77,8 +85,8 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
         <div className="mt-3 text-sm text-muted">{project.location}</div>
         <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">
-          <span>{project.year}</span>
-          <span>{unitsText(project.units)}</span>
+          {project.year && <span>{project.year}</span>}
+          {project.units && <span>{unitsText(project.units)}</span>}
         </div>
         <ConstructionProgress project={project} variant="compact" className="mt-4 border-t border-line pt-4" />
       </div>

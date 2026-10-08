@@ -15,6 +15,15 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
+  // A project without a photo gets the site's default share image.
+  if (project.heroImage.isPlaceholder) {
+    return renderOg({
+      label: "Javor Sped Holding",
+      title: "Јавор Шпед",
+      subtitle: "Премиум станбени проекти во Струмица и Дојран",
+      photo: "/images/exteriors/exterior-hero-wide.jpg",
+    });
+  }
   return renderOg({
     label: "Јавор Шпед",
     title: project.name,

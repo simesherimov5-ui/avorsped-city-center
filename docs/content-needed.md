@@ -143,6 +143,17 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Three detail photos** (material, interior, view from the terrace) for the band the board shows between the details and «Наскоро».
 - **«Наскоро» sign-up:** the board has an input for an e-mail or phone; the site has nowhere to send it, so the button leads to the form on Контакт. Decide where the waiting list should go.
 
+### 3.8 ГТЦ Глобал: what the page still lacks
+
+- **Where:** the `gtc-global` entry of `projects` in `data/index.ts`; it shows only what is known.
+- **Needed:** the total area, number of floors, number of shops and offices, parking places, the start year of construction (one source says 2006), the holding's role (investor or contractor) and which company of the holding is named.
+- **Photos:** all five come from Wikimedia Commons (2009–2015, before the fire of 2 January 2021). Send our own current photos (front from the square, the glass corner, from the boulevard); then the credit line can go (see `docs/photo-credits.md`).
+
+### 3.9 Илинденска: what the page still lacks
+
+- **Where:** the `ilindenska` entry of `projects` in `data/index.ts`.
+- **Needed:** the street number, the year of completion, number of floors, number of apartments and shops, total area, and our own photos of the building from the street, from the corner and from the back. Until then its card shows the logo mark and its page has no photo block.
+
 ---
 
 ## 4. Дојрански Рај (before-launch B3)

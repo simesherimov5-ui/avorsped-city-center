@@ -28,6 +28,8 @@
   --color-brass: #c4a454;
   /* The filling button on dark surfaces (set by the owner, to try). */
   --color-button: #fcb16a;
+  /* The «Завршено» chip of a finished project (set by the owner: green). */
+  --color-done: #2f7d4f;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
@@ -82,6 +84,7 @@
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
   --color-brass: var(--color-brass);
+  --color-done: var(--color-done);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);

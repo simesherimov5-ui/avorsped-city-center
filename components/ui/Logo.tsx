@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
 
 /** The building mark: the same drawing the opening builds. Takes its colour from the text colour (`currentColor`). */
-export function BuildingMark({ className }: { className?: string }) {
+export function BuildingMark({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg
       viewBox={MARK_VIEWBOX}
@@ -11,6 +11,7 @@ export function BuildingMark({ className }: { className?: string }) {
       strokeWidth="6"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      style={style}
       aria-hidden="true"
     >
       {MARK_STROKES.map((s) => (
