@@ -120,9 +120,10 @@ export function ContactForm({
   const [unitText, setUnitText] = useState("");
   const [unitTextOk, setUnitTextOk] = useState(false);
   const [undecided, setUndecided] = useState(false);
-  // What the undecided visitor is looking for (optional): the chosen kinds, and whether the step is answered or skipped.
+  // What the undecided visitor is looking for. Optional: the step is a folded row that «Додај» opens, and it never
+  // holds up the day and time step.
   const [prefs, setPrefs] = useState<string[]>([]);
-  const [prefsDone, setPrefsDone] = useState(false);
+  const [prefsOpen, setPrefsOpen] = useState(false);
   const [dayIso, setDayIso] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
@@ -161,7 +162,7 @@ export function ContactForm({
     project: Boolean(project) || undecided,
     building: Boolean(building),
     unit: hasUnit === "no" || (hasUnit === "yes" && Boolean(unit || unitTextOk)),
-    prefs: prefsDone,
+    prefs: true,
     when: Boolean(day && time),
     details: false,
   };
@@ -175,7 +176,7 @@ export function ContactForm({
 
   const summaryOf = (id: StepId) => {
     if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
-    if (id === "prefs") return prefs.length ? prefs.join(", ") : "Прескокнато";
+    if (id === "prefs") return prefs.length ? prefs.join(", ") : "По желба";
     if (id === "building") return building?.name ?? "";
     if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
     if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
@@ -209,17 +210,23 @@ export function ContactForm({
       setHasUnit("");
       clearUnit();
       setPrefs([]);
-      setPrefsDone(false);
+      setPrefsOpen(false);
     }
     setEditing(null);
   };
   const togglePref = (value: string) => {
     setPrefs((list) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]));
   };
-  const donePrefs = (skip: boolean) => {
-    if (skip) setPrefs([]);
-    setPrefsDone(true);
-    setEditing(null);
+  /** «Додај» / «Измени» opens the chips and moves focus into them; «Готово» folds them and returns focus to the row. */
+  const setPrefsShown = (open: boolean) => {
+    setPrefsOpen(open);
+    window.setTimeout(
+      () => {
+        const wrap = form.current?.querySelector<HTMLElement>('[data-step-wrap="prefs"]');
+        wrap?.querySelector<HTMLElement>(open ? "button.ct-tog" : "button.ct-edit")?.focus({ preventScroll: true });
+      },
+      reduce ? 0 : 340
+    );
   };
   const pickBuilding = (id: string) => {
     if (id !== buildingId) {
@@ -288,7 +295,7 @@ export function ContactForm({
     setProjectId(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
     setUndecided(false);
     setPrefs([]);
-    setPrefsDone(false);
+    setPrefsOpen(false);
     setBuildingId(start?.buildingId ?? "");
     setHasUnit(startUnit ? "yes" : "");
     setFloor(startUnit ? String(startUnit.floor) : "");
@@ -338,7 +345,7 @@ export function ContactForm({
     }
     // every earlier step must be answered (they always are once this step is on screen)
     if (!day || !time) return;
-    if (undecided ? !prefsDone : !project || (needsBuilding && !building) || !answered.unit) return;
+    if (!undecided && (!project || (needsBuilding && !building) || !answered.unit)) return;
     const request: BookingRequest = {
       project: undecided ? null : project!.name,
       projectId: undecided ? null : project!.id,
@@ -383,8 +390,12 @@ export function ContactForm({
     const index = visible.indexOf(id);
     if (index < 0) return null;
     const number = String(index + 1).padStart(2, "0");
-    const isOpen = openId === id;
+    // «Што барате?» is optional: it opens and closes on its own and is not part of the one-step-at-a-time flow.
+    const optional = id === "prefs";
+    const isOpen = optional ? prefsOpen : openId === id;
     const isFolded = !isOpen && answered[id];
+    const empty = optional && prefs.length === 0;
+    const action = optional && empty ? "Додај" : "Измени";
     return (
       <div key={id} className="ct-step-wrap" data-step-wrap={id}>
         <Collapse show={isOpen} reduce={reduce} enter>
@@ -400,14 +411,14 @@ export function ContactForm({
           <div className="ct-step ct-sumrow">
             <b className="ct-step-n bk-mono">{number}</b>
             <span className="ct-sumrow-label bk-label">{TITLES[id]}</span>
-            <span className="ct-sumrow-value">{summaryOf(id)}</span>
+            <span className={empty ? "ct-sumrow-value is-muted" : "ct-sumrow-value"}>{summaryOf(id)}</span>
             <button
               type="button"
               className="ct-edit"
-              aria-label={`Измени: ${TITLES[id]}`}
-              onClick={() => setEditing(id)}
+              aria-label={`${action}: ${TITLES[id]}`}
+              onClick={() => (optional ? setPrefsShown(true) : setEditing(id))}
             >
-              Измени
+              {action}
             </button>
           </div>
         </Collapse>
@@ -474,16 +485,8 @@ export function ContactForm({
                 ))}
               </div>
               <div className="ct-actions">
-                <button
-                  type="button"
-                  className="ct-chip ct-go"
-                  disabled={prefs.length === 0}
-                  onClick={() => donePrefs(false)}
-                >
-                  Продолжи
-                </button>
-                <button type="button" className="ct-edit ct-skip" onClick={() => donePrefs(true)}>
-                  Прескокни
+                <button type="button" className="ct-chip ct-go" onClick={() => setPrefsShown(false)}>
+                  Готово
                 </button>
               </div>
             </>

@@ -123,11 +123,15 @@
   color: var(--color-paper);
   overflow-wrap: anywhere;
 }
+.ct-sumrow-value.is-muted {
+  font-weight: 400;
+  color: var(--mute);
+}
 .ct-edit {
   flex: none;
   min-width: 44px;
   min-height: 44px;
-  margin: -12px 0;
+  margin: -12px 0 -12px auto;
   padding: 0 4px;
   border: 0;
   background: none;
@@ -251,9 +255,6 @@
   align-items: center;
   gap: 8px 20px;
   margin-top: 20px;
-}
-.ct-skip {
-  margin: 0;
 }
 .ct-chip.is-mono {
   font-family: var(--font-sans), system-ui, sans-serif;
