@@ -75,12 +75,14 @@
     color-mix(in srgb, var(--black) 82%, transparent) 100%
   );
 }
+/* The facts sit at the right, and the gold line runs under them along the bottom of the hero. */
 .ab-meta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 8px 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--gold-line);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gold-line);
 }
 .ab-meta > span {
   padding: 0 24px;
@@ -91,8 +93,10 @@
   text-transform: uppercase;
 }
 .ab-meta > span:first-child {
-  padding-left: 0;
   border-left: 0;
+}
+.ab-meta > span:last-child {
+  padding-right: 0;
 }
 .ab-meta b {
   font-weight: 400;
@@ -110,6 +114,8 @@
 @media (max-width: 560px) {
   .ab-meta {
     flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
   }
   .ab-meta > span {
     padding: 0;
