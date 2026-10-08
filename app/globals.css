@@ -435,6 +435,14 @@ h4 {
     transform: translateX(6px) rotate(-45deg);
   }
 }
+/* The filled look at rest: the fill is in and the text takes the fill's text colour. */
+.btn-primary--filled:not(:disabled) .btn-primary__fill {
+  transform: scaleX(1);
+}
+.btn-primary--filled:not(:disabled) .btn-primary__label,
+.btn-primary--filled:not(:disabled) .btn-primary__arrow {
+  color: var(--btn-on);
+}
 .btn-primary:disabled,
 .btn-primary[aria-disabled="true"] {
   opacity: 0.4;

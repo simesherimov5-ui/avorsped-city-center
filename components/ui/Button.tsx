@@ -32,6 +32,8 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit";
   disabled?: boolean;
+  /** The primary button shown already filled (it still reacts to hover and focus). */
+  filled?: boolean;
 }
 
 export function Button({
@@ -44,10 +46,11 @@ export function Button({
   className,
   type = "button",
   disabled,
+  filled = false,
 }: ButtonProps) {
   if (variant === "primary") {
     // The filling button has its own look (see .btn-primary in globals.css); no click pulse, it would fight the fill.
-    const primary = cn("btn-primary", size === "sm" && "btn-primary--sm", className);
+    const primary = cn("btn-primary", size === "sm" && "btn-primary--sm", filled && "btn-primary--filled", className);
     const face = <PrimaryFace arrow={size !== "sm"}>{children}</PrimaryFace>;
     if (href) {
       return (
