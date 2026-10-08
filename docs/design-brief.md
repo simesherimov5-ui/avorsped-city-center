@@ -10,7 +10,7 @@ Status: **the identity «Бронза & Травертин» was approved on 202
 `javor-sped-complete/reference/redizajn-bronza-travertin.html`; the numbers in the redesign brief are the source of truth.
 
 - **Six colours, nothing else** (every other shade is one of them at an opacity): Оникс `#14110F` (main dark), Еспресо
-  `#221C17` (cards and surfaces on dark), Травертин `#F2E9DA` (text on dark; the light page background is the owner's sand `#E6DCCD`), Варовник `#E5D8C3`
+  `#221C17` (cards and surfaces on dark), Травертин `#F2E9DA` (text on dark; the light page background is the owner's sand `#F4EFE7`), Варовник `#E5D8C3`
   (surfaces and form fields on light), Бронза `#6D533E` (accent on light only), Светол бакар `#C4A454` (accent on dark only).
   On dark: text Травертин, accent Светол бакар. On light: text Оникс, accent Бронза. Never Светол бакар as text on light,
   never Бронза as text on dark. Every page keeps the light or dark surface it has.
