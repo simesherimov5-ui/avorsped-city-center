@@ -65,7 +65,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <div className="t-h3">{project.name}</div>
           <span
             aria-hidden
-            className="shrink-0 text-bronze transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2"
+            className="shrink-0 text-gold-deep transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2"
           >
             <svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" strokeWidth="1">
               <path d="M0 5h17M13 1l4 4-4 4" />
@@ -73,7 +73,7 @@ export function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
         <div className="relative mt-3 h-px bg-line">
-          <i className="absolute left-0 top-0 h-px w-0 bg-bronze transition-[width] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
+          <i className="absolute left-0 top-0 h-px w-0 bg-gold-deep transition-[width] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
         </div>
         <div className="mt-3 text-sm text-muted">{project.location}</div>
         <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">

@@ -42,7 +42,7 @@ export function FloorList({
               className={cn(
                 "relative z-10 mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
                 isActive
-                  ? "border-gold-deep bg-gold-deep text-paper"
+                  ? "border-gold-deep bg-gold-deep text-ink"
                   : "border-line bg-warm-white text-muted group-hover:border-gold-deep/60 group-hover:text-charcoal"
               )}
             >

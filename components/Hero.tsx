@@ -159,7 +159,7 @@ export function Hero() {
           ref={headlineRef}
           className="mx-auto mt-3 max-w-4xl whitespace-nowrap text-[clamp(1.2rem,5.4vw,2.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
         >
-          Добредојдовте во вашиот <span className="text-gold">нов дом</span>
+          Добредојдовте во вашиот нов дом
         </h1>
       </div>
 
