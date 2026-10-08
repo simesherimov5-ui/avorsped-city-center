@@ -19,11 +19,14 @@ export type ProjectOption = { id: string; name: string; buildings: { id: string;
 export type UnitOption = { id: string; buildingId: string; floor: number; number: string; area: number };
 export type BookingStart = { projectId?: string; buildingId?: string; unitId?: string };
 
-type StepId = "project" | "building" | "unit" | "when" | "details";
+type StepId = "project" | "building" | "unit" | "prefs" | "when" | "details";
 type Field = "name" | "phone";
 type Errors = Partial<Record<Field, string>>;
 
 const SLOTS = buildSlots();
+/** The «not sure yet» answer to the first question: no project, and the visitor is advised at the consultation. */
+const UNDECIDED = "undecided";
+const PREFERENCES = ["Гарсоњера", "Еднособен", "Двособен", "Трособен"];
 const MESSAGES: Record<Field, string> = {
   name: "Внесете име и презиме.",
   phone: "Внесете телефонски број со најмалку 8 цифри.",
@@ -32,6 +35,7 @@ const TITLES: Record<StepId, string> = {
   project: "Каде барате?",
   building: "Која зграда?",
   unit: "Дали имате конкретен стан?",
+  prefs: "Што барате?",
   when: "Изберете ден и час",
   details: "Ваши податоци",
 };
@@ -115,6 +119,10 @@ export function ContactForm({
   // Without a list of apartments for the project the visitor types the number, and confirms it.
   const [unitText, setUnitText] = useState("");
   const [unitTextOk, setUnitTextOk] = useState(false);
+  const [undecided, setUndecided] = useState(false);
+  // What the undecided visitor is looking for (optional): the chosen kinds, and whether the step is answered or skipped.
+  const [prefs, setPrefs] = useState<string[]>([]);
+  const [prefsDone, setPrefsDone] = useState(false);
   const [dayIso, setDayIso] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
@@ -146,11 +154,14 @@ export function ContactForm({
       : "";
 
   // Which steps are answered, and so which are on screen: every step up to the first unanswered one.
-  const order: StepId[] = ["project", ...(needsBuilding ? (["building"] as const) : []), "unit", "when", "details"];
+  const order: StepId[] = undecided
+    ? ["project", "prefs", "when", "details"]
+    : ["project", ...(needsBuilding ? (["building"] as const) : []), "unit", "when", "details"];
   const answered: Record<StepId, boolean> = {
-    project: Boolean(project),
+    project: Boolean(project) || undecided,
     building: Boolean(building),
     unit: hasUnit === "no" || (hasUnit === "yes" && Boolean(unit || unitTextOk)),
+    prefs: prefsDone,
     when: Boolean(day && time),
     details: false,
   };
@@ -163,14 +174,16 @@ export function ContactForm({
   const openId: StepId = editing && visible.includes(editing) ? editing : firstOpen;
 
   const summaryOf = (id: StepId) => {
-    if (id === "project") return project?.name ?? "";
+    if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
+    if (id === "prefs") return prefs.length ? prefs.join(", ") : "Прескокнато";
     if (id === "building") return building?.name ?? "";
     if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
     if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
     return "";
   };
   const summary = [
-    project?.name,
+    undecided ? "Проект: не е избран" : project?.name,
+    undecided && prefs.length ? `Што бара: ${prefs.join(", ")}` : undefined,
     building?.name,
     hasUnit === "yes" ? unitLabel : undefined,
     day?.label,
@@ -187,12 +200,25 @@ export function ContactForm({
     setUnitTextOk(false);
   };
   const pickProject = (id: string) => {
-    if (id !== projectId) {
-      setProjectId(id);
+    const next = id === UNDECIDED;
+    if (next !== undecided || (!next && id !== projectId)) {
+      // a different answer: whatever hung on the old one goes
+      setUndecided(next);
+      setProjectId(next ? "" : id);
       setBuildingId("");
       setHasUnit("");
       clearUnit();
+      setPrefs([]);
+      setPrefsDone(false);
     }
+    setEditing(null);
+  };
+  const togglePref = (value: string) => {
+    setPrefs((list) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]));
+  };
+  const donePrefs = (skip: boolean) => {
+    if (skip) setPrefs([]);
+    setPrefsDone(true);
     setEditing(null);
   };
   const pickBuilding = (id: string) => {
@@ -248,7 +274,7 @@ export function ContactForm({
           else window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
         }
         step
-          .querySelector<HTMLElement>('[role="radio"][tabindex="0"], input, button.ct-go')
+          .querySelector<HTMLElement>('[role="radio"][tabindex="0"], input, button.ct-go, button.ct-tog')
           ?.focus({ preventScroll: true });
       },
       reduce ? 0 : 340
@@ -260,6 +286,9 @@ export function ContactForm({
 
   function reset() {
     setProjectId(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
+    setUndecided(false);
+    setPrefs([]);
+    setPrefsDone(false);
     setBuildingId(start?.buildingId ?? "");
     setHasUnit(startUnit ? "yes" : "");
     setFloor(startUnit ? String(startUnit.floor) : "");
@@ -308,14 +337,17 @@ export function ContactForm({
       return;
     }
     // every earlier step must be answered (they always are once this step is on screen)
-    if (!project || !day || !time || (needsBuilding && !building) || !answered.unit) return;
+    if (!day || !time) return;
+    if (undecided ? !prefsDone : !project || (needsBuilding && !building) || !answered.unit) return;
     const request: BookingRequest = {
-      project: project.name,
-      projectId: project.id,
-      building: building?.name,
-      buildingId: building?.id,
-      unit: hasUnit === "yes" ? unitLabel || undefined : undefined,
-      unitId: hasUnit === "yes" ? unit?.id : undefined,
+      project: undecided ? null : project!.name,
+      projectId: undecided ? null : project!.id,
+      undecided,
+      preferences: undecided ? prefs : [],
+      building: undecided ? undefined : building?.name,
+      buildingId: undecided ? undefined : building?.id,
+      unit: !undecided && hasUnit === "yes" ? unitLabel || undefined : undefined,
+      unitId: !undecided && hasUnit === "yes" ? unit?.id : undefined,
       date: day.iso,
       dateLabel: day.label,
       time,
@@ -347,7 +379,7 @@ export function ContactForm({
     ) : null;
 
   /** One step: a summary row when answered and closed, the question itself when open, nothing before its turn. */
-  const step = (id: StepId, body: ReactNode) => {
+  const step = (id: StepId, body: ReactNode, note?: ReactNode) => {
     const index = visible.indexOf(id);
     if (index < 0) return null;
     const number = String(index + 1).padStart(2, "0");
@@ -379,6 +411,11 @@ export function ContactForm({
             </button>
           </div>
         </Collapse>
+        {note !== undefined && (
+          <Collapse show={Boolean(note) && isFolded} reduce={reduce}>
+            <p className="ct-note">{note}</p>
+          </Collapse>
+        )}
       </div>
     );
   };
@@ -403,13 +440,57 @@ export function ContactForm({
             className="ct-chips"
             itemClassName="ct-chip"
             stagger
-            value={projectId}
+            value={undecided ? UNDECIDED : projectId}
             onChange={pickProject}
-            options={projects.map((p) => ({ value: p.id, label: p.name, content: p.name }))}
-          />
+            options={[
+              ...projects.map((p) => ({ value: p.id, label: p.name, content: p.name })),
+              {
+                value: UNDECIDED,
+                label: "Сè уште не знам – посоветувајте ме",
+                content: "Сè уште не знам – посоветувајте ме",
+                className: "is-secondary",
+              },
+            ]}
+          />,
+          undecided ? "Нема проблем – на консултацијата заедно ќе ги разгледаме сите проекти." : null
         )}
 
+        {undecided &&
+          step(
+            "prefs",
+            <>
+              <div role="group" aria-label={TITLES.prefs} data-group="prefs" data-stagger className="ct-chips">
+                {PREFERENCES.map((label, i) => (
+                  <button
+                    key={label}
+                    type="button"
+                    aria-pressed={prefs.includes(label)}
+                    className="ct-chip ct-tog"
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    onClick={() => togglePref(label)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className="ct-actions">
+                <button
+                  type="button"
+                  className="ct-chip ct-go"
+                  disabled={prefs.length === 0}
+                  onClick={() => donePrefs(false)}
+                >
+                  Продолжи
+                </button>
+                <button type="button" className="ct-edit ct-skip" onClick={() => donePrefs(true)}>
+                  Прескокни
+                </button>
+              </div>
+            </>
+          )}
+
         {needsBuilding &&
+          !undecided &&
           step(
             "building",
             <RadioGroup
@@ -424,99 +505,104 @@ export function ContactForm({
             />
           )}
 
-        {step(
-          "unit",
-          <>
-            <RadioGroup
-              groupId="has-unit"
-              label={TITLES.unit}
-              className="ct-chips"
-              itemClassName="ct-chip"
-              stagger
-              value={hasUnit}
-              onChange={(v) => pickHasUnit(v as "yes" | "no")}
-              options={[
-                { value: "yes", label: "Да", content: "Да" },
-                { value: "no", label: "Не", content: "Не" },
-              ]}
-            />
-            <Collapse show={hasUnit === "yes"} reduce={reduce}>
-              <div className="ct-sub">
-                {pool.length > 0 ? (
-                  <>
-                    <div className="ct-sub-label bk-label">Кат</div>
-                    <RadioGroup
-                      groupId="floor"
-                      label="Кат"
-                      className="ct-chips"
-                      itemClassName="ct-chip"
-                      stagger
-                      value={floor}
-                      onChange={pickFloor}
-                      options={floors.map((f) => ({ value: String(f), label: floorLabel(f), content: floorLabel(f) }))}
-                    />
-                    <Collapse show={floorUnits.length > 0} reduce={reduce}>
-                      <div className="ct-sub-label bk-label">Стан</div>
+        {!undecided &&
+          step(
+            "unit",
+            <>
+              <RadioGroup
+                groupId="has-unit"
+                label={TITLES.unit}
+                className="ct-chips"
+                itemClassName="ct-chip"
+                stagger
+                value={hasUnit}
+                onChange={(v) => pickHasUnit(v as "yes" | "no")}
+                options={[
+                  { value: "yes", label: "Да", content: "Да" },
+                  { value: "no", label: "Не", content: "Не" },
+                ]}
+              />
+              <Collapse show={hasUnit === "yes"} reduce={reduce}>
+                <div className="ct-sub">
+                  {pool.length > 0 ? (
+                    <>
+                      <div className="ct-sub-label bk-label">Кат</div>
                       <RadioGroup
-                        groupId="unit"
-                        label="Стан"
+                        groupId="floor"
+                        label="Кат"
                         className="ct-chips"
-                        itemClassName="ct-chip is-mono"
+                        itemClassName="ct-chip"
                         stagger
-                        value={unitId}
-                        onChange={pickUnit}
-                        options={floorUnits.map((u) => ({
-                          value: u.id,
-                          label: `Стан ${u.number}, ${formatArea(u.area)}`,
-                          content: u.number,
+                        value={floor}
+                        onChange={pickFloor}
+                        options={floors.map((f) => ({
+                          value: String(f),
+                          label: floorLabel(f),
+                          content: floorLabel(f),
                         }))}
                       />
-                    </Collapse>
-                  </>
-                ) : (
-                  <div className="ct-unit-text">
-                    <div className="ct-field">
-                      <label htmlFor="ct-unit-text" className="bk-label">
-                        Број на стан
-                      </label>
-                      <div className="ct-input">
-                        <input
-                          id="ct-unit-text"
-                          type="text"
-                          inputMode="text"
-                          autoComplete="off"
-                          value={unitText}
-                          onChange={(e) => {
-                            setUnitText(e.target.value);
-                            setUnitTextOk(false);
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && unitText.trim()) {
-                              e.preventDefault();
-                              setUnitTextOk(true);
-                              setEditing(null);
-                            }
-                          }}
+                      <Collapse show={floorUnits.length > 0} reduce={reduce}>
+                        <div className="ct-sub-label bk-label">Стан</div>
+                        <RadioGroup
+                          groupId="unit"
+                          label="Стан"
+                          className="ct-chips"
+                          itemClassName="ct-chip is-mono"
+                          stagger
+                          value={unitId}
+                          onChange={pickUnit}
+                          options={floorUnits.map((u) => ({
+                            value: u.id,
+                            label: `Стан ${u.number}, ${formatArea(u.area)}`,
+                            content: u.number,
+                          }))}
                         />
+                      </Collapse>
+                    </>
+                  ) : (
+                    <div className="ct-unit-text">
+                      <div className="ct-field">
+                        <label htmlFor="ct-unit-text" className="bk-label">
+                          Број на стан
+                        </label>
+                        <div className="ct-input">
+                          <input
+                            id="ct-unit-text"
+                            type="text"
+                            inputMode="text"
+                            autoComplete="off"
+                            value={unitText}
+                            onChange={(e) => {
+                              setUnitText(e.target.value);
+                              setUnitTextOk(false);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && unitText.trim()) {
+                                e.preventDefault();
+                                setUnitTextOk(true);
+                                setEditing(null);
+                              }
+                            }}
+                          />
+                        </div>
                       </div>
+                      <button
+                        type="button"
+                        className="ct-chip ct-go"
+                        disabled={!unitText.trim()}
+                        onClick={() => {
+                          setUnitTextOk(true);
+                          setEditing(null);
+                        }}
+                      >
+                        Продолжи
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      className="ct-chip ct-go"
-                      disabled={!unitText.trim()}
-                      onClick={() => {
-                        setUnitTextOk(true);
-                        setEditing(null);
-                      }}
-                    >
-                      Продолжи
-                    </button>
-                  </div>
-                )}
-              </div>
-            </Collapse>
-          </>
-        )}
+                  )}
+                </div>
+              </Collapse>
+            </>
+          )}
 
         {step(
           "when",

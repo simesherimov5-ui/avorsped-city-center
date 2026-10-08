@@ -222,12 +222,38 @@
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
-.ct-chip[aria-checked="true"] {
+.ct-chip[aria-checked="true"],
+.ct-chip[aria-pressed="true"] {
   border-color: var(--color-gold);
   background: var(--color-gold);
   color: var(--black);
   font-weight: 500;
   animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* «Сè уште не знам»: the same size as the projects, with a quieter border; on its own row on phones. */
+.ct-chip.is-secondary {
+  border-color: var(--gold-line);
+}
+.ct-chip.is-secondary:hover,
+.ct-chip.is-secondary[aria-checked="true"] {
+  border-color: var(--color-gold);
+}
+.ct-note {
+  margin: 0;
+  padding: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mute);
+}
+.ct-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-top: 20px;
+}
+.ct-skip {
+  margin: 0;
 }
 .ct-chip.is-mono {
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -400,6 +426,11 @@
   }
   .ct-day small {
     letter-spacing: 0.08em;
+  }
+  .ct-chip.is-secondary {
+    flex: 1 1 100%;
+    height: auto;
+    padding-block: 10px;
   }
   .ct-chip.is-mono {
     font-size: 12.5px;

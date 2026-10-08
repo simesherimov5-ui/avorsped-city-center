@@ -3,7 +3,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-export type RadioOption = { value: string; content: ReactNode; label: string };
+export type RadioOption = { value: string; content: ReactNode; label: string; className?: string };
 
 /**
  * A real radio group: one choice at a time, Tab moves into and out of the group (to the chosen option, or the
@@ -69,7 +69,7 @@ export function RadioGroup({
           aria-checked={i === chosen}
           aria-label={option.label}
           tabIndex={i === tabStop ? 0 : -1}
-          className={cn(itemClassName)}
+          className={cn(itemClassName, option.className)}
           style={stagger ? { animationDelay: `${i * 40}ms` } : undefined}
           onClick={() => onChange(option.value)}
           onKeyDown={(e) => onKeyDown(e, i)}
