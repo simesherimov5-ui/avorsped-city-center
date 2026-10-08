@@ -457,8 +457,8 @@ export function ContactForm({
               ...projects.map((p) => ({ value: p.id, label: p.name, content: p.name })),
               {
                 value: UNDECIDED,
-                label: "Сè уште не знам – посоветувајте ме",
-                content: "Сè уште не знам – посоветувајте ме",
+                label: "Сè уште не знам",
+                content: "Сè уште не знам",
                 className: "is-secondary",
               },
             ]}
