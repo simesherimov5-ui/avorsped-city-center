@@ -9,7 +9,7 @@ import { join } from "node:path";
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_TYPE = "image/png";
 
-const TRAVERTINE_RGB = "244, 239, 231";
+const TRAVERTINE_RGB = "242, 233, 218";
 const ONYX_RGB = "20, 17, 15";
 const COPPER_RGB = "188, 150, 118";
 const PAPER = `rgb(${TRAVERTINE_RGB})`;
