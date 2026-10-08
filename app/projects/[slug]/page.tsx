@@ -12,7 +12,7 @@ import { ProjectHeader } from "@/components/project/ProjectHeader";
 import { ProjectCta } from "@/components/project/ProjectCta";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
-import { showsConstructionProgress } from "@/components/construction/phases";
+import { FloorPickerSection } from "@/components/floor-picker/FloorPickerSection";
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
@@ -123,13 +123,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         )
       )}
 
-      {showsConstructionProgress(project) && (
-        <section className="border-t border-line">
-          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
-            <ConstructionProgress project={project} />
-          </div>
-        </section>
-      )}
+      {project.floors && <FloorPickerSection floors={project.floors.map((floor) => ({ ...floor, apartments: [] }))} />}
+
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
+          <ConstructionProgress project={project} always />
+        </div>
+      </section>
 
       <ProjectCta projectId={project.id} />
 

@@ -186,6 +186,8 @@ export interface Project {
   distanceHighlights?: string[];
   /** Optional dedicated deep-dive page for this project (e.g. a multi-building explorer). Falls back to the generic /projects/[slug] page. */
   href?: string;
+  /** The floors of a single-building project, bottom to top; their apartments are added once the details arrive. */
+  floors?: { number: number; label: string }[];
   apartmentTypes?: {
     label: string;
     area: string;

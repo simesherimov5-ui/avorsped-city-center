@@ -31,10 +31,14 @@ const DENSE_FROM = 7;
  * Up and Down move the choice. It starts on the lowest floor that has a free apartment. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  */
-export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath: string }) {
+export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
-  const start = lowestFirst.find((f) => f.apartments.some((a) => a.status === "available")) ?? lowestFirst[0];
+  // A floor with no apartments listed yet (the details are not here yet) is shown, but its panel stays empty.
+  const start =
+    lowestFirst.find((f) => f.apartments.some((a) => a.status === "available")) ??
+    lowestFirst.find((f) => f.apartments.length > 0) ??
+    lowestFirst[0];
 
   const [selected, setSelected] = useState(start?.number);
   const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -107,12 +111,22 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
             </li>
           ))}
         </ul>
-        <ZoomNavLink href={`${basePath}/${current.number}`} label={current.label} className="fp-floorlink">
-          Изберете го вашиот стан
-          <svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" strokeWidth="1" aria-hidden>
-            <path d="M0 5h17M13 1l4 4-4 4" />
-          </svg>
-        </ZoomNavLink>
+        {basePath && current.apartments.length > 0 && (
+          <ZoomNavLink href={`${basePath}/${current.number}`} label={current.label} className="fp-floorlink">
+            Изберете го вашиот стан
+            <svg
+              width="18"
+              height="10"
+              viewBox="0 0 18 10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              aria-hidden
+            >
+              <path d="M0 5h17M13 1l4 4-4 4" />
+            </svg>
+          </ZoomNavLink>
+        )}
       </div>
     </div>
   );

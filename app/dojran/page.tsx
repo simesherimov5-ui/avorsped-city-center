@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { ProjectHeader } from "@/components/project/ProjectHeader";
-import { FloorList } from "@/components/FloorList";
+import { FloorPickerSection } from "@/components/floor-picker/FloorPickerSection";
+import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { DojranFacade } from "@/components/DojranFacade";
 import { OtherProjects } from "@/components/OtherProjects";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
@@ -28,7 +28,7 @@ export default function DojranPage() {
           <DojranFacade image={project.heroImage} />
         </div>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-2">
+        <div className="mt-12">
           <ProjectHeader
             eyebrow={project.location}
             name={project.name}
@@ -39,21 +39,14 @@ export default function DojranPage() {
               Закажи консултација
             </Button>
           </ProjectHeader>
+        </div>
+      </section>
 
-          <div>
-            <SectionHeading
-              eyebrow="Една зграда"
-              title="Изберете кат"
-              size="compact"
-              description="Кликнете на кат — на сликата погоре или во листата — за да ги видите достапните станови на тој кат."
-            />
-            <div className="mt-6">
-              <FloorList
-                basePath="/dojran"
-                floors={dojranFloors.map((f) => ({ number: f.number, label: f.label, meta: f.unitsHint }))}
-              />
-            </div>
-          </div>
+      <FloorPickerSection floors={dojranFloors.map((f) => ({ number: f.number, label: f.label, apartments: [] }))} />
+
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 lg:px-10">
+          <ConstructionProgress project={project} always />
         </div>
       </section>
 

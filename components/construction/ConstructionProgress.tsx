@@ -28,6 +28,8 @@ type Props = {
   project: Pick<Project, "status" | "construction">;
   /** "full" is the section on a project's page; "compact" is the single thin bar on its card. */
   variant?: "full" | "compact";
+  /** The section on a project's page for every project: without progress data it shows the five phases and nothing claimed. */
+  always?: boolean;
   className?: string;
 };
 
@@ -36,8 +38,10 @@ type Props = {
  * (and that have progress data), so a finished or upcoming project never gets one, and any future project
  * with that status gets it automatically.
  */
-export function ConstructionProgress({ project, variant = "full", className }: Props) {
+export function ConstructionProgress({ project, variant = "full", always = false, className }: Props) {
   const data = project.construction;
+  if (variant === "full" && always)
+    return <Full data={showsConstructionProgress(project) && data ? data : null} className={className} />;
   if (!showsConstructionProgress(project) || !data) return null;
   return variant === "compact" ? (
     <Compact data={data} className={className} />
@@ -70,10 +74,11 @@ function Compact({ data, className }: { data: ConstructionProgressData; classNam
   );
 }
 
-function Full({ data, className }: { data: ConstructionProgressData; className?: string }) {
+function Full({ data, className }: { data: ConstructionProgressData | null; className?: string }) {
   const list = useRef<HTMLOListElement>(null);
-  const current = phaseIndex(data);
-  const percent = clampPercent(data.percent);
+  // Without progress data no phase is marked: every dot is empty and nothing is claimed.
+  const current = data ? phaseIndex(data) : -1;
+  const percent = data ? clampPercent(data.percent) : 0;
 
   // The gold line fills phase by phase, 1.6s in total, when the list scrolls into view.
   useGSAP(
@@ -105,8 +110,9 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
           const state = i < current ? "done" : i === current ? "current" : "upcoming";
           const last = i === CONSTRUCTION_PHASES.length - 1;
           const frac = state === "done" ? 1 : state === "current" ? percent / 100 : 0;
-          const sub =
-            state === "done"
+          const sub = !data
+            ? null
+            : state === "done"
               ? "завршено"
               : state === "current"
                 ? `во тек · ${percent}%`
@@ -142,15 +148,17 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
                 </span>
               )}
               <div className="text-[15px] text-ink">{phase.label}</div>
-              <small className="mono-stat mt-1.5 block text-[12px] text-gold-deep" style={{ letterSpacing: 0 }}>
-                {sub}
-              </small>
+              {sub && (
+                <small className="mono-stat mt-1.5 block text-[12px] text-gold-deep" style={{ letterSpacing: 0 }}>
+                  {sub}
+                </small>
+              )}
             </li>
           );
         })}
       </ol>
 
-      {data.updated && <p className="mt-8 text-sm text-muted">Ажурирано: {formatUpdated(data.updated)}</p>}
+      {data?.updated && <p className="mt-8 text-sm text-muted">Ажурирано: {formatUpdated(data.updated)}</p>}
     </section>
   );
 }

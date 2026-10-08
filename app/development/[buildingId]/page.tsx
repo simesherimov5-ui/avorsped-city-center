@@ -89,7 +89,9 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
               floors={building.floors.map((floor) => ({
                 number: floor.number,
                 label: floor.label,
-                apartments: units
+                // Only a floor with real architectural details lists its apartments; the others stay empty until
+                // those details arrive.
+                apartments: (floor.officialOverviewImage ? units : [])
                   .filter((a) => a.floor === floor.number)
                   .map((a) => ({
                     id: a.id,

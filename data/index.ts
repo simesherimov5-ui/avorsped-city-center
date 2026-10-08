@@ -130,6 +130,12 @@ export const projects: Project[] = [
         { number: 9, top: "95.1%", left: "12.4%" },
       ],
     },
+    floors: [
+      { number: 0, label: "Приземје" },
+      { number: 1, label: "Кат 1" },
+      { number: 2, label: "Кат 2" },
+      { number: 3, label: "Кат 3" },
+    ],
     apartmentTypes: [
       {
         label: "Четирисобен — Стан 1 / Приземје",

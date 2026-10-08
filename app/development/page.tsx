@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
-import { showsConstructionProgress } from "@/components/construction/phases";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
@@ -168,10 +167,10 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Construction progress */}
-      {cityCenter && showsConstructionProgress(cityCenter) && (
+      {cityCenter && (
         <section className="bg-cream py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
-            <ConstructionProgress project={cityCenter} />
+            <ConstructionProgress project={cityCenter} always />
           </div>
         </section>
       )}
