@@ -25,7 +25,7 @@
   /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
   --color-brass: #c4a454;
   /* The filling button on dark surfaces (set by the owner, to try). */
-  --color-button: #baab02;
+  --color-button: #fcb16a;
 
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */

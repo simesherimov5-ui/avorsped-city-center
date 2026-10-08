@@ -101,7 +101,7 @@ export function ProjectSlideshow({
       onPointerCancel={() => (swipeStart.current = null)}
       onFocus={(e) => setFocused(e.target.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
-      className="focus-ring relative h-[clamp(400px,60dvh,520px)] w-full touch-pan-y overflow-hidden bg-ink md:h-[clamp(380px,28vw,560px)]"
+      className="focus-ring relative h-[clamp(400px,60dvh,520px)] w-full touch-pan-y overflow-hidden bg-ink md:h-[clamp(480px,72dvh,780px)]"
     >
       <AnimatePresence initial={false}>
         <motion.div
