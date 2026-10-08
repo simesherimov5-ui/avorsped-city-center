@@ -4,9 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Media } from "@/components/ui/Media";
-import { CountUp } from "@/components/ui/CountUp";
 import { useIntro } from "@/components/intro/IntroProvider";
-import { companyStats } from "@/data";
 import { gsap, SplitText } from "@/lib/gsap";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 
@@ -17,9 +15,6 @@ const HERO_IMAGE = {
   alt: "Јавор Шпед — архитектонска визуелизација",
   isPlaceholder: false,
 };
-
-// The strip's numbers read first: the accent colour, Montserrat 500 with tabular numbers, 16px.
-const STAT_NUMBER = { fontWeight: 500, fontSize: "16px", letterSpacing: "0.02em" } as const;
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
@@ -41,7 +36,6 @@ export function Hero() {
   const revealedAtMount = useRef(revealing);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const invitationRef = useRef<HTMLDivElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
@@ -49,19 +43,18 @@ export function Hero() {
     () => {
       const eyebrow = eyebrowRef.current;
       const headline = headlineRef.current;
-      const invitation = invitationRef.current;
       const stats = statsBarRef.current;
       const scrollCue = scrollIndicatorRef.current;
-      if (!eyebrow || !headline || !invitation || !stats || !scrollCue) return;
+      if (!eyebrow || !headline || !stats || !scrollCue) return;
 
       if (!revealing) {
-        gsap.set([eyebrow, headline, invitation, stats, scrollCue], { opacity: 0 });
-        gsap.set([eyebrow, invitation, stats, scrollCue], { y: 14 });
+        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 0 });
+        gsap.set([eyebrow, stats, scrollCue], { y: 14 });
         return;
       }
 
       if (instant || revealedAtMount.current) {
-        gsap.set([eyebrow, headline, invitation, stats, scrollCue], { opacity: 1, y: 0 });
+        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 1, y: 0 });
         return;
       }
 
@@ -72,7 +65,6 @@ export function Hero() {
       const tl = gsap.timeline();
       tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1)
         .to(split.lines, { yPercent: 0, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.3)
-        .to(invitation, { opacity: 1, y: 0, duration: 0.7 }, 1.0)
         .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1)
         .to(scrollCue, { opacity: 1, y: 0, duration: 0.7 }, 1.3);
 
@@ -166,44 +158,18 @@ export function Hero() {
       {/* Spacer that keeps the stats strip pinned to the bottom of the hero. */}
       <div className="flex-1" />
 
-      {/* The signature and the sentence that asks the visitor to look further, just above the strip. */}
-      <div
-        ref={invitationRef}
-        className="relative px-6 pb-8 text-center"
-        style={{ textShadow: "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent)" }}
-      >
-        <div className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
-          — Javor Sped Holding
-        </div>
-        <p className="mx-auto mt-2 max-w-md text-[14px] font-light leading-[1.65] text-paper sm:text-[15px]">
-          Секоја адреса има своја приказна. Откријте ја вашата.
-        </p>
-      </div>
-
-      {/* Company footprint — real, portfolio-wide numbers, not one project's. */}
+      {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-5 py-4 text-center text-[12px] font-medium uppercase tracking-[0.24em] text-paper sm:flex-row sm:justify-between sm:px-10 sm:text-left sm:text-[13px]">
-          <span>Струмица, Северна Македонија</span>
-          <span className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 sm:flex-nowrap sm:justify-end sm:gap-5">
-            <span>
-              <span className="mono-stat text-gold" style={STAT_NUMBER}>
-                {instant ? companyStats[0].value : revealing ? <CountUp value={companyStats[0].value} /> : null}
-              </span>{" "}
-              {companyStats[0].label}
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
+          <span className="text-[12px] font-medium uppercase tracking-[0.24em] text-paper sm:text-[13px]">
+            Струмица, Северна Македонија
+          </span>
+          <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
+              — Javor Sped Holding
             </span>
-            <span className="h-3 w-px bg-gold/60 max-sm:hidden" aria-hidden />
-            <span>
-              <span className="mono-stat text-gold" style={STAT_NUMBER}>
-                {instant ? companyStats[1].value : revealing ? <CountUp value={companyStats[1].value} /> : null}
-              </span>{" "}
-              {companyStats[1].label}
-            </span>
-            <span className="h-3 w-px bg-gold/60 max-sm:hidden" aria-hidden />
-            <span>
-              <span className="mono-stat text-gold" style={STAT_NUMBER}>
-                {instant ? companyStats[2].value : revealing ? <CountUp value={companyStats[2].value} /> : null}
-              </span>{" "}
-              {companyStats[2].label}
+            <span className="text-[14px] font-light leading-[1.5] text-paper sm:text-[15px]">
+              Секоја адреса има своја приказна. Откријте ја вашата.
             </span>
           </span>
         </div>
