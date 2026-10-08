@@ -50,7 +50,7 @@
 [data-theme="black"] .bk-serif em,
 [data-theme="black"] .bk-gold-i {
   color: var(--color-gold);
-  font-style: italic;
+  font-style: normal;
 }
 [data-theme="black"] .bk-mono {
   font-family: var(--font-sans), system-ui, sans-serif;

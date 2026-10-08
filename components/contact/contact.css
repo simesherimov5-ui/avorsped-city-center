@@ -32,14 +32,14 @@
 }
 .ct-h1 {
   margin: 16px 0 12px;
-  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  font-size: clamp(1.625rem, 7vw, 2.25rem);
   line-height: 1.04;
   letter-spacing: -0.015em;
 }
 /* The heading scale from 768px up: H1 40–68px; phones keep the size above. */
 @media (min-width: 768px) {
   .ct-h1 {
-    font-size: clamp(40px, 4.6vw, 68px);
+    font-size: clamp(36px, 3.6vw, 54px);
   }
 }
 .ct-lead {
