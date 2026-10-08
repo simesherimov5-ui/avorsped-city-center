@@ -157,10 +157,9 @@ export function Hero() {
             roofline, so its size is capped to keep both lines inside it. */}
         <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-4xl text-[clamp(1.75rem,3vw,2.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
+          className="mx-auto mt-3 max-w-4xl whitespace-nowrap text-[clamp(1.2rem,5.4vw,2.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
         >
-          Добредојдовте во вашиот <br />
-          <em className="font-normal italic text-gold">нов дом</em>
+          Добредојдовте во вашиот <span className="text-gold">нов дом</span>
         </h1>
       </div>
 

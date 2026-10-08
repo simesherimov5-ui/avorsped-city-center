@@ -20,6 +20,8 @@
   --color-espresso: #221c17;
   --color-travertine: #f2e9da;
   --color-limestone: #e5d8c3;
+  /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
+  --color-sand: #e0cab6;
   --color-bronze: #6d533e;
   --color-copper: #bc9676;
   /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
@@ -51,9 +53,9 @@
    * accent/accent-soft class names) renders the new palette without a mechanical rename of every file.
    * cream is the light page (Травертин); warm-white and silver are the surfaces on light (Варовник).
    */
-  --color-cream: var(--color-travertine);
-  --color-warm-white: var(--color-limestone);
-  --color-silver: var(--color-limestone);
+  --color-cream: var(--color-sand);
+  --color-warm-white: var(--color-sand);
+  --color-silver: var(--color-sand);
   --color-concrete: color-mix(in srgb, var(--color-onyx) 14%, transparent);
   --color-charcoal: var(--color-onyx);
   --color-accent: var(--color-copper);
@@ -75,6 +77,7 @@
   --color-onyx: var(--color-onyx);
   --color-espresso: var(--color-espresso);
   --color-travertine: var(--color-travertine);
+  --color-sand: var(--color-sand);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
@@ -123,7 +126,7 @@ html {
 }
 
 body {
-  background: var(--color-paper);
+  background: var(--color-sand);
   color: var(--color-ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 300; /* body text is Montserrat 300 at 16–18px; anything smaller is 400 or heavier (see the base layer below) */

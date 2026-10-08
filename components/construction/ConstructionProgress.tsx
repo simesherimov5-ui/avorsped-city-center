@@ -124,8 +124,8 @@ function Full({ data, className }: { data: ConstructionProgressData; className?:
                 className={cn(
                   "absolute left-0 top-[3px] h-[11px] w-[11px] rounded-full md:top-[4px]",
                   state === "done" && "border border-gold-deep bg-gold-deep",
-                  state === "current" && "border-2 border-gold-deep bg-paper outline outline-4 outline-gold-deep/25",
-                  state === "upcoming" && "border border-ink/40 bg-paper"
+                  state === "current" && "border-2 border-gold-deep bg-cream outline outline-4 outline-gold-deep/25",
+                  state === "upcoming" && "border border-ink/40 bg-cream"
                 )}
               />
               {/* The line from this phase's dot to the next: vertical on phones, horizontal from md up. */}

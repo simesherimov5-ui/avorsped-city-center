@@ -12,7 +12,7 @@ import { unitsText } from "@/lib/plural";
 // Never color-code project phase — "completed" is distinguished by shape
 // (a bordered pill) rather than a hue that would break the 3-color palette.
 const STATUS_STYLE: Record<Project["status"], string> = {
-  completed: "border border-gold bg-paper text-ink",
+  completed: "border border-gold bg-cream text-ink",
   "under-construction": "bg-accent text-chrome",
   upcoming: "bg-chrome text-on-chrome",
 };
