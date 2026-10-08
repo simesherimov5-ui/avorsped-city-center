@@ -167,7 +167,8 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname]);
-  const hidden = hideState.hidden && hideState.path === pathname && !open;
+  // On the projects page the navbar stays in view: its filter bar sticks right under it.
+  const hidden = hideState.hidden && hideState.path === pathname && !open && pathname !== "/projects";
 
   // Overlay the hero when we're at the top of the homepage; everywhere else
   // (and once scrolled past the hero, or with the mobile menu open) the bar

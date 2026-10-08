@@ -359,7 +359,7 @@ function GridCard({ project, delay }: { project: Project; delay?: number }) {
               fit={project.imageFit ?? "cover"}
               focus={project.imageFocus}
               className="h-full w-full !bg-transparent"
-              sizes="(max-width: 767px) 100vw, 420px"
+              sizes="(max-width: 767px) 100vw, (max-width: 1100px) 50vw, 300px"
               defer
             />
           </div>
