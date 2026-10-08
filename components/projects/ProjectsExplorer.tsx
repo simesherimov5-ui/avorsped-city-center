@@ -62,9 +62,12 @@ function Explorer({
     { value: "done", label: "Завршени" },
     ...(hasSoon ? [{ value: "soon" as const, label: "Наскоро" }] : []),
   ];
-  const cities = citiesWithCounts(projects);
+  // The cities (in the list and on the map) and their counts follow the chosen status: only places that have a project
+  // in that status are offered, each with the number of those projects.
+  const inStatus = filterProjects(projects, status, "all");
+  const cities = citiesWithCounts(inStatus);
   const options = [
-    { city: "all", label: "Сите градови", count: projects.length },
+    { city: "all", label: "Сите градови", count: inStatus.length },
     ...cities.map((c) => ({ ...c, label: c.city })),
   ];
 
@@ -81,7 +84,9 @@ function Explorer({
 
   const choose = (next: { status?: StatusFilter; city?: CityFilter; view?: View }) => {
     const s = next.status ?? status;
-    const c = next.city ?? city;
+    let c = next.city ?? city;
+    // a city with no project in the newly chosen status would leave the page empty: go back to all cities
+    if (next.status && c !== "all" && !filterProjects(projects, s, "all").some((p) => p.city === c)) c = "all";
     const v = next.view ?? view;
     setStatus(s);
     setCity(c);
