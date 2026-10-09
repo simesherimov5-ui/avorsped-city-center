@@ -82,7 +82,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         className="focus-ring flex min-h-12 items-center justify-center gap-2 border-t border-line pt-5 text-base text-muted transition-colors hover:text-charcoal sm:text-sm"
       >
         <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
-        Или нè јавете: {companyInfo.phone}
+        Или јавете ни се: {companyInfo.phone}
       </a>
     </aside>
   );
