@@ -72,7 +72,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
                 sizes={
                   project.imageFit === "contain"
-                    ? "(max-width: 896px) 55vw, 490px"
+                    ? "(max-width: 896px) 100vw, 896px"
                     : completed
                       ? "(max-width: 896px) 100vw, 896px"
                       : undefined

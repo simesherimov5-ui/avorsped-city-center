@@ -15,7 +15,7 @@ const FADE_S = 1.2;
 // A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
 // as wide as its frame is tall.
 const slideSizes = (project: Project) =>
-  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 400px" : "(max-width: 767px) 160vw, 100vw";
+  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 640px" : "(max-width: 767px) 160vw, 100vw";
 const SWIPE_PX = 50;
 
 const subscribeVisibility = (onChange: () => void) => {

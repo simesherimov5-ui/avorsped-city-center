@@ -45,7 +45,7 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
                 // the button is named by its label, so the picture inside needs no second description
                 image={{ ...room.image, alt: "" }}
                 className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, 240px"
+                sizes="(max-width: 640px) 100vw, 256px"
               />
               <div className="absolute inset-0 bg-chrome/25 transition-colors duration-300 group-hover:bg-chrome/40" />
               <div className="absolute inset-0 flex items-center justify-center">

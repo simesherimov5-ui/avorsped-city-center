@@ -364,7 +364,8 @@ function GridCard({ project, delay }: { project: Project; delay?: number }) {
               fit={project.imageFit ?? "cover"}
               focus={project.imageFocus}
               className="h-full w-full !bg-transparent"
-              sizes="(max-width: 767px) 100vw, (max-width: 1100px) 50vw, 300px"
+              // the photo is drawn wider than its card (the crop of a wide photo, and the project's own zoom)
+              sizes="(max-width: 767px) 160vw, (max-width: 1100px) 100vw, 620px"
               defer
             />
           </div>
