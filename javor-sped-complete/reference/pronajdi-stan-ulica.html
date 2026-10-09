@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пронајди стан · Javor Sped</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+/* Layout: the site's rhythm — Оникс hero that holds "the street" (the buildings, windows lit where a flat is free),
+   a cream body with the filter bar and the flats, a dark closing band; the flat opens like the site's curtain. */
+:root{
+  --onyx:#14110F; --espresso:#221C17; --trav:#F4EFE7; --lime:#E6DCCD; --bronze:#6D533E; --gold:#DDB28E;
+  --gold-72:rgba(221,178,142,.72); --gold-line:rgba(221,178,142,.22); --ink-68:rgba(20,17,15,.68); --ink-line:rgba(20,17,15,.12);
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif; --sans:'Montserrat',system-ui,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1); --u:clamp(7px,calc((90vw - 96px)/82),14px); --label-h:64px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--trav);color:var(--onyx);font:400 16px/1.7 var(--sans)}
+button,select{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.on-light :focus-visible{outline-color:var(--bronze)}
+.wrap{max-width:1240px;margin:0 auto}
+.gut{padding-inline:max(5%,16px)}
+.eyebrow{font:600 11px/1.3 var(--sans);letter-spacing:.3em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:400}
+.num{font-variant-numeric:tabular-nums}
+
+/* ───────── navbar (the site's own; here only for context) ───────── */
+.nav{background:var(--onyx);color:var(--gold);border-bottom:1px solid var(--gold-line)}
+.nav-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 32px;padding-block:20px}
+.nav-links{display:flex;flex-wrap:wrap;gap:0 34px;font:500 13px/1 var(--sans);letter-spacing:.14em}
+.nav-links a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;border-bottom:1px solid transparent}
+.nav-links a[aria-current]{border-bottom-color:var(--gold)}
+
+/* ───────── buttons: the site's raised button, gold text ───────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:52px;padding:0 26px;border:0;border-radius:2px;
+  font:600 13px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--gold);
+  background:rgba(244,239,231,.07);
+  box-shadow:inset 0 1px 0 rgba(221,178,142,.34),inset 0 0 0 1px rgba(244,239,231,.04),0 1px 0 rgba(0,0,0,.55),0 14px 26px -16px rgba(0,0,0,.75);
+  transition:background .5s var(--ease),box-shadow .5s var(--ease),transform .5s var(--ease)}
+.btn:hover,.btn:focus-visible{background:rgba(244,239,231,.115);transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(221,178,142,.6),inset 0 0 0 1px rgba(244,239,231,.06),0 1px 0 rgba(0,0,0,.55),0 20px 30px -16px rgba(0,0,0,.85)}
+.btn:active{transform:translateY(1px);transition-duration:.1s}
+.btn .circ{width:30px;height:30px;border:1px solid rgba(221,178,142,.4);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:transform .7s var(--ease),border-color .5s}
+.btn:hover .circ{transform:translateX(6px) rotate(-45deg);border-color:rgba(221,178,142,.8)}
+.btn--sm{min-height:44px;padding:0 20px;font-size:12px}
+.btn--onlight{background:var(--onyx);box-shadow:inset 0 1px 0 rgba(221,178,142,.3),0 14px 26px -16px rgba(20,17,15,.6)}
+.btn--onlight:hover,.btn--onlight:focus-visible{background:var(--espresso);box-shadow:inset 0 1px 0 rgba(221,178,142,.6),0 20px 30px -16px rgba(20,17,15,.7)}
+.btn--line{background:none;box-shadow:inset 0 0 0 1px rgba(221,178,142,.45)}
+.btn--line:hover,.btn--line:focus-visible{background:rgba(221,178,142,.1);box-shadow:inset 0 0 0 1px var(--gold)}
+.textlink{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0;border:0;background:none;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;text-decoration:none}
+.textlink span{transition:transform .7s var(--ease)}
+.textlink:hover span{transform:translateX(6px)}
+
+/* ───────── hero: the street ───────── */
+.hero{position:relative;background:var(--onyx);color:var(--gold);overflow:hidden}
+.hero-in{padding-block:64px 44px}
+.hero-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:28px 64px}
+.sheen{display:inline-block;background:linear-gradient(110deg,var(--bronze) 0%,var(--gold) 38%,var(--trav) 50%,var(--gold) 62%,var(--bronze) 100%);background-size:260% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 4.5s ease-in-out infinite}
+@keyframes sheen{0%{background-position:100% 0}60%,100%{background-position:0 0}}
+h1{margin:20px 0 0;font:400 clamp(32px,3.9vw,56px)/1.1 var(--serif);letter-spacing:-.012em;text-wrap:balance}
+.hero-sub{margin:14px 0 0;max-width:520px;font:italic 400 clamp(18px,1.7vw,23px)/1.4 var(--serif);color:var(--gold)}
+.tally{display:flex;align-items:flex-end;gap:18px;text-align:left}
+.tally b{font:400 clamp(56px,6vw,88px)/.9 var(--serif)}
+.tally span{display:flex;flex-direction:column;gap:6px;padding-bottom:6px;font:500 13px/1.4 var(--sans)}
+.tally small{font:400 13px/1.4 var(--sans);color:var(--gold-72)}
+
+.street-scroll{margin-top:44px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--gold-line) transparent}
+.street{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:calc(var(--u)*5);min-width:max-content;padding:0 calc(var(--u)*5.4 + 14px) 0 calc(var(--u)*1.5)}
+.ground{position:absolute;left:0;right:0;bottom:var(--label-h);height:1px;background:var(--gold);transform-origin:left}
+.grp{display:flex;flex-direction:column;gap:22px}
+.grp-h{display:flex;align-items:center;gap:16px;color:var(--gold-72)}
+.grp-h::after{content:"";flex:1;height:1px;background:var(--gold-line)}
+.grp-row{display:flex;align-items:flex-end;gap:calc(var(--u)*3)}
+.bld{position:relative;display:flex;flex-direction:column;align-items:center;padding:0;border:0;background:none;color:var(--gold)}
+.bld-label{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;height:var(--label-h);padding-top:14px;white-space:nowrap}
+.bld-label b{font:400 clamp(13px,calc(var(--u)*1.3),18px)/1.2 var(--serif);border-bottom:1px solid transparent;transition:border-color .5s}
+.bld-label small{font:400 clamp(11px,calc(var(--u)*.86),12px)/1.4 var(--sans);color:var(--gold-72)}
+.bld.is-sel .bld-label b{border-bottom-color:var(--gold)}
+
+.tw{display:flex;flex-direction:column;align-items:center;transition:opacity .6s var(--ease)}
+.tw .cap{width:44%;height:calc(var(--u)*.75);border:1px solid var(--gold-72);border-bottom:0}
+.tw .body{display:flex;flex-direction:column;gap:calc(var(--u)*.6);padding:calc(var(--u)*.75) calc(var(--u)*.85);border:1px solid var(--gold-72);border-bottom:0;transition:border-color .5s,background .5s}
+.tw .fl{display:flex;justify-content:center;gap:calc(var(--u)*.5)}
+.win{display:block;width:var(--u);height:calc(var(--u)*1.35);border:1px solid rgba(221,178,142,.36);transition:box-shadow .5s,background .5s,border-color .5s}
+/* windows show availability only where .is-lit is set: the chosen building, the legend */
+.is-lit .win{border-color:rgba(221,178,142,.75)}
+.is-lit .win.free{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(221,178,142,.4)}
+.is-lit .win.sold{border-color:rgba(221,178,142,.18)}
+.tw .base{width:calc(100% + var(--u)*1.3);height:3px;background:rgba(221,178,142,.5);transition:background .5s}
+.bld:hover .body,.bld:focus-visible .body,.bld.is-sel .body{border-color:var(--gold);background:rgba(221,178,142,.05)}
+.bld.is-sel:hover .win.free{box-shadow:0 0 12px rgba(221,178,142,.65)}
+.bld.is-sel .base{background:var(--gold)}
+.street.has-sel .bld:not(.is-sel) .tw{opacity:.5}
+.street.has-sel .bld:not(.is-sel):hover .tw{opacity:.85}
+.lake{position:absolute;left:calc(100% + 10px);bottom:calc(var(--label-h) - 12px);width:calc(var(--u)*5.4);color:var(--gold-72)}
+
+/* the one orchestrated moment, and only on the building you pick: it rises again, then its windows light */
+.bld.is-sel .tw .body{animation:grow .95s var(--ease) both}
+.bld.is-sel .tw .cap{animation:fade .5s ease .75s both}
+.bld.is-sel .win.free{animation:light .9s ease both;animation-delay:calc(.6s + var(--r)*1.1s)}
+@keyframes grow{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes light{0%{background:transparent;box-shadow:none}55%{background:var(--trav);box-shadow:0 0 16px rgba(244,239,231,.75)}100%{background:var(--gold);box-shadow:0 0 8px rgba(221,178,142,.4)}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero .rise{animation:rise 1.1s var(--ease) both;animation-delay:calc(var(--i,0)*.1s)}
+
+.street-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 32px;margin-top:26px}
+.all-btn[aria-pressed=true]{background:var(--gold);color:var(--onyx);box-shadow:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px 26px;font:400 13px/1.4 var(--sans);color:var(--gold-72)}
+.legend span{display:inline-flex;align-items:center;gap:10px}
+.legend .win{--u:11px;flex:none}
+.swipe{margin:14px 0 0;font:400 12px/1.4 var(--sans);color:var(--gold-72)}
+.swipe[hidden]{display:none}
+
+/* ───────── filter bar (same pattern as Проекти) ───────── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:rgba(244,239,231,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--ink-line)}
+.bar-in{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 40px;padding-block:14px 0}
+.tabs{position:relative;display:flex;gap:6px 34px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tab{flex:none;min-height:52px;padding:0 0 14px;border:0;background:none;font:400 clamp(17px,1.5vw,21px)/1.2 var(--serif);color:var(--ink-68);transition:color .4s}
+.tab[aria-pressed=true]{color:var(--onyx)}
+.tab-ink{position:absolute;left:0;bottom:0;height:2px;background:var(--bronze);transition:transform .6s var(--ease),width .6s var(--ease)}
+.bar-right{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 28px;padding-bottom:12px}
+.pick{display:flex;flex-direction:column;gap:4px}
+.pick span{font:600 11px/1.3 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--bronze)}
+.pick select{min-height:40px;min-width:168px;padding:0 26px 0 0;border:0;border-bottom:1px solid var(--onyx);border-radius:0;background:transparent;font:400 17px/1.2 var(--serif);appearance:none;-webkit-appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--bronze) 50%),linear-gradient(135deg,var(--bronze) 50%,transparent 50%);background-position:calc(100% - 9px) 17px,calc(100% - 4px) 17px;background-size:5px 5px;background-repeat:no-repeat}
+.only{display:inline-flex;align-items:center;gap:12px;min-height:44px;padding:0;border:0;background:none;font:500 13px/1 var(--sans)}
+.only i{position:relative;width:18px;height:18px;border:1px solid var(--onyx);transition:background .4s}
+.only[aria-pressed=true] i{background:var(--onyx)}
+.only[aria-pressed=true] i::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--gold);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.views{display:flex}
+.views button{width:48px;height:48px;padding:0;border:1px solid var(--ink-line);background:none;color:var(--bronze);display:inline-flex;align-items:center;justify-content:center;transition:background .4s,color .4s}
+.views button[aria-pressed=true]{background:var(--onyx);border-color:var(--onyx);color:var(--gold)}
+
+/* ───────── results ───────── */
+.results{padding-block:34px 96px}
+.count{letter-spacing:.16em;font-size:12px;color:var(--bronze)}
+.grid{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:44px 28px}
+.card{display:block;width:100%;padding:0;border:0;background:none;text-align:left;animation:rise .8s var(--ease) both;animation-delay:calc(var(--i)*.045s)}
+.card-ph{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--lime);overflow:hidden}
+.card-ph svg{width:74%;transition:transform 1.4s var(--ease)}
+.card:hover .card-ph svg,.card:focus-visible .card-ph svg{transform:scale(1.07)}
+.card.sold .card-ph svg{opacity:.4}
+.chip{position:absolute;left:14px;top:14px;display:inline-flex;align-items:center;gap:8px;padding:8px 11px;background:var(--trav);font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.where{position:absolute;left:14px;bottom:12px;font:600 11px/1.3 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-68)}
+.mk{display:inline-block;flex:none}
+.mk.free{width:7px;height:7px;border-radius:50%;background:var(--bronze)}
+.mk.res{width:8px;height:8px;border-radius:50%;border:1px solid currentColor}
+.mk.sold{width:10px;height:1px;background:currentColor}
+.card-t{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:18px}
+.card-t b{font:400 clamp(21px,1.9vw,26px)/1.2 var(--serif)}
+.card-t span{color:var(--bronze);font-size:18px;transition:transform .8s var(--ease)}
+.card:hover .card-t span,.card:focus-visible .card-t span{transform:translateX(8px)}
+.card-rule{position:relative;display:block;height:1px;margin:14px 0;background:var(--lime)}
+.card-rule::after{content:"";position:absolute;inset:0;background:var(--bronze);transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease)}
+.card:hover .card-rule::after,.card:focus-visible .card-rule::after{transform:scaleX(1)}
+.card-m{display:flex;flex-wrap:wrap;gap:4px 18px;font:500 14px/1.5 var(--sans)}
+.card-m span+span{color:var(--ink-68)}
+
+.rows{margin-top:22px;border-top:1px solid var(--onyx)}
+.row{display:grid;grid-template-columns:1.2fr 1.5fr 1fr 1fr 1fr 1.4fr 30px;gap:0 14px;align-items:center;width:100%;min-height:60px;padding:0 14px;border:0;border-bottom:1px solid var(--ink-line);background:none;text-align:left;font:500 14px/1.4 var(--sans);
+  transition:background .4s;animation:rise .7s var(--ease) both;animation-delay:calc(var(--i)*.03s)}
+.row:hover,.row:focus-visible{background:var(--lime)}
+.row b{font:400 20px/1.2 var(--serif)}
+.row .st{display:inline-flex;align-items:center;gap:8px;font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.row .go{color:var(--bronze);font-size:18px;transition:transform .8s var(--ease)}
+.row:hover .go{transform:translateX(6px)}
+.row .m{display:none}
+.more{display:flex;justify-content:center;margin-top:52px}
+.empty{margin:40px 0 0;max-width:520px;font:300 17px/1.7 var(--sans)}
+
+/* ───────── closing band ───────── */
+.close-band{background:var(--onyx);color:var(--gold);padding-block:88px}
+.close-in{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:32px 64px}
+.close-band h2{margin:18px 0 0;font:400 clamp(26px,2.8vw,40px)/1.15 var(--serif);text-wrap:balance}
+
+/* ───────── the flat, opening like the site's curtain ───────── */
+.modal{position:fixed;inset:0;z-index:50;display:none;color:var(--gold)}
+.modal.is-open{display:block}
+.scrim{position:absolute;inset:0;border:0;width:100%;height:100%;padding:0;background:rgba(20,17,15,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .5s ease;cursor:default}
+.is-in .scrim{opacity:1}
+.hair{position:absolute;left:50%;top:50%;width:min(1180px,calc(100% - 48px));height:1px;background:var(--gold);transform:translate(-50%,-50%) scaleX(0);transition:transform .5s var(--ease),opacity .4s ease 1.1s}
+.is-in .hair{transform:translate(-50%,-50%) scaleX(1);opacity:0}
+.sheet{position:absolute;left:50%;top:50%;width:min(1180px,calc(100% - 48px));height:min(660px,calc(100% - 48px));transform:translate(-50%,-50%);display:grid;grid-template-columns:1.22fr 1fr;
+  background:var(--onyx);border-radius:2px;box-shadow:inset 0 1px 0 rgba(221,178,142,.6),inset 0 0 0 1px rgba(244,239,231,.07),0 44px 80px -44px #000;
+  clip-path:inset(50% 0 50% 0);transition:clip-path 1.1s cubic-bezier(.65,0,.35,1) .35s}
+.is-in .sheet{clip-path:inset(0 0 0 0)}
+.is-out .sheet{transition:clip-path .4s var(--ease)}
+.is-out .hair{transition:none;opacity:0}
+.stage{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;background-color:var(--espresso);
+  background-image:linear-gradient(rgba(221,178,142,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(221,178,142,.055) 1px,transparent 1px);background-size:36px 36px;background-position:-1px -1px}
+.stage-plan{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:44px 44px 12px}
+.stage-plan svg{width:100%;max-width:560px;max-height:100%}
+.stage-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:0 32px 28px}
+.pos{display:flex;align-items:flex-end;gap:18px}
+.pos .tw{--u:8px}
+.pos .win{border-color:rgba(221,178,142,.3);background:none;box-shadow:none}
+.pos .win.hi{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 3px rgba(221,178,142,.22),0 0 14px rgba(221,178,142,.7);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(221,178,142,.08),0 0 18px rgba(221,178,142,.9)}}
+.pos-t{display:flex;flex-direction:column;gap:4px;padding-bottom:2px;font:400 13px/1.4 var(--sans);color:var(--gold-72)}
+.pos-t b{font:400 18px/1.2 var(--serif);color:var(--gold)}
+.info{display:flex;flex-direction:column;min-width:0;min-height:0;padding:44px 44px 0;overflow:auto}
+.info h2{margin:14px 0 0;font:400 clamp(40px,4.2vw,60px)/1 var(--serif);letter-spacing:-.012em}
+.info .st{display:inline-flex;align-items:center;gap:9px;margin-top:18px;font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.info .mk.free{background:var(--gold)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin:26px 0 0}
+.facts div{padding:14px 0;border-top:1px solid var(--gold-line)}
+.facts dt{font:600 11px/1.3 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold-72)}
+.facts dd{margin:5px 0 0;font:400 22px/1.2 var(--serif)}
+.acts{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:26px;padding-top:26px;border-top:1px solid var(--gold-line)}
+.acts-row{display:flex;flex-wrap:wrap;gap:4px 28px}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:auto;padding:16px 0 20px}
+.pager button{width:48px;height:48px;padding:0;border:1px solid var(--gold-line);background:none;font-size:17px;transition:background .4s,border-color .4s}
+.pager button:hover{background:rgba(221,178,142,.1);border-color:var(--gold)}
+.pager-mid{flex:1;display:flex;flex-direction:column;gap:9px;font:500 12px/1 var(--sans);letter-spacing:.14em}
+.pager-bar{height:1px;background:var(--gold-line)}
+.pager-bar i{display:block;height:1px;background:var(--gold);transition:width .7s var(--ease)}
+.x{position:absolute;top:14px;right:14px;z-index:2;width:44px;height:44px;padding:0;border:1px solid var(--gold-line);background:var(--onyx);color:var(--gold);display:flex;align-items:center;justify-content:center;transition:border-color .4s,transform .7s var(--ease)}
+.x:hover{border-color:var(--gold);transform:rotate(90deg)}
+.sheet .rise{animation:rise .7s var(--ease) both;animation-delay:calc(var(--t,.85s) + var(--i,0)*.07s)}
+
+/* plans */
+.plan{display:block;fill:none;stroke:currentColor;stroke-linecap:square}
+.plan .w{stroke-width:3}.plan .i{stroke-width:1.5}.plan .d{stroke-width:.8}.plan .g{stroke-width:.8}
+.plan .b{stroke-width:.8;stroke-dasharray:3 3}
+.plan text{display:none;fill:currentColor;stroke:none;font:500 6.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;text-anchor:middle}
+.plan--big text{display:block;opacity:.8}
+.draw .w,.draw .i,.draw .d,.draw .g{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.2s var(--ease) forwards;animation-delay:calc(var(--t,.85s) + var(--k)*.09s)}
+.draw .b,.draw text{animation:fade .8s ease both;animation-delay:calc(var(--t,.85s) + .9s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+@media (max-width:900px){
+  .sheet{left:0;top:0;width:100%;height:100%;transform:none;grid-template-columns:1fr;grid-template-rows:auto 1fr;overflow:auto;border-radius:0}
+  .hair{width:100%}
+  .stage-plan{padding:64px 24px 8px;min-height:250px}
+  .stage-foot{padding:0 20px 20px}
+  .info{padding:28px 20px 0;overflow:visible}
+  .pager{position:sticky;bottom:0;background:var(--onyx);padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:720px){
+  .hero-in{padding-block:44px 32px}
+  .bar{position:static}
+  .bar-right{width:100%;gap:12px 20px}
+  .pick{flex:1 1 140px}.pick select{width:100%;min-width:0}
+  .grid{gap:36px 20px}
+  .row{grid-template-columns:1fr auto;row-gap:2px;padding:12px 4px}
+  .row .d{display:none}
+  .row .m{display:block;grid-column:1/-1;font:400 12px/1.5 var(--sans);color:var(--ink-68)}
+  .row .go{display:none}
+  .close-band{padding-block:64px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.sheen{color:var(--gold);background:none}}
+</style>
+</head>
+<body>
+<header class="nav gut">
+  <div class="wrap nav-in">
+    <a href="#top" aria-label="Javor Sped — почетна" style="display:flex">
+      <svg viewBox="50 60 170 240" width="32" height="46" fill="none" stroke="#DDB28E" stroke-width="5" aria-hidden="true"><path d="M60 300V70H110M134 300V62"/><path d="M70 136L128 110M70 154L128 128M70 172L128 146M70 190L128 164M70 208L128 182M70 226L128 200M70 244L128 218M70 262L128 236M70 280L128 254M70 298L128 272"/><path opacity=".6" d="M140 106L200 136M140 124L200 154M140 142L200 172M140 160L200 190M140 178L200 208M140 196L200 226M140 214L200 244M140 232L200 262M140 250L200 280M140 268L200 298"/></svg>
+    </a>
+    <nav class="nav-links" aria-label="Главна навигација">
+      <a href="#top">ПОЧЕТНА</a><a href="#top">ПРОЕКТИ</a><a href="#top" aria-current="page">ПРОНАЈДИ СТАН</a><a href="#top">ЗА НАС</a><a href="#top">КОНТАКТ</a>
+    </nav>
+    <a class="btn btn--sm" href="#kraj">Закажи консултација</a>
+  </div>
+</header>
+
+<section class="hero gut" id="top">
+  <div class="wrap hero-in">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow rise" style="--i:0"><span class="sheen">Javor Sped · Пронајди стан</span></div>
+        <h1 class="rise" style="--i:1">Пронајди го твојот стан</h1>
+        <p class="hero-sub rise" style="--i:2">Избери зграда. Прозорците што ќе засветат се достапни станови.</p>
+      </div>
+      <div class="tally rise" style="--i:3" aria-live="polite">
+        <b class="num" id="tallyN">0</b>
+        <span>достапни станови<small id="tallyW">во сите згради</small></span>
+      </div>
+    </div>
+
+    <div class="street-scroll">
+      <div class="street" id="street"></div>
+    </div>
+    <p class="swipe" id="swipe" hidden>Повлечи настрана за сите згради</p>
+
+    <div class="street-foot">
+      <button type="button" class="btn btn--sm btn--line all-btn" id="allBtn" aria-pressed="true">Сите згради</button>
+      <div class="legend is-lit" aria-hidden="true">
+        <span><i class="win free"></i>Достапен</span>
+        <span><i class="win"></i>Резервиран</span>
+        <span><i class="win sold"></i>Продаден</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="on-light">
+<section class="bar gut" aria-label="Филтри">
+  <div class="wrap bar-in">
+    <div class="tabs" id="tabs" role="group" aria-label="Број на соби"></div>
+    <div class="bar-right">
+      <label class="pick"><span>Кат</span>
+        <select id="fFloor">
+          <option value="all">Сите катови</option><option value="g">Приземје</option><option value="m">Кат 1 и 2</option><option value="h">Кат 3 и погоре</option>
+        </select>
+      </label>
+      <label class="pick"><span>Површина</span>
+        <select id="fArea">
+          <option value="all">Сите површини</option><option value="a">до 50 m²</option><option value="b">50 – 80 m²</option><option value="c">80 – 110 m²</option><option value="d">над 110 m²</option>
+        </select>
+      </label>
+      <button type="button" class="only" id="fFree" aria-pressed="false"><i></i>Само достапни</button>
+      <div class="views" role="group" aria-label="Приказ">
+        <button type="button" id="vGrid" aria-pressed="true" aria-label="Картички"><svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 2h6v6H2zM10 2h6v6h-6zM2 10h6v6H2zM10 10h6v6h-6z"/></svg></button>
+        <button type="button" id="vList" aria-pressed="false" aria-label="Листа"><svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h14"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="results gut">
+  <div class="wrap">
+    <div class="count eyebrow num" id="count" aria-live="polite"></div>
+    <div id="out"></div>
+    <div class="more"><button type="button" class="btn btn--onlight" id="more"></button></div>
+  </div>
+</section>
+</div>
+
+<section class="close-band gut" id="kraj">
+  <div class="wrap close-in">
+    <div>
+      <div class="eyebrow">Лична консултација</div>
+      <h2>Сите детали за станот, лично од нашиот тим.</h2>
+    </div>
+    <a class="btn" href="#top">Закажи консултација<span class="circ">→</span></a>
+  </div>
+</section>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <button type="button" class="scrim" data-close aria-label="Затвори"></button>
+  <i class="hair"></i>
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+// SAMPLE DATA ONLY — every flat here is generated. The real page reads the project data.
+const pad = (n, l) => String(n).padStart(l, '0');
+let seed = 11;
+const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const TYPES = [[0, 34, 0], [1, 46, 0], [2, 63, 1], [3, 86, 2], [4, 114, 2]];
+const BLDS = [];
+[5, 6, 5, 7, 6, 5].forEach((fl, i) => BLDS.push({ key: 'cc-' + (i + 1), proj: 'City Center', name: 'Зграда ' + pad(i + 1, 2), floors: fl, per: 4 }));
+BLDS.push({ key: 'dr', proj: 'Дојрански Рај', name: 'Дојрански Рај', floors: 4, per: 5, lake: true });
+const all = [];
+BLDS.forEach(b => { for (let f = 0; f < b.floors; f++) for (let n = 1; n <= b.per; n++) {
+  const t = TYPES[Math.floor(rnd() * 5)], r = rnd();
+  all.push({ id: `${b.key}-${f}-${n}`, b: b.key, f, n, num: f * 100 + n, rooms: t[0], plan: t[2],
+    status: r < .56 ? 'free' : r < .82 ? 'res' : 'sold', area: Math.round((t[1] + rnd() * 13) * 10) / 10, r: rnd() });
+} });
+
+const STATUS = { free: 'Достапен', res: 'Резервиран', sold: 'Продаден' };
+const PAGE = 8;
+const s = { bld: 'all', rooms: 'all', floor: 'all', area: 'all', free: false, view: 'grid', pages: 1, open: null };
+const $ = id => document.getElementById(id);
+const bld = key => BLDS.find(b => b.key === key);
+const view = a => ({
+  title: 'Стан ' + pad(a.num, 3),
+  bld: bld(a.b).name, proj: bld(a.b).proj,
+  floor: a.f === 0 ? 'Приземје' : 'Кат ' + a.f,
+  rooms: a.rooms === 0 ? 'Студио' : a.rooms === 1 ? '1 соба' : a.rooms + ' соби',
+  area: a.area.toFixed(1).replace('.', ',') + ' m²'
+});
+
+/* plans: w outer walls · i inner walls · d doors · g glazing · b balcony · text room names */
+const P = (cls, d) => d.map((x, k) => `<path class="${cls}" pathLength="1" style="--k:${k}" d="${x}"/>`).join('');
+const PLANS = [
+  { w: ['M30 25H210V145H30Z'], i: ['M88 25V60', 'M88 76V78H30', 'M140 25V80', 'M140 95V145'],
+    d: ['M88 60H104A16 16 0 0 1 88 76', 'M140 80H125A15 15 0 0 0 140 95', 'M50 145V129A16 16 0 0 1 66 145'],
+    g: ['M100 22.5H132M100 27.5H132', 'M207.5 45V80M212.5 45V80', 'M27.5 100V130M32.5 100V130'], b: 'M210 98H230V145H210',
+    t: [['Бања', 59, 54], ['Дневна', 104, 112], ['Спална', 175, 60]] },
+  { w: ['M30 25H170V55H210V145H30Z'], i: ['M100 25V64', 'M100 80H30', 'M150 25V84', 'M150 100V145', 'M30 96H80V112', 'M80 128V145'],
+    d: ['M100 64H84A16 16 0 0 0 100 80', 'M150 84H166A16 16 0 0 1 150 100', 'M80 112H64A16 16 0 0 0 80 128'],
+    g: ['M45 22.5H85M45 27.5H85', 'M110 22.5H140M110 27.5H140', 'M207.5 75V125M212.5 75V125'], b: 'M170 25H196V55',
+    t: [['Спална', 65, 55], ['Кујна', 125, 52], ['Спална', 181, 118], ['Бања', 55, 124], ['Дневна', 115, 118]] },
+  { w: ['M20 30H220V125H160V145H20Z'], i: ['M70 30V75', 'M120 30V75', 'M170 30V75', 'M20 75H38M54 75H88M104 75H138M154 75H188M204 75H220', 'M60 145V100H36'],
+    d: ['M38 75V91A16 16 0 0 0 54 75', 'M88 75V91A16 16 0 0 0 104 75', 'M138 75V91A16 16 0 0 0 154 75', 'M36 100V116A16 16 0 0 1 20 100'],
+    g: ['M30 27.5H60M30 32.5H60', 'M80 27.5H110M80 32.5H110', 'M130 27.5H160M130 32.5H160', 'M180 27.5H210M180 32.5H210'], b: 'M160 125H220V145H160',
+    t: [['Спална', 45, 56], ['Спална', 95, 56], ['Спална', 145, 56], ['Кујна', 195, 56], ['Бања', 40, 126], ['Дневна', 112, 112]] }
+];
+const plan = (a, big) => { const p = PLANS[a.plan];
+  return `<svg class="plan${big ? ' plan--big draw' : ''}" viewBox="10 14 228 138" aria-hidden="true">${P('w', p.w)}${P('i', p.i)}${P('d', p.d)}${P('g', p.g)}<path class="b" d="${p.b}"/>${p.t.map(t => `<text x="${t[1]}" y="${t[2]}">${t[0]}</text>`).join('')}</svg>`; };
+
+/* a building: floors of windows, one window per flat */
+const tower = (b, idx, hi) => {
+  let rows = '';
+  for (let f = b.floors - 1; f >= 0; f--)
+    rows += `<span class="fl">${all.filter(a => a.b === b.key && a.f === f).map(a => `<i class="win ${a.status}${hi === a.id ? ' hi' : ''}" style="--r:${a.r.toFixed(2)}"></i>`).join('')}</span>`;
+  return `<span class="tw" style="--b:${idx}"><span class="cap"></span><span class="body">${rows}</span><span class="base"></span></span>`;
+};
+
+function drawStreet() {
+  const groups = [];
+  BLDS.forEach((b, i) => { let g = groups.find(x => x.proj === b.proj); if (!g) groups.push(g = { proj: b.proj, items: [] }); g.items.push([b, i]); });
+  $('street').innerHTML = '<i class="ground"></i>' + groups.map((g, gi) => `<div class="grp">
+    <div class="grp-h eyebrow" style="--b:${gi * 6}">${g.proj}</div>
+    <div class="grp-row">${g.items.map(([b, i]) => {
+      const fr = all.filter(a => a.b === b.key && a.status === 'free').length;
+      return `<button type="button" class="bld" data-bld="${b.key}" aria-pressed="false" aria-label="${b.name}, ${b.proj}, ${fr} достапни">
+        ${tower(b, i)}
+        ${b.lake ? '<svg class="lake" viewBox="0 0 76 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M0 3q5-4 10 0t10 0t10 0t10 0t10 0t10 0t10 0M12 9q5-4 10 0t10 0t10 0t10 0t10 0"/></svg>' : ''}
+        <span class="bld-label" style="--b:${i}"><b>${b.name}</b><small class="num">${fr} достапни</small></span>
+      </button>`; }).join('')}</div></div>`).join('');
+}
+
+let tallyNow = 0, tallyRaf;
+function tally(to) {
+  const from = tallyNow, t0 = performance.now(), dur = matchMedia('(prefers-reduced-motion:reduce)').matches ? 0 : 900;
+  cancelAnimationFrame(tallyRaf);
+  const step = t => { const k = dur ? Math.min(1, (t - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
+    tallyNow = Math.round(from + (to - from) * e); $('tallyN').textContent = tallyNow; if (k < 1) tallyRaf = requestAnimationFrame(step); };
+  tallyRaf = requestAnimationFrame(step);
+}
+
+const AREA = { all: () => true, a: x => x < 50, b: x => x >= 50 && x < 80, c: x => x >= 80 && x < 110, d: x => x >= 110 };
+const FLOOR = { all: () => true, g: f => f === 0, m: f => f >= 1 && f <= 2, h: f => f >= 3 };
+const list = () => all.filter(a => (s.bld === 'all' || a.b === s.bld) && (s.rooms === 'all' || a.rooms === s.rooms) && FLOOR[s.floor](a.f) && AREA[s.area](a.area) && (!s.free || a.status === 'free'));
+const mark = a => `<i class="mk ${a.status}"></i>${STATUS[a.status]}`;
+
+function render() {
+  // street + tally
+  document.querySelectorAll('.bld').forEach(b => { const on = b.dataset.bld === s.bld; b.classList.toggle('is-sel', on); b.classList.toggle('is-lit', on); b.setAttribute('aria-pressed', on); });
+  $('street').classList.toggle('has-sel', s.bld !== 'all');
+  $('allBtn').setAttribute('aria-pressed', s.bld === 'all');
+  const scope = all.filter(a => s.bld === 'all' || a.b === s.bld);
+  tally(scope.filter(a => a.status === 'free').length);
+  $('tallyW').textContent = s.bld === 'all' ? 'во сите згради' : `во ${bld(s.bld).name}` + (bld(s.bld).proj !== bld(s.bld).name ? ` · ${bld(s.bld).proj}` : '');
+
+  // tabs
+  const TABS = [['all', 'Сите'], [0, 'Студио'], [1, '1 соба'], [2, '2 соби'], [3, '3 соби'], [4, '4 соби']];
+  if (!$('tabs').children.length) $('tabs').innerHTML = TABS.map(([k, t]) => `<button type="button" class="tab" data-room="${k}">${t}</button>`).join('') + '<i class="tab-ink"></i>';
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', String(s.rooms) === t.dataset.room));
+  ink();
+  $('fFree').setAttribute('aria-pressed', s.free);
+  $('vGrid').setAttribute('aria-pressed', s.view === 'grid'); $('vList').setAttribute('aria-pressed', s.view === 'list');
+
+  // results
+  const l = list(), n = l.length, shown = l.slice(0, PAGE * s.pages * (s.view === 'list' ? 1.5 : 1));
+  $('count').textContent = n === 0 ? 'Нема станови за овој избор' : n === 1 ? 'Прикажан 1 стан' : `Прикажани ${shown.length} од ${n} станови`;
+  if (!n) $('out').innerHTML = '<p class="empty">Пробајте со друга зграда, друг број на соби или без „Само достапни“.</p>';
+  else if (s.view === 'grid') $('out').innerHTML = `<div class="grid">${shown.map((a, i) => { const x = view(a);
+    return `<button type="button" class="card ${a.status}" data-open="${a.id}" style="--i:${i % (PAGE * 2)}" aria-label="${x.title}, ${x.bld}, ${x.rooms}, ${STATUS[a.status]}">
+      <span class="card-ph">${plan(a)}<span class="chip">${mark(a)}</span><span class="where">${x.bld}</span></span>
+      <span class="card-t"><b>${x.title}</b><span>→</span></span>
+      <span class="card-rule"></span>
+      <span class="card-m num"><span>${x.area}</span><span>${x.rooms}</span><span>${x.floor}</span></span>
+    </button>`; }).join('')}</div>`;
+  else $('out').innerHTML = `<div class="rows">${shown.map((a, i) => { const x = view(a);
+    return `<button type="button" class="row" data-open="${a.id}" style="--i:${i % 24}">
+      <b>${x.title}</b><span class="d">${x.bld}</span><span class="d num">${x.floor}</span><span class="d">${x.rooms}</span><span class="d num">${x.area}</span>
+      <span class="st">${mark(a)}</span><span class="go">→</span>
+      <span class="m num">${x.bld} · ${x.floor} · ${x.rooms} · ${x.area}</span>
+    </button>`; }).join('')}</div>`;
+  $('more').hidden = n <= shown.length;
+  $('more').textContent = `Прикажи уште ${Math.min(PAGE, n - shown.length)}`;
+}
+
+/* the flat */
+let lastFocus;
+function fill(a, quick) {
+  const l = list(), i = l.findIndex(x => x.id === a.id), x = view(a), b = bld(a.b);
+  $('sheet').style.setProperty('--t', quick ? '.05s' : '1.05s');
+  $('sheet').innerHTML = `
+    <button type="button" class="x" data-close aria-label="Затвори"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14"/></svg></button>
+    <div class="stage">
+      <div class="stage-plan">${plan(a, true)}</div>
+      <div class="stage-foot rise" style="--i:6">
+        <div class="pos">${tower(b, 0, a.id)}<div class="pos-t"><b>${x.floor}</b>${b.name} · стан ${a.n} од ${b.per} на катот</div></div>
+      </div>
+    </div>
+    <div class="info">
+      <div class="eyebrow rise" style="--i:0">${x.proj}${x.proj !== x.bld ? ' · ' + x.bld : ''}</div>
+      <h2 class="rise" id="mTitle" style="--i:1">${x.title}</h2>
+      <div class="st rise" style="--i:2">${mark(a)}</div>
+      <dl class="facts num rise" style="--i:3">
+        <div><dt>Површина</dt><dd>${x.area}</dd></div><div><dt>Соби</dt><dd>${x.rooms}</dd></div>
+        <div><dt>Кат</dt><dd>${x.floor}</dd></div><div><dt>Зграда</dt><dd>${x.bld}</dd></div>
+      </dl>
+      <div class="acts rise" style="--i:4">
+        <a class="btn" href="#kraj" data-close>Закажи консултација<span class="circ">→</span></a>
+        <div class="acts-row"><a class="textlink" href="#top" data-close>Цела страница на станот <span>→</span></a><button type="button" class="textlink">+ Спореди</button></div>
+      </div>
+      <div class="pager rise" style="--i:5">
+        <button type="button" data-step="-1" aria-label="Претходен стан">←</button>
+        <div class="pager-mid num"><span>${i + 1} / ${l.length}</span><div class="pager-bar"><i style="width:${(i + 1) / l.length * 100}%"></i></div></div>
+        <button type="button" data-step="1" aria-label="Следен стан">→</button>
+      </div>
+    </div>`;
+}
+function openFlat(id) {
+  const a = all.find(x => x.id === id); if (!a) return;
+  lastFocus = document.activeElement; s.open = id; fill(a);
+  const m = $('modal'); m.classList.remove('is-out'); m.classList.add('is-open');
+  document.documentElement.style.overflow = 'hidden';
+  requestAnimationFrame(() => requestAnimationFrame(() => { m.classList.add('is-in'); m.querySelector('.x').focus({ preventScroll: true }); }));
+}
+function closeFlat() {
+  const m = $('modal'); if (!m.classList.contains('is-open')) return;
+  m.classList.add('is-out'); m.classList.remove('is-in'); s.open = null;
+  document.documentElement.style.overflow = '';
+  setTimeout(() => { m.classList.remove('is-open', 'is-out'); if (lastFocus) lastFocus.focus({ preventScroll: true }); }, 420);
+}
+function stepFlat(d) {
+  const l = list(), i = l.findIndex(x => x.id === s.open); if (i < 0) return;
+  const a = l[(i + d + l.length) % l.length]; s.open = a.id; fill(a, true);
+  $('sheet').querySelector(`[data-step="${d}"]`).focus({ preventScroll: true });
+}
+
+/* events */
+$('street').onclick = e => { const b = e.target.closest('[data-bld]'); if (!b) return; s.bld = s.bld === b.dataset.bld ? 'all' : b.dataset.bld; s.pages = 1; render(); };
+$('allBtn').onclick = () => { s.bld = 'all'; s.pages = 1; render(); };
+$('tabs').onclick = e => { const t = e.target.closest('[data-room]'); if (!t) return; s.rooms = t.dataset.room === 'all' ? 'all' : +t.dataset.room; s.pages = 1; render(); };
+$('fFloor').onchange = e => { s.floor = e.target.value; s.pages = 1; render(); };
+$('fArea').onchange = e => { s.area = e.target.value; s.pages = 1; render(); };
+$('fFree').onclick = () => { s.free = !s.free; s.pages = 1; render(); };
+$('vGrid').onclick = () => { s.view = 'grid'; render(); };
+$('vList').onclick = () => { s.view = 'list'; render(); };
+$('more').onclick = () => { s.pages++; render(); };
+$('out').onclick = e => { const c = e.target.closest('[data-open]'); if (c) openFlat(c.dataset.open); };
+$('modal').onclick = e => { const st = e.target.closest('[data-step]'); if (st) return stepFlat(+st.dataset.step); if (e.target.closest('[data-close]')) closeFlat(); };
+document.addEventListener('keydown', e => { if (!s.open) return;
+  if (e.key === 'Escape') closeFlat(); else if (e.key === 'ArrowRight') stepFlat(1); else if (e.key === 'ArrowLeft') stepFlat(-1); });
+function ink() {
+  const t = document.querySelector('.tab[aria-pressed=true]'), k = document.querySelector('.tab-ink');
+  if (t && k) { k.style.width = t.offsetWidth + 'px'; k.style.transform = `translateX(${t.offsetLeft}px)`; }
+  const sc = document.querySelector('.street-scroll');
+  $('swipe').hidden = sc.scrollWidth <= sc.clientWidth + 2;   // the hint shows only when the street really scrolls
+}
+addEventListener('resize', ink);
+
+drawStreet();
+render();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(ink);
+</script>
+</body>
+</html>

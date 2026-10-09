@@ -34,6 +34,8 @@ interface ButtonProps {
   disabled?: boolean;
   /** The primary button shown already filled (it still reacts to hover and focus). */
   filled?: boolean;
+  /** For a button that switches something on and off: sets aria-pressed. */
+  pressed?: boolean;
 }
 
 export function Button({
@@ -47,6 +49,7 @@ export function Button({
   type = "button",
   disabled,
   filled = false,
+  pressed,
 }: ButtonProps) {
   if (variant === "primary") {
     // The filling button has its own look (see .btn-primary in globals.css); no click pulse, it would fight the fill.
@@ -54,13 +57,20 @@ export function Button({
     const face = <PrimaryFace arrow={size !== "sm"}>{children}</PrimaryFace>;
     if (href) {
       return (
-        <Link href={href} className={primary} onClick={onClick} data-tone={tone}>
+        <Link href={href} className={primary} onClick={onClick} data-tone={tone} aria-pressed={pressed}>
           {face}
         </Link>
       );
     }
     return (
-      <button type={type} onClick={onClick} disabled={disabled} className={primary} data-tone={tone}>
+      <button
+        type={type}
+        onClick={onClick}
+        disabled={disabled}
+        className={primary}
+        data-tone={tone}
+        aria-pressed={pressed}
+      >
         {face}
       </button>
     );
@@ -82,13 +92,20 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick} onPointerDown={spawnClickPulse}>
+      <Link href={href} className={classes} onClick={onClick} onPointerDown={spawnClickPulse} aria-pressed={pressed}>
         {children}
       </Link>
     );
   }
   return (
-    <button type={type} onClick={onClick} onPointerDown={spawnClickPulse} disabled={disabled} className={classes}>
+    <button
+      type={type}
+      onClick={onClick}
+      onPointerDown={spawnClickPulse}
+      disabled={disabled}
+      className={classes}
+      aria-pressed={pressed}
+    >
       {children}
     </button>
   );
