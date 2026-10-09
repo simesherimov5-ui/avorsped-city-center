@@ -6,6 +6,7 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { StatusMarker } from "@/components/ui/StatusBadge";
 import { formatArea, statusLabel } from "@/lib/format";
+import { roomsText } from "@/lib/plural";
 import type { UnitStatus } from "@/types";
 
 export interface PickerApartment {
@@ -34,7 +35,7 @@ const DENSE_FROM = 7;
 export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
-  // A floor with no apartments listed yet (the details are not here yet) is shown, but its panel stays empty.
+  // A floor with no apartments listed yet (the details are not here yet) is shown, with a short «soon» line in its panel.
   const start =
     lowestFirst.find((f) => f.apartments.some((a) => a.status === "available")) ??
     lowestFirst.find((f) => f.apartments.length > 0) ??
@@ -92,28 +93,31 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
       <div className="fp-panel" aria-live="polite">
         <div className="fp-label">Избор на стан по кат</div>
         <h3 className="fp-title">{current.label}</h3>
-        <ul className="fp-units">
-          {current.apartments.map((a) => (
-            <li key={a.id}>
-              <Link href={`/apartments/${a.id}`} className="fp-unit">
-                <b className="fp-unit-no">
-                  <span className="sr-only">Стан </span>
-                  {a.number}
-                </b>
-                <span className="fp-unit-spec">
-                  {formatArea(a.area)} · {a.bedrooms === 0 ? "Студио" : `${a.bedrooms} соби`}
-                </span>
-                <span className={`fp-unit-st is-${a.status}`}>
-                  <StatusMarker status={a.status} className="h-[7px] w-[7px]" />
-                  {statusLabel(a.status)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
+        {current.apartments.length > 0 && (
+          <ul className="fp-units">
+            {current.apartments.map((a) => (
+              <li key={a.id}>
+                <Link href={`/apartments/${a.id}`} className="fp-unit">
+                  <b className="fp-unit-no">
+                    <span className="sr-only">Стан </span>
+                    {a.number}
+                  </b>
+                  <span className="fp-unit-spec">
+                    {formatArea(a.area)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
+                  </span>
+                  <span className={`fp-unit-st is-${a.status}`}>
+                    <StatusMarker status={a.status} className="h-[7px] w-[7px]" />
+                    {statusLabel(a.status)}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
         {basePath && current.apartments.length > 0 && (
           <ZoomNavLink href={`${basePath}/${current.number}`} label={current.label} className="fp-floorlink">
-            Изберете го вашиот стан
+            Погледни ја основата на катот
             <svg
               width="18"
               height="10"

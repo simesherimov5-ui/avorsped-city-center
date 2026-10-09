@@ -10,6 +10,7 @@ import { floorPlanImageForApartment } from "@/lib/assets";
 import { getBuilding } from "@/data";
 import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
+import { roomsText } from "@/lib/plural";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
 export function ApartmentCard({ apartment, priority }: { apartment: Apartment; priority?: boolean }) {
@@ -56,7 +57,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-line pt-4 text-xs text-muted">
           <span className="flex items-center gap-1.5">
             <BedDouble className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
-            {apartment.bedrooms === 0 ? "Студио" : `${apartment.bedrooms} соби`}
+            {apartment.bedrooms === 0 ? "Студио" : roomsText(apartment.bedrooms)}
           </span>
           <span className="flex items-center gap-1.5">
             <Ruler className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />

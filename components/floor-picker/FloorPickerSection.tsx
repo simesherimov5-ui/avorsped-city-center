@@ -3,7 +3,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /**
  * "Изберете кат" on a dark band: the floors of a building and, beside them, the apartments of the chosen floor. A floor
- * whose details are not here yet is passed with no apartments and its panel stays empty.
+ * whose details are not here yet is passed with no apartments and its panel says so.
  */
 export function FloorPickerSection({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   return (
