@@ -11,7 +11,7 @@ import {
   development,
   projects,
 } from "@/data";
-import { formatArea, formatPrice, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
+import { formatArea, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
@@ -34,7 +34,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const where = building ? `Зграда ${building.shortLabel}` : "";
   const bedrooms = apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type);
   return pageMetadata({
-    // no price in the text: it is indicative and changes, and a search result would keep showing the old one
     title: `Стан ${apt.number}, ${where} — ${development.name}`,
     description: `${bedrooms} стан ${apt.number} во ${where}, ${apt.floor === 0 ? "приземје" : `кат ${apt.floor}`}: ${formatArea(apt.area)} површина, ориентација ${orientationLabel(apt.orientation).toLowerCase()}. Погледнете го распоредот и закажете консултација.`,
     path: `/apartments/${apt.id}`,
@@ -53,16 +52,11 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
   const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
 
-  // The price, the specifications and the enquiry buttons. On a computer this is the sticky column on the right; on a
+  // The specifications and the enquiry buttons. On a computer this is the sticky column on the right; on a
   // phone the same block comes straight after the floor plan, not after everything else on the page.
   const renderAside = (extraClass: string) => (
     <aside className={cn("h-fit space-y-6 border border-line bg-warm-white p-6", extraClass)}>
-      <div>
-        <div className="eyebrow text-muted">Цена</div>
-        <div className="mt-1.5 text-4xl font-medium tabular-nums text-gold-deep">{formatPrice(apartment.price)}</div>
-        <div className="mt-1.5 text-xs text-muted">Индикативна цена, подложна на конечна спецификација</div>
-      </div>
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-6 text-sm">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
         <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
         <Spec label="Спални соби" value={String(apartment.bedrooms)} />
         <Spec label="Бањи" value={String(apartment.bathrooms)} />

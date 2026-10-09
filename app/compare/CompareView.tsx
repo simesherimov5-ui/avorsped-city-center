@@ -7,11 +7,10 @@ import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
 import { idsToParam, parseIds, writeStored } from "@/lib/compare-store";
 import { getApartment, getBuilding } from "@/data";
-import { formatArea, formatPrice, orientationLabel, typeLabel } from "@/lib/format";
+import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { cn } from "@/lib/cn";
 
 const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment>>) => string }[] = [
   { label: "Зграда", get: (a) => getBuilding(a.buildingId)?.name ?? "" },
@@ -22,7 +21,6 @@ const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment
   { label: "Површина", get: (a) => formatArea(a.area) },
   { label: "Балкон", get: (a) => formatArea(a.balconyArea) },
   { label: "Ориентација", get: (a) => orientationLabel(a.orientation) },
-  { label: "Цена", get: (a) => formatPrice(a.price) },
 ];
 
 /**
@@ -91,25 +89,16 @@ export function CompareView() {
                 </tr>
               </thead>
               <tbody>
-                {ROWS.map((row) => {
-                  const isPrice = row.label === "Цена";
-                  return (
-                    <tr key={row.label} className="border-b border-line">
-                      <td className="eyebrow py-3 pr-4 text-muted">{row.label}</td>
-                      {selected.map((a) => (
-                        <td
-                          key={a.id}
-                          className={cn(
-                            "px-4 py-3 capitalize",
-                            isPrice ? "text-lg font-medium tabular-nums text-gold-deep" : "text-ink/80"
-                          )}
-                        >
-                          {row.get(a)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
+                {ROWS.map((row) => (
+                  <tr key={row.label} className="border-b border-line">
+                    <td className="eyebrow py-3 pr-4 text-muted">{row.label}</td>
+                    {selected.map((a) => (
+                      <td key={a.id} className="px-4 py-3 capitalize text-ink/80">
+                        {row.get(a)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
             <button onClick={clear} className="focus-ring mt-6 text-sm text-muted hover:text-charcoal">

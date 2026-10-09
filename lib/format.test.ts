@@ -1,18 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, formatPrice, orientationLabel, projectStatusLabel, statusLabel, typeLabel } from "@/lib/format";
-
-describe("formatPrice", () => {
-  it("groups thousands with dots and appends the euro sign", () => {
-    expect(formatPrice(999)).toBe("999 €");
-    expect(formatPrice(1000)).toBe("1.000 €");
-    expect(formatPrice(1234567)).toBe("1.234.567 €");
-  });
-
-  it("rounds to whole euros before grouping", () => {
-    expect(formatPrice(1234.6)).toBe("1.235 €");
-    expect(formatPrice(0)).toBe("0 €");
-  });
-});
+import { formatArea, orientationLabel, projectStatusLabel, statusLabel, typeLabel } from "@/lib/format";
 
 describe("formatArea", () => {
   it("uses one decimal and the м² unit", () => {

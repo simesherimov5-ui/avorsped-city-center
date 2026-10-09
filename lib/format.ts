@@ -1,17 +1,8 @@
 import type { Orientation, ProjectStatus } from "@/types";
 
-export function formatPrice(value: number): string {
-  // Manual thousands-grouping instead of Intl.NumberFormat: the "mk-MK"
-  // locale data available at build/SSR time can differ from a browser's,
-  // producing a server/client hydration mismatch on the exact same value.
-  const grouped = Math.round(value)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  return `${grouped} €`;
-}
-
 export function formatArea(value: number): string {
-  // Decimal comma, as written in Macedonian; done by hand for the same reason as formatPrice.
+  // Decimal comma, as written in Macedonian; done by hand because the "mk-MK" locale data at build/SSR time can
+  // differ from a browser's, which would make the server and the browser disagree on the same value.
   return `${value.toFixed(1).replace(".", ",")} м²`;
 }
 

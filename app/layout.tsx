@@ -18,7 +18,7 @@ import { SITE_NAME, siteUrl } from "@/lib/seo";
 // Exactly two families on the whole site (the identity "Бронза & Травертин"), both loaded with their Cyrillic letters:
 // the site is in Macedonian, and a family loaded without them silently falls back to a different system font on every
 // device. Playfair Display is for headings and large display numbers; Montserrat is for everything else (text, labels,
-// menus, buttons, prices, areas and every number that used to be set in a monospace font).
+// menus, buttons, areas and every number that used to be set in a monospace font).
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
   weight: ["300", "400", "500", "600"],

@@ -107,9 +107,8 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 ### 3.2 Apartment data (before-launch B5)
 
 - **Where:** `data/generate.ts` (generated mock data; only Building 06, floor 3 is real).
-- **Needed for each apartment:** building, floor, number, area (m²), balcony area, rooms, orientation, price in euros (and whether it includes VAT), status (available, reserved, sold).
-- **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | <price> | достапен`.
-- **Also:** which of the prices may be shown on the website at all.
+- **Needed for each apartment:** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
+- **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | достапен`.
 
 ### 3.3 Floor plans and photos for the other buildings
 
@@ -159,7 +158,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 ## 4. Дојрански Рај (before-launch B3)
 
 - **Where:** the `dojranski-raj` entry of `projects` in `data/index.ts` and `dojranFloors` in `data/dojran.ts`.
-- **Needed:** the real number of apartments (the project says 30, the floor pages list 7), and per apartment: floor, number, area, price, status, one floor plan, 4–10 photos or renders.
+- **Needed:** the real number of apartments (the project says 30, the floor pages list 7), and per apartment: floor, number, area, status, one floor plan, 4–10 photos or renders.
 - **Format:** spreadsheet row per apartment as in 3.2; photos landscape at least 1600 px wide.
 - **Until then:** each floor page only says "Наскоро"; say whether to hide the floor pages.
 

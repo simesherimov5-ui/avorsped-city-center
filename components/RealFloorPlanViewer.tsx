@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus, Minus, Maximize2, X, ArrowRight } from "lucide-react";
 import type { Apartment, MediaImage, PlanRegion } from "@/types";
-import { formatArea, formatPrice, statusLabel, typeLabel } from "@/lib/format";
+import { formatArea, statusLabel, typeLabel } from "@/lib/format";
 import { StatusMarker } from "@/components/ui/StatusBadge";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { DURATION, EASE } from "@/lib/motion";
@@ -509,8 +509,6 @@ function ApartmentSummary({ apartment }: { apartment: Apartment }) {
       <div className="mt-2 flex items-center gap-2 text-sm">
         <StatusMarker status={apartment.status} />
         <span className="text-ink/70">{statusLabel(apartment.status)}</span>
-        <span className="text-line">·</span>
-        <span className="font-medium text-charcoal">{formatPrice(apartment.price)}</span>
       </div>
     </div>
   );

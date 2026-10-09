@@ -38,7 +38,6 @@ export interface Apartment {
   area: number; // m² interior
   balconyArea: number; // m²
   orientation: Orientation;
-  price: number; // EUR
   status: UnitStatus;
   rooms: Room[];
   shape: FloorPlanShape;
@@ -226,15 +225,4 @@ export interface Project {
 export interface CompanyStat {
   value: string;
   label: string;
-}
-
-export interface ApartmentFilterState {
-  buildingId?: string;
-  floor?: number;
-  bedrooms?: number;
-  minArea?: number;
-  maxArea?: number;
-  maxPrice?: number;
-  status?: UnitStatus;
-  orientation?: Orientation;
 }

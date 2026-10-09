@@ -207,7 +207,7 @@ export default function DevelopmentPage() {
           Не сте сигурни која зграда?
         </h2>
         <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
-          Филтрирајте секој стан од сите шест згради по големина, буџет и достапност.
+          Филтрирајте секој стан од сите шест згради по големина и достапност.
         </p>
         <div className="mt-8">
           <Button href="/apartments" variant="primary" tone="dark">

@@ -40,8 +40,6 @@ const UNIT_TYPES: { type: Apartment["type"]; bedrooms: number; bathrooms: number
   { type: "4-bedroom", bedrooms: 4, bathrooms: 3, area: 120 },
 ];
 
-const BASE_RATE_EUR_PER_SQM = 2150;
-
 function generateRooms(bedrooms: number, area: number, balconyArea: number): Room[] {
   if (bedrooms === 0) {
     const living = Math.round(area * 0.55 * 10) / 10;
@@ -338,8 +336,6 @@ function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[
   return REAL_B06_F3_UNITS.map((unit, idx) => {
     const area = Math.round(unit.rooms.reduce((sum, r) => sum + r.area, 0) * 100) / 100;
     const orientation = ORIENTATIONS[Math.floor(seeded(5, floor, idx, 8) * ORIENTATIONS.length)];
-    const orientationPremium = orientation.includes("South") ? 1.04 : 1;
-    const price = Math.round((area * BASE_RATE_EUR_PER_SQM * (1 + floor * 0.006) * orientationPremium) / 500) * 500;
     const id = `${buildingId}-f${floor}-${unitSlug(unit.number)}`;
 
     return {
@@ -353,7 +349,6 @@ function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[
       area,
       balconyArea: unit.balconyArea,
       orientation,
-      price,
       status: pickStatus(5, floor, 8, idx),
       rooms: unit.rooms,
       shape: buildFloorPlanShape(idx, REAL_B06_F3_UNITS.length),
@@ -453,10 +448,6 @@ export function generateDevelopment(): GeneratedDevelopment {
         const balconyArea = Math.round((6 + seeded(b, f, a, 11) * 10) * 10) / 10;
         const number = `${f}${String(a + 1).padStart(2, "0")}`;
         const id = `${buildingId}-f${f}-${number}`;
-        const floorPremium = 1 + f * 0.006;
-        const orientationPremium = orientation.includes("South") ? 1.04 : 1;
-        const price =
-          Math.round((unitType.area * BASE_RATE_EUR_PER_SQM * floorPremium * orientationPremium) / 500) * 500;
 
         const apartment: Apartment = {
           id,
@@ -469,7 +460,6 @@ export function generateDevelopment(): GeneratedDevelopment {
           area: unitType.area,
           balconyArea,
           orientation,
-          price,
           status: pickStatus(b, f, floorCount, a),
           rooms: generateRooms(unitType.bedrooms, unitType.area, balconyArea),
           shape: buildFloorPlanShape(a, apCount),
