@@ -35,4 +35,18 @@ describe("bookingLines", () => {
     });
     expect(lines.slice(0, 2)).toEqual(["Проект: City Center", "Зграда: Зграда 06"]);
   });
+
+  it("says the building was not chosen when the visitor does not know which one", () => {
+    const lines = bookingLines({
+      ...base,
+      project: "City Center",
+      projectId: "city-center",
+      undecided: false,
+      preferences: [],
+      building: null,
+      buildingId: null,
+      buildingUnknown: true,
+    });
+    expect(lines.slice(0, 2)).toEqual(["Проект: City Center", "Зграда: не е избрана"]);
+  });
 });

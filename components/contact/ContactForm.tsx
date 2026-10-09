@@ -26,6 +26,8 @@ type Errors = Partial<Record<Field, string>>;
 const SLOTS = buildSlots();
 /** The «not sure yet» answer to the first question: no project, and the visitor is advised at the consultation. */
 const UNDECIDED = "undecided";
+/** The same for the building: «Не знам која зграда» skips the apartment question. */
+const UNKNOWN_BUILDING = "unknown-building";
 const PREFERENCES = ["Гарсоњера", "Еднособен", "Двособен", "Трособен"];
 const MESSAGES: Record<Field, string> = {
   name: "Внесете име и презиме.",
@@ -113,6 +115,7 @@ export function ContactForm({
   const startUnit = units.find((u) => u.id === start?.unitId);
   const [projectId, setProjectId] = useState(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
   const [buildingId, setBuildingId] = useState(start?.buildingId ?? "");
+  const [buildingUnknown, setBuildingUnknown] = useState(false);
   const [hasUnit, setHasUnit] = useState<"" | "yes" | "no">(startUnit ? "yes" : "");
   const [floor, setFloor] = useState(startUnit ? String(startUnit.floor) : "");
   const [unitId, setUnitId] = useState(startUnit?.id ?? "");
@@ -157,10 +160,16 @@ export function ContactForm({
   // Which steps are answered, and so which are on screen: every step up to the first unanswered one.
   const order: StepId[] = undecided
     ? ["project", "prefs", "when", "details"]
-    : ["project", ...(needsBuilding ? (["building"] as const) : []), "unit", "when", "details"];
+    : [
+        "project",
+        ...(needsBuilding ? (["building"] as const) : []),
+        ...(buildingUnknown ? [] : (["unit"] as const)),
+        "when",
+        "details",
+      ];
   const answered: Record<StepId, boolean> = {
     project: Boolean(project) || undecided,
-    building: Boolean(building),
+    building: Boolean(building) || buildingUnknown,
     unit: hasUnit === "no" || (hasUnit === "yes" && Boolean(unit || unitTextOk)),
     prefs: true,
     when: Boolean(day && time),
@@ -177,7 +186,7 @@ export function ContactForm({
   const summaryOf = (id: StepId) => {
     if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
     if (id === "prefs") return prefs.length ? prefs.join(", ") : "По желба";
-    if (id === "building") return building?.name ?? "";
+    if (id === "building") return buildingUnknown ? "Не знам која зграда" : (building?.name ?? "");
     if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
     if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
     return "";
@@ -185,7 +194,7 @@ export function ContactForm({
   const summary = [
     undecided ? "Проект: не е избран" : project?.name,
     undecided && prefs.length ? `Што бара: ${prefs.join(", ")}` : undefined,
-    building?.name,
+    buildingUnknown ? "Зграда: не е избрана" : building?.name,
     hasUnit === "yes" ? unitLabel : undefined,
     day?.label,
     time || undefined,
@@ -207,6 +216,7 @@ export function ContactForm({
       setUndecided(next);
       setProjectId(next ? "" : id);
       setBuildingId("");
+      setBuildingUnknown(false);
       setHasUnit("");
       clearUnit();
       setPrefs([]);
@@ -229,8 +239,10 @@ export function ContactForm({
     );
   };
   const pickBuilding = (id: string) => {
-    if (id !== buildingId) {
-      setBuildingId(id);
+    const unknown = id === UNKNOWN_BUILDING;
+    if (unknown !== buildingUnknown || (!unknown && id !== buildingId)) {
+      setBuildingUnknown(unknown);
+      setBuildingId(unknown ? "" : id);
       setHasUnit("");
       clearUnit();
     }
@@ -297,6 +309,7 @@ export function ContactForm({
     setPrefs([]);
     setPrefsOpen(false);
     setBuildingId(start?.buildingId ?? "");
+    setBuildingUnknown(false);
     setHasUnit(startUnit ? "yes" : "");
     setFloor(startUnit ? String(startUnit.floor) : "");
     setUnitId(startUnit?.id ?? "");
@@ -345,16 +358,17 @@ export function ContactForm({
     }
     // every earlier step must be answered (they always are once this step is on screen)
     if (!day || !time) return;
-    if (!undecided && (!project || (needsBuilding && !building) || !answered.unit)) return;
+    if (!undecided && (!project || !answered.building || (!buildingUnknown && !answered.unit))) return;
     const request: BookingRequest = {
       project: undecided ? null : project!.name,
       projectId: undecided ? null : project!.id,
       undecided,
       preferences: undecided ? prefs : [],
-      building: undecided ? undefined : building?.name,
-      buildingId: undecided ? undefined : building?.id,
-      unit: !undecided && hasUnit === "yes" ? unitLabel || undefined : undefined,
-      unitId: !undecided && hasUnit === "yes" ? unit?.id : undefined,
+      building: undecided ? undefined : buildingUnknown ? null : building?.name,
+      buildingId: undecided ? undefined : buildingUnknown ? null : building?.id,
+      buildingUnknown: !undecided && buildingUnknown,
+      unit: !undecided && !buildingUnknown && hasUnit === "yes" ? unitLabel || undefined : undefined,
+      unitId: !undecided && !buildingUnknown && hasUnit === "yes" ? unit?.id : undefined,
       date: day.iso,
       dateLabel: day.label,
       time,
@@ -502,9 +516,17 @@ export function ContactForm({
               className="ct-chips"
               itemClassName="ct-chip"
               stagger
-              value={buildingId}
+              value={buildingUnknown ? UNKNOWN_BUILDING : buildingId}
               onChange={pickBuilding}
-              options={(project?.buildings ?? []).map((b) => ({ value: b.id, label: b.name, content: b.name }))}
+              options={[
+                ...(project?.buildings ?? []).map((b) => ({ value: b.id, label: b.name, content: b.name })),
+                {
+                  value: UNKNOWN_BUILDING,
+                  label: "Не знам која зграда",
+                  content: "Не знам која зграда",
+                  className: "is-secondary",
+                },
+              ]}
             />
           )}
 

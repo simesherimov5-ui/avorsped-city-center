@@ -6,9 +6,11 @@ export type BookingRequest = {
   undecided: boolean;
   /** What an undecided visitor is looking for (Двособен, Трособен…); empty if they skipped it or chose a project. */
   preferences: string[];
-  /** Only when the project has buildings (City Center). */
-  building?: string;
-  buildingId?: string;
+  /** Only when the project has buildings (City Center). Null when the visitor does not know which one. */
+  building?: string | null;
+  buildingId?: string | null;
+  /** True for «Не знам која зграда»: the team shows the buildings at the consultation. */
+  buildingUnknown?: boolean;
   /** A specific apartment, if the visitor has one in mind: its label ("Стан 21 · Кат 3") and, if picked from the list, its id. */
   unit?: string;
   unitId?: string;
@@ -30,7 +32,7 @@ export function bookingLines(request: BookingRequest): string[] {
     request.undecided
       ? `Што бара: ${request.preferences.length ? request.preferences.join(", ") : "не е наведено"}`
       : "",
-    request.building ? `Зграда: ${request.building}` : "",
+    request.buildingUnknown ? "Зграда: не е избрана" : request.building ? `Зграда: ${request.building}` : "",
     request.unit ? `Стан: ${request.unit}` : "",
     `Термин: ${request.dateLabel}, ${request.time}`,
     `Име: ${request.name}`,
