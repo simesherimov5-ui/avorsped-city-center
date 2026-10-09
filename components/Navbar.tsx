@@ -205,7 +205,7 @@ export function Navbar() {
               href="/"
               onPointerDown={spawnClickPulse}
               className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
-              aria-label="Јавор Шпед — почетна"
+              aria-label="Javor Sped Holding — почетна"
             >
               <Logo variant="icon" />
             </Link>

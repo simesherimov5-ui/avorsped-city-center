@@ -1,4 +1,4 @@
-import { apartments, buildings, projects } from "@/data";
+import { placeOf, projectsOnSale } from "@/data";
 import { ApartmentFinder } from "@/components/apartments/ApartmentFinder";
 import { Button } from "@/components/ui/Button";
 import { floorPlanImageForApartment } from "@/lib/assets";
@@ -7,31 +7,36 @@ import { parseChoices, sortForPage, type FinderApartment, type FinderBuilding } 
 type Params = Record<string, string | string[] | undefined>;
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
-// The buildings that have apartments, in the order of the data, with the project each belongs to.
-const finderBuildings: FinderBuilding[] = buildings
-  .filter((b) => apartments.some((a) => a.buildingId === b.id))
-  .map((b) => ({
+// Every project on sale, in the order of the projects page, each with its buildings and apartments (a project with
+// no apartments yet is one building with no floors). Nothing here knows which projects there are.
+const sale = projectsOnSale();
+
+const finderBuildings: FinderBuilding[] = sale.flatMap(({ project, buildings }) =>
+  buildings.map((b) => ({
     id: b.id,
     name: b.name,
-    project: projects.find((p) => p.buildings?.some((x) => x.id === b.id))?.name ?? b.name,
-    floors: b.floors.map((f) => ({
-      number: f.number,
-      label: f.label,
-      apartmentIds: apartments.filter((a) => a.buildingId === b.id && a.floor === f.number).map((a) => a.id),
-    })),
-  }));
+    project: project.name,
+    projectId: project.id,
+    projectHref: project.href ?? `/projects/${project.slug}`,
+    coming: b.floors.length === 0,
+    floors: b.floors,
+  }))
+);
 
 const finderApartments: FinderApartment[] = sortForPage(
-  apartments.map((a) => ({
-    id: a.id,
-    buildingId: a.buildingId,
-    floor: a.floor,
-    number: a.number,
-    bedrooms: a.bedrooms,
-    area: a.area,
-    status: a.status,
-    plan: (({ src, alt, isPlaceholder }) => ({ src, alt, isPlaceholder }))(floorPlanImageForApartment(a)),
-  })),
+  sale.flatMap(({ apartments }) =>
+    apartments.map((a) => ({
+      id: a.id,
+      projectId: a.projectId,
+      buildingId: placeOf(a),
+      floor: a.floor,
+      number: a.number,
+      bedrooms: a.bedrooms,
+      area: a.area,
+      status: a.status,
+      plan: (({ src, alt, isPlaceholder }) => ({ src, alt, isPlaceholder }))(floorPlanImageForApartment(a)),
+    }))
+  ),
   finderBuildings.map((b) => b.id)
 );
 

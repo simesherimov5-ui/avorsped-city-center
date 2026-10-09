@@ -3,6 +3,8 @@ import type { UnitStatus } from "@/types";
 /** What the finder needs to know about one apartment. The page builds these from the project data. */
 export type FinderApartment = {
   id: string;
+  projectId: string;
+  /** The building it is in: its id, or the project's id for a project that is one building. */
   buildingId: string;
   floor: number;
   number: string;
@@ -18,7 +20,12 @@ export type FinderApartment = {
 export type FinderBuilding = {
   id: string;
   name: string;
+  /** The project's name, and its id and page (for the «coming soon» message). */
   project: string;
+  projectId: string;
+  projectHref: string;
+  /** The project has no apartments in the data yet: the street draws an outline without windows. */
+  coming: boolean;
   floors: { number: number; label: string; apartmentIds: string[] }[];
 };
 
@@ -107,6 +114,10 @@ export function roomOptions(list: FinderApartment[]): number[] {
   return [...new Set(list.map((a) => a.bedrooms))].sort((a, b) => a - b);
 }
 
+/** Where a building is, for a label: "<project> · <building>", or just the project where it is one building. */
+export const placeText = (b: Pick<FinderBuilding, "name" | "project">) =>
+  b.project === b.name ? b.name : `${b.project} · ${b.name}`;
+
 export const roomLabel = (rooms: number) => (rooms === 0 ? "Студио" : rooms === 1 ? "1 соба" : `${rooms} соби`);
 
 /** A fixed number between 0 and 1 for an id, the same on the server and in the browser (it staggers the windows lighting up). */
@@ -175,6 +186,9 @@ const WINDOW_GAP = 0.5;
 const BODY_SIDES = 0.85;
 const BUILDING_GAP = 3;
 const GROUP_GAP = 5;
+/** A project with no apartments yet is drawn as an empty outline this wide (a body of four windows) and this tall (six floors). */
+const COMING_WIDTH_UNITS = 7.2;
+const COMING_FLOORS = 6;
 
 /** The widest floor of a building, in windows. */
 export const widestFloor = (building: FinderBuilding) =>
@@ -182,14 +196,22 @@ export const widestFloor = (building: FinderBuilding) =>
 
 /** The width of a building's body in u: its widest floor of windows, the gaps between them and the sides. */
 export const bodyUnits = (building: FinderBuilding) =>
-  widestFloor(building) + (widestFloor(building) - 1) * WINDOW_GAP + 2 * BODY_SIDES;
+  building.coming
+    ? COMING_WIDTH_UNITS
+    : widestFloor(building) + (widestFloor(building) - 1) * WINDOW_GAP + 2 * BODY_SIDES;
+
+/** The height of a building in u: the cap, the floors of windows with the gaps and padding, not the base bar. */
+export const heightUnits = (building: FinderBuilding) => {
+  const floors = building.coming ? COMING_FLOORS : Math.max(1, building.floors.length);
+  return 0.75 + floors * 1.35 + (floors - 1) * 0.6 + 1.5;
+};
 
 /**
  * How many u the whole street is wide (every body, the gaps between buildings and between project groups, the
  * overhang of the first and last base bar), and how many fixed pixels the borders add. The page divides the content
  * width by this to get u (7px at least, 14px at most).
  */
-export function streetUnits(buildings: FinderBuilding[]): { units: number; pixels: number } {
+export function streetUnits(buildings: FinderBuilding[]): { units: number; pixels: number; height: number } {
   const groups = new Map<string, FinderBuilding[]>();
   for (const b of buildings) groups.set(b.project, [...(groups.get(b.project) ?? []), b]);
   let units = 1.5 + 1.3;
@@ -197,5 +219,9 @@ export function streetUnits(buildings: FinderBuilding[]): { units: number; pixel
     units += group.reduce((sum, b) => sum + bodyUnits(b), 0) + (group.length - 1) * BUILDING_GAP;
   }
   units += (groups.size - 1) * GROUP_GAP;
-  return { units: Math.ceil(units * 10) / 10 + 0.5, pixels: buildings.length * 2 };
+  return {
+    units: Math.ceil(units * 10) / 10 + 0.5,
+    pixels: buildings.length * 2,
+    height: Math.ceil(Math.max(1, ...buildings.map(heightUnits)) * 10) / 10,
+  };
 }

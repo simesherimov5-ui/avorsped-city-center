@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCompare } from "@/lib/compare-context";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
-import { getApartment } from "@/data";
+import { getApartment, placeLabel } from "@/data";
 import { X } from "lucide-react";
 
 /**
@@ -62,7 +62,10 @@ export function CompareBar() {
                   key={id}
                   className="flex shrink-0 items-center gap-1.5 border border-line bg-cream px-3 py-1.5 text-xs"
                 >
-                  Стан {apt.number}
+                  <span>
+                    Стан {apt.number}
+                    <span className="ml-1.5 text-muted">{placeLabel(apt).text}</span>
+                  </span>
                   <button onClick={() => toggle(id)} aria-label={`Отстрани стан ${apt.number}`}>
                     <X className="h-3 w-3" />
                   </button>

@@ -2,15 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronLeft } from "lucide-react";
 import { Phone } from "lucide-react";
-import {
-  apartments,
-  getApartment,
-  getBuilding,
-  getApartmentsForFloor,
-  companyInfo,
-  development,
-  projects,
-} from "@/data";
+import { apartments, getApartment, getProject, placeLabel, placeOf, companyInfo } from "@/data";
 import { formatArea, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -30,11 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const apt = getApartment(id);
   if (!apt) return { title: "Стан", robots: { index: false } };
-  const building = getBuilding(apt.buildingId);
-  const where = building ? `Зграда ${building.shortLabel}` : "";
+  const where = placeLabel(apt).text;
   const bedrooms = apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type);
   return pageMetadata({
-    title: `Стан ${apt.number}, ${where} — ${development.name}`,
+    title: `Стан ${apt.number}, ${where}`,
     description: `${bedrooms} стан ${apt.number} во ${where}, ${apt.floor === 0 ? "приземје" : `кат ${apt.floor}`}: ${formatArea(apt.area)} површина, ориентација ${orientationLabel(apt.orientation).toLowerCase()}. Погледнете го распоредот и закажете консултација.`,
     path: `/apartments/${apt.id}`,
   });
@@ -44,13 +35,25 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
   const apartment = getApartment(id);
   if (!apartment) notFound();
-  const building = getBuilding(apartment.buildingId);
+  const place = placeLabel(apartment);
+  const project = getProject(apartment.projectId);
   const floorPlanImage = floorPlanImageForApartment(apartment);
-  const cityCenterId = projects.find((p) => p.id === "city-center")?.id ?? "";
 
-  const inquiryHref = `/contact?project=${encodeURIComponent(cityCenterId)}&building=${apartment.buildingId}&apartment=${apartment.id}`;
+  const inquiryHref = `/contact?project=${encodeURIComponent(apartment.projectId)}${apartment.buildingId ? `&building=${encodeURIComponent(apartment.buildingId)}` : ""}&apartment=${apartment.id}`;
 
-  const others = getApartmentsForFloor(apartment.buildingId, apartment.floor).filter((a) => a.id !== apartment.id);
+  // Back to the floor plan where the project has pages per building and floor, otherwise to the project.
+  const projectHref = project?.href ?? `/projects/${project?.slug ?? ""}`;
+  const back = apartment.buildingId
+    ? { href: `${projectHref}/${apartment.buildingId}/${apartment.floor}`, text: "Назад кон основата на катот" }
+    : { href: projectHref, text: "Назад кон проектот" };
+
+  const others = apartments.filter(
+    (a) =>
+      a.projectId === apartment.projectId &&
+      placeOf(a) === placeOf(apartment) &&
+      a.floor === apartment.floor &&
+      a.id !== apartment.id
+  );
 
   // The specifications and the enquiry buttons. On a computer this is the sticky column on the right; on a
   // phone the same block comes straight after the floor plan, not after everything else on the page.
@@ -85,11 +88,11 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     <ZoomEnter className="pt-24 sm:pt-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <ZoomNavLink
-          href={`/development/${apartment.buildingId}/${apartment.floor}`}
-          label={building?.name}
+          href={back.href}
+          label={place.building || place.project}
           className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
         >
-          <ChevronLeft className="h-4 w-4" /> Назад кон основата на катот
+          <ChevronLeft className="h-4 w-4" /> {back.text}
         </ZoomNavLink>
       </div>
 
@@ -97,7 +100,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="eyebrow text-muted">
-              {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
+              {place.text} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
             <h1 className="t-h1 mt-1.5">Стан {apartment.number}</h1>
           </div>
@@ -139,9 +142,11 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     </tbody>
                   </table>
                   <p className="mt-3 text-xs leading-relaxed text-muted">
-                    {floorPlanImage.isExactMatch
-                      ? `Точна архитектонска основа за Стан ${apartment.number}.`
-                      : `Основата е пример за овој тип на стан. Мерењата во табелата се специфични за Стан ${apartment.number}.`}
+                    {floorPlanImage.isPlaceholder
+                      ? `Основата за Стан ${apartment.number} ќе биде додадена.`
+                      : floorPlanImage.isExactMatch
+                        ? `Архитектонска основа за Стан ${apartment.number}.`
+                        : `Основата е пример за овој тип на стан. Мерењата во табелата се специфични за Стан ${apartment.number}.`}
                   </p>
                 </div>
               </div>

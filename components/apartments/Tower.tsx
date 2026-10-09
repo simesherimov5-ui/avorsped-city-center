@@ -19,7 +19,7 @@ export function Tower({
   return (
     <span className="af-tw">
       <span className="af-cap" />
-      <span className="af-body">
+      <span className={`af-body${building.coming ? " is-empty" : ""}`}>
         {[...building.floors]
           .sort((a, b) => b.number - a.number)
           .map((floor) => (

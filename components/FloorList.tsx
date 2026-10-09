@@ -9,7 +9,7 @@ export interface FloorListItem {
 }
 
 // Generic top-down floor list used by any project with floor-level navigation —
-// City Center's per-building floors and Дојрански Рај's single-building floors
+// The floors of a project's building, or of a project that is one building
 // both render through this instead of two near-identical components. Styled as
 // a numbered rail (echoing the construction-progress story elsewhere on the
 // site) rather than a plain link list, so the current floor reads at a glance.

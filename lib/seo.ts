@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { truncate } from "@/lib/truncate";
 
-export const SITE_NAME = "Јавор Шпед";
+/** The name of the site: the holding, not any one of its projects. */
+export const SITE_NAME = "Javor Sped Holding";
 
 /**
  * The public address of the site. Set NEXT_PUBLIC_SITE_URL once there is a domain; until then Vercel's own address
@@ -21,7 +22,7 @@ export { truncate };
 /**
  * The metadata every page needs, in one place: its own title and description, a canonical link, and matching Open
  * Graph / Twitter tags (a page's own openGraph replaces the layout's, so it has to carry everything itself).
- * `title` is the page's own part ("Проекти"): the layout adds " | Јавор Шпед" to the browser title.
+ * `title` is the page's own part ("Проекти"): the layout adds " | Javor Sped Holding" to the browser title.
  */
 export function pageMetadata({
   title,

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
-import { projects } from "@/data";
+import { apartmentsOf, projects } from "@/data";
 import { Media } from "@/components/ui/Media";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { RoomVideoTour } from "@/components/RoomVideoTour";
@@ -156,7 +156,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         )
       )}
 
-      {project.floors && <FloorPickerSection floors={project.floors.map((floor) => ({ ...floor, apartments: [] }))} />}
+      {project.floors && (
+        <FloorPickerSection
+          floors={project.floors.map((floor) => ({
+            ...floor,
+            apartments: apartmentsOf(project.id)
+              .filter((a) => a.floor === floor.number)
+              .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms, status: a.status })),
+          }))}
+        />
+      )}
 
       {!completed && (
         <section className="border-t border-line">

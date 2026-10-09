@@ -16,7 +16,14 @@ import { sendBooking, type BookingRequest } from "./send-booking";
 /** A project the visitor can ask about, with its buildings if it has any. Passed in by the page, from the data. */
 export type ProjectOption = { id: string; name: string; buildings: { id: string; name: string }[] };
 /** An apartment that can be asked about (available, or the one the visitor came from). */
-export type UnitOption = { id: string; buildingId: string; floor: number; number: string; area: number };
+export type UnitOption = {
+  id: string;
+  projectId: string;
+  buildingId?: string;
+  floor: number;
+  number: string;
+  area: number;
+};
 export type BookingStart = { projectId?: string; buildingId?: string; unitId?: string };
 
 type StepId = "project" | "building" | "unit" | "prefs" | "when" | "details";
@@ -147,7 +154,13 @@ export function ContactForm({
   const needsBuilding = (project?.buildings.length ?? 0) > 0;
   const building = project?.buildings.find((b) => b.id === buildingId);
   // The apartments the visitor can pick: those of the chosen building. A project with no list gets the text field.
-  const pool = needsBuilding && building ? units.filter((u) => u.buildingId === building.id) : [];
+  const pool = !project
+    ? []
+    : needsBuilding
+      ? building
+        ? units.filter((u) => u.buildingId === building.id)
+        : []
+      : units.filter((u) => u.projectId === project.id);
   const floors = [...new Set(pool.map((u) => u.floor))].sort((a, b) => a - b);
   const floorUnits = pool.filter((u) => String(u.floor) === floor);
   const unit = pool.find((u) => u.id === unitId);

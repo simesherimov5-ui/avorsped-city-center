@@ -106,7 +106,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 3.2 Apartment data (before-launch B5)
 
-- **Where:** `data/generate.ts` (generated mock data; only Building 06, floor 3 is real).
+- **Where:** `data/generate.ts` (generated mock data; only Building 06, floor 3 is real). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change.
 - **Needed for each apartment:** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
 - **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | достапен`.
 
@@ -160,12 +160,12 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 - **Where:** the `dojranski-raj` entry of `projects` in `data/index.ts` and `dojranFloors` in `data/dojran.ts`.
 - **Needed:** the real number of apartments (the project says 30, the floor pages list 7), and per apartment: floor, number, area, status, one floor plan, 4–10 photos or renders.
 - **Format:** spreadsheet row per apartment as in 3.2; photos landscape at least 1600 px wide.
-- **Until then:** each floor page only says "Наскоро"; say whether to hide the floor pages.
+- **Until then:** the apartments listed on Пронајди стан and on the floor pages are sample data made from the floor list (`buildSampleApartments`, marked `sample` in `data/index.ts`); apartment list for Дојрански Рај is needed to replace them.
 
 ## 5. Станбена Куќа
 
 - **Where:** the `stanbena-kukja` entry of `projects` in `data/index.ts` (name `Станбена Куќа`, address `/projects/stanbena-kukja`).
-- **Needed:** the final project name, expected completion, current phase, and the 7-apartment list as in 3.2.
+- **Needed:** the final project name, expected completion, current phase, and the 7-apartment list as in 3.2 (apartment list for Станбена Куќа). Until then the seven apartments come from the floors, areas and types on its page, with sample statuses, marked `sample` in `data/index.ts`.
 - **Format:** name up to 40 characters; the old address then redirects permanently to the new one.
 
 ---

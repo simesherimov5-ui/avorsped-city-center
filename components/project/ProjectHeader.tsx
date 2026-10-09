@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** "City Center" becomes "City " and "Center": the last word is set in italic Бронза (the accent on a light surface). */
+/** The project's name with its last word set in italic Бронза (the accent on a light surface). */
 function splitName(name: string) {
   const at = name.lastIndexOf(" ");
   return at < 0 ? { lead: name, last: "" } : { lead: name.slice(0, at + 1), last: name.slice(at + 1) };

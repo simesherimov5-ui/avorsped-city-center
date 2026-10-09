@@ -6,7 +6,7 @@ export type BookingRequest = {
   undecided: boolean;
   /** What an undecided visitor is looking for (Двособен, Трособен…); empty if they skipped it or chose a project. */
   preferences: string[];
-  /** Only when the project has buildings (City Center). Null when the visitor does not know which one. */
+  /** Only when the project has several buildings. Null when the visitor does not know which one. */
   building?: string | null;
   buildingId?: string | null;
   /** True for «Не знам која зграда»: the team shows the buildings at the consultation. */

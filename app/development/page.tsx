@@ -43,7 +43,9 @@ const LOCATION_TEXT = {
 
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
-  const counts = availabilityCounts(apartments);
+  // City Center's own page: its own apartments, not the whole holding's
+  const ccApartments = apartments.filter((a) => a.projectId === "city-center");
+  const counts = availabilityCounts(ccApartments);
   const availablePct = Math.round((counts.available / counts.total) * 100);
   const reservedPct = Math.round((counts.reserved / counts.total) * 100);
   const soldPct = 100 - availablePct - reservedPct;
@@ -192,7 +194,7 @@ export default function DevelopmentPage() {
               <Masterplan
                 variant="full"
                 buildings={buildings}
-                apartments={apartments}
+                apartments={ccApartments}
                 image={development.masterplanImage}
                 hotspots={development.buildingHotspots}
                 basePath="/development"

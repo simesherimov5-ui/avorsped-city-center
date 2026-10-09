@@ -21,8 +21,12 @@ describe("pageMetadata", () => {
 
   it("gives the page its own canonical link and matching social tags", () => {
     expect(m.alternates?.canonical).toBe("/projects");
-    expect(m.openGraph).toMatchObject({ title: "Проекти | Јавор Шпед", description: "Опис.", url: "/projects" });
-    expect(m.twitter).toMatchObject({ card: "summary_large_image", title: "Проекти | Јавор Шпед" });
+    expect(m.openGraph).toMatchObject({
+      title: "Проекти | Javor Sped Holding",
+      description: "Опис.",
+      url: "/projects",
+    });
+    expect(m.twitter).toMatchObject({ card: "summary_large_image", title: "Проекти | Javor Sped Holding" });
   });
 
   it("can keep a page out of search results", () => {

@@ -1,23 +1,13 @@
-import { generateDevelopment } from "./generate";
+import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./generate";
+import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
 
 const generated = generateDevelopment();
 
+/** City Center's own development (its masterplan, buildings and text): only City Center's pages read this. */
 export const development = generated.development;
-export const apartments: Apartment[] = generated.apartments;
+/** City Center's buildings. Other projects' buildings are in `projects[n].buildings`; read them through `projectsOnSale()`. */
 export const buildings: Building[] = generated.development.buildings;
-
-export function getApartment(id: string): Apartment | undefined {
-  return apartments.find((a) => a.id === id);
-}
-
-export function getBuilding(id: string): Building | undefined {
-  return buildings.find((b) => b.id === id);
-}
-
-export function getApartmentsForFloor(buildingId: string, floor: number): Apartment[] {
-  return apartments.filter((a) => a.buildingId === buildingId && a.floor === floor);
-}
 
 export function availabilityCounts(list: Apartment[] = apartments) {
   return {
@@ -284,16 +274,144 @@ export const projects: Project[] = [
   },
 ];
 
+// ---- the apartments of every project
+
+/** What is known of Станбена Куќа's seven apartments (its floors, areas and types are the project's own data). */
+function stanbenaKukjaUnits(): SampleUnit[] {
+  const types = projects.find((p) => p.id === "stanbena-kukja")?.apartmentTypes ?? [];
+  const [ground, odd, even] = [types[0]?.image, types[2]?.image, types[1]?.image];
+  return [
+    { floor: 0, number: "1", area: 115, bedrooms: 3, bathrooms: 2, planImage: ground },
+    ...[1, 2, 3].flatMap((floor) => [
+      { floor, number: String(floor * 2), area: 87, bedrooms: 2, bathrooms: 1, planImage: even },
+      { floor, number: String(floor * 2 + 1), area: 83, bedrooms: 2, bathrooms: 1, planImage: odd },
+    ]),
+  ];
+}
+
+/** Дојрански Рај: the studios per floor the floor list gives; the areas are sample values between 27 and 41 м². */
+function dojranskiRajUnits(): SampleUnit[] {
+  return dojranFloors.flatMap((floor) => {
+    const count = Number.parseInt(floor.unitsHint, 10) || 0;
+    return Array.from({ length: count }, (_, i) => ({
+      floor: floor.number,
+      number: `${floor.number}${String(i + 1).padStart(2, "0")}`,
+      area: 27 + ((floor.number * 7 + i * 5) % 15),
+      bedrooms: 0,
+      bathrooms: 1,
+    }));
+  });
+}
+
+/**
+ * Every apartment of every project, one list. City Center's are generated sample data (except Building 06, floor 3);
+ * the projects without a list from the client get sample apartments made the same way, marked `sample`, until the real
+ * lists arrive (docs/content-needed.md). A project with no entry here simply has no apartments yet.
+ */
+export const apartments: Apartment[] = [
+  ...generated.apartments,
+  ...buildSampleApartments("stanbena-kukja", 1, stanbenaKukjaUnits()),
+  ...buildSampleApartments("dojranski-raj", 2, dojranskiRajUnits()),
+];
+
+export function getApartment(id: string): Apartment | undefined {
+  return apartments.find((a) => a.id === id);
+}
+
+/** The apartments of one project. */
+export function apartmentsOf(projectId: string): Apartment[] {
+  return apartments.filter((a) => a.projectId === projectId);
+}
+
+export function getProject(id: string): Project | undefined {
+  return projects.find((p) => p.id === id);
+}
+
+export function getBuilding(id: string): Building | undefined {
+  return buildings.find((b) => b.id === id);
+}
+
+/** City Center's per-building floors (its own /development pages). */
+export function getApartmentsForFloor(buildingId: string, floor: number): Apartment[] {
+  return apartments.filter((a) => a.buildingId === buildingId && a.floor === floor);
+}
+
+const floorLabel = (number: number) => (number === 0 ? "Приземје" : `Кат ${number}`);
+
+/** A building of a project on sale, as the Пронајди стан street draws it. */
+export interface SaleBuilding {
+  /** The building's id; a project that is one building uses the project's id. */
+  id: string;
+  name: string;
+  /** Lowest floor first; each with the ids of its apartments, in order. Empty while the project has no apartments yet. */
+  floors: { number: number; label: string; apartmentIds: string[] }[];
+}
+
+export interface SaleProject {
+  project: Project;
+  buildings: SaleBuilding[];
+  apartments: Apartment[];
+}
+
+/** The place an apartment is in: its building's id, or its project's id for a project that is one building. */
+export const placeOf = (a: Apartment) => a.buildingId ?? a.projectId;
+
+/**
+ * The projects that are on sale (not the completed ones), in the order of the projects page, each with its buildings and
+ * apartments. Everything that lists apartments reads through this: adding a project (and its apartments) to the data
+ * makes it appear everywhere. A project with no apartments yet is still listed, as one building with no floors.
+ */
+export function projectsOnSale(): SaleProject[] {
+  return projects
+    .filter((p) => p.status !== "completed")
+    .map((project) => {
+      const own = apartments.filter((a) => a.projectId === project.id);
+      const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
+        ? project.buildings
+            .filter((b) => own.some((a) => a.buildingId === b.id))
+            .map((b) => ({ id: b.id, name: b.name, labels: new Map(b.floors.map((f) => [f.number, f.label])) }))
+        : [{ id: project.id, name: project.name }];
+      const buildingsOfProject: SaleBuilding[] = places.map((place) => {
+        const here = own.filter((a) => placeOf(a) === place.id);
+        const numbers = [...new Set(here.map((a) => a.floor))].sort((a, b) => a - b);
+        return {
+          id: place.id,
+          name: place.name,
+          floors: numbers.map((number) => ({
+            number,
+            label: place.labels?.get(number) ?? floorLabel(number),
+            apartmentIds: here.filter((a) => a.floor === number).map((a) => a.id),
+          })),
+        };
+      });
+      return { project, buildings: buildingsOfProject, apartments: own };
+    });
+}
+
+/** Where an apartment is, for a label: the project, and the building when the project has several. */
+export function placeLabel(a: Apartment): { project: string; building: string; text: string } {
+  const project = getProject(a.projectId);
+  const projectName = project?.name ?? "";
+  const building = project?.buildings?.find((b) => b.id === a.buildingId)?.name ?? "";
+  return { project: projectName, building, text: building ? `${projectName} · ${building}` : projectName };
+}
+
 export const companyStats: CompanyStat[] = [
   { value: "30+", label: "Години искуство" },
   { value: "5", label: "Завршени проекти" },
   { value: "540+", label: "Изградени станови" },
-  { value: "6", label: "Згради во изградба" },
+  // the buildings of the projects that are under construction (a project that is one building counts as one)
+  {
+    value: String(
+      projects.filter((p) => p.status === "under-construction").reduce((n, p) => n + (p.buildings?.length ?? 1), 0)
+    ),
+    label: "Згради во изградба",
+  },
 ];
 
 /**
  * The "Нашиот пат" timeline on the About page — the one place to add milestones.
- * Only what the client has confirmed is listed: the founding, and the current City Center project.
+ * Only what the client has confirmed is listed: the founding, and the projects under construction (read from the projects data).
  * TODO(client): add the other milestones (year + one short sentence each) as they are confirmed.
  */
 export const companyTimeline: CompanyMilestone[] = [
@@ -304,7 +422,10 @@ export const companyTimeline: CompanyMilestone[] = [
   },
   {
     year: "2026",
-    text: "City Center — шест згради во изградба.",
+    text: `Во изградба: ${projects
+      .filter((p) => p.status === "under-construction")
+      .map((p) => p.name)
+      .join(" и ")}.`,
     image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
   },
 ];
@@ -314,7 +435,7 @@ export const companyInfo = {
   shortName: "Јавор Шпед",
   founded: 1994,
   story:
-    "Основан во 1994 година, Јавор Шпед започна како шпедитерска и логистичка компанија, а денес прерасна во диверзифицирана холдинг група која опфаќа транспорт, енергетика, инженеринг и градежништво. Истата оперативна дисциплина ја пренесуваме и во станбената архитектура — а City Center е нашиот досега најамбициозен проект.",
+    "Основан во 1994 година, Јавор Шпед започна како шпедитерска и логистичка компанија, а денес прерасна во диверзифицирана холдинг група која опфаќа транспорт, енергетика, инженеринг и градежништво. Истата оперативна дисциплина ја пренесуваме и во станбената архитектура.",
   mission:
     "Да проектираме и градиме станбени простори кои го подобруваат начинот на живот — комбинирајќи современа архитектура, издржлива градба и транспарентна комуникација со секој купувач.",
   values: [

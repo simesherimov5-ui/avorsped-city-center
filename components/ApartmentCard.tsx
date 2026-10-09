@@ -7,14 +7,14 @@ import { formatArea, orientationLabel } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
 import { floorPlanImageForApartment } from "@/lib/assets";
-import { getBuilding } from "@/data";
+import { placeLabel } from "@/data";
 import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
 import { roomsText } from "@/lib/plural";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
 export function ApartmentCard({ apartment, priority }: { apartment: Apartment; priority?: boolean }) {
-  const building = getBuilding(apartment.buildingId);
+  const place = placeLabel(apartment);
   const { ids, toggle, isFull } = useCompare();
   const selected = ids.includes(apartment.id);
 
@@ -49,7 +49,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           <div>
             <div className="t-h3">Стан {apartment.number}</div>
             <div className="mt-1 text-xs text-muted">
-              {building?.name} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
+              {place.text} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
             </div>
           </div>
           <Link

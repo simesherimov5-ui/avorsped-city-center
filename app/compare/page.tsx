@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Спореди станови",
-  description: "Споредете до три станови од City Center една до друга: површина, спални соби и ориентација.",
+  description: "Споредете до три станови една до друга: површина, спални соби и ориентација.",
   path: "/compare",
   noindex: true, // the page shows whatever is in the address, so it is not worth indexing
 });

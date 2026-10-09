@@ -3,6 +3,7 @@
 import "./finder.css";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Button } from "@/components/ui/Button";
 import { Media } from "@/components/ui/Media";
 import { BuildingMark } from "@/components/ui/Logo";
@@ -13,6 +14,7 @@ import {
   areaOptions,
   choicesQuery,
   countLine,
+  placeText,
   filterApartments,
   floorOptions,
   parseChoices,
@@ -96,7 +98,11 @@ export function ApartmentFinder({
   const tabs = useRef<HTMLDivElement>(null);
 
   const byId = useMemo(() => new Map(apartments.map((a) => [a.id, a])), [apartments]);
-  const buildingName = (id: string) => buildings.find((b) => b.id === id)?.name ?? "";
+  // where an apartment is, wherever two projects could be confused: "<project> · <building>", or just the project
+  const buildingName = (id: string) => {
+    const b = buildings.find((x) => x.id === id);
+    return b ? placeText(b) : "";
+  };
   const buildingIds = useMemo(() => buildings.map((b) => b.id), [buildings]);
   const building = buildings.find((b) => b.id === choices.building);
 
@@ -393,11 +399,16 @@ export function ApartmentFinder({
 
         <section className="af-results af-gut">
           <div className="af-wrap">
-            <div className="af-count af-num" role="status" aria-live="polite">
-              {countLine(shown.length, list.length)}
-            </div>
+            {building?.coming ? (
+              <ComingSoon building={building} />
+            ) : (
+              <div className="af-count af-num" role="status" aria-live="polite">
+                {countLine(shown.length, list.length)}
+                {building && list.length > 0 ? ` · ${placeText(building)}` : ""}
+              </div>
+            )}
 
-            {list.length === 0 && (
+            {!building?.coming && list.length === 0 && (
               <p className="af-empty">Пробајте со друга зграда, друг број на соби или без „Само достапни“.</p>
             )}
 
@@ -500,6 +511,23 @@ export function ApartmentFinder({
         onStep={openApartment}
         onClose={closeApartment}
       />
+    </div>
+  );
+}
+
+/** A project with no apartments in the data yet: said plainly, with the way to ask and the project's own page. */
+function ComingSoon({ building }: { building: FinderBuilding }) {
+  return (
+    <div className="af-coming">
+      <p className="af-coming-t">Становите за {building.project} наскоро ќе бидат објавени.</p>
+      <div className="af-coming-act">
+        <Button href={`/contact?project=${encodeURIComponent(building.projectId)}`} variant="primary">
+          Закажи консултација
+        </Button>
+        <Link href={building.projectHref} className="af-coming-link">
+          Страница на проектот <span aria-hidden>→</span>
+        </Link>
+      </div>
     </div>
   );
 }

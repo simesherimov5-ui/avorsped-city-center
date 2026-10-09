@@ -25,7 +25,7 @@ export function Street({
   playing: string | null;
   onSelect: (id: string) => void;
 }) {
-  const { units, pixels } = streetUnits(buildings);
+  const { units, pixels, height } = streetUnits(buildings);
   const groups: { project: string; items: FinderBuilding[] }[] = [];
   for (const b of buildings) {
     const group = groups.find((g) => g.project === b.project);
@@ -38,8 +38,27 @@ export function Street({
   useEffect(() => {
     const box = scroller.current;
     if (!box) return;
-    const measure = () => setScrolls(box.scrollWidth > box.clientWidth + 2);
-    measure();
+    // The size of a window (u) is the largest, between 7px and 14px (and low enough for the tallest building to stay
+    // under 240px), at which the whole street still fits the box. The stylesheet has an estimate from the number of
+    // windows; this finds the exact size, because the names and captions are text of a width nobody can compute.
+    const fit = () => {
+      const street = box.firstElementChild as HTMLElement | null;
+      if (!street) return;
+      const tallest = Number.parseFloat(box.style.getPropertyValue("--h")) || 1;
+      let low = 7;
+      let high = Math.max(7, Math.min(14, 236 / tallest));
+      for (let i = 0; i < 9; i++) {
+        const mid = (low + high) / 2;
+        box.style.setProperty("--u", `${mid}px`);
+        if (street.scrollWidth <= box.clientWidth) low = mid;
+        else high = mid;
+      }
+      box.style.setProperty("--u", `${low}px`);
+    };
+    const measure = () => {
+      fit();
+      setScrolls(box.scrollWidth > box.clientWidth + 2);
+    };
     const observer = new ResizeObserver(measure);
     observer.observe(box);
     const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
@@ -55,7 +74,11 @@ export function Street({
 
   return (
     <>
-      <div ref={scroller} className="af-street-scroll" style={{ "--n": units, "--k": `${pixels}px` } as CSSProperties}>
+      <div
+        ref={scroller}
+        className="af-street-scroll"
+        style={{ "--n": units, "--k": `${pixels}px`, "--h": height } as CSSProperties}
+      >
         <div className={`af-street${selected !== "all" ? " has-sel" : ""}`}>
           <i className="af-ground" aria-hidden />
           {groups.map((group) => (
@@ -65,7 +88,9 @@ export function Street({
                 {group.items.map((b) => {
                   const free = availableIn(b);
                   const on = selected === b.id;
-                  const label = `${b.name}${b.project !== b.name ? `, ${b.project}` : ""}, ${free} ${availableWord(free)}`;
+                  const label = `${b.name}${b.project !== b.name ? `, ${b.project}` : ""}, ${
+                    b.coming ? "наскоро" : `${free} ${availableWord(free)}`
+                  }`;
                   return (
                     <button
                       key={b.id}
@@ -78,9 +103,7 @@ export function Street({
                       <Tower building={b} apartments={apartments} />
                       <span className="af-bld-label" aria-hidden>
                         <b>{b.name}</b>
-                        <small className="af-num">
-                          {free} {availableWord(free)}
-                        </small>
+                        <small className="af-num">{b.coming ? "Наскоро" : `${free} ${availableWord(free)}`}</small>
                       </span>
                     </button>
                   );

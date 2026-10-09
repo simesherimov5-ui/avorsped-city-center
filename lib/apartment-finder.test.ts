@@ -26,6 +26,7 @@ const apt = (
   status: FinderApartment["status"]
 ): FinderApartment => ({
   id,
+  projectId: "p",
   buildingId,
   floor,
   number,
@@ -135,7 +136,11 @@ describe("misc", () => {
       id,
       name: id,
       project,
-      floors: [{ number: 0, label: "", apartmentIds: Array.from({ length: per }, (_, i) => `${id}-${i}`) }],
+      projectId: project,
+      projectHref: `/projects/${project}`,
+      coming: per === 0,
+      floors:
+        per === 0 ? [] : [{ number: 0, label: "", apartmentIds: Array.from({ length: per }, (_, i) => `${id}-${i}`) }],
     });
     const one = streetUnits([b("a", "P", 4)]);
     const two = streetUnits([b("a", "P", 4), b("b", "P", 4)]);
@@ -143,5 +148,8 @@ describe("misc", () => {
     expect(two.units).toBeGreaterThan(one.units);
     expect(split.units).toBeGreaterThan(two.units);
     expect(two.pixels).toBe(4);
+    // a project with no apartments yet is still a building on the street, as an empty outline
+    expect(streetUnits([b("a", "P", 4), b("c", "R", 0)]).units).toBeGreaterThan(one.units);
+    expect(streetUnits([b("c", "R", 0)]).height).toBeGreaterThan(5);
   });
 });

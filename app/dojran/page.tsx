@@ -6,7 +6,7 @@ import { ConstructionProgress } from "@/components/construction/ConstructionProg
 import { DojranFacade } from "@/components/DojranFacade";
 import { OtherProjects } from "@/components/OtherProjects";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
-import { projects } from "@/data";
+import { apartmentsOf, projects } from "@/data";
 import { dojranFloors } from "@/data/dojran";
 import { pageMetadata } from "@/lib/seo";
 
@@ -42,7 +42,15 @@ export default function DojranPage() {
         </div>
       </section>
 
-      <FloorPickerSection floors={dojranFloors.map((f) => ({ number: f.number, label: f.label, apartments: [] }))} />
+      <FloorPickerSection
+        floors={dojranFloors.map((f) => ({
+          number: f.number,
+          label: f.label,
+          apartments: apartmentsOf("dojranski-raj")
+            .filter((a) => a.floor === f.number)
+            .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms, status: a.status })),
+        }))}
+      />
 
       <section className="border-t border-line">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 lg:px-10">

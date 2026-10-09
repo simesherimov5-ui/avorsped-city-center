@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { apartments, companyInfo, getApartment, getBuilding, projects } from "@/data";
+import { companyInfo, getApartment, getProject, projectsOnSale } from "@/data";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactStage } from "@/components/contact/ContactStage";
 import { DirectPanel } from "@/components/contact/DirectPanel";
@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Контакт и консултација",
   description:
-    "Закажете консултација за стан во City Center или пишете ни: адреса, телефон и е-пошта на Јавор Шпед во Струмица.",
+    "Закажете консултација за стан или пишете ни: адреса, телефон и е-пошта на Javor Sped Holding во Струмица.",
   path: "/contact",
 });
 
@@ -25,20 +25,35 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
   // Arriving from an apartment or project page: pre-select the interest and carry the reference along.
   const apartment = getApartment(first(params.apartment) ?? "");
-  const building = getBuilding(apartment?.buildingId ?? first(params.building) ?? "");
-  // The project comes from the data: whichever project owns the apartment's or building's building. Only a bare
-  // project link (no apartment or building) names a project directly, so a reference can never carry a wrong name.
-  const project =
-    (building && projects.find((p) => p.buildings?.some((b) => b.id === building.id))) ||
-    projects.find((p) => p.id === (LEGACY_PROJECTS[first(params.project) ?? ""] ?? first(params.project)));
-  // The form asks about the projects that are being built or coming; the apartments it can offer are the available
-  // ones, plus the one the visitor came from.
-  const options = projects
-    .filter((p) => p.status !== "completed")
-    .map((p) => ({ id: p.id, name: p.name, buildings: (p.buildings ?? []).map((b) => ({ id: b.id, name: b.name })) }));
-  const units = apartments
+  // The form asks about the projects that are on sale (from the data, whatever they are); the apartments it can offer
+  // are the available ones, plus the one the visitor came from.
+  const onSale = projectsOnSale();
+  const options = onSale.map(({ project }) => ({
+    id: project.id,
+    name: project.name,
+    // the building step appears for a project that has buildings
+    buildings: (project.buildings ?? []).map((b) => ({ id: b.id, name: b.name })),
+  }));
+  const units = onSale
+    .flatMap((p) => p.apartments)
     .filter((a) => a.status === "available" || a.id === apartment?.id)
-    .map((a) => ({ id: a.id, buildingId: a.buildingId, floor: a.floor, number: a.number, area: a.area }));
+    .map((a) => ({
+      id: a.id,
+      projectId: a.projectId,
+      buildingId: a.buildingId,
+      floor: a.floor,
+      number: a.number,
+      area: a.area,
+    }));
+  // The project comes from the data: the apartment's own, else the one named in the address, else the one that owns
+  // the named building, so a reference can never carry a wrong name.
+  const buildingParam = first(params.building) ?? "";
+  const project =
+    (apartment && getProject(apartment.projectId)) ||
+    getProject(LEGACY_PROJECTS[first(params.project) ?? ""] ?? first(params.project) ?? "") ||
+    onSale.find((p) => p.project.buildings?.some((b) => b.id === buildingParam))?.project;
+  const buildingId = apartment?.buildingId ?? (buildingParam || undefined);
+  const building = project?.buildings?.find((b) => b.id === buildingId);
   const start = { projectId: project?.id, buildingId: building?.id, unitId: apartment?.id };
 
   return (

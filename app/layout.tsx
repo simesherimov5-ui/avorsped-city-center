@@ -37,14 +37,14 @@ export const metadata: Metadata = {
   // The public address (see lib/seo.ts): canonical links, the sitemap and share images are built from it.
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Јавор Шпед",
-    template: "%s | Јавор Шпед",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Јавор Шпед гради премиум станбени згради и станови. Истражете го City Center — станбен комплекс од шест згради — и пронајдете го вашиот нов дом.",
+    "Javor Sped Holding гради премиум станбени згради и станови во Струмица и Дојран. Истражете ги проектите и пронајдете го вашиот нов дом.",
   openGraph: {
-    title: "Јавор Шпед",
-    description: "Премиум станбени проекти. Истражете го City Center и пронајдете го вашиот стан.",
+    title: SITE_NAME,
+    description: "Премиум станбени проекти на Javor Sped Holding. Истражете ги проектите и пронајдете го вашиот стан.",
     siteName: SITE_NAME,
     locale: "mk_MK",
     type: "website",

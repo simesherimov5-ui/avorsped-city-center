@@ -9,7 +9,7 @@ import type {
   Room,
   UnitStatus,
 } from "@/types";
-import { b06Floor3Overview } from "@/lib/assets";
+import { b06Floor3Overview, exampleFloorPlan } from "@/lib/assets";
 
 // Pure, deterministic pseudo-random so server and client render identical mock data.
 function seeded(...nums: number[]): number {
@@ -340,6 +340,7 @@ function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[
 
     return {
       id,
+      projectId: "city-center",
       buildingId,
       floor,
       number: unit.number,
@@ -451,6 +452,9 @@ export function generateDevelopment(): GeneratedDevelopment {
 
         const apartment: Apartment = {
           id,
+          projectId: "city-center",
+          sample: true,
+          planImage: exampleFloorPlan(unitType.type),
           buildingId,
           floor: f,
           number,
@@ -593,4 +597,54 @@ export function generateDevelopment(): GeneratedDevelopment {
   };
 
   return { development, apartments: allApartments };
+}
+
+/** One apartment of a sample list: what is known about it. */
+export interface SampleUnit {
+  floor: number;
+  number: string;
+  area: number;
+  bedrooms: number;
+  bathrooms: number;
+  orientation?: Orientation;
+  planImage?: Apartment["planImage"];
+}
+
+const TYPE_OF_BEDROOMS: Apartment["type"][] = ["studio", "1-bedroom", "2-bedroom", "3-bedroom", "4-bedroom"];
+
+/**
+ * Sample apartments for a project that has none yet, made the same way as City Center's: the floors, numbers, areas and
+ * rooms are what the project's data says, and the status and orientation (where not given) are the same deterministic
+ * mock values. Every apartment is marked `sample`. `order` only varies the pseudo-random numbers between projects.
+ */
+export function buildSampleApartments(projectId: string, order: number, units: SampleUnit[]): Apartment[] {
+  const floorCount = Math.max(1, ...units.map((u) => u.floor + 1));
+  const perFloor = new Map<number, SampleUnit[]>();
+  for (const u of units) perFloor.set(u.floor, [...(perFloor.get(u.floor) ?? []), u]);
+  return units.map((u, idx) => {
+    const onFloor = perFloor.get(u.floor) ?? [u];
+    const balconyArea = Math.round((4 + seeded(order, u.floor, idx, 11) * 6) * 10) / 10;
+    return {
+      id: `${projectId}-f${u.floor}-${unitSlug(u.number)}`,
+      projectId,
+      sample: true,
+      floor: u.floor,
+      number: u.number,
+      type: TYPE_OF_BEDROOMS[Math.min(u.bedrooms, 4)],
+      bedrooms: u.bedrooms,
+      bathrooms: u.bathrooms,
+      area: u.area,
+      balconyArea,
+      orientation: u.orientation ?? ORIENTATIONS[Math.floor(seeded(order, u.floor, idx, 8) * ORIENTATIONS.length)],
+      status: pickStatus(order, u.floor, floorCount, idx),
+      rooms: generateRooms(u.bedrooms, u.area, balconyArea),
+      shape: buildFloorPlanShape(onFloor.indexOf(u), onFloor.length),
+      gallery: [
+        { src: "", alt: `${projectId} ${u.number} дневна соба`, isPlaceholder: true },
+        { src: "", alt: `${projectId} ${u.number} кујна`, isPlaceholder: true },
+        { src: "", alt: `${projectId} ${u.number} спална соба`, isPlaceholder: true },
+      ],
+      planImage: u.planImage,
+    };
+  });
 }

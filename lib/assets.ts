@@ -24,10 +24,21 @@ const REAL_FLOOR_PLAN_BY_ID: Record<string, { src: string; alt: string }> = Obje
   ])
 );
 
+/** The example plan for a type of apartment (a stand-in until an apartment has its own plan). */
+export function exampleFloorPlan(type: Apartment["type"]) {
+  return { ...FLOOR_PLAN_IMAGE[type], isPlaceholder: false as const, example: true as const };
+}
+
+/**
+ * The plan to show for an apartment: its exact one where it exists, else the plan its data carries (an example plan is
+ * marked as one), else an empty frame. A project without plans never borrows another project's.
+ */
 export function floorPlanImageForApartment(apartment: Apartment) {
   const real = REAL_FLOOR_PLAN_BY_ID[apartment.id];
   if (real) return { ...real, isPlaceholder: false as const, isExactMatch: true };
-  return { ...FLOOR_PLAN_IMAGE[apartment.type], isPlaceholder: false as const, isExactMatch: false };
+  const own = apartment.planImage;
+  if (own) return { src: own.src, alt: own.alt, isPlaceholder: own.isPlaceholder, isExactMatch: !own.example };
+  return { src: "", alt: `Стан ${apartment.number}`, isPlaceholder: true as const, isExactMatch: false };
 }
 
 // Real pixel dimensions of the source PNG — the only copy of this drawing in the

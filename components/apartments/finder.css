@@ -152,7 +152,7 @@
 /* ───────── the street ───────── */
 .af-street-scroll {
   /* u is a window's width: the whole street is exactly as wide as the content, 7px to 14px per u (--n u and --k px) */
-  --u: clamp(7px, calc((min(1240px, 90vw) - var(--k)) / var(--n)), 14px);
+  --u: clamp(7px, min(calc((min(1240px, 90vw) - var(--k)) / var(--n)), calc(236px / var(--h))), 14px);
   margin-top: 44px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -160,12 +160,13 @@
   scrollbar-color: var(--af-copper-line) transparent;
 }
 .af-street {
+  width: max-content;
+  min-width: 100%;
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: calc(var(--u) * 5);
-  min-width: max-content;
   padding: 0 calc(var(--u) * 0.65) 0 calc(var(--u) * 1.5);
 }
 .af-ground {
@@ -241,6 +242,12 @@
   flex-direction: column;
   align-items: center;
   transition: opacity 0.6s var(--af-ease);
+}
+/* a project with no apartments yet: the outline of a building without windows */
+.af-body.is-empty {
+  box-sizing: content-box;
+  width: calc(var(--u) * 5.5);
+  height: calc(var(--u) * 11.1);
 }
 .af-cap {
   width: 44%;
@@ -580,6 +587,35 @@
   line-height: 1.3;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--color-bronze);
+}
+.af-coming {
+  max-width: 560px;
+  padding-block: 28px 8px;
+}
+.af-coming-t {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.25;
+}
+.af-coming-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 32px;
+  margin-top: 28px;
+}
+.af-coming-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
   color: var(--color-bronze);
 }
 .af-empty {

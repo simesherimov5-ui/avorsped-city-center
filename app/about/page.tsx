@@ -15,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "За нас",
-  description: `Јавор Шпед работи од ${companyInfo.founded} година и ја носи истата дисциплина во станбената градба: приказна, вредности и пат до City Center.`,
+  description: `Јавор Шпед работи од ${companyInfo.founded} година и ја носи истата дисциплина во станбената градба: приказна, вредности и пат до проектите.`,
   path: "/about",
 });
 

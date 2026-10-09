@@ -28,8 +28,16 @@ export interface PlanRegion {
 }
 
 export interface Apartment {
-  id: string; // e.g. "b03-f05-503"
-  buildingId: string;
+  /** Unique across every project, e.g. "b03-f5-503" or "stanbena-kukja-f1-2". */
+  id: string;
+  /** The project the apartment belongs to (the id of an entry of `projects`). */
+  projectId: string;
+  /** The building within the project; left out for a project that is one building. */
+  buildingId?: string;
+  /** True for generated sample data, until the client sends the real apartment list of the project. */
+  sample?: true;
+  /** The apartment's own plan or render, where the project has one (otherwise it is looked up by type, or there is none). */
+  planImage?: MediaImage & { example?: true };
   floor: number;
   number: string; // "503"
   type: "1-bedroom" | "2-bedroom" | "3-bedroom" | "4-bedroom" | "studio";

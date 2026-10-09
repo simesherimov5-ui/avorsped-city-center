@@ -6,14 +6,15 @@ import { useSearchParams } from "next/navigation";
 import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
 import { idsToParam, parseIds, writeStored } from "@/lib/compare-store";
-import { getApartment, getBuilding } from "@/data";
+import { getApartment, placeLabel } from "@/data";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
 const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment>>) => string }[] = [
-  { label: "Зграда", get: (a) => getBuilding(a.buildingId)?.name ?? "" },
+  { label: "Проект", get: (a) => placeLabel(a).project },
+  { label: "Зграда", get: (a) => placeLabel(a).building || "—" },
   { label: "Кат", get: (a) => (a.floor === 0 ? "Приземје" : String(a.floor)) },
   { label: "Тип", get: (a) => (a.bedrooms === 0 ? "Студио" : typeLabel(a.type)) },
   { label: "Спални соби", get: (a) => String(a.bedrooms) },
@@ -83,6 +84,7 @@ export function CompareView() {
                       >
                         Стан {a.number}
                       </Link>
+                      <div className="mt-1 text-sm font-normal text-muted">{placeLabel(a).text}</div>
                       <StatusBadge status={a.status} variant="pill" className="mt-2" />
                     </th>
                   ))}
