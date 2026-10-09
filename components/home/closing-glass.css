@@ -1,0 +1,306 @@
+/* The homepage ending: the building mark in thin gold lines, a pane of dark glass in front of it, the call to action on
+   the glass. Colours are the tokens of app/globals.css (Оникс, Еспресо, Травертин, the logo gold, Бронза), at an opacity
+   or two of them mixed. Blur, one soft shadow and one soft gold glow are allowed in this one section (design brief). */
+.cg {
+  --cg-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  min-height: min(760px, 100svh);
+  padding: 72px 20px;
+  background: var(--color-onyx);
+  color: var(--color-travertine);
+}
+.cg > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/* 1 · a soft gold glow, so the glass has light to catch */
+.cg-glow {
+  width: min(900px, 130%);
+  aspect-ratio: 3 / 2;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-brass) 16%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* 2 · the building mark: one gradient across the whole drawing, thin lines (1.5 units of a 240-unit-tall drawing) */
+.cg-mark {
+  display: block;
+  height: min(660px, 88svh);
+  width: auto;
+}
+.cg-mark path {
+  fill: none;
+  stroke: url(#cg-gold);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.cg-s0 {
+  stop-color: var(--color-bronze);
+}
+.cg-s1 {
+  stop-color: var(--color-brass);
+}
+.cg-s2 {
+  stop-color: color-mix(in srgb, var(--color-brass) 50%, var(--color-travertine));
+}
+
+/* 3 · the glass panel */
+.cg-glass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: min(820px, 100%);
+  padding: 52px 64px 44px;
+  border: 1px solid color-mix(in srgb, var(--color-travertine) 7%, transparent);
+  border-top-color: color-mix(in srgb, var(--color-brass) 60%, transparent); /* gold light catching the glass */
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-espresso) 40%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  box-shadow: 0 44px 80px -44px rgb(0 0 0 / 0.9);
+  text-align: center;
+}
+.cg-title {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+.cg-title em {
+  font-style: italic;
+  color: var(--color-accent);
+}
+.cg-lead {
+  max-width: 480px;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--color-travertine) 84%, transparent);
+}
+.cg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+/* pressed: both buttons shrink at once (the buttons themselves are not touched) */
+.cg-actions > a {
+  transition:
+    scale 100ms ease-out,
+    color 200ms,
+    background-color 200ms,
+    border-color 200ms;
+}
+.cg-actions > a:active {
+  scale: 0.97;
+}
+.cg-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 22px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+.cg-contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: color-mix(in srgb, var(--color-travertine) 90%, transparent);
+  text-decoration: none;
+}
+.cg-contact a:hover {
+  color: var(--color-travertine);
+}
+.cg-contact i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-travertine) 50%, transparent);
+}
+
+/* ───────── The entrance: the building draws, the glass arrives, the text comes ─────────
+   "cg-armed" is added by the script, only when it is about to play (so without scripts everything is simply there);
+   "cg-in" is added once, when 40% of the section is on screen. */
+.cg.cg-armed:not(.cg-in) .cg-glow,
+.cg.cg-armed:not(.cg-in) .cg-glass,
+.cg.cg-armed:not(.cg-in) .cg-glass > * {
+  opacity: 0;
+}
+.cg.cg-armed:not(.cg-in) .cg-mark path {
+  stroke-dashoffset: 1;
+}
+
+.cg.cg-in .cg-glow {
+  animation: cg-fade 1.4s ease-out 0.4s both;
+}
+.cg.cg-in .cg-mark path {
+  animation: cg-draw var(--t, 0.5s) var(--cg-ease) var(--d, 0s) both;
+}
+.cg.cg-in .cg-glass {
+  animation: cg-glass 0.8s var(--cg-ease) 1.15s both;
+}
+.cg.cg-in .cg-glass > * {
+  animation: cg-rise 0.7s var(--cg-ease) both;
+}
+.cg.cg-in .cg-glass > :nth-child(1) {
+  animation-delay: 1.45s;
+}
+.cg.cg-in .cg-glass > :nth-child(2) {
+  animation-delay: 1.54s;
+}
+.cg.cg-in .cg-glass > :nth-child(3) {
+  animation-delay: 1.63s;
+}
+.cg.cg-in .cg-glass > :nth-child(4) {
+  animation-delay: 1.72s;
+}
+.cg.cg-in .cg-glass > :nth-child(5) {
+  animation-delay: 1.81s;
+}
+
+@keyframes cg-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes cg-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* the glass materialises: opacity, scale and blur together */
+@keyframes cg-glass {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    backdrop-filter: blur(10px) saturate(160%);
+  }
+}
+@keyframes cg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ───────── Phones: the building stands above the panel, and the panel overlaps its base ───────── */
+@media (max-width: 640px) {
+  .cg {
+    grid-template-rows: auto auto;
+    align-content: center;
+    min-height: 0;
+    padding: 56px 16px 64px;
+  }
+  .cg > * {
+    grid-area: auto;
+  }
+  .cg-glow {
+    grid-area: 1 / 1 / 3 / 2;
+    align-self: start;
+    width: 130%;
+  }
+  .cg-mark {
+    grid-row: 1;
+    grid-column: 1;
+    height: 230px;
+  }
+  .cg-mark path {
+    stroke-width: 2.2;
+  }
+  .cg-glass {
+    grid-row: 2;
+    grid-column: 1;
+    gap: 18px;
+    margin-top: -64px;
+    padding: 36px 22px 30px;
+  }
+  .cg-glass .eyebrow {
+    letter-spacing: 0.2em;
+  }
+  .cg-lead {
+    font-size: 16px;
+  }
+  .cg-actions {
+    flex-direction: column;
+    align-self: stretch;
+    gap: 12px;
+  }
+  /* the label of the filling button is one line even on the narrowest phone */
+  .cg .cg-actions a.btn-primary:not(.btn-primary--sm) {
+    gap: 12px;
+    padding: 18px 16px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .cg-contact {
+    flex-direction: column;
+    gap: 0;
+  }
+  .cg-contact i {
+    display: none;
+  }
+}
+
+/* ───────── Accessibility ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .cg.cg-in .cg-glow,
+  .cg.cg-in .cg-mark path,
+  .cg.cg-in .cg-glass,
+  .cg.cg-in .cg-glass > * {
+    animation: none;
+  }
+  .cg-actions > a {
+    transition: none;
+  }
+  .cg-actions > a:active {
+    scale: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .cg-glass {
+    background: var(--color-espresso);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .cg-glass {
+    border-color: color-mix(in srgb, var(--color-travertine) 60%, transparent);
+    background: var(--color-espresso);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
