@@ -29,9 +29,8 @@ const subscribeSeen = (cb: () => void) => {
     listeners.delete(cb);
   };
 };
-// Development replays the intro on every reload; production shows it once per browser session.
+// Once per browser session (a new tab or window plays it again).
 const readSeen = () => {
-  if (process.env.NODE_ENV === "development") return false;
   try {
     return sessionStorage.getItem(SESSION_FLAG) === "1";
   } catch {

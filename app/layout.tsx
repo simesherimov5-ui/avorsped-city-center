@@ -57,8 +57,16 @@ export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${montserrat.variable} ${playfair.variable}`}>
+    <html lang="mk" className={`${montserrat.variable} ${playfair.variable}`} suppressHydrationWarning>
       <body className="antialiased">
+        {/* Before anything is painted: a visitor who has already seen the opening this session never gets its black
+            screen (the intro's own CSS hides it while this attribute is on <html>). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('js_intro_seen')==='1')document.documentElement.setAttribute('data-intro-seen','')}catch(e){}",
+          }}
+        />
         {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
         <a href="#main" className="skip-link">
           Прескокни до содржината

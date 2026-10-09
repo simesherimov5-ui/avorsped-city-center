@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * Homepage opening sequence on a black screen (about 8.5 seconds):
+ * Homepage opening sequence on a black screen (about 8.5 seconds; a click, tap, Esc, Enter or Space skips to the last step):
  * 1. The building draws itself, stroke by stroke
  * 2. The ring appears around it and draws as a 000–100 counter runs
  * 3. The building fades and "JS" rises into the ring
@@ -64,6 +64,24 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
 
       let tl: gsap.core.Timeline | null = null;
       let cancelled = false;
+      let skipRequested = false;
+      /** Where the screen starts to open: skipping jumps here, so the normal reveal plays and nothing else. */
+      const REVEAL_AT = 7.4;
+      const skip = () => {
+        skipRequested = true;
+        // Not built yet (the fonts are still loading): `run` jumps as soon as it exists.
+        if (!tl || tl.time() >= REVEAL_AT) return;
+        tl.seek(REVEAL_AT - 0.01, true).resume();
+      };
+      const onClick = () => skip();
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          skip();
+        }
+      };
+      window.addEventListener("click", onClick);
+      window.addEventListener("keydown", onKey);
       const run = () => {
         if (cancelled) return;
         const t = gsap.timeline();
@@ -128,11 +146,12 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
             });
           }, 7.35)
           // 6 · both lines lift away together as the screen opens: top half up, bottom half down
-          .to(q(".jsi-lock"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, 7.4)
-          .add(() => onReveal?.(), 7.4)
-          .to(q(".jsi-bg-top"), { yPercent: -100, duration: 1.1, ease: PREMIUM_EASE }, 7.4)
-          .to(q(".jsi-bg-bot"), { yPercent: 100, duration: 1.1, ease: PREMIUM_EASE }, 7.4)
+          .to(q(".jsi-lock"), { opacity: 0, y: -18, duration: 0.6, ease: "power2.in" }, REVEAL_AT)
+          .add(() => onReveal?.(), REVEAL_AT)
+          .to(q(".jsi-bg-top"), { yPercent: -100, duration: 1.1, ease: PREMIUM_EASE }, REVEAL_AT)
+          .to(q(".jsi-bg-bot"), { yPercent: 100, duration: 1.1, ease: PREMIUM_EASE }, REVEAL_AT)
           .add(finish, 8.5);
+        if (skipRequested) t.seek(REVEAL_AT - 0.01, true);
       };
       // wait for the fonts so the letter widths are measured correctly
       const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
@@ -140,6 +159,8 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
 
       return () => {
         cancelled = true;
+        window.removeEventListener("click", onClick);
+        window.removeEventListener("keydown", onKey);
         tl?.kill();
       };
     },
