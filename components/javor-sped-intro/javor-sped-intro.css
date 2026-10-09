@@ -6,10 +6,6 @@
   z-index: 100;
   pointer-events: none;
 }
-/* Seen already this session: no black screen at all, not even before the page hydrates (script in app/layout.tsx). */
-html[data-intro-seen] .jsi {
-  display: none;
-}
 .jsi-bg-top,
 .jsi-bg-bot {
   position: absolute;
