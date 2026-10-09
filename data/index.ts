@@ -62,8 +62,8 @@ export const projects: Project[] = [
     capabilities: { hasMasterplan: true, hasBuildings: true, hasApartmentSelection: true },
   },
   {
-    id: "vista-heights",
-    slug: "vista-heights",
+    id: "stanbena-kukja",
+    slug: "stanbena-kukja",
     name: "Станбена Куќа",
     location: "Ул. Цветан Димов бр. 16, Струмица, Северна Македонија",
     city: "Струмица",

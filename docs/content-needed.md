@@ -165,7 +165,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ## 5. Станбена Куќа
 
-- **Where:** the `vista-heights` entry of `projects` in `data/index.ts` (name `Станбена Куќа`, address `/projects/vista-heights`).
+- **Where:** the `stanbena-kukja` entry of `projects` in `data/index.ts` (name `Станбена Куќа`, address `/projects/stanbena-kukja`).
 - **Needed:** the final project name, expected completion, current phase, and the 7-apartment list as in 3.2.
 - **Format:** name up to 40 characters; the old address then redirects permanently to the new one.
 

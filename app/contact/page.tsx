@@ -17,6 +17,9 @@ export const metadata: Metadata = pageMetadata({
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
+/** Old `?project=` values from before a project was renamed: they still pre-select it. */
+const LEGACY_PROJECTS: Record<string, string> = { "vista-heights": "stanbena-kukja" };
+
 export default async function ContactPage({ searchParams }: { searchParams: Promise<Params> }) {
   const params = await searchParams;
 
@@ -27,7 +30,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   // project link (no apartment or building) names a project directly, so a reference can never carry a wrong name.
   const project =
     (building && projects.find((p) => p.buildings?.some((b) => b.id === building.id))) ||
-    projects.find((p) => p.id === first(params.project));
+    projects.find((p) => p.id === (LEGACY_PROJECTS[first(params.project) ?? ""] ?? first(params.project)));
   // The form asks about the projects that are being built or coming; the apartments it can offer are the available
   // ones, plus the one the visitor came from.
   const options = projects
