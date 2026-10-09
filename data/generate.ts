@@ -593,8 +593,8 @@ export function generateDevelopment(): GeneratedDevelopment {
     // has no printed labels, so this mapping is a visual estimate calibrated
     // against the client's reference — adjust here if a number still looks off.
     buildingHotspots: {
-      b01: { top: "18%", left: "19%" },
-      b02: { top: "46%", left: "21%" },
+      b01: { top: "46%", left: "21%" },
+      b02: { top: "18%", left: "19%" },
       b03: { top: "28%", left: "49%" },
       b04: { top: "54%", left: "68%" },
       b05: { top: "78%", left: "84%" },
