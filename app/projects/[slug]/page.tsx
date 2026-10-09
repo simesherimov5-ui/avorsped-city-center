@@ -7,6 +7,7 @@ import { projects } from "@/data";
 import { Media } from "@/components/ui/Media";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { RoomVideoTour } from "@/components/RoomVideoTour";
+import { OneVideoAtATime } from "@/components/ui/OneVideoAtATime";
 import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { ProjectHeader } from "@/components/project/ProjectHeader";
 import { ProjectCta } from "@/components/project/ProjectCta";
@@ -121,6 +122,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           />
         </Reveal>
       </section>
+
+      {(project.roomTour || project.floorPlanExplorer) && <OneVideoAtATime />}
 
       {project.roomTour && (
         <Band

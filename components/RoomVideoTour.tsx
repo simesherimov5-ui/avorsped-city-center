@@ -19,7 +19,12 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
         <button
           key={room.label}
           type="button"
-          onClick={() => setActive(i)}
+          onClick={(e) => {
+            if (active !== i) return setActive(i);
+            // the video is already here (another video may have paused it): the button plays or pauses it
+            const video = e.currentTarget.querySelector("video");
+            if (video) void (video.paused ? video.play() : video.pause());
+          }}
           aria-label={`Пушти видео — ${room.label}`}
           className="focus-ring group relative block aspect-[4/3] overflow-hidden border border-line bg-chrome text-left"
         >
