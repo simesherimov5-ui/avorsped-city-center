@@ -25,8 +25,9 @@ const subscribeVisibility = (onChange: () => void) => {
 
 /**
  * Full-width projects slider. Each slide lasts `autoplayMs` (4s unless the page says otherwise) and its gold dash fills in step; the dash's own
- * animation ends the slide, so pausing (keyboard focus, hidden tab; not hover) freezes both and any
- * arrow, dash, swipe or key restarts the timer. Slides crossfade over 1.2s while the new photo
+ * animation ends the slide, so pausing (the mouse over the slider, keyboard focus, a hidden tab) freezes both. Any
+ * arrow, dash, swipe or key restarts the timer, so the slide the visitor chose gets a full interval before the show
+ * moves on. Slides crossfade over 1.2s while the new photo
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
  * autoplay, no zoom, no text animation.
  */
@@ -46,9 +47,10 @@ export function ProjectSlideshow({
   // server's HTML and triggers a hydration mismatch. This hook starts false and then follows the setting.
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [index, setIndex] = useState(0);
-  // Once the visitor moves the slides themselves (arrows, keys, swipe, dots) the show stops for good.
-  const [stopped, setStopped] = useState(false);
+  // Counts the visitor's own moves (arrows, keys, swipe, dots): each one restarts the timer, so the chosen slide stays a full interval.
+  const [restart, setRestart] = useState(0);
   const [focused, setFocused] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const tabHidden = useSyncExternalStore(
     subscribeVisibility,
     () => document.hidden,
@@ -57,10 +59,10 @@ export function ProjectSlideshow({
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const go = (dir: 1 | -1, byVisitor = true) => {
-    if (byVisitor) setStopped(true);
+    if (byVisitor) setRestart((n) => n + 1);
     setIndex((i) => (i + dir + projects.length) % projects.length);
   };
-  const paused = focused || tabHidden;
+  const paused = focused || hovered || tabHidden;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
   const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
@@ -99,6 +101,8 @@ export function ProjectSlideshow({
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerCancel={() => (swipeStart.current = null)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
       onFocus={(e) => setFocused(e.target.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
       className="focus-ring relative h-[clamp(400px,60dvh,520px)] w-full touch-pan-y overflow-hidden bg-ink md:h-[clamp(480px,72dvh,780px)]"
@@ -202,7 +206,7 @@ export function ProjectSlideshow({
               key={p.id}
               type="button"
               onClick={() => {
-                setStopped(true);
+                setRestart((n) => n + 1);
                 setIndex(i);
               }}
               aria-label={p.name}
@@ -211,11 +215,11 @@ export function ProjectSlideshow({
             >
               <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
                 {active &&
-                  (reduceMotion || stopped ? (
+                  (reduceMotion ? (
                     <span className="absolute inset-0 bg-gold" />
                   ) : (
                     <span
-                      key={index}
+                      key={`${index}-${restart}`}
                       className="slide-progress absolute inset-0 bg-gold"
                       style={{
                         animationDuration: `${autoplayMs}ms`,
