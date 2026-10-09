@@ -33,8 +33,6 @@ const MARK = { available: "free", reserved: "res", sold: "sold" } as const;
 const CARDS_AT_FIRST = 8;
 const ROWS_AT_FIRST = 12;
 
-const floorText = (floor: number) => (floor === 0 ? "Приземје" : `Кат ${floor}`);
-
 /** The number in the hero. It counts to the new value in 0.9s (from 0 on load); without motion it just changes. */
 function Tally({ value }: { value: number }) {
   const [initial] = useState(value);
@@ -424,13 +422,14 @@ export function ApartmentFinder({
                     onClick={() => openApartment(a.id)}
                   >
                     <span className="af-ph">
-                      <span className="af-ph-img">
+                      <span className={`af-ph-img${a.plan.transparent ? " is-padded" : ""}`}>
                         {a.plan.isPlaceholder || !a.plan.src ? (
                           <BuildingMark className="af-nophoto" />
                         ) : (
                           <Media
                             image={{ ...a.plan, alt: "" }}
                             fit="contain"
+                            crisp={a.plan.transparent}
                             className="h-full w-full !bg-transparent"
                             sizes="(max-width: 767px) 90vw, 330px"
                           />
@@ -448,9 +447,9 @@ export function ApartmentFinder({
                     </span>
                     <span className="af-rule" aria-hidden />
                     <span className="af-card-m af-num">
-                      <span>{formatArea(a.area)}</span>
+                      <span>{formatArea(a.area, a.areaDecimals)}</span>
                       <span>{roomLabel(a.bedrooms)}</span>
-                      <span>{floorText(a.floor)}</span>
+                      <span>{a.floorLabel}</span>
                     </span>
                   </button>
                 ))}
@@ -471,9 +470,9 @@ export function ApartmentFinder({
                     >
                       <b>Стан {a.number}</b>
                       <span className="d">{name}</span>
-                      <span className="d af-num">{floorText(a.floor)}</span>
+                      <span className="d af-num">{a.floorLabel}</span>
                       <span className="d">{roomLabel(a.bedrooms)}</span>
-                      <span className="d af-num">{formatArea(a.area)}</span>
+                      <span className="d af-num">{formatArea(a.area, a.areaDecimals)}</span>
                       <span className="st">
                         <i className={`af-mk ${MARK[a.status]}`} aria-hidden />
                         {statusLabel(a.status)}
@@ -482,7 +481,7 @@ export function ApartmentFinder({
                         →
                       </span>
                       <span className="m af-num">
-                        {name} · {floorText(a.floor)} · {roomLabel(a.bedrooms)} · {formatArea(a.area)}
+                        {name} · {a.floorLabel} · {roomLabel(a.bedrooms)} · {formatArea(a.area, a.areaDecimals)}
                       </span>
                     </button>
                   );

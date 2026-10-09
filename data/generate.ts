@@ -10,6 +10,7 @@ import type {
   UnitStatus,
 } from "@/types";
 import { b06Floor3Overview, exampleFloorPlan } from "@/lib/assets";
+import { buildZgrada01 } from "./zgrada-01";
 
 // Pure, deterministic pseudo-random so server and client render identical mock data.
 function seeded(...nums: number[]): number {
@@ -414,6 +415,25 @@ export function generateDevelopment(): GeneratedDevelopment {
     const buildingId = `b${String(b + 1).padStart(2, "0")}`;
     const floorCount = floorCountForBuilding(b);
     const floors: Floor[] = [];
+
+    // Зграда 01 is the first building with real data (the architect's drawings): its floors, apartments and sketches
+    // come from data/zgrada-01.ts, not from the generator below.
+    if (buildingId === "b01") {
+      const real = buildZgrada01();
+      allApartments.push(...real.apartments);
+      buildings.push({
+        id: buildingId,
+        name: "Зграда 01",
+        shortLabel: "01",
+        floors: real.floors,
+        totalApartments: real.apartments.length,
+        floorSketch: real.floorSketch,
+        exteriorImage: { src: buildingExteriors[b], alt: "Зграда 01 — надворешен изглед", isPlaceholder: false },
+        status: buildingStatuses[b],
+        position: positions[b],
+      });
+      continue;
+    }
 
     for (let f = 0; f <= floorCount; f++) {
       if (buildingId === "b06" && f === 3) {

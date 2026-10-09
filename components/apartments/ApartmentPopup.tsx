@@ -16,8 +16,6 @@ const FOCUSABLE = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tab
 const STATUS_CLASS = { available: "free", reserved: "res", sold: "sold" } as const;
 const CLOSE_MS = 420;
 
-const floorText = (floor: number) => (floor === 0 ? "Приземје" : `Кат ${floor}`);
-
 /**
  * One apartment in a pop-up over the page. It opens like the site's curtain: the page behind darkens, a thin line is
  * drawn across the middle, the panel opens up and down from it and the content rises in. Stepping to the next
@@ -282,13 +280,14 @@ function Content({
       <div className="af-stage">
         <div className="af-stage-plan">
           <div className="af-plan-box">
-            <div className="af-plan-img af-draw-in">
+            <div className={`af-plan-img af-draw-in${a.plan.transparent ? " is-sheet" : ""}`}>
               {a.plan.isPlaceholder || !a.plan.src ? (
                 <BuildingMark className="af-nophoto" />
               ) : (
                 <Media
                   image={a.plan}
                   fit="contain"
+                  crisp={a.plan.transparent}
                   className="h-full w-full !bg-transparent"
                   sizes="(max-width: 900px) 100vw, 560px"
                 />
@@ -301,7 +300,7 @@ function Content({
             <div className="af-pos">
               <Tower building={building} apartments={apartments} highlight={a.id} />
               <div className="af-pos-t">
-                <b>{floorText(a.floor)}</b>
+                <b>{a.floorLabel}</b>
                 {buildingName} · стан {place} од {perFloor} на катот
               </div>
             </div>
@@ -324,7 +323,7 @@ function Content({
         <dl className="af-facts af-num af-rise-in" style={{ "--i": 3 } as CSSProperties}>
           <div>
             <dt>Површина</dt>
-            <dd>{formatArea(a.area)}</dd>
+            <dd>{formatArea(a.area, a.areaDecimals)}</dd>
           </div>
           <div>
             <dt>Соби</dt>
@@ -332,7 +331,7 @@ function Content({
           </div>
           <div>
             <dt>Кат</dt>
-            <dd>{floorText(a.floor)}</dd>
+            <dd>{a.floorLabel}</dd>
           </div>
           <div>
             <dt>Зграда</dt>

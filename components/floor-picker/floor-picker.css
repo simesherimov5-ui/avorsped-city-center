@@ -140,7 +140,8 @@
   text-decoration: none;
   transition: border-color 0.4s ease;
 }
-.fp-unit:hover {
+.fp-unit:hover,
+.fp-unit.is-hot {
   border-color: var(--color-copper);
 }
 .fp-unit:focus-visible {
@@ -230,5 +231,26 @@
 @media (prefers-reduced-motion: reduce) {
   .fp-floorlink:hover svg {
     transform: none;
+  }
+}
+
+/* A building with a floor sketch: the panel gets the room it needs, the heading is smaller, the cards sit in one row */
+.fp.has-sketch {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+.fp.has-sketch .fp-title {
+  font-size: clamp(34px, 3.4vw, 48px);
+}
+.fp.has-sketch .fp-units {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+@media (max-width: 879px) {
+  .fp.has-sketch {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .fp.has-sketch .fp-panel {
+    padding: 32px 16px;
   }
 }

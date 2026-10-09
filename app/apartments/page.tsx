@@ -1,4 +1,4 @@
-import { placeOf, projectsOnSale } from "@/data";
+import { floorLabelOf, placeOf, projectsOnSale } from "@/data";
 import { ApartmentFinder } from "@/components/apartments/ApartmentFinder";
 import { Button } from "@/components/ui/Button";
 import { floorPlanImageForApartment } from "@/lib/assets";
@@ -33,8 +33,12 @@ const finderApartments: FinderApartment[] = sortForPage(
       number: a.number,
       bedrooms: a.bedrooms,
       area: a.area,
+      areaDecimals: a.areaDecimals,
       status: a.status,
-      plan: (({ src, alt, isPlaceholder }) => ({ src, alt, isPlaceholder }))(floorPlanImageForApartment(a)),
+      floorLabel: floorLabelOf(a),
+      plan: (({ src, alt, isPlaceholder, transparent }) => ({ src, alt, isPlaceholder, transparent }))(
+        floorPlanImageForApartment(a)
+      ),
     }))
   ),
   finderBuildings.map((b) => b.id)

@@ -30,6 +30,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
           </defs>
           <rect x="0" y="0" width="100" height="100" fill="none" className="stroke-line" strokeWidth="0.5" />
           {apartments.map((apt) => {
+            if (!apt.shape) return null;
             const [p0, p1, p2, p3] = apt.shape.points;
             const points = [p0, p1, p2, p3].map((p) => p.join(",")).join(" ");
             const isActive = active === apt.id;
@@ -42,7 +43,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
                   className="fp-poly cursor-pointer"
                   tabIndex={0}
                   role="button"
-                  aria-label={`Стан ${apt.number}, ${statusLabel(apt.status)}, ${formatArea(apt.area)}`}
+                  aria-label={`Стан ${apt.number}, ${statusLabel(apt.status)}, ${formatArea(apt.area, apt.areaDecimals)}`}
                   onMouseEnter={() => setActive(apt.id)}
                   onMouseLeave={() => setActive(null)}
                   onFocus={() => setActive(apt.id)}
@@ -68,7 +69,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
                   fontSize="2.4"
                   className="pointer-events-none select-none fill-muted"
                 >
-                  {formatArea(apt.area)}
+                  {formatArea(apt.area, apt.areaDecimals)}
                 </text>
               </g>
             );
@@ -80,7 +81,7 @@ export function FloorPlan({ apartments }: { apartments: Apartment[] }) {
         <StatusLegend />
         <div className="min-h-[1.25rem] text-base text-muted sm:text-sm">
           {activeApt ? (
-            `Стан ${activeApt.number} — ${typeLabel(activeApt.type)}, ${formatArea(activeApt.area)}, ${statusLabel(activeApt.status)}`
+            `Стан ${activeApt.number} — ${typeLabel(activeApt.type)}, ${formatArea(activeApt.area, activeApt.areaDecimals)}, ${statusLabel(activeApt.status)}`
           ) : (
             <>
               <span className="[@media(hover:none)]:hidden">

@@ -358,7 +358,7 @@ export function RealFloorPlanViewer({
             >
               <div className="eyebrow text-gold-deep">Стан {cardApartment.number}</div>
               <div className="mt-1.5 text-xl font-medium tabular-nums text-charcoal">
-                {formatArea(cardApartment.area)}
+                {formatArea(cardApartment.area, cardApartment.areaDecimals)}
               </div>
               <div className="mt-1 text-xs text-muted">
                 {cardApartment.bedrooms} {cardApartment.bedrooms === 1 ? "спална" : "спални"} ·{" "}
@@ -500,7 +500,7 @@ function ApartmentSummary({ apartment }: { apartment: Apartment }) {
     <div>
       <div className="eyebrow text-gold-deep">Стан {apartment.number}</div>
       <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="text-2xl font-medium tabular-nums">{formatArea(apartment.area)}</span>
+        <span className="text-2xl font-medium tabular-nums">{formatArea(apartment.area, apartment.areaDecimals)}</span>
         <span className="text-sm text-muted">
           {typeLabel(apartment.type)} · {apartment.bedrooms} {apartment.bedrooms === 1 ? "спална соба" : "спални соби"}{" "}
           · {apartment.bathrooms} {apartment.bathrooms === 1 ? "бања" : "бањи"}

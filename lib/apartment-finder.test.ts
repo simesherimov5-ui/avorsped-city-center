@@ -27,6 +27,7 @@ const apt = (
 ): FinderApartment => ({
   id,
   projectId: "p",
+  floorLabel: floor === 0 ? "Приземје" : `Кат ${floor}`,
   buildingId,
   floor,
   number,

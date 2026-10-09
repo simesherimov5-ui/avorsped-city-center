@@ -1,9 +1,12 @@
 import type { Orientation, ProjectStatus } from "@/types";
 
-export function formatArea(value: number): string {
-  // Decimal comma, as written in Macedonian; done by hand because the "mk-MK" locale data at build/SSR time can
-  // differ from a browser's, which would make the server and the browser disagree on the same value.
-  return `${value.toFixed(1).replace(".", ",")} м²`;
+/**
+ * An area with a decimal comma, as written in Macedonian: one decimal ("74,0 м²"), or the `decimals` the data has
+ * ("94,05 м²" for an apartment from the architect's drawing, which has two). Done by hand because the "mk-MK" locale
+ * data at build/SSR time can differ from a browser's, which would make the server and the browser disagree.
+ */
+export function formatArea(value: number, decimals = 1): string {
+  return `${value.toFixed(decimals).replace(".", ",")} м²`;
 }
 
 export function statusLabel(status: "available" | "reserved" | "sold"): string {

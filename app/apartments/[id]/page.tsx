@@ -1,8 +1,17 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronLeft } from "lucide-react";
 import { Phone } from "lucide-react";
-import { apartments, getApartment, getProject, placeLabel, placeOf, companyInfo } from "@/data";
+import {
+  apartments,
+  floorLabelOf,
+  getApartment,
+  getBuilding,
+  getProject,
+  placeLabel,
+  placeOf,
+  companyInfo,
+} from "@/data";
 import { formatArea, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -24,9 +33,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!apt) return { title: "Стан", robots: { index: false } };
   const where = placeLabel(apt).text;
   const bedrooms = apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type);
+  const facing = apt.orientation ? `, ориентација ${orientationLabel(apt.orientation).toLowerCase()}` : "";
   return pageMetadata({
     title: `Стан ${apt.number}, ${where}`,
-    description: `${bedrooms} стан ${apt.number} во ${where}, ${apt.floor === 0 ? "приземје" : `кат ${apt.floor}`}: ${formatArea(apt.area)} површина, ориентација ${orientationLabel(apt.orientation).toLowerCase()}. Погледнете го распоредот и закажете консултација.`,
+    description: `${bedrooms} стан ${apt.number} во ${where}, ${floorLabelOf(apt).toLowerCase()}: ${formatArea(apt.area, apt.areaDecimals)} површина${facing}. Погледнете го распоредот и закажете консултација.`,
     path: `/apartments/${apt.id}`,
   });
 }
@@ -34,7 +44,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ApartmentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const apartment = getApartment(id);
-  if (!apartment) notFound();
+  if (!apartment) {
+    // an old sample link of a building whose apartments have been replaced by the real ones: the building's page
+    const oldBuilding = id.match(/^([a-z0-9]+)-f\d+-/)?.[1];
+    if (oldBuilding && getBuilding(oldBuilding)) redirect(`/development/${oldBuilding}`);
+    notFound();
+  }
   const place = placeLabel(apartment);
   const project = getProject(apartment.projectId);
   const floorPlanImage = floorPlanImageForApartment(apartment);
@@ -61,12 +76,12 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     <aside className={cn("h-fit space-y-6 border border-line bg-warm-white p-6", extraClass)}>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
         <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
-        <Spec label="Спални соби" value={String(apartment.bedrooms)} />
+        <Spec label="Соби" value={String(apartment.bedrooms)} />
         <Spec label="Бањи" value={String(apartment.bathrooms)} />
-        <Spec label="Површина" value={formatArea(apartment.area)} />
-        <Spec label="Балкон" value={formatArea(apartment.balconyArea)} />
-        <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />
-        <Spec label="Кат" value={apartment.floor === 0 ? "Приземје" : String(apartment.floor)} />
+        <Spec label="Површина" value={formatArea(apartment.area, apartment.areaDecimals)} />
+        <Spec label="Балкон" value={formatArea(apartment.balconyArea, apartment.areaDecimals)} />
+        {apartment.orientation && <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />}
+        <Spec label="Кат" value={floorLabelOf(apartment)} />
         <Spec label="Статус" value={statusLabel(apartment.status)} />
       </dl>
       <div className="space-y-3 border-t border-line pt-6">
@@ -100,7 +115,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="eyebrow text-muted">
-              {place.text} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
+              {place.text} · {floorLabelOf(apartment)}
             </div>
             <h1 className="t-h1 mt-1.5">Стан {apartment.number}</h1>
           </div>
@@ -112,14 +127,17 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             <div>
               <h2 className="t-h3">Архитектонска основа</h2>
               <div className="mt-6 grid gap-8 lg:grid-cols-[3fr_2fr]">
-                <div className="relative border border-line bg-cream">
+                <div className="relative border border-line bg-cream p-4 sm:p-6">
                   <span className="eyebrow absolute left-4 top-4 z-10 bg-warm-white/90 px-2.5 py-1 text-muted">
                     Основа
                   </span>
+                  {/* never cropped, and a line drawing is served as it is, never larger than its own pixels */}
                   <Media
                     image={floorPlanImage}
                     label={`Архитектонска основа на стан ${apartment.number}`}
-                    className="aspect-[4/3]"
+                    fit="contain"
+                    crisp={floorPlanImage.transparent}
+                    className="aspect-[4/3] !bg-transparent"
                     sizes="(max-width: 1024px) 100vw, 560px"
                     priority
                   />
@@ -130,13 +148,19 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                       {apartment.rooms.map((room) => (
                         <tr key={room.name} className="border-b border-line">
                           <td className="py-2.5 text-ink/70">{room.name}</td>
-                          <td className="py-2.5 text-right font-medium">{formatArea(room.area)}</td>
+                          <td className="py-2.5 text-right font-medium">
+                            {formatArea(room.area, apartment.areaDecimals)}
+                          </td>
                         </tr>
                       ))}
                       <tr>
-                        <td className="py-3 font-medium">Вкупна внатрешна површина</td>
+                        <td className="py-3 font-medium">
+                          {Math.abs(apartment.rooms.reduce((sum, r) => sum + r.area, 0) - apartment.area) < 0.01
+                            ? "Вкупна површина"
+                            : "Вкупна внатрешна површина"}
+                        </td>
                         <td className="whitespace-nowrap py-3 pl-3 text-right text-lg font-medium tabular-nums text-gold-deep">
-                          {formatArea(apartment.area)}
+                          {formatArea(apartment.area, apartment.areaDecimals)}
                         </td>
                       </tr>
                     </tbody>

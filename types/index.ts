@@ -37,18 +37,29 @@ export interface Apartment {
   /** True for generated sample data, until the client sends the real apartment list of the project. */
   sample?: true;
   /** The apartment's own plan or render, where the project has one (otherwise it is looked up by type, or there is none). */
-  planImage?: MediaImage & { example?: true };
+  planImage?: MediaImage & {
+    example?: true;
+    /** Dark lines on a transparent background: it must sit on a light surface. */
+    transparent?: true;
+  };
+  /** Where it is on its floor (1 is the first apartment of a level) and which of the building's types it is. */
+  position?: number;
+  planType?: string;
   floor: number;
   number: string; // "503"
   type: "1-bedroom" | "2-bedroom" | "3-bedroom" | "4-bedroom" | "studio";
   bedrooms: number;
   bathrooms: number;
   area: number; // m² interior
+  /** How many decimals the area is written with (2 for an apartment from the architect's drawing); one where left out. */
+  areaDecimals?: number;
   balconyArea: number; // m²
-  orientation: Orientation;
+  /** Left out where the architect's drawing does not say. */
+  orientation?: Orientation;
   status: UnitStatus;
   rooms: Room[];
-  shape: FloorPlanShape;
+  /** The schematic outline of the generated sample floors; an apartment with a real floor sketch has none. */
+  shape?: FloorPlanShape;
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   tour?: { available: boolean; type: "360" | "matterport" | "glb" | "none" };
   /** Present only where a real architectural floor-plan image exists for this unit's floor (see Floor.officialOverviewImage). */
@@ -75,8 +86,23 @@ export interface Floor {
   interactiveCropRegion?: PlanRegion;
 }
 
+/** One floor sketch for a whole building, and where each apartment of a level sits on it (percent of the image). */
+export interface FloorSketch {
+  image: MediaImage & { width: number; height: number };
+  shapes: {
+    /** The apartment's position on a level (the same on every level). */
+    position: number;
+    /** The apartment's outline, balcony included. */
+    polygon: [number, number][];
+    /** Where its number is shown. */
+    label: [number, number];
+  }[];
+}
+
 export interface Building {
   id: string; // "b01"
+  /** The real floor sketch and its shapes, where the architect's drawing exists; the others have none. */
+  floorSketch?: FloorSketch;
   name: string; // "Building 01"
   shortLabel: string; // "01"
   floors: Floor[];

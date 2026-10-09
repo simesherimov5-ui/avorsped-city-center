@@ -40,7 +40,8 @@ describe("projectsOnSale", () => {
 
   it("marks apartments that are generated sample data", () => {
     for (const a of apartments) {
-      if (a.projectId !== "city-center" || a.id.startsWith("b06-f3-")) continue;
+      // the real ones: Building 06, floor 3, and all of Зграда 01
+      if (a.projectId !== "city-center" || a.id.startsWith("b06-f3-") || a.buildingId === "b01") continue;
       expect(a.sample, a.id).toBe(true);
     }
     expect(apartments.filter((a) => a.projectId !== "city-center").every((a) => a.sample)).toBe(true);

@@ -21,8 +21,11 @@ export type UnitOption = {
   projectId: string;
   buildingId?: string;
   floor: number;
+  /** The floor's name as its building's data calls it ("Кат 2", "Поткровје"). */
+  floorLabel: string;
   number: string;
   area: number;
+  areaDecimals?: number;
 };
 export type BookingStart = { projectId?: string; buildingId?: string; unitId?: string };
 
@@ -54,7 +57,8 @@ const TITLES: Record<StepId, string> = {
 const subscribeNever = () => () => {};
 const noToday = () => "";
 
-const floorLabel = (floor: number) => (floor === 0 ? "Приземје" : `Кат ${floor}`);
+const floorName = (floor: number, units: UnitOption[]) =>
+  units.find((u) => u.floor === floor)?.floorLabel ?? (floor === 0 ? "Приземје" : `Кат ${floor}`);
 
 /** Slides a field 6px each way once, gently, to point at what is missing. */
 function shake(el: Element | null) {
@@ -165,7 +169,7 @@ export function ContactForm({
   const floorUnits = pool.filter((u) => String(u.floor) === floor);
   const unit = pool.find((u) => u.id === unitId);
   const unitLabel = unit
-    ? `Стан ${unit.number} · ${floorLabel(unit.floor)}`
+    ? `Стан ${unit.number} · ${unit.floorLabel}`
     : unitTextOk && unitText.trim()
       ? `Стан ${unitText.trim()}`
       : "";
@@ -575,8 +579,8 @@ export function ContactForm({
                         onChange={pickFloor}
                         options={floors.map((f) => ({
                           value: String(f),
-                          label: floorLabel(f),
-                          content: floorLabel(f),
+                          label: floorName(f, pool),
+                          content: floorName(f, pool),
                         }))}
                       />
                       <Collapse show={floorUnits.length > 0} reduce={reduce}>
@@ -591,7 +595,7 @@ export function ContactForm({
                           onChange={pickUnit}
                           options={floorUnits.map((u) => ({
                             value: u.id,
-                            label: `Стан ${u.number}, ${formatArea(u.area)}`,
+                            label: `Стан ${u.number}, ${formatArea(u.area, u.areaDecimals)}`,
                             content: u.number,
                           }))}
                         />

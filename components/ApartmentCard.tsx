@@ -7,7 +7,7 @@ import { formatArea, orientationLabel } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
 import { floorPlanImageForApartment } from "@/lib/assets";
-import { placeLabel } from "@/data";
+import { floorLabelOf, placeLabel } from "@/data";
 import { useCompare } from "@/lib/compare-context";
 import { cn } from "@/lib/cn";
 import { roomsText } from "@/lib/plural";
@@ -32,6 +32,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           <Media
             image={floorPlanImageForApartment(apartment)}
             fit="contain"
+            crisp={floorPlanImageForApartment(apartment).transparent}
             priority={priority}
             // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
             className={cn(
@@ -49,7 +50,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           <div>
             <div className="t-h3">Стан {apartment.number}</div>
             <div className="mt-1 text-xs text-muted">
-              {place.text} · {apartment.floor === 0 ? "Приземје" : `Кат ${apartment.floor}`}
+              {place.text} · {floorLabelOf(apartment)}
             </div>
           </div>
           <Link
@@ -68,12 +69,14 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           </span>
           <span className="flex items-center gap-1.5">
             <Ruler className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
-            {formatArea(apartment.area)}
+            {formatArea(apartment.area, apartment.areaDecimals)}
           </span>
-          <span className="flex items-center gap-1.5">
-            <Compass className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
-            {orientationLabel(apartment.orientation)}
-          </span>
+          {apartment.orientation && (
+            <span className="flex items-center gap-1.5">
+              <Compass className="h-3.5 w-3.5 text-muted" strokeWidth={1.5} />
+              {orientationLabel(apartment.orientation)}
+            </span>
+          )}
         </div>
 
         <label

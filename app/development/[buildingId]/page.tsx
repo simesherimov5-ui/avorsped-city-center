@@ -86,6 +86,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           <div className="mt-10">
             <FloorPicker
               basePath={`/development/${building.id}`}
+              sketch={building.floorSketch}
               floors={building.floors.map((floor) => ({
                 number: floor.number,
                 label: floor.label,
@@ -95,8 +96,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                     id: a.id,
                     number: a.number,
                     area: a.area,
+                    areaDecimals: a.areaDecimals,
                     bedrooms: a.bedrooms,
                     status: a.status,
+                    position: a.position,
                   })),
               }))}
             />

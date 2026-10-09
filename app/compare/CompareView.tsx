@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Layers } from "lucide-react";
 import { useCompare } from "@/lib/compare-context";
 import { idsToParam, parseIds, writeStored } from "@/lib/compare-store";
-import { getApartment, placeLabel } from "@/data";
+import { floorLabelOf, getApartment, placeLabel } from "@/data";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -15,13 +15,13 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment>>) => string }[] = [
   { label: "Проект", get: (a) => placeLabel(a).project },
   { label: "Зграда", get: (a) => placeLabel(a).building || "—" },
-  { label: "Кат", get: (a) => (a.floor === 0 ? "Приземје" : String(a.floor)) },
+  { label: "Кат", get: (a) => floorLabelOf(a) },
   { label: "Тип", get: (a) => (a.bedrooms === 0 ? "Студио" : typeLabel(a.type)) },
-  { label: "Спални соби", get: (a) => String(a.bedrooms) },
+  { label: "Соби", get: (a) => String(a.bedrooms) },
   { label: "Бањи", get: (a) => String(a.bathrooms) },
-  { label: "Површина", get: (a) => formatArea(a.area) },
-  { label: "Балкон", get: (a) => formatArea(a.balconyArea) },
-  { label: "Ориентација", get: (a) => orientationLabel(a.orientation) },
+  { label: "Површина", get: (a) => formatArea(a.area, a.areaDecimals) },
+  { label: "Балкон", get: (a) => formatArea(a.balconyArea, a.areaDecimals) },
+  { label: "Ориентација", get: (a) => (a.orientation ? orientationLabel(a.orientation) : "—") },
 ];
 
 /**

@@ -30,6 +30,7 @@ export function Media({
   fit = "cover",
   focus,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  crisp = false,
 }: {
   image: MediaImage;
   className?: string;
@@ -42,6 +43,11 @@ export function Media({
   /** A project's framing (zoom below 1 shows more of the photo, with a blurred copy behind it). */
   focus?: ImageFocus;
   sizes?: string;
+  /**
+   * For lossless line drawings (plans, sketches): the file is served as it is, never resized or re-encoded, because
+   * the optimizer's lossy re-encoding smears thin lines. The drawing must then not be shown larger than its own pixels.
+   */
+  crisp?: boolean;
 }) {
   if (image.isPlaceholder || !image.src) {
     return <Placeholder label={label ?? image.alt} tone={tone} className={className} />;
@@ -101,7 +107,8 @@ export function Media({
         className
       )}
     >
-      {(out || contained) && (
+      {/* a lossless line drawing has no blurred copy behind it: it sits on its own light surface */}
+      {(out || contained) && !crisp && (
         <div aria-hidden className="absolute inset-0 scale-[1.2] [filter:blur(40px)_brightness(0.55)]">
           <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={75} />
         </div>
@@ -117,6 +124,7 @@ export function Media({
             priority={priority}
             fetchPriority={defer ? "low" : undefined}
             quality={90}
+            unoptimized={crisp}
           />
         </div>
       ) : (
@@ -130,6 +138,7 @@ export function Media({
           priority={priority}
           fetchPriority={defer ? "low" : undefined}
           quality={90}
+          unoptimized={crisp}
         />
       )}
     </div>

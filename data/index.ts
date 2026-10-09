@@ -338,6 +338,12 @@ export function getApartmentsForFloor(buildingId: string, floor: number): Apartm
 
 const floorLabel = (number: number) => (number === 0 ? "Приземје" : `Кат ${number}`);
 
+/** The name of an apartment's floor, as its building's data calls it ("Кат 2", "Поткровје"); a plain "Кат n" otherwise. */
+export function floorLabelOf(a: Apartment): string {
+  const building = getProject(a.projectId)?.buildings?.find((b) => b.id === a.buildingId);
+  return building?.floors.find((f) => f.number === a.floor)?.label ?? floorLabel(a.floor);
+}
+
 /** A building of a project on sale, as the Пронајди стан street draws it. */
 export interface SaleBuilding {
   /** The building's id; a project that is one building uses the project's id. */

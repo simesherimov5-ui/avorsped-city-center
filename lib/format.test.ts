@@ -6,6 +6,12 @@ describe("formatArea", () => {
     expect(formatArea(79.72)).toBe("79,7 м²");
     expect(formatArea(28.7)).toBe("28,7 м²");
   });
+
+  it("uses the decimals the data has when it says so (the architect's areas have two)", () => {
+    expect(formatArea(94.05, 2)).toBe("94,05 м²");
+    expect(formatArea(89.1, 2)).toBe("89,10 м²");
+    expect(formatArea(45, 2)).toBe("45,00 м²");
+  });
 });
 
 describe("labels", () => {

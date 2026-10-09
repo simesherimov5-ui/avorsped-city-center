@@ -35,10 +35,25 @@ export function exampleFloorPlan(type: Apartment["type"]) {
  */
 export function floorPlanImageForApartment(apartment: Apartment) {
   const real = REAL_FLOOR_PLAN_BY_ID[apartment.id];
-  if (real) return { ...real, isPlaceholder: false as const, isExactMatch: true };
+  if (real) return { ...real, isPlaceholder: false as const, isExactMatch: true, transparent: false };
   const own = apartment.planImage;
-  if (own) return { src: own.src, alt: own.alt, isPlaceholder: own.isPlaceholder, isExactMatch: !own.example };
-  return { src: "", alt: `Стан ${apartment.number}`, isPlaceholder: true as const, isExactMatch: false };
+  if (own) {
+    return {
+      src: own.src,
+      alt: own.alt,
+      isPlaceholder: own.isPlaceholder,
+      isExactMatch: !own.example,
+      // line drawings on a transparent background: kept lossless and always on a light surface
+      transparent: own.transparent === true,
+    };
+  }
+  return {
+    src: "",
+    alt: `Стан ${apartment.number}`,
+    isPlaceholder: true as const,
+    isExactMatch: false,
+    transparent: false,
+  };
 }
 
 // Real pixel dimensions of the source PNG — the only copy of this drawing in the

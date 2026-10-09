@@ -106,9 +106,11 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 3.2 Apartment data (before-launch B5)
 
-- **Where:** `data/generate.ts` (generated mock data; only Building 06, floor 3 is real). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change.
+- **Where:** `data/generate.ts` (generated mock data; Зграда 01 is real, from `data/zgrada-01.ts`, and so is Building 06, floor 3). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change.
 - **Needed for each apartment:** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
 - **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | достапен`.
+
+- **Зграда 01 (Ламела 1):** real status of each apartment in Зграда 01 is needed: all 30 are set to available for now. Also not in the drawing, so not shown: the orientation of each apartment. The next building's drawings (floor sketch, one sketch per apartment type, the shapes of the apartments on the sketch) are added the same way: files in `public/images/floorplans/<building>/`, data in a file like `data/zgrada-01.ts`.
 
 ### 3.3 Floor plans and photos for the other buildings
 

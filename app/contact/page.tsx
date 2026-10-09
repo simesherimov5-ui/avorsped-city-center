@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { companyInfo, getApartment, getProject, projectsOnSale } from "@/data";
+import { companyInfo, floorLabelOf, getApartment, getProject, projectsOnSale } from "@/data";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactStage } from "@/components/contact/ContactStage";
 import { DirectPanel } from "@/components/contact/DirectPanel";
@@ -42,8 +42,10 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
       projectId: a.projectId,
       buildingId: a.buildingId,
       floor: a.floor,
+      floorLabel: floorLabelOf(a),
       number: a.number,
       area: a.area,
+      areaDecimals: a.areaDecimals,
     }));
   // The project comes from the data: the apartment's own, else the one named in the address, else the one that owns
   // the named building, so a reference can never carry a wrong name.

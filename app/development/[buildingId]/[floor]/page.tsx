@@ -6,6 +6,8 @@ import { getBuilding, getApartmentsForFloor, buildings, apartments, development,
 import { availableWord, unitsText } from "@/lib/plural";
 import { pageMetadata } from "@/lib/seo";
 import { FloorPlan } from "@/components/FloorPlan";
+import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
+import { StatusLegend } from "@/components/ui/StatusBadge";
 import { RealFloorPlanViewer } from "@/components/RealFloorPlanViewer";
 import { FloorList } from "@/components/FloorList";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
@@ -89,7 +91,24 @@ export default async function FloorPage({ params }: { params: Promise<{ building
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
           <div>
-            {hasRealPlan && overview ? (
+            {building.floorSketch ? (
+              <>
+                <FloorSketch
+                  sketch={building.floorSketch}
+                  levelKey={floor.number}
+                  apartments={units.map((a) => ({
+                    id: a.id,
+                    number: a.number,
+                    position: a.position,
+                    area: a.area,
+                    areaDecimals: a.areaDecimals,
+                    bedrooms: a.bedrooms,
+                    status: a.status,
+                  }))}
+                />
+                <StatusLegend className="mt-4" />
+              </>
+            ) : hasRealPlan && overview ? (
               <RealFloorPlanViewer
                 image={overview}
                 imageWidth={overview.width}

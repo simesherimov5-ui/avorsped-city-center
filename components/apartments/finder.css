@@ -652,6 +652,9 @@
   inset: 0;
   transition: transform 1.4s var(--af-ease);
 }
+.af-ph-img.is-padded {
+  inset: 10px;
+}
 .af-card:hover .af-ph-img,
 .af-card:focus-visible .af-ph-img {
   transform: scale(1.07);
@@ -965,6 +968,13 @@
   inset: 0;
   animation: af-plan 1.2s var(--af-ease) both;
   animation-delay: var(--t, 1.05s);
+}
+/* a line drawing on a transparent background sits on a cream sheet (dark lines never on the dark stage) */
+.af-plan-img.is-sheet {
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid var(--af-copper-line);
+  background: var(--color-sand);
 }
 /* an image plan arrives by fading in and settling from 1.04 to 1 */
 @keyframes af-plan {

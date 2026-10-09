@@ -7,14 +7,18 @@ import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { StatusMarker } from "@/components/ui/StatusBadge";
 import { formatArea, statusLabel } from "@/lib/format";
 import { roomsText } from "@/lib/plural";
-import type { UnitStatus } from "@/types";
+import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
+import type { FloorSketch as FloorSketchData, UnitStatus } from "@/types";
 
 export interface PickerApartment {
   id: string;
   number: string;
   area: number;
+  areaDecimals?: number;
   bedrooms: number;
   status: UnitStatus;
+  /** Where it is on its level, for the shape of the floor sketch. */
+  position?: number;
 }
 
 export interface PickerFloor {
@@ -32,7 +36,16 @@ const DENSE_FROM = 7;
  * Up and Down move the choice. It starts on the lowest floor that has a free apartment. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  */
-export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
+export function FloorPicker({
+  floors,
+  basePath,
+  sketch,
+}: {
+  floors: PickerFloor[];
+  basePath?: string;
+  /** The building's floor sketch with a shape per apartment: shown in the panel above the cards (for a building that has one). */
+  sketch?: FloorSketchData;
+}) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
   // A floor with no apartments listed yet (the details are not here yet) is shown, with a short «soon» line in its panel.
@@ -42,6 +55,8 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
     lowestFirst[0];
 
   const [selected, setSelected] = useState(start?.number);
+  // the apartment the pointer or the keyboard is on, in the sketch or in the cards: both light up
+  const [hot, setHot] = useState<string | null>(null);
   const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   if (!start) return null;
@@ -58,7 +73,7 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
   };
 
   return (
-    <div className="fp">
+    <div className={`fp${sketch ? " has-sketch" : ""}`}>
       <div className="fp-facade">
         <div className="fp-cap" aria-hidden />
         <div className="fp-floors" role="group" aria-label="Катови" onKeyDown={onKeyDown}>
@@ -93,18 +108,34 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
       <div className="fp-panel" aria-live="polite">
         <div className="fp-label">Избор на стан по кат</div>
         <h3 className="fp-title">{current.label}</h3>
+        {sketch && current.apartments.length > 0 && (
+          <FloorSketch
+            sketch={sketch}
+            apartments={current.apartments}
+            levelKey={current.number}
+            hovered={hot}
+            onHover={setHot}
+          />
+        )}
         {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
         {current.apartments.length > 0 && (
           <ul className="fp-units">
             {current.apartments.map((a) => (
               <li key={a.id}>
-                <Link href={`/apartments/${a.id}`} className="fp-unit">
+                <Link
+                  href={`/apartments/${a.id}`}
+                  className={`fp-unit${hot === a.id ? " is-hot" : ""}`}
+                  onMouseEnter={() => setHot(a.id)}
+                  onMouseLeave={() => setHot(null)}
+                  onFocus={() => setHot(a.id)}
+                  onBlur={() => setHot(null)}
+                >
                   <b className="fp-unit-no">
                     <span className="sr-only">Стан </span>
                     {a.number}
                   </b>
                   <span className="fp-unit-spec">
-                    {formatArea(a.area)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
+                    {formatArea(a.area, a.areaDecimals)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
                   </span>
                   <span className={`fp-unit-st is-${a.status}`}>
                     <StatusMarker status={a.status} className="h-[7px] w-[7px]" />

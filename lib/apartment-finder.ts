@@ -11,9 +11,12 @@ export type FinderApartment = {
   /** 0 is a studio. */
   bedrooms: number;
   area: number;
+  areaDecimals?: number;
   status: UnitStatus;
   /** The apartment's own plan / render image (what its card has always shown). */
-  plan: { src: string; alt: string; isPlaceholder: boolean };
+  plan: { src: string; alt: string; isPlaceholder: boolean; transparent?: boolean };
+  /** The name of its floor, as its building's data calls it ("Кат 2", "Поткровје"). */
+  floorLabel: string;
 };
 
 /** A building that has apartments, drawn in the street: its floors (lowest first) and the apartments of each, in order. */
