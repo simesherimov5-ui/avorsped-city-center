@@ -11,6 +11,7 @@ const dictionaries: Record<Locale, Record<string, string>> = {
   en: {
     "nav.home": "Home",
     "nav.projects": "Projects",
+    "nav.findApartment": "Find an Apartment",
     "nav.completedProjects": "Completed Projects",
     "nav.about": "About Us",
     "nav.contact": "Contact",
@@ -21,6 +22,7 @@ const dictionaries: Record<Locale, Record<string, string>> = {
   mk: {
     "nav.home": "Почетна",
     "nav.projects": "Проекти",
+    "nav.findApartment": "Пронајди стан",
     "nav.completedProjects": "Завршени проекти",
     "nav.about": "За нас",
     "nav.contact": "Контакт",
