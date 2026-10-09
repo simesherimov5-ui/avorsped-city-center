@@ -28,6 +28,17 @@
   --color-brass: #c4a454;
   /* The filling button on dark surfaces (set by the owner, to try). */
   --color-button: #c9a45c;
+  /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
+     the wordmark and the building mark only. */
+  --color-gold-shade: #8e7240;
+  --color-gold-glint: #e6cf9a;
+  --gold-sheen: linear-gradient(
+    120deg,
+    var(--color-gold-shade) 0%,
+    var(--color-button) 35%,
+    var(--color-gold-glint) 60%,
+    var(--color-button) 100%
+  );
   /* The «Завршено» chip of a finished project (set by the owner: green). */
   --color-done: #2a7348;
 

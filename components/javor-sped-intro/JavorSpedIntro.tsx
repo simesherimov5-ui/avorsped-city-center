@@ -179,6 +179,14 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
         <circle className="jsi-ring-prog" cx="75" cy="75" r="72" />
       </svg>
       <svg className="jsi-logo" viewBox={MARK_VIEWBOX} aria-hidden>
+        <defs>
+          <linearGradient id="jsi-sheen" gradientUnits="userSpaceOnUse" x1="50" y1="60" x2="220" y2="300">
+            <stop className="jsi-sheen-0" offset="0" />
+            <stop className="jsi-sheen-1" offset="0.35" />
+            <stop className="jsi-sheen-2" offset="0.6" />
+            <stop className="jsi-sheen-3" offset="1" />
+          </linearGradient>
+        </defs>
         {MARK_STROKES.map((s) => (
           <path key={s.d} className="jsi-st" d={s.d} data-delay={s.delay} data-opacity={s.opacity} />
         ))}

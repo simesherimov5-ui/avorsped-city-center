@@ -1,19 +1,42 @@
+import { useId } from "react";
 import { cn } from "@/lib/cn";
 import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
 
-/** The building mark: the same drawing the opening builds. Takes its colour from the text colour (`currentColor`). */
-export function BuildingMark({ className, style }: { className?: string; style?: React.CSSProperties }) {
+/**
+ * The building mark: the same drawing the opening builds. Takes its colour from the text colour (`currentColor`); with
+ * `gold` it is drawn in the logo's metallic gold (one gradient across the whole drawing) instead.
+ */
+export function BuildingMark({
+  className,
+  style,
+  gold = false,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+  gold?: boolean;
+}) {
+  const gradient = useId();
   return (
     <svg
       viewBox={MARK_VIEWBOX}
       fill="none"
-      stroke="currentColor"
+      stroke={gold ? `url(#${gradient})` : "currentColor"}
       strokeWidth="6"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       style={style}
       aria-hidden="true"
     >
+      {gold && (
+        <defs>
+          <linearGradient id={gradient} gradientUnits="userSpaceOnUse" x1="50" y1="60" x2="220" y2="300">
+            <stop offset="0" style={{ stopColor: "var(--color-gold-shade)" }} />
+            <stop offset="0.35" style={{ stopColor: "var(--color-button)" }} />
+            <stop offset="0.6" style={{ stopColor: "var(--color-gold-glint)" }} />
+            <stop offset="1" style={{ stopColor: "var(--color-button)" }} />
+          </linearGradient>
+        </defs>
+      )}
       {MARK_STROKES.map((s) => (
         <path key={s.d} d={s.d} opacity={s.opacity === 1 ? undefined : s.opacity} />
       ))}
@@ -36,7 +59,7 @@ export function Logo({
   className?: string;
 }) {
   if (variant === "icon") {
-    return <BuildingMark className={cn("h-10 w-auto text-brass", className)} />;
+    return <BuildingMark gold className={cn("h-10 w-auto", className)} />;
   }
 
   if (variant === "inline") {

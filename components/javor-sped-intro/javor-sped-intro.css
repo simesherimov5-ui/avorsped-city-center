@@ -58,9 +58,22 @@
   height: 88px;
   margin: -44px 0 0 -31px;
   fill: none;
-  stroke: var(--color-brass);
+  stroke: url(#jsi-sheen);
   stroke-width: 6;
   overflow: visible;
+}
+/* the same metallic gold as the wordmark, as one gradient across the whole drawing */
+.jsi-sheen-0 {
+  stop-color: var(--color-gold-shade);
+}
+.jsi-sheen-1 {
+  stop-color: var(--color-button);
+}
+.jsi-sheen-2 {
+  stop-color: var(--color-gold-glint);
+}
+.jsi-sheen-3 {
+  stop-color: var(--color-button);
 }
 /* Hidden from the first paint, so nothing flashes before the animation code runs. */
 .jsi-st {
@@ -118,7 +131,10 @@
   display: inline-block;
 }
 .jsi-gold {
-  color: var(--color-brass);
+  color: transparent;
+  background: var(--gold-sheen);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 /* Hidden from the first paint, so nothing flashes before the animation code runs. */
 .jsi-j,

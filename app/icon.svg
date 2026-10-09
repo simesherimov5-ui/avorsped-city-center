@@ -1,6 +1,14 @@
 <svg width="64" height="64" viewBox="-20 31 300 300" xmlns="http://www.w3.org/2000/svg">
   <rect x="-20" y="31" width="300" height="300" fill="#14110F"/>
-  <g fill="none" stroke="#C4A454" stroke-width="10">
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="50" y1="60" x2="220" y2="300">
+      <stop offset="0" stop-color="#8E7240"/>
+      <stop offset="0.35" stop-color="#C9A45C"/>
+      <stop offset="0.6" stop-color="#E6CF9A"/>
+      <stop offset="1" stop-color="#C9A45C"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#g)" stroke-width="10">
     <path d="M60 300 V70 H110"/>
     <path d="M134 300 V62"/>
     <path d="M70 136 L128 110"/>
