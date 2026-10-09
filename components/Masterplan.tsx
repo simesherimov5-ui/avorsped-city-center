@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
@@ -68,7 +68,9 @@ export function Masterplan({
 
   return (
     <div className="w-full">
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-stretch">
+      {/* items-start: the plan keeps its own 16:9 box whatever the panel beside it does (stretching it would crop the photo
+            and slide the markers off their buildings). */}
+      <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
         {/* Real aerial photo with selectable hotspots per building */}
         <div
           className={cn(
@@ -151,27 +153,13 @@ export function Masterplan({
 
         {/* Desktop — persistent, refined info panel beside the plan */}
         <div className="hidden lg:block">
-          <AnimatePresence mode="wait">
-            {active ? (
-              <motion.div
-                key={active.id}
-                initial={{ opacity: 0, x: 12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 12 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="h-full"
-              >
-                <BuildingPanel building={active} basePath={basePath} originRect={selectedRect} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center"
-              >
+          <PanelStack
+            buildings={buildingStats}
+            active={active}
+            basePath={basePath}
+            originRect={selectedRect}
+            idle={
+              <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
                 <p className="text-sm leading-relaxed text-muted">
                   Изберете зграда од планот за катови, достапност и фаза на изградба.
                 </p>
@@ -194,9 +182,9 @@ export function Masterplan({
                     </button>
                   ))}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            }
+          />
         </div>
       </div>
 
@@ -232,30 +220,86 @@ export function Masterplan({
           })}
         </div>
 
-        <AnimatePresence mode="wait">
-          {active ? (
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-4"
-            >
-              <BuildingPanel building={active} basePath={basePath} originRect={selectedRect} />
-            </motion.div>
-          ) : (
-            <p className="mt-4 text-sm text-muted">
-              Допрете на зграда погоре за катови, достапност и фаза на изградба.
-            </p>
-          )}
-        </AnimatePresence>
+        <div className="mt-4">
+          <PanelStack
+            buildings={buildingStats}
+            active={active}
+            basePath={basePath}
+            originRect={selectedRect}
+            idle={
+              <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
+                <p className="text-sm leading-relaxed text-muted">
+                  Допрете на зграда погоре за катови, достапност и фаза на изградба.
+                </p>
+              </div>
+            }
+          />
+        </div>
       </div>
 
-      {variant === "full" && !active && (
-        <p className="mx-auto mt-6 hidden max-w-md text-center text-sm text-muted lg:block">
+      {variant === "full" && (
+        <p
+          aria-hidden={active ? true : undefined}
+          className={cn("mx-auto mt-6 hidden max-w-md text-center text-sm text-muted lg:block", active && "invisible")}
+        >
           Сите згради се достапни за истражување — изберете од планот или од листата.
         </p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The idle note and the six building panels share one grid cell, and only one of them is shown: the cell is as tall as
+ * the tallest, so choosing (or changing) a building never moves what is below. The others are invisible stand-ins
+ * without the photo, so they cost nothing to load and cannot be reached.
+ */
+function PanelStack({
+  buildings,
+  active,
+  basePath,
+  originRect,
+  idle,
+}: {
+  buildings: BuildingWithAvailability[];
+  active: BuildingWithAvailability | null;
+  basePath: string;
+  originRect: Rect | null;
+  idle: ReactNode;
+}) {
+  return (
+    <div className="grid">
+      {active ? (
+        <div aria-hidden inert className="invisible col-start-1 row-start-1">
+          {idle}
+        </div>
+      ) : (
+        <motion.div
+          key="idle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="col-start-1 row-start-1"
+        >
+          {idle}
+        </motion.div>
+      )}
+      {buildings.map((b) =>
+        b.id === active?.id ? (
+          <motion.div
+            key={`${b.id}-on`}
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="col-start-1 row-start-1"
+          >
+            <BuildingPanel building={b} basePath={basePath} originRect={originRect} />
+          </motion.div>
+        ) : (
+          <div key={b.id} aria-hidden inert className="invisible col-start-1 row-start-1">
+            <BuildingPanel building={b} basePath={basePath} originRect={null} standIn />
+          </div>
+        )
       )}
     </div>
   );
@@ -265,19 +309,24 @@ function BuildingPanel({
   building,
   basePath,
   originRect,
+  standIn = false,
 }: {
   building: BuildingWithAvailability;
   basePath: string;
   originRect: Rect | null;
+  /** Only takes up the room (no photo): see PanelStack. */
+  standIn?: boolean;
 }) {
   return (
     <div className="flex h-full flex-col border border-line bg-warm-white p-6">
       <div className="aspect-[4/3] overflow-hidden border border-line">
-        <Media
-          image={building.exteriorImage}
-          label={`${building.name} — надворешен изглед`}
-          className="h-full w-full"
-        />
+        {!standIn && (
+          <Media
+            image={building.exteriorImage}
+            label={`${building.name} — надворешен изглед`}
+            className="h-full w-full"
+          />
+        )}
       </div>
       <div className="mt-5">
         <div className="eyebrow text-gold-deep">Зграда {building.shortLabel}</div>
