@@ -8,7 +8,7 @@ import { StatusMarker } from "@/components/ui/StatusBadge";
 import { formatArea, statusLabel } from "@/lib/format";
 import { roomsText } from "@/lib/plural";
 import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
-import type { FloorSketch as FloorSketchData, UnitStatus } from "@/types";
+import type { ApartmentOutline, DrawingImage, UnitStatus } from "@/types";
 
 export interface PickerApartment {
   id: string;
@@ -17,14 +17,16 @@ export interface PickerApartment {
   areaDecimals?: number;
   bedrooms: number;
   status: UnitStatus;
-  /** Where it is on its level, for the shape of the floor sketch. */
-  position?: number;
+  /** Where it is on its floor's sketch, for its shape there. */
+  outline?: ApartmentOutline;
 }
 
 export interface PickerFloor {
   number: number;
   label: string;
   apartments: PickerApartment[];
+  /** This floor's own sketch, where there is one. */
+  sketch?: DrawingImage;
 }
 
 /** More windows than this and a row spaces them tighter so they still fit beside the label. */
@@ -36,16 +38,7 @@ const DENSE_FROM = 7;
  * Up and Down move the choice. It starts on the lowest floor that has a free apartment. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  */
-export function FloorPicker({
-  floors,
-  basePath,
-  sketch,
-}: {
-  floors: PickerFloor[];
-  basePath?: string;
-  /** The building's floor sketch with a shape per apartment: shown in the panel above the cards (for a building that has one). */
-  sketch?: FloorSketchData;
-}) {
+export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
   // A floor with no apartments listed yet (the details are not here yet) is shown, with a short «soon» line in its panel.
@@ -61,6 +54,9 @@ export function FloorPicker({
 
   if (!start) return null;
   const current = rows.find((f) => f.number === selected) ?? start;
+  // A floor with a sketch and shapes shows the sketch above its cards; a building without them shows cards only.
+  const hasSketch = floors.some((f) => f.sketch && f.apartments.some((a) => a.outline));
+  const currentSketch = current.sketch && current.apartments.some((a) => a.outline) ? current.sketch : undefined;
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
@@ -73,7 +69,7 @@ export function FloorPicker({
   };
 
   return (
-    <div className={`fp${sketch ? " has-sketch" : ""}`}>
+    <div className={`fp${hasSketch ? " has-sketch" : ""}`}>
       <div className="fp-facade">
         <div className="fp-cap" aria-hidden />
         <div className="fp-floors" role="group" aria-label="Катови" onKeyDown={onKeyDown}>
@@ -108,9 +104,9 @@ export function FloorPicker({
       <div className="fp-panel" aria-live="polite">
         <div className="fp-label">Избор на стан по кат</div>
         <h3 className="fp-title">{current.label}</h3>
-        {sketch && current.apartments.length > 0 && (
+        {currentSketch && (
           <FloorSketch
-            sketch={sketch}
+            image={currentSketch}
             apartments={current.apartments}
             levelKey={current.number}
             hovered={hot}

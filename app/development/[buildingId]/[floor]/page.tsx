@@ -1,14 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronRight } from "lucide-react";
-import type { Apartment } from "@/types";
 import { getBuilding, getApartmentsForFloor, buildings, apartments, development, availabilityCounts } from "@/data";
 import { availableWord, unitsText } from "@/lib/plural";
 import { pageMetadata } from "@/lib/seo";
-import { FloorPlan } from "@/components/FloorPlan";
+import { ApartmentCard } from "@/components/ApartmentCard";
 import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
 import { StatusLegend } from "@/components/ui/StatusBadge";
-import { RealFloorPlanViewer } from "@/components/RealFloorPlanViewer";
 import { FloorList } from "@/components/FloorList";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 
@@ -36,10 +34,6 @@ export async function generateMetadata({
   });
 }
 
-function hasRegion(a: Apartment): a is Apartment & { realPlanRegion: NonNullable<Apartment["realPlanRegion"]> } {
-  return Boolean(a.realPlanRegion);
-}
-
 export default async function FloorPage({ params }: { params: Promise<{ buildingId: string; floor: string }> }) {
   const { buildingId, floor: floorParam } = await params;
   const building = getBuilding(buildingId);
@@ -50,13 +44,6 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   if (!floor) notFound();
 
   const units = getApartmentsForFloor(building.id, floorNum);
-  const unitsWithRegions = units.filter(hasRegion);
-  // Only switch to the real interactive plan when every unit on this floor has a
-  // calibrated region — a partial overlay would be more confusing than the
-  // existing schematic diagram, which always covers every unit on any floor.
-  const overview = floor.officialOverviewImage;
-  const hasRealPlan = Boolean(overview) && units.length > 0 && unitsWithRegions.length === units.length;
-
   const floorNavItems = building.floors.map((f) => {
     const floorUnits = apartments.filter((a) => a.buildingId === building.id && a.floor === f.number);
     const available = floorUnits.filter((a) => a.status === "available").length;
@@ -91,33 +78,30 @@ export default async function FloorPage({ params }: { params: Promise<{ building
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
           <div>
-            {building.floorSketch ? (
+            {floor.sketch && units.some((a) => a.outline) ? (
               <>
                 <FloorSketch
-                  sketch={building.floorSketch}
+                  image={floor.sketch}
                   levelKey={floor.number}
                   apartments={units.map((a) => ({
                     id: a.id,
                     number: a.number,
-                    position: a.position,
                     area: a.area,
                     areaDecimals: a.areaDecimals,
                     bedrooms: a.bedrooms,
                     status: a.status,
+                    outline: a.outline,
                   }))}
                 />
                 <StatusLegend className="mt-4" />
               </>
-            ) : hasRealPlan && overview ? (
-              <RealFloorPlanViewer
-                image={overview}
-                imageWidth={overview.width}
-                imageHeight={overview.height}
-                apartments={unitsWithRegions}
-                focusRegion={floor.interactiveCropRegion}
-              />
             ) : (
-              <FloorPlan apartments={units} />
+              // a floor without a sketch: its apartments, as cards
+              <div className="grid gap-6 sm:grid-cols-2">
+                {units.map((a) => (
+                  <ApartmentCard key={a.id} apartment={a} />
+                ))}
+              </div>
             )}
           </div>
           <div>
@@ -125,20 +109,6 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             <FloorList basePath={`/development/${building.id}`} activeFloor={floorNum} floors={floorNavItems} />
           </div>
         </div>
-
-        {overview && (
-          <div className="mt-16 border-t border-line pt-12">
-            <div className="eyebrow text-gold-deep">Официјална документација</div>
-            <h2 className="t-h3 mt-1.5">Официјална основа на катот</h2>
-            <p className="mt-2 max-w-lg text-sm text-muted">
-              Оригиналниот архитектонски документ во целост, со мерките на секоја просторија. Користете ги контролите за
-              зум за да ги разгледате деталите.
-            </p>
-            <div className="mt-6 max-w-4xl">
-              <RealFloorPlanViewer image={overview} imageWidth={overview.width} imageHeight={overview.height} />
-            </div>
-          </div>
-        )}
       </section>
     </ZoomEnter>
   );

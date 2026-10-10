@@ -44,6 +44,7 @@ const TYPE_LABELS: Record<string, string> = {
   "2-bedroom": "Двособен",
   "3-bedroom": "Трособен",
   "4-bedroom": "Четворособен",
+  "5-bedroom": "Петособен",
 };
 
 export function typeLabel(type: string): string {

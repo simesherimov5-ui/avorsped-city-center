@@ -106,11 +106,15 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ### 3.2 Apartment data (before-launch B5)
 
-- **Where:** `data/generate.ts` (generated mock data; Зграда 01 is real, from `data/zgrada-01.ts`, and so is Building 06, floor 3). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change.
-- **Needed for each apartment:** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
+- **Where:** the six buildings of City Center (Ламела 1–6 = Зграда 01–06) come from the architect's plans, `data/plans/city-center.json` (207 apartments: 30, 30, 35, 23, 24 and 65), turned into site data by `data/plans.ts`; the sketches and plans are in `public/images/floorplans/lamela-N/`. The other projects' apartments are generated mock data (`data/generate.ts`, marked `sample`). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change. Another project's real plans (same file shape) appear the same way, with no code written for it.
+- **Needed for each apartment (other projects):** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
 - **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | достапен`.
 
-- **Зграда 01 (Ламела 1):** real status of each apartment in Зграда 01 is needed: all 30 are set to available for now. Also not in the drawing, so not shown: the orientation of each apartment. The next building's drawings (floor sketch, one sketch per apartment type, the shapes of the apartments on the sketch) are added the same way: files in `public/images/floorplans/<building>/`, data in a file like `data/zgrada-01.ts`.
+- **Real status of every City Center apartment (needed):** the drawings do not say which apartments are available, reserved or sold, so all 207 are set to available for now. Send the status of each (building, floor, number, status); it replaces the default in `data/plans.ts`. Also not in the drawings, so not shown: the orientation of each apartment.
+- **To confirm with the architect:** two drawings whose rooms do not add up to the total shown on the drawing. The site shows the drawing's own numbers, with no note.
+  - Зграда 02, Кат 1, Стан 4: the rooms add up to 125,20 m², the total says 119,20 m².
+  - Зграда 05, Кат 1, Стан 4: the rooms add up to 169,90 m², the total says 170,00 m².
+- **When the architect's plans change:** replace `data/plans/city-center.json` and the images in `public/images/floorplans/lamela-N/` (all lossless transparent .webp, the sketch of each floor and the plan of each apartment). `data/city-center.test.ts` checks the counts, the room sums and that every file exists.
 
 ### 3.3 Floor plans and photos for the other buildings
 

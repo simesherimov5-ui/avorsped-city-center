@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const apt = getApartment(id);
   if (!apt) return { title: "Стан", robots: { index: false } };
   const where = placeLabel(apt).text;
-  const bedrooms = apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type);
+  const bedrooms = apt.typeLabel ?? (apt.bedrooms === 0 ? "Студио" : typeLabel(apt.type));
   const facing = apt.orientation ? `, ориентација ${orientationLabel(apt.orientation).toLowerCase()}` : "";
   return pageMetadata({
     title: `Стан ${apt.number}, ${where}`,
@@ -53,6 +53,11 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const place = placeLabel(apartment);
   const project = getProject(apartment.projectId);
   const floorPlanImage = floorPlanImageForApartment(apartment);
+  // the plan's own proportions (a tall plan gets a tall box), kept between portrait 3:4-ish and 4:3
+  const planRatio =
+    apartment.planImage?.width && apartment.planImage.height
+      ? Math.min(4 / 3, Math.max(0.68, apartment.planImage.width / apartment.planImage.height))
+      : 4 / 3;
 
   const inquiryHref = `/contact?project=${encodeURIComponent(apartment.projectId)}${apartment.buildingId ? `&building=${encodeURIComponent(apartment.buildingId)}` : ""}&apartment=${apartment.id}`;
 
@@ -75,11 +80,16 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   const renderAside = (extraClass: string) => (
     <aside className={cn("h-fit space-y-6 border border-line bg-warm-white p-6", extraClass)}>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
-        <Spec label="Тип" value={apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type)} />
+        <Spec
+          label="Тип"
+          value={apartment.typeLabel ?? (apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type))}
+        />
         <Spec label="Соби" value={String(apartment.bedrooms)} />
-        <Spec label="Бањи" value={String(apartment.bathrooms)} />
+        {apartment.bathrooms > 0 && <Spec label="Бањи" value={String(apartment.bathrooms)} />}
         <Spec label="Површина" value={formatArea(apartment.area, apartment.areaDecimals)} />
-        <Spec label="Балкон" value={formatArea(apartment.balconyArea, apartment.areaDecimals)} />
+        {apartment.balconyArea > 0 && (
+          <Spec label="Тераса" value={formatArea(apartment.balconyArea, apartment.areaDecimals)} />
+        )}
         {apartment.orientation && <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />}
         <Spec label="Кат" value={floorLabelOf(apartment)} />
         <Spec label="Статус" value={statusLabel(apartment.status)} />
@@ -132,21 +142,23 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     Основа
                   </span>
                   {/* never cropped, and a line drawing is served as it is, never larger than its own pixels */}
-                  <Media
-                    image={floorPlanImage}
-                    label={`Архитектонска основа на стан ${apartment.number}`}
-                    fit="contain"
-                    crisp={floorPlanImage.transparent}
-                    className="aspect-[4/3] !bg-transparent"
-                    sizes="(max-width: 1024px) 100vw, 560px"
-                    priority
-                  />
+                  <div style={{ aspectRatio: planRatio }}>
+                    <Media
+                      image={floorPlanImage}
+                      label={`Архитектонска основа на стан ${apartment.number}`}
+                      fit="contain"
+                      crisp={floorPlanImage.transparent}
+                      className="h-full w-full !bg-transparent"
+                      sizes="(max-width: 1024px) 100vw, 560px"
+                      priority
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col">
                   <table className="w-full text-sm">
                     <tbody>
-                      {apartment.rooms.map((room) => (
-                        <tr key={room.name} className="border-b border-line">
+                      {apartment.rooms.map((room, i) => (
+                        <tr key={`${room.name}-${i}`} className="border-b border-line">
                           <td className="py-2.5 text-ink/70">{room.name}</td>
                           <td className="py-2.5 text-right font-medium">
                             {formatArea(room.area, apartment.areaDecimals)}

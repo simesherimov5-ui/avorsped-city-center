@@ -34,7 +34,6 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 
 - Pages (14 of 15) and 8 component files import `@/data` directly; 3 pages are client components (`app/apartments`, `app/compare`, `app/projects`), so the generator and dataset run in the browser bundle.
   This blocks swapping in a real backend. Lint stops new component imports; the 8 existing ones are the baseline in `eslint.config.mjs`.
-- `RealFloorPlanViewer.tsx` renders a raw `<img>` instead of going through `Media` (one `eslint-disable`, line 239).
 - Status labels are duplicated in `ApartmentFilters.tsx` instead of using `lib/format.ts`, and `app/projects/page.tsx:14-16` repeats the project-status labels (`projectStatusLabel`).
 - The i18n scaffold in `lib/i18n.tsx` is used by two files; almost all UI text is hardcoded Macedonian.
 - Forms (consultation, contact) are mocks.
@@ -48,14 +47,14 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 
 One PR per row, in order. Characterization tests come before refactors.
 
-| #   | Work                                                                                                                                            | Done when                                                             |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| 0   | Foundation: typecheck, Prettier, Vitest, CI, Claude Code config                                                                                 | `npm run check` and CI are green on a fresh clone                     |
-| 1   | Playwright smoke tests of current behaviour (browse → floor → apartment, compare, booking form)                                                 | Tests pass on `main` before any refactor                              |
-| 2   | Guardrails: the lint rules exist (Setup PR); fix `RealFloorPlanViewer`, labels, hex colours, then delete their baselines in `eslint.config.mjs` | Every baseline list in `eslint.config.mjs` is empty                   |
-| 3   | Server-only data layer: `domain/` Zod schemas, async repositories, deterministic seed                                                           | No client file imports data directly; `DATA_IMPORT_BASELINE` is empty |
-| 3b  | Pages to Server Components, one PR per page group, with before/after bundle size from `next build`                                              | Bundle shrinks; pages receive plain props                             |
-| 4   | i18n: `next-intl`, `app/[locale]`, `mk` default plus `en`, key-parity test, Cyrillic-literal CI check                                           | Every page works in `/mk` and `/en`                                   |
+| #   | Work                                                                                                                     | Done when                                                             |
+| --- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| 0   | Foundation: typecheck, Prettier, Vitest, CI, Claude Code config                                                          | `npm run check` and CI are green on a fresh clone                     |
+| 1   | Playwright smoke tests of current behaviour (browse → floor → apartment, compare, booking form)                          | Tests pass on `main` before any refactor                              |
+| 2   | Guardrails: the lint rules exist (Setup PR); fix labels, hex colours, then delete their baselines in `eslint.config.mjs` | Every baseline list in `eslint.config.mjs` is empty                   |
+| 3   | Server-only data layer: `domain/` Zod schemas, async repositories, deterministic seed                                    | No client file imports data directly; `DATA_IMPORT_BASELINE` is empty |
+| 3b  | Pages to Server Components, one PR per page group, with before/after bundle size from `next build`                       | Bundle shrinks; pages receive plain props                             |
+| 4   | i18n: `next-intl`, `app/[locale]`, `mk` default plus `en`, key-parity test, Cyrillic-literal CI check                    | Every page works in `/mk` and `/en`                                   |
 
 ## Claude Code setup: later
 

@@ -14,9 +14,9 @@ describe("apartment ids", () => {
     for (const a of apartments) expect(getApartment(a.id)).toBe(a);
   });
 
-  it("keep the Cyrillic unit number only as the label (Building 06, floor 3, unit 21а)", () => {
+  it("keep the unit number as text, letter included (Зграда 06, Кат 3, Стан 21a)", () => {
     const a = getApartment("b06-f3-21a");
-    expect(a?.number).toBe("21а");
+    expect(a?.number).toBe("21a");
   });
 });
 

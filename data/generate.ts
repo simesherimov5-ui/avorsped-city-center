@@ -1,16 +1,7 @@
-import type {
-  Apartment,
-  Building,
-  ConstructionStage,
-  Development,
-  Floor,
-  Orientation,
-  PlanRegion,
-  Room,
-  UnitStatus,
-} from "@/types";
-import { b06Floor3Overview, exampleFloorPlan } from "@/lib/assets";
-import { buildZgrada01 } from "./zgrada-01";
+import type { Apartment, Building, ConstructionStage, Development, Orientation, Room, UnitStatus } from "@/types";
+import { buildFromPlans, type PlansFile } from "./plans";
+import cityCenterPlans from "./plans/city-center.json";
+import { unitSlug } from "./slug";
 
 // Pure, deterministic pseudo-random so server and client render identical mock data.
 function seeded(...nums: number[]): number {
@@ -28,17 +19,6 @@ const ORIENTATIONS: Orientation[] = [
   "North-West",
   "South-East",
   "South-West",
-];
-
-const UNIT_TYPES: { type: Apartment["type"]; bedrooms: number; bathrooms: number; area: number }[] = [
-  { type: "studio", bedrooms: 0, bathrooms: 1, area: 42 },
-  { type: "1-bedroom", bedrooms: 1, bathrooms: 1, area: 55 },
-  { type: "1-bedroom", bedrooms: 1, bathrooms: 1, area: 62 },
-  { type: "2-bedroom", bedrooms: 2, bathrooms: 1, area: 74 },
-  { type: "2-bedroom", bedrooms: 2, bathrooms: 2, area: 82 },
-  { type: "3-bedroom", bedrooms: 3, bathrooms: 2, area: 91 },
-  { type: "3-bedroom", bedrooms: 3, bathrooms: 2, area: 105 },
-  { type: "4-bedroom", bedrooms: 4, bathrooms: 3, area: 120 },
 ];
 
 function generateRooms(bedrooms: number, area: number, balconyArea: number): Room[] {
@@ -87,293 +67,6 @@ function pickStatus(buildingIdx: number, floor: number, floorCount: number, idx:
   return "available";
 }
 
-function buildFloorPlanShape(index: number, count: number): Apartment["shape"] {
-  const gutter = 2;
-  const width = 100 / count;
-  const x0 = index * width + gutter / 2;
-  const x1 = (index + 1) * width - gutter / 2;
-  return {
-    points: [
-      [x0, 6],
-      [x1, 6],
-      [x1, 94],
-      [x0, 94],
-    ],
-    labelPosition: [(x0 + x1) / 2, 50],
-  };
-}
-
-// Real architectural data supplied for Building 06, Floor 3 (Објект 6, Кат 03) —
-// every other floor in the development is still procedurally generated mock data.
-interface RealUnitDef {
-  number: string;
-  bedrooms: number;
-  bathrooms: number;
-  balconyArea: number;
-  rooms: Room[];
-  /**
-   * Hotspot rectangle (percentages of the full /images/floorplans/b06-f3/overview.png)
-   * for the interactive floor-plan viewer. The source is a flattened PDF/PNG export of
-   * the architectural drawing — there is no vector/CAD file in the repo to derive exact
-   * wall boundaries from — so these are best-effort zones: row position and left-to-right
-   * order read directly off the printed "Стан NN" labels, column widths weighted by each
-   * unit's real total area (below). They are close enough to be usable and honest, but
-   * not a traced boundary; replace with exact coordinates if the CAD/DWG source is ever
-   * supplied.
-   */
-  planRegion: PlanRegion;
-}
-
-const REAL_B06_F3_UNITS: RealUnitDef[] = [
-  {
-    number: "21",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.25,
-    rooms: [
-      { name: "Ходник", area: 11.35 },
-      { name: "Дневна престој, кујна со трпезарија", area: 25.65 },
-      { name: "Спална соба", area: 13.05 },
-      { name: "Детска соба", area: 11.2 },
-      { name: "Бања", area: 4.95 },
-      { name: "Тераса", area: 5.25 },
-    ],
-    planRegion: { x: 2, y: 32, width: 11.0, height: 22 },
-  },
-  {
-    number: "21а",
-    bedrooms: 1,
-    bathrooms: 1,
-    balconyArea: 5.45,
-    rooms: [
-      { name: "Ходник", area: 3.9 },
-      { name: "Дневна престој, кујна со трпезарија", area: 27.67 },
-      { name: "Спална соба", area: 11.4 },
-      { name: "Бања", area: 4.4 },
-      { name: "Тераса", area: 5.45 },
-    ],
-    planRegion: { x: 13.0, y: 32, width: 8.1, height: 22 },
-  },
-  {
-    number: "22",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.88,
-    rooms: [
-      { name: "Ходник", area: 9.43 },
-      { name: "Дневна престој, кујна со трпезарија", area: 38.92 },
-      { name: "Спална соба", area: 17.44 },
-      { name: "Детска соба", area: 11.84 },
-      { name: "Бања", area: 4.5 },
-      { name: "Тоалет", area: 2.4 },
-      { name: "Тераса", area: 5.88 },
-    ],
-    planRegion: { x: 21.1, y: 32, width: 13.9, height: 22 },
-  },
-  {
-    number: "23",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.88,
-    rooms: [
-      { name: "Ходник", area: 7.4 },
-      { name: "Дневна престој, кујна со трпезарија", area: 39.36 },
-      { name: "Спална соба", area: 20.96 },
-      { name: "Детска соба", area: 11.84 },
-      { name: "Бања", area: 6.0 },
-      { name: "Тоалет", area: 2.4 },
-      { name: "Тераса", area: 5.88 },
-    ],
-    planRegion: { x: 35.0, y: 32, width: 14.5, height: 22 },
-  },
-  {
-    number: "24",
-    bedrooms: 2,
-    bathrooms: 2,
-    balconyArea: 6.2,
-    rooms: [
-      { name: "Ходник", area: 11.4 },
-      { name: "Дневна престој, кујна со трпезарија", area: 33.23 },
-      { name: "Спална соба", area: 17.22 },
-      { name: "Детска соба", area: 14.02 },
-      { name: "Бања 1", area: 4.5 },
-      { name: "Бања 2", area: 7.52 },
-      { name: "Тераса", area: 6.2 },
-    ],
-    planRegion: { x: 49.5, y: 32, width: 14.5, height: 22 },
-  },
-  {
-    number: "25",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.25,
-    rooms: [
-      { name: "Ходник", area: 7.52 },
-      { name: "Дневна престој, кујна со трпезарија", area: 34.0 },
-      { name: "Спална соба", area: 13.23 },
-      { name: "Детска соба", area: 10.3 },
-      { name: "Бања", area: 4.1 },
-      { name: "Тоалет", area: 2.4 },
-      { name: "Тераса", area: 5.25 },
-    ],
-    planRegion: { x: 53.5, y: 54, width: 10.5, height: 22 },
-  },
-  {
-    number: "26",
-    bedrooms: 1,
-    bathrooms: 1,
-    balconyArea: 5.04,
-    rooms: [
-      { name: "Ходник", area: 9.29 },
-      { name: "Дневна престој, кујна со трпезарија", area: 22.02 },
-      { name: "Спална соба", area: 14.79 },
-      { name: "Бања", area: 6.08 },
-      { name: "Тераса", area: 5.04 },
-    ],
-    planRegion: { x: 45.7, y: 54, width: 7.8, height: 22 },
-  },
-  {
-    number: "27",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.88,
-    rooms: [
-      { name: "Ходник", area: 7.6 },
-      { name: "Дневна престој, кујна со трпезарија", area: 39.54 },
-      { name: "Спална соба", area: 20.57 },
-      { name: "Детска соба", area: 11.84 },
-      { name: "Бања", area: 6.19 },
-      { name: "Тоалет", area: 2.52 },
-      { name: "Тераса", area: 5.88 },
-    ],
-    planRegion: { x: 32.9, y: 54, width: 12.8, height: 22 },
-  },
-  {
-    number: "28",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 6.19,
-    rooms: [
-      { name: "Ходник", area: 6.48 },
-      { name: "Дневна престој, кујна со трпезарија", area: 38.04 },
-      { name: "Спална соба", area: 21.74 },
-      { name: "Детска соба", area: 11.9 },
-      { name: "Бања", area: 5.6 },
-      { name: "Тоалет", area: 2.52 },
-      { name: "Тераса", area: 6.19 },
-    ],
-    planRegion: { x: 20.3, y: 54, width: 12.6, height: 22 },
-  },
-  {
-    number: "29",
-    bedrooms: 1,
-    bathrooms: 1,
-    balconyArea: 5.04,
-    rooms: [
-      { name: "Ходник", area: 9.29 },
-      { name: "Дневна престој, кујна со трпезарија", area: 22.02 },
-      { name: "Спална соба", area: 14.79 },
-      { name: "Бања", area: 6.08 },
-      { name: "Тераса", area: 5.04 },
-    ],
-    planRegion: { x: 12.5, y: 54, width: 7.8, height: 22 },
-  },
-  {
-    number: "30",
-    bedrooms: 2,
-    bathrooms: 1,
-    balconyArea: 5.25,
-    rooms: [
-      { name: "Ходник", area: 9.37 },
-      { name: "Дневна престој, кујна со трпезарија", area: 33.6 },
-      { name: "Спална соба", area: 11.85 },
-      { name: "Детска соба", area: 10.35 },
-      { name: "Бања", area: 4.11 },
-      { name: "Тоалет", area: 2.6 },
-      { name: "Тераса", area: 5.25 },
-    ],
-    planRegion: { x: 2, y: 54, width: 10.5, height: 22 },
-  },
-];
-
-// An apartment id goes into a URL, so it is plain ASCII: the unit number "21а" (its last letter is Cyrillic) becomes
-// "21a" in the id and stays "21а" only as the label shown to visitors.
-const CYRILLIC_TO_ASCII: Record<string, string> = {
-  а: "a",
-  б: "b",
-  в: "v",
-  г: "g",
-  д: "d",
-  ѓ: "gj",
-  е: "e",
-  ж: "zh",
-  з: "z",
-  ѕ: "dz",
-  и: "i",
-  ј: "j",
-  к: "k",
-  л: "l",
-  љ: "lj",
-  м: "m",
-  н: "n",
-  њ: "nj",
-  о: "o",
-  п: "p",
-  р: "r",
-  с: "s",
-  т: "t",
-  ќ: "kj",
-  у: "u",
-  ф: "f",
-  х: "h",
-  ц: "c",
-  ч: "ch",
-  џ: "dzh",
-  ш: "sh",
-};
-export const unitSlug = (number: string) => [...number.toLowerCase()].map((ch) => CYRILLIC_TO_ASCII[ch] ?? ch).join("");
-
-function buildRealB06F3Apartments(buildingId: string, floor: number): Apartment[] {
-  return REAL_B06_F3_UNITS.map((unit, idx) => {
-    const area = Math.round(unit.rooms.reduce((sum, r) => sum + r.area, 0) * 100) / 100;
-    const orientation = ORIENTATIONS[Math.floor(seeded(5, floor, idx, 8) * ORIENTATIONS.length)];
-    const id = `${buildingId}-f${floor}-${unitSlug(unit.number)}`;
-
-    return {
-      id,
-      projectId: "city-center",
-      buildingId,
-      floor,
-      number: unit.number,
-      type: unit.bedrooms === 1 ? "1-bedroom" : "2-bedroom",
-      bedrooms: unit.bedrooms,
-      bathrooms: unit.bathrooms,
-      area,
-      balconyArea: unit.balconyArea,
-      orientation,
-      status: pickStatus(5, floor, 8, idx),
-      rooms: unit.rooms,
-      shape: buildFloorPlanShape(idx, REAL_B06_F3_UNITS.length),
-      realPlanRegion: unit.planRegion,
-      gallery: [
-        { src: "", alt: `${id} дневна соба`, isPlaceholder: true },
-        { src: "", alt: `${id} кујна`, isPlaceholder: true },
-        { src: "", alt: `${id} спална соба`, isPlaceholder: true },
-      ],
-      tour: { available: false, type: "none" },
-    };
-  });
-}
-
-function buildingApartmentsPerFloor(buildingIdx: number, floor: number): number {
-  if (floor === 0) return 2; // ground floor: lobby + fewer, larger units
-  return 3 + Math.floor(seeded(buildingIdx, floor, 1) * 3); // 3-5
-}
-
-function floorCountForBuilding(buildingIdx: number): number {
-  return 5 + Math.floor(seeded(buildingIdx, 99) * 4); // 5-8
-}
-
 export interface GeneratedDevelopment {
   development: Development;
   apartments: Apartment[];
@@ -411,112 +104,25 @@ export function generateDevelopment(): GeneratedDevelopment {
     "/images/exteriors/exterior-06-billboard.jpg",
   ];
 
-  for (let b = 0; b < 6; b++) {
-    const buildingId = `b${String(b + 1).padStart(2, "0")}`;
-    const floorCount = floorCountForBuilding(b);
-    const floors: Floor[] = [];
-
-    // Зграда 01 is the first building with real data (the architect's drawings): its floors, apartments and sketches
-    // come from data/zgrada-01.ts, not from the generator below.
-    if (buildingId === "b01") {
-      const real = buildZgrada01();
-      allApartments.push(...real.apartments);
-      buildings.push({
-        id: buildingId,
-        name: "Зграда 01",
-        shortLabel: "01",
-        floors: real.floors,
-        totalApartments: real.apartments.length,
-        floorSketch: real.floorSketch,
-        exteriorImage: { src: buildingExteriors[b], alt: "Зграда 01 — надворешен изглед", isPlaceholder: false },
-        status: buildingStatuses[b],
-        position: positions[b],
-      });
-      continue;
-    }
-
-    for (let f = 0; f <= floorCount; f++) {
-      if (buildingId === "b06" && f === 3) {
-        // Real architectural data for this floor — see REAL_B06_F3_UNITS.
-        const realApartments = buildRealB06F3Apartments(buildingId, f);
-        allApartments.push(...realApartments);
-        floors.push({
-          number: f,
-          label: `Кат ${f}`,
-          apartmentIds: realApartments.map((a) => a.id),
-          officialOverviewImage: b06Floor3Overview,
-          // The scanned page includes a printed "ОБЈЕКТ 6" title block and a
-          // full room-by-room measurement table to the right of the drawing —
-          // real content, but not what a buyer needs while choosing an
-          // apartment. Measured directly off the 1800×1273 source (canvas
-          // column-sampling found the drawing's white background gives way to
-          // the table's tan panel at x≈1235px, i.e. 68.6% across); the
-          // interactive viewer frames just the drawing, with a small margin.
-          // The full page — table included — still renders unmodified in the
-          // "official documentation" section below.
-          interactiveCropRegion: { x: 0, y: 0, width: 68.3, height: 100 },
-        });
-        continue;
-      }
-
-      const apCount = buildingApartmentsPerFloor(b, f);
-      const apartmentIds: string[] = [];
-
-      for (let a = 0; a < apCount; a++) {
-        const unitTypeIdx = Math.floor(seeded(b, f, a, 5) * UNIT_TYPES.length);
-        const unitType = UNIT_TYPES[unitTypeIdx];
-        const orientation = ORIENTATIONS[Math.floor(seeded(b, f, a, 8) * ORIENTATIONS.length)];
-        const balconyArea = Math.round((6 + seeded(b, f, a, 11) * 10) * 10) / 10;
-        const number = `${f}${String(a + 1).padStart(2, "0")}`;
-        const id = `${buildingId}-f${f}-${number}`;
-
-        const apartment: Apartment = {
-          id,
-          projectId: "city-center",
-          sample: true,
-          planImage: exampleFloorPlan(unitType.type),
-          buildingId,
-          floor: f,
-          number,
-          type: unitType.type,
-          bedrooms: unitType.bedrooms,
-          bathrooms: unitType.bathrooms,
-          area: unitType.area,
-          balconyArea,
-          orientation,
-          status: pickStatus(b, f, floorCount, a),
-          rooms: generateRooms(unitType.bedrooms, unitType.area, balconyArea),
-          shape: buildFloorPlanShape(a, apCount),
-          gallery: [
-            { src: "", alt: `${id} дневна соба`, isPlaceholder: true },
-            { src: "", alt: `${id} кујна`, isPlaceholder: true },
-            { src: "", alt: `${id} спална соба`, isPlaceholder: true },
-          ],
-          tour: { available: false, type: "none" },
-        };
-
-        allApartments.push(apartment);
-        apartmentIds.push(id);
-      }
-
-      floors.push({
-        number: f,
-        label: f === 0 ? "Приземје" : `Кат ${f}`,
-        apartmentIds,
-      });
-    }
-
+  // The six buildings come from the architect's plans (data/plans/city-center.json), floor by floor; nothing about their
+  // floors or apartments is generated.
+  const plans = buildFromPlans(cityCenterPlans as unknown as PlansFile, {
+    projectId: "city-center",
+    imageDir: "/images/floorplans",
+    buildingId: (n) => `b${String(n).padStart(2, "0")}`,
+    buildingName: (n) => `Зграда ${String(n).padStart(2, "0")}`,
+  });
+  for (const plan of plans.buildings) {
+    const b = plan.number - 1;
+    const label = String(plan.number).padStart(2, "0");
+    allApartments.push(...plan.apartments);
     buildings.push({
-      id: buildingId,
-      name: `Зграда ${String(b + 1).padStart(2, "0")}`,
-      shortLabel: String(b + 1).padStart(2, "0"),
-      floors,
-      totalApartments: floors.reduce((sum, fl) => sum + fl.apartmentIds.length, 0),
-      exteriorImage: {
-        src: buildingExteriors[b],
-        alt: `Зграда ${String(b + 1).padStart(2, "0")} — надворешен изглед`,
-        isPlaceholder: false,
-      },
+      id: plan.id,
+      name: plan.name,
+      shortLabel: label,
+      floors: plan.floors,
+      totalApartments: plan.apartments.length,
+      exteriorImage: { src: buildingExteriors[b], alt: `Зграда ${label} — надворешен изглед`, isPlaceholder: false },
       status: buildingStatuses[b],
       position: positions[b],
     });
@@ -642,7 +248,6 @@ export function buildSampleApartments(projectId: string, order: number, units: S
   const perFloor = new Map<number, SampleUnit[]>();
   for (const u of units) perFloor.set(u.floor, [...(perFloor.get(u.floor) ?? []), u]);
   return units.map((u, idx) => {
-    const onFloor = perFloor.get(u.floor) ?? [u];
     const balconyArea = Math.round((4 + seeded(order, u.floor, idx, 11) * 6) * 10) / 10;
     return {
       id: `${projectId}-f${u.floor}-${unitSlug(u.number)}`,
@@ -658,7 +263,6 @@ export function buildSampleApartments(projectId: string, order: number, units: S
       orientation: u.orientation ?? ORIENTATIONS[Math.floor(seeded(order, u.floor, idx, 8) * ORIENTATIONS.length)],
       status: pickStatus(order, u.floor, floorCount, idx),
       rooms: generateRooms(u.bedrooms, u.area, balconyArea),
-      shape: buildFloorPlanShape(onFloor.indexOf(u), onFloor.length),
       gallery: [
         { src: "", alt: `${projectId} ${u.number} дневна соба`, isPlaceholder: true },
         { src: "", alt: `${projectId} ${u.number} кујна`, isPlaceholder: true },

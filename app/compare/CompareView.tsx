@@ -16,11 +16,11 @@ const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment
   { label: "Проект", get: (a) => placeLabel(a).project },
   { label: "Зграда", get: (a) => placeLabel(a).building || "—" },
   { label: "Кат", get: (a) => floorLabelOf(a) },
-  { label: "Тип", get: (a) => (a.bedrooms === 0 ? "Студио" : typeLabel(a.type)) },
+  { label: "Тип", get: (a) => a.typeLabel ?? (a.bedrooms === 0 ? "Студио" : typeLabel(a.type)) },
   { label: "Соби", get: (a) => String(a.bedrooms) },
-  { label: "Бањи", get: (a) => String(a.bathrooms) },
+  { label: "Бањи", get: (a) => (a.bathrooms > 0 ? String(a.bathrooms) : "—") },
   { label: "Површина", get: (a) => formatArea(a.area, a.areaDecimals) },
-  { label: "Балкон", get: (a) => formatArea(a.balconyArea, a.areaDecimals) },
+  { label: "Тераса", get: (a) => (a.balconyArea > 0 ? formatArea(a.balconyArea, a.areaDecimals) : "—") },
   { label: "Ориентација", get: (a) => (a.orientation ? orientationLabel(a.orientation) : "—") },
 ];
 

@@ -20,9 +20,39 @@
     transform: none;
   }
 }
-.fs-frame {
+/* the box holds the picture and the shapes together, in the sketch's own proportions (set from the data) */
+.fs-box {
   position: relative;
-  width: 100%;
+  margin-inline: auto;
+  transition:
+    width 0.45s ease,
+    aspect-ratio 0.45s ease;
+}
+.fs-layer {
+  position: absolute;
+  inset: 0;
+}
+.fs-layer.is-entering {
+  animation: fs-fade-in 0.45s ease both;
+}
+.fs-layer.is-leaving {
+  animation: fs-fade-out 0.45s ease both;
+}
+@keyframes fs-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fs-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 /* the shapes: an SVG exactly over the picture, so the percent values are its coordinates */
@@ -92,6 +122,12 @@
   animation-delay: calc(var(--i) * 0.06s);
   transition: border-color 0.4s ease;
 }
+/* floors with ten or more apartments: smaller numbers, so they never overlap */
+.fs-chips.is-dense .fs-chip {
+  gap: 3px;
+  padding: 1px 5px 1px 4px;
+  font-size: clamp(9px, 1.15vw, 13px);
+}
 .fs-chip.is-hot {
   border-color: var(--color-bronze);
 }
@@ -114,8 +150,16 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .fs,
-  .fs-chip {
+  .fs-chip,
+  .fs-layer.is-entering,
+  .fs-layer.is-leaving {
     animation: none;
+  }
+  .fs-layer.is-leaving {
+    display: none;
+  }
+  .fs-box {
+    transition: none;
   }
   .fs-shape polygon,
   .fs-chip {

@@ -38,13 +38,9 @@ describe("projectsOnSale", () => {
     }
   });
 
-  it("marks apartments that are generated sample data", () => {
-    for (const a of apartments) {
-      // the real ones: Building 06, floor 3, and all of Зграда 01
-      if (a.projectId !== "city-center" || a.id.startsWith("b06-f3-") || a.buildingId === "b01") continue;
-      expect(a.sample, a.id).toBe(true);
-    }
-    expect(apartments.filter((a) => a.projectId !== "city-center").every((a) => a.sample)).toBe(true);
+  it("marks the apartments that are generated sample data, and only those", () => {
+    // the architect's plans (City Center) are real; the other projects' lists are sample data until the real ones arrive
+    for (const a of apartments) expect(a.sample === true, a.id).toBe(a.projectId !== "city-center");
   });
 
   it("names where an apartment is: the project, and the building when the project has several", () => {

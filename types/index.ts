@@ -13,22 +13,18 @@ export interface Room {
   area: number; // m²
 }
 
-export interface FloorPlanShape {
-  /** Normalized 0-100 polygon points, room-agnostic outline for the unit within the floor SVG */
-  points: [number, number][];
-  labelPosition: [number, number];
+/** Where an apartment is on its floor's sketch: its outline (balcony included) and the point for its number, in percent of the sketch. */
+export interface ApartmentOutline {
+  /** x from the left edge, y from the top edge, in percent of the floor sketch. */
+  polygon: [number, number][];
+  label: [number, number];
 }
 
-/** A hotspot region as a percentage rectangle over a real (photographed/scanned) floor-plan image. */
-export interface PlanRegion {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+/** A drawing (a floor sketch or an apartment plan) with its own pixel size. */
+export type DrawingImage = MediaImage & { width: number; height: number };
 
 export interface Apartment {
-  /** Unique across every project, e.g. "b03-f5-503" or "stanbena-kukja-f1-2". */
+  /** Unique across every project, e.g. "b03-f5-24" or "stanbena-kukja-f1-2". */
   id: string;
   /** The project the apartment belongs to (the id of an entry of `projects`). */
   projectId: string;
@@ -36,73 +32,47 @@ export interface Apartment {
   buildingId?: string;
   /** True for generated sample data, until the client sends the real apartment list of the project. */
   sample?: true;
-  /** The apartment's own plan or render, where the project has one (otherwise it is looked up by type, or there is none). */
+  /** The apartment's own plan or render, where the project has one; without it the apartment shows an empty frame. */
   planImage?: MediaImage & {
-    example?: true;
     /** Dark lines on a transparent background: it must sit on a light surface. */
     transparent?: true;
+    width?: number;
+    height?: number;
   };
-  /** Where it is on its floor (1 is the first apartment of a level) and which of the building's types it is. */
-  position?: number;
-  planType?: string;
+  /** Where it is on its floor's sketch, where the floor has one. */
+  outline?: ApartmentOutline;
   floor: number;
-  number: string; // "503"
-  type: "1-bedroom" | "2-bedroom" | "3-bedroom" | "4-bedroom" | "studio";
+  /** As on the drawing: text ("21", "11a"). */
+  number: string;
+  type: "1-bedroom" | "2-bedroom" | "3-bedroom" | "4-bedroom" | "5-bedroom" | "studio";
+  /** The type as the drawing writes it ("Трособен"), where there is one. */
+  typeLabel?: string;
+  /** The number of «соби» as the site shows it ("3 соби"). */
   bedrooms: number;
   bathrooms: number;
-  area: number; // m² interior
+  area: number; // m² total
   /** How many decimals the area is written with (2 for an apartment from the architect's drawing); one where left out. */
   areaDecimals?: number;
   balconyArea: number; // m²
   /** Left out where the architect's drawing does not say. */
   orientation?: Orientation;
   status: UnitStatus;
+  /** The rooms and terraces with their areas, in the order of the drawing. */
   rooms: Room[];
-  /** The schematic outline of the generated sample floors; an apartment with a real floor sketch has none. */
-  shape?: FloorPlanShape;
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   tour?: { available: boolean; type: "360" | "matterport" | "glb" | "none" };
-  /** Present only where a real architectural floor-plan image exists for this unit's floor (see Floor.officialOverviewImage). */
-  realPlanRegion?: PlanRegion;
 }
 
 export interface Floor {
   number: number; // 0 = ground
-  label: string; // "Ground", "Floor 1", ...
+  label: string; // "Кат 1", "Поткровје"
   apartmentIds: string[];
-  /**
-   * Real, official full-floor architectural plan, when one exists — never fabricated
-   * for floors without it. width/height are the source file's real pixel dimensions,
-   * used only to render it at its true aspect ratio, never to distort it.
-   */
-  officialOverviewImage?: MediaImage & { width: number; height: number };
-  /**
-   * Percentage sub-rect (of officialOverviewImage) that the *interactive*
-   * apartment-selection viewer frames by default — e.g. excluding a printed
-   * title block or room-schedule table that's part of the same scanned page.
-   * The official-documentation viewer always ignores this and shows the full,
-   * unmodified page. Omit when the scan has no such extra content to exclude.
-   */
-  interactiveCropRegion?: PlanRegion;
-}
-
-/** One floor sketch for a whole building, and where each apartment of a level sits on it (percent of the image). */
-export interface FloorSketch {
-  image: MediaImage & { width: number; height: number };
-  shapes: {
-    /** The apartment's position on a level (the same on every level). */
-    position: number;
-    /** The apartment's outline, balcony included. */
-    polygon: [number, number][];
-    /** Where its number is shown. */
-    label: [number, number];
-  }[];
+  /** This floor's own sketch, where the architect's drawing exists. The apartments carry their shapes on it. */
+  sketch?: DrawingImage;
 }
 
 export interface Building {
   id: string; // "b01"
-  /** The real floor sketch and its shapes, where the architect's drawing exists; the others have none. */
-  floorSketch?: FloorSketch;
   name: string; // "Building 01"
   shortLabel: string; // "01"
   floors: Floor[];
