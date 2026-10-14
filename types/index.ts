@@ -167,6 +167,23 @@ export interface ImageFocus {
   aspect?: number;
 }
 
+export interface ProjectAbout {
+  kicker: string;
+  title: string;
+  /** The end of the heading, set in italic Бронза. */
+  titleItalic: string;
+  paragraphs: string[];
+  signature: string;
+  /** The heading in English (the paragraphs stay as written). */
+  en?: { kicker: string; title: string; titleItalic: string };
+}
+
+export interface ResidentQuote {
+  text: string;
+  name: string;
+  project: string;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -192,6 +209,19 @@ export interface Project {
   photoCredit?: { text: string; href?: string }[];
   statusLabelOverride?: string;
   tagline?: string;
+  /**
+   * The cinematic opening of the project page (full-screen picture or film, the name low and centred). A project without
+   * `heroOpening` keeps the ordinary page top.
+   */
+  heroOpening?: boolean;
+  /** A short drone film for the opening, a path under public/ (mp4). Without it the hero image is shown, slowly settling. */
+  heroVideo?: string;
+  /** False when the film has no sound track, so the page shows no sound button. Default: it has sound. */
+  heroVideoSound?: boolean;
+  /** The line under the name in the opening; split at its first comma (sans, then serif italic). Falls back to `tagline`. */
+  openingTagline?: string;
+  /** The "За проектот" section under the opening. Without it the page has no such section. */
+  about?: ProjectAbout;
   distanceHighlights?: string[];
   /** Optional dedicated deep-dive page for this project (e.g. a multi-building explorer). Falls back to the generic /projects/[slug] page. */
   href?: string;

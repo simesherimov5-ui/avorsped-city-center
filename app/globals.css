@@ -219,6 +219,81 @@ h4 {
   line-height: 1.45;
 }
 
+/* Resident quotes: the old words fade out and rise 8px (0.4s), the new ones fade in from 8px below (0.6s). */
+.q-in {
+  animation: q-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.q-out {
+  animation: q-out 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes q-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes q-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles slowly. */
+.opening-rise {
+  animation: opening-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+@keyframes opening-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+.opening-settle {
+  animation: opening-settle 18s ease-out infinite alternate;
+}
+@keyframes opening-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+/* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
+body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
+  background-color: transparent;
+  border-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
+.about-col {
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s);
+}
+.about-col[data-armed="true"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-rise,
+  .opening-settle,
+  .q-in,
+  .q-out {
+    animation: none;
+  }
+  .about-col {
+    transition: none;
+  }
+  .about-col[data-armed="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
    explicit font-weight utility on the element still wins, because this is the base layer. */
 @layer base {

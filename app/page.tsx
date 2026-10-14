@@ -8,8 +8,9 @@ import { NewProjects } from "@/components/home/NewProjects";
 import { Numbers } from "@/components/home/Numbers";
 import { Differences } from "@/components/home/Differences";
 import { Soon } from "@/components/home/Soon";
+import { Quotes } from "@/components/home/Quotes";
 import { ClosingGlass } from "@/components/home/ClosingGlass";
-import { projects, companyInfo } from "@/data";
+import { projects, companyInfo, residentQuotes } from "@/data";
 import type { Metadata } from "next";
 
 // TODO(client): the film is not made yet; until it is, the frame shows this aerial view of City Center.
@@ -63,6 +64,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Words of the residents (no section while there are no quotes) */}
+      <Quotes quotes={residentQuotes} />
 
       {/* 6. What sets us apart */}
       <Differences />

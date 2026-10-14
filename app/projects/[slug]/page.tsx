@@ -11,6 +11,7 @@ import { OneVideoAtATime } from "@/components/ui/OneVideoAtATime";
 import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { ProjectHeader } from "@/components/project/ProjectHeader";
 import { ProjectCta } from "@/components/project/ProjectCta";
+import { ProjectOpeningSection } from "@/components/project/ProjectOpeningSection";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { FloorPickerSection } from "@/components/floor-picker/FloorPickerSection";
@@ -53,75 +54,80 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   ];
 
   return (
-    <div className="pt-24 sm:pt-28">
-      <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
-        <Link
-          href="/projects"
-          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
-        >
-          <ChevronLeft className="h-4 w-4" /> Назад кон проектите
-        </Link>
-      </div>
+    <div className={project.heroOpening ? undefined : "pt-24 sm:pt-28"}>
+      {project.heroOpening && <ProjectOpeningSection project={project} />}
+      {!project.heroOpening && (
+        <>
+          <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
+            <Link
+              href="/projects"
+              className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
+            >
+              <ChevronLeft className="h-4 w-4" /> Назад кон проектите
+            </Link>
+          </div>
 
-      {hasPhotos && (
-        <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
-          <Reveal immediate>
-            {project.gallery.length > 0 ? (
-              <PhotoCarousel
-                photos={project.gallery}
-                className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
-                sizes={
-                  project.imageFit === "contain"
-                    ? "(max-width: 896px) 100vw, 896px"
-                    : completed
-                      ? "(max-width: 896px) 100vw, 896px"
-                      : undefined
-                }
-                fit={project.imageFit}
-                focus={project.imageFocus}
-              />
-            ) : (
-              <Media
-                image={project.heroImage}
-                focus={project.imageFocus}
-                label={`${project.name} — насловна визуелизација`}
-                className="aspect-[16/7]"
-                sizes="100vw"
-              />
-            )}
-          </Reveal>
-          {project.photoCredit && (
-            <p className="mt-4 text-[12px] leading-relaxed text-muted">
-              {project.photoCredit.map((part, i) =>
-                part.href ? (
-                  <a
-                    key={i}
-                    href={part.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-2 hover:text-charcoal"
-                  >
-                    {part.text}
-                  </a>
+          {hasPhotos && (
+            <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
+              <Reveal immediate>
+                {project.gallery.length > 0 ? (
+                  <PhotoCarousel
+                    photos={project.gallery}
+                    className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
+                    sizes={
+                      project.imageFit === "contain"
+                        ? "(max-width: 896px) 100vw, 896px"
+                        : completed
+                          ? "(max-width: 896px) 100vw, 896px"
+                          : undefined
+                    }
+                    fit={project.imageFit}
+                    focus={project.imageFocus}
+                  />
                 ) : (
-                  <span key={i}>{part.text}</span>
-                )
+                  <Media
+                    image={project.heroImage}
+                    focus={project.imageFocus}
+                    label={`${project.name} — насловна визуелизација`}
+                    className="aspect-[16/7]"
+                    sizes="100vw"
+                  />
+                )}
+              </Reveal>
+              {project.photoCredit && (
+                <p className="mt-4 text-[12px] leading-relaxed text-muted">
+                  {project.photoCredit.map((part, i) =>
+                    part.href ? (
+                      <a
+                        key={i}
+                        href={part.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-2 hover:text-charcoal"
+                      >
+                        {part.text}
+                      </a>
+                    ) : (
+                      <span key={i}>{part.text}</span>
+                    )
+                  )}
+                </p>
               )}
-            </p>
+            </section>
           )}
-        </section>
-      )}
 
-      <section className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}>
-        <Reveal immediate delay={0.08}>
-          <ProjectHeader
-            eyebrow={project.location}
-            name={project.name}
-            description={project.description}
-            facts={facts}
-          />
-        </Reveal>
-      </section>
+          <section className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}>
+            <Reveal immediate delay={0.08}>
+              <ProjectHeader
+                eyebrow={project.location}
+                name={project.name}
+                description={project.description}
+                facts={facts}
+              />
+            </Reveal>
+          </section>
+        </>
+      )}
 
       {(project.roomTour || project.floorPlanExplorer) && <OneVideoAtATime />}
 

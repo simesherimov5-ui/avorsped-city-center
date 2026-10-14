@@ -106,7 +106,6 @@ export function Navbar() {
   }, [open]);
 
   useEffect(() => {
-    if (!isHome) return;
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -115,7 +114,7 @@ export function Navbar() {
       // Reset when leaving the homepage so returning to it starts transparent.
       setScrolled(false);
     };
-  }, [isHome]);
+  }, [pathname]);
 
   // The gold underline is one element that slides to the active tab (0.6s); it jumps there on first
   // paint and on resize, and fades out on pages that are not one of the tabs.
@@ -186,6 +185,8 @@ export function Navbar() {
       >
         <header
           ref={navRef}
+          data-at-top={!scrolled}
+          data-open={open}
           // Keyboard focus anywhere in the bar brings it back.
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(

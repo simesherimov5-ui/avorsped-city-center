@@ -18,6 +18,8 @@ export function availabilityCounts(list: Apartment[] = apartments) {
   };
 }
 
+export { residentQuotes } from "./quotes";
+
 export const projects: Project[] = [
   {
     id: "city-center",
@@ -30,6 +32,24 @@ export const projects: Project[] = [
     units: development.totalApartments,
     description: development.description,
     tagline: "Најдобрата локација за вашиот нов дом",
+    heroOpening: true,
+    // TODO(client): the drone film (docs/content-needed.md). Drop the file in public/ and set `heroVideo: "/videos/<file>.mp4"`.
+    openingTagline: "Шест згради, една нова адреса за центарот на Струмица.",
+    about: {
+      kicker: "ЗА ПРОЕКТОТ",
+      title: "Нов стандард на живеење, ",
+      titleItalic: "во срцето на Струмица.",
+      paragraphs: [
+        "[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]",
+        "[Втор пасус: за кого е наменет и каков живот нуди.]",
+      ],
+      signature: "Javor Sped Holding",
+      en: {
+        kicker: "ABOUT THE PROJECT",
+        title: "A new standard of living, ",
+        titleItalic: "in the heart of Strumica.",
+      },
+    },
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
     heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
     gallery: [

@@ -49,6 +49,15 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ---
 
+### 1.7 Homepage: "Зборови на нашите станари" (the three resident quotes)
+
+- **Where:** `residentQuotes` in `data/quotes.ts`: `{ text, name, project }`. Today it holds three placeholders in [square brackets] (`[Изјава од станар, една до две реченици.]`, `[Втора изјава: за квалитетот или тимот.]`, `[Трета изјава: за животот во зградата.]`, each with name `[ИМЕ]` and project `[ПРОЕКТ]`). With no quotes the band does not appear; with one there is no timer.
+- **Needed per quote:** one or two sentences in the resident's words, the resident's name (as they allow it to be printed) and the project they live in.
+- **Format:** text up to about 160 characters (it is set large). **Example shape:** `<one or two sentences> · <Name Surname> · <project name>`.
+- **Also needed:** the resident's consent to print the name and the words.
+
+---
+
 ## 2. За нас (About)
 
 ### 2.1 Hero photo or short video
@@ -158,6 +167,19 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 - **Where:** the `ilindenska` entry of `projects` in `data/index.ts`.
 - **Needed:** the street number, the year of completion, number of floors, number of apartments and shops, total area, and our own photos of the building from the street, from the corner and from the back. Until then its card shows the logo mark and its page has no photo block.
+
+---
+
+### 3.10 City Center: the drone film for the opening
+
+- **Where:** `heroVideo` of the `city-center` entry in `data/index.ts` (a path under `public/`, e.g. `/videos/city-center-opening.mp4`). Drop the file in `public/videos/` and fill the field; the opening then plays it. Until then the opening shows the hero photo, slowly settling. If the film has no sound track, also set `heroVideoSound: false` (the sound button is then not shown).
+- **Format:** MP4 (H.264), 1920 × 1080, 15–30 seconds, loops cleanly, under 8 MB, no important detail in the top 20% or the bottom 35% (the name and the menu sit there). It is muted by default; sound is optional. It is not played on phones or with reduced motion (the photo is shown).
+
+### 3.11 City Center: the "За проектот" text
+
+- **Where:** `about.paragraphs` of the `city-center` entry in `data/index.ts`. Two placeholders in [square brackets] stand there now: `[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]` and `[Втор пасус: за кого е наменет и каков живот нуди.]`
+- **Format:** two paragraphs, 2–4 sentences each, no more than about 600 characters each. The English heading is in `about.en`; the paragraphs stay in Macedonian unless an English text is sent.
+- **Also open:** the line under the name in the opening (`openingTagline`) is "Шест згради, една нова адреса за центарот на Струмица." Confirm it.
 
 ---
 

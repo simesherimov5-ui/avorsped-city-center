@@ -8,6 +8,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { LocationMap } from "@/components/location-map/LocationMap";
 import { DOT_COLOR, StatusMarker } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
+import { ProjectOpeningSection } from "@/components/project/ProjectOpeningSection";
 import { development, availabilityCounts, apartments, buildings, projects } from "@/data";
 import { CITY_CENTER } from "@/lib/locations";
 import { pageMetadata } from "@/lib/seo";
@@ -43,6 +44,8 @@ const LOCATION_TEXT = {
 
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
+  // a project with `heroOpening` gets the cinematic opening instead of the plain header
+  const opening = cityCenter?.heroOpening ? cityCenter : undefined;
   // City Center's own page: its own apartments, not the whole holding's
   const ccApartments = apartments.filter((a) => a.projectId === "city-center");
   const counts = availabilityCounts(ccApartments);
@@ -51,23 +54,30 @@ export default function DevelopmentPage() {
   const soldPct = 100 - availablePct - reservedPct;
 
   return (
-    <div className="pt-24 sm:pt-28">
+    <div className={opening ? undefined : "pt-24 sm:pt-28"}>
+      {/* The cinematic opening and "За проектот" replace the plain header (the title and the intro text) */}
+      {opening && <ProjectOpeningSection project={opening} />}
+
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
       <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-12 pt-10 lg:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-          <Reveal immediate>
-            <div className="eyebrow text-gold-deep">{development.location}</div>
-            <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
-              {development.name}
-            </h1>
-          </Reveal>
-          <Reveal immediate delay={0.08}>
-            <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
-          </Reveal>
-        </div>
+        {!opening && (
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+            <Reveal immediate>
+              <div className="eyebrow text-gold-deep">{development.location}</div>
+              <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
+                {development.name}
+              </h1>
+            </Reveal>
+            <Reveal immediate delay={0.08}>
+              <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
+            </Reveal>
+          </div>
+        )}
 
         <Reveal immediate delay={0.16}>
-          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
+          <div
+            className={`${opening ? "" : "mt-10 "}grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line`}
+          >
             <Stat label="Згради" value="6" />
             <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
             <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
