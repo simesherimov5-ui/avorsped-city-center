@@ -23,11 +23,11 @@ export function ProjectMaterials({ project }: { project: Project }) {
         <ul className="mt-12 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-6 p-0">
           {project.materials.map((item) => (
             <li key={item.name} className="group flex flex-col gap-4">
-              <div className="aspect-[3/4] overflow-hidden bg-espresso">
+              <div className="aspect-[3/4] overflow-hidden bg-ink/10">
                 <Media
                   image={{ src: item.image?.src ?? "", alt: item.image?.alt ?? item.name, isPlaceholder: !item.image }}
                   label="[ ФОТОГРАФИЈА ]"
-                  tone="dark"
+                  tone="light"
                   className="h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                   sizes="(max-width: 640px) 100vw, 320px"
                 />

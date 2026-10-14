@@ -79,7 +79,7 @@ export function ProjectOpening({
     <section
       data-opening
       aria-label={name}
-      className="relative h-svh min-h-[560px] max-h-[1000px] w-full overflow-hidden bg-chrome text-paper"
+      className="on-dark relative h-svh min-h-[560px] max-h-[1000px] w-full overflow-hidden text-paper"
     >
       {showVideo ? (
         <video

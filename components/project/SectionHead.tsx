@@ -31,16 +31,24 @@ export function SectionHead({
 export function ProjectSection({
   id,
   label,
+  tone = "light",
   className,
   children,
 }: {
   id?: string;
   label?: string;
+  /** The surface of the section: cream, a slightly deeper cream, or Оникс (with the text in the accent colour). */
+  tone?: "light" | "tint" | "dark";
   className?: string;
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-label={label} className="border-t border-line">
+    <section
+      id={id}
+      aria-label={label}
+      className={cn(tone === "dark" ? "on-dark" : "on-light", "border-t border-line")}
+      style={tone === "tint" ? { backgroundColor: "var(--color-limestone)" } : undefined}
+    >
       <div className={cn("mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10", className)}>{children}</div>
     </section>
   );

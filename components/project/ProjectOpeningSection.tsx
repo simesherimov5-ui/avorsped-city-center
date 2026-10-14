@@ -16,7 +16,11 @@ export function ProjectOpeningSection({ project }: { project: Project }) {
         video={project.heroVideo}
         hasSound={project.heroVideoSound !== false}
       />
-      {project.about && <ProjectAbout about={project.about} />}
+      {project.about && (
+        <div className="on-light">
+          <ProjectAbout about={project.about} />
+        </div>
+      )}
     </>
   );
 }

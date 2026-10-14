@@ -68,6 +68,10 @@ export function Masterplan({
   }));
 
   const active = buildingStats.find((b) => b.id === selected) ?? null;
+  const choose = (id: string, el: Element) => {
+    setSelectedRect(rectOf(el));
+    setSelected(id);
+  };
 
   return (
     <div className="w-full">
@@ -163,6 +167,7 @@ export function Masterplan({
             active={active}
             basePath={basePath}
             originRect={selectedRect}
+            onChoose={choose}
             idle={
               <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
                 <p className="text-sm leading-relaxed text-muted">
@@ -231,6 +236,7 @@ export function Masterplan({
             active={active}
             basePath={basePath}
             originRect={selectedRect}
+            onChoose={choose}
             idle={
               <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
                 <p className="text-sm leading-relaxed text-muted">
@@ -264,12 +270,14 @@ function PanelStack({
   active,
   basePath,
   originRect,
+  onChoose,
   idle,
 }: {
   buildings: BuildingWithAvailability[];
   active: BuildingWithAvailability | null;
   basePath: string;
   originRect: Rect | null;
+  onChoose: (id: string, el: Element) => void;
   idle: ReactNode;
 }) {
   return (
@@ -298,11 +306,24 @@ function PanelStack({
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="col-start-1 row-start-1"
           >
-            <BuildingPanel building={b} basePath={basePath} originRect={originRect} />
+            <BuildingPanel
+              building={b}
+              basePath={basePath}
+              originRect={originRect}
+              onChoose={onChoose}
+              all={buildings}
+            />
           </motion.div>
         ) : (
           <div key={b.id} aria-hidden inert className="invisible col-start-1 row-start-1">
-            <BuildingPanel building={b} basePath={basePath} originRect={null} standIn />
+            <BuildingPanel
+              building={b}
+              basePath={basePath}
+              originRect={null}
+              onChoose={onChoose}
+              all={buildings}
+              standIn
+            />
           </div>
         )
       )}
@@ -314,52 +335,56 @@ function BuildingPanel({
   building,
   basePath,
   originRect,
-  standIn = false,
+  onChoose,
+  all,
 }: {
   building: BuildingWithAvailability;
   basePath: string;
   originRect: Rect | null;
-  /** Only takes up the room (no photo): see PanelStack. */
+  onChoose: (id: string, el: Element) => void;
+  all: BuildingWithAvailability[];
+  /** Only takes up the room: see PanelStack. */
   standIn?: boolean;
 }) {
   return (
-    <div className="flex h-full flex-col border border-line bg-warm-white p-6">
-      <div className="aspect-[4/3] overflow-hidden border border-line">
-        {!standIn && (
-          <Media
-            image={building.exteriorImage}
-            label={`${building.name} — надворешен изглед`}
-            className="h-full w-full"
-          />
-        )}
+    <div className="flex h-full flex-col gap-5">
+      <h3 className="m-0 font-display text-(length:--fs-h2) font-normal leading-[1.1]">{building.name}</h3>
+      <div aria-hidden className="h-px w-full bg-line" />
+      {building.description && <p className="m-0 text-base leading-[1.8] text-muted">{building.description}</p>}
+      <p className="m-0 text-sm text-muted">
+        {floorsText(building.floors.length)} · {unitsText(building.totalApartments)} · {building.available}{" "}
+        {availableWord(building.available)}
+      </p>
+      <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-ink">
+        <span aria-hidden className="block h-2 w-2 rounded-full bg-bronze" />
+        {building.status === "completed" ? "Завршено" : "Во изградба"}
+        {building.available > 0 && <> · Во продажба</>}
+        <span className="sr-only"> · {STATUS_LABEL[building.status]}</span>
       </div>
-      <div className="mt-5">
-        <div className="eyebrow text-gold-deep">Зграда {building.shortLabel}</div>
-        <h3 className="t-h3 mt-1.5">{building.name}</h3>
-      </div>
-      <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5 text-sm">
-        <PanelStat label="Катови" value={String(building.floors.length)} />
-        <PanelStat label="Станови" value={String(building.totalApartments)} />
-        <PanelStat label="Достапни" value={String(building.available)} />
-        <PanelStat label="Фаза" value={STATUS_LABEL[building.status]} />
-      </dl>
       <ZoomNavLink
         href={`${basePath}/${building.id}`}
         label={building.name}
         originRect={originRect ? () => originRect : undefined}
-        className="focus-ring mt-6 flex w-full items-center justify-center gap-2 whitespace-nowrap bg-accent px-7 py-3.5 text-xs font-medium uppercase tracking-[0.16em] text-chrome transition-colors hover:bg-accent-soft active:scale-[0.97]"
+        className="focus-ring flex w-full items-center justify-center gap-2 whitespace-nowrap border border-ink/30 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink hover:bg-ink/5 active:scale-[0.97]"
       >
-        Разгледај ја зградата
+        Разгледајте ја зградата →
       </ZoomNavLink>
-    </div>
-  );
-}
-
-function PanelStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="eyebrow text-muted">{label}</dt>
-      <dd className="mt-1 text-lg font-medium tabular-nums">{value}</dd>
+      <div className="mt-1 grid grid-cols-3 gap-2">
+        {all.map((b) => (
+          <button
+            key={b.id}
+            type="button"
+            aria-pressed={b.id === building.id}
+            onClick={(e) => onChoose(b.id, e.currentTarget)}
+            className={cn(
+              "focus-ring min-h-12 border px-1 py-3 text-center font-display text-base transition-colors",
+              b.id === building.id ? "border-onyx bg-onyx text-travertine" : "border-line text-ink hover:border-ink/40"
+            )}
+          >
+            Зграда {Number(b.shortLabel)}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

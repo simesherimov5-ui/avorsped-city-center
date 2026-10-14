@@ -125,6 +125,8 @@ export function generateDevelopment(): GeneratedDevelopment {
       exteriorImage: { src: buildingExteriors[b], alt: `Зграда ${label} — надворешен изглед`, isPlaceholder: false },
       status: buildingStatuses[b],
       position: positions[b],
+      // TODO(client): a short text about each building (docs/content-needed.md).
+      description: `[Краток опис на зграда ${plan.number}: каква е, што има во приземјето, каков поглед имаат становите.]`,
     });
   }
 

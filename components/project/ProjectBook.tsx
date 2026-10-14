@@ -8,7 +8,7 @@ export function ProjectBook({ project }: { project: Project }) {
   const book = project.book;
   if (!book) return null;
   return (
-    <ProjectSection id="book" label="Закажете средба">
+    <ProjectSection id="book" label="Закажете средба" tone="dark">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal>
           <SectionHead eyebrow="ЗАКАЖЕТЕ СРЕДБА" title={book.title} titleItalic={book.titleItalic}>

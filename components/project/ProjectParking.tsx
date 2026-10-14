@@ -7,7 +7,7 @@ export function ProjectParking({ project }: { project: Project }) {
   const parking = project.parking;
   if (!parking) return null;
   return (
-    <ProjectSection label="Паркинг">
+    <ProjectSection label="Паркинг" tone="dark">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal>
           <SectionHead eyebrow="ПАРКИНГ" title={parking.title} titleItalic={parking.titleItalic}>

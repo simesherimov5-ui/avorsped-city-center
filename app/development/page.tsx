@@ -64,100 +64,105 @@ export default function DevelopmentPage() {
 
   return (
     // Оникс is the page's base; the building picker is its one light block.
-    <div className={`on-dark${opening ? "" : " pt-24 sm:pt-28"}`}>
+    <div className={opening ? undefined : "pt-24 sm:pt-28"}>
       {/* 1 · the cinematic opening and 2 · "За проектот" replace the plain header (the title and the intro text) */}
       {opening && <ProjectOpeningSection project={opening} />}
 
-      {/* The plain header, for a project without the opening; the numbers stay in both cases */}
-      <section className="mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-8 lg:px-10">
-        {!opening && (
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-            <Reveal immediate>
-              <div className="eyebrow text-gold-deep">{development.location}</div>
-              <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
-                {development.name}
-              </h1>
-            </Reveal>
-            <Reveal immediate delay={0.08}>
-              <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
-            </Reveal>
-          </div>
-        )}
+      {/* the light part of the page: the numbers and the building picker */}
+      <div className="on-light">
+        {/* The plain header, for a project without the opening; the numbers stay in both cases */}
+        <section className="mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-8 lg:px-10">
+          {!opening && (
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+              <Reveal immediate>
+                <div className="eyebrow text-gold-deep">{development.location}</div>
+                <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
+                  {development.name}
+                </h1>
+              </Reveal>
+              <Reveal immediate delay={0.08}>
+                <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
+              </Reveal>
+            </div>
+          )}
 
-        <Reveal immediate delay={0.16}>
-          <div
-            className={`${opening ? "" : "mt-10 "}grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line`}
-          >
-            <Stat label="Згради" value="6" />
-            <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
-            <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
-            <Stat label="Завршување" value={development.expectedCompletion} className="sm:pl-8" />
-          </div>
-        </Reveal>
-      </section>
-
-      {/* 3 · pick a building: the aerial photo with its markers, as before, with the compass (the page's one light block) */}
-      <section className="on-light py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Ситуационен план"
-              title="Шест згради, еден заеднички двор"
-              description="Комплексот е распореден околу централен пејзажиран двор — секоја зграда гледа кон зеленило наместо кон паркинг или улица."
-              size="compact"
-              className="max-w-2xl"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-12">
-              <Masterplan
-                variant="full"
-                buildings={buildings}
-                apartments={ccApartments}
-                image={development.masterplanImage}
-                hotspots={development.buildingHotspots}
-                basePath="/development"
-                north={cityCenter?.masterplanNorth}
-              />
+          <Reveal immediate delay={0.16}>
+            <div
+              className={`${opening ? "" : "mt-10 "}grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line`}
+            >
+              <Stat label="Згради" value="6" />
+              <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
+              <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
+              <Stat label="Завршување" value={development.expectedCompletion} className="sm:pl-8" />
             </div>
           </Reveal>
-        </div>
-      </section>
+        </section>
+
+        {/* 3 · pick a building: the aerial photo with its markers and the compass; beside it only the facts of the chosen building */}
+        <section className="py-12 sm:py-16">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Ситуационен план"
+                title="Шест згради, еден заеднички двор"
+                description="Комплексот е распореден околу централен пејзажиран двор — секоја зграда гледа кон зеленило наместо кон паркинг или улица."
+                size="compact"
+                className="max-w-2xl"
+              />
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="mt-12">
+                <Masterplan
+                  variant="full"
+                  buildings={buildings}
+                  apartments={ccApartments}
+                  image={development.masterplanImage}
+                  hotspots={development.buildingHotspots}
+                  basePath="/development"
+                  north={cityCenter?.masterplanNorth}
+                />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      </div>
 
       {/* Availability — real-time breakdown across all six buildings */}
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <Reveal>
-            <div>
-              <div className="eyebrow text-gold-deep">Достапност</div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
-                {availableWord(counts.available)}
-              </h2>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-                Статусот на секој стан во сите шест згради се ажурира во реално време.
-              </p>
-              <div className="mt-8">
-                <Button href="/apartments" variant="primary" tone="dark">
-                  Пронајди го твојот стан
-                </Button>
+      <section className="on-dark">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <Reveal>
+              <div>
+                <div className="eyebrow text-gold-deep">Достапност</div>
+                <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
+                  {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
+                  {availableWord(counts.available)}
+                </h2>
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+                  Статусот на секој стан во сите шест згради се ажурира во реално време.
+                </p>
+                <div className="mt-8">
+                  <Button href="/apartments" variant="primary" tone="dark">
+                    Пронајди го твојот стан
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div>
-              <div className="flex h-1.5 w-full overflow-hidden bg-line">
-                <div style={{ width: `${availablePct}%` }} className={DOT_COLOR.available} />
-                <div style={{ width: `${reservedPct}%` }} className={DOT_COLOR.reserved} />
-                <div style={{ width: `${soldPct}%` }} className={DOT_COLOR.sold} />
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <div className="flex h-1.5 w-full overflow-hidden bg-line">
+                  <div style={{ width: `${availablePct}%` }} className={DOT_COLOR.available} />
+                  <div style={{ width: `${reservedPct}%` }} className={DOT_COLOR.reserved} />
+                  <div style={{ width: `${soldPct}%` }} className={DOT_COLOR.sold} />
+                </div>
+                <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+                  <MeterLabel status="available" label="Достапни" value={counts.available} />
+                  <MeterLabel status="reserved" label="Резервирани" value={counts.reserved} />
+                  <MeterLabel status="sold" label="Продадени" value={counts.sold} />
+                </div>
               </div>
-              <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-                <MeterLabel status="available" label="Достапни" value={counts.available} />
-                <MeterLabel status="reserved" label="Резервирани" value={counts.reserved} />
-                <MeterLabel status="sold" label="Продадени" value={counts.sold} />
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -226,7 +231,7 @@ export default function DevelopmentPage() {
         </>
       )}
 
-      <section className="border-t border-line">
+      <section className="on-dark border-t border-line">
         <div className="mx-auto max-w-7xl px-5 py-16 text-center sm:px-8 sm:py-24 lg:px-10">
           <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Не сте сигурни која зграда?</h2>
           <p className="mx-auto mt-3 max-w-md text-ink/70">
@@ -240,7 +245,9 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <OtherProjects currentProjectId="city-center" />
+      <div className="on-dark">
+        <OtherProjects currentProjectId="city-center" />
+      </div>
     </div>
   );
 }

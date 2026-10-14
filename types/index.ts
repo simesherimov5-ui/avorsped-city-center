@@ -80,6 +80,8 @@ export interface Building {
   exteriorImage: { src: string; alt: string; isPlaceholder: boolean };
   status: "planning" | "foundation" | "structure" | "exterior" | "interior" | "completed";
   position: { row: number; col: number }; // grid position in the masterplan
+  /** A short text about the building, shown in the building picker. */
+  description?: string;
 }
 
 export interface ConstructionStage {

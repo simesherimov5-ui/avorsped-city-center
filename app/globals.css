@@ -299,22 +299,26 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 }
 
 /* A dark band on a page whose own surface is light, and its way back: inside .on-dark the light-surface tokens turn into
-   their dark-surface partners (text Травертин, hairlines Травертин 12%, the accent Светол бакар, cards Еспресо);
+   their dark-surface partners (text and hairlines in Светол бакар, cards Еспресо);
    .on-light inside it restores them for the one light block of the page. */
 .on-dark {
-  --color-ink: var(--color-travertine);
-  --color-charcoal: var(--color-travertine);
-  --color-muted: color-mix(in srgb, var(--color-travertine) 64%, transparent);
-  --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --color-ink: var(--color-copper);
+  --color-charcoal: var(--color-copper);
+  --color-on-chrome: var(--color-copper);
+  --color-paper: var(--color-copper);
+  --color-muted: color-mix(in srgb, var(--color-copper) 68%, transparent);
+  --color-line: color-mix(in srgb, var(--color-copper) 22%, transparent);
   --color-gold-deep: var(--color-copper);
   --color-gold-dark: var(--color-copper);
   --color-cream: var(--color-espresso);
   --color-warm-white: var(--color-espresso);
   --color-silver: var(--color-espresso);
   background-color: var(--color-onyx);
-  color: var(--color-travertine);
+  color: var(--color-copper);
 }
 .on-light {
+  --color-on-chrome: var(--color-travertine);
+  --color-paper: var(--color-travertine);
   --color-ink: var(--color-onyx);
   --color-charcoal: var(--color-onyx);
   --color-muted: color-mix(in srgb, var(--color-onyx) 68%, transparent);
