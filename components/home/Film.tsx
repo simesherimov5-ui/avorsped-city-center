@@ -8,21 +8,19 @@ import { Reveal } from "@/components/motion/Reveal";
  */
 export function Film({ still, src }: { still: { src: string; alt: string }; src?: string }) {
   return (
-    <section id="film" className="bg-chrome text-on-chrome">
-      <div className="container-x section-y">
+    <section id="film" className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
+      <div className="container-x">
         <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <div className="eyebrow text-accent">Филм</div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Три децении, <em className="italic text-accent">во една минута.</em>
-              </h2>
-            </div>
-            <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>
+          <div className="sec-head">
+            <div className="eyebrow text-accent">Филм</div>
+            <h2 className="t-h2">
+              Три децении, <em className="italic text-accent">во една минута.</em>
+            </h2>
+            <p className="sec-lead text-on-chrome/70">Од 1994 до денес.</p>
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso lg:mt-10 lg:aspect-auto lg:h-[480px]">
+          <div className="relative aspect-[16/9] overflow-hidden bg-espresso lg:aspect-auto lg:h-[480px]">
             {src ? (
               <video
                 controls

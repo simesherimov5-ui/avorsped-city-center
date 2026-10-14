@@ -1,6 +1,6 @@
 /* The homepage ending: the building mark in thin gold lines, a pane of dark glass in front of it, the call to action on
    the glass. Colours are the tokens of app/globals.css (Оникс, Еспресо, Травертин, the logo gold, Бронза), at an opacity
-   or two of them mixed. Blur, one soft shadow and one soft gold glow are allowed in this one section (design brief). */
+   or two of them mixed. Blur and one soft shadow are allowed in this one section (design brief). */
 .cg {
   --cg-ease: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
@@ -17,14 +17,6 @@
 .cg > * {
   grid-area: 1 / 1;
   min-width: 0;
-}
-
-/* 1 · a soft gold glow, so the glass has light to catch */
-.cg-glow {
-  width: min(900px, 130%);
-  aspect-ratio: 3 / 2;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-brass) 16%, transparent), transparent);
-  pointer-events: none;
 }
 
 /* 2 · the building mark: one gradient across the whole drawing, thin lines (1.5 units of a 240-unit-tall drawing) */
@@ -56,8 +48,8 @@
   flex-direction: column;
   align-items: center;
   gap: 22px;
-  width: min(820px, 100%);
-  padding: 52px 64px 44px;
+  width: min(640px, 100%);
+  padding: 48px 40px 40px;
   border: 1px solid color-mix(in srgb, var(--color-travertine) 7%, transparent);
   border-top-color: color-mix(in srgb, var(--color-brass) 60%, transparent); /* gold light catching the glass */
   border-radius: 2px;
@@ -137,7 +129,6 @@
 /* ───────── The entrance: the building draws, the glass arrives, the text comes ─────────
    "cg-armed" is added by the script, only when it is about to play (so without scripts everything is simply there);
    "cg-in" is added once, when 40% of the section is on screen. */
-.cg.cg-armed:not(.cg-in) .cg-glow,
 .cg.cg-armed:not(.cg-in) .cg-glass,
 .cg.cg-armed:not(.cg-in) .cg-glass > * {
   opacity: 0;
@@ -146,9 +137,6 @@
   stroke-dashoffset: 1;
 }
 
-.cg.cg-in .cg-glow {
-  animation: cg-fade 1.4s ease-out 0.4s both;
-}
 .cg.cg-in .cg-mark path {
   animation: cg-draw var(--t, 0.5s) var(--cg-ease) var(--d, 0s) both;
 }
@@ -227,11 +215,6 @@
   .cg > * {
     grid-area: auto;
   }
-  .cg-glow {
-    grid-area: 1 / 1 / 3 / 2;
-    align-self: start;
-    width: 130%;
-  }
   .cg-mark {
     grid-row: 1;
     grid-column: 1;
@@ -276,7 +259,6 @@
 
 /* ───────── Accessibility ───────── */
 @media (prefers-reduced-motion: reduce) {
-  .cg.cg-in .cg-glow,
   .cg.cg-in .cg-mark path,
   .cg.cg-in .cg-glass,
   .cg.cg-in .cg-glass > * {

@@ -129,7 +129,7 @@
   text-align: center;
 }
 .ab-story-inner {
-  max-width: 760px;
+  max-width: 720px;
   margin-inline: auto;
 }
 .ab-story-text {
@@ -159,15 +159,21 @@
 /* The running texts (За нас, Визија, Мисија): the heading on the left, the words on the right */
 .ab-prose {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
-  gap: clamp(28px, 5vw, 80px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 32px;
   align-items: start;
 }
+.ab-prose > :first-child {
+  grid-column: 1 / 6;
+}
+.ab-prose > :nth-child(2) {
+  grid-column: 7 / 13;
+}
 .ab-prose-body {
-  max-width: 64ch;
-  font-size: 17px;
+  max-width: 65ch;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.7;
   color: color-mix(in srgb, var(--color-paper) 82%, transparent);
 }
 .ab-prose-body p + p {
@@ -197,6 +203,11 @@
 @media (max-width: 880px) {
   .ab-prose {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+  }
+  .ab-prose > :first-child,
+  .ab-prose > :nth-child(2) {
+    grid-column: 1;
   }
   .ab-aims {
     grid-template-columns: minmax(0, 1fr);
@@ -207,9 +218,26 @@
 /* A3 — values: a sticky photo beside the list */
 .ab-duo {
   display: grid;
-  grid-template-columns: minmax(0, 4.4fr) minmax(0, 6fr);
-  gap: clamp(28px, 5vw, 80px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 32px;
+  margin-top: 48px;
   align-items: start;
+}
+.ab-duo-photo-wrap {
+  grid-column: 1 / 5;
+}
+.ab-values {
+  grid-column: 6 / 13;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  align-content: start;
+}
+.ab-values > * {
+  display: flex;
+}
+.ab-values .ab-v {
+  flex: 1;
 }
 .ab-duo-photo {
   position: sticky;
@@ -229,9 +257,6 @@
   padding: 22px 0;
   border-top: 1px solid var(--color-line);
   transition: border-color 0.4s;
-}
-.ab-v:last-child {
-  border-bottom: 1px solid var(--color-line);
 }
 .ab-v-n {
   padding-top: 8px;
@@ -263,10 +288,20 @@
 @media (max-width: 900px) {
   .ab-duo {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 32px;
+  }
+  .ab-duo-photo-wrap,
+  .ab-values {
+    grid-column: 1;
   }
   .ab-duo-photo {
     position: static;
     aspect-ratio: 4 / 3;
+  }
+}
+@media (max-width: 640px) {
+  .ab-values {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

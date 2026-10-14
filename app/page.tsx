@@ -40,25 +40,23 @@ export default function HomePage() {
       <NewProjects projects={projects.filter((p) => p.status !== "completed")} />
 
       {/* 5. The numbers */}
-      <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="container-x section-y">
+      <section className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
+        <div className="container-x">
           <ScrollReveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
-                <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                  Изградени <em className="italic text-accent">на доверба.</em>
-                </h2>
-              </div>
+            <div className="sec-head">
+              <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
+              <h2 className="t-h2">
+                Изградени <em className="italic text-accent">на доверба.</em>
+              </h2>
               <Link
                 href="/about"
-                className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+                className="sec-link focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
               >
                 Нашата приказна
               </Link>
             </div>
           </ScrollReveal>
-          <div className="mt-12">
+          <div>
             <Numbers founded={companyInfo.founded} figures={FIGURES} />
           </div>
         </div>
@@ -71,7 +69,7 @@ export default function HomePage() {
       <Soon />
 
       {/* A line the company stands behind, on the dark */}
-      <section className="bg-chrome py-20 text-on-chrome sm:py-28">
+      <section className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
         <div className="container-x">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>

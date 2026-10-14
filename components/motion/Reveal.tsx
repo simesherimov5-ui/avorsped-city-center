@@ -1,43 +1,56 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { useEffect, useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
 
 /**
- * GSAP ScrollTrigger fade+slide reveal, homepage-only — the site's other
- * pages keep using the existing Framer-Motion `components/ui/Reveal.tsx`
- * (same name, different folder: this one is GSAP, that one Framer).
+ * The one reveal of the site: content rises 24px and fades in over 0.9s (cubic-bezier(.22, 1, .36, 1)) once 15% of it is
+ * on screen, and plays once. `delay` staggers siblings (0.08s apart). What is already on screen when the page opens is
+ * left as it is; with reduced motion, or without scripts, everything is simply shown (see [data-reveal] in globals.css).
+ * `immediate` plays at once in plain CSS (`.enter`) so the text of a page's top does not wait for the scripts.
  */
-export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function Reveal({
+  children,
+  delay = 0,
+  immediate = false,
+  className,
+  as: Tag = "div",
+}: {
+  children: ReactNode;
+  delay?: number;
+  immediate?: boolean;
+  className?: string;
+  as?: ElementType;
+}) {
+  const ref = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      if (prefersReducedMotion()) {
-        gsap.set(ref.current, { opacity: 1, y: 0 });
-        return;
-      }
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || immediate) return;
+    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = el.getBoundingClientRect();
+    // Already on screen when the page opened (or the visitor jumped past it): nothing to play.
+    if (box.top < window.innerHeight * 0.85) return;
+    el.dataset.reveal = "armed";
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        el.dataset.reveal = "in";
+        observer.disconnect();
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [immediate]);
 
-      // Lighter on phones: shorter travel, shorter duration.
-      const phone = window.innerWidth < 768;
-      gsap.set(ref.current, { opacity: 0, y: phone ? 20 : 40 });
-      gsap.to(ref.current, {
-        opacity: 1,
-        y: 0,
-        duration: phone ? 0.6 : 1,
-        delay,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 85%",
-          once: true,
-        },
-      });
-    },
-    { scope: ref, dependencies: [delay] }
+  const style = { "--reveal-delay": `${delay}s`, "--enter-delay": `${delay}s` } as CSSProperties;
+  return (
+    <Tag
+      ref={ref}
+      className={[immediate ? "enter" : "", className].filter(Boolean).join(" ") || undefined}
+      style={style}
+    >
+      {children}
+    </Tag>
   );
-
-  return <div ref={ref}>{children}</div>;
 }

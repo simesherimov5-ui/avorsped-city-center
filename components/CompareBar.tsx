@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCompare } from "@/lib/compare-context";
@@ -37,6 +37,16 @@ export function CompareBar() {
   const [paths, setPaths] = useState({ current: pathname, previous: pathname });
   if (paths.current !== pathname) setPaths({ current: pathname, previous: paths.current });
   const cameFromPageWithoutBar = !showsCompareBar(paths.previous);
+
+  // While the bar is on screen the page gets room for it at the bottom, so it never covers the footer.
+  const visible = showsCompareBar(pathname) && ids.length > 0;
+  useEffect(() => {
+    if (!visible) return;
+    document.body.style.paddingBottom = "72px";
+    return () => {
+      document.body.style.paddingBottom = "";
+    };
+  }, [visible]);
 
   // The selection itself is never touched here: it stays in localStorage while the bar is not shown.
   if (!showsCompareBar(pathname) || ids.length === 0 || (cameFromPageWithoutBar && transition?.target === pathname))

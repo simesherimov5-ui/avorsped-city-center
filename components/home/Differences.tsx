@@ -23,32 +23,30 @@ const ITEMS = [
   },
 ];
 
-/** "Што нè разликува": four short texts on a light surface, numbered because they are a list of four. */
+/** "Што нè разликува": the heading in the first four columns, the four short texts in a 2 × 2 grid in columns 6 to 12. */
 export function Differences() {
   return (
-    <section className="bg-cream text-charcoal">
-      <div className="container-x section-y flex flex-col gap-14 lg:flex-row lg:gap-14">
-        <Reveal>
-          <div className="lg:w-[300px] lg:shrink-0">
-            <div className="eyebrow text-gold-deep">Што нè разликува</div>
-            <h2 className="mt-4 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-              Деталите
-              <br />
-              <em className="italic text-gold-deep">се сè.</em>
-            </h2>
-          </div>
+    <section className="section-y bg-cream text-charcoal">
+      <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+        <Reveal className="lg:col-span-4">
+          <div className="eyebrow text-gold-deep">Што нè разликува</div>
+          <h2 className="t-h2 mt-3">
+            Деталите
+            <br />
+            <em className="italic text-gold-deep">се сè.</em>
+          </h2>
         </Reveal>
-        <div className="grid min-w-0 flex-1 gap-x-10 sm:grid-cols-2">
+        <div className="grid auto-rows-fr gap-x-10 gap-y-10 sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
           {ITEMS.map((item, i) => (
-            <Reveal key={item.lead} delay={i * 0.06}>
-              <div className="flex flex-col gap-3 border-t border-line py-6">
+            <Reveal key={item.lead} delay={i * 0.08} className="h-full">
+              <div className="flex h-full flex-col gap-3 border-t border-line pt-6">
                 <div className="eyebrow text-gold-deep">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">
+                <h3 className="t-h3">
                   {item.lead}
                   <br />
                   <em className="italic text-gold-deep">{item.accent}</em>
                 </h3>
-                <p className="text-[14px] font-normal leading-[1.7] text-ink/75">{item.text}</p>
+                <p className="max-w-[65ch] text-[15px] leading-[1.7] text-ink/75">{item.text}</p>
               </div>
             </Reveal>
           ))}

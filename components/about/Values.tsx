@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { Media } from "@/components/ui/Media";
+import { Reveal } from "@/components/motion/Reveal";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 
 type Image = { src: string; alt: string };
@@ -17,8 +18,8 @@ type Props = {
 };
 
 /**
- * A sticky portrait photo beside the four values. The list rows fade up one by one; a row's title and top
- * line turn gold on hover. With one photo per value the photos crossfade (0.5s) as the rows are hovered or
+ * The heading on the container's edge, then a sticky portrait photo beside the four values in a 2 × 2 grid. A row's title
+ * and top line turn gold on hover. With one photo per value the photos crossfade (0.5s) as the rows are hovered or
  * scrolled through.
  */
 export function Values({ eyebrow, heading, values, images }: Props) {
@@ -27,44 +28,19 @@ export function Values({ eyebrow, heading, values, images }: Props) {
   const [active, setActive] = useState(0);
   const several = images.length > 1;
 
+  // Several photos: the one for the row that is crossing the middle of the screen shows.
   useGSAP(
     () => {
       const el = root.current;
-      if (!el || prefersReducedMotion()) return;
-      const rows = el.querySelectorAll<HTMLElement>("[data-row]");
-      gsap.set(rows, { opacity: 0, y: 40 });
-      rows.forEach((row, i) => {
-        gsap.to(row, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          delay: window.innerWidth < 900 ? 0 : 0.1 * (i % 2),
-          scrollTrigger: { trigger: row, start: "top 88%", once: true },
+      if (!el || !several || prefersReducedMotion()) return;
+      el.querySelectorAll<HTMLElement>("[data-row]").forEach((row, i) => {
+        ScrollTrigger.create({
+          trigger: row,
+          start: "top 55%",
+          end: "bottom 55%",
+          onToggle: (self) => self.isActive && setActive(i),
         });
-        // Several photos: the one for the row that is crossing the middle of the screen shows.
-        if (several) {
-          ScrollTrigger.create({
-            trigger: row,
-            start: "top 55%",
-            end: "bottom 55%",
-            onToggle: (self) => self.isActive && setActive(i),
-          });
-        }
       });
-      if (photoBox.current) {
-        gsap.fromTo(
-          photoBox.current,
-          { opacity: 0, scale: 1.05 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 1.4,
-            ease: "power3.out",
-            scrollTrigger: { trigger: photoBox.current, start: "top 85%", once: true },
-          }
-        );
-      }
     },
     { scope: root, dependencies: [several] }
   );
@@ -86,41 +62,44 @@ export function Values({ eyebrow, heading, values, images }: Props) {
   );
 
   return (
-    <div ref={root} className="ab-duo">
-      <div ref={photoBox} className="ab-duo-photo">
-        {images.map((image, i) => (
-          <div key={image.src} data-layer style={{ opacity: i === 0 ? 1 : 0 }}>
-            <Media
-              image={{ ...image, isPlaceholder: false }}
-              tone="dark"
-              defer
-              sizes="(max-width: 900px) 133vw, 1150px"
-              className="h-full w-full"
-            />
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <div className="bk-eyebrow">{eyebrow}</div>
-        <RevealHeading as="h2" className="bk-h2 bk-serif" duration={1.1} ease="power4.out" from={115}>
-          {heading}
-        </RevealHeading>
-        <div>
-          {values.map((value, i) => (
-            <article
-              key={value.title}
-              data-row
-              className="ab-v"
-              onPointerEnter={() => several && setActive(i)}
-              onFocus={() => several && setActive(i)}
-            >
-              <span className="ab-v-n bk-mono">{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <h3>{value.title}</h3>
-                <p>{value.description}</p>
+    <div ref={root}>
+      <div className="bk-eyebrow">{eyebrow}</div>
+      <RevealHeading as="h2" className="bk-h2 bk-serif">
+        {heading}
+      </RevealHeading>
+      <div className="ab-duo">
+        <Reveal className="ab-duo-photo-wrap">
+          <div ref={photoBox} className="ab-duo-photo">
+            {images.map((image, i) => (
+              <div key={image.src} data-layer style={{ opacity: i === 0 ? 1 : 0 }}>
+                <Media
+                  image={{ ...image, isPlaceholder: false }}
+                  tone="dark"
+                  defer
+                  sizes="(max-width: 900px) 133vw, 1150px"
+                  className="h-full w-full"
+                />
               </div>
-            </article>
+            ))}
+          </div>
+        </Reveal>
+
+        <div className="ab-values">
+          {values.map((value, i) => (
+            <Reveal key={value.title} delay={0.08 * (i % 2)}>
+              <article
+                data-row
+                className="ab-v"
+                onPointerEnter={() => several && setActive(i)}
+                onFocus={() => several && setActive(i)}
+              >
+                <span className="ab-v-n bk-mono">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{value.title}</h3>
+                  <p>{value.description}</p>
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </div>

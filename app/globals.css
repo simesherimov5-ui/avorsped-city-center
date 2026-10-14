@@ -191,6 +191,67 @@ h4 {
   line-height: 1.45;
 }
 
+/* One container and one section rhythm for the whole site: the navbar, every section and the footer share the same left
+   edge. Plain (unlayered) rules: put vertical padding on the section (.section-y), not next to them. */
+.container-x {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+.section-y {
+  padding-block: 72px;
+}
+@media (min-width: 640px) {
+  .container-x {
+    padding-inline: 24px;
+  }
+}
+@media (min-width: 768px) {
+  .section-y {
+    padding-block: 112px;
+  }
+}
+
+/* The head of a section: eyebrow, then the h2 (12px below), then an optional lead (16px below, 520px at most), then 48px
+   of space before the content. A "see all" link (.sec-link) sits on the right of the h2, on the same baseline. */
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 24px;
+  align-items: baseline;
+  margin-bottom: 48px;
+}
+.sec-head > .eyebrow,
+.sec-head > .sec-eyebrow {
+  grid-column: 1 / -1;
+}
+.sec-head > h2 {
+  grid-column: 1;
+  margin-top: 12px;
+}
+.sec-head > .sec-link {
+  grid-column: 2;
+  grid-row: 2;
+}
+.sec-head > .sec-lead {
+  grid-column: 1 / -1;
+  margin-top: 16px;
+  max-width: 520px;
+  font-size: var(--text-lead-size);
+  line-height: var(--text-lead-leading);
+}
+@media (max-width: 560px) {
+  .sec-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sec-head > .sec-link {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 16px;
+  }
+}
+
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
    explicit font-weight utility on the element still wins, because this is the base layer. */
 @layer base {
@@ -501,15 +562,29 @@ h4 {
     transform: translateY(var(--enter-distance, 24px));
   }
 }
-.enter {
-  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+/* The reveal (components/motion/Reveal.tsx): armed by a script only for content that is below the fold. */
+[data-reveal] {
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
 }
-@media (max-width: 767px) {
-  .enter {
-    --enter-distance: 12px;
-    --enter-stagger: 0;
-    animation-duration: 0.3s;
+[data-reveal="armed"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
   }
+}
+.enter {
+  animation: enter-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
 }
 
 /* Phones. Unlayered, so these beat the Tailwind utilities they refine. */
@@ -723,20 +798,9 @@ body {
 .hero-scrim {
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--color-onyx) 44%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 58%, transparent) 10%,
-    color-mix(in srgb, var(--color-onyx) 50%, transparent) 22%,
-    color-mix(in srgb, var(--color-onyx) 30%, transparent) 32%,
-    color-mix(in srgb, var(--color-onyx) 10%, transparent) 42%,
-    color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
-    color-mix(in srgb, var(--color-onyx) 20%, transparent) 80%,
-    color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
-  );
-}
-.hero-scrim-radial {
-  background: radial-gradient(
-    ellipse 70% 46% at 50% 14%,
-    color-mix(in srgb, var(--color-onyx) 30%, transparent),
-    transparent 72%
+    color-mix(in srgb, var(--color-onyx) 60%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 34%, transparent) 26%,
+    color-mix(in srgb, var(--color-onyx) 30%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 60%, transparent) 100%
   );
 }

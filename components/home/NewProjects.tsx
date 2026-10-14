@@ -9,22 +9,17 @@ import type { Project } from "@/types";
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
   return (
-    <section id="new" className="bg-chrome pb-16 text-on-chrome sm:pb-24">
+    <section id="new" className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
       <div className="container-x">
         <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-5">
-            <div>
-              <div className="flex items-center gap-3">
-                <span aria-hidden className="block h-2 w-2 rounded-full bg-accent" />
-                <div className="eyebrow text-accent">Ново · во продажба</div>
-              </div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Во изградба <em className="italic text-accent">сега.</em>
-              </h2>
-            </div>
+          <div className="sec-head">
+            <div className="eyebrow text-accent">Ново · во продажба</div>
+            <h2 className="t-h2">
+              Во изградба <em className="italic text-accent">сега.</em>
+            </h2>
             <Link
               href="/projects"
-              className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              className="sec-link focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
             >
               Сите проекти →
             </Link>
@@ -32,7 +27,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
         </Reveal>
       </div>
       <Reveal delay={0.1}>
-        <div className="mt-10">
+        <div>
           <ProjectSlideshow projects={projects} headingAs="h3" autoplayMs={7000} />
         </div>
       </Reveal>

@@ -33,13 +33,13 @@
 .ct-h1 {
   margin: 16px 0 12px;
   font-size: var(--fs-h1);
-  line-height: 1.04;
-  letter-spacing: -0.015em;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
-/* The heading scale from 768px up: H1 40–68px; phones keep the size above. */
-@media (min-width: 768px) {
+/* one line from 1280px up */
+@media (min-width: 1280px) {
   .ct-h1 {
-    font-size: var(--fs-h1);
+    white-space: nowrap;
   }
 }
 .ct-lead {
@@ -49,27 +49,37 @@
   color: var(--mute);
 }
 
-/* B2 — layout: the form on the left (max 680px), the panel on the right (max 420px), free space between */
+/* B2 — layout: the form on the left (7 of 12 columns), the panel on the right (5), side by side from the top and as
+   tall as each other */
 .ct-cols {
   display: grid;
-  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
-  gap: 32px;
-  align-items: start;
-  padding-bottom: clamp(56px, 6vw, 96px);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 32px;
+  align-items: stretch;
+  padding-bottom: var(--bk-gap);
+}
+.ct-cols > .ct-form {
+  grid-column: 1 / 8;
+}
+.ct-cols > .ct-side {
+  grid-column: 8 / 13;
 }
 @media (max-width: 980px) {
   .ct-cols {
     grid-template-columns: minmax(0, 1fr);
-    gap: 40px;
+    row-gap: 40px;
+  }
+  .ct-cols > .ct-form,
+  .ct-cols > .ct-side {
+    grid-column: 1;
   }
 }
 
 /* B3 — the form: a bordered panel like the «Директно» card (same border, padding and surface), the lead inside it */
 .ct-panel {
   width: 100%;
-  max-width: 680px;
   min-width: 0;
-  padding: clamp(22px, 2.4vw, 32px);
+  padding: 36px;
   border: 1px solid var(--gold-line);
   background: var(--color-ink);
 }
@@ -447,21 +457,15 @@
 
 /* B4 — the direct panel */
 .ct-side {
-  position: sticky;
-  top: 120px;
-  justify-self: end;
   width: 100%;
-  max-width: 420px;
   min-width: 0;
-  padding: clamp(22px, 2.4vw, 32px);
+  padding: 36px;
   border: 1px solid var(--gold-line);
   background: var(--color-ink);
 }
 @media (max-width: 980px) {
   .ct-side {
-    position: static;
     justify-self: stretch;
-    max-width: none;
   }
 }
 .ct-rows {
