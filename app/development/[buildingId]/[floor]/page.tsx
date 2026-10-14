@@ -60,7 +60,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
           arrived through the building, so it doesn't need repeating as a
           prominent heading. The floor plan and its apartments are the
           actual content of this page. */}
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-8 lg:px-10">
+      <div className="container-x pt-8">
         <nav aria-label="Патека" className="flex items-center gap-1.5 text-sm text-muted sm:text-xs">
           <ZoomNavLink
             href={`/development/${building.id}`}
@@ -75,7 +75,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
         <h1 className="t-h1 mt-3 text-charcoal">Изберете го вашиот стан</h1>
       </div>
 
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
+      <section className="container-x section-y">
         <div className="grid gap-10 lg:grid-cols-[1fr_260px] lg:items-start">
           <div>
             {floor.sketch && units.some((a) => a.outline) ? (

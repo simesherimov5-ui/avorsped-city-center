@@ -15,7 +15,7 @@ export function ProjectCta({
 }) {
   return (
     <section className="bg-chrome text-on-chrome">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-8 px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
+      <div className="container-x section-y flex flex-wrap items-center justify-between gap-8">
         <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
           Дојдете да <em className="italic text-accent">го видите</em>
         </h2>

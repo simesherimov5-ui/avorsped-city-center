@@ -5,7 +5,7 @@ import { companyInfo } from "@/data";
 export function Footer() {
   return (
     <footer className="border-t border-line bg-chrome text-on-chrome">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 py-16 sm:py-20 lg:grid-cols-4 lg:gap-8 lg:px-10">
+      <div className="container-x section-y grid gap-12 lg:grid-cols-4 lg:gap-8">
         <div>
           <div className="leading-none">
             <div className="footer-sheen">Javor Sped</div>

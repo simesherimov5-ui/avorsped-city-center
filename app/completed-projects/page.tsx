@@ -17,7 +17,7 @@ export default function CompletedProjectsPage() {
 
   return (
     <div className="pt-24 sm:pt-28">
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
+      <section className="container-x section-y">
         <SectionHeading
           as="h1"
           eyebrow="Портфолио"

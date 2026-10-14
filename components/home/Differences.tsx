@@ -27,7 +27,7 @@ const ITEMS = [
 export function Differences() {
   return (
     <section className="bg-cream text-charcoal">
-      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-5 py-16 sm:px-8 sm:py-24 lg:flex-row lg:gap-14 lg:px-10">
+      <div className="container-x section-y flex flex-col gap-14 lg:flex-row lg:gap-14">
         <Reveal>
           <div className="lg:w-[300px] lg:shrink-0">
             <div className="eyebrow text-gold-deep">Што нè разликува</div>

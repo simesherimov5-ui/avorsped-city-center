@@ -111,7 +111,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
   return (
     <ZoomEnter className="pt-24 sm:pt-28">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
+      <div className="container-x pt-6">
         <ZoomNavLink
           href={back.href}
           label={place.building || place.project}
@@ -121,7 +121,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         </ZoomNavLink>
       </div>
 
-      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
+      <section className="container-x section-y">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="eyebrow text-muted">

@@ -55,7 +55,7 @@
   /* The page background of the all-dark pages (За нас, Контакт): the same Оникс as everywhere, one dark, not two. */
   --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
-  --nav-h: 61px;
+  --nav-h: 76px;
 
   /*
    * Older names, kept as aliases so the rest of the codebase (cream/warm-white/silver/charcoal/chrome/on-chrome/
@@ -113,17 +113,6 @@
   /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
   --font-sans: var(--font-montserrat);
-}
-
-@media (min-width: 640px) {
-  :root {
-    --nav-h: 69px;
-  }
-}
-@media (min-width: 1024px) {
-  :root {
-    --nav-h: 85px;
-  }
 }
 
 * {
@@ -191,6 +180,30 @@ h4 {
   }
   .t-h3 {
     font-size: clamp(26px, 2.1vw, 30px);
+  }
+}
+
+/* One container and one section rhythm for the whole site: the navbar, every section and the footer share the same left
+   edge. Utilities still win (pt-0, mt-*), because these are in the components layer. */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  .section-y {
+    padding-block: 72px;
+  }
+  @media (min-width: 640px) {
+    .container-x {
+      padding-inline: 24px;
+    }
+  }
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: 112px;
+    }
   }
 }
 
@@ -538,6 +551,42 @@ body {
 @keyframes menu-in {
   from {
     opacity: 0;
+  }
+}
+/* The links of the phone menu fade in one after the other. */
+.mobile-link {
+  animation: mobile-link-in 0.5s ease-out both;
+}
+@keyframes mobile-link-in {
+  from {
+    opacity: 0;
+  }
+}
+/* A tab of the navigation: a 1px Светол бакар line grows from the centre (0.4s) on hover and on the current page. */
+.nav-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-copper);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-tab:hover::after,
+.nav-tab[data-active]::after,
+.nav-tab:focus-visible::after {
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-link,
+  .mobile-menu {
+    animation: none;
+  }
+  .nav-tab::after {
+    transition: none;
   }
 }
 /* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */

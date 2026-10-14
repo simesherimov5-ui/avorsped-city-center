@@ -41,7 +41,7 @@ export default function HomePage() {
 
       {/* 5. The numbers */}
       <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
+        <div className="container-x section-y">
           <ScrollReveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
@@ -72,7 +72,7 @@ export default function HomePage() {
 
       {/* A line the company stands behind, on the dark */}
       <section className="bg-chrome py-20 text-on-chrome sm:py-28">
-        <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
+        <div className="container-x">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
             <Link

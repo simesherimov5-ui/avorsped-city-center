@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 export function Manifest() {
   return (
     <section className="bg-chrome text-on-chrome">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 py-20 text-center sm:px-8 sm:py-28 lg:px-10">
+      <div className="container-x section-y flex flex-col items-center gap-8 text-center">
         <Reveal>
           <div className="eyebrow text-accent">Во што веруваме</div>
         </Reveal>

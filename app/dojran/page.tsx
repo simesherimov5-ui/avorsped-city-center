@@ -23,8 +23,8 @@ export default function DojranPage() {
 
   return (
     <ZoomEnter className="pt-24 sm:pt-28">
-      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-16 pt-10 lg:px-10">
-        <div className="mx-auto max-w-6xl">
+      <section className="container-x pb-16 pt-10">
+        <div>
           <DojranFacade image={project.heroImage} />
         </div>
 
@@ -53,7 +53,7 @@ export default function DojranPage() {
       />
 
       <section className="border-t border-line">
-        <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 lg:px-10">
+        <div className="container-x section-y">
           <ConstructionProgress project={project} always />
         </div>
       </section>

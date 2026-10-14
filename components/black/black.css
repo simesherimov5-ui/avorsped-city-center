@@ -13,8 +13,8 @@
   --color-line-dark: color-mix(in srgb, var(--color-travertine) 12%, transparent);
   --gold-line: color-mix(in srgb, var(--color-copper) 30%, transparent);
   --mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
-  --bk-px: clamp(20px, 5vw, 64px);
-  --bk-gap: clamp(64px, 7.5vw, 112px);
+  --bk-px: 20px;
+  --bk-gap: 72px;
   color: var(--color-paper);
   font-size: 15px;
   font-weight: 400;
@@ -31,13 +31,23 @@
   overflow-x: clip;
 }
 
-/* The content container: content is at most 1240px wide, centred, with side padding clamp(20px, 5vw, 64px).
-   Above ~1370px the page stops growing. Full-bleed parts (photos, bands) sit outside it. */
+/* The content container: the same as .container-x of the rest of the site (1200px, side padding 20 / 24px), so every
+   page shares one left edge. Full-bleed parts (photos, bands) sit outside it. */
 .bk-wrap {
   width: 100%;
-  max-width: calc(1240px + 2 * var(--bk-px));
+  max-width: 1200px;
   margin-inline: auto;
   padding-inline: var(--bk-px);
+}
+@media (min-width: 640px) {
+  [data-theme="black"] {
+    --bk-px: 24px;
+  }
+}
+@media (min-width: 768px) {
+  [data-theme="black"] {
+    --bk-gap: 112px;
+  }
 }
 
 /* Type */

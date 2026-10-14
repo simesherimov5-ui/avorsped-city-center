@@ -10,7 +10,6 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
-import { isBlackPage } from "@/lib/theme";
 import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
@@ -40,17 +39,11 @@ export function Navbar() {
   // Tied to the page it was set on, so every new page starts with the bar showing.
   const [hideState, setHideState] = useState({ hidden: false, path: pathname });
   const navRef = useRef<HTMLElement>(null);
-  const linksRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLSpanElement>(null);
-  const linkEls = useRef<Record<string, HTMLAnchorElement | null>>({});
-  const linePlaced = useRef(false);
   const transition = usePageTransition();
   // While the curtain runs, the line already points at the tab that was clicked.
   const activeHref = tabFor(transition?.target ?? pathname);
 
   const isHome = pathname === "/";
-  // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
-  const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
   // at. On the Контакт page itself it scrolls to the booking form and focuses its first step instead.
   const onContact = pathname === "/contact";
@@ -106,7 +99,6 @@ export function Navbar() {
   }, [open]);
 
   useEffect(() => {
-    if (!isHome) return;
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -115,37 +107,7 @@ export function Navbar() {
       // Reset when leaving the homepage so returning to it starts transparent.
       setScrolled(false);
     };
-  }, [isHome]);
-
-  // The gold underline is one element that slides to the active tab (0.6s); it jumps there on first
-  // paint and on resize, and fades out on pages that are not one of the tabs.
-  useEffect(() => {
-    const place = (animate: boolean) => {
-      const line = lineRef.current;
-      const group = linksRef.current;
-      if (!line || !group) return;
-      const el = activeHref ? linkEls.current[activeHref] : null;
-      if (!el) {
-        gsap.to(line, { opacity: 0, duration: animate ? 0.3 : 0, overwrite: true });
-        return;
-      }
-      const g = group.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      gsap.to(line, {
-        x: r.left - g.left,
-        width: r.width,
-        opacity: 1,
-        duration: animate ? 0.6 : 0,
-        ease: "power3.inOut",
-        overwrite: true,
-      });
-    };
-    place(linePlaced.current);
-    linePlaced.current = true;
-    const onResize = () => place(false);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [activeHref]);
+  }, [pathname]);
 
   // Hide on scroll down (after HIDE_AFTER_PX), show on scroll up. It never hides while the phone menu is
   // open or while a nav link has keyboard focus (a mouse click's focus doesn't count, or it would never hide).
@@ -189,54 +151,41 @@ export function Navbar() {
           // Keyboard focus anywhere in the bar brings it back.
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(
-            "border-b transition-colors duration-500",
-            // The black pages only swap the bar's fill for pure black; the hairline and blur stay the same.
-            black
-              ? "border-on-chrome/10 bg-black backdrop-blur-md"
-              : solid
-                ? "border-on-chrome/10 bg-chrome/97 backdrop-blur-md"
-                : "border-transparent bg-transparent"
+            "border-b transition-[background-color,border-color,backdrop-filter] duration-300",
+            // Over the hero the bar is clear; everywhere else, and once the page is scrolled past 40px, it is Оникс 92% with a blur
+            // and a hairline below.
+            solid
+              ? "border-on-chrome/[0.08] bg-chrome/[0.92] backdrop-blur-[12px]"
+              : "border-transparent bg-transparent"
           )}
         >
-          <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
+          <nav className="container-x flex h-[76px] items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr]">
             <Link
               id="site-logo"
               href="/"
               onPointerDown={spawnClickPulse}
-              className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
+              className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2 lg:justify-self-start"
               aria-label="Javor Sped Holding — почетна"
             >
               <Logo variant="icon" />
             </Link>
 
-            <div className="hidden flex-1 items-center justify-center lg:flex">
-              <div ref={linksRef} className="relative flex gap-7 xl:gap-9">
-                {LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    ref={(el) => {
-                      linkEls.current[link.href] = el;
-                    }}
-                    onPointerDown={spawnClickPulse}
-                    aria-current={pathname === link.href ? "page" : undefined}
-                    className={cn(
-                      "nav-link relative isolate whitespace-nowrap py-1 text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-on-chrome",
-                      activeHref === link.href && "text-on-chrome"
-                    )}
-                  >
-                    {t(link.key)}
-                  </Link>
-                ))}
-                <span
-                  ref={lineRef}
-                  aria-hidden
-                  className="pointer-events-none absolute -bottom-0.5 left-0 h-px w-0 bg-accent opacity-0"
-                />
-              </div>
+            <div className="hidden items-center gap-10 lg:flex">
+              {LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onPointerDown={spawnClickPulse}
+                  aria-current={pathname === link.href ? "page" : undefined}
+                  data-active={activeHref === link.href ? "" : undefined}
+                  className="nav-link nav-tab focus-ring relative isolate whitespace-nowrap py-2 text-[12px] font-medium uppercase tracking-[0.14em] text-on-chrome/[0.72] transition-colors duration-300 hover:text-on-chrome data-[active]:text-on-chrome"
+                >
+                  {t(link.key)}
+                </Link>
+              ))}
             </div>
 
-            <div className="nav-link hidden items-center gap-4 lg:flex">
+            <div className="nav-link hidden items-center lg:flex lg:justify-self-end">
               {/* One button, one style, on every page (the black pages only change the bar's background). */}
               <Button href={consultHref} onClick={consultClick} variant="primary" size="sm" tone="dark">
                 {t("nav.consultation")}
@@ -266,7 +215,7 @@ export function Navbar() {
           aria-label="Мени"
           className="mobile-menu fixed inset-0 z-40 flex flex-col overflow-y-auto bg-ink px-5 pb-8 pt-24 sm:px-8 lg:hidden"
         >
-          <nav className="flex flex-1 flex-col justify-center">
+          <nav className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
             {LINKS.map((link, i) => (
               <Link
                 key={link.href}
@@ -274,12 +223,12 @@ export function Navbar() {
                 onClick={() => setOpen(false)}
                 onPointerDown={spawnClickPulse}
                 aria-current={pathname === link.href ? "page" : undefined}
+                style={{ animationDelay: `${0.12 + i * 0.06}s` }}
                 className={cn(
-                  "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-sans font-normal text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
-                  pathname === link.href ? "text-gold" : "text-paper"
+                  "mobile-link focus-ring relative isolate flex min-h-14 items-center font-display text-[24px] font-normal leading-tight",
+                  pathname === link.href ? "text-accent" : "text-paper"
                 )}
               >
-                <span className="eyebrow text-gold">{String(i + 1).padStart(2, "0")}</span>
                 {t(link.key)}
               </Link>
             ))}
