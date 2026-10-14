@@ -79,7 +79,7 @@ export function ProjectOpening({
     <section
       data-opening
       aria-label={name}
-      className="on-dark relative h-svh min-h-[560px] max-h-[1000px] w-full overflow-hidden text-paper"
+      className="scope-mist relative h-svh min-h-[560px] max-h-[1000px] w-full overflow-hidden bg-chrome text-paper"
     >
       {showVideo ? (
         <video
@@ -113,7 +113,7 @@ export function ProjectOpening({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 45%, transparent) 0%, transparent 22%, transparent 50%, color-mix(in srgb, var(--color-onyx) 85%, transparent) 100%)",
+            "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 45%, transparent) 0%, transparent 20%, transparent 42%, color-mix(in srgb, var(--color-onyx) 92%, transparent) 64%, var(--color-onyx) 80%)",
         }}
       />
 
@@ -134,7 +134,7 @@ export function ProjectOpening({
         {tagline && (
           <p className="m-0 max-w-[900px]">
             {lead && <span className="text-base font-light text-on-chrome/80">{lead}</span>}
-            <span className="font-display text-xl italic text-accent">{rest}</span>
+            <span className="font-display text-xl italic text-paper">{rest}</span>
           </p>
         )}
         <div className="mt-2.5 flex items-center gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-on-chrome/80">

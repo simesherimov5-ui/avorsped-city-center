@@ -26,6 +26,9 @@
   ); /* retired as a surface; only a hairline tone is left */
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
+  /* Антрацит: a dark neutral grey surface, and its whitish text colour (not cream). */
+  --color-anthracite: #26282b;
+  --color-mist: #e9e9e7;
   --color-bronze: #6d533e;
   --color-copper: #ddb28e;
   /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
@@ -98,6 +101,8 @@
   --color-espresso: var(--color-espresso);
   --color-travertine: var(--color-travertine);
   --color-sand: var(--color-sand);
+  --color-anthracite: var(--color-anthracite);
+  --color-mist: var(--color-mist);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
@@ -316,6 +321,26 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   background-color: var(--color-onyx);
   color: var(--color-copper);
 }
+/* Антрацит: the same idea with a neutral dark grey ground and whitish text; the accent stays Светол бакар. .scope-mist is
+   the text colours alone, for text that sits on a picture. */
+.scope-mist,
+.on-anthracite {
+  --color-ink: var(--color-mist);
+  --color-charcoal: var(--color-mist);
+  --color-on-chrome: var(--color-mist);
+  --color-paper: var(--color-mist);
+  --color-muted: color-mix(in srgb, var(--color-mist) 66%, transparent);
+  --color-line: color-mix(in srgb, var(--color-mist) 16%, transparent);
+  --color-gold-deep: var(--color-copper);
+  --color-gold-dark: var(--color-copper);
+  --color-cream: var(--color-anthracite);
+  --color-warm-white: var(--color-anthracite);
+  --color-silver: var(--color-anthracite);
+  color: var(--color-mist);
+}
+.on-anthracite {
+  background-color: var(--color-anthracite);
+}
 .on-light {
   --color-on-chrome: var(--color-travertine);
   --color-paper: var(--color-travertine);
@@ -346,6 +371,68 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .phase-pulse {
     animation: none;
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-copper) 30%, transparent);
+  }
+}
+
+/* The pin that drops onto the real map: it falls from above and two rings spread where it lands (a still pin with reduced motion). */
+.gm-pin {
+  position: absolute;
+  left: -20px;
+  top: -52px;
+  opacity: 0;
+  transform: translateY(-160px);
+}
+.gm-pin.is-dropped {
+  animation: gm-drop 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes gm-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-160px);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.gm-ring {
+  position: absolute;
+  left: -32px;
+  top: -32px;
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid var(--color-copper);
+  border-radius: 50%;
+  opacity: 0;
+}
+.gm-ring.is-on {
+  animation: gm-ring 2.4s ease-out 0.8s infinite;
+}
+.gm-ring-2.is-on {
+  animation-delay: 2s;
+}
+@keyframes gm-ring {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gm-pin,
+  .gm-pin.is-dropped {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .gm-ring.is-on {
+    animation: none;
   }
 }
 

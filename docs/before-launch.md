@@ -14,6 +14,7 @@ The site must not go live until every item under "Blocking" is done. Tick them o
 - [ ] **B5 — Apartment data.** The apartments, areas and plans of City Center (all six buildings) are the architect's, but their statuses are all "available" for now: send the real status of each. The other projects' apartments are generated mock data. Confirm or replace them before launch.
 - [ ] **Public address.** `metadataBase`, the sitemap, canonical links and share images need the public address (no custom domain yet). Set `NEXT_PUBLIC_SITE_URL` in Vercel; until then they use Vercel's own address.
 - [x] **Google map cookies.** Closed by the redesign: the Google embed is gone. The page only links to Google Maps (a plain link that opens in a new tab), so nothing of Google's loads on the site.
+- [ ] **Google map on the City Center page.** The "Локација" section embeds the real Google map (with a pin that drops onto it), so Google content loads there again. Mention it in the privacy policy (and decide whether a consent step is needed) before launch.
 - [ ] **Privacy policy.** The form collects a name and a phone number. The page structure is ready but unpublished (`components/privacy/privacy-content.ts`): it needs the text, then it must be linked from the footer and mentioned under the form.
 
 ## Should be done soon after launch

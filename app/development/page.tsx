@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
-import { LocationMap } from "@/components/location-map/LocationMap";
+import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
 import { DOT_COLOR, StatusMarker } from "@/components/ui/StatusBadge";
 import { OtherProjects } from "@/components/OtherProjects";
 import { ProjectMaterials } from "@/components/project/ProjectMaterials";
@@ -26,16 +26,6 @@ export const metadata: Metadata = pageMetadata({
   image: null,
 });
 
-// City Center on the map: the coordinates are in lib/locations.ts, and the spots are where
-// each nearby place sits on the 400 × 300 drawing (the pin is at 200, 140), placed from the same map. A place that is
-// not listed here is left off the drawing; its distance comes from the data.
-const PLACE_SPOTS: Record<string, { x: number; y: number; side: "left" | "right" }> = {
-  "Автопат А4": { x: 290, y: 78, side: "left" },
-  "Бела Река": { x: 330, y: 168, side: "left" },
-  "Стадион Младост": { x: 118, y: 226, side: "left" },
-  "Спортска сала Парк": { x: 170, y: 272, side: "left" },
-};
-
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
   // a project with `heroOpening` gets the cinematic opening instead of the plain header
@@ -46,11 +36,6 @@ export default function DevelopmentPage() {
   const availablePct = Math.round((counts.available / counts.total) * 100);
   const reservedPct = Math.round((counts.reserved / counts.total) * 100);
   const soldPct = 100 - availablePct - reservedPct;
-
-  const mapPlaces = development.nearbyPoints.flatMap((point) => {
-    const spot = PLACE_SPOTS[point.name];
-    return spot ? [{ name: point.name, detail: point.distance, ...spot }] : [];
-  });
 
   return (
     // Оникс is the page's base; the building picker is its one light block.
@@ -167,11 +152,7 @@ export default function DevelopmentPage() {
             project={cityCenter}
             map={
               <div>
-                <LocationMap
-                  label="Мапа со локација на City Center"
-                  pinLabel={`${cityCenter.name} 1`}
-                  places={mapPlaces}
-                />
+                <GoogleMapPin lat={CITY_CENTER.lat} lng={CITY_CENTER.lng} label={`Мапа: ${cityCenter.name}`} />
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 text-sm">
                   <span className="text-muted">{development.mapQuery}</span>
                   <a
@@ -227,9 +208,7 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <div className="on-dark">
-        <OtherProjects currentProjectId="city-center" />
-      </div>
+      <OtherProjects currentProjectId="city-center" anthracite />
     </div>
   );
 }

@@ -38,7 +38,7 @@ export function ProjectSection({
   id?: string;
   label?: string;
   /** The surface of the section: cream, a slightly deeper cream, or Оникс (with the text in the accent colour). */
-  tone?: "light" | "tint" | "dark";
+  tone?: "light" | "tint" | "dark" | "anthracite";
   className?: string;
   children: ReactNode;
 }) {
@@ -46,7 +46,10 @@ export function ProjectSection({
     <section
       id={id}
       aria-label={label}
-      className={cn(tone === "dark" ? "on-dark" : "on-light", "border-t border-line")}
+      className={cn(
+        tone === "dark" ? "on-dark" : tone === "anthracite" ? "on-anthracite" : "on-light",
+        "border-t border-line"
+      )}
       style={tone === "tint" ? { backgroundColor: "var(--color-limestone)" } : undefined}
     >
       <div className={cn("mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10", className)}>{children}</div>
