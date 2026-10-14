@@ -598,17 +598,6 @@
   border-radius: 50%;
   background: var(--color-bronze);
 }
-.pj-chip.is-build i {
-  background: var(--color-copper);
-}
-/* a finished project: a green chip that says only «Завршено» (set by the owner) */
-.pj-chip.is-done {
-  background: var(--color-done);
-  color: var(--color-travertine);
-}
-.pj-chip.is-done i {
-  background: var(--color-travertine);
-}
 .pj-photo-city {
   position: absolute;
   bottom: 18px;
@@ -922,7 +911,7 @@
   color: var(--color-bronze);
 }
 .pj-row-meta .is-done {
-  color: var(--color-done);
+  color: var(--color-bronze);
 }
 .pj-row-meta .is-soon {
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);

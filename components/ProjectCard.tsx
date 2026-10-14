@@ -10,12 +10,12 @@ import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 import { unitsText } from "@/lib/plural";
 
-// Never color-code project phase — "completed" is distinguished by shape
-// (a bordered pill) rather than a hue that would break the 3-color palette.
+// Never color-code project phase: every status chip is the same colour, only its words differ.
+const CHIP_STYLE = "bg-accent text-chrome";
 const STATUS_STYLE: Record<Project["status"], string> = {
-  completed: "bg-done text-paper",
-  "under-construction": "bg-accent text-chrome",
-  upcoming: "bg-chrome text-on-chrome",
+  completed: CHIP_STYLE,
+  "under-construction": CHIP_STYLE,
+  upcoming: CHIP_STYLE,
 };
 
 export function ProjectCard({ project }: { project: Project }) {

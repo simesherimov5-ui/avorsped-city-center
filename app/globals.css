@@ -39,9 +39,6 @@
     var(--color-gold-glint) 60%,
     var(--color-button) 100%
   );
-  /* The «Завршено» chip of a finished project (set by the owner: green). */
-  --color-done: #2a7348;
-
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
   --color-paper: var(--color-travertine);
@@ -95,7 +92,6 @@
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
   --color-brass: var(--color-brass);
-  --color-done: var(--color-done);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
