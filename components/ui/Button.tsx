@@ -5,12 +5,11 @@ import type { MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 
-/** The inside of the filling primary button: the fill that slides in, the label, the circled arrow. */
+/** The inside of the primary button: the label and the circled arrow (the foil fill is the button's own ::before). */
 export function PrimaryFace({ children, arrow = true }: { children: ReactNode; arrow?: boolean }) {
   return (
     <>
-      <span aria-hidden className="btn-primary__fill" />
-      <span className="btn-primary__label">{children}</span>
+      <span>{children}</span>
       {arrow && (
         <span aria-hidden className="btn-primary__arrow">
           <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">

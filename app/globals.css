@@ -33,6 +33,20 @@
   --color-gold: #c4a454;
   --color-brass: var(--color-gold); /* the older name of the logo gold */
   --color-button: var(--color-copper);
+  /* Antique foil: the primary button (and the focus ring). An outline and text in --foil-line at rest; the metallic
+     sheen sweeps in on hover. */
+  --foil-dark: #7e6230;
+  --foil-mid: #b8944f;
+  --foil-light: #d2b477;
+  --foil-line: #c7a46b;
+  --foil-sheen: linear-gradient(
+    110deg,
+    var(--foil-dark) 0%,
+    var(--foil-mid) 35%,
+    var(--foil-light) 50%,
+    var(--foil-mid) 65%,
+    var(--foil-dark) 100%
+  );
   /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
      the wordmark and the building mark only. */
   --color-gold-shade: color-mix(in srgb, var(--color-gold) 62%, var(--color-onyx));
@@ -569,27 +583,24 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   outline-offset: 3px;
 }
 
-/* The primary button, "копче што се полни". At rest: an outline and a circled
-   arrow in the accent. On hover, keyboard focus and press the accent fills in
-   from the left and the text and arrow take the fill's text colour. Light
-   surfaces: Бронза fill, Травертин text. Dark surfaces (data-tone="dark"):
-   Светол бакар fill, Оникс text. Used by <Button> and by the form submit. */
+/* The primary button, "antique foil sheen". At rest: a 1px foil outline and foil text (and the circled arrow, which
+   follows the text colour). On hover and keyboard focus the metallic foil fill sweeps in from the left, the text turns
+   Оникс; on leave the fill sweeps out to the right. On a light surface (data-tone="light") it rests as an Оникс block
+   with light foil text, and fills the same way. Used by <Button> and by the form submit. */
 .btn-primary {
-  --btn-c: var(--color-button);
-  --btn-on: var(--color-onyx);
   position: relative;
-  isolation: isolate;
   overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 18px;
   min-height: 44px;
   padding: 22px 36px;
-  border: 1px solid var(--btn-c);
+  background: transparent;
+  border: 1px solid var(--foil-line);
   border-radius: 0;
-  background: none;
-  color: var(--btn-c);
+  color: var(--foil-line);
   font:
     600 13px/1.2 var(--font-sans),
     system-ui,
@@ -599,31 +610,30 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  outline: none;
+  transition:
+    color 0.5s cubic-bezier(0.7, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.7, 0, 0.2, 1);
 }
-.btn-primary[data-tone="dark"] {
-  --btn-c: var(--color-button);
-  --btn-on: var(--color-onyx);
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* the sheen is drawn twice the button's width and centred, so the label always sits on its brighter middle (Оникс
+     text stays above 4.5:1 there; the darkest foil at the ends of the gradient falls outside the button) */
+  background: var(--foil-sheen) center / 200% 100% no-repeat;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.btn-primary[data-tone="light"] {
+  background: var(--color-onyx);
+  border-color: var(--color-onyx);
+  color: var(--foil-light);
 }
 .btn-primary--sm {
   padding: 14px 22px;
   font-size: 12px;
-}
-.btn-primary__fill {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--btn-c);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
-}
-.btn-primary__label,
-.btn-primary__arrow {
-  position: relative;
-  transition:
-    color 0.5s ease 0.15s,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-primary__arrow {
   display: inline-flex;
@@ -635,44 +645,48 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   border: 1px solid currentColor;
   border-radius: 50%;
 }
-.btn-primary:focus-visible {
-  outline: 2px solid var(--btn-c);
-  outline-offset: 3px;
+/* Filled: hover (where there is a pointer), keyboard focus, and the --filled look at rest. */
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]),
+.btn-primary--filled:not(:disabled) {
+  color: var(--color-onyx);
+  border-color: var(--foil-mid);
 }
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"])::before,
+.btn-primary--filled:not(:disabled)::before {
   transform: scaleX(1);
+  transform-origin: left;
 }
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-  color: var(--btn-on);
-}
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-  transform: translateX(6px) rotate(-45deg);
-}
-/* Touch has no hover, so hover only counts where there is a pointer. */
 @media (hover: hover) {
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--color-onyx);
+    border-color: var(--foil-mid);
+  }
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"])::before {
     transform: scaleX(1);
-  }
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-    color: var(--btn-on);
-  }
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-    transform: translateX(6px) rotate(-45deg);
+    transform-origin: left;
   }
 }
-/* The filled look at rest: the fill is in and the text takes the fill's text colour. */
-.btn-primary--filled:not(:disabled) .btn-primary__fill {
-  transform: scaleX(1);
+/* Touch has no hover: a press shows the filled state, and it stays for at least 150ms after the finger lifts. */
+@media (hover: none) {
+  .btn-primary::before {
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1) 0.15s;
+  }
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--color-onyx);
+    border-color: var(--foil-mid);
+  }
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"])::before {
+    transform: scaleX(1);
+    transform-origin: left;
+    transition-delay: 0s;
+  }
 }
-.btn-primary--filled:not(:disabled) .btn-primary__label,
-.btn-primary--filled:not(:disabled) .btn-primary__arrow {
-  color: var(--btn-on);
+.btn-primary:active::before {
+  filter: brightness(0.92);
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--foil-light);
+  outline-offset: 3px;
 }
 .btn-primary:disabled,
 .btn-primary[aria-disabled="true"] {
@@ -695,16 +709,45 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     text-align: left;
   }
 }
+/* Reduced motion: no sweep; the fill fades in. */
 @media (prefers-reduced-motion: reduce) {
-  .btn-primary__fill,
-  .btn-primary__arrow {
-    transition: none;
-  }
-  .btn-primary__label {
-    transition: color 0.2s linear;
-  }
-  .btn-primary:is(:hover, :focus-visible, :active):not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+  .btn-primary::before {
     transform: none;
+    opacity: 0;
+    transition: opacity 0.2s linear;
+  }
+  .btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"])::before,
+  .btn-primary--filled:not(:disabled)::before,
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"])::before {
+    transform: none;
+    opacity: 1;
+  }
+  .btn-primary {
+    transition:
+      color 0.2s linear,
+      border-color 0.2s linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"])::before {
+    transform: none;
+    opacity: 1;
+  }
+}
+/* Over a photo (the project slideshow): Оникс at 45% under the button at rest, so the foil outline reads on the picture. */
+[aria-roledescription="slide"] .btn-primary {
+  background: color-mix(in srgb, var(--color-onyx) 45%, transparent);
+}
+/* Windows high contrast: the system colours take over; the fill is not drawn, so the text always reads. */
+@media (forced-colors: active) {
+  .btn-primary,
+  .btn-primary[data-tone="light"] {
+    border-color: ButtonText;
+    color: ButtonText;
+    background: ButtonFace;
+  }
+  .btn-primary::before {
+    display: none;
   }
 }
 
