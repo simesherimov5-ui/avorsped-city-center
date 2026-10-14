@@ -29,7 +29,7 @@ export function ClosingCta({
       </div>
       <div aria-hidden className="ab-cta-shade" />
       <div className="bk-wrap">
-        <RevealHeading as="h2" className="bk-serif">
+        <RevealHeading as="h2" className="bk-serif" duration={1.1} ease="power4.out" from={115}>
           {heading}
         </RevealHeading>
         <Reveal>

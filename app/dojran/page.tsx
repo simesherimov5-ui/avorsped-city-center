@@ -22,27 +22,25 @@ export default function DojranPage() {
   const project = projects.find((p) => p.id === "dojranski-raj")!;
 
   return (
-    <ZoomEnter>
-      <div className="on-dark pt-24 sm:pt-28">
-        <section className="container-x pb-16 pt-10">
-          <div>
-            <DojranFacade image={project.heroImage} />
-          </div>
+    <ZoomEnter className="pt-24 sm:pt-28">
+      <section className="container-x pb-16 pt-10">
+        <div>
+          <DojranFacade image={project.heroImage} />
+        </div>
 
-          <div className="mt-12">
-            <ProjectHeader
-              eyebrow={project.location}
-              name={project.name}
-              description={project.description}
-              facts={project.specifications}
-            >
-              <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
-                Закажи консултација
-              </Button>
-            </ProjectHeader>
-          </div>
-        </section>
-      </div>
+        <div className="mt-12">
+          <ProjectHeader
+            eyebrow={project.location}
+            name={project.name}
+            description={project.description}
+            facts={project.specifications}
+          >
+            <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
+              Закажи консултација
+            </Button>
+          </ProjectHeader>
+        </div>
+      </section>
 
       <FloorPickerSection
         floors={dojranFloors.map((f) => ({

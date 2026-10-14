@@ -28,7 +28,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                   tone="dark"
                   fit={project.imageFit ?? "cover"}
                   focus={project.imageFocus}
-                  className="h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                  className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105"
                   sizes={
                     project.imageFit === "contain"
                       ? "(max-width: 639px) 100vw, 600px"

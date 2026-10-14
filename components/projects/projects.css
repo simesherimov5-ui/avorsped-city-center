@@ -30,6 +30,7 @@
   position: relative;
   display: flex;
   overflow: hidden;
+  min-height: clamp(560px, 82dvh, 760px);
   background: var(--color-onyx);
   color: var(--color-travertine);
 }
@@ -74,7 +75,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 48px;
-  padding-top: 112px;
+  padding-top: 140px;
   padding-bottom: 56px;
 }
 .pj-hero-text {
@@ -92,12 +93,25 @@
     transform: none;
   }
 }
+/* The same gradient and timing as the footer's wordmark (the second and last place the sheen is used). */
 .pj-sheen {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
-  color: var(--color-copper);
+  background: linear-gradient(
+    110deg,
+    var(--color-bronze) 0%,
+    var(--color-brass) 38%,
+    var(--color-travertine) 50%,
+    var(--color-brass) 62%,
+    var(--color-bronze) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: footer-sheen 4.5s ease-in-out infinite;
 }
 .pj-h1 {
   margin: 0;
@@ -226,6 +240,9 @@
   }
 }
 @media (max-width: 767px) {
+  .pj-hero-inner {
+    padding-top: 120px;
+  }
   .pj-wrap {
     padding-inline: 20px;
   }
@@ -506,23 +523,8 @@
 }
 .pj-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 40px 24px;
-}
-@media (min-width: 768px) {
-  .pj-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .pj-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1200px) {
-  .pj-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 40px 28px;
 }
 @media (max-width: 767px) {
   .pj-results {
@@ -553,20 +555,20 @@
 }
 .pj-photo {
   position: relative;
-  aspect-ratio: 4 / 5;
+  height: 340px;
   overflow: hidden;
   background: var(--color-espresso);
 }
 .pj-img {
   position: absolute;
   inset: 0;
-  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .pj-card:hover .pj-img,
 .pj-card:focus-visible .pj-img,
 .pj-row:hover .pj-img,
 .pj-row:focus-visible .pj-img {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 .pj-photo-scrim {
   position: absolute;
@@ -652,6 +654,11 @@
   font-weight: 400;
   line-height: 1.65;
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
+}
+@media (max-width: 767px) {
+  .pj-photo {
+    height: 320px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .pj-card.is-rising,

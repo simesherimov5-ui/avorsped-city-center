@@ -5,7 +5,7 @@ import { companyInfo } from "@/data";
 export function Footer() {
   return (
     <footer className="border-t border-line bg-chrome text-on-chrome">
-      <div className="container-x grid items-start gap-12 py-16 lg:grid-cols-4 lg:gap-8 lg:py-20">
+      <div className="container-x section-y grid gap-12 lg:grid-cols-4 lg:gap-8">
         <div>
           <div className="leading-none">
             <div className="footer-sheen">Javor Sped</div>
@@ -57,23 +57,8 @@ export function Footer() {
           </ConsultationLink>
         </div>
       </div>
-      <div className="border-t border-on-chrome/10">
-        <div className="container-x flex flex-col gap-4 py-6 text-xs text-on-chrome/60 sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            © {new Date().getFullYear()} {companyInfo.name} Холдинг. Сите права се задржани.
-          </span>
-          <nav aria-label="Страници" className="flex flex-wrap gap-x-6">
-            <Link href="/projects" className="flex min-h-11 items-center hover:text-on-chrome sm:min-h-0">
-              Проекти
-            </Link>
-            <Link href="/about" className="flex min-h-11 items-center hover:text-on-chrome sm:min-h-0">
-              За нас
-            </Link>
-            <Link href="/contact" className="flex min-h-11 items-center hover:text-on-chrome sm:min-h-0">
-              Контакт
-            </Link>
-          </nav>
-        </div>
+      <div className="border-t border-on-chrome/10 px-5 sm:px-8 py-6 text-xs text-on-chrome/60 lg:px-10">
+        © {new Date().getFullYear()} {companyInfo.name} Холдинг. Сите права се задржани.
       </div>
     </footer>
   );

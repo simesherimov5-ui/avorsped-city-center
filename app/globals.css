@@ -150,22 +150,6 @@ h4 {
   line-height: 1.12;
 }
 
-/* Headings with no class of their own follow the same scale (the base layer, so any size utility or class still wins). */
-@layer base {
-  h1 {
-    font-size: var(--fs-h1);
-    line-height: 1.15;
-  }
-  h2 {
-    font-size: var(--fs-h2);
-    line-height: 1.2;
-  }
-  h3 {
-    font-size: var(--fs-h3);
-    line-height: 1.3;
-  }
-}
-
 /* The heading scale (one for the whole site, the tokens --fs-* above). Hero h1 30–52px · page h1 28–44px · section h2
    24–32px · h3 / card titles 18–20px · statement 19–22px · lead 17px · body 15px · small 13px. They are classes, not element
    rules, so a small heading inside a card can stay small. */
@@ -205,101 +189,6 @@ h4 {
   font-size: var(--fs-statement);
   font-weight: 400;
   line-height: 1.45;
-}
-
-/* One container and one section rhythm for the whole site: the navbar, every section and the footer share the same left
-   edge. Plain (unlayered) rules: put vertical padding on the section (.section-y), not next to them. */
-.container-x {
-  width: 100%;
-  max-width: 1200px;
-  margin-inline: auto;
-  padding-inline: 20px;
-}
-.section-y {
-  padding-block: 72px;
-}
-@media (min-width: 640px) {
-  .container-x {
-    padding-inline: 24px;
-  }
-}
-@media (min-width: 768px) {
-  .section-y {
-    padding-block: 112px;
-  }
-}
-
-/* A dark band on a page whose own surface is light: the light-surface tokens turn into their dark-surface partners inside
-   it (text Травертин, hairlines Травертин 12%, the accent Светол бакар, cards Еспресо), so a component written for light
-   needs no second version. */
-.on-dark {
-  --color-ink: var(--color-travertine);
-  --color-charcoal: var(--color-travertine);
-  --color-muted: color-mix(in srgb, var(--color-travertine) 64%, transparent);
-  --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
-  --color-gold-deep: var(--color-copper);
-  --color-gold-dark: var(--color-copper);
-  --color-cream: var(--color-espresso);
-  --color-warm-white: var(--color-espresso);
-  --color-silver: var(--color-espresso);
-  background-color: var(--color-onyx);
-  color: var(--color-travertine);
-}
-
-/* A text link: a faint line at rest, a 1px Светол бакар line grows along it on hover and focus (0.4s). */
-.link-grow {
-  padding-bottom: 4px;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-copper) 35%, transparent);
-  background: linear-gradient(var(--color-copper), var(--color-copper)) left bottom / 0% 1px no-repeat;
-  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.link-grow:hover,
-.link-grow:focus-visible {
-  background-size: 100% 1px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .link-grow {
-    transition: none;
-  }
-}
-
-/* The head of a section: eyebrow, then the h2 (12px below), then an optional lead (16px below, 520px at most), then 48px
-   of space before the content. A "see all" link (.sec-link) sits on the right of the h2, on the same baseline. */
-.sec-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 24px;
-  align-items: baseline;
-  margin-bottom: 48px;
-}
-.sec-head > .eyebrow,
-.sec-head > .sec-eyebrow {
-  grid-column: 1 / -1;
-}
-.sec-head > h2 {
-  grid-column: 1;
-  margin-top: 12px;
-}
-.sec-head > .sec-link {
-  grid-column: 2;
-  grid-row: 2;
-}
-.sec-head > .sec-lead {
-  grid-column: 1 / -1;
-  margin-top: 16px;
-  max-width: 520px;
-  font-size: var(--text-lead-size);
-  line-height: var(--text-lead-leading);
-}
-@media (max-width: 560px) {
-  .sec-head {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .sec-head > .sec-link {
-    grid-column: 1;
-    grid-row: auto;
-    margin-top: 16px;
-  }
 }
 
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
@@ -612,29 +501,15 @@ h4 {
     transform: translateY(var(--enter-distance, 24px));
   }
 }
-/* The reveal (components/motion/Reveal.tsx): armed by a script only for content that is below the fold. */
-[data-reveal] {
-  transition:
-    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
-}
-[data-reveal="armed"] {
-  opacity: 0;
-  transform: translateY(24px);
-}
-[data-reveal="in"] {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none;
-  }
-}
 .enter {
-  animation: enter-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+}
+@media (max-width: 767px) {
+  .enter {
+    --enter-distance: 12px;
+    --enter-stagger: 0;
+    animation-duration: 0.3s;
+  }
 }
 
 /* Phones. Unlayered, so these beat the Tailwind utilities they refine. */
@@ -721,12 +596,22 @@ body {
     font-size: 1rem;
     line-height: 1.6;
   }
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+  }
   /* Long Macedonian words never push a headline past the screen. */
   h1,
   h2,
   h3 {
     overflow-wrap: break-word;
     hyphens: auto;
+  }
+  h1 {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+  }
+  h2 {
+    font-size: clamp(1.625rem, 7.2vw, 2.25rem);
   }
 }
 
@@ -838,9 +723,20 @@ body {
 .hero-scrim {
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--color-onyx) 60%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 40%, transparent) 26%,
-    color-mix(in srgb, var(--color-onyx) 44%, transparent) 55%,
-    color-mix(in srgb, var(--color-onyx) 60%, transparent) 100%
+    color-mix(in srgb, var(--color-onyx) 44%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 58%, transparent) 10%,
+    color-mix(in srgb, var(--color-onyx) 50%, transparent) 22%,
+    color-mix(in srgb, var(--color-onyx) 30%, transparent) 32%,
+    color-mix(in srgb, var(--color-onyx) 10%, transparent) 42%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 20%, transparent) 80%,
+    color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
+  );
+}
+.hero-scrim-radial {
+  background: radial-gradient(
+    ellipse 70% 46% at 50% 14%,
+    color-mix(in srgb, var(--color-onyx) 30%, transparent),
+    transparent 72%
   );
 }

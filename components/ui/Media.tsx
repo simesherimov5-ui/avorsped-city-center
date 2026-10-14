@@ -107,6 +107,12 @@ export function Media({
         className
       )}
     >
+      {/* a lossless line drawing has no blurred copy behind it: it sits on its own light surface */}
+      {(out || contained) && !crisp && (
+        <div aria-hidden className="absolute inset-0 scale-[1.2] [filter:blur(40px)_brightness(0.55)]">
+          <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={75} />
+        </div>
+      )}
       {sizedPicture ? (
         <div className="absolute" style={picture}>
           <Image

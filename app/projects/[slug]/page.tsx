@@ -53,77 +53,75 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   ];
 
   return (
-    <div>
-      <div className="on-dark pt-24 sm:pt-28">
-        <div className="container-x pt-6">
-          <Link
-            href="/projects"
-            className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
-          >
-            <ChevronLeft className="h-4 w-4" /> Назад кон проектите
-          </Link>
-        </div>
-
-        {hasPhotos && (
-          <section className="container-x pb-12 pt-6">
-            <Reveal immediate>
-              {project.gallery.length > 0 ? (
-                <PhotoCarousel
-                  photos={project.gallery}
-                  className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
-                  sizes={
-                    project.imageFit === "contain"
-                      ? "(max-width: 896px) 100vw, 896px"
-                      : completed
-                        ? "(max-width: 896px) 100vw, 896px"
-                        : undefined
-                  }
-                  fit={project.imageFit}
-                  focus={project.imageFocus}
-                />
-              ) : (
-                <Media
-                  image={project.heroImage}
-                  focus={project.imageFocus}
-                  label={`${project.name} — насловна визуелизација`}
-                  className="aspect-[16/7]"
-                  sizes="100vw"
-                />
-              )}
-            </Reveal>
-            {project.photoCredit && (
-              <p className="mt-4 text-[12px] leading-relaxed text-muted">
-                {project.photoCredit.map((part, i) =>
-                  part.href ? (
-                    <a
-                      key={i}
-                      href={part.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-2 hover:text-charcoal"
-                    >
-                      {part.text}
-                    </a>
-                  ) : (
-                    <span key={i}>{part.text}</span>
-                  )
-                )}
-              </p>
-            )}
-          </section>
-        )}
-
-        <section className={`container-x pb-14 ${hasPhotos ? "" : "pt-10"}`}>
-          <Reveal immediate delay={0.08}>
-            <ProjectHeader
-              eyebrow={project.location}
-              name={project.name}
-              description={project.description}
-              facts={facts}
-            />
-          </Reveal>
-        </section>
+    <div className="pt-24 sm:pt-28">
+      <div className="container-x pt-6">
+        <Link
+          href="/projects"
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
+        >
+          <ChevronLeft className="h-4 w-4" /> Назад кон проектите
+        </Link>
       </div>
+
+      {hasPhotos && (
+        <section className="container-x pb-12 pt-6">
+          <Reveal immediate>
+            {project.gallery.length > 0 ? (
+              <PhotoCarousel
+                photos={project.gallery}
+                className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
+                sizes={
+                  project.imageFit === "contain"
+                    ? "(max-width: 896px) 100vw, 896px"
+                    : completed
+                      ? "(max-width: 896px) 100vw, 896px"
+                      : undefined
+                }
+                fit={project.imageFit}
+                focus={project.imageFocus}
+              />
+            ) : (
+              <Media
+                image={project.heroImage}
+                focus={project.imageFocus}
+                label={`${project.name} — насловна визуелизација`}
+                className="aspect-[16/7]"
+                sizes="100vw"
+              />
+            )}
+          </Reveal>
+          {project.photoCredit && (
+            <p className="mt-4 text-[12px] leading-relaxed text-muted">
+              {project.photoCredit.map((part, i) =>
+                part.href ? (
+                  <a
+                    key={i}
+                    href={part.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-charcoal"
+                  >
+                    {part.text}
+                  </a>
+                ) : (
+                  <span key={i}>{part.text}</span>
+                )
+              )}
+            </p>
+          )}
+        </section>
+      )}
+
+      <section className={`container-x pb-14 ${hasPhotos ? "" : "pt-10"}`}>
+        <Reveal immediate delay={0.08}>
+          <ProjectHeader
+            eyebrow={project.location}
+            name={project.name}
+            description={project.description}
+            facts={facts}
+          />
+        </Reveal>
+      </section>
 
       {(project.roomTour || project.floorPlanExplorer) && <OneVideoAtATime />}
 
@@ -170,7 +168,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       )}
 
       {!completed && (
-        <section className="on-dark border-t border-line">
+        <section className="border-t border-line">
           <div className="container-x section-y">
             <ConstructionProgress project={project} always />
           </div>

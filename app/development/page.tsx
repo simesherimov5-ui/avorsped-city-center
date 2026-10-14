@@ -51,69 +51,67 @@ export default function DevelopmentPage() {
   const soldPct = 100 - availablePct - reservedPct;
 
   return (
-    <div>
-      <div className="on-dark pt-24 sm:pt-28">
-        {/* Header — title, editorial lead paragraph, numbers as design elements */}
-        <section className="container-x pb-12 pt-10">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
-            <Reveal immediate>
-              <div className="eyebrow text-gold-deep">{development.location}</div>
-              <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
-                {development.name}
-              </h1>
-            </Reveal>
-            <Reveal immediate delay={0.08}>
-              <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
-            </Reveal>
-          </div>
+    <div className="pt-24 sm:pt-28">
+      {/* Header — title, editorial lead paragraph, numbers as design elements */}
+      <section className="container-x pb-12 pt-10">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+          <Reveal immediate>
+            <div className="eyebrow text-gold-deep">{development.location}</div>
+            <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
+              {development.name}
+            </h1>
+          </Reveal>
+          <Reveal immediate delay={0.08}>
+            <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
+          </Reveal>
+        </div>
 
-          <Reveal immediate delay={0.16}>
-            <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
-              <Stat label="Згради" value="6" />
-              <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
-              <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
-              <Stat label="Завршување" value={development.expectedCompletion} className="sm:pl-8" />
+        <Reveal immediate delay={0.16}>
+          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-4 sm:divide-x sm:divide-line">
+            <Stat label="Згради" value="6" />
+            <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
+            <Stat label="Достапни" value={String(counts.available)} className="sm:pl-8" />
+            <Stat label="Завршување" value={development.expectedCompletion} className="sm:pl-8" />
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Availability — real-time breakdown across all six buildings */}
+      <section className="container-x section-y">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <Reveal>
+            <div>
+              <div className="eyebrow text-gold-deep">Достапност</div>
+              <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2] mt-3">
+                {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
+                {availableWord(counts.available)}
+              </h2>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+                Статусот на секој стан во сите шест згради се ажурира во реално време.
+              </p>
+              <div className="mt-8">
+                <Button href="/apartments" variant="primary">
+                  Пронајди го твојот стан
+                </Button>
+              </div>
             </div>
           </Reveal>
-        </section>
-
-        {/* Availability — real-time breakdown across all six buildings */}
-        <section className="container-x section-y border-t border-line">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <Reveal>
-              <div>
-                <div className="eyebrow text-gold-deep">Достапност</div>
-                <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2] mt-3">
-                  {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
-                  {availableWord(counts.available)}
-                </h2>
-                <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
-                  Статусот на секој стан во сите шест згради се ажурира во реално време.
-                </p>
-                <div className="mt-8">
-                  <Button href="/apartments" variant="primary">
-                    Пронајди го твојот стан
-                  </Button>
-                </div>
+          <Reveal delay={0.1}>
+            <div>
+              <div className="flex h-1.5 w-full overflow-hidden bg-line">
+                <div style={{ width: `${availablePct}%` }} className={DOT_COLOR.available} />
+                <div style={{ width: `${reservedPct}%` }} className={DOT_COLOR.reserved} />
+                <div style={{ width: `${soldPct}%` }} className={DOT_COLOR.sold} />
               </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div>
-                <div className="flex h-1.5 w-full overflow-hidden bg-line">
-                  <div style={{ width: `${availablePct}%` }} className={DOT_COLOR.available} />
-                  <div style={{ width: `${reservedPct}%` }} className={DOT_COLOR.reserved} />
-                  <div style={{ width: `${soldPct}%` }} className={DOT_COLOR.sold} />
-                </div>
-                <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
-                  <MeterLabel status="available" label="Достапни" value={counts.available} />
-                  <MeterLabel status="reserved" label="Резервирани" value={counts.reserved} />
-                  <MeterLabel status="sold" label="Продадени" value={counts.sold} />
-                </div>
+              <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+                <MeterLabel status="available" label="Достапни" value={counts.available} />
+                <MeterLabel status="reserved" label="Резервирани" value={counts.reserved} />
+                <MeterLabel status="sold" label="Продадени" value={counts.sold} />
               </div>
-            </Reveal>
-          </div>
-        </section>
-      </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Location */}
       <section className="container-x section-y">
@@ -172,7 +170,7 @@ export default function DevelopmentPage() {
 
       {/* Construction progress */}
       {cityCenter && (
-        <section className="section-y bg-cream">
+        <section className="bg-cream py-12 sm:py-16">
           <div className="container-x">
             <ConstructionProgress project={cityCenter} always />
           </div>
@@ -180,7 +178,7 @@ export default function DevelopmentPage() {
       )}
 
       {/* Masterplan — six buildings around a shared courtyard */}
-      <section className="section-y bg-cream">
+      <section className="bg-cream py-12 sm:py-16">
         <div className="container-x">
           <Reveal>
             <SectionHeading
@@ -206,17 +204,15 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <section className="section-y bg-chrome text-center text-on-chrome">
-        <div className="container-x">
-          <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Не сте сигурни која зграда?</h2>
-          <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
-            Филтрирајте секој стан од сите шест згради по големина и достапност.
-          </p>
-          <div className="mt-8">
-            <Button href="/apartments" variant="primary" tone="dark">
-              Пронајди го твојот стан
-            </Button>
-          </div>
+      <section className="bg-chrome py-12 sm:py-16 text-center text-on-chrome">
+        <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Не сте сигурни која зграда?</h2>
+        <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
+          Филтрирајте секој стан од сите шест згради по големина и достапност.
+        </p>
+        <div className="mt-8">
+          <Button href="/apartments" variant="primary" tone="dark">
+            Пронајди го твојот стан
+          </Button>
         </div>
       </section>
 
@@ -228,7 +224,7 @@ export default function DevelopmentPage() {
 function Stat({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
     <div className={className}>
-      <div className="font-display text-(length:--fs-h1) text-gold-deep">
+      <div className="font-display text-3xl text-gold-deep sm:text-4xl">
         <CountUp value={value} />
       </div>
       <div className="eyebrow eyebrow-tight mt-2 text-muted">{label}</div>

@@ -40,23 +40,25 @@ export default function HomePage() {
       <NewProjects projects={projects.filter((p) => p.status !== "completed")} />
 
       {/* 5. The numbers */}
-      <section className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="container-x">
+      <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
+        <div className="container-x section-y">
           <ScrollReveal>
-            <div className="sec-head">
-              <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
-              <h2 className="t-h2">
-                Изградени <em className="italic text-accent">на доверба.</em>
-              </h2>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
+                <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
+                  Изградени <em className="italic text-accent">на доверба.</em>
+                </h2>
+              </div>
               <Link
                 href="/about"
-                className="sec-link focus-ring inline-flex min-h-11 items-center link-grow text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+                className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
               >
                 Нашата приказна
               </Link>
             </div>
           </ScrollReveal>
-          <div>
+          <div className="mt-12">
             <Numbers founded={companyInfo.founded} figures={FIGURES} />
           </div>
         </div>
@@ -69,13 +71,13 @@ export default function HomePage() {
       <Soon />
 
       {/* A line the company stands behind, on the dark */}
-      <section className="section-y border-t border-on-chrome/10 bg-chrome text-on-chrome">
+      <section className="bg-chrome py-20 text-on-chrome sm:py-28">
         <div className="container-x">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
             <Link
               href="/about"
-              className="focus-ring mt-10 inline-flex min-h-11 items-center link-grow text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              className="focus-ring mt-10 inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
             >
               За нас
             </Link>

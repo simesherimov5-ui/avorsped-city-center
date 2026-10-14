@@ -12,6 +12,10 @@ import type { Project } from "@/types";
 const DEFAULT_AUTOPLAY_MS = 4000;
 const FADE_S = 1.2;
 
+// A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
+// as wide as its frame is tall.
+const slideSizes = (project: Project) =>
+  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 640px" : "(max-width: 767px) 160vw, 100vw";
 const SWIPE_PX = 50;
 
 const subscribeVisibility = (onChange: () => void) => {
@@ -24,7 +28,7 @@ const subscribeVisibility = (onChange: () => void) => {
  * animation ends the slide, so pausing (the mouse over the slider, keyboard focus, a hidden tab) freezes both. Any
  * arrow, dash, swipe or key restarts the timer, so the slide the visitor chose gets a full interval before the show
  * moves on. Slides crossfade over 1.2s while the new photo
- * settles from 1.04 to 1. Reduced motion: no
+ * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
  * autoplay, no zoom, no text animation.
  */
 export function ProjectSlideshow({
@@ -101,50 +105,53 @@ export function ProjectSlideshow({
       onPointerLeave={() => setHovered(false)}
       onFocus={(e) => setFocused(e.target.matches(":focus-visible"))}
       onBlur={() => setFocused(false)}
-      className="container-x focus-ring touch-pan-y"
+      className="focus-ring relative h-[clamp(400px,60dvh,520px)] w-full touch-pan-y overflow-hidden bg-ink md:h-[clamp(480px,72dvh,780px)]"
     >
-      {/* One clean 16:9 photo; the status, name, place and button sit bottom-left on a scrim that only covers the lower part. */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-espresso sm:aspect-[16/9]">
-        <AnimatePresence initial={false}>
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={project.id}
+          aria-roledescription="slide"
+          aria-label={`${index + 1} / ${projects.length}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          // The outgoing slide stays fully visible underneath until the new one has faded in over it.
+          exit={{ opacity: 1, transition: { duration: reduceMotion ? 0 : FADE_S } }}
+          transition={{ duration: reduceMotion ? 0 : FADE_S, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
           <motion.div
-            key={project.id}
-            aria-roledescription="slide"
-            aria-label={`${index + 1} / ${projects.length}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            // The outgoing slide stays fully visible underneath until the new one has faded in over it.
-            exit={{ opacity: 1, transition: { duration: reduceMotion ? 0 : FADE_S } }}
-            transition={{ duration: reduceMotion ? 0 : FADE_S, ease: "easeInOut" }}
             className="absolute inset-0"
+            initial={{ scale: reduceMotion ? 1 : 1.08 }}
+            animate={{ scale: reduceMotion ? 1 : [1.08, 1, 1.05] }}
+            transition={{
+              duration: FADE_S + autoplayMs / 1000,
+              times: [0, FADE_S / (FADE_S + autoplayMs / 1000), 1],
+              ease: ["easeOut", "linear"],
+            }}
           >
-            <motion.div
-              className="absolute inset-0"
-              initial={{ scale: reduceMotion ? 1 : 1.04 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: reduceMotion ? 0 : FADE_S, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Media
-                image={project.heroImage}
-                tone="dark"
-                fit="cover"
-                focus={project.imageFocus}
-                className="h-full w-full !bg-transparent"
-                sizes="(max-width: 1200px) 100vw, 1152px"
-                priority={index === 0}
-              />
-            </motion.div>
-            <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-chrome/85 via-chrome/40 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-6 text-on-chrome sm:p-10">
+            <Media
+              image={project.heroImage}
+              tone="dark"
+              fit={project.imageFit ?? "cover"}
+              focus={project.imageFocus}
+              className="h-full w-full !bg-transparent"
+              sizes={slideSizes(project)}
+              priority={index === 0}
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/55 to-chrome/20" />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="container-x pb-14 text-on-chrome sm:pb-16">
               <motion.span {...textIn(0)} className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
                 {statusText}
               </motion.span>
               <Heading {...textIn(1)} className="mt-3 font-display text-(length:--fs-h3) font-normal leading-[1.3]">
                 {project.name}
               </Heading>
-              <motion.div {...textIn(2)} className="mt-1 text-sm text-on-chrome/90">
+              <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
                 {project.location}
               </motion.div>
-              <motion.div {...textIn(3)} className="mt-5">
+              <motion.div {...textIn(3)} className="mt-4 sm:mt-5">
                 <Button
                   href={project.href ?? `/projects/${project.slug}`}
                   variant="primary"
@@ -155,75 +162,73 @@ export function ProjectSlideshow({
                 </Button>
               </motion.div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-        {/* Preloads the next photo so the crossfade never waits on the network. */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
-          <Media
-            image={next.heroImage}
-            fit="cover"
-            focus={next.imageFocus}
-            className="h-full w-full"
-            sizes="(max-width: 1200px) 100vw, 1152px"
-            priority
-          />
-        </div>
+      {/* Preloads the next photo so the crossfade never waits on the network. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
+        <Media
+          image={next.heroImage}
+          fit={next.imageFit ?? "cover"}
+          focus={next.imageFocus}
+          className="h-full w-full"
+          sizes={slideSizes(next)}
+          priority
+        />
       </div>
 
-      {/* The controls sit under the photo: the arrows on the container's two edges, the dashes between them. */}
-      <div className="mt-4 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          aria-label="Претходен проект"
-          className="focus-ring flex h-11 w-11 items-center justify-center border border-on-chrome/30 text-on-chrome transition-colors hover:border-accent hover:text-accent"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex justify-center">
-          {projects.map((p, i) => {
-            const active = i === index;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => {
-                  setRestart((n) => n + 1);
-                  setIndex(i);
-                }}
-                aria-label={p.name}
-                aria-current={active}
-                className="focus-ring group flex h-11 w-12 items-center justify-center"
-              >
-                <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
-                  {active &&
-                    (reduceMotion ? (
-                      <span className="absolute inset-0 bg-accent" />
-                    ) : (
-                      <span
-                        key={`${index}-${restart}`}
-                        className="slide-progress absolute inset-0 bg-accent"
-                        style={{
-                          animationDuration: `${autoplayMs}ms`,
-                          animationPlayState: paused ? "paused" : "running",
-                        }}
-                        onAnimationEnd={() => go(1, false)}
-                      />
-                    ))}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <button
-          type="button"
-          onClick={() => go(1)}
-          aria-label="Следен проект"
-          className="focus-ring flex h-11 w-11 items-center justify-center border border-on-chrome/30 text-on-chrome transition-colors hover:border-accent hover:text-accent"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
+      <button
+        type="button"
+        onClick={() => go(-1)}
+        aria-label="Претходен проект"
+        className="focus-ring absolute bottom-0 left-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:left-4 sm:top-1/2 sm:-translate-y-1/2"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        onClick={() => go(1)}
+        aria-label="Следен проект"
+        className="focus-ring absolute bottom-0 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:right-4 sm:top-1/2 sm:-translate-y-1/2"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+
+      <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center">
+        {projects.map((p, i) => {
+          const active = i === index;
+          return (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => {
+                setRestart((n) => n + 1);
+                setIndex(i);
+              }}
+              aria-label={p.name}
+              aria-current={active}
+              className="focus-ring group flex h-11 w-12 items-center justify-center"
+            >
+              <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
+                {active &&
+                  (reduceMotion ? (
+                    <span className="absolute inset-0 bg-gold" />
+                  ) : (
+                    <span
+                      key={`${index}-${restart}`}
+                      className="slide-progress absolute inset-0 bg-gold"
+                      style={{
+                        animationDuration: `${autoplayMs}ms`,
+                        animationPlayState: paused ? "paused" : "running",
+                      }}
+                      onAnimationEnd={() => go(1, false)}
+                    />
+                  ))}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </section>
   );
