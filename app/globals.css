@@ -17,13 +17,17 @@
    * Never Светол бакар as text on light (1.7:1), never Бронза as text on dark (2.7:1).
    */
   --color-onyx: #14110f;
-  --color-espresso: #221c17;
-  --color-travertine: #f2e9da;
-  --color-limestone: #e5d8c3;
+  --color-espresso: #1e1915;
+  --color-travertine: #f4efe7;
+  --color-limestone: color-mix(
+    in srgb,
+    var(--color-onyx) 10%,
+    var(--color-travertine)
+  ); /* retired as a surface; only a hairline tone is left */
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
   --color-bronze: #6d533e;
-  --color-copper: #c4a454;
+  --color-copper: #ddb28e;
   /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
   --color-brass: #c4a454;
   /* The filling button on dark surfaces (set by the owner, to try). */
@@ -44,7 +48,7 @@
   --color-paper: var(--color-travertine);
   --color-ink: var(--color-onyx);
   --color-gold: var(--color-copper);
-  --color-gold-deep: var(--color-brass); /* the accent as text on light: the logo gold (set by the owner) */
+  --color-gold-deep: var(--color-bronze); /* the accent as text on light: Бронза */
   --color-gold-dark: var(--color-bronze);
   --color-gold-light: var(--color-travertine); /* highlights on dark */
   /* Hairlines: Оникс at 12% on light, Травертин at 12% on dark. */
@@ -315,7 +319,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   --color-charcoal: var(--color-onyx);
   --color-muted: color-mix(in srgb, var(--color-onyx) 68%, transparent);
   --color-line: color-mix(in srgb, var(--color-onyx) 12%, transparent);
-  --color-gold-deep: var(--color-brass);
+  --color-gold-deep: var(--color-bronze);
   --color-gold-dark: var(--color-bronze);
   --color-cream: var(--color-sand);
   --color-warm-white: var(--color-sand);
