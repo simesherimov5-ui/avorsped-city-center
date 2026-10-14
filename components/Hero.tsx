@@ -160,7 +160,7 @@ export function Hero() {
 
       {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
-        <div className="container-x flex flex-col items-center gap-3 py-4 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
           <span className="text-[12px] font-medium uppercase tracking-[0.24em] text-paper sm:text-[13px]">
             Струмица, Северна Македонија
           </span>

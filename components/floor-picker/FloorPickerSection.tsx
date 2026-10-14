@@ -8,7 +8,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 export function FloorPickerSection({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   return (
     <section className="bg-chrome py-12 text-on-chrome sm:py-16">
-      <div className="container-x">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <SectionHeading eyebrow="Станови" title="Изберете кат" align="center" tone="dark" size="compact" />
         <div className="mt-10">
           <FloorPicker floors={floors} basePath={basePath} />

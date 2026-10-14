@@ -53,7 +53,7 @@ export default function DevelopmentPage() {
   return (
     <div className="pt-24 sm:pt-28">
       {/* Header — title, editorial lead paragraph, numbers as design elements */}
-      <section className="container-x pb-12 pt-10">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 pb-12 pt-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <Reveal immediate>
             <div className="eyebrow text-gold-deep">{development.location}</div>
@@ -77,7 +77,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Availability — real-time breakdown across all six buildings */}
-      <section className="container-x section-y">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-16 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <Reveal>
             <div>
@@ -114,7 +114,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* Location */}
-      <section className="container-x section-y">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-12 sm:py-16 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-2">
           <Reveal>
             <div>
@@ -171,7 +171,7 @@ export default function DevelopmentPage() {
       {/* Construction progress */}
       {cityCenter && (
         <section className="bg-cream py-12 sm:py-16">
-          <div className="container-x">
+          <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
             <ConstructionProgress project={cityCenter} always />
           </div>
         </section>
@@ -179,7 +179,7 @@ export default function DevelopmentPage() {
 
       {/* Masterplan — six buildings around a shared courtyard */}
       <section className="bg-cream py-12 sm:py-16">
-        <div className="container-x">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <Reveal>
             <SectionHeading
               eyebrow="Ситуационен план"

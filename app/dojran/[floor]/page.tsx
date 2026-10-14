@@ -36,7 +36,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
 
   return (
     <ZoomEnter className="pt-24 sm:pt-28">
-      <div className="container-x pt-6">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <ZoomNavLink
           href="/dojran"
           label="Дојрански Рај"
@@ -46,7 +46,7 @@ export default async function DojranFloorPage({ params }: { params: Promise<{ fl
         </ZoomNavLink>
       </div>
 
-      <section className="container-x section-y">
+      <section className="mx-auto max-w-6xl px-5 sm:px-8 py-8 lg:px-10">
         <SectionHeading
           as="h1"
           eyebrow="Дојрански Рај"

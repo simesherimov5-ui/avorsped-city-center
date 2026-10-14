@@ -12,13 +12,13 @@ export function OtherProjects({ currentProjectId }: { currentProjectId: string }
 
   return (
     <section className="bg-chrome py-16 sm:py-24">
-      <div className="container-x">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
           <SectionHeading eyebrow="Продолжете да истражувате" title="Другите наши проекти" tone="dark" />
         </Reveal>
       </div>
       <Reveal delay={0.1}>
-        <div className="container-x mt-12">
+        <div className="mx-auto mt-12 max-w-7xl px-5 sm:px-8 lg:px-10">
           <ProjectShowcase projects={others} />
         </div>
       </Reveal>

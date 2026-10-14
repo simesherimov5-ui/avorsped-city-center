@@ -9,7 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 export function Film({ still, src }: { still: { src: string; alt: string }; src?: string }) {
   return (
     <section id="film" className="bg-chrome text-on-chrome">
-      <div className="container-x section-y">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>

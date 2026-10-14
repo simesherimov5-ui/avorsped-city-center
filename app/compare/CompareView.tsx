@@ -54,7 +54,7 @@ export function CompareView() {
 
   return (
     <div className="pt-24 sm:pt-28">
-      <section className="container-x section-y">
+      <section className="mx-auto max-w-5xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading as="h1" eyebrow="Споредба" title="Спореди станови" />
 
         {selected.length === 0 ? (

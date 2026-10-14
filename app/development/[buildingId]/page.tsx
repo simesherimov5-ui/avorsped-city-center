@@ -48,7 +48,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
 
   return (
     <ZoomEnter className="pt-24 sm:pt-28">
-      <div className="container-x pt-6">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/development"
           className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
@@ -57,7 +57,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         </Link>
       </div>
 
-      <section className="container-x section-y">
+      <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <Media
             image={building.exteriorImage}
@@ -81,7 +81,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
       </section>
 
       <section className="bg-chrome py-16 text-on-chrome sm:py-20">
-        <div className="container-x">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" tone="dark" />
           <div className="mt-10">
             <FloorPicker

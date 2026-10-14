@@ -49,9 +49,9 @@ export function CompareBar() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-warm-white/95 backdrop-blur py-3"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-warm-white/95 backdrop-blur px-4 py-3 sm:px-8"
       >
-        <div className="container-x flex flex-wrap items-center justify-between gap-3">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
             <span className="eyebrow shrink-0 text-muted">Споредба ({ids.length}/3)</span>
             {ids.map((id) => {

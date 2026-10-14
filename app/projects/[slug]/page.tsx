@@ -54,7 +54,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="pt-24 sm:pt-28">
-      <div className="container-x pt-6">
+      <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
         <Link
           href="/projects"
           className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
@@ -64,7 +64,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </div>
 
       {hasPhotos && (
-        <section className="container-x pb-12 pt-6">
+        <section className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8 lg:px-10">
           <Reveal immediate>
             {project.gallery.length > 0 ? (
               <PhotoCarousel
@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      <section className={`container-x pb-14 ${hasPhotos ? "" : "pt-10"}`}>
+      <section className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}>
         <Reveal immediate delay={0.08}>
           <ProjectHeader
             eyebrow={project.location}
@@ -169,7 +169,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {!completed && (
         <section className="border-t border-line">
-          <div className="container-x section-y">
+          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
             <ConstructionProgress project={project} always />
           </div>
         </section>
@@ -190,7 +190,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 function Band({ title, note, children }: { title: string; note?: string; children: ReactNode }) {
   return (
     <section className="border-t border-line">
-      <div className="container-x section-y">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 lg:px-10">
         <Reveal>
           <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.15]">{title}</h2>
           {note && <p className="mt-2 max-w-md text-sm text-muted">{note}</p>}
