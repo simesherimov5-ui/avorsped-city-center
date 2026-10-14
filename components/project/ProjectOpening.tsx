@@ -132,7 +132,7 @@ export function ProjectOpening({
               textShadow:
                 "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent), 0 4px 24px color-mix(in srgb, var(--color-onyx) 50%, transparent)",
             }}
-            className="opening-rise absolute left-[5%] top-[calc(var(--nav-h)+64px)] m-0 max-w-[min(780px,90%)] text-[clamp(20px,2.3vw,32px)] leading-[1.5] text-paper"
+            className="opening-rise absolute left-[5%] top-[calc(var(--nav-h)+56px)] m-0 max-w-[min(760px,90%)] text-[clamp(16px,1.7vw,26px)] leading-[1.45] text-paper"
           >
             {lead && <span className="font-light">{lead}</span>}
             <span className="font-display italic">{rest}</span>
