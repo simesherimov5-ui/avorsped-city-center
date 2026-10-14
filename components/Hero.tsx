@@ -165,7 +165,7 @@ export function Hero() {
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-accent sm:text-[12px]">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
               — Javor Sped Holding
             </span>
             <span className="text-[14px] font-normal leading-[1.5] text-paper sm:text-[15px]">

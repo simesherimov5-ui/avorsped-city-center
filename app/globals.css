@@ -18,17 +18,18 @@
    */
   --color-onyx: #14110f;
   --color-espresso: #221c17;
-  --color-travertine: #f4efe7;
+  --color-travertine: #f2e9da;
   --color-limestone: #e5d8c3;
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
   --color-bronze: #6d533e;
-  --color-copper: #ddb28e;
-  /* The logo's own gold, the one gold kept on purpose: the building mark, the JAVOR SPED wordmark and the intro screen
-     draw with it. Nothing else on the site uses it; every other accent is Светол бакар or Бронза. */
+  --color-copper: #c4a454;
+  /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
   --color-brass: #c4a454;
+  /* The filling button on dark surfaces (set by the owner, to try). */
   --color-button: #c9a45c;
-  /* The logo's metallic gold: --color-button with a darker shade and a lighter glint (logo and intro only). */
+  /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
+     the wordmark and the building mark only. */
   --color-gold-shade: #8e7240;
   --color-gold-glint: #e6cf9a;
   --gold-sheen: linear-gradient(
@@ -43,7 +44,7 @@
   --color-paper: var(--color-travertine);
   --color-ink: var(--color-onyx);
   --color-gold: var(--color-copper);
-  --color-gold-deep: var(--color-bronze); /* the accent as text on light: Бронза */
+  --color-gold-deep: var(--color-brass); /* the accent as text on light: the logo gold (set by the owner) */
   --color-gold-dark: var(--color-bronze);
   --color-gold-light: var(--color-travertine); /* highlights on dark */
   /* Hairlines: Оникс at 12% on light, Травертин at 12% on dark. */
