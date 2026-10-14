@@ -150,6 +150,22 @@ h4 {
   line-height: 1.12;
 }
 
+/* Headings with no class of their own follow the same scale (the base layer, so any size utility or class still wins). */
+@layer base {
+  h1 {
+    font-size: var(--fs-h1);
+    line-height: 1.15;
+  }
+  h2 {
+    font-size: var(--fs-h2);
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: var(--fs-h3);
+    line-height: 1.3;
+  }
+}
+
 /* The heading scale (one for the whole site, the tokens --fs-* above). Hero h1 30–52px · page h1 28–44px · section h2
    24–32px · h3 / card titles 18–20px · statement 19–22px · lead 17px · body 15px · small 13px. They are classes, not element
    rules, so a small heading inside a card can stay small. */
@@ -211,6 +227,23 @@ h4 {
   .section-y {
     padding-block: 112px;
   }
+}
+
+/* A dark band on a page whose own surface is light: the light-surface tokens turn into their dark-surface partners inside
+   it (text Травертин, hairlines Травертин 12%, the accent Светол бакар, cards Еспресо), so a component written for light
+   needs no second version. */
+.on-dark {
+  --color-ink: var(--color-travertine);
+  --color-charcoal: var(--color-travertine);
+  --color-muted: color-mix(in srgb, var(--color-travertine) 64%, transparent);
+  --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --color-gold-deep: var(--color-copper);
+  --color-gold-dark: var(--color-copper);
+  --color-cream: var(--color-espresso);
+  --color-warm-white: var(--color-espresso);
+  --color-silver: var(--color-espresso);
+  background-color: var(--color-onyx);
+  color: var(--color-travertine);
 }
 
 /* A text link: a faint line at rest, a 1px Светол бакар line grows along it on hover and focus (0.4s). */
@@ -688,22 +721,12 @@ body {
     font-size: 1rem;
     line-height: 1.6;
   }
-  .eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-  }
   /* Long Macedonian words never push a headline past the screen. */
   h1,
   h2,
   h3 {
     overflow-wrap: break-word;
     hyphens: auto;
-  }
-  h1 {
-    font-size: clamp(2rem, 9vw, 2.75rem);
-  }
-  h2 {
-    font-size: clamp(1.625rem, 7.2vw, 2.25rem);
   }
 }
 
@@ -816,8 +839,8 @@ body {
   background: linear-gradient(
     to bottom,
     color-mix(in srgb, var(--color-onyx) 60%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 34%, transparent) 26%,
-    color-mix(in srgb, var(--color-onyx) 30%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 40%, transparent) 26%,
+    color-mix(in srgb, var(--color-onyx) 44%, transparent) 55%,
     color-mix(in srgb, var(--color-onyx) 60%, transparent) 100%
   );
 }

@@ -135,7 +135,7 @@ export function Hero() {
         </p>
         <div
           ref={actionsRef}
-          className="mt-8 flex flex-wrap items-center justify-center gap-4"
+          className="mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4"
           style={{ textShadow: "none" }}
         >
           <Button href="/contact" variant="primary" tone="dark">
