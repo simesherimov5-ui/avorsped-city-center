@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 /** "Наскоро": a band that tells visitors something new is coming and sends them to the form to leave their details. */
 export function Soon() {
   return (
-    <section className="bg-espresso text-on-chrome">
+    <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-10 px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
         <Reveal>
           <div className="max-w-2xl">
