@@ -113,7 +113,7 @@ export function ProjectOpening({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 45%, transparent) 0%, transparent 20%, transparent 42%, color-mix(in srgb, var(--color-onyx) 92%, transparent) 64%, var(--color-onyx) 80%)",
+            "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 45%, transparent) 0%, transparent 22%, transparent 60%, color-mix(in srgb, var(--color-onyx) 38%, transparent) 100%)",
         }}
       />
 
@@ -124,7 +124,13 @@ export function ProjectOpening({
         {t("opening.back")}
       </Link>
 
-      <div className="opening-rise absolute inset-x-0 bottom-5 flex flex-col items-center gap-[14px] px-[5%] text-center md:bottom-8">
+      <div
+        style={{
+          textShadow:
+            "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent), 0 4px 24px color-mix(in srgb, var(--color-onyx) 50%, transparent)",
+        }}
+        className="opening-rise absolute inset-x-0 bottom-5 flex flex-col items-center gap-[14px] px-[5%] text-center md:bottom-8"
+      >
         <div className="eyebrow uppercase text-accent" style={{ letterSpacing: "0.5em" }}>
           {eyebrow}
         </div>

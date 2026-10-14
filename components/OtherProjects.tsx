@@ -8,17 +8,17 @@ import { projects } from "@/data";
 // instead of ending at a dead end, without ever repeating the current one.
 export function OtherProjects({
   currentProjectId,
-  anthracite = false,
+  light = false,
 }: {
   currentProjectId: string;
-  /** Anthracite ground with whitish text instead of Оникс. */
-  anthracite?: boolean;
+  /** The cream ground with dark text instead of Оникс. */
+  light?: boolean;
 }) {
   const others = projects.filter((p) => p.id !== currentProjectId);
   if (others.length === 0) return null;
 
   return (
-    <section className={`${anthracite ? "on-anthracite" : "bg-chrome"} py-16 sm:py-24`}>
+    <section className={`${light ? "on-light" : "bg-chrome"} py-16 sm:py-24`}>
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
           <SectionHeading eyebrow="Продолжете да истражувате" title="Другите наши проекти" tone="dark" />

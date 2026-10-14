@@ -208,7 +208,7 @@ export default function DevelopmentPage() {
         </div>
       </section>
 
-      <OtherProjects currentProjectId="city-center" anthracite />
+      <OtherProjects currentProjectId="city-center" light />
     </div>
   );
 }
