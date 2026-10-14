@@ -82,9 +82,9 @@ export function Button({
   const styles = {
     secondary:
       tone === "dark"
-        ? "border border-button text-button hover:bg-button hover:text-chrome"
+        ? "border border-on-chrome/40 text-on-chrome hover:border-on-chrome hover:bg-on-chrome/10"
         : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
-    ghost: tone === "dark" ? "text-button hover:text-button/80" : "text-charcoal/70 hover:text-charcoal",
+    ghost: tone === "dark" ? "text-on-chrome/80 hover:text-on-chrome" : "text-charcoal/70 hover:text-charcoal",
   }[variant];
 
   const classes = cn(base, styles, className);

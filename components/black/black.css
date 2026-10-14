@@ -119,9 +119,9 @@
   gap: 12px;
   min-height: 44px;
   padding: 0 22px;
-  border: 1px solid var(--color-button);
+  border: 1px solid color-mix(in srgb, var(--color-paper) 40%, transparent);
   background: transparent;
-  color: var(--color-button);
+  color: var(--color-paper);
   font:
     500 11px/1 var(--font-sans),
     system-ui,
@@ -138,14 +138,14 @@
     transform 0.2s;
 }
 .bk-btn:hover {
-  background: var(--color-button);
-  color: var(--black);
+  background: color-mix(in srgb, var(--color-paper) 10%, transparent);
+  border-color: var(--color-paper);
 }
 .bk-btn:active {
   transform: scale(0.98);
 }
 .bk-btn:focus-visible {
-  outline: 2px solid var(--color-button);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 .bk-btn:disabled {
@@ -179,7 +179,7 @@
   color: var(--color-gold);
 }
 .bk-modal-close:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 

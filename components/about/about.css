@@ -308,7 +308,7 @@
   cursor: pointer;
 }
 .ab-card:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 4px;
 }
 .ab-card-photo {

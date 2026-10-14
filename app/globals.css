@@ -27,12 +27,10 @@
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
   --color-bronze: #6d533e;
-  --color-copper: #ddb28e;
   /* The two golds of the site. Logo gold: the logos, the preloader, the page transitions and every accent text (eyebrows,
-     labels, numbers, links, the active tab). Светол бакар (copper): every button. */
+     labels, numbers, links, the active tab). No gold on buttons: those use the antique foil below. */
   --color-gold: #c4a454;
   --color-brass: var(--color-gold); /* the older name of the logo gold */
-  --color-button: var(--color-copper);
   /* Antique foil: the primary button (and the focus ring). An outline and text in --foil-line at rest; the metallic
      sheen sweeps in on hover. */
   --foil-dark: #7e6230;
@@ -47,7 +45,7 @@
     var(--foil-mid) 65%,
     var(--foil-dark) 100%
   );
-  /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
+  /* The logo's metallic gold (as on the first site): the logo gold, with a darker shade and a lighter glint. Used by
      the wordmark and the building mark only. */
   --color-gold-shade: color-mix(in srgb, var(--color-gold) 62%, var(--color-onyx));
   --color-gold-glint: color-mix(in srgb, var(--color-gold) 60%, var(--color-travertine));
@@ -114,9 +112,7 @@
   --color-sand: var(--color-sand);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
-  --color-copper: var(--color-copper);
   --color-brass: var(--color-brass);
-  --color-button: var(--color-button);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
@@ -579,7 +575,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   outline: none;
 }
 .focus-ring:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 
@@ -894,9 +890,9 @@ body {
   }
 }
 
-/* The metallic sheen — one place on the whole site, the footer wordmark. The text is filled with a bronze-to-copper
+/* The metallic sheen — one place on the whole site, the footer wordmark. The text is filled with a bronze-to-gold
    gradient with a bright band that sweeps across during the first 60% of each 4.5s loop and then rests. Not on the
-   hero: the headline there sits on a photo. Reduced motion: no movement, plain Светол бакар. */
+   hero: the headline there sits on a photo. Reduced motion: no movement, plain logo gold. */
 .footer-sheen {
   display: inline-block;
   white-space: nowrap;

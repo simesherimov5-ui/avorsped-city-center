@@ -58,7 +58,7 @@
     border-color 0.4s ease;
 }
 .fp-floor:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 2px;
 }
 .fp-floor[aria-pressed="true"] {
@@ -145,7 +145,7 @@
   border-color: var(--color-gold);
 }
 .fp-unit:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 2px;
 }
 .fp-unit-no {
@@ -200,7 +200,7 @@
   transform: translateX(6px);
 }
 .fp-floorlink:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 

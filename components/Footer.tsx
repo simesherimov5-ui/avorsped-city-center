@@ -49,7 +49,7 @@ export function Footer() {
           <p className="mt-5 text-sm leading-relaxed text-on-chrome/60">
             Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
           </p>
-          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-button px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-button transition-colors hover:bg-button hover:text-chrome">
+          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-on-chrome/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-on-chrome/60 hover:bg-on-chrome/10">
             Закажи консултација
           </ConsultationLink>
         </div>

@@ -149,7 +149,7 @@
   color: var(--color-gold-light);
 }
 .ct-edit:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 2px;
 }
 .ct-sub {
@@ -223,7 +223,7 @@
 }
 .ct-chip:focus-visible,
 .ct-day:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 .ct-chip[aria-checked="true"],
@@ -507,7 +507,7 @@ a.ct-val:focus-visible {
   transform: translateX(6px);
 }
 a.ct-val:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 4px;
 }
 /* Working hours: one line per range, the days on the left and the times on the right. */
@@ -552,7 +552,7 @@ a.ct-val:focus-visible {
   color: var(--color-gold-light);
 }
 .ct-addr a:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 /* the map in the panel is a little shorter, so the two columns stay in proportion */
