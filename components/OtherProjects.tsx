@@ -21,7 +21,12 @@ export function OtherProjects({
     <section className={`${light ? "on-light" : "bg-chrome"} py-16 sm:py-24`}>
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
-          <SectionHeading eyebrow="Продолжете да истражувате" title="Другите наши проекти" tone="dark" />
+          <SectionHeading
+            eyebrow="Продолжете да истражувате"
+            title="Другите наши проекти"
+            tone={light ? "light" : "dark"}
+            eyebrowGold
+          />
         </Reveal>
       </div>
       <Reveal delay={0.1}>

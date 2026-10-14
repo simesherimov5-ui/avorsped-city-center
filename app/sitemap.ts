@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/projects",
     "/development",
-    "/apartments",
     "/completed-projects",
     "/dojran",
     "/about",
@@ -17,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // a project that has its own page (City Center, Дојрански Рај) redirects from /projects/…, so only the others
     ...projects.filter((p) => !p.href).map((p) => `/projects/${p.slug}`),
     ...buildings.map((b) => `/development/${b.id}`),
-    ...apartments.map((a) => `/apartments/${a.id}`),
+    ...apartments.map((a) => `/development/apartment/${a.id}`),
     ...dojranFloors.map((f) => `/dojran/${f.number}`),
   ];
   return paths.map((path) => ({ url: `${siteUrl()}${path === "/" ? "" : path}` }));

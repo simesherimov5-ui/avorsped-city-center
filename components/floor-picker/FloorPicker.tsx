@@ -119,7 +119,7 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
             {current.apartments.map((a) => (
               <li key={a.id}>
                 <Link
-                  href={`/apartments/${a.id}`}
+                  href={`/development/apartment/${a.id}`}
                   className={`fp-unit${hot === a.id ? " is-hot" : ""}`}
                   onMouseEnter={() => setHot(a.id)}
                   onMouseLeave={() => setHot(null)}

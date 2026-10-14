@@ -58,12 +58,12 @@
     border-color 0.4s ease;
 }
 .fp-floor:focus-visible {
-  outline: 2px solid var(--color-copper);
+  outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
 .fp-floor[aria-pressed="true"] {
-  border-color: var(--color-copper);
-  background: var(--color-copper);
+  border-color: var(--color-gold);
+  background: var(--color-gold);
   color: var(--color-onyx);
 }
 .fp-wins {
@@ -101,7 +101,7 @@
   padding: 48px 44px;
 }
 .fp-label {
-  color: var(--color-copper);
+  color: var(--color-gold);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.32em;
@@ -142,10 +142,10 @@
 }
 .fp-unit:hover,
 .fp-unit.is-hot {
-  border-color: var(--color-copper);
+  border-color: var(--color-gold);
 }
 .fp-unit:focus-visible {
-  outline: 2px solid var(--color-copper);
+  outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
 .fp-unit-no {
@@ -171,7 +171,7 @@
   text-transform: uppercase;
 }
 .fp-unit-st.is-available {
-  color: var(--color-copper);
+  color: var(--color-gold);
 }
 .fp-unit-st.is-reserved {
   color: var(--color-travertine);
@@ -185,7 +185,7 @@
   align-self: flex-start;
   gap: 12px;
   min-height: 44px;
-  color: var(--color-copper);
+  color: var(--color-gold);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -200,7 +200,7 @@
   transform: translateX(6px);
 }
 .fp-floorlink:focus-visible {
-  outline: 2px solid var(--color-copper);
+  outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
 

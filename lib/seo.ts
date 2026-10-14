@@ -33,7 +33,7 @@ export function pageMetadata({
 }: {
   title: string;
   description: string;
-  /** The page's address without the domain, e.g. "/projects" or "/apartments/b01-f1-101". */
+  /** The page's address without the domain, e.g. "/projects" or "/development/apartment/b01-f1-101". */
   path: string;
   noindex?: boolean;
   /**

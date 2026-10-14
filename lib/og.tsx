@@ -11,7 +11,7 @@ export const OG_TYPE = "image/png";
 
 const TRAVERTINE_RGB = "244, 239, 231";
 const ONYX_RGB = "20, 17, 15";
-const COPPER_RGB = "221, 178, 142";
+const COPPER_RGB = "196, 164, 84"; // the logo gold, the site's accent text colour
 const PAPER = `rgb(${TRAVERTINE_RGB})`;
 const INK = `rgb(${ONYX_RGB})`;
 const GOLD = `rgb(${COPPER_RGB})`;

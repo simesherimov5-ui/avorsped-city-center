@@ -105,7 +105,7 @@ export function FloorSketch({
           {placed.map(({ apartment, outline }) => (
             <Link
               key={apartment.id}
-              href={`/apartments/${apartment.id}`}
+              href={`/development/apartment/${apartment.id}`}
               className={`fs-shape${hovered === apartment.id ? " is-hot" : ""}`}
               data-status={apartment.status}
               aria-label={`Стан ${apartment.number}, ${formatArea(apartment.area, apartment.areaDecimals)}, ${roomsText(apartment.bedrooms)}, ${statusLabel(apartment.status).toLowerCase()}`}

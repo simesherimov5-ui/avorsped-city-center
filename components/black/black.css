@@ -11,7 +11,7 @@
 [data-theme="black"] {
   --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
   --color-line-dark: color-mix(in srgb, var(--color-travertine) 12%, transparent);
-  --gold-line: color-mix(in srgb, var(--color-copper) 30%, transparent);
+  --gold-line: color-mix(in srgb, var(--color-gold) 30%, transparent);
   --mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
   --bk-px: clamp(20px, 5vw, 64px);
   --bk-gap: clamp(64px, 7.5vw, 112px);
@@ -21,7 +21,7 @@
   line-height: 1.6;
 }
 [data-theme="black"] ::selection {
-  background: var(--color-copper);
+  background: var(--color-gold);
   color: var(--color-onyx);
 }
 .bk-page {
@@ -119,9 +119,9 @@
   gap: 12px;
   min-height: 44px;
   padding: 0 22px;
-  border: 1px solid var(--color-gold);
+  border: 1px solid var(--color-button);
   background: transparent;
-  color: var(--color-gold);
+  color: var(--color-button);
   font:
     500 11px/1 var(--font-sans),
     system-ui,
@@ -138,14 +138,14 @@
     transform 0.2s;
 }
 .bk-btn:hover {
-  background: var(--color-gold);
+  background: var(--color-button);
   color: var(--black);
 }
 .bk-btn:active {
   transform: scale(0.98);
 }
 .bk-btn:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-button);
   outline-offset: 3px;
 }
 .bk-btn:disabled {

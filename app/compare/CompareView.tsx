@@ -66,7 +66,7 @@ export function CompareView() {
                 Додајте до 3 станови за споредба од листата со достапни единици.
               </p>
             </div>
-            <Button href="/apartments" variant="primary" size="sm">
+            <Button href="/development" variant="primary" size="sm">
               Разгледај станови
             </Button>
           </div>
@@ -79,7 +79,7 @@ export function CompareView() {
                   {selected.map((a) => (
                     <th key={a.id} className="border-b border-line px-4 pb-4 text-left align-top">
                       <Link
-                        href={`/apartments/${a.id}`}
+                        href={`/development/apartment/${a.id}`}
                         className="focus-ring block text-lg font-medium hover:text-gold-deep"
                       >
                         Стан {a.number}

@@ -64,7 +64,7 @@
   background: color-mix(in srgb, var(--color-espresso) 40%, transparent);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
   backdrop-filter: blur(10px) saturate(160%);
-  box-shadow: 0 44px 80px -44px rgb(0 0 0 / 0.9);
+  box-shadow: 0 44px 80px -44px color-mix(in srgb, var(--color-onyx) 90%, transparent);
   text-align: center;
 }
 .cg-title {

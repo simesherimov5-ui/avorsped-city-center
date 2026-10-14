@@ -19,10 +19,10 @@ export function Footer() {
         <div>
           <div className="eyebrow text-accent">Истражи</div>
           <div className="mt-3 flex flex-col text-base text-on-chrome/75 sm:mt-5 sm:gap-2.5 sm:text-sm">
-            <Link href="/projects" className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0">
+            <Link href="/projects" className="flex min-h-11 w-fit items-center hover:text-on-chrome">
               Проекти
             </Link>
-            <Link href="/about" className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0">
+            <Link href="/about" className="flex min-h-11 w-fit items-center hover:text-on-chrome">
               За нас
             </Link>
           </div>
@@ -34,14 +34,11 @@ export function Footer() {
             <span className="py-2 sm:py-0">{companyInfo.address}</span>
             <a
               href={`tel:${companyInfo.phone.replace(/ /g, "")}`}
-              className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0"
+              className="flex min-h-11 w-fit items-center hover:text-on-chrome"
             >
               {companyInfo.phone}
             </a>
-            <a
-              href={`mailto:${companyInfo.email}`}
-              className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0"
-            >
+            <a href={`mailto:${companyInfo.email}`} className="flex min-h-11 w-fit items-center hover:text-on-chrome">
               {companyInfo.email}
             </a>
           </div>
@@ -52,7 +49,7 @@ export function Footer() {
           <p className="mt-5 text-sm leading-relaxed text-on-chrome/60">
             Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
           </p>
-          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-on-chrome/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-on-chrome/60 hover:bg-on-chrome/10">
+          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-button px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-button transition-colors hover:bg-button hover:text-chrome">
             Закажи консултација
           </ConsultationLink>
         </div>

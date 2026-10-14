@@ -29,7 +29,7 @@ describe.skipIf(!process.env.CHECK_BASE_URL)("apartment pages", () => {
     for (let i = 0; i < apartments.length; i += 12) {
       const batch = apartments.slice(i, i + 12);
       const results = await Promise.all(
-        batch.map(async (a) => ({ id: a.id, status: (await fetch(`${base}/apartments/${a.id}`)).status }))
+        batch.map(async (a) => ({ id: a.id, status: (await fetch(`${base}/development/apartment/${a.id}`)).status }))
       );
       for (const r of results) if (r.status !== 200) failures.push(`${r.id} -> ${r.status}`);
     }

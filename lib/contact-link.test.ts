@@ -10,7 +10,7 @@ describe("contactHref", () => {
   });
 
   it("carries the apartment, building or project being looked at", () => {
-    expect(contactHref("/apartments/b01-f1-101")).toBe("/contact?apartment=b01-f1-101");
+    expect(contactHref("/development/apartment/b01-f1-101")).toBe("/contact?apartment=b01-f1-101");
     expect(contactHref("/development/b01")).toBe("/contact?building=b01");
     expect(contactHref("/development/b01/2")).toBe("/contact?building=b01");
     expect(contactHref("/projects/city-center")).toBe("/contact?project=city-center");

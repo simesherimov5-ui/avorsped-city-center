@@ -63,7 +63,7 @@ export function GoogleMapPin({
         <svg viewBox="0 0 40 52" className={`gm-pin ${state === "dropped" ? "is-dropped" : ""}`} width="40" height="52">
           <path
             d="M20 51 C20 51 3 31 3 19 A17 17 0 0 1 37 19 C37 31 20 51 20 51 Z"
-            fill="var(--color-copper)"
+            fill="var(--color-gold)"
             stroke="var(--color-onyx)"
             strokeOpacity="0.5"
             strokeWidth="1.5"

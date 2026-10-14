@@ -40,7 +40,7 @@ export function Media({
   /** A photo further down the page: it is fetched at low priority so it does not compete with the first photo. */
   defer?: boolean;
   fit?: "cover" | "contain";
-  /** A project's framing (zoom below 1 shows more of the photo, with a blurred copy behind it). */
+  /** A project's framing: where the cover crop is centred and an optional zoom in. */
   focus?: ImageFocus;
   sizes?: string;
   /**
@@ -57,10 +57,12 @@ export function Media({
   // frame, anchored on the focal point, so it can show more of the photo than a cover crop does. The frame's
   // uncovered edges are filled with a blurred, darkened copy of the same photo, and the picture's own edges fade
   // into it. The sizes use container units of the frame (this component's root), so no layout script is needed.
-  const out = fit === "cover" && focus !== undefined && focus.zoom < 1;
+  // Photos always fill their frame cleanly (object-cover): no zoomed-out picture over a blurred copy of itself.
+  const out = false;
   // A photo shown whole in a frame of another shape ("contain", e.g. a portrait picture in a wide card) gets the same
   // treatment instead of flat bars: the picture sits in the middle with a blurred, darkened copy behind it.
-  const contained = fit === "contain";
+  // Only a lossless line drawing (plan, sketch) is shown whole; it sits on its own surface.
+  const contained = fit === "contain" && Boolean(crisp);
   const sizedPicture = out || (contained && focus?.aspect !== undefined);
   const aspect = focus?.aspect ?? 1.5;
   const fade = {
@@ -103,16 +105,10 @@ export function Media({
       className={cn(
         "relative overflow-hidden",
         sizedPicture && "[container-type:size]",
-        fit === "contain" && (tone === "dark" ? "bg-chrome" : "bg-silver"),
+        contained && (tone === "dark" ? "bg-chrome" : "bg-silver"),
         className
       )}
     >
-      {/* a lossless line drawing has no blurred copy behind it: it sits on its own light surface */}
-      {(out || contained) && !crisp && (
-        <div aria-hidden className="absolute inset-0 scale-[1.2] [filter:blur(40px)_brightness(0.55)]">
-          <Image src={image.src} alt="" fill sizes="25vw" className="object-cover" quality={75} />
-        </div>
-      )}
       {sizedPicture ? (
         <div className="absolute" style={picture}>
           <Image
@@ -133,7 +129,7 @@ export function Media({
           alt={image.alt}
           fill
           sizes={sizes}
-          className={fit === "contain" ? "object-contain" : "object-cover"}
+          className={contained ? "object-contain" : "object-cover"}
           style={framing}
           priority={priority}
           fetchPriority={defer ? "low" : undefined}

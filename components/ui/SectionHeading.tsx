@@ -6,6 +6,7 @@ export function SectionHeading({
   description,
   align = "left",
   tone = "light",
+  eyebrowGold = false,
   size = "default",
   className,
   as: Heading = "h2",
@@ -20,10 +21,14 @@ export function SectionHeading({
   className?: string;
   /** "h1" for the one main heading of a page; every other section heading stays an h2. */
   as?: "h1" | "h2";
+  /** The eyebrow in the logo gold even on a light surface. */
+  eyebrowGold?: boolean;
 }) {
   return (
     <div className={cn(align === "center" && "mx-auto max-w-2xl text-center", className)}>
-      {eyebrow && <div className={cn("eyebrow", tone === "dark" ? "text-accent" : "text-gold-deep")}>{eyebrow}</div>}
+      {eyebrow && (
+        <div className={cn("eyebrow", eyebrowGold || tone === "dark" ? "text-gold" : "text-gold-deep")}>{eyebrow}</div>
+      )}
       <Heading
         className={cn(
           size === "compact"

@@ -26,31 +26,28 @@
   ); /* retired as a surface; only a hairline tone is left */
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
-  /* Антрацит: a dark neutral grey surface, and its whitish text colour (not cream). */
-  --color-anthracite: #26282b;
-  --color-mist: #e9e9e7;
   --color-bronze: #6d533e;
   --color-copper: #ddb28e;
-  /* The logo's own gold: the building mark and the JAVOR SPED wordmark text (set by the owner). */
-  --color-brass: #c4a454;
-  /* The filling button on dark surfaces (set by the owner, to try). */
-  --color-button: #c9a45c;
+  /* The two golds of the site. Logo gold: the logos, the preloader, the page transitions and every accent text (eyebrows,
+     labels, numbers, links, the active tab). Светол бакар (copper): every button. */
+  --color-gold: #c4a454;
+  --color-brass: var(--color-gold); /* the older name of the logo gold */
+  --color-button: var(--color-copper);
   /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
      the wordmark and the building mark only. */
-  --color-gold-shade: #8e7240;
-  --color-gold-glint: #e6cf9a;
+  --color-gold-shade: color-mix(in srgb, var(--color-gold) 62%, var(--color-onyx));
+  --color-gold-glint: color-mix(in srgb, var(--color-gold) 60%, var(--color-travertine));
   --gold-sheen: linear-gradient(
     120deg,
     var(--color-gold-shade) 0%,
-    var(--color-button) 35%,
+    var(--color-gold) 35%,
     var(--color-gold-glint) 60%,
-    var(--color-button) 100%
+    var(--color-gold) 100%
   );
   /* The names the code already uses are aliases of the six, so nothing needs a mass rename:
      paper = Травертин, ink = Оникс, gold = Светол бакар (the accent on dark). */
   --color-paper: var(--color-travertine);
   --color-ink: var(--color-onyx);
-  --color-gold: var(--color-copper);
   --color-gold-deep: var(--color-bronze); /* the accent as text on light: Бронза */
   --color-gold-dark: var(--color-bronze);
   --color-gold-light: var(--color-travertine); /* highlights on dark */
@@ -75,7 +72,7 @@
   --color-silver: var(--color-sand);
   --color-concrete: color-mix(in srgb, var(--color-onyx) 14%, transparent);
   --color-charcoal: var(--color-onyx);
-  --color-accent: var(--color-copper);
+  --color-accent: var(--color-gold);
   --color-accent-soft: var(--color-travertine);
   --color-chrome: var(--color-onyx);
   --color-on-chrome: var(--color-travertine);
@@ -101,12 +98,11 @@
   --color-espresso: var(--color-espresso);
   --color-travertine: var(--color-travertine);
   --color-sand: var(--color-sand);
-  --color-anthracite: var(--color-anthracite);
-  --color-mist: var(--color-mist);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-copper: var(--color-copper);
   --color-brass: var(--color-brass);
+  --color-button: var(--color-button);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
@@ -307,39 +303,19 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
    their dark-surface partners (text and hairlines in Светол бакар, cards Еспресо);
    .on-light inside it restores them for the one light block of the page. */
 .on-dark {
-  --color-ink: var(--color-copper);
-  --color-charcoal: var(--color-copper);
-  --color-on-chrome: var(--color-copper);
-  --color-paper: var(--color-copper);
-  --color-muted: color-mix(in srgb, var(--color-copper) 68%, transparent);
-  --color-line: color-mix(in srgb, var(--color-copper) 22%, transparent);
-  --color-gold-deep: var(--color-copper);
-  --color-gold-dark: var(--color-copper);
+  --color-ink: var(--color-gold);
+  --color-charcoal: var(--color-gold);
+  --color-on-chrome: var(--color-gold);
+  --color-paper: var(--color-gold);
+  --color-muted: color-mix(in srgb, var(--color-gold) 68%, transparent);
+  --color-line: color-mix(in srgb, var(--color-gold) 22%, transparent);
+  --color-gold-deep: var(--color-gold);
+  --color-gold-dark: var(--color-gold);
   --color-cream: var(--color-espresso);
   --color-warm-white: var(--color-espresso);
   --color-silver: var(--color-espresso);
   background-color: var(--color-onyx);
-  color: var(--color-copper);
-}
-/* Антрацит: the same idea with a neutral dark grey ground and whitish text; the accent stays Светол бакар. .scope-mist is
-   the text colours alone, for text that sits on a picture. */
-.scope-mist,
-.on-anthracite {
-  --color-ink: var(--color-mist);
-  --color-charcoal: var(--color-mist);
-  --color-on-chrome: var(--color-mist);
-  --color-paper: var(--color-mist);
-  --color-muted: color-mix(in srgb, var(--color-mist) 66%, transparent);
-  --color-line: color-mix(in srgb, var(--color-mist) 16%, transparent);
-  --color-gold-deep: var(--color-copper);
-  --color-gold-dark: var(--color-copper);
-  --color-cream: var(--color-anthracite);
-  --color-warm-white: var(--color-anthracite);
-  --color-silver: var(--color-anthracite);
-  color: var(--color-mist);
-}
-.on-anthracite {
-  background-color: var(--color-anthracite);
+  color: var(--color-gold);
 }
 .on-light {
   --color-on-chrome: var(--color-travertine);
@@ -359,7 +335,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 
 /* The current phase of the construction timeline: a soft pulse (still with reduced motion). */
 .phase-pulse {
-  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-copper) 55%, transparent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold) 55%, transparent);
   animation: phase-pulse 2.4s ease-out infinite;
 }
 @keyframes phase-pulse {
@@ -370,7 +346,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 @media (prefers-reduced-motion: reduce) {
   .phase-pulse {
     animation: none;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-copper) 30%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 30%, transparent);
   }
 }
 
@@ -404,7 +380,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   top: -32px;
   width: 64px;
   height: 64px;
-  border: 1.5px solid var(--color-copper);
+  border: 1.5px solid var(--color-gold);
   border-radius: 50%;
   opacity: 0;
 }
@@ -434,6 +410,12 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .gm-ring.is-on {
     animation: none;
   }
+}
+
+/* An anchor that is scrolled to lands below the fixed header. */
+#za-proektot,
+#book {
+  scroll-margin-top: var(--nav-h);
 }
 
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
@@ -514,7 +496,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 }
 
 ::selection {
-  background: var(--color-copper);
+  background: var(--color-gold);
   color: var(--color-onyx);
 }
 
@@ -593,7 +575,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
    surfaces: Бронза fill, Травертин text. Dark surfaces (data-tone="dark"):
    Светол бакар fill, Оникс text. Used by <Button> and by the form submit. */
 .btn-primary {
-  --btn-c: var(--color-brass);
+  --btn-c: var(--color-button);
   --btn-on: var(--color-onyx);
   position: relative;
   isolation: isolate;
@@ -851,7 +833,7 @@ body {
 .click-pulse {
   position: absolute;
   border-radius: 9999px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--color-copper) 45%, transparent) 0%, transparent 72%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-gold) 45%, transparent) 0%, transparent 72%);
   transform: scale(0);
   opacity: 0.6;
   animation: click-pulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;

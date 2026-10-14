@@ -27,7 +27,7 @@
 
 /* Before it plays: the pin is above the frame, the lines undrawn, the labels and rings hidden. */
 .lm-pin {
-  fill: var(--color-copper);
+  fill: var(--color-gold);
   opacity: 0;
   transform: translateY(-60px);
 }
@@ -36,7 +36,7 @@
 }
 .lm-route {
   fill: none;
-  stroke: var(--color-copper);
+  stroke: var(--color-gold);
   stroke-width: 1.5;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -45,7 +45,7 @@
   opacity: 0;
 }
 .lm-place circle {
-  fill: var(--color-copper);
+  fill: var(--color-gold);
 }
 .lm-name {
   fill: color-mix(in srgb, var(--color-travertine) 86%, transparent);
@@ -70,7 +70,7 @@
 }
 .lm-ring {
   fill: none;
-  stroke: var(--color-copper);
+  stroke: var(--color-gold);
   stroke-width: 1;
   opacity: 0;
   transform-origin: 200px 140px;

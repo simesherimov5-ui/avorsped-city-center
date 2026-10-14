@@ -43,7 +43,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
               <div className="text-on-chrome">
                 <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">{statusText}</span>
                 <h3 className="mt-3 font-display text-(length:--fs-h3) font-normal leading-[1.3]">{project.name}</h3>
-                <div className="mt-2 text-sm tracking-wide text-on-chrome">{project.location}</div>
+                <div className="mt-2 text-sm tracking-wide text-gold">{project.location}</div>
               </div>
 
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-on-chrome/70 text-on-chrome transition-colors duration-300 group-hover:border-on-chrome group-hover:bg-on-chrome group-hover:text-chrome sm:h-14 sm:w-14">

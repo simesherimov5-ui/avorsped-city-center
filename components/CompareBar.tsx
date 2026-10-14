@@ -14,14 +14,7 @@ import { X } from "lucide-react";
  * page, За нас, Контакт, the 404 page, a page added later) has no bar at all. A new project route is one line here.
  * `/compare` is listed so it keeps doing what it did before this list existed.
  */
-export const COMPARE_BAR_PATHS = [
-  "/apartments",
-  "/projects",
-  "/completed-projects",
-  "/development",
-  "/dojran",
-  "/compare",
-];
+export const COMPARE_BAR_PATHS = ["/projects", "/completed-projects", "/development", "/dojran", "/compare"];
 
 export const showsCompareBar = (pathname: string) =>
   COMPARE_BAR_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));

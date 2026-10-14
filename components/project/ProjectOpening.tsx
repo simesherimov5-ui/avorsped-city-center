@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { PauseButton } from "@/components/ui/PauseButton";
 import { useI18n } from "@/lib/i18n";
 import { getLenis } from "@/lib/lenis";
 import { useMediaQuery } from "@/lib/useMediaQuery";
@@ -42,6 +43,7 @@ export function ProjectOpening({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
+  const [filmPaused, setFilmPaused] = useState(false);
   const showVideo = Boolean(video) && !phone && !reduceMotion;
   const showSound = showVideo && hasSound && playing;
 
@@ -58,6 +60,18 @@ export function ProjectOpening({
   const comma = tagline ? tagline.indexOf(",") : -1;
   const lead = tagline && comma >= 0 ? tagline.slice(0, comma + 1) + " " : "";
   const rest = tagline ? (comma >= 0 ? tagline.slice(comma + 1).trim() : tagline) : "";
+
+  const toggleFilm = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (el.paused) {
+      el.play().catch(() => {});
+      setFilmPaused(false);
+    } else {
+      el.pause();
+      setFilmPaused(true);
+    }
+  };
 
   const toggleSound = () => {
     const el = videoRef.current;
@@ -79,7 +93,7 @@ export function ProjectOpening({
     <section
       data-opening
       aria-label={name}
-      className="scope-mist relative flex h-svh min-h-[560px] max-h-[1000px] w-full flex-col overflow-hidden bg-chrome text-paper"
+      className="relative flex h-svh min-h-[560px] max-h-[1000px] w-full flex-col overflow-hidden bg-chrome text-paper"
     >
       {/* the picture (or the film) with the line about the project at its top left */}
       <div className="relative min-h-0 flex-1 overflow-hidden">
@@ -149,6 +163,7 @@ export function ProjectOpening({
           </div>
         </div>
         <div className="flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
+          {showVideo && <PauseButton paused={filmPaused} onToggle={toggleFilm} />}
           {showSound && (
             <button
               type="button"

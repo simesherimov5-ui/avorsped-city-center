@@ -40,7 +40,7 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
             >
               <span
                 className={cn(
-                  "flex h-8 w-8 items-center justify-center border text-sm font-semibold transition-all",
+                  "flex h-8 w-8 items-center justify-center border text-sm font-semibold transition-[background-color,border-color,color,transform]",
                   isClickable
                     ? isHovered
                       ? "scale-110 border-accent bg-accent text-chrome"

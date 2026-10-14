@@ -150,7 +150,7 @@ export function ProjectsMap({
                 <svg width="26" height="34" viewBox="0 0 26 34" aria-hidden>
                   <path
                     d="M13 33 C 13 33, 1 20, 1 12.5 A 12 12 0 0 1 25 12.5 C 25 20, 13 33, 13 33 Z"
-                    fill={on ? "var(--color-bronze)" : "var(--color-copper)"}
+                    fill={on ? "var(--color-bronze)" : "var(--color-gold)"}
                     stroke="var(--color-bronze)"
                     strokeWidth="1"
                   />

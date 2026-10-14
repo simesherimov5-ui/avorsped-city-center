@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return pageMetadata({
     title: `Стан ${apt.number}, ${where}`,
     description: `${bedrooms} стан ${apt.number} во ${where}, ${floorLabelOf(apt).toLowerCase()}: ${formatArea(apt.area, apt.areaDecimals)} површина${facing}. Погледнете го распоредот и закажете консултација.`,
-    path: `/apartments/${apt.id}`,
+    path: `/development/apartment/${apt.id}`,
   });
 }
 

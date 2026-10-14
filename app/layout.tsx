@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 };
 
 // The browser bar on phones takes the site's dark (Оникс).
-export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)" };
+export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)", colorScheme: "dark" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

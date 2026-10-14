@@ -56,7 +56,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-[opacity,transform] duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && <div className="text-sm text-on-chrome sm:text-base">{project.tagline}</div>}
             {project.distanceHighlights && project.distanceHighlights.length > 0 && (
               <ul className="mt-1.5 space-y-0.5 text-[11px] uppercase tracking-wide text-on-chrome/80">

@@ -3,6 +3,7 @@
 import "./projects.css";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Media } from "@/components/ui/Media";
+import { PauseButton } from "@/components/ui/PauseButton";
 import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
@@ -26,12 +27,13 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
   // a click on a slide button restarts the timer: bumping the key restarts the track's animation
   const [run, setRun] = useState(0);
   const [focused, setFocused] = useState(false);
+  const [manual, setManual] = useState(false);
   const hidden = useSyncExternalStore(
     subscribeVisibility,
     () => document.hidden,
     () => false
   );
-  const paused = focused || hidden;
+  const paused = focused || hidden || manual;
   const count = slides.length;
 
   // With reduced motion there is no animation to end a slide, so a timer does it.
@@ -45,6 +47,11 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
 
   return (
     <section className="pj-hero" aria-label="Проекти">
+      <PauseButton
+        paused={manual}
+        onToggle={() => setManual((m) => !m)}
+        className="absolute right-[5%] top-[calc(var(--nav-h)+16px)] z-10"
+      />
       {slides.map((project, i) => (
         <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
           <div className="pj-slide-photo">

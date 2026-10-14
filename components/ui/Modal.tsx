@@ -150,7 +150,7 @@ export function Modal({ open, onClose, label, overlay = 0.86, closeIn = "panel",
       data-theme="black"
       tabIndex={-1}
       onKeyDown={trapTab}
-      className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto p-5 outline-none"
+      className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto overscroll-contain p-5 outline-none"
     >
       <div
         ref={backdropRef}

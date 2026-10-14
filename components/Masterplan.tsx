@@ -403,22 +403,22 @@ function Compass({ north }: { north: number }) {
     >
       <g transform={`rotate(${north} 36 36)`}>
         <circle cx="36" cy="36" r="26" fill="var(--color-onyx)" fillOpacity="0.45" />
-        <circle cx="36" cy="36" r="20" fill="none" stroke="var(--color-copper)" strokeWidth="1.25" />
+        <circle cx="36" cy="36" r="20" fill="none" stroke="var(--color-gold)" strokeWidth="1.25" />
         <path
           d="M36 18 L39 36 L36 54 L33 36 Z"
           fill="none"
-          stroke="var(--color-copper)"
+          stroke="var(--color-gold)"
           strokeWidth="1.25"
           strokeLinejoin="round"
         />
-        <path d="M36 18 L39 36 L33 36 Z" fill="var(--color-copper)" />
+        <path d="M36 18 L39 36 L33 36 Z" fill="var(--color-gold)" />
         <text
           x="36"
           y="13"
           textAnchor="middle"
           fontSize="9"
           fontWeight="600"
-          fill="var(--color-copper)"
+          fill="var(--color-gold)"
           style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
         >
           С

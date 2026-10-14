@@ -4,8 +4,7 @@ import { showsCompareBar } from "./CompareBar";
 describe("showsCompareBar", () => {
   it("is on where apartments are chosen, and under those paths", () => {
     for (const path of [
-      "/apartments",
-      "/apartments/b01-f0-001",
+      "/development/apartment/b01-f0-001",
       "/projects",
       "/projects/stanbena-kukja",
       "/completed-projects",
@@ -18,7 +17,7 @@ describe("showsCompareBar", () => {
   });
 
   it("is off everywhere else, including a path that only starts with the same letters", () => {
-    for (const path of ["/", "/about", "/contact", "/not-found", "/projects-archive", "/apartmentsx"])
+    for (const path of ["/", "/about", "/contact", "/not-found", "/projects-archive", "/developmentx"])
       expect(showsCompareBar(path), path).toBe(false);
   });
 });

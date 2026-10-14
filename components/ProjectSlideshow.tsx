@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
+import { PauseButton } from "@/components/ui/PauseButton";
 import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
@@ -51,6 +52,7 @@ export function ProjectSlideshow({
   const [restart, setRestart] = useState(0);
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [manual, setManual] = useState(false);
   const tabHidden = useSyncExternalStore(
     subscribeVisibility,
     () => document.hidden,
@@ -62,7 +64,7 @@ export function ProjectSlideshow({
     if (byVisitor) setRestart((n) => n + 1);
     setIndex((i) => (i + dir + projects.length) % projects.length);
   };
-  const paused = focused || hovered || tabHidden;
+  const paused = focused || hovered || tabHidden || manual;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
   const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
@@ -230,6 +232,11 @@ export function ProjectSlideshow({
           );
         })}
       </div>
+      <PauseButton
+        paused={manual}
+        onToggle={() => setManual((m) => !m)}
+        className="absolute bottom-0 right-2 z-10 sm:right-4"
+      />
     </section>
   );
 }

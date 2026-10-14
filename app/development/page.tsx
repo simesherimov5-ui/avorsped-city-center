@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
 import { CountUp } from "@/components/ui/CountUp";
 import { Reveal } from "@/components/ui/Reveal";
 import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
@@ -116,11 +115,6 @@ export default function DevelopmentPage() {
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">
                   Статусот на секој стан во сите шест згради се ажурира во реално време.
                 </p>
-                <div className="mt-8">
-                  <Button href="/apartments" variant="primary" tone="dark">
-                    Пронајди го твојот стан
-                  </Button>
-                </div>
               </div>
             </Reveal>
             <Reveal delay={0.1}>
@@ -193,20 +187,6 @@ export default function DevelopmentPage() {
           <ProjectBook project={cityCenter} />
         </>
       )}
-
-      <section className="on-dark border-t border-line">
-        <div className="mx-auto max-w-7xl px-5 py-16 text-center sm:px-8 sm:py-24 lg:px-10">
-          <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Не сте сигурни која зграда?</h2>
-          <p className="mx-auto mt-3 max-w-md text-ink/70">
-            Филтрирајте секој стан од сите шест згради по големина и достапност.
-          </p>
-          <div className="mt-8">
-            <Button href="/apartments" variant="primary" tone="dark">
-              Пронајди го твојот стан
-            </Button>
-          </div>
-        </div>
-      </section>
 
       <OtherProjects currentProjectId="city-center" light />
     </div>

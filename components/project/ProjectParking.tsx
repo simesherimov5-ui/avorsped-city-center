@@ -46,9 +46,9 @@ function GarageDrawing() {
               y={y}
               width="38"
               height="60"
-              fill={on ? "var(--color-copper)" : "none"}
+              fill={on ? "var(--color-gold)" : "none"}
               fillOpacity={on ? 0.28 : 0}
-              stroke={on ? "var(--color-copper)" : "var(--color-on-chrome)"}
+              stroke={on ? "var(--color-gold)" : "var(--color-on-chrome)"}
               strokeOpacity={on ? 1 : 0.45}
             />
           );

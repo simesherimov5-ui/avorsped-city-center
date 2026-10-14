@@ -22,11 +22,11 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
     <div
       onPointerDown={spawnClickPulse}
       className={cn(
-        "group relative isolate border bg-warm-white transition-all duration-300",
+        "group relative isolate border bg-warm-white transition-[border-color,box-shadow,background-color] duration-300",
         selected ? "border-gold-deep" : "border-line hover:border-ink/30"
       )}
     >
-      <Link href={`/apartments/${apartment.id}`} className="focus-ring block">
+      <Link href={`/development/apartment/${apartment.id}`} className="focus-ring block">
         <div className="relative overflow-hidden">
           {/* The apartment's own floor plan (or, for units without one, the plan of their type) is the thumbnail. */}
           <Media
@@ -54,7 +54,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             </div>
           </div>
           <Link
-            href={`/apartments/${apartment.id}`}
+            href={`/development/apartment/${apartment.id}`}
             aria-label={`Погледни го стан ${apartment.number}`}
             className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
           >

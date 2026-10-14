@@ -191,10 +191,12 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
           <path key={s.d} className="jsi-st" d={s.d} data-delay={s.delay} data-opacity={s.opacity} />
         ))}
       </svg>
-      <div className="jsi-count">000</div>
+      <div className="jsi-count" aria-hidden="true">
+        000
+      </div>
       <div className="jsi-stage">
         <div className="jsi-lock">
-          <div className="jsi-wm">
+          <div className="jsi-wm" aria-hidden="true">
             <span className="jsi-gold jsi-j">J</span>
             <span className="jsi-gold jsi-x jsi-avor">AVOR</span>
             {/* The space between the two words: a no-break space, so it keeps its width (prettier writes it as the literal character). */}
@@ -202,7 +204,9 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
             <span className="jsi-gold jsi-s">S</span>
             <span className="jsi-gold jsi-x jsi-ped">PED</span>
           </div>
-          <div className="jsi-hold">HOLDING</div>
+          <div className="jsi-hold" aria-hidden="true">
+            HOLDING
+          </div>
         </div>
       </div>
     </div>

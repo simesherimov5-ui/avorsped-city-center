@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import { PauseButton } from "@/components/ui/PauseButton";
 import type { ResidentQuote } from "@/types";
 
 const SHOW_MS = 7000;
@@ -27,6 +28,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
   const [onScreen, setOnScreen] = useState(false);
   const [tabHidden, setTabHidden] = useState(false);
   const [used, setUsed] = useState(false);
+  const [manual, setManual] = useState(false);
   const count = quotes.length;
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
     };
   }, [count]);
 
-  const paused = hovered || focused || !onScreen || tabHidden;
+  const paused = hovered || focused || !onScreen || tabHidden || manual;
 
   // Every change goes through here: the old words leave (0.4s), then the new ones come in.
   const show = (next: number) => {
@@ -94,7 +96,14 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
           </div>
         </div>
         {count > 1 && (
-          <div className="flex justify-center">
+          <div className="flex items-center justify-center">
+            <PauseButton
+              paused={manual}
+              onToggle={() => {
+                setUsed(true);
+                setManual((m) => !m);
+              }}
+            />
             {quotes.map((_, i) => {
               const active = i === index;
               return (

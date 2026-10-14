@@ -31,9 +31,9 @@ export function BuildingMark({
         <defs>
           <linearGradient id={gradient} gradientUnits="userSpaceOnUse" x1="50" y1="60" x2="220" y2="300">
             <stop offset="0" style={{ stopColor: "var(--color-gold-shade)" }} />
-            <stop offset="0.35" style={{ stopColor: "var(--color-button)" }} />
+            <stop offset="0.35" style={{ stopColor: "var(--color-gold)" }} />
             <stop offset="0.6" style={{ stopColor: "var(--color-gold-glint)" }} />
-            <stop offset="1" style={{ stopColor: "var(--color-button)" }} />
+            <stop offset="1" style={{ stopColor: "var(--color-gold)" }} />
           </linearGradient>
         </defs>
       )}

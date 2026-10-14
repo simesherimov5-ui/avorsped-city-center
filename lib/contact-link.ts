@@ -6,7 +6,7 @@ import { getLenis } from "@/lib/lenis";
  * and a reference tag. Anywhere else it is the plain Контакт page.
  */
 export function contactHref(pathname: string): string {
-  const apartment = pathname.match(/^\/apartments\/([^/]+)\/?$/);
+  const apartment = pathname.match(/^\/development\/apartment\/([^/]+)\/?$/);
   if (apartment) return `/contact?apartment=${encodeURIComponent(apartment[1])}`;
   const building = pathname.match(/^\/development\/([^/]+)/);
   if (building) return `/contact?building=${encodeURIComponent(building[1])}`;

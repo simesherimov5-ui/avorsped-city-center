@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
   gap: 32px;
-  align-items: start;
+  align-items: stretch; /* the form and the panel are as tall as each other */
   padding-bottom: clamp(56px, 6vw, 96px);
 }
 @media (max-width: 980px) {
@@ -67,7 +67,7 @@
 /* B3 — the form: a bordered panel like the «Директно» card (same border, padding and surface), the lead inside it */
 .ct-panel {
   width: 100%;
-  max-width: 680px;
+  max-width: none;
   min-width: 0;
   padding: clamp(22px, 2.4vw, 32px);
   border: 1px solid var(--gold-line);
@@ -447,13 +447,11 @@
 
 /* B4 — the direct panel */
 .ct-side {
-  position: sticky;
-  top: 120px;
-  justify-self: end;
+  justify-self: stretch;
   width: 100%;
-  max-width: 420px;
+  max-width: none;
   min-width: 0;
-  padding: clamp(22px, 2.4vw, 32px);
+  padding: clamp(20px, 2vw, 28px);
   border: 1px solid var(--gold-line);
   background: var(--color-ink);
 }
@@ -552,6 +550,14 @@ a.ct-val:focus-visible {
 }
 .ct-addr a:hover {
   color: var(--color-gold-light);
+}
+.ct-addr a:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+/* the map in the panel is a little shorter, so the two columns stay in proportion */
+.ct-side .lm {
+  aspect-ratio: 16 / 9;
 }
 
 /* The booking confirmation pop-up */

@@ -5,7 +5,7 @@
   box-sizing: border-box;
   width: 100%;
   padding: 16px;
-  border: 1px solid color-mix(in srgb, var(--color-copper) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
   background: var(--color-sand);
   color: var(--color-onyx);
   animation: fs-sheet 0.7s var(--fs-ease) both;
@@ -68,7 +68,7 @@
   outline: none;
 }
 .fs-shape polygon {
-  fill: color-mix(in srgb, var(--color-copper) 16%, transparent);
+  fill: color-mix(in srgb, var(--color-gold) 16%, transparent);
   stroke: transparent;
   stroke-width: 1.5px;
   vector-effect: non-scaling-stroke;
@@ -88,7 +88,7 @@
 .fs-shape:hover polygon,
 .fs-shape.is-hot polygon,
 .fs-shape:focus-visible polygon {
-  fill: color-mix(in srgb, var(--color-copper) 34%, transparent);
+  fill: color-mix(in srgb, var(--color-gold) 34%, transparent);
   stroke: var(--color-bronze);
   stroke-width: 1.5px;
 }

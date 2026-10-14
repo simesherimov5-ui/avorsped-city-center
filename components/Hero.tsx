@@ -161,14 +161,14 @@ export function Hero() {
       {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
-          <span className="text-[12px] font-medium uppercase tracking-[0.24em] text-paper sm:text-[13px]">
+          <span className="text-[12px] font-medium uppercase tracking-[0.24em] text-gold sm:text-[13px]">
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
             <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
               — Javor Sped Holding
             </span>
-            <span className="text-[14px] font-normal leading-[1.5] text-paper sm:text-[15px]">
+            <span className="text-[14px] font-normal leading-[1.5] text-gold sm:text-[15px]">
               Секоја адреса има своја приказна. Откријте ја вашата.
             </span>
           </span>
