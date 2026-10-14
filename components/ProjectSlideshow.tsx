@@ -145,10 +145,7 @@ export function ProjectSlideshow({
               <motion.span {...textIn(0)} className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
                 {statusText}
               </motion.span>
-              <Heading
-                {...textIn(1)}
-                className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]"
-              >
+              <Heading {...textIn(1)} className="mt-3 font-display text-(length:--fs-h3) font-normal leading-[1.3]">
                 {project.name}
               </Heading>
               <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">

@@ -77,8 +77,8 @@ export function Button({
   }
 
   const base = cn(
-    "relative isolate inline-flex min-h-12 items-center justify-center lg:min-h-0 gap-2 whitespace-nowrap max-sm:whitespace-normal max-sm:text-center font-medium uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
-    size === "sm" ? "px-5 py-2.5 text-[11px] tracking-[0.14em]" : "px-7 py-3.5 text-xs tracking-[0.16em]"
+    "relative isolate inline-flex min-h-12 items-center justify-center lg:min-h-0 gap-2 whitespace-nowrap max-sm:whitespace-normal max-sm:text-center font-semibold uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
+    size === "sm" ? "px-5 py-2.5 text-[12px] tracking-[0.18em]" : "px-7 py-3.5 text-[12px] tracking-[0.18em]"
   );
   const styles = {
     secondary:

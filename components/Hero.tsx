@@ -149,7 +149,7 @@ export function Hero() {
             roofline, so its size is capped to keep both lines inside it. */}
         <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-4xl whitespace-nowrap text-[clamp(1.2rem,5.4vw,2.75rem)]! font-normal! leading-[1.02]! tracking-[-0.01em]! text-paper"
+          className="mx-auto mt-3 max-w-[760px] text-balance text-(length:--fs-hero)! font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
         >
           Добредојдовте во вашиот нов дом
         </h1>

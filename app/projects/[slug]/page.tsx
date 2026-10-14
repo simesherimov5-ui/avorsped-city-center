@@ -192,7 +192,7 @@ function Band({ title, note, children }: { title: string; note?: string; childre
     <section className="border-t border-line">
       <div className="container-x section-y">
         <Reveal>
-          <h2 className="font-display text-[clamp(22px,2.2vw,30px)] font-normal leading-[1.15]">{title}</h2>
+          <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.15]">{title}</h2>
           {note && <p className="mt-2 max-w-md text-sm text-muted">{note}</p>}
           <div className="mt-8 max-w-3xl">{children}</div>
         </Reveal>

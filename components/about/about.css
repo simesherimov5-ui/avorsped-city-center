@@ -137,8 +137,8 @@
   /* The statement is a long text, so it is Montserrat (Playfair is for headings); its accent words are coloured, not
      italic (there is no Montserrat italic). */
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(19px, 1.9vw, 26px);
+  font-weight: 400;
+  font-size: var(--fs-statement);
   line-height: 1.5;
 }
 .ab-story-text .bk-gold-i {
@@ -166,7 +166,7 @@
 .ab-prose-body {
   max-width: 64ch;
   font-size: 17px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.75;
   color: color-mix(in srgb, var(--color-paper) 82%, transparent);
 }
@@ -174,8 +174,8 @@
   margin-top: 1.1em;
 }
 .ab-prose-lead {
-  font-size: clamp(19px, 1.7vw, 23px);
-  line-height: 1.6;
+  font-size: var(--text-lead-size);
+  line-height: var(--text-lead-leading);
   color: var(--color-paper);
 }
 /* the vision's three aims: three columns, each under a thin rule */
@@ -191,7 +191,7 @@
   padding-top: 20px;
   border-top: 1px solid var(--color-gold);
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.7;
 }
 @media (max-width: 880px) {
@@ -244,7 +244,7 @@
   font-family: var(--font-display), Georgia, serif;
   font-weight: 500;
   letter-spacing: 0;
-  font-size: clamp(26px, 2.1vw, 30px);
+  font-size: var(--fs-h3);
   line-height: 1.2;
   transition: color 0.4s;
 }
@@ -425,13 +425,13 @@
 .ab-cta h2 {
   max-width: 640px;
   margin: 0 auto 34px;
-  font-size: clamp(1.625rem, 7.2vw, 2.25rem);
+  font-size: var(--fs-h2);
   line-height: 1.1;
 }
 @media (min-width: 768px) {
   .ab-cta h2 {
     max-width: 880px;
-    font-size: clamp(40px, 3.9vw, 56px);
+    font-size: var(--fs-h2);
   }
 }
 
@@ -477,8 +477,8 @@
 .ab-viewer-text {
   margin: 8px 0 0;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 400;
+  font-size: var(--fs-statement);
   line-height: 1.3;
 }
 .ab-viewer-nav {

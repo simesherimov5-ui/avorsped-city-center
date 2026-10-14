@@ -12,7 +12,7 @@ export function Manifest() {
           <div className="eyebrow text-accent">Во што веруваме</div>
         </Reveal>
         <Reveal delay={0.1}>
-          <p className="flex max-w-[980px] flex-col gap-1.5 font-display text-[clamp(19px,2vw,28px)] leading-[1.45]">
+          <p className="flex max-w-[980px] flex-col gap-1.5 font-display text-(length:--fs-statement) leading-[1.45]">
             <span>Има еден момент што никогаш не се заборава:</span>
             <span>кога за првпат ќе го свртите клучот</span>
             <span>и ќе сфатите дека сте дома.</span>

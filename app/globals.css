@@ -74,12 +74,18 @@
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
-  --text-body-size: 1.0625rem;
+  --text-body-size: 0.9375rem; /* 15px */
   --text-body-leading: 1.7;
-  --text-lead-size: 1.1875rem;
-  --text-lead-leading: 1.75;
-  --text-caption-size: 0.8125rem;
+  --text-lead-size: 1.0625rem; /* 17px */
+  --text-lead-leading: 1.65;
+  --text-caption-size: 0.8125rem; /* 13px */
   --text-caption-leading: 1.5;
+  /* The one type scale of the site; nothing is set larger than these at any width. */
+  --fs-hero: clamp(30px, 3.6vw, 52px);
+  --fs-h1: clamp(28px, 3vw, 44px);
+  --fs-h2: clamp(24px, 2.2vw, 32px);
+  --fs-h3: clamp(18px, 1.4vw, 20px);
+  --fs-statement: clamp(19px, 1.7vw, 22px);
 }
 
 @theme inline {
@@ -127,7 +133,7 @@ body {
   background: var(--color-sand);
   color: var(--color-ink);
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 300; /* body text is Montserrat 300 at 16–18px; anything smaller is 400 or heavier (see the base layer below) */
+  font-weight: 400; /* never 300 under 16px */
   font-size: var(--text-body-size);
   line-height: var(--text-body-leading);
   -webkit-font-smoothing: antialiased;
@@ -144,67 +150,45 @@ h4 {
   line-height: 1.12;
 }
 
-/* The heading scale. Phones keep the sizes they had (the h1/h2 rules in the phone block below); from 768px up:
-   H1 Playfair 400, 64–104px, line 1.0, −0.015em · H2 Playfair 400, 40–56px, line 1.1 · H3 Playfair 500, 26–30px,
-   line 1.2. They are classes, not element rules, so a small heading inside a card can stay small. */
+/* The heading scale (one for the whole site, the tokens --fs-* above). Hero h1 30–52px · page h1 28–44px · section h2
+   24–32px · h3 / card titles 18–20px · statement 19–22px · lead 17px · body 15px · small 13px. They are classes, not element
+   rules, so a small heading inside a card can stay small. */
+.t-hero,
 .t-h1,
 .t-h2,
-.t-h3 {
+.t-h3,
+.t-statement {
   font-family: var(--font-display), Georgia, serif;
   overflow-wrap: break-word;
 }
-.t-h1 {
-  font-size: clamp(1.75rem, 8vw, 2.5rem);
-  font-weight: 400;
-  line-height: 1.04;
-  letter-spacing: -0.015em;
-}
-.t-h2 {
-  font-size: clamp(1.5rem, 6.4vw, 2rem);
+.t-hero {
+  font-size: var(--fs-hero);
   font-weight: 400;
   line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.t-h1 {
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.t-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: 1.2;
   letter-spacing: -0.005em;
 }
 .t-h3 {
-  font-size: 1.625rem;
+  font-size: var(--fs-h3);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.3;
   letter-spacing: 0;
 }
-@media (min-width: 768px) {
-  .t-h1 {
-    font-size: clamp(40px, 4.6vw, 68px);
-  }
-  .t-h2 {
-    font-size: clamp(30px, 3vw, 42px);
-  }
-  .t-h3 {
-    font-size: clamp(26px, 2.1vw, 30px);
-  }
-}
-
-/* One container and one section rhythm for the whole site: the navbar, every section and the footer share the same left
-   edge. Utilities still win (pt-0, mt-*), because these are in the components layer. */
-@layer components {
-  .container-x {
-    width: 100%;
-    max-width: 1200px;
-    margin-inline: auto;
-    padding-inline: 20px;
-  }
-  .section-y {
-    padding-block: 72px;
-  }
-  @media (min-width: 640px) {
-    .container-x {
-      padding-inline: 24px;
-    }
-  }
-  @media (min-width: 768px) {
-    .section-y {
-      padding-block: 112px;
-    }
-  }
+.t-statement {
+  font-size: var(--fs-statement);
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
@@ -230,6 +214,7 @@ h4 {
 .text-lead {
   font-size: var(--text-lead-size);
   line-height: var(--text-lead-leading);
+  max-width: 65ch;
 }
 
 .text-caption {
@@ -240,9 +225,9 @@ h4 {
 /* Small uppercase label used above headings and on section eyebrows —
    one consistent size/tracking pair instead of ad hoc tracking-widest calls. */
 .eyebrow {
-  font-size: 0.75rem;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
 }
 

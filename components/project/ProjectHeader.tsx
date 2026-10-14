@@ -31,11 +31,11 @@ export function ProjectHeader({
   return (
     <div className={className}>
       <div className="eyebrow text-gold-deep">{eyebrow}</div>
-      <h1 className="mt-3 font-display text-[clamp(32px,4vw,52px)] font-normal leading-[1.04] tracking-[-0.01em] text-charcoal">
+      <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em] text-charcoal">
         {lead}
         {last && <em className="italic text-gold-deep">{last}</em>}
       </h1>
-      {description && <p className="mt-5 max-w-xl text-base font-light leading-[1.75] text-ink/75">{description}</p>}
+      {description && <p className="mt-5 max-w-xl text-base font-normal leading-[1.75] text-ink/75">{description}</p>}
       {facts.length > 0 && (
         <dl
           className={cn(

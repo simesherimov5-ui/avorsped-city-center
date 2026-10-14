@@ -18,7 +18,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
                 <span aria-hidden className="block h-2 w-2 rounded-full bg-accent" />
                 <div className="eyebrow text-accent">Ново · во продажба</div>
               </div>
-              <h2 className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
+              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
                 Во изградба <em className="italic text-accent">сега.</em>
               </h2>
             </div>

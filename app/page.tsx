@@ -46,7 +46,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
-                <h2 className="mt-3 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
+                <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
                   Изградени <em className="italic text-accent">на доверба.</em>
                 </h2>
               </div>

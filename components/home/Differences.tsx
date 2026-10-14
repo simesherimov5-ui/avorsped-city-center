@@ -31,7 +31,7 @@ export function Differences() {
         <Reveal>
           <div className="lg:w-[300px] lg:shrink-0">
             <div className="eyebrow text-gold-deep">Што нè разликува</div>
-            <h2 className="mt-4 font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
+            <h2 className="mt-4 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
               Деталите
               <br />
               <em className="italic text-gold-deep">се сè.</em>
@@ -43,7 +43,7 @@ export function Differences() {
             <Reveal key={item.lead} delay={i * 0.06}>
               <div className="flex flex-col gap-3 border-t border-line py-6">
                 <div className="eyebrow text-gold-deep">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="font-display text-[21px] font-normal leading-[1.2] sm:text-[24px]">
+                <h3 className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">
                   {item.lead}
                   <br />
                   <em className="italic text-gold-deep">{item.accent}</em>

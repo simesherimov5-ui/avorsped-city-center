@@ -57,7 +57,7 @@ export default function DevelopmentPage() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
           <Reveal immediate>
             <div className="eyebrow text-gold-deep">{development.location}</div>
-            <h1 className="mt-3 font-display text-[clamp(34px,4.4vw,60px)] font-normal leading-[1.04] tracking-[-0.01em]">
+            <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em]">
               {development.name}
             </h1>
           </Reveal>
@@ -82,7 +82,7 @@ export default function DevelopmentPage() {
           <Reveal>
             <div>
               <div className="eyebrow text-gold-deep">Достапност</div>
-              <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1] mt-3">
+              <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2] mt-3">
                 {counts.available} од {unitsText(counts.total)} {plural(counts.available, "е", "се")} сè уште{" "}
                 {availableWord(counts.available)}
               </h2>
@@ -119,7 +119,7 @@ export default function DevelopmentPage() {
           <Reveal>
             <div>
               <div className="eyebrow text-gold-deep">Локација · {development.location}</div>
-              <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1] mt-3">
+              <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2] mt-3">
                 {LOCATION_TEXT.title}
               </h2>
               <div className="mt-6 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
@@ -205,9 +205,7 @@ export default function DevelopmentPage() {
       </section>
 
       <section className="bg-chrome py-12 sm:py-16 text-center text-on-chrome">
-        <h2 className="font-display text-[clamp(26px,2.8vw,40px)] font-normal leading-[1.1]">
-          Не сте сигурни која зграда?
-        </h2>
+        <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Не сте сигурни која зграда?</h2>
         <p className="mx-auto mt-3 max-w-md text-on-chrome/70">
           Филтрирајте секој стан од сите шест згради по големина и достапност.
         </p>

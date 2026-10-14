@@ -29,7 +29,7 @@ export function SectionHeading({
           size === "compact"
             ? cn(
                 "mt-3 font-display font-normal leading-[1.1]",
-                Heading === "h1" ? "text-[clamp(30px,3.4vw,48px)]" : "text-[clamp(26px,2.8vw,40px)]"
+                Heading === "h1" ? "text-(length:--fs-h1)" : "text-(length:--fs-h2)"
               )
             : cn("mt-4", Heading === "h1" ? "t-h1" : "t-h2"),
           tone === "dark" ? "text-on-chrome" : "text-charcoal"
