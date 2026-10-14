@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Playfair_Display } from "next/font/google";
 import { MotionConfig } from "framer-motion";
+import "./fonts/fonts.css";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -15,23 +15,9 @@ import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 import { companyInfo, projects } from "@/data";
 import { SITE_NAME, siteUrl } from "@/lib/seo";
 
-// Exactly two families on the whole site (the identity "Бронза & Травертин"), both loaded with their Cyrillic letters:
-// the site is in Macedonian, and a family loaded without them silently falls back to a different system font on every
-// device. Playfair Display is for headings and large display numbers; Montserrat is for everything else (text, labels,
-// menus, buttons, areas and every number that used to be set in a monospace font).
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-montserrat",
-});
-
-// 400 and 500 upright, and the italic (400) for the one emphasised word of a heading.
-const playfair = Playfair_Display({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-playfair",
-});
+// Exactly two families on the whole site (the identity "Бронза & Травертин"), both with their Cyrillic letters, served from
+// app/fonts (see fonts.css): the site is in Macedonian, and a family without them silently falls back to a different
+// system font. Playfair Display is for headings and large display numbers; Montserrat is for everything else.
 
 export const metadata: Metadata = {
   // The public address (see lib/seo.ts): canonical links, the sitemap and share images are built from it.
@@ -57,7 +43,7 @@ export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="mk" className={`${montserrat.variable} ${playfair.variable}`}>
+    <html lang="mk">
       <body className="antialiased">
         {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
         <a href="#main" className="skip-link">
