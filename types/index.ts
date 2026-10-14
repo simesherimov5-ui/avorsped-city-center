@@ -178,6 +178,26 @@ export interface ProjectAbout {
   en?: { kicker: string; title: string; titleItalic: string };
 }
 
+/** A heading in two parts: the second part is set in italic, in the accent colour. */
+export interface SplitTitle {
+  title: string;
+  titleItalic: string;
+}
+
+export interface MaterialItem {
+  name: string;
+  /** "Where it is used · maker". */
+  note: string;
+  image?: { src: string; alt: string };
+}
+
+export interface ProjectProgress extends SplitTitle {
+  /** ISO date of the last update, or free text; a [placeholder] is shown while it is missing. */
+  updated?: string;
+  /** Per phase: the month it is planned or done in, and a photo from the site. */
+  phases?: Partial<Record<ConstructionPhase, { date?: string; photo?: { src: string; alt: string } }>>;
+}
+
 export interface ResidentQuote {
   text: string;
   name: string;
@@ -222,6 +242,20 @@ export interface Project {
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */
   about?: ProjectAbout;
+  /** Direction of north on the aerial photo of the building picker, in degrees (0 = up, clockwise). Without it: no compass. */
+  masterplanNorth?: number;
+  /** The "Материјали" section: its heading, the materials and who equipped the project. */
+  materialsHeading?: SplitTitle;
+  materials?: MaterialItem[];
+  equippedBy?: string;
+  /** The "Паркинг" section. */
+  parking?: SplitTitle & { text: string };
+  /** The "Локација" list of places and how long it takes to walk there. */
+  walking?: SplitTitle & { places: { name: string; time: string }[] };
+  /** The "Тек на градба" section (the phase itself comes from `construction.currentPhase`). */
+  progress?: ProjectProgress;
+  /** The "Закажете средба" section. */
+  book?: SplitTitle & { text: string };
   distanceHighlights?: string[];
   /** Optional dedicated deep-dive page for this project (e.g. a multi-building explorer). Falls back to the generic /projects/[slug] page. */
   href?: string;

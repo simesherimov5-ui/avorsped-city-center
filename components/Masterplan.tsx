@@ -42,6 +42,8 @@ interface MasterplanProps {
   basePath: string;
   variant?: "preview" | "full";
   className?: string;
+  /** Where north is on `image`, in degrees (0 = up, clockwise). Without it the photo has no compass. */
+  north?: number;
 }
 
 type BuildingWithAvailability = Building & { available: number };
@@ -54,6 +56,7 @@ export function Masterplan({
   basePath,
   variant = "full",
   className,
+  north,
 }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -81,6 +84,8 @@ export function Masterplan({
           <div className="absolute inset-0">
             <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 1024px" />
           </div>
+
+          {north !== undefined && <Compass north={north} />}
 
           {buildingStats.map((building) => {
             const spot = hotspots[building.id];
@@ -356,5 +361,44 @@ function PanelStat({ label, value }: { label: string; value: string }) {
       <dt className="eyebrow text-muted">{label}</dt>
       <dd className="mt-1 text-lg font-medium tabular-nums">{value}</dd>
     </div>
+  );
+}
+
+/**
+ * A compass in the top-right corner of the photo: a thin ring, a slim diamond needle and the letter С (север) above it,
+ * in the accent colour on a soft dark backing so it reads on the bright parts of the photo. The whole compass turns by
+ * `north` degrees, so the needle points to north on the photo. It is decoration only and sits under the markers.
+ */
+function Compass({ north }: { north: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 72 72"
+      className="pointer-events-none absolute right-0 top-0 h-[58px] w-[58px] sm:h-[72px] sm:w-[72px]"
+    >
+      <g transform={`rotate(${north} 36 36)`}>
+        <circle cx="36" cy="36" r="26" fill="var(--color-onyx)" fillOpacity="0.45" />
+        <circle cx="36" cy="36" r="20" fill="none" stroke="var(--color-copper)" strokeWidth="1.25" />
+        <path
+          d="M36 18 L39 36 L36 54 L33 36 Z"
+          fill="none"
+          stroke="var(--color-copper)"
+          strokeWidth="1.25"
+          strokeLinejoin="round"
+        />
+        <path d="M36 18 L39 36 L33 36 Z" fill="var(--color-copper)" />
+        <text
+          x="36"
+          y="13"
+          textAnchor="middle"
+          fontSize="9"
+          fontWeight="600"
+          fill="var(--color-copper)"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        >
+          С
+        </text>
+      </g>
+    </svg>
   );
 }

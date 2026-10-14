@@ -35,13 +35,13 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
   }, []);
 
   return (
-    <section ref={root} id={id} className="bg-cream text-charcoal">
+    <section ref={root} id={id}>
       <div className="mx-auto flex max-w-[1320px] flex-wrap items-start gap-16 px-[5%] pb-20 pt-24 md:pb-[120px] md:pt-[140px]">
         <div className="about-col flex flex-[1_1_360px] flex-col gap-[22px]">
-          <div className="eyebrow text-bronze">{head.kicker}</div>
+          <div className="eyebrow text-gold-deep">{head.kicker}</div>
           <h2 className="font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">
             {head.title}
-            <em className="italic text-bronze">{head.titleItalic}</em>
+            <em className="italic text-gold-deep">{head.titleItalic}</em>
           </h2>
         </div>
         <div
@@ -53,8 +53,8 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
               {paragraph}
             </p>
           ))}
-          <div aria-hidden className="mt-2.5 h-px w-full max-w-[62ch] bg-ink/15" />
-          <div className="font-display text-xl italic text-bronze">{about.signature}</div>
+          <div aria-hidden className="mt-2.5 h-px w-full max-w-[62ch] bg-line" />
+          <div className="font-display text-xl italic text-gold-deep">{about.signature}</div>
         </div>
       </div>
     </section>

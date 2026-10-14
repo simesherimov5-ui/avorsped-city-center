@@ -12,6 +12,11 @@ import { InteractiveFloorPlan } from "@/components/InteractiveFloorPlan";
 import { ProjectHeader } from "@/components/project/ProjectHeader";
 import { ProjectCta } from "@/components/project/ProjectCta";
 import { ProjectOpeningSection } from "@/components/project/ProjectOpeningSection";
+import { ProjectMaterials } from "@/components/project/ProjectMaterials";
+import { ProjectParking } from "@/components/project/ProjectParking";
+import { ProjectLocation } from "@/components/project/ProjectLocation";
+import { ProjectBuildProgress } from "@/components/project/ProjectBuildProgress";
+import { ProjectBook } from "@/components/project/ProjectBook";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
 import { FloorPickerSection } from "@/components/floor-picker/FloorPickerSection";
@@ -55,7 +60,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className={project.heroOpening ? undefined : "pt-24 sm:pt-28"}>
-      {project.heroOpening && <ProjectOpeningSection project={project} />}
+      {project.heroOpening && (
+        <>
+          <ProjectOpeningSection project={project} />
+          <ProjectMaterials project={project} />
+          <ProjectParking project={project} />
+          <ProjectLocation project={project} />
+          <ProjectBuildProgress project={project} />
+          <ProjectBook project={project} />
+        </>
+      )}
       {!project.heroOpening && (
         <>
           <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">

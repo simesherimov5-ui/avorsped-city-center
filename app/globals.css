@@ -294,6 +294,53 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 
+/* A dark band on a page whose own surface is light, and its way back: inside .on-dark the light-surface tokens turn into
+   their dark-surface partners (text Травертин, hairlines Травертин 12%, the accent Светол бакар, cards Еспресо);
+   .on-light inside it restores them for the one light block of the page. */
+.on-dark {
+  --color-ink: var(--color-travertine);
+  --color-charcoal: var(--color-travertine);
+  --color-muted: color-mix(in srgb, var(--color-travertine) 64%, transparent);
+  --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
+  --color-gold-deep: var(--color-copper);
+  --color-gold-dark: var(--color-copper);
+  --color-cream: var(--color-espresso);
+  --color-warm-white: var(--color-espresso);
+  --color-silver: var(--color-espresso);
+  background-color: var(--color-onyx);
+  color: var(--color-travertine);
+}
+.on-light {
+  --color-ink: var(--color-onyx);
+  --color-charcoal: var(--color-onyx);
+  --color-muted: color-mix(in srgb, var(--color-onyx) 68%, transparent);
+  --color-line: color-mix(in srgb, var(--color-onyx) 12%, transparent);
+  --color-gold-deep: var(--color-brass);
+  --color-gold-dark: var(--color-bronze);
+  --color-cream: var(--color-sand);
+  --color-warm-white: var(--color-sand);
+  --color-silver: var(--color-sand);
+  background-color: var(--color-sand);
+  color: var(--color-onyx);
+}
+
+/* The current phase of the construction timeline: a soft pulse (still with reduced motion). */
+.phase-pulse {
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-copper) 55%, transparent);
+  animation: phase-pulse 2.4s ease-out infinite;
+}
+@keyframes phase-pulse {
+  to {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phase-pulse {
+    animation: none;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-copper) 30%, transparent);
+  }
+}
+
 /* Text under 16px is weight 400 or heavier, never 300. The small size utilities carry the weight with them; an
    explicit font-weight utility on the element still wins, because this is the base layer. */
 @layer base {

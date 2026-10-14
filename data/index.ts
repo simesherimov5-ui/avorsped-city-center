@@ -50,6 +50,39 @@ export const projects: Project[] = [
         titleItalic: "in the heart of Strumica.",
       },
     },
+    // TODO(client): the north direction on the aerial photo, in degrees (docs/content-needed.md).
+    masterplanNorth: 0,
+    // TODO(client): the material photos, makers and the headings (docs/content-needed.md).
+    materialsHeading: { title: "[Наслов за квалитетот] ", titleItalic: "[продолжение]" },
+    equippedBy: "Luxury Home",
+    materials: ["Гранит", "Плочки", "Санитарија", "Подови"].map((name) => ({
+      name,
+      note: "[Каде се користи · производител]",
+    })),
+    parking: {
+      title: "[Наслов за паркингот] ",
+      titleItalic: "[продолжение]",
+      text: "[Подземна гаража и паркинг места во комплексот: како се влегува, дали има лифт од гаража до станот, гаражни места за продажба.]",
+    },
+    // TODO(client): the real places and minutes on foot.
+    walking: {
+      title: "Центарот на Струмица, ",
+      titleItalic: "на неколку чекори.",
+      places: [
+        { name: "[Плоштад]", time: "[ 3 МИН ПЕШКИ ]" },
+        { name: "[Училиште]", time: "[ 5 МИН ]" },
+        { name: "[Градинка]", time: "[ 5 МИН ]" },
+        { name: "[Маркет]", time: "[ 2 МИН ]" },
+        { name: "[Парк]", time: "[ 6 МИН ]" },
+      ],
+    },
+    // TODO(client): the date of the last update, the month of each phase and the construction photos.
+    progress: { title: "Следете како ", titleItalic: "расте." },
+    book: {
+      title: "[Наслов за покана] ",
+      titleItalic: "[продолжение]",
+      text: "[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]",
+    },
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
     heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
     gallery: [

@@ -183,6 +183,19 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ---
 
+### 3.12 City Center page: the rest of the new sections
+
+All of it is in the `city-center` entry of `data/index.ts`; every text in [square brackets] is a placeholder that stays as written until the real text arrives.
+
+- **North on the aerial photo:** `masterplanNorth`, in degrees (0 = up, clockwise). Today 0. Send "the north direction on the City Center aerial photo (degrees)"; the compass in the corner of the building picker turns by it.
+- **Материјали** (`materialsHeading`, `materials`, `equippedBy`): the heading `[Наслов за квалитетот] [продолжение]`; for each of Гранит, Плочки, Санитарија, Подови the note `[Каде се користи · производител]` and a photo (portrait 3:4, at least 900 × 1200 px; the placeholder `[ ФОТОГРАФИЈА ]` shows until then). "ОПРЕМЕНО ОД Luxury Home" is text; send the Luxury Home logo file if it should be the logo.
+- **Паркинг** (`parking`): the heading `[Наслов за паркингот] [продолжение]` and the text `[Подземна гаража и паркинг места во комплексот: како се влегува, дали има лифт од гаража до станот, гаражни места за продажба.]` The drawing is simplified (caption `[ ПОЕДНОСТАВЕНА ОСНОВА НА ГАРАЖАТА ]`); a real garage plan can replace it.
+- **Локација** (`walking`): the real places and the minutes on foot. Placeholders now: `[Плоштад]` `[ 3 МИН ПЕШКИ ]`, `[Училиште]` `[ 5 МИН ]`, `[Градинка]` `[ 5 МИН ]`, `[Маркет]` `[ 2 МИН ]`, `[Парк]` `[ 6 МИН ]`.
+- **Тек на градба** (`progress`, `construction`): the date of the last update (`[датум]`), the month of each of the five phases (`[месец]`) and a construction photo for each phase (the placeholder `[ ФОТО ОД ГРАДИЛИШТЕ ]` shows until then). The current phase is `construction.currentPhase` (Конструкција today).
+- **Закажете средба** (`book`): the heading `[Наслов за покана] [продолжение]` and the text `[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]`
+
+---
+
 ## 4. Дојрански Рај (before-launch B3)
 
 - **Where:** the `dojranski-raj` entry of `projects` in `data/index.ts` and `dojranFloors` in `data/dojran.ts`.
