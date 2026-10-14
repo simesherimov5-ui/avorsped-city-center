@@ -110,9 +110,9 @@
 .fp-title {
   margin: 0;
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: var(--fs-h2);
+  font-size: var(--fs-h3);
   font-weight: 400;
-  line-height: 1;
+  line-height: 1.3;
 }
 .fp-soon {
   margin: 0;
@@ -239,7 +239,7 @@
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
 }
 .fp.has-sketch .fp-title {
-  font-size: var(--fs-h2);
+  font-size: var(--fs-h3);
 }
 .fp.has-sketch .fp-units {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
