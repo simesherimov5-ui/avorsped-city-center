@@ -108,7 +108,7 @@
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--mute);
+  color: var(--color-gold);
 }
 
 /* The small outline button (44px). The filling primary button is .btn-primary in globals.css. */

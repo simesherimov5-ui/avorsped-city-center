@@ -65,7 +65,7 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
       {items.map((item, i) => (
         <div key={item.label} className="flex flex-col gap-3">
           <div
-            className="font-display text-(length:--fs-hero) leading-[0.95] text-on-chrome"
+            className="font-display text-(length:--fs-hero) leading-[0.95] text-accent"
             style={{ fontVariantNumeric: "lining-nums tabular-nums" }}
           >
             <span
@@ -79,7 +79,7 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
             </span>
           </div>
           <div aria-hidden className="h-px w-12 bg-accent" />
-          <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-on-chrome/70">{item.label}</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-accent">{item.label}</div>
         </div>
       ))}
     </div>

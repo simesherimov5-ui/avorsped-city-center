@@ -119,7 +119,7 @@ export function ProjectOpening({
 
       <Link
         href={backHref}
-        className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.2em] text-on-chrome/70 transition-colors hover:text-on-chrome"
+        className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent/80"
       >
         {t("opening.back")}
       </Link>
@@ -143,7 +143,7 @@ export function ProjectOpening({
             <span className="font-display text-xl italic text-paper">{rest}</span>
           </p>
         )}
-        <div className="mt-2.5 flex items-center gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-on-chrome/80">
+        <div className="mt-2.5 flex items-center gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent">
           {showSound && (
             <>
               <button

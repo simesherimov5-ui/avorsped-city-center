@@ -56,7 +56,7 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
             </>
           )}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-chrome/80 to-transparent p-3">
-            <span className="eyebrow text-on-chrome">{room.label}</span>
+            <span className="eyebrow text-accent">{room.label}</span>
           </div>
         </button>
       ))}

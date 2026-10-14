@@ -90,7 +90,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
             <blockquote className="m-0 font-display text-[clamp(30px,3.4vw,48px)] font-normal italic leading-[1.3] text-paper">
               „{quote.text}“
             </blockquote>
-            <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.32em] text-on-chrome/60">{by}</p>
+            <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.32em] text-accent">{by}</p>
           </div>
         </div>
         {count > 1 && (

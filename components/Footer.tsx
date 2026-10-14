@@ -9,7 +9,7 @@ export function Footer() {
         <div>
           <div className="leading-none">
             <div className="footer-sheen">Javor Sped</div>
-            <div className="eyebrow mt-2 text-on-chrome/60">Holding</div>
+            <div className="eyebrow mt-2 text-accent">Holding</div>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-on-chrome/60">
             {companyInfo.name} Холдинг — градиме станбени простори од {companyInfo.founded} година.
@@ -17,7 +17,7 @@ export function Footer() {
         </div>
 
         <div>
-          <div className="eyebrow text-on-chrome/60">Истражи</div>
+          <div className="eyebrow text-accent">Истражи</div>
           <div className="mt-3 flex flex-col text-base text-on-chrome/75 sm:mt-5 sm:gap-2.5 sm:text-sm">
             <Link href="/projects" className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0">
               Проекти
@@ -29,7 +29,7 @@ export function Footer() {
         </div>
 
         <div>
-          <div className="eyebrow text-on-chrome/60">Контакт</div>
+          <div className="eyebrow text-accent">Контакт</div>
           <div className="mt-3 flex flex-col text-base text-on-chrome/75 sm:mt-5 sm:gap-2.5 sm:text-sm">
             <span className="py-2 sm:py-0">{companyInfo.address}</span>
             <a
@@ -48,7 +48,7 @@ export function Footer() {
         </div>
 
         <div>
-          <div className="eyebrow text-on-chrome/60">Консултација</div>
+          <div className="eyebrow text-accent">Консултација</div>
           <p className="mt-5 text-sm leading-relaxed text-on-chrome/60">
             Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
           </p>
