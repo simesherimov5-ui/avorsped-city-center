@@ -42,7 +42,7 @@ export function ProjectCard({ project }: { project: Project }) {
                 ? "(max-width: 640px) 80vw, 320px"
                 : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
             }
-            className="aspect-[4/3] transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
+            className="aspect-[4/3] transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           />
         )}
         <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>

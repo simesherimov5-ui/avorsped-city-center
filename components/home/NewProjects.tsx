@@ -19,7 +19,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
             </h2>
             <Link
               href="/projects"
-              className="sec-link focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              className="sec-link focus-ring inline-flex min-h-11 items-center link-grow text-xs font-semibold uppercase tracking-[0.32em] text-accent"
             >
               Сите проекти →
             </Link>

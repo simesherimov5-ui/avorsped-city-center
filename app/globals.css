@@ -213,6 +213,23 @@ h4 {
   }
 }
 
+/* A text link: a faint line at rest, a 1px Светол бакар line grows along it on hover and focus (0.4s). */
+.link-grow {
+  padding-bottom: 4px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-copper) 35%, transparent);
+  background: linear-gradient(var(--color-copper), var(--color-copper)) left bottom / 0% 1px no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-grow:hover,
+.link-grow:focus-visible {
+  background-size: 100% 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-grow {
+    transition: none;
+  }
+}
+
 /* The head of a section: eyebrow, then the h2 (12px below), then an optional lead (16px below, 520px at most), then 48px
    of space before the content. A "see all" link (.sec-link) sits on the right of the h2, on the same baseline. */
 .sec-head {

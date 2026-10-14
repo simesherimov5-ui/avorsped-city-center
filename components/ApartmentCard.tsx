@@ -36,7 +36,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             priority={priority}
             // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
             className={cn(
-              "aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]",
+              "aspect-[4/3] transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]",
               apartment.status === "sold" && "opacity-50"
             )}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

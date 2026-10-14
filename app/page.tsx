@@ -50,7 +50,7 @@ export default function HomePage() {
               </h2>
               <Link
                 href="/about"
-                className="sec-link focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+                className="sec-link focus-ring inline-flex min-h-11 items-center link-grow text-xs font-semibold uppercase tracking-[0.32em] text-accent"
               >
                 Нашата приказна
               </Link>
@@ -75,7 +75,7 @@ export default function HomePage() {
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
             <Link
               href="/about"
-              className="focus-ring mt-10 inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              className="focus-ring mt-10 inline-flex min-h-11 items-center link-grow text-xs font-semibold uppercase tracking-[0.32em] text-accent"
             >
               За нас
             </Link>
