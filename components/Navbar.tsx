@@ -19,7 +19,6 @@ import { Logo } from "@/components/ui/Logo";
 const LINKS = [
   { href: "/", key: "nav.home" },
   { href: "/projects", key: "nav.projects" },
-  { href: "/apartments", key: "nav.findApartment" },
   { href: "/about", key: "nav.about" },
   { href: "/contact", key: "nav.contact" },
 ];

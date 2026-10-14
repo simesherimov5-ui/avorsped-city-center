@@ -19,9 +19,6 @@ export function Footer() {
         <div>
           <div className="eyebrow text-on-chrome/60">Истражи</div>
           <div className="mt-3 flex flex-col text-base text-on-chrome/75 sm:mt-5 sm:gap-2.5 sm:text-sm">
-            <Link href="/apartments" className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0">
-              Пронајди стан
-            </Link>
             <Link href="/projects" className="flex min-h-11 w-fit items-center hover:text-on-chrome lg:min-h-0">
               Проекти
             </Link>
