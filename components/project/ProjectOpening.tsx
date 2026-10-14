@@ -124,11 +124,11 @@ export function ProjectOpening({
         {t("opening.back")}
       </Link>
 
-      <div className="opening-rise absolute inset-x-0 bottom-10 flex flex-col items-center gap-[18px] px-[5%] text-center md:bottom-16">
+      <div className="opening-rise absolute inset-x-0 bottom-5 flex flex-col items-center gap-[14px] px-[5%] text-center md:bottom-8">
         <div className="eyebrow uppercase text-accent" style={{ letterSpacing: "0.5em" }}>
           {eyebrow}
         </div>
-        <h1 className="font-display text-[clamp(44px,13vw,64px)] font-normal leading-none text-paper md:text-[clamp(56px,8vw,128px)]">
+        <h1 className="font-display text-[clamp(36px,10vw,52px)] font-normal leading-none text-paper md:text-[clamp(44px,5.6vw,88px)]">
           {name}
         </h1>
         {tagline && (

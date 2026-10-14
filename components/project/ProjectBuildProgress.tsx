@@ -36,7 +36,7 @@ export function ProjectBuildProgress({ project }: { project: Project }) {
   const fill = (current / (CONSTRUCTION_PHASES.length - 1)) * 100;
 
   return (
-    <ProjectSection label="Тек на градба" tone="tint">
+    <ProjectSection label="Тек на градба" tone="dark">
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHead eyebrow="ТЕК НА ГРАДБА" title={progress.title} titleItalic={progress.titleItalic} />
@@ -71,7 +71,7 @@ export function ProjectBuildProgress({ project }: { project: Project }) {
                 />
                 <div className="eyebrow eyebrow-tight text-ink">{NAMES[phase.key]}</div>
                 <div className="font-display text-base italic text-gold-deep">{detail?.date ?? "[месец]"}</div>
-                <div className="mt-2 aspect-[4/3] w-full overflow-hidden bg-ink/10">
+                <div className="mt-2 aspect-[4/3] w-full overflow-hidden bg-espresso">
                   <Media
                     image={{
                       src: detail?.photo?.src ?? "",
@@ -79,7 +79,7 @@ export function ProjectBuildProgress({ project }: { project: Project }) {
                       isPlaceholder: !detail?.photo,
                     }}
                     label="[ ФОТО ОД ГРАДИЛИШТЕ ]"
-                    tone="light"
+                    tone="dark"
                     className="h-full w-full"
                     sizes="(max-width: 640px) 100vw, 260px"
                   />

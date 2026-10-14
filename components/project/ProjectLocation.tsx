@@ -12,7 +12,7 @@ export function ProjectLocation({ project, map, below }: { project: Project; map
   const walking = project.walking;
   if (!walking) return null;
   return (
-    <ProjectSection label="Локација">
+    <ProjectSection label="Локација" tone="dark">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal>
           <SectionHead eyebrow="ЛОКАЦИЈА" title={walking.title} titleItalic={walking.titleItalic} />
