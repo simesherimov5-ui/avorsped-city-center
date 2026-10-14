@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Крај на почетна · Стакло (референца)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+/* Reference for the homepage ending "Стакло". The colours are the site's tokens (app/globals.css):
+   Оникс, Еспресо, Травертин, the logo gold (--color-brass), the button gold (--color-button), Бронза. */
+:root {
+  --onyx: #14110f;
+  --espresso: #221c17;
+  --travertine: #f2e9da;
+  --brass: #c4a454;
+  --button: #c9a45c;
+  --bronze: #6d533e;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--onyx); }
+body { font-family: "Montserrat", "Segoe UI", sans-serif; color: var(--travertine); -webkit-font-smoothing: antialiased; }
+
+/* Only for this reference file: the replay button. It is not part of the section. */
+.ref-bar { position: fixed; top: 12px; right: 12px; z-index: 10; }
+.ref-bar button { font: 600 11px/1 "Montserrat", sans-serif; letter-spacing: 0.2em; text-transform: uppercase; color: var(--travertine); background: rgba(242, 233, 218, 0.08); border: 1px solid rgba(242, 233, 218, 0.25); padding: 12px 16px; cursor: pointer; }
+.ref-bar button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+/* ───────── The section ───────── */
+.end { position: relative; isolation: isolate; overflow: hidden; display: grid; align-items: center; justify-items: center; min-height: min(760px, 100svh); padding: 72px 20px; background: var(--onyx); color: var(--travertine); }
+.end > * { grid-area: 1 / 1; min-width: 0; }
+
+/* 1 · a soft gold glow, so the glass has light to catch */
+.end-glow { width: min(900px, 130%); aspect-ratio: 3 / 2; background: radial-gradient(closest-side, rgba(196, 164, 84, 0.16), rgba(196, 164, 84, 0)); pointer-events: none; }
+
+/* 2 · the building mark, as thin gold lines */
+.end-mark { display: block; height: min(660px, 88svh); width: auto; }
+.end-mark path { fill: none; stroke: url(#end-gold); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.end-mark .s0 { stop-color: var(--bronze); }
+.end-mark .s1 { stop-color: var(--brass); }
+.end-mark .s2 { stop-color: #dbc797; } /* the logo gold mixed half-way to Травертин */
+
+/* 3 · the glass panel */
+.end-glass { width: min(820px, 100%); padding: 52px 64px 44px; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; border-radius: 2px;
+  background: rgba(34, 28, 23, 0.4);
+  -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(242, 233, 218, 0.07); border-top-color: rgba(196, 164, 84, 0.6); /* gold light on the top edge */
+  box-shadow: 0 44px 80px -44px rgba(0, 0, 0, 0.9); }
+.end-eyebrow { font-size: 12px; font-weight: 600; line-height: 1; letter-spacing: 0.32em; text-transform: uppercase; color: var(--brass); }
+.end-title { margin: 0; font-family: "Playfair Display", Georgia, serif; font-weight: 400; font-size: clamp(30px, 3.5vw, 50px); line-height: 1.1; letter-spacing: -0.018em; text-wrap: balance; }
+.end-title em { font-style: italic; color: var(--brass); }
+.end-lead { margin: 0; max-width: 480px; font-size: 17px; font-weight: 400; line-height: 1.65; color: rgba(242, 233, 218, 0.84); }
+.end-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 8px; }
+.end-btn { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 44px; padding: 18px 30px; border-radius: 0; font-size: 12px; font-weight: 600; line-height: 1.2; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; transition: transform 100ms ease-out; }
+.end-btn:active { transform: scale(0.97); } /* feedback the instant it is pressed */
+.end-btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.end-btn--primary { background: var(--button); color: var(--onyx); }
+.end-btn--primary span { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: 1px solid rgba(20, 17, 15, 0.55); border-radius: 50%; }
+.end-btn--secondary { border: 1px solid rgba(242, 233, 218, 0.4); color: var(--travertine); }
+.end-contact { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 22px; margin-top: 10px; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; }
+.end-contact a { display: inline-flex; align-items: center; min-height: 44px; color: rgba(242, 233, 218, 0.9); text-decoration: none; }
+.end-contact a:hover { color: var(--travertine); }
+.end-contact i { width: 3px; height: 3px; border-radius: 50%; background: rgba(242, 233, 218, 0.5); }
+
+/* ───────── The entrance: the building builds, the glass arrives, the text comes ─────────
+   "armed" is added by the script (so without scripts everything is simply visible);
+   "in" is added once, when 40% of the section is on screen. */
+.end.armed:not(.in) .end-glow { opacity: 0; }
+.end.armed:not(.in) .end-mark path { stroke-dashoffset: 1; }
+.end.armed:not(.in) .end-glass { opacity: 0; }
+.end.armed:not(.in) .end-glass > * { opacity: 0; }
+
+.end.in .end-glow { animation: end-fade 1.4s ease-out 0.4s both; }
+.end.in .end-mark path { animation: end-draw 0.5s var(--ease) both; }
+/* frame and spine rise first, then the floors from the ground up; each right half 0.05s after its left half */
+.end.in .end-mark path:nth-of-type(1) { animation-duration: 0.9s; animation-delay: 0s; }
+.end.in .end-mark path:nth-of-type(2) { animation-duration: 0.85s; animation-delay: 0.08s; }
+.end.in .end-mark path:nth-of-type(3) { animation-delay: 0.3s; }
+.end.in .end-mark path:nth-of-type(4) { animation-delay: 0.35s; }
+.end.in .end-mark path:nth-of-type(5) { animation-delay: 0.36s; }
+.end.in .end-mark path:nth-of-type(6) { animation-delay: 0.41s; }
+.end.in .end-mark path:nth-of-type(7) { animation-delay: 0.42s; }
+.end.in .end-mark path:nth-of-type(8) { animation-delay: 0.47s; }
+.end.in .end-mark path:nth-of-type(9) { animation-delay: 0.48s; }
+.end.in .end-mark path:nth-of-type(10) { animation-delay: 0.53s; }
+.end.in .end-mark path:nth-of-type(11) { animation-delay: 0.54s; }
+.end.in .end-mark path:nth-of-type(12) { animation-delay: 0.59s; }
+.end.in .end-mark path:nth-of-type(13) { animation-delay: 0.6s; }
+.end.in .end-mark path:nth-of-type(14) { animation-delay: 0.65s; }
+.end.in .end-mark path:nth-of-type(15) { animation-delay: 0.66s; }
+.end.in .end-mark path:nth-of-type(16) { animation-delay: 0.71s; }
+.end.in .end-mark path:nth-of-type(17) { animation-delay: 0.72s; }
+.end.in .end-mark path:nth-of-type(18) { animation-delay: 0.77s; }
+.end.in .end-mark path:nth-of-type(19) { animation-delay: 0.78s; }
+.end.in .end-mark path:nth-of-type(20) { animation-delay: 0.83s; }
+.end.in .end-mark path:nth-of-type(21) { animation-delay: 0.84s; }
+.end.in .end-mark path:nth-of-type(22) { animation-delay: 0.89s; }
+/* the glass materialises: opacity, scale and blur together */
+.end.in .end-glass { animation: end-glass 0.8s var(--ease) 1.15s both; }
+/* then the text, line by line */
+.end.in .end-glass > * { animation: end-rise 0.7s var(--ease) both; }
+.end.in .end-glass > :nth-child(1) { animation-delay: 1.45s; }
+.end.in .end-glass > :nth-child(2) { animation-delay: 1.54s; }
+.end.in .end-glass > :nth-child(3) { animation-delay: 1.63s; }
+.end.in .end-glass > :nth-child(4) { animation-delay: 1.72s; }
+.end.in .end-glass > :nth-child(5) { animation-delay: 1.81s; }
+
+@keyframes end-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes end-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes end-glass {
+  from { opacity: 0; transform: scale(0.97); -webkit-backdrop-filter: blur(0px) saturate(100%); backdrop-filter: blur(0px) saturate(100%); }
+  to { opacity: 1; transform: none; -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%); }
+}
+@keyframes end-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ───────── Phones ───────── */
+@media (max-width: 640px) {
+  /* the building stands above the panel and the panel overlaps its base */
+  .end { min-height: 0; padding: 56px 16px 64px; grid-template-rows: auto auto; align-content: center; }
+  .end > * { grid-area: auto; }
+  .end-glow { grid-area: 1 / 1 / 3 / 2; align-self: start; width: 130%; }
+  .end-mark { grid-row: 1; grid-column: 1; height: 230px; }
+  .end-mark path { stroke-width: 2.2; }
+  .end-glass { grid-row: 2; grid-column: 1; margin-top: -64px; }
+  .end-glass { padding: 36px 22px 30px; gap: 18px; }
+  .end-eyebrow { letter-spacing: 0.2em; }
+  .end-lead { font-size: 16px; }
+  .end-actions { flex-direction: column; align-self: stretch; gap: 12px; }
+  .end-btn { padding: 18px 22px; letter-spacing: 0.14em; }
+  .end-contact i { display: none; }
+  .end-contact { flex-direction: column; gap: 0; }
+}
+
+/* ───────── Accessibility ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .end.in .end-glow, .end.in .end-mark path, .end.in .end-glass, .end.in .end-glass > * { animation: none; }
+  .end-btn { transition: none; }
+  .end-btn:active { transform: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .end-glass { background: var(--espresso); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .end-glass { background: var(--espresso); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: rgba(242, 233, 218, 0.6); }
+}
+</style>
+</head>
+<body>
+<div class="ref-bar"><button type="button" id="replay">Повтори</button></div>
+
+<section class="end" aria-labelledby="end-title">
+  <div class="end-glow" aria-hidden="true"></div>
+
+  <svg class="end-mark" viewBox="50 60 170 240" aria-hidden="true">
+    <defs>
+      <linearGradient id="end-gold" gradientUnits="userSpaceOnUse" x1="60" y1="300" x2="200" y2="62">
+        <stop class="s0" offset="0"></stop>
+        <stop class="s1" offset="0.4"></stop>
+        <stop class="s2" offset="1"></stop>
+      </linearGradient>
+    </defs>
+    <path pathLength="1" d="M60 300 V70 H110"></path>
+    <path pathLength="1" d="M134 300 V62"></path>
+    <path pathLength="1" d="M70 298 L128 272"></path>
+    <path pathLength="1" opacity="0.6" d="M140 268 L200 298"></path>
+    <path pathLength="1" d="M70 280 L128 254"></path>
+    <path pathLength="1" opacity="0.6" d="M140 250 L200 280"></path>
+    <path pathLength="1" d="M70 262 L128 236"></path>
+    <path pathLength="1" opacity="0.6" d="M140 232 L200 262"></path>
+    <path pathLength="1" d="M70 244 L128 218"></path>
+    <path pathLength="1" opacity="0.6" d="M140 214 L200 244"></path>
+    <path pathLength="1" d="M70 226 L128 200"></path>
+    <path pathLength="1" opacity="0.6" d="M140 196 L200 226"></path>
+    <path pathLength="1" d="M70 208 L128 182"></path>
+    <path pathLength="1" opacity="0.6" d="M140 178 L200 208"></path>
+    <path pathLength="1" d="M70 190 L128 164"></path>
+    <path pathLength="1" opacity="0.6" d="M140 160 L200 190"></path>
+    <path pathLength="1" d="M70 172 L128 146"></path>
+    <path pathLength="1" opacity="0.6" d="M140 142 L200 172"></path>
+    <path pathLength="1" d="M70 154 L128 128"></path>
+    <path pathLength="1" opacity="0.6" d="M140 124 L200 154"></path>
+    <path pathLength="1" d="M70 136 L128 110"></path>
+    <path pathLength="1" opacity="0.6" d="M140 106 L200 136"></path>
+  </svg>
+
+  <div class="end-glass">
+    <div class="end-eyebrow">Следен чекор</div>
+    <h2 class="end-title" id="end-title">Вашето следно поглавје <em>започнува тука.</em></h2>
+    <p class="end-lead">Разговарајте со нашиот тим за продажба за кој било од нашите проекти.</p>
+    <div class="end-actions">
+      <a class="end-btn end-btn--primary" href="#kontakt">Закажи консултација<span aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 6 H11 M7 2 L11 6 L7 10"></path></svg></span></a>
+      <a class="end-btn end-btn--secondary" href="#proekti">Погледни ги проектите</a>
+    </div>
+    <div class="end-contact">
+      <a href="tel:+38923123456">+389 2 3123 456</a>
+      <i aria-hidden="true"></i>
+      <a href="mailto:info@javorsped.mk">info@javorsped.mk</a>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var el = document.querySelector(".end");
+  if (!el) return;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) {
+    el.classList.add("armed");
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { el.classList.add("in"); io.disconnect(); }
+        });
+      }, { threshold: 0.4 });
+      io.observe(el);
+    } else {
+      el.classList.add("in");
+    }
+  }
+  document.getElementById("replay").addEventListener("click", function () {
+    if (reduce) return;
+    el.classList.add("armed");
+    el.classList.remove("in");
+    void el.offsetWidth; // restart the animations
+    el.classList.add("in");
+  });
+})();
+</script>
+</body>
+</html>

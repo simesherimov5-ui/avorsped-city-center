@@ -1,0 +1,435 @@
+13f6622 | 2026-10-07 | Redesign phase 1: the six colours of Бронза & Травертин
+Оникс, Еспресо, Травертин, Варовник, Бронза and Светол бакар are the only colours; the old token names are aliases of them (paper = Травертин, ink and the dark pages' black = Оникс, gold = Светол бакар, gold-deep = Бронза, warm-white = Варовник). Hand-written colours in the share images, the theme colour, the manifest, the icon, the dark theme, the intro and the status badge now use the palette or the tokens; shadows are gone; apartment status is a filled dot, an empty ring or a short dash next to its label. Decision log, Direction and As built today updated in docs/design-brief.md.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f1d1a11 | 2026-10-07 | Redesign phase 2: Playfair Display and Montserrat, the heading scale
+Exactly two families with Cyrillic: Playfair Display (400, 500, 400 italic) and Montserrat (300-600); Inter and IBM Plex Mono are gone, and every number that used the monospace font is Montserrat 500 with tabular numbers. Headings use .t-h1/.t-h2/.t-h3 (64-104px, 40-56px, 26-30px from 768px up; phones keep their sizes); prices, areas, menus and long texts are Montserrat; text under 16px is weight 400 or more; the stray glyphs and the map's zoom buttons no longer fall back to a system font. Text on photos holds 4.5:1 where it did not.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+b885978 | 2026-10-07 | Redesign phase 3: the filling primary button and the project card hover
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+e6060b6 | 2026-10-07 | Redesign phase 4: the floor picker on the building page
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+3e2981e | 2026-10-07 | Redesign phase 5: the opening where the logo builds itself
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+15393db | 2026-10-07 | Redesign phase 6: the year counter in Зошто нас
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+e8e6cb6 | 2026-10-07 | Redesign phase 7: the metallic sheen on the footer wordmark
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+8e0720d | 2026-10-07 | Redesign phase 8: the schematic location map on Контакт and the development page
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+e24fa3a | 2026-10-07 | Describe the new components in the design brief
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+0296e44 | 2026-10-07 | Page change: a plain curtain wipe, no fade over the dark, about 1.5s instead of 2.8s
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+948714d | 2026-10-07 | Use the opening's building mark as the logo everywhere and move the company ticker above the footer
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+6708eb9 | 2026-10-07 | Homepage: big serif headline, project-name strip, the company's own texts and a quote band
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+840454b | 2026-10-07 | Place the company's texts and quotes: About, Projects, development location; page change 1.2s longer
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+c176870 | 2026-10-07 | Remove the moving project-name strip from the homepage
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+7f33c96 | 2026-10-07 | Accent on dark is now #BC9676 everywhere (tokens, favicon, share images, brief)
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+223b753 | 2026-10-07 | Homepage follows the board: manifest, film, projects being built, numbers, what sets us apart, soon
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+d4e3813 | 2026-10-07 | Homepage: smaller text and spacing, projects as the photo slideshow again, hero without the button, all numbers count up
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+5933db3 | 2026-10-07 | Hero text as marked, homepage projects in the carousel slideshow
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+94f35ea | 2026-10-07 | Homepage slideshow shows all three projects, Станбена Куќа included
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+54f2ff9 | 2026-10-07 | Homepage slideshow changes slide every 3 seconds
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+71ea0a1 | 2026-10-07 | Development page: availability and location first, the building picker last, smaller headings, no zoom when a building is picked
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+d3c0aa6 | 2026-10-07 | City Center location map: the nearby places drawn on it, real coordinates for the Google Maps link
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+e299c5a | 2026-10-07 | Project pages follow the redesign: shared header and call to action, smaller titles; City Center on the contact map
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+0f381a0 | 2026-10-07 | Remove Exclusive Building, the companies ticker and circle; logo and wordmark in the logo gold #C4A454; no hover pause on the slideshow
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+ec1a048 | 2026-10-07 | Opening restored to the original sequence: the building draws, then the ring and counter, then JS to JAVOR SPED and HOLDING
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+d6ae714 | 2026-10-07 | Contact map: the pin is named ГТЦ Глобал, the City Center line clears the name
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+14833e4 | 2026-10-08 | Button colour #baab02 on dark surfaces, projects page slideshow up under the navbar, the slideshow stops when the visitor moves it
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+5301d11 | 2026-10-08 | Button colour #fcb16a on dark surfaces; taller project slideshow
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+aa9c944 | 2026-10-08 | Light surfaces a little creamier: Травертин #F2E9DA, Варовник #E5D8C3
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+d9331f1 | 2026-10-08 | Light backgrounds in #E0CAB6; the hero headline on one line, no italics
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+9e8b896 | 2026-10-08 | Accent text on cream surfaces in the logo gold; the hero headline in one colour
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+db4ec1f | 2026-10-08 | Floor picker and construction progress on every project; floors without details stay empty
+
+---
+5ba17c6 | 2026-10-08 | Light backgrounds in #F7ECC3
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+27bdfa4 | 2026-10-08 | Hero: the two texts in the bottom strip, numbers removed; the accent on dark is now the logo gold
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+1c1acdb | 2026-10-08 | Light backgrounds in #E6DCCD
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+a6656c4 | 2026-10-08 | Light backgrounds in #F4EFE7
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+01e422c | 2026-10-08 | Completed projects: ГТЦ Глобал, Илинденска
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+5f30c40 | 2026-10-08 | Проекти page per board 03b
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+509e7f4 | 2026-10-08 | Projects page: four cards to a row, the navbar stays in view above the sticky filter bar
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+b8d1a2f | 2026-10-08 | Remove the Завршени проекти tab from the navbar
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+0e3d141 | 2026-10-08 | Projects map: pins and city counts follow the chosen status
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+be02f9c | 2026-10-08 | About hero: the facts at the right with the gold line under them
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f1d79fd | 2026-10-08 | Contact: the booking form in a bordered panel, guided one step at a time; smaller headings; light small text fixed
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f5173db | 2026-10-08 | Done-green slightly darker so the Завршено labels pass contrast
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+3943a91 | 2026-10-08 | Contact heading smaller; the gold phrase on the black pages is no longer italic
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+bcdc6b2 | 2026-10-08 | Contact booking: an undecided path with optional preferences
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+62df2cc | 2026-10-09 | Contact booking: the optional preferences step stays folded, so the day and time step opens at once
+
+---
+f42f323 | 2026-10-09 | Contact booking: the undecided option reads just «Сè уште не знам»
+
+---
+664d9dd | 2026-10-09 | Dark-surface buttons (Закажи консултација) use #c9a45c
+
+---
+7969d2a | 2026-10-09 | Add the apple-design skill (Emil Kowalski) for motion and interface craft
+
+---
+47d895f | 2026-10-09 | City Center masterplan: markers 01 and 02 swap places on the aerial photo
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+3e2c42c | 2026-10-09 | Masterplan: the plan keeps its 16:9 box and the panel never changes the page height
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+7b9d401 | 2026-10-09 | Floor picker lists each floor's apartments with a link to the floor plan; a floor without details says so; «1 соба»
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+722208e | 2026-10-09 | Станбена Куќа: only one video plays at a time (the large player pauses the small one)
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+8c86e33 | 2026-10-09 | Home carousel: 7 seconds a slide, pauses on hover and focus, a visitor's move restarts the interval
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+e7a037e | 2026-10-09 | Home intro: plays once per browser session without a flash, and a click, tap, Esc, Enter or Space skips it
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+63958ff | 2026-10-09 | Images: sizes match the displayed width, so no photo is loaded smaller than it is shown
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+712da34 | 2026-10-09 | Станбена Куќа: the address is /projects/stanbena-kukja; the old one redirects permanently
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+82744bf | 2026-10-09 | Spelling: зелен простор, City Center, нè нас, јавете ни се
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+9785f87 | 2026-10-09 | Navigation: «Пронајди стан» after Проекти, desktop and mobile
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+a502a4e | 2026-10-09 | Контакт: «Не знам која зграда» skips the apartment question
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+47a60e2 | 2026-10-09 | Homepage ending: glass panel over the building mark
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+9105b8e | 2026-10-09 | Opening: it plays on every load of the homepage again (a click, tap or key still skips it)
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+820d345 | 2026-10-09 | Opening: the closing animation is 1.2 seconds longer
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+eb9e5c4 | 2026-10-09 | Logo and wordmark in the metallic gold of the first site (the opening, the navbar, the favicon)
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+1a3df78 | 2026-10-09 | Compare bar: shown only where apartments are chosen (an allow-list of paths); hiding never clears the selection
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+4958a03 | 2026-10-09 | Пронајди стан: street of buildings and apartment pop-up
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+d471cdc | 2026-10-09 | Remove prices everywhere
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+cce942d | 2026-10-09 | Пронајди стан and data for all projects, not only City Center
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+db6b9cf | 2026-10-09 | Зграда 01: real floors, apartments and sketches
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+7392b25 | 2026-10-10 | City Center: real floors, apartments and sketches
+All six buildings (Ламела 1–6 = Зграда 01–06) now come from the architect's
+plans: 207 apartments with their own numbers, areas, rooms and plans, six
+floors each (Кат 1–5 and Поткровје), and each floor's own sketch with the
+shape of every apartment on it. The conversion is generic (data/plans.ts) and
+knows nothing about any one project or building; the plans file is
+data/plans/city-center.json and the images are in public/images/floorplans.
+
+- floor picker shows the chosen floor's sketch, with linked hover and focus
+  between the shapes and the cards, and the sketch cross-fades only when
+  another file is needed
+- floor sketch and plans are served lossless and never larger than their own
+  pixels (the blur came from the contained picture's blurred backdrop showing
+  through the transparent drawing and from the image optimizer re-encoding it)
+- apartment pages, compare and Пронајди стан use each apartment's own plan
+  and rooms; old sample apartment links redirect to the building page
+- replaces the Зграда 01-only data, viewers and sample plans
+- docs: statuses and two drawing notes to confirm with the architect
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+633f3d7 | 2026-10-14 | Remove the Пронајди стан tab from the navigation and footer
+The page stays; the tab returns together with the comparison.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+47d6387 | 2026-10-14 | Project status chips: one colour for every status
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f1011d8 | 2026-10-14 | WIP: snapshot before polish pass
+Everything of the work so far is already committed on this branch; the only files
+not committed are the client's reference material (architect's drawings and PDFs under
+javor-sped-complete/reference and a prompt file), which stay out of git on purpose.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+c74a84d | 2026-10-14 | Fonts: serve Playfair Display and Montserrat from app/fonts
+next/font/google registered only fallback faces; the real fonts never loaded.
+Latin and Cyrillic subsets (variable woff2) now load from the repo in dev and production.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+c2c5fbe | 2026-10-14 | Colours: one accent (Светол бакар, Бронза on light), one cream, homepage rhythm
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+eceb831 | 2026-10-14 | One container and a centred navigation
+Navbar, sections and footer share .container-x (1200px, 24 / 20px sides); the black and projects wrappers match it.
+The nav is a three-column grid so its links sit on the page centre, 76px high, with a centre-growing underline,
+a blurred Оникс bar after 40px and a centred full-screen phone menu.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+fb2a4c9 | 2026-10-14 | One type scale for the whole site
+Hero 30-52, page h1 28-44, section h2 24-32, h3 18-20, statement 19-22, lead 17, body 15, small 13; eyebrow 11/600/0.3em,
+button 12/600/0.18em; no weight 300 under 16px; the hero title wraps on phones.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+1de12fe | 2026-10-14 | Text placement page by page and one reveal
+Hero centred with two buttons and one scrim; film lead under its heading; clean 16:9 carousel with controls under
+the photo; Differences 4 + 7 columns; closing block 640px without the glow; projects hero compact, 4:5 cards at
+4/3/2/1 columns; about prose 5 + 6 columns, values 2 x 2; contact 7 + 5 columns; footer bottom row.
+One reveal (0.9s, 24px, 15% in view, once) replaces the GSAP and Framer ones; section-head pattern added.
+Also restores .container-x / .section-y, dropped by an earlier edit.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+791c1fa | 2026-10-14 | Animation: one system, calmer hovers
+Photos scale to 1.04 over 1.2s on card hover; text links grow an underline in 0.4s; the word-by-word story effect and
+the blurred, scaled photo backdrop are removed.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+645e560 | 2026-10-14 | Pages dark with one light band; base heading scale; section spacing
+The project pages get a dark top band (.on-dark remaps the light tokens), so each page is Оникс with one light band.
+Phone heading overrides are gone: h1 / h2 / h3 follow the single scale. Hero scrim and buttons tuned for phones.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+3e77a69 | 2026-10-14 | Revert placement, animation and page-rhythm changes of the polish pass
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f122cd1 | 2026-10-14 | Revert "One container and a centred navigation"
+This reverts commit eceb83107ec8112e593421a134ed062ccac6cda7.
+
+---
+a7256e7 | 2026-10-14 | Revert "Colours: one accent, one cream, homepage rhythm"
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+2a419d0 | 2026-10-14 | Keep the polish pass's heading scale on top of the reverted design
+Base h1 / h2 / h3 sizes, no phone heading overrides, floor picker title at h3 size.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+278a8cc | 2026-10-14 | Homepage quotes, City Center opening and about section
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+3d7fd0d | 2026-10-14 | City Center: page rebuilt on the new layout
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+8d79610 | 2026-10-14 | Colours: the redesign prototype's palette (Оникс base, Травертин, Светол бакар, Бронза on light)
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+a054ee0 | 2026-10-14 | City Center: photo building picker with an information-only panel, sections on their own surfaces, gold text on the dark ones
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+7b4d250 | 2026-10-14 | City Center: remove the location paragraphs
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+de867da | 2026-10-14 | City Center: gold-on-dark sections after the picker; smaller, lower opening title
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+f6f35f3 | 2026-10-14 | City Center: Оникс ground and whitish text in the opening, anthracite sections, real Google map with a dropping pin
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+4e26935 | 2026-10-14 | City Center: cream ground for Материјали, Локација and the other projects; no solid ground behind the opening text
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+da4f2bc | 2026-10-14 | Gold accent for small labels, nav hover/active, footer headings, stats and the active booking step
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+76784e8 | 2026-10-14 | City Center opening: the line about the project top left, the name, place and sound in a bar under the picture
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+7978225 | 2026-10-14 | City Center opening: the line about the project fits its area, on desktop and phones
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
+1b8fb03 | 2026-10-14 | Fix the audit findings: two golds, palette, Пронајди стан removed, accessibility
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+---
