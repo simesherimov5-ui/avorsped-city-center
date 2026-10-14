@@ -36,16 +36,6 @@ const PLACE_SPOTS: Record<string, { x: number; y: number; side: "left" | "right"
   "Спортска сала Парк": { x: 170, y: 272, side: "left" },
 };
 
-// The location in the company's own words.
-const LOCATION_TEXT = {
-  title: "Исклучителна локација — блиску до сè што ви е важно",
-  paragraphs: [
-    "Вистинската локација му дава поинаков ритам на секојдневието — повеќе време за себе и за најблиските, помалку време во движење и слобода да уживате во градот. Сместен во атрактивен дел од градот, надвор од најголемиот метеж, станбениот комплекс City Center ја обединува удобноста на мирното живеење со близината на сите важни содржини.",
-    "Градскиот парк, супермаркетите, спортските игралишта, болницата и градинката се во непосредна близина, а развиената инфраструктура и директниот пристап до булеварите овозможуваат едноставно поврзување со останатите делови на градот. Така, секојдневните обврски стануваат полесни, а можностите за одмор и рекреација — поблиски.",
-    "Внимателната поставеност и ориентација на комплексот, природното проветрување и широките, непречени погледи дополнително го збогатуваат квалитетот на живеењето. Сето тоа создава простор во кој поврзаноста со градот и чувството на спокој се во природна рамнотежа.",
-  ],
-};
-
 export default function DevelopmentPage() {
   const cityCenter = projects.find((p) => p.id === "city-center");
   // a project with `heroOpening` gets the cinematic opening instead of the plain header
@@ -197,15 +187,7 @@ export default function DevelopmentPage() {
             }
             below={
               <Reveal>
-                <div className="mt-16 grid gap-10 border-t border-line pt-12 lg:grid-cols-2 lg:gap-16">
-                  <div>
-                    <h3 className="font-display text-(length:--fs-h3) font-normal">{LOCATION_TEXT.title}</h3>
-                    <div className="mt-6 max-w-[62ch] space-y-4 text-base leading-[1.75] text-ink/80">
-                      {LOCATION_TEXT.paragraphs.map((paragraph) => (
-                        <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-                      ))}
-                    </div>
-                  </div>
+                <div className="mt-16 border-t border-line pt-12">
                   <ul className="list-none space-y-4 p-0">
                     {development.nearbyPoints.map((point) => (
                       <li
