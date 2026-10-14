@@ -79,87 +79,86 @@ export function ProjectOpening({
     <section
       data-opening
       aria-label={name}
-      className="scope-mist relative h-svh min-h-[560px] max-h-[1000px] w-full overflow-hidden bg-chrome text-paper"
+      className="scope-mist relative flex h-svh min-h-[560px] max-h-[1000px] w-full flex-col overflow-hidden bg-chrome text-paper"
     >
-      {showVideo ? (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover"
-          src={video}
-          poster={image.src}
-          muted
-          autoPlay
-          loop
-          playsInline
-          preload="metadata"
-          onPlaying={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-        />
-      ) : (
-        <div className={`absolute inset-0 ${video ? "" : "opening-settle"}`}>
-          <Media
-            image={{ ...image, isPlaceholder: false }}
-            tone="dark"
-            priority
-            sizes="100vw"
-            className="h-full w-full !bg-transparent"
+      {/* the picture (or the film) with the line about the project at its top left */}
+      <div className="relative min-h-0 flex-1 overflow-hidden">
+        {showVideo ? (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            src={video}
+            poster={image.src}
+            muted
+            autoPlay
+            loop
+            playsInline
+            preload="metadata"
+            onPlaying={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
           />
-        </div>
-      )}
+        ) : (
+          <div className={`absolute inset-0 ${video ? "" : "opening-settle"}`}>
+            <Media
+              image={{ ...image, isPlaceholder: false }}
+              tone="dark"
+              priority
+              sizes="100vw"
+              className="h-full w-full !bg-transparent"
+            />
+          </div>
+        )}
 
-      {/* the one gradient over the media */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 45%, transparent) 0%, transparent 22%, transparent 60%, color-mix(in srgb, var(--color-onyx) 38%, transparent) 100%)",
-        }}
-      />
+        {/* the one gradient over the media: dark at the top (the navigation), clear below */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 55%, transparent) 0%, transparent 32%, transparent 100%)",
+          }}
+        />
 
-      <Link
-        href={backHref}
-        className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent/80"
-      >
-        {t("opening.back")}
-      </Link>
+        <Link
+          href={backHref}
+          className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent/80"
+        >
+          {t("opening.back")}
+        </Link>
 
-      <div
-        style={{
-          textShadow:
-            "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent), 0 4px 24px color-mix(in srgb, var(--color-onyx) 50%, transparent)",
-        }}
-        className="opening-rise absolute inset-x-0 bottom-5 flex flex-col items-center gap-[14px] px-[5%] text-center md:bottom-8"
-      >
-        <div className="eyebrow uppercase text-accent" style={{ letterSpacing: "0.5em" }}>
-          {eyebrow}
-        </div>
-        <h1 className="font-display text-[clamp(36px,10vw,52px)] font-normal leading-none text-paper md:text-[clamp(44px,5.6vw,88px)]">
-          {name}
-        </h1>
         {tagline && (
-          <p className="m-0 max-w-[900px]">
-            {lead && <span className="text-base font-light text-on-chrome/80">{lead}</span>}
-            <span className="font-display text-xl italic text-paper">{rest}</span>
+          <p
+            style={{
+              textShadow:
+                "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent), 0 4px 24px color-mix(in srgb, var(--color-onyx) 50%, transparent)",
+            }}
+            className="opening-rise absolute left-[5%] top-[calc(var(--nav-h)+64px)] m-0 max-w-[min(780px,90%)] text-[clamp(20px,2.3vw,32px)] leading-[1.5] text-paper"
+          >
+            {lead && <span className="font-light">{lead}</span>}
+            <span className="font-display italic">{rest}</span>
           </p>
         )}
-        <div className="mt-2.5 flex items-center gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent">
+      </div>
+
+      {/* under it, on Оникс: the name, where it is and its state, and on the right the sound and the way on */}
+      <div className="opening-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-3 bg-chrome px-[5%] py-5 md:py-6">
+        <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+          <h1 className="m-0 font-display text-[clamp(32px,3.6vw,56px)] font-normal leading-none text-paper">{name}</h1>
+          <div className="eyebrow uppercase text-accent" style={{ letterSpacing: "0.3em" }}>
+            {eyebrow}
+          </div>
+        </div>
+        <div className="flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
           {showSound && (
-            <>
-              <button
-                type="button"
-                onClick={toggleSound}
-                aria-pressed={!muted}
-                aria-label={muted ? t("opening.soundOn") : t("opening.soundOff")}
-                className="focus-ring inline-flex items-center gap-3 uppercase tracking-[0.3em]"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-paper/50 text-sm">
-                  {muted ? "×" : "♪"}
-                </span>
-                {t("opening.sound")}
-              </button>
-              <span aria-hidden className="h-7 w-px bg-paper/30" />
-            </>
+            <button
+              type="button"
+              onClick={toggleSound}
+              aria-pressed={!muted}
+              aria-label={muted ? t("opening.soundOn") : t("opening.soundOff")}
+              className="focus-ring inline-flex min-h-11 items-center gap-2 uppercase tracking-[0.3em]"
+            >
+              {t("opening.sound")} <span aria-hidden>{muted ? "×" : "♪"}</span>
+            </button>
           )}
           <a
             href={`#${nextId}`}
