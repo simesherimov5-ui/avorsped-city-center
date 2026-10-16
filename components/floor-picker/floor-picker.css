@@ -53,9 +53,9 @@
   text-transform: uppercase;
   cursor: pointer;
   transition:
-    background-color 0.4s ease,
-    color 0.4s ease,
-    border-color 0.4s ease;
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
 .fp-floor:focus-visible {
   outline: 2px solid var(--foil-light);
@@ -80,7 +80,7 @@
   min-width: 3px;
   height: 14px;
   border: 1px solid var(--fp-line);
-  transition: border-color 0.4s ease;
+  transition: border-color var(--dur-fast) var(--ease);
 }
 .fp-floor[aria-pressed="true"] .fp-wins i {
   border-color: var(--color-onyx);
@@ -138,7 +138,7 @@
   border: 1px solid var(--fp-line);
   color: inherit;
   text-decoration: none;
-  transition: border-color 0.4s ease;
+  transition: border-color var(--dur-fast) var(--ease);
 }
 .fp-unit:hover,
 .fp-unit.is-hot {
@@ -194,7 +194,7 @@
 }
 .fp-floorlink svg {
   flex: none;
-  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--dur-fast) var(--ease);
 }
 .fp-floorlink:hover svg {
   transform: translateX(6px);

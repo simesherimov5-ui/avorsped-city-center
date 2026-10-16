@@ -8,7 +8,7 @@
   border: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
   background: var(--color-sand);
   color: var(--color-onyx);
-  animation: fs-sheet 0.7s var(--fs-ease) both;
+  animation: fs-sheet var(--dur-slow) var(--ease) both;
 }
 @keyframes fs-sheet {
   from {
@@ -25,18 +25,18 @@
   position: relative;
   margin-inline: auto;
   transition:
-    width 0.45s ease,
-    aspect-ratio 0.45s ease;
+    width var(--dur-base) var(--ease),
+    aspect-ratio var(--dur-base) var(--ease);
 }
 .fs-layer {
   position: absolute;
   inset: 0;
 }
 .fs-layer.is-entering {
-  animation: fs-fade-in 0.45s ease both;
+  animation: fs-fade-in var(--dur-base) var(--ease) both;
 }
 .fs-layer.is-leaving {
-  animation: fs-fade-out 0.45s ease both;
+  animation: fs-fade-out var(--dur-base-out) var(--ease) both;
 }
 @keyframes fs-fade-in {
   from {
@@ -73,8 +73,8 @@
   stroke-width: 1.5px;
   vector-effect: non-scaling-stroke;
   transition:
-    fill 0.4s ease,
-    stroke 0.4s ease;
+    fill var(--dur-fast) var(--ease),
+    stroke var(--dur-fast) var(--ease);
 }
 /* by shape and not by colour alone: free is filled, reserved is an outline, sold is a darker fill */
 .fs-shape[data-status="reserved"] polygon {
@@ -118,9 +118,9 @@
   font-variant-numeric: lining-nums;
   line-height: 1.2;
   white-space: nowrap;
-  animation: fs-chip 0.45s var(--fs-ease) both;
-  animation-delay: calc(var(--i) * 0.06s);
-  transition: border-color 0.4s ease;
+  animation: fs-chip var(--dur-base) var(--ease) both;
+  animation-delay: calc(var(--i) * 0.05s);
+  transition: border-color var(--dur-fast) var(--ease);
 }
 /* floors with ten or more apartments: smaller numbers, so they never overlap */
 .fs-chips.is-dense .fs-chip {

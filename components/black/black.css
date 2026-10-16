@@ -132,10 +132,10 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
-    background-color 0.3s,
-    color 0.3s,
-    border-color 0.3s,
-    transform 0.2s;
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .bk-btn:hover {
   background: color-mix(in srgb, var(--color-paper) 10%, transparent);
@@ -171,8 +171,8 @@
   color: var(--color-paper);
   cursor: pointer;
   transition:
-    border-color 0.3s,
-    color 0.3s;
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
 }
 .bk-modal-close:hover {
   border-color: var(--color-gold);

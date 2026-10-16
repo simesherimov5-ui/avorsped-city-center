@@ -2,6 +2,7 @@
 
 import { useRef, useState, useSyncExternalStore, type KeyboardEvent, type PointerEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
@@ -91,7 +92,7 @@ export function ProjectSlideshow({
       : {
           initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay: 0.55 + step * 0.1, ease: "easeOut" as const },
+          transition: { duration: DURATION.slow, delay: 0.55 + step * 0.05, ease: EASE },
         };
 
   return (

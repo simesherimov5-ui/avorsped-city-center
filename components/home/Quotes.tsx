@@ -120,7 +120,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
                   className="focus-ring flex h-11 w-11 items-center justify-center"
                 >
                   <span
-                    className={`block h-0.5 transition-[width,background-color] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`block h-0.5 transition-[width,background-color] duration-(--dur-slow) ease-(--ease) ${
                       active ? "w-9 bg-accent" : "w-3.5 bg-on-chrome/20"
                     }`}
                   />

@@ -210,10 +210,10 @@
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
-    border-color 0.25s,
-    background-color 0.25s,
-    color 0.25s,
-    transform 0.15s;
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .ct-chip:hover {
   border-color: var(--color-gold);
@@ -232,7 +232,7 @@
   background: var(--color-gold);
   color: var(--black);
   font-weight: 500;
-  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: ct-settle var(--dur-base) var(--ease);
 }
 /* «Сè уште не знам»: the same size as the projects, with a quieter border; on its own row on phones. */
 .ct-chip.is-secondary {
@@ -291,10 +291,10 @@
   color: var(--color-paper);
   cursor: pointer;
   transition:
-    border-color 0.25s,
-    background-color 0.25s,
-    color 0.25s,
-    transform 0.15s;
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .ct-day:hover {
   border-color: var(--color-gold);
@@ -322,7 +322,7 @@
   border-color: var(--color-gold);
   background: var(--color-ink);
   color: var(--color-gold);
-  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: ct-settle var(--dur-base) var(--ease);
 }
 .ct-day[aria-checked="true"] small {
   color: var(--color-gold);
@@ -373,7 +373,7 @@
   background: var(--color-gold);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--dur-base) var(--ease);
 }
 .ct-input:focus-within::after {
   transform: scaleX(1);
@@ -384,7 +384,7 @@
   font-size: 14px;
   font-weight: 400;
   color: var(--color-gold-light);
-  animation: ct-fade 0.3s;
+  animation: ct-fade var(--dur-base) var(--ease);
 }
 .ct-submit {
   display: flex;
@@ -403,7 +403,7 @@
   color: var(--mute);
 }
 .ct-sum > span {
-  animation: ct-fade 0.18s;
+  animation: ct-fade var(--dur-fast) var(--ease);
 }
 .ct-fail {
   margin: 16px 0 0;
@@ -493,8 +493,8 @@
   text-align: right;
   overflow-wrap: anywhere;
   transition:
-    color 0.3s,
-    transform 0.3s;
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 /* A 44px tap target without changing the row: the padding is cancelled by the negative margin. */
 a.ct-val {

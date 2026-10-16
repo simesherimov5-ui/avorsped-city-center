@@ -2,7 +2,8 @@
 
 import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
+import { REVEAL_START } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
 /**
@@ -28,9 +29,9 @@ export function ParallaxImage({ children, className }: { children: ReactNode; cl
       gsap.set(clipRef.current, { clipPath: "inset(100% 0 0 0)" });
       gsap.to(clipRef.current, {
         clipPath: "inset(0% 0 0 0)",
-        duration: window.innerWidth < 768 ? 0.7 : 1.1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: clipRef.current, start: "top 90%", once: true },
+        duration: window.innerWidth < 768 ? DUR.base : DUR.slow,
+        ease: CALM_EASE,
+        scrollTrigger: { trigger: clipRef.current, start: REVEAL_START, once: true },
       });
 
       // Parallax is for pointer devices with room for it — phones get the wipe only.

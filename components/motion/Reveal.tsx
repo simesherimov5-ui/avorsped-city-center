@@ -2,7 +2,8 @@
 
 import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
+import { REVEAL_START } from "@/lib/motion";
 
 /**
  * GSAP ScrollTrigger fade+slide reveal, homepage-only — the site's other
@@ -20,18 +21,19 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
         return;
       }
 
-      // Lighter on phones: shorter travel, shorter duration.
+      // Lighter on phones: shorter travel, shorter duration. It starts as soon as the top of the block is inside the
+      // bottom 8% of the screen, so nothing sits invisible on screen waiting for it.
       const phone = window.innerWidth < 768;
-      gsap.set(ref.current, { opacity: 0, y: phone ? 20 : 40 });
+      gsap.set(ref.current, { opacity: 0, y: phone ? 12 : 24 });
       gsap.to(ref.current, {
         opacity: 1,
         y: 0,
-        duration: phone ? 0.6 : 1,
+        duration: phone ? DUR.base : DUR.slow,
         delay,
-        ease: "power3.out",
+        ease: CALM_EASE,
         scrollTrigger: {
           trigger: ref.current,
-          start: "top 85%",
+          start: REVEAL_START,
           once: true,
         },
       });

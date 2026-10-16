@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
@@ -122,7 +123,7 @@ export function Masterplan({
                     scale: isSelected ? 1.25 : isHovered ? 1.15 : 1,
                     opacity: isDimmed ? 0.45 : 1,
                   }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: DURATION.base, ease: EASE }}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-9 sm:w-9 sm:text-sm",
                     (isSelected || isHovered) && "outline outline-1 outline-offset-4 outline-accent/50",
@@ -291,7 +292,7 @@ function PanelStack({
           key="idle"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: DURATION.base, ease: EASE }}
           className="col-start-1 row-start-1"
         >
           {idle}
@@ -303,7 +304,7 @@ function PanelStack({
             key={`${b.id}-on`}
             initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: DURATION.base, ease: EASE }}
             className="col-start-1 row-start-1"
           >
             <BuildingPanel

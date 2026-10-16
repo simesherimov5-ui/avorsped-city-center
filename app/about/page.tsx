@@ -137,7 +137,7 @@ export default function AboutPage() {
 
       <section className="bk-wrap bk-section">
         <div className="bk-eyebrow">Нашиот пат</div>
-        <RevealHeading as="h2" className="bk-h2 bk-serif" duration={1.1} ease="power4.out" from={115}>
+        <RevealHeading as="h2" className="bk-h2 bk-serif" from={115}>
           Од 1994 до денес.
         </RevealHeading>
         <Timeline milestones={companyTimeline} />

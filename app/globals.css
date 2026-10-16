@@ -74,6 +74,17 @@
   /* Height of the fixed navbar, for pages that start right below it. */
   --nav-h: 61px;
 
+  /* The site's three animation speeds and its one easing (also lib/motion.ts and lib/gsap.ts). Fast: hover, press, small
+     colour changes. Base: menus, pop-ups, form steps, toggles. Slow: image movement, section reveals. What leaves takes
+     about 75% of the time it took to arrive, never under --dur-fast. The intro, the page curtain, the logo drawing and
+     the company ticker keep their own timing. */
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 600ms;
+  --dur-base-out: 210ms;
+  --dur-slow-out: 450ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   /*
    * Older names, kept as aliases so the rest of the codebase (cream/warm-white/silver/charcoal/chrome/on-chrome/
    * accent/accent-soft class names) renders the new palette without a mechanical rename of every file.
@@ -135,6 +146,10 @@
   /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
   --font-sans: var(--font-montserrat);
+  /* Tailwind's own transition-* utilities use the site's fast speed and easing. */
+  --default-transition-duration: var(--dur-fast);
+  --default-transition-timing-function: var(--ease);
+  --ease-site: var(--ease);
 }
 
 @media (min-width: 640px) {
@@ -236,10 +251,10 @@ h4 {
 
 /* Resident quotes: the old words fade out and rise 8px (0.4s), the new ones fade in from 8px below (0.6s). */
 .q-in {
-  animation: q-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: q-in var(--dur-slow) var(--ease) both;
 }
 .q-out {
-  animation: q-out 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: q-out var(--dur-slow-out) var(--ease) both;
 }
 @keyframes q-in {
   from {
@@ -286,8 +301,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
 .about-col {
   transition:
-    opacity 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s),
-    transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s);
+    opacity var(--dur-slow) var(--ease) var(--about-delay, 0s),
+    transform var(--dur-slow) var(--ease) var(--about-delay, 0s);
 }
 .about-col[data-armed="true"] {
   opacity: 0;
@@ -519,8 +534,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
   transition:
-    fill 0.2s,
-    stroke 0.2s;
+    fill var(--dur-fast) var(--ease),
+    stroke var(--dur-fast) var(--ease);
 }
 .fp-poly[data-status="available"] {
   fill: color-mix(in srgb, var(--color-gold) 20%, transparent);
@@ -563,7 +578,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   font-size: 14px;
   font-weight: 500;
   transform: translateY(-200%);
-  transition: transform 0.2s;
+  transition: transform var(--dur-fast) var(--ease);
 }
 .skip-link:focus {
   transform: none;
@@ -768,13 +783,13 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 .enter {
-  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+  animation: enter-rise var(--dur-slow) var(--ease) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
 }
 @media (max-width: 767px) {
   .enter {
     --enter-distance: 12px;
     --enter-stagger: 0;
-    animation-duration: 0.3s;
+    animation-duration: var(--dur-base);
   }
 }
 
@@ -784,7 +799,7 @@ body {
   overflow-x: clip;
 }
 .mobile-menu {
-  animation: menu-in 0.22s ease-out;
+  animation: menu-in var(--dur-base) var(--ease);
 }
 /* The slider's gold dash: fills over the slide's 4s; its end advances the slide. */
 .slide-progress {
@@ -875,7 +890,7 @@ body {
   background: radial-gradient(circle, color-mix(in srgb, var(--color-gold) 45%, transparent) 0%, transparent 72%);
   transform: scale(0);
   opacity: 0.6;
-  animation: click-pulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: click-pulse var(--dur-slow) var(--ease) forwards;
 }
 @keyframes click-pulse {
   to {

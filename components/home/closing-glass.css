@@ -98,10 +98,10 @@
 /* pressed: both buttons shrink at once (the buttons themselves are not touched) */
 .cg-actions > a {
   transition:
-    scale 100ms ease-out,
-    color 200ms,
-    background-color 200ms,
-    border-color 200ms;
+    scale var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
 .cg-actions > a:active {
   scale: 0.97;
@@ -147,16 +147,16 @@
 }
 
 .cg.cg-in .cg-glow {
-  animation: cg-fade 1.4s ease-out 0.4s both;
+  animation: cg-fade var(--dur-slow) var(--ease) 0.4s both;
 }
 .cg.cg-in .cg-mark path {
   animation: cg-draw var(--t, 0.5s) var(--cg-ease) var(--d, 0s) both;
 }
 .cg.cg-in .cg-glass {
-  animation: cg-glass 0.8s var(--cg-ease) 1.15s both;
+  animation: cg-glass var(--dur-slow) var(--ease) 1.15s both;
 }
 .cg.cg-in .cg-glass > * {
-  animation: cg-rise 0.7s var(--cg-ease) both;
+  animation: cg-rise var(--dur-slow) var(--ease) both;
 }
 .cg.cg-in .cg-glass > :nth-child(1) {
   animation-delay: 1.45s;

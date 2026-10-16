@@ -28,7 +28,7 @@ export function ProjectMaterials({ project }: { project: Project }) {
                   image={{ src: item.image?.src ?? "", alt: item.image?.alt ?? item.name, isPlaceholder: !item.image }}
                   label="[ ФОТОГРАФИЈА ]"
                   tone="light"
-                  className="h-full w-full transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                  className="h-full w-full transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.04]"
                   sizes="(max-width: 640px) 100vw, 320px"
                 />
               </div>

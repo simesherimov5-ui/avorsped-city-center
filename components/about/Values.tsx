@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { REVEAL_START } from "@/lib/motion";
 import { Media } from "@/components/ui/Media";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 
@@ -32,15 +33,15 @@ export function Values({ eyebrow, heading, values, images }: Props) {
       const el = root.current;
       if (!el || prefersReducedMotion()) return;
       const rows = el.querySelectorAll<HTMLElement>("[data-row]");
-      gsap.set(rows, { opacity: 0, y: 40 });
+      gsap.set(rows, { opacity: 0, y: 24 });
       rows.forEach((row, i) => {
         gsap.to(row, {
           opacity: 1,
           y: 0,
-          duration: 1,
-          ease: "power3.out",
-          delay: window.innerWidth < 900 ? 0 : 0.1 * (i % 2),
-          scrollTrigger: { trigger: row, start: "top 88%", once: true },
+          duration: DUR.slow,
+          ease: CALM_EASE,
+          delay: window.innerWidth < 900 ? 0 : 0.05 * (i % 2),
+          scrollTrigger: { trigger: row, start: REVEAL_START, once: true },
         });
         // Several photos: the one for the row that is crossing the middle of the screen shows.
         if (several) {
@@ -59,9 +60,9 @@ export function Values({ eyebrow, heading, values, images }: Props) {
           {
             opacity: 1,
             scale: 1,
-            duration: 1.4,
-            ease: "power3.out",
-            scrollTrigger: { trigger: photoBox.current, start: "top 85%", once: true },
+            duration: DUR.slow,
+            ease: CALM_EASE,
+            scrollTrigger: { trigger: photoBox.current, start: REVEAL_START, once: true },
           }
         );
       }
@@ -77,8 +78,8 @@ export function Values({ eyebrow, heading, values, images }: Props) {
       layers.forEach((layer, i) =>
         gsap.to(layer, {
           opacity: i === active ? 1 : 0,
-          duration: prefersReducedMotion() ? 0 : 0.5,
-          ease: "power2.inOut",
+          duration: prefersReducedMotion() ? 0 : DUR.slow,
+          ease: CALM_EASE,
         })
       );
     },
@@ -103,7 +104,7 @@ export function Values({ eyebrow, heading, values, images }: Props) {
 
       <div>
         <div className="bk-eyebrow">{eyebrow}</div>
-        <RevealHeading as="h2" className="bk-h2 bk-serif" duration={1.1} ease="power4.out" from={115}>
+        <RevealHeading as="h2" className="bk-h2 bk-serif" from={115}>
           {heading}
         </RevealHeading>
         <div>

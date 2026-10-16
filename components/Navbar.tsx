@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { useI18n } from "@/lib/i18n";
 import { useIntro } from "@/components/intro/IntroProvider";
-import { gsap } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 import { isBlackPage } from "@/lib/theme";
@@ -125,7 +125,7 @@ export function Navbar() {
       if (!line || !group) return;
       const el = activeHref ? linkEls.current[activeHref] : null;
       if (!el) {
-        gsap.to(line, { opacity: 0, duration: animate ? 0.3 : 0, overwrite: true });
+        gsap.to(line, { opacity: 0, duration: animate ? DUR.base * 0.75 : 0, overwrite: true });
         return;
       }
       const g = group.getBoundingClientRect();
@@ -134,8 +134,8 @@ export function Navbar() {
         x: r.left - g.left,
         width: r.width,
         opacity: 1,
-        duration: animate ? 0.6 : 0,
-        ease: "power3.inOut",
+        duration: animate ? DUR.base : 0,
+        ease: CALM_EASE,
         overwrite: true,
       });
     };
@@ -179,7 +179,7 @@ export function Navbar() {
           transform for the entrance and writes `translate: none` onto it, which would cancel the slide. */}
       <div
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed inset-x-0 top-0 z-50 transition-transform duration-(--dur-base) ease-(--ease)",
           hidden ? "-translate-y-full" : "translate-y-0"
         )}
       >
@@ -190,7 +190,7 @@ export function Navbar() {
           // Keyboard focus anywhere in the bar brings it back.
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
           className={cn(
-            "border-b transition-colors duration-500",
+            "border-b transition-colors duration-(--dur-base)",
             // The black pages only swap the bar's fill for pure black; the hairline and blur stay the same.
             black
               ? "border-on-chrome/10 bg-black backdrop-blur-md"

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { Modal } from "@/components/ui/Modal";
 
 /**
@@ -47,7 +47,7 @@ function Content({ onClose, summary }: { onClose: () => void; summary: string })
         .timeline({ delay: 0.55 })
         .to(ring, { strokeDashoffset: 0, duration: 1, ease: "power2.inOut" })
         .to(check, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, "-=0.1")
-        .to(lines, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: "power3.out" }, "-=0.3");
+        .to(lines, { opacity: 1, y: 0, duration: DUR.slow, stagger: 0.05, ease: CALM_EASE }, "-=0.3");
     },
     { scope: root }
   );

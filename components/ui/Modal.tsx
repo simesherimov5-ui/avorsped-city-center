@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, 
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { cn } from "@/lib/cn";
 
@@ -52,19 +52,24 @@ export function Modal({ open, onClose, label, overlay = 0.86, closeIn = "panel",
       if (!dialog || !backdrop || !panel) return;
 
       if (prefersReducedMotion()) {
-        if (open) gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: 0.2 });
-        else gsap.to(dialog, { opacity: 0, duration: 0.2, onComplete: () => setShown(false) });
+        if (open) gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: DUR.fast });
+        else gsap.to(dialog, { opacity: 0, duration: DUR.fast, onComplete: () => setShown(false) });
         return;
       }
 
       if (open) {
         gsap.set(backdrop, { opacity: 0 });
         gsap.set(panel, { opacity: 0, y: 24, scale: 0.97 });
-        gsap.to(backdrop, { opacity: 1, duration: 0.4, ease: "power2.out" });
-        gsap.to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.6, delay: 0.1, ease: "power3.out" });
+        gsap.to(backdrop, { opacity: 1, duration: DUR.base, ease: CALM_EASE });
+        gsap.to(panel, { opacity: 1, y: 0, scale: 1, duration: DUR.base, delay: 0.05, ease: CALM_EASE });
       } else {
-        gsap.to(panel, { opacity: 0, y: 12, duration: 0.3, ease: "power2.in" });
-        gsap.to(backdrop, { opacity: 0, duration: 0.3, ease: "power2.in", onComplete: () => setShown(false) });
+        gsap.to(panel, { opacity: 0, y: 12, duration: DUR.base * 0.75, ease: CALM_EASE });
+        gsap.to(backdrop, {
+          opacity: 0,
+          duration: DUR.base * 0.75,
+          ease: CALM_EASE,
+          onComplete: () => setShown(false),
+        });
       }
     },
     { dependencies: [open, shown], scope: dialogRef }
