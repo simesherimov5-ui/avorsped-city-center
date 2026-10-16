@@ -472,7 +472,7 @@
   flex-direction: column;
   gap: 28px;
   padding-top: 64px;
-  padding-bottom: 120px;
+  padding-bottom: 80px;
 }
 .pj-count {
   font-size: 12px;
@@ -965,7 +965,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  padding-block: 130px;
+  padding-block: 88px;
 }
 .pj-soon-text {
   display: flex;

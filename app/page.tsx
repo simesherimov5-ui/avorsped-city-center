@@ -72,7 +72,7 @@ export default function HomePage() {
       <Soon />
 
       {/* A line the company stands behind, on the dark */}
-      <section className="grain grain--dark bg-chrome py-20 text-on-chrome sm:py-28">
+      <section className="grain grain--dark bg-chrome pb-10 pt-20 text-on-chrome sm:pb-12 sm:pt-28">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
