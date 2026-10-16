@@ -38,7 +38,7 @@ const LINES = (() => {
 /**
  * The ending of the homepage: the building mark drawn in thin gold lines, a pane of dark glass in front of it, and the
  * call to action on the glass. The server HTML is the finished section. When the visitor has not reached it yet, the
- * script hides the parts and plays the entrance once, as 40% of the section comes on screen (building, then glass, then
+ * script hides the parts and plays the entrance once, as soon as the section is a little way on screen (building, then glass, then
  * the text); with scripts off, with reduced motion, or when the section is already on screen on load, nothing is hidden.
  */
 export function ClosingGlass({ phone, email }: { phone: string; email: string }) {
@@ -49,7 +49,8 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
     if (!el || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return;
     // The first report says where the section is right now. On screen already (the visitor landed here): it stays as
-    // it is, finished. Off screen: hide the parts, and play the entrance once when 40% of it comes into view.
+    // it is, finished. Off screen: hide the parts, and play the entrance once as soon as it is inside the bottom 90% of
+    // the screen, so the section is never an empty band on screen.
     let armed = false;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -60,11 +61,11 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
           el.classList.add("cg-armed");
           return;
         }
-        if (entry.intersectionRatio < 0.4) return;
+        if (!entry.isIntersecting) return;
         el.classList.add("cg-in");
         observer.disconnect();
       },
-      { threshold: [0, 0.4] }
+      { threshold: [0, 0.05], rootMargin: "0px 0px -10% 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();

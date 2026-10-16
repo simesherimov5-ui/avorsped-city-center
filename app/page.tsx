@@ -42,7 +42,7 @@ export default function HomePage() {
 
       {/* 5. The numbers */}
       <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
+        <div className="mx-auto max-w-7xl px-5 pb-16 pt-[70px] sm:px-8 sm:pb-24 lg:px-10">
           <ScrollReveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>

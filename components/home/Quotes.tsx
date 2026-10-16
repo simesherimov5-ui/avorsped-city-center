@@ -80,7 +80,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
       onFocus={() => setFocused(true)}
       onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setFocused(false)}
     >
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-9 px-5 py-20 text-center sm:px-8 md:py-[120px] lg:px-10">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-9 px-5 pb-16 pt-20 text-center sm:px-8 md:pb-20 md:pt-[120px] lg:px-10">
         <div className="eyebrow text-accent">{t("quotes.eyebrow")}</div>
         <div
           aria-live={used ? "polite" : "off"}

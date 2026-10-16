@@ -9,7 +9,7 @@ import type { Project } from "@/types";
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
   return (
-    <section id="new" className="bg-chrome pb-16 text-on-chrome sm:pb-24">
+    <section id="new" className="bg-chrome text-on-chrome">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-5">

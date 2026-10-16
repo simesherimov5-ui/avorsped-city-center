@@ -136,7 +136,7 @@
 
 /* ───────── The entrance: the building draws, the glass arrives, the text comes ─────────
    "cg-armed" is added by the script, only when it is about to play (so without scripts everything is simply there);
-   "cg-in" is added once, when 40% of the section is on screen. */
+   "cg-in" is added once, as soon as the section is a little way on screen. */
 .cg.cg-armed:not(.cg-in) .cg-glow,
 .cg.cg-armed:not(.cg-in) .cg-glass,
 .cg.cg-armed:not(.cg-in) .cg-glass > * {

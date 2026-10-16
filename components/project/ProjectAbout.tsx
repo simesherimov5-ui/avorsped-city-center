@@ -28,7 +28,7 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
         columns.forEach((c) => (c.dataset.armed = "false"));
         observer.disconnect();
       },
-      { threshold: 0.2 }
+      { threshold: 0.05, rootMargin: "0px 0px -10% 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
