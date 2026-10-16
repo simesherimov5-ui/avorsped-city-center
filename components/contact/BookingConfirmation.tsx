@@ -42,12 +42,13 @@ function Content({ onClose, summary }: { onClose: () => void; summary: string })
       }
       gsap.set([ring, check], { strokeDashoffset: 1 });
       gsap.set(lines, { opacity: 0, y: 12 });
-      // The panel itself takes 0.7s to arrive; the sequence starts as it settles.
+      // The panel itself arrives in --dur-base; then the gold circle draws (900ms), the check mark (500ms), and the
+      // title and the line under it fade up.
       gsap
-        .timeline({ delay: 0.55 })
-        .to(ring, { strokeDashoffset: 0, duration: 1, ease: "power2.inOut" })
-        .to(check, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, "-=0.1")
-        .to(lines, { opacity: 1, y: 0, duration: DUR.slow, stagger: 0.05, ease: CALM_EASE }, "-=0.3");
+        .timeline({ delay: DUR.base })
+        .to(ring, { strokeDashoffset: 0, duration: 0.9, ease: CALM_EASE })
+        .to(check, { strokeDashoffset: 0, duration: 0.5, ease: CALM_EASE })
+        .to(lines, { opacity: 1, y: 0, duration: DUR.slow, stagger: 0.1, ease: CALM_EASE });
     },
     { scope: root }
   );

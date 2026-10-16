@@ -20,6 +20,8 @@ export function RadioGroup({
   className,
   itemClassName,
   stagger = false,
+  enterStart = 100,
+  enterGap,
 }: {
   options: RadioOption[];
   value: string;
@@ -32,9 +34,14 @@ export function RadioGroup({
   groupId: string;
   className?: string;
   itemClassName?: string;
-  /** The options come in one after another, about 40ms apart (not with reduced motion). */
+  /** The options come in one after another, after the step's title (not with reduced motion). */
   stagger?: boolean;
+  /** When the first option starts to come in, in ms (the title comes first). */
+  enterStart?: number;
+  /** The time between two options, in ms: by default 350ms for four options or fewer, 180ms for more. */
+  enterGap?: number;
 }) {
+  const gap = enterGap ?? (options.length <= 4 ? 350 : 180);
   const chosen = options.findIndex((o) => o.value === value);
   const tabStop = chosen >= 0 ? chosen : 0;
 
@@ -70,7 +77,7 @@ export function RadioGroup({
           aria-label={option.label}
           tabIndex={i === tabStop ? 0 : -1}
           className={cn(itemClassName, option.className)}
-          style={stagger ? { animationDelay: `${i * 50}ms` } : undefined}
+          style={stagger ? { animationDelay: `${enterStart + i * gap}ms` } : undefined}
           onClick={() => onChange(option.value)}
           onKeyDown={(e) => onKeyDown(e, i)}
         >
