@@ -367,7 +367,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   --color-charcoal: var(--color-gold);
   --color-on-chrome: var(--color-gold);
   --color-paper: var(--color-gold);
-  --color-muted: color-mix(in srgb, var(--color-gold) 68%, transparent);
+  --color-muted: color-mix(in srgb, var(--color-gold) 78%, transparent); /* 4.9:1 on Еспресо, 5.2:1 on Оникс */
   --color-line: color-mix(in srgb, var(--color-gold) 22%, transparent);
   --color-gold-deep: var(--color-gold);
   --color-gold-dark: var(--color-gold);

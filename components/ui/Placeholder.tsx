@@ -33,7 +33,7 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
       <div
         className={cn(
           "relative flex flex-col items-center gap-2 px-4 text-center",
-          isDark ? "text-on-chrome/62" : "text-muted"
+          isDark ? "text-on-chrome/80" : "text-muted"
         )}
       >
         <ImageOff className="h-5 w-5" strokeWidth={1.5} />

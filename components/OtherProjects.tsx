@@ -25,7 +25,6 @@ export function OtherProjects({
             eyebrow="Продолжете да истражувате"
             title="Другите наши проекти"
             tone={light ? "light" : "dark"}
-            eyebrowGold
           />
         </Reveal>
       </div>
