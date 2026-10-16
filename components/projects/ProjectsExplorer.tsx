@@ -284,7 +284,7 @@ function Explorer({
                   )}
                   <div className="pj-grid">
                     {group.projects.map((project) => (
-                      <GridCard key={project.id} project={project} delay={changed ? undefined : n++ * 0.09} />
+                      <GridCard key={project.id} project={project} delay={changed ? undefined : n++ * 0.05} />
                     ))}
                   </div>
                 </div>

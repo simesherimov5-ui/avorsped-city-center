@@ -543,6 +543,11 @@
   gap: 18px;
   color: var(--color-onyx);
   text-decoration: none;
+  /* press: the card gives a little and springs back (scale, so it never fights the rise-in's transform) */
+  transition: scale var(--dur-fast) var(--ease);
+}
+.pj-card:active {
+  scale: 0.985;
 }
 .pj-card.is-rising {
   opacity: 0;
@@ -559,22 +564,27 @@
   overflow: hidden;
   background: var(--color-espresso);
 }
+/* The photo zooms in slowly on hover (900ms), inside the card's frame. */
 .pj-img {
   position: absolute;
   inset: 0;
-  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 900ms var(--ease);
 }
-.pj-card:hover .pj-img,
 .pj-card:focus-visible .pj-img,
-.pj-row:hover .pj-img,
 .pj-row:focus-visible .pj-img {
-  transform: scale(1.06);
+  transform: scale(1.035);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-img,
+  .pj-row:hover .pj-img {
+    transform: scale(1.035);
+  }
 }
 .pj-photo-scrim {
   position: absolute;
   inset: auto 0 0 0;
   height: 45%;
-  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-onyx) 70%, transparent) 100%);
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-onyx) 65%, transparent) 100%);
 }
 .pj-chip {
   position: absolute;
@@ -624,11 +634,15 @@
   font-size: 18px;
   transition: transform var(--dur-fast) var(--ease);
 }
-.pj-card:hover .pj-arrow,
 .pj-card:focus-visible .pj-arrow,
-.pj-row:hover .pj-arrow,
 .pj-row:focus-visible .pj-arrow {
-  transform: translateX(8px);
+  transform: translateX(4px);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-arrow,
+  .pj-row:hover .pj-arrow {
+    transform: translateX(4px);
+  }
 }
 .pj-rule {
   position: relative;
@@ -640,13 +654,19 @@
   top: 0;
   left: 0;
   height: 1px;
-  width: 0;
-  background: var(--color-bronze);
-  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.pj-card:hover .pj-rule i,
-.pj-card:focus-visible .pj-rule i {
   width: 100%;
+  background: var(--color-bronze);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-slow) var(--ease);
+}
+.pj-card:focus-visible .pj-rule i {
+  transform: scaleX(1);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-rule i {
+    transform: scaleX(1);
+  }
 }
 .pj-tagline {
   margin: 0;
@@ -673,9 +693,16 @@
   }
   .pj-card:hover .pj-img,
   .pj-card:hover .pj-arrow,
+  .pj-card:focus-visible .pj-img,
+  .pj-card:focus-visible .pj-arrow,
   .pj-row:hover .pj-img,
-  .pj-row:hover .pj-arrow {
+  .pj-row:hover .pj-arrow,
+  .pj-row:focus-visible .pj-img,
+  .pj-row:focus-visible .pj-arrow {
     transform: none;
+  }
+  .pj-card:active {
+    scale: none;
   }
 }
 
