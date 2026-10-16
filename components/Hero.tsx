@@ -143,11 +143,11 @@ export function Hero() {
           Основано 1994
         </div>
 
-        {/* The page's h1, in the display serif: the last words in italic Светол бакар. It sits in the sky band above the
-            roofline, so its size is capped to keep both lines inside it. */}
+        {/* The page's h1, in the display serif, plain: one line from 600px up, two balanced lines on a phone (.hero-title
+            in globals.css). It sits in the sky band above the roofline. */}
         <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-[760px] text-balance text-(length:--fs-hero)! font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
+          className="hero-title mx-auto mt-3 font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
         >
           Добредојдовте во вашиот нов дом
         </h1>
@@ -164,7 +164,7 @@ export function Hero() {
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
             <span className="text-label font-semibold uppercase tracking-label text-brass">— Javor Sped Holding</span>
-            <span className="font-display text-[18px] font-normal italic leading-[1.4] text-gold sm:text-[20px]">
+            <span className="text-[17px] font-normal leading-[1.5] text-gold">
               Секоја адреса има приказна. Најдете ја вашата.
             </span>
           </span>

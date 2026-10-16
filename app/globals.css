@@ -1133,6 +1133,22 @@ body:has([data-compare-bar]) {
     color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
   );
 }
+/* The homepage headline: one line, centred, from 600px up (sized so it always fits inside the side padding); on a phone
+   two balanced lines at about 34px. */
+.hero-title {
+  max-width: 100%;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 34px;
+  font-style: normal;
+  text-wrap: balance;
+}
+@media (min-width: 600px) {
+  .hero-title {
+    white-space: nowrap;
+    font-size: clamp(30px, 4.3vw, 68px);
+  }
+}
+
 /* The scrim of the hero's info strip ("Струмица, Северна Македонија" and the line on the right). */
 .hero-info-scrim {
   background: linear-gradient(
