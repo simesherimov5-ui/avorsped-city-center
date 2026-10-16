@@ -276,18 +276,37 @@
   }
 }
 
-/* ───────── filter bar ───────── */
+/* ───────── filter bar ─────────
+   The bar and the list share one wrapper (.pj-explorer), so the bar sticks below the navbar only while the list is on
+   screen and scrolls away with it at the end: it never covers the Наскоро band or the footer. When the navbar slides
+   away (scrolling down) the stuck bar slides up with it, by the same transform, timing and easing; a soft shadow shows
+   while it is stuck. Phones: the bar stays in the flow. */
+.pj-explorer {
+  position: relative;
+}
+.pj-sentinel {
+  height: 0;
+}
 .pj-bar {
   position: relative;
   z-index: 15;
   background: color-mix(in srgb, var(--color-sand) 96%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid color-mix(in srgb, var(--color-onyx) 20%, transparent);
+  transition:
+    transform var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease);
 }
 @media (min-width: 768px) {
   .pj-bar {
     position: sticky;
-    top: var(--pj-top, 0px);
+    top: var(--nav-h);
+  }
+  .pj-bar[data-stuck="true"] {
+    box-shadow: 0 10px 24px -18px color-mix(in srgb, var(--color-onyx) 55%, transparent);
+  }
+  body:has([data-nav-hidden="true"]) .pj-bar[data-stuck="true"] {
+    transform: translateY(calc(-1 * var(--nav-h)));
   }
 }
 .pj-bar-inner {
@@ -299,9 +318,24 @@
   padding-top: 26px;
 }
 .pj-tabs {
+  position: relative;
   display: flex;
   gap: 40px;
   align-items: flex-end;
+}
+/* The active tab's underline: one 1px-wide line, moved and stretched under the chosen tab (it slides on a change). */
+.pj-tab-line {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 1px;
+  height: 2px;
+  background: var(--color-bronze);
+  transform-origin: left center;
+  pointer-events: none;
+}
+.pj-tab-line.is-ready {
+  transition: transform var(--dur-base) var(--ease);
 }
 .pj-tab {
   display: flex;
@@ -322,7 +356,6 @@
     border-color var(--dur-fast) var(--ease);
 }
 .pj-tab[aria-pressed="true"] {
-  border-bottom-color: var(--color-bronze);
   color: var(--color-onyx);
 }
 .pj-tab:focus-visible,
@@ -487,6 +520,24 @@
 }
 .pj-view {
   animation: pj-fadein var(--dur-base) var(--ease);
+}
+/* A new choice: the old cards fade out (200ms), the new ones rise in, 40ms apart. */
+.pj-groups,
+.pj-map-view {
+  transition: opacity 200ms var(--ease);
+}
+.pj-groups.is-leaving,
+.pj-map-view.is-leaving {
+  opacity: 0;
+}
+.pj-card.is-swapping {
+  animation: pj-swap-in var(--dur-base) var(--ease) backwards;
+}
+@keyframes pj-swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
 }
 @keyframes pj-fadein {
   from {

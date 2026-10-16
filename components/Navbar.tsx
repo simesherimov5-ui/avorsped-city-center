@@ -165,8 +165,8 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname]);
-  // On the projects page the navbar stays in view: its filter bar sticks right under it.
-  const hidden = hideState.hidden && hideState.path === pathname && !open && pathname !== "/projects";
+  // (The Проекти filter bar follows the navbar: it reads data-nav-hidden below.)
+  const hidden = hideState.hidden && hideState.path === pathname && !open;
 
   // Overlay the hero when we're at the top of the homepage; everywhere else
   // (and once scrolled past the hero, or with the mobile menu open) the bar
@@ -178,6 +178,7 @@ export function Navbar() {
       {/* The hide/show slide lives on this wrapper, not on the header: GSAP animates the header's own
           transform for the entrance and writes `translate: none` onto it, which would cancel the slide. */}
       <div
+        data-nav-hidden={hidden}
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-transform duration-(--dur-base) ease-(--ease)",
           hidden ? "-translate-y-full" : "translate-y-0"
