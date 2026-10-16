@@ -98,7 +98,7 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
         <h2 className="cg-title" id="cg-title">
           Вашето следно поглавје <em>започнува тука.</em>
         </h2>
-        <p className="cg-lead">Разговарајте со нашиот тим за продажба за кој било од нашите проекти.</p>
+        <p className="cg-lead">Нашиот тим ќе ви помогне да го најдете вистинскиот стан.</p>
         <div className="cg-actions">
           <Button href="/contact" variant="primary" tone="dark" filled>
             Закажи консултација
