@@ -48,7 +48,7 @@ export default function HomePage() {
               <div>
                 <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
                 <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                  Изградени <em className="italic text-accent">на доверба.</em>
+                  Изградени на доверба.
                 </h2>
               </div>
               <Link

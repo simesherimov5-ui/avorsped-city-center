@@ -66,7 +66,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             Контакт
           </div>
           <h1 data-seq="h1" className="ct-h1 bk-serif ct-pre">
-            Закажете <em>приватна</em> консултација.
+            Закажете приватна консултација.
           </h1>
         </header>
 

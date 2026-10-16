@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** The usual heading of a section: an eyebrow, then an h2 whose second half is italic in the accent colour. */
+/** The usual heading of a section: an eyebrow, then a plain h2 (its two halves read as one line, no accent). */
 export function SectionHead({
   eyebrow,
   title,
@@ -20,7 +20,7 @@ export function SectionHead({
       <div className="eyebrow text-gold-deep">{eyebrow}</div>
       <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">
         {title}
-        <em className="italic text-gold-deep">{titleItalic}</em>
+        {titleItalic}
       </h2>
       {children}
     </div>

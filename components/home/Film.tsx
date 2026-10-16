@@ -15,7 +15,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
             <div>
               <div className="eyebrow text-accent">Филм</div>
               <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Три децении, <em className="italic text-accent">во една минута.</em>
+                Три децении, во една минута.
               </h2>
             </div>
             <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>

@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import type { Project } from "@/types";
 
 /**
- * "Во изградба сега": the company's current projects, in the same full-width slideshow as the Проекти page: one project
+ * "Сега во изградба": the company's current projects, in the same full-width slideshow as the Проекти page: one project
  * at a time with its status, name, place and a way in.
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
@@ -18,9 +18,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
                 <span aria-hidden className="block h-2 w-2 rounded-full bg-accent" />
                 <div className="eyebrow text-accent">Ново · во продажба</div>
               </div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Во изградба <em className="italic text-accent">сега.</em>
-              </h2>
+              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">Сега во изградба.</h2>
             </div>
             <Link
               href="/projects"

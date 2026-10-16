@@ -34,7 +34,7 @@ export function Differences() {
             <h2 className="mt-4 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
               Деталите
               <br />
-              <em className="italic text-gold-deep">се сè.</em>
+              се сè.
             </h2>
           </div>
         </Reveal>

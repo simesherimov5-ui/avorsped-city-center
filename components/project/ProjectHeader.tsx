@@ -2,14 +2,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /** The project's name with its last word set in italic Бронза (the accent on a light surface). */
-function splitName(name: string) {
-  const at = name.lastIndexOf(" ");
-  return at < 0 ? { lead: name, last: "" } : { lead: name.slice(0, at + 1), last: name.slice(at + 1) };
-}
-
 /**
- * The top of a project page, on a light surface: where it is, its name in the display serif (the last word in italic
- * Бронза), a few lines about it, a row of facts under thin rules and, if given, the way in. Every project page opens
+ * The top of a project page, on a light surface: where it is, its name in the display serif (plain, no accent word), a few lines about it, a row of facts under thin rules and, if given, the way in. Every project page opens
  * with this, so they read as one family.
  */
 export function ProjectHeader({
@@ -27,13 +21,11 @@ export function ProjectHeader({
   children?: ReactNode;
   className?: string;
 }) {
-  const { lead, last } = splitName(name);
   return (
     <div className={className}>
       <div className="eyebrow text-gold-deep">{eyebrow}</div>
       <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em] text-charcoal">
-        {lead}
-        {last && <em className="italic text-gold-deep">{last}</em>}
+        {name}
       </h1>
       {description && <p className="mt-5 max-w-xl text-base font-normal leading-[1.75] text-ink/75">{description}</p>}
       {facts.length > 0 && (
