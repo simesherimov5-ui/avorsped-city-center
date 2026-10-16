@@ -51,10 +51,7 @@ export default function HomePage() {
                   Изградени на доверба.
                 </h2>
               </div>
-              <Link
-                href="/about"
-                className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-label font-semibold uppercase tracking-label text-accent"
-              >
+              <Link href="/about" className="btn-tertiary focus-ring">
                 Нашата приказна
               </Link>
             </div>
@@ -79,10 +76,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
-            <Link
-              href="/about"
-              className="focus-ring mt-10 inline-flex min-h-11 items-center border-b border-accent pb-1 text-label font-semibold uppercase tracking-label text-accent"
-            >
+            <Link href="/about" className="btn-tertiary focus-ring mt-10">
               За нас
             </Link>
           </ScrollReveal>

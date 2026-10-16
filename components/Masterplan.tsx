@@ -366,7 +366,8 @@ function BuildingPanel({
         href={`${basePath}/${building.id}`}
         label={building.name}
         originRect={originRect ? () => originRect : undefined}
-        className="focus-ring flex w-full items-center justify-center gap-2 whitespace-nowrap border border-ink/30 px-6 py-3.5 text-label font-semibold uppercase tracking-label text-ink transition-colors hover:border-ink hover:bg-ink/5 active:scale-[0.97]"
+        className="btn-secondary focus-ring w-full"
+        data-tone="light"
       >
         Разгледајте ја зградата →
       </ZoomNavLink>

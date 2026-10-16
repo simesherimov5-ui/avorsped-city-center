@@ -631,7 +631,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   cursor: pointer;
   transition:
     color 0.5s cubic-bezier(0.7, 0, 0.2, 1),
-    border-color 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+    border-color 0.5s cubic-bezier(0.7, 0, 0.2, 1),
+    transform var(--dur-fast) var(--ease);
 }
 .btn-primary::before {
   content: "";
@@ -743,8 +744,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
   .btn-primary {
     transition:
-      color 0.2s linear,
-      border-color 0.2s linear;
+      color var(--dur-fast) linear,
+      border-color var(--dur-fast) linear;
   }
 }
 @media (prefers-reduced-motion: reduce) and (hover: hover) {
@@ -757,6 +758,111 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 [aria-roledescription="slide"] .btn-primary {
   background: color-mix(in srgb, var(--color-onyx) 45%, transparent);
 }
+/* The second level: a 1px foil outline, gold text (Бронза on a light surface, where gold does not read), no fill; a very
+   light gold wash on hover. Used by <Button variant="secondary"> and any link or button that needs the look. */
+.btn-secondary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid var(--foil-line);
+  border-radius: 0;
+  color: var(--color-gold);
+  font:
+    600 12px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+.btn-secondary[data-tone="light"] {
+  color: var(--color-bronze);
+}
+.btn-secondary--sm {
+  padding: 10px 20px;
+}
+@media (hover: hover) {
+  .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: color-mix(in srgb, var(--color-gold) 8%, transparent);
+  }
+}
+/* The third level: a text link with the gold underline ("Нашата приказна"). Бронза on a light surface. */
+.btn-tertiary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-gold);
+  font:
+    600 12px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+.btn-tertiary[data-tone="light"] {
+  color: var(--color-bronze);
+  text-decoration-color: var(--color-bronze);
+}
+@media (hover: hover) {
+  .btn-tertiary:hover {
+    color: var(--color-gold-glint);
+  }
+  .btn-tertiary[data-tone="light"]:hover {
+    color: var(--color-onyx);
+  }
+}
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"],
+.btn-tertiary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* Pressed: every button of the three levels gives a little (scale .97) and springs back. */
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]),
+.btn-secondary:active:not(:disabled):not([aria-disabled="true"]),
+.btn-tertiary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-tertiary:active {
+    transform: none !important;
+  }
+}
+@media (max-width: 640px) {
+  .btn-secondary:not(.btn-secondary--sm) {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
 /* Windows high contrast: the system colours take over; the fill is not drawn, so the text always reads. */
 @media (forced-colors: active) {
   .btn-primary,

@@ -69,7 +69,7 @@ function Content({ onClose, summary }: { onClose: () => void; summary: string })
       </div>
       <p data-line>Ќе ви се јавиме за потврда на терминот.</p>
       <div data-line>
-        <button type="button" data-autofocus className="bk-btn" onClick={onClose}>
+        <button type="button" data-autofocus className="btn-secondary focus-ring" data-tone="dark" onClick={onClose}>
           Во ред
         </button>
       </div>

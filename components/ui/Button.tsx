@@ -25,7 +25,7 @@ interface ButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
   tone?: "light" | "dark";
   size?: "sm" | "md";
   className?: string;
@@ -75,23 +75,24 @@ export function Button({
     );
   }
 
-  const base = cn(
-    "relative isolate inline-flex min-h-12 items-center justify-center lg:min-h-0 gap-2 whitespace-nowrap max-sm:whitespace-normal max-sm:text-center font-semibold uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
-    size === "sm" ? "px-5 py-2.5 text-[12px] tracking-[0.18em]" : "px-7 py-3.5 text-[12px] tracking-[0.18em]"
+  // The second and third levels (see .btn-secondary and .btn-tertiary in globals.css). "ghost" is the older name of
+  // the tertiary text link.
+  const classes = cn(
+    "focus-ring",
+    variant === "secondary" ? cn("btn-secondary", size === "sm" && "btn-secondary--sm") : "btn-tertiary",
+    className
   );
-  const styles = {
-    secondary:
-      tone === "dark"
-        ? "border border-on-chrome/40 text-on-chrome hover:border-on-chrome hover:bg-on-chrome/10"
-        : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
-    ghost: tone === "dark" ? "text-on-chrome/80 hover:text-on-chrome" : "text-charcoal/70 hover:text-charcoal",
-  }[variant];
-
-  const classes = cn(base, styles, className);
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick} onPointerDown={spawnClickPulse} aria-pressed={pressed}>
+      <Link
+        href={href}
+        className={classes}
+        onClick={onClick}
+        onPointerDown={spawnClickPulse}
+        data-tone={tone}
+        aria-pressed={pressed}
+      >
         {children}
       </Link>
     );
@@ -103,6 +104,7 @@ export function Button({
       onPointerDown={spawnClickPulse}
       disabled={disabled}
       className={classes}
+      data-tone={tone}
       aria-pressed={pressed}
     >
       {children}

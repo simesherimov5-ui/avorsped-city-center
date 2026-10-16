@@ -20,10 +20,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
               </div>
               <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">Сега во изградба.</h2>
             </div>
-            <Link
-              href="/projects"
-              className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-label font-semibold uppercase tracking-label text-accent"
-            >
+            <Link href="/projects" className="btn-tertiary focus-ring">
               Сите проекти →
             </Link>
           </div>

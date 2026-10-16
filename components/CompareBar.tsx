@@ -67,7 +67,7 @@ export function CompareBar() {
             })}
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={clear} className="!px-3">
+            <Button variant="tertiary" size="sm" onClick={clear}>
               Исчисти
             </Button>
             <Button href={`/compare?ids=${encodeURIComponent(ids.join(","))}`} variant="primary" size="sm">
