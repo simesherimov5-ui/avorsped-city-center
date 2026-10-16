@@ -976,10 +976,6 @@
   font-weight: 400;
   line-height: 1.15;
 }
-.pj-soon-heading em {
-  font-style: italic;
-  color: var(--color-gold);
-}
 .pj-soon-actions {
   display: flex;
   flex-wrap: wrap;

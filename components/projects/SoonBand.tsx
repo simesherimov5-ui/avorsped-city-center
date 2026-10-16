@@ -15,7 +15,7 @@ export function SoonBand() {
             НАСКОРО
           </div>
           <h2 className="pj-soon-heading">
-            Нешто ново се подготвува. <em>Бидете први што ќе ги дознаете деталите.</em>
+            Нешто ново се подготвува. Бидете први што ќе ги дознаете деталите.
           </h2>
         </div>
         <div className="pj-soon-actions">

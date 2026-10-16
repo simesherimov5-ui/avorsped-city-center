@@ -10,7 +10,7 @@ export function Soon() {
           <div className="max-w-2xl">
             <div className="eyebrow text-accent">Наскоро</div>
             <p className="mt-4 font-display text-(length:--fs-statement) leading-[1.15]">
-              Нешто ново се подготвува. <em className="italic text-accent">Бидете први што ќе ги дознаете деталите.</em>
+              Нешто ново се подготвува. Бидете први што ќе ги дознаете деталите.
             </p>
           </div>
         </Reveal>
