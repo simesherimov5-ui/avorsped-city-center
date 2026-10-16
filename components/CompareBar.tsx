@@ -73,7 +73,12 @@ export function CompareBar() {
                       Стан {apt.number}
                       <span className="ml-1.5 text-muted">{placeLabel(apt).text}</span>
                     </span>
-                    <button onClick={() => toggle(id)} aria-label={`Отстрани стан ${apt.number}`}>
+                    <button
+                      type="button"
+                      onClick={() => toggle(id)}
+                      aria-label={`Отстрани стан ${apt.number}`}
+                      className="focus-ring -my-1 -mr-1.5 inline-flex h-6 w-6 items-center justify-center"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </span>
