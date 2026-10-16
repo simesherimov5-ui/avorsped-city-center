@@ -976,6 +976,16 @@ body {
     color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
   );
 }
+/* The scrim of the hero's info strip ("Струмица, Северна Македонија" and the line on the right). */
+.hero-info-scrim {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-onyx) 60%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 32%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 88%, transparent) 100%
+  );
+}
 .hero-scrim-radial {
   background: radial-gradient(
     ellipse 70% 46% at 50% 14%,

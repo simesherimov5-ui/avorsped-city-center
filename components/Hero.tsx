@@ -121,12 +121,10 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* A dark scrim behind the invitation and the info strip: ink fading in from nothing at the top of its 460px to
-          85% at the bottom, above the photo and under the text, so their text always sits on the dark part. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[460px] bg-gradient-to-b from-ink/0 via-ink/55 to-ink/85 max-sm:to-ink/90"
-      />
+      {/* The info strip's scrim: Оникс at 60% at the top (under the navbar), clear through the middle of the photo, and
+          88% at the bottom, so the strip's text always sits on the dark part. Above the photo, under the text; the
+          photo itself is not touched. */}
+      <div aria-hidden className="hero-info-scrim pointer-events-none absolute inset-0" />
 
       {/* Sky text — the eyebrow and headline sit in the cloud band right
           below the nav, not stamped over the building. Kept deliberately
@@ -166,8 +164,8 @@ export function Hero() {
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
             <span className="text-label font-semibold uppercase tracking-label text-brass">— Javor Sped Holding</span>
-            <span className="text-[14px] font-normal leading-[1.5] text-gold sm:text-[15px]">
-              Секоја адреса има своја приказна. Откријте ја вашата.
+            <span className="font-display text-[18px] font-normal italic leading-[1.4] text-gold sm:text-[20px]">
+              Секоја адреса има приказна. Најдете ја вашата.
             </span>
           </span>
         </div>
