@@ -70,7 +70,7 @@ export function RadioGroup({
           aria-label={option.label}
           tabIndex={i === tabStop ? 0 : -1}
           className={cn(itemClassName, option.className)}
-          style={stagger ? { animationDelay: `${i * 40}ms` } : undefined}
+          style={stagger ? { animationDelay: `${i * 50}ms` } : undefined}
           onClick={() => onChange(option.value)}
           onKeyDown={(e) => onKeyDown(e, i)}
         >

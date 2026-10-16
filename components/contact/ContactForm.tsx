@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { formatArea } from "@/lib/format";
@@ -85,7 +86,8 @@ function Collapse({
   enter?: boolean;
   children: ReactNode;
 }) {
-  const t = reduce ? 0 : enter ? 0.45 : 0.3;
+  // a step opens in --dur-base and closes in 75% of it
+  const t = reduce ? 0 : DURATION.base;
   return (
     <AnimatePresence initial={false}>
       {show && (
@@ -94,8 +96,8 @@ function Collapse({
           className="ct-collapse"
           initial={reduce ? false : { height: 0, opacity: 0, y: enter ? 12 : 0 }}
           animate={{ height: "auto", opacity: 1, y: 0 }}
-          exit={{ height: 0, opacity: 0, y: 0 }}
-          transition={{ duration: t, ease: "easeOut" }}
+          exit={{ height: 0, opacity: 0, y: 0, transition: { duration: t * 0.75, ease: EASE } }}
+          transition={{ duration: t, ease: EASE }}
         >
           {children}
         </motion.div>
