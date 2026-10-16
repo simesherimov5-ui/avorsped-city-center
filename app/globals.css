@@ -914,6 +914,14 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 
+/* Reduced motion: scroll reveals never hide anything, from the first paint on. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* The opening entrance of a page, in plain CSS: the same fade and rise as components/ui/Reveal.tsx (0.5s, 24px, the site
    ease; phones 0.3s, 12px, no delay), but it plays from the first paint, so the first text does not wait for the
    scripts to load. Used for what is on screen when a page opens; everything below keeps the scroll reveal. */

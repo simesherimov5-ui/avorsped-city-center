@@ -30,8 +30,12 @@ export function Reveal({
     );
   }
 
+  // Reduced motion: the content is simply there (also before the scripts run, see [data-reveal] in globals.css).
+  if (reduceMotion) return <div>{children}</div>;
+
   return (
     <motion.div
+      data-reveal
       initial={{ opacity: 0, y: reduceMotion ? 0 : isPhone ? REVEAL_DISTANCE / 2 : REVEAL_DISTANCE }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={REVEAL_VIEWPORT}
