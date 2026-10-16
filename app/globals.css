@@ -913,9 +913,9 @@ body {
   }
 }
 
-/* The metallic sheen — one place on the whole site, the footer wordmark. The text is filled with a bronze-to-gold
-   gradient with a bright band that sweeps across during the first 60% of each 4.5s loop and then rests. Not on the
-   hero: the headline there sits on a photo. Reduced motion: no movement, plain logo gold. */
+/* The metallic sheen of the footer wordmark. The text is filled with a bronze-to-gold gradient with a bright band that
+   sweeps across once (2.4s) when the footer comes into view (.is-on, components/FooterSheen.tsx), then stays still.
+   Reduced motion: no movement, plain logo gold. */
 .footer-sheen {
   display: inline-block;
   white-space: nowrap;
@@ -935,7 +935,10 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: footer-sheen 4.5s ease-in-out infinite;
+  background-position: 100% 0;
+}
+.footer-sheen.is-on {
+  animation: footer-sheen-once 2.4s var(--ease) both;
 }
 @keyframes footer-sheen {
   0% {
@@ -946,8 +949,17 @@ body {
     background-position: 0% 0;
   }
 }
+@keyframes footer-sheen-once {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .footer-sheen {
+  .footer-sheen,
+  .footer-sheen.is-on {
     animation: none;
     background: none;
     color: var(--color-brass);

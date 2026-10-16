@@ -1,18 +1,18 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import { ConsultationLink } from "@/components/ConsultationLink";
+import { FooterSheen } from "@/components/FooterSheen";
 import { companyInfo } from "@/data";
 
 export function Footer() {
   return (
     <footer className="border-t border-line bg-chrome text-on-chrome">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 py-16 sm:py-20 lg:grid-cols-4 lg:gap-8 lg:px-10">
+      <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 py-16 sm:py-20 lg:grid-cols-3 lg:gap-8 lg:px-10">
         <div>
           <div className="leading-none">
-            <div className="footer-sheen">Javor Sped</div>
+            <FooterSheen>Javor Sped</FooterSheen>
             <div className="eyebrow mt-2 text-accent">Holding</div>
           </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-on-chrome/60">
-            {companyInfo.name} Холдинг — градиме станбени простори од {companyInfo.founded} година.
+            Градиме домови од {companyInfo.founded}.
           </p>
         </div>
 
@@ -42,16 +42,6 @@ export function Footer() {
               {companyInfo.email}
             </a>
           </div>
-        </div>
-
-        <div>
-          <div className="eyebrow text-accent">Консултација</div>
-          <p className="mt-5 text-sm leading-relaxed text-on-chrome/60">
-            Разговарајте со нашиот тим за продажба за кој било од нашите проекти.
-          </p>
-          <ConsultationLink className="mt-5 inline-flex min-h-12 items-center border border-on-chrome/30 px-5 py-2.5 text-xs uppercase tracking-[0.14em] transition-colors hover:border-on-chrome/60 hover:bg-on-chrome/10">
-            Закажи консултација
-          </ConsultationLink>
         </div>
       </div>
       <div className="border-t border-on-chrome/10 px-5 sm:px-8 py-6 text-xs text-on-chrome/60 lg:px-10">
