@@ -761,7 +761,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .btn-primary::before {
     transform: none;
     opacity: 0;
-    transition: opacity 0.2s linear;
+    transition: opacity var(--dur-fast) linear;
   }
   .btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"])::before,
   .btn-primary--filled:not(:disabled)::before,

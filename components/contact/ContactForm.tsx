@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type FormEv
 import { flushSync } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { formatArea } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
@@ -67,7 +67,7 @@ function shake(el: Element | null) {
   gsap.fromTo(
     el,
     { x: 0 },
-    { keyframes: [{ x: -6 }, { x: 6 }, { x: -4 }, { x: 4 }, { x: 0 }], duration: 0.4, ease: "power1.inOut" }
+    { keyframes: [{ x: -6 }, { x: 6 }, { x: -4 }, { x: 4 }, { x: 0 }], duration: DUR.base, ease: "power1.inOut" }
   );
 }
 
