@@ -20,7 +20,7 @@ export function SoonBand() {
           <Button href="/contact" variant="primary" tone="dark" filled>
             Пријави се
           </Button>
-          <Button href="/contact" variant="primary" tone="dark">
+          <Button href="/contact" variant="secondary" tone="dark" arrow>
             Закажи консултација
           </Button>
         </div>

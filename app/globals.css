@@ -785,8 +785,10 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 [aria-roledescription="slide"] .btn-primary {
   background: color-mix(in srgb, var(--color-onyx) 45%, transparent);
 }
-/* The second level: a 1px foil outline, gold text (Бронза on a light surface, where gold does not read), no fill; a very
-   light gold wash on hover. Used by <Button variant="secondary"> and any link or button that needs the look. */
+/* The second level: a 1px foil outline, gold text (Бронза on a light surface, where gold does not read), no fill. It
+   never takes a gold or foil fill (only the primary button has that, so a group has one gold button at most): on hover
+   the outline and text turn Травертин with a 4% Травертин wash and the arrow moves 4px; pressed it gives to .97. Used
+   by <Button variant="secondary"> and any link or button that needs the look. */
 .btn-secondary {
   position: relative;
   isolation: isolate;
@@ -812,6 +814,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   transition:
     background-color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
     transform var(--dur-fast) var(--ease);
 }
 .btn-secondary[data-tone="light"] {
@@ -820,10 +823,39 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 .btn-secondary--sm {
   padding: 10px 20px;
 }
+.btn-secondary__arrow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-block: -8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  transition: transform var(--dur-fast) var(--ease);
+}
 @media (hover: hover) {
   .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
-    background-color: color-mix(in srgb, var(--color-gold) 8%, transparent);
+    border-color: color-mix(in srgb, var(--color-travertine) 60%, transparent);
+    background-color: color-mix(in srgb, var(--color-travertine) 4%, transparent);
+    color: var(--color-travertine);
   }
+  .btn-secondary[data-tone="light"]:hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: color-mix(in srgb, var(--color-onyx) 60%, transparent);
+    background-color: color-mix(in srgb, var(--color-onyx) 4%, transparent);
+    color: var(--color-onyx);
+  }
+  .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) .btn-secondary__arrow {
+    transform: translateX(4px);
+  }
+}
+/* Focus: a clear ring on both levels. On a light surface the light foil would be 1.7:1, so it is Бронза there (6.2:1). */
+.btn-primary[data-tone="light"]:focus-visible,
+.btn-secondary[data-tone="light"]:focus-visible,
+.btn-tertiary[data-tone="light"]:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 3px;
 }
 /* The third level: a text link with the gold underline ("Нашата приказна"). Бронза on a light surface. */
 .btn-tertiary {

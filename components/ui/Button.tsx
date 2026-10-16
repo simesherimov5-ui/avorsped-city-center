@@ -3,7 +3,6 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import type { MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { spawnClickPulse } from "@/lib/clickPulse";
 
 /** The inside of the primary button: the label and the circled arrow (the foil fill is the button's own ::before). */
 export function PrimaryFace({ children, arrow = true }: { children: ReactNode; arrow?: boolean }) {
@@ -35,6 +34,8 @@ interface ButtonProps {
   filled?: boolean;
   /** For a button that switches something on and off: sets aria-pressed. */
   pressed?: boolean;
+  /** The secondary button with the circled arrow (as the primary one has), e.g. beside a primary button. */
+  arrow?: boolean;
 }
 
 export function Button({
@@ -49,6 +50,7 @@ export function Button({
   disabled,
   filled = false,
   pressed,
+  arrow = false,
 }: ButtonProps) {
   if (variant === "primary") {
     // The filling button has its own look (see .btn-primary in globals.css); no click pulse, it would fight the fill.
@@ -76,7 +78,20 @@ export function Button({
   }
 
   // The second and third levels (see .btn-secondary and .btn-tertiary in globals.css). "ghost" is the older name of
-  // the tertiary text link.
+  // the tertiary text link. Neither has the gold click pulse: only the primary button ever turns gold.
+  const content =
+    variant === "secondary" && arrow ? (
+      <>
+        <span>{children}</span>
+        <span aria-hidden className="btn-secondary__arrow">
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M0 4h13M9 1l4 3-4 3" />
+          </svg>
+        </span>
+      </>
+    ) : (
+      children
+    );
   const classes = cn(
     "focus-ring",
     variant === "secondary" ? cn("btn-secondary", size === "sm" && "btn-secondary--sm") : "btn-tertiary",
@@ -85,15 +100,8 @@ export function Button({
 
   if (href) {
     return (
-      <Link
-        href={href}
-        className={classes}
-        onClick={onClick}
-        onPointerDown={spawnClickPulse}
-        data-tone={tone}
-        aria-pressed={pressed}
-      >
-        {children}
+      <Link href={href} className={classes} onClick={onClick} data-tone={tone} aria-pressed={pressed}>
+        {content}
       </Link>
     );
   }
@@ -101,13 +109,12 @@ export function Button({
     <button
       type={type}
       onClick={onClick}
-      onPointerDown={spawnClickPulse}
       disabled={disabled}
       className={classes}
       data-tone={tone}
       aria-pressed={pressed}
     >
-      {children}
+      {content}
     </button>
   );
 }
