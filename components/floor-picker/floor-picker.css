@@ -46,10 +46,10 @@
   background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
   color: var(--fp-mute);
   font:
-    600 11px/1 var(--font-sans),
+    600 12px/1 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.3em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   cursor: pointer;
   transition:
@@ -104,7 +104,7 @@
   color: var(--color-gold);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .fp-title {
@@ -165,9 +165,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .fp-unit-st.is-available {
@@ -188,7 +188,7 @@
   color: var(--color-gold);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   text-decoration: none;
   text-transform: uppercase;
 }

@@ -198,9 +198,9 @@
   color: var(--color-travertine);
 }
 .pj-now-meta {
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.24em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   color: color-mix(in srgb, var(--color-travertine) 64%, transparent);
 }
@@ -208,9 +208,9 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: var(--label-track);
   color: color-mix(in srgb, var(--color-travertine) 64%, transparent);
 }
 .pj-cue-line {
@@ -412,7 +412,7 @@
 }
 .pj-opt-count {
   font-family: var(--font-sans), sans-serif;
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
   color: var(--color-bronze);
 }
@@ -477,7 +477,7 @@
 .pj-count {
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--label-track);
   color: var(--color-bronze);
 }
 .pj-view {
@@ -518,7 +518,7 @@
   font-family: var(--font-sans), sans-serif;
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--label-track);
   color: var(--color-bronze);
 }
 .pj-grid {
@@ -586,9 +586,9 @@
   padding: 8px 12px;
   background: var(--color-travertine);
   color: var(--color-onyx);
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .pj-chip i {
@@ -602,9 +602,9 @@
   position: absolute;
   bottom: 18px;
   left: 20px;
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   color: var(--color-travertine);
 }
@@ -795,9 +795,9 @@
   color: var(--color-onyx);
 }
 .pj-pin-count {
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--label-track);
   color: var(--color-bronze);
 }
 .pj-zoom {
@@ -901,9 +901,9 @@
   line-height: 1.2;
 }
 .pj-row-meta {
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   color: var(--color-bronze);
 }

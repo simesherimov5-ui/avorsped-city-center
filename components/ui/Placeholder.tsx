@@ -37,7 +37,7 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
         )}
       >
         <ImageOff className="h-5 w-5" strokeWidth={1.5} />
-        <span className="text-[11px] uppercase tracking-[0.14em]">{label}</span>
+        <span className="text-label uppercase tracking-label">{label}</span>
       </div>
     </div>
   );

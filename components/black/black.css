@@ -87,7 +87,7 @@
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .bk-eyebrow::before,
@@ -106,7 +106,7 @@
 .bk-label {
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   color: var(--color-gold);
 }
@@ -123,10 +123,10 @@
   background: transparent;
   color: var(--color-paper);
   font:
-    500 11px/1 var(--font-sans),
+    500 12px/1 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.26em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;

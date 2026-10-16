@@ -87,9 +87,9 @@
 .ab-meta > span {
   padding: 0 24px;
   border-left: 1px solid var(--gold-line);
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 400;
-  letter-spacing: 0.24em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .ab-meta > span:first-child {
@@ -491,6 +491,6 @@
   text-align: center;
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   color: var(--mute);
 }

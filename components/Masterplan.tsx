@@ -146,7 +146,7 @@ export function Masterplan({
                   className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="text-base font-medium">{building.name}</div>
-                  <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
+                  <div className="mt-2 space-y-1 text-label text-on-chrome/70">
                     <div>
                       {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
@@ -219,7 +219,7 @@ export function Masterplan({
               >
                 <span
                   className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
+                    "flex h-6 w-6 items-center justify-center rounded-full border text-label font-semibold",
                     isSelected ? "border-accent bg-accent text-chrome" : "border-line text-muted"
                   )}
                 >
@@ -356,7 +356,7 @@ function BuildingPanel({
         {floorsText(building.floors.length)} · {unitsText(building.totalApartments)} · {building.available}{" "}
         {availableWord(building.available)}
       </p>
-      <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-ink">
+      <div className="flex items-center gap-3 text-label font-semibold uppercase tracking-label text-ink">
         <span aria-hidden className="block h-2 w-2 rounded-full bg-bronze" />
         {building.status === "completed" ? "Завршено" : "Во изградба"}
         {building.available > 0 && <> · Во продажба</>}
@@ -366,7 +366,7 @@ function BuildingPanel({
         href={`${basePath}/${building.id}`}
         label={building.name}
         originRect={originRect ? () => originRect : undefined}
-        className="focus-ring flex w-full items-center justify-center gap-2 whitespace-nowrap border border-ink/30 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink hover:bg-ink/5 active:scale-[0.97]"
+        className="focus-ring flex w-full items-center justify-center gap-2 whitespace-nowrap border border-ink/30 px-6 py-3.5 text-label font-semibold uppercase tracking-label text-ink transition-colors hover:border-ink hover:bg-ink/5 active:scale-[0.97]"
       >
         Разгледајте ја зградата →
       </ZoomNavLink>

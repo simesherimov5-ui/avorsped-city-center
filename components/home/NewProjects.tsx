@@ -24,7 +24,7 @@ export function NewProjects({ projects }: { projects: Project[] }) {
             </div>
             <Link
               href="/projects"
-              className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
+              className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-label font-semibold uppercase tracking-label text-accent"
             >
               Сите проекти →
             </Link>

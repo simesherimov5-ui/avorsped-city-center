@@ -79,7 +79,7 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
             </span>
           </div>
           <div aria-hidden className="h-px w-12 bg-accent" />
-          <div className="text-[11px] font-semibold uppercase tracking-[0.32em] text-accent">{item.label}</div>
+          <div className="text-label font-semibold uppercase tracking-label text-accent">{item.label}</div>
         </div>
       ))}
     </div>

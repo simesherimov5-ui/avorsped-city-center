@@ -222,7 +222,7 @@ export function Navbar() {
                     onPointerDown={spawnClickPulse}
                     aria-current={pathname === link.href ? "page" : undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[12.5px] uppercase tracking-[0.08em] transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
                       activeHref === link.href && "text-gold!"
                     )}
                   >

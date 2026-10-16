@@ -81,9 +81,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
       onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setFocused(false)}
     >
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-9 px-5 py-20 text-center sm:px-8 md:py-[120px] lg:px-10">
-        <div className="eyebrow text-accent" style={{ letterSpacing: "0.32em" }}>
-          {t("quotes.eyebrow")}
-        </div>
+        <div className="eyebrow text-accent">{t("quotes.eyebrow")}</div>
         <div
           aria-live={used ? "polite" : "off"}
           className="flex min-h-[200px] w-full max-w-[960px] flex-col items-center justify-center gap-9"
@@ -92,7 +90,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
             <blockquote className="m-0 font-display text-[clamp(30px,3.4vw,48px)] font-normal italic leading-[1.3] text-paper">
               „{quote.text}“
             </blockquote>
-            <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.32em] text-accent">{by}</p>
+            <p className="mt-9 text-label font-semibold uppercase tracking-label text-accent">{by}</p>
           </div>
         </div>
         {count > 1 && (

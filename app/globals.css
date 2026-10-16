@@ -85,6 +85,11 @@
   --dur-slow-out: 450ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Small uppercase labels (eyebrows, badges, stat labels, footer headings, text links): never under 12px, letters
+     about 0.13em apart. Nav links are a touch tighter (--tracking-nav). Tailwind: text-label, tracking-label. */
+  --label-size: 12px;
+  --label-track: 0.13em;
+
   /*
    * Older names, kept as aliases so the rest of the codebase (cream/warm-white/silver/charcoal/chrome/on-chrome/
    * accent/accent-soft class names) renders the new palette without a mechanical rename of every file.
@@ -150,6 +155,9 @@
   --default-transition-duration: var(--dur-fast);
   --default-transition-timing-function: var(--ease);
   --ease-site: var(--ease);
+  --text-label: var(--label-size);
+  --tracking-label: var(--label-track);
+  --tracking-nav: 0.1em;
 }
 
 @media (min-width: 640px) {
@@ -477,15 +485,15 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* Small uppercase label used above headings and on section eyebrows —
    one consistent size/tracking pair instead of ad hoc tracking-widest calls. */
 .eyebrow {
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 /* For a label in a narrow column ("Ориентација" in a two-column grid): the same label with the letters closer. */
 .eyebrow-tight {
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
 }
 
 /* A 40px gold rule before an eyebrow label. */
@@ -616,7 +624,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     600 13px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
@@ -710,7 +718,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     gap: 12px;
     padding: 18px 22px;
     font-size: 12px;
-    letter-spacing: 0.14em;
+    letter-spacing: var(--label-track);
   }
   .btn-primary--sm {
     padding: 14px 22px;
