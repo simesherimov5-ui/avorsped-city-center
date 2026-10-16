@@ -281,7 +281,8 @@ h4 {
   }
 }
 
-/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles slowly. */
+/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles once, from a
+   slight zoom to its full frame (it ends at scale 1, so no building is cut once the opening is over). */
 .opening-rise {
   animation: opening-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
@@ -292,14 +293,14 @@ h4 {
   }
 }
 .opening-settle {
-  animation: opening-settle 18s ease-out infinite alternate;
+  animation: opening-settle 3.2s var(--ease) both;
 }
 @keyframes opening-settle {
   from {
-    transform: scale(1.12);
+    transform: scale(1.06);
   }
   to {
-    transform: scale(1);
+    transform: none;
   }
 }
 /* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */

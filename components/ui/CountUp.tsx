@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 /**
  * Animates the numeric prefix of a stat like "30+" or "540+" from 0 up to
  * its target once it scrolls into view, keeping any non-numeric suffix
  * static. Plays once; respects prefers-reduced-motion by rendering the
- * final value immediately instead of animating.
+ * final value instead of animating. The reduced-motion check is a
+ * hydration-safe media query (false on the server and in the first render),
+ * so the server HTML and the browser's first render always agree.
  */
 export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pad?: number; duration?: number }) {
   const match = value.match(/^(\d+)(.*)$/);
@@ -15,10 +18,9 @@ export function CountUp({ value, pad = 0, duration = 1400 }: { value: string; pa
   const hasMatch = Boolean(match);
 
   const ref = useRef<HTMLSpanElement>(null);
-  const [prefersReducedMotion] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-  const [display, setDisplay] = useState(() => (prefersReducedMotion ? target : 0));
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const [count, setDisplay] = useState(0);
+  const display = prefersReducedMotion ? target : count;
 
   useEffect(() => {
     const node = ref.current;
