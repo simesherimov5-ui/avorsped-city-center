@@ -933,6 +933,10 @@ body {
     opacity: 0;
   }
 }
+/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. */
+body:has([data-compare-bar]) {
+  padding-bottom: 140px;
+}
 /* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */
 .grid > * {
   min-width: 0;
