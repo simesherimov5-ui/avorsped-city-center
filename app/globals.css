@@ -1091,7 +1091,7 @@ body:has([data-compare-bar]) {
 }
 
 /* The metallic sheen of the footer wordmark. The text is filled with a bronze-to-gold gradient with a bright band that
-   sweeps across once (2.4s) when the footer comes into view (.is-on, components/FooterSheen.tsx), then stays still.
+   sweeps across once (2.4s) when the footer comes into view (.is-on, components/ui/SheenOnce.tsx), then stays still.
    Reduced motion: no movement, plain logo gold. */
 .footer-sheen {
   display: inline-block;
@@ -1116,15 +1116,6 @@ body:has([data-compare-bar]) {
 }
 .footer-sheen.is-on {
   animation: footer-sheen-once 2.4s var(--ease) both;
-}
-@keyframes footer-sheen {
-  0% {
-    background-position: 100% 0;
-  }
-  60%,
-  100% {
-    background-position: 0% 0;
-  }
 }
 @keyframes footer-sheen-once {
   from {

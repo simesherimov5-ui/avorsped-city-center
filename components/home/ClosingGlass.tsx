@@ -49,8 +49,8 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
     if (!el || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return;
     // The first report says where the section is right now. On screen already (the visitor landed here): it stays as
-    // it is, finished. Off screen: hide the parts, and play the entrance once as soon as it is inside the bottom 90% of
-    // the screen, so the section is never an empty band on screen.
+    // it is, finished. Off screen: hide the parts, and play the entrance once as soon as it is on screen (less a 5% band
+    // at the bottom), so the section is never an empty band on screen.
     let armed = false;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -65,7 +65,7 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
         el.classList.add("cg-in");
         observer.disconnect();
       },
-      { threshold: [0, 0.05], rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -5% 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();

@@ -34,8 +34,8 @@ export const REVEAL_DISTANCE = 24;
 /** What leaves takes about 75% of the time it took to arrive (never under DURATION.fast). */
 export const exitDuration = (d: number) => Math.max(DURATION.fast, d * 0.75);
 
-/** Scroll reveals start as soon as a little of the element is inside the bottom 90% of the screen. */
-export const REVEAL_VIEWPORT = { once: true, margin: "0px 0px -10% 0px", amount: 0.05 } as const;
+/** Scroll reveals start as soon as the element is inside the screen, less a 5% band at the bottom. */
+export const REVEAL_VIEWPORT = { once: true, margin: "0px 0px -5% 0px", amount: 0 } as const;
 
-/** The same point for GSAP ScrollTrigger: the element's top passes 92% of the screen's height. */
-export const REVEAL_START = "top 92%";
+/** The same point for GSAP ScrollTrigger: the element's top passes 95% of the screen's height. */
+export const REVEAL_START = "top 95%";

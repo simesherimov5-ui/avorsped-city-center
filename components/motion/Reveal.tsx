@@ -22,7 +22,7 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
       }
 
       // Lighter on phones: shorter travel, shorter duration. It starts as soon as the top of the block is inside the
-      // bottom 8% of the screen, so nothing sits invisible on screen waiting for it.
+      // bottom 5% of the screen, so nothing sits invisible on screen waiting for it.
       const phone = window.innerWidth < 768;
       gsap.set(ref.current, { opacity: 0, y: phone ? 12 : 24 });
       gsap.to(ref.current, {
