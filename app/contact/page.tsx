@@ -59,7 +59,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const start = { projectId: project?.id, buildingId: building?.id, unitId: apartment?.id };
 
   return (
-    <div data-theme="black" className="bk-page">
+    <div data-theme="black" className="bk-page grain grain--dark">
       <ContactStage>
         <header className="ct-head bk-wrap">
           <div data-seq="eyebrow" className="bk-eyebrow ct-pre">

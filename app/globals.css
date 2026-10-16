@@ -87,6 +87,10 @@
 
   /* Small uppercase labels (eyebrows, badges, stat labels, footer headings, text links): never under 12px, letters
      about 0.13em apart. Nav links are a touch tighter (--tracking-nav). Tailwind: text-label, tracking-label. */
+  /* A very fine stone grain (one 160px noise tile, in a warm Бронза tone) for the flat Травертин and Оникс sections.
+     Used only through .grain below. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.43 0 0 0 0 0.33 0 0 0 0 0.24 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
   --label-size: 12px;
   --label-track: 0.13em;
 
@@ -330,6 +334,29 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Stone grain: add .grain to a Травертин section (and .grain--dark to an Оникс / Еспресо one). The noise sits on its
+   own layer above the section's background and behind everything in it, so photos, buttons and cards cover it and the
+   text contrast does not change. Barely visible: 35% multiplied on light, 18% screened on dark. Removing the class
+   removes it. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain);
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.grain--dark::before {
+  opacity: 0.18;
+  mix-blend-mode: screen;
 }
 
 /* A dark band on a page whose own surface is light, and its way back: inside .on-dark the light-surface tokens turn into

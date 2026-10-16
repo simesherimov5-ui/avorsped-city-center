@@ -46,7 +46,7 @@ export function ProjectSection({
     <section
       id={id}
       aria-label={label}
-      className={cn(tone === "dark" ? "on-dark" : "on-light", "border-t border-line")}
+      className={cn(tone === "dark" ? "on-dark grain grain--dark" : "on-light grain", "border-t border-line")}
       style={tone === "tint" ? { backgroundColor: "var(--color-limestone)" } : undefined}
     >
       <div className={cn("mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10", className)}>{children}</div>

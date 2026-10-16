@@ -10,7 +10,7 @@ const ITEMS = [
 /** "Што нè разликува": four short texts on a light surface, numbered because they are a list of four. */
 export function Differences() {
   return (
-    <section className="bg-cream text-charcoal">
+    <section className="grain bg-cream text-charcoal">
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-5 pb-16 pt-[70px] sm:px-8 sm:pb-24 lg:flex-row lg:gap-14 lg:px-10">
         <Reveal>
           <div className="lg:w-[300px] lg:shrink-0">

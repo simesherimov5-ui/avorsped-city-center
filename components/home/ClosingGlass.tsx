@@ -72,7 +72,7 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
   }, []);
 
   return (
-    <section ref={root} className="cg" aria-labelledby="cg-title">
+    <section ref={root} className="cg grain grain--dark" aria-labelledby="cg-title">
       <div className="cg-glow" aria-hidden />
 
       <svg className="cg-mark" viewBox={MARK_VIEWBOX} aria-hidden>

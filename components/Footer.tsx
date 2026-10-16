@@ -4,7 +4,7 @@ import { companyInfo } from "@/data";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-chrome text-on-chrome">
+    <footer className="grain grain--dark border-t border-line bg-chrome text-on-chrome">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 py-16 sm:py-20 lg:grid-cols-3 lg:gap-8 lg:px-10">
         <div>
           <div className="leading-none">

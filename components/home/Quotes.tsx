@@ -74,7 +74,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
     <section
       ref={root}
       aria-label={t("quotes.eyebrow")}
-      className="bg-espresso text-on-chrome"
+      className="grain grain--dark bg-espresso text-on-chrome"
       onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
       onPointerLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}

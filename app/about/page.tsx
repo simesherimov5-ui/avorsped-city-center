@@ -73,7 +73,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div data-theme="black" className="bk-page">
+    <div data-theme="black" className="bk-page grain grain--dark">
       <ReadingProgress />
 
       <AboutHero

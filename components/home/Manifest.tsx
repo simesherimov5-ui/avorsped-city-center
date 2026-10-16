@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
  */
 export function Manifest() {
   return (
-    <section className="bg-cream text-charcoal">
+    <section className="grain bg-cream text-charcoal">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 py-20 text-center sm:px-8 sm:py-28 lg:px-10">
         <Reveal>
           <div className="eyebrow text-gold-deep">Во што веруваме</div>

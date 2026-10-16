@@ -264,83 +264,85 @@ function Explorer({
         </div>
       </div>
 
-      <section className="pj-wrap pj-results">
-        <div className="pj-count" role="status" aria-live="polite">
-          {countLine}
-        </div>
+      <div className="grain">
+        <section className="pj-wrap pj-results">
+          <div className="pj-count" role="status" aria-live="polite">
+            {countLine}
+          </div>
 
-        {view === "grid" && shown.length > 0 && (
-          <div key={`grid-${status}-${city}`} className={changed ? "pj-view pj-groups" : "pj-groups"}>
-            {groups.map((group) => {
-              let n = 0;
-              return (
-                <div key={group.city || "none"}>
-                  {group.city && (
-                    <h2 className="pj-group-head">
-                      <PinIcon />
-                      <span className="pj-group-name">{group.city}</span>
-                      <span className="pj-group-count">{projectsText(group.projects.length)}</span>
-                    </h2>
-                  )}
-                  <div className="pj-grid">
+          {view === "grid" && shown.length > 0 && (
+            <div key={`grid-${status}-${city}`} className={changed ? "pj-view pj-groups" : "pj-groups"}>
+              {groups.map((group) => {
+                let n = 0;
+                return (
+                  <div key={group.city || "none"}>
+                    {group.city && (
+                      <h2 className="pj-group-head">
+                        <PinIcon />
+                        <span className="pj-group-name">{group.city}</span>
+                        <span className="pj-group-count">{projectsText(group.projects.length)}</span>
+                      </h2>
+                    )}
+                    <div className="pj-grid">
+                      {group.projects.map((project) => (
+                        <GridCard key={project.id} project={project} delay={changed ? undefined : n++ * 0.05} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {view === "map" && (
+            <div key={`map-${status}-${city}`} className={changed ? "pj-view pj-map-view" : "pj-map-view"}>
+              <ProjectsMap pins={pins} selected={city} onPick={(c) => choose({ city: c })} />
+              <div className="pj-rows">
+                {groups.map((group) => (
+                  <div key={group.city || "none"} className="pj-rows-group">
+                    {group.city && (
+                      <div className="eyebrow pj-rows-head">
+                        <PinIcon />
+                        {group.city}
+                      </div>
+                    )}
                     {group.projects.map((project) => (
-                      <GridCard key={project.id} project={project} delay={changed ? undefined : n++ * 0.05} />
+                      <Link key={project.id} href={href(project)} className="pj-row">
+                        <span className="pj-thumb">
+                          {project.heroImage.isPlaceholder ? (
+                            <NoPhoto />
+                          ) : (
+                            <span className="pj-img">
+                              <Media
+                                image={project.heroImage}
+                                tone="dark"
+                                fit={project.imageFit ?? "cover"}
+                                focus={project.imageFocus}
+                                className="h-full w-full !bg-transparent"
+                                sizes="96px"
+                                defer
+                              />
+                            </span>
+                          )}
+                        </span>
+                        <span className="pj-row-text">
+                          <span className="pj-row-name">{project.name}</span>
+                          <span className="pj-row-meta">
+                            {project.city} · <span className={statusClass(project)}>{statusText(project)}</span>
+                          </span>
+                        </span>
+                        <span className="pj-arrow" aria-hidden>
+                          →
+                        </span>
+                      </Link>
                     ))}
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {view === "map" && (
-          <div key={`map-${status}-${city}`} className={changed ? "pj-view pj-map-view" : "pj-map-view"}>
-            <ProjectsMap pins={pins} selected={city} onPick={(c) => choose({ city: c })} />
-            <div className="pj-rows">
-              {groups.map((group) => (
-                <div key={group.city || "none"} className="pj-rows-group">
-                  {group.city && (
-                    <div className="eyebrow pj-rows-head">
-                      <PinIcon />
-                      {group.city}
-                    </div>
-                  )}
-                  {group.projects.map((project) => (
-                    <Link key={project.id} href={href(project)} className="pj-row">
-                      <span className="pj-thumb">
-                        {project.heroImage.isPlaceholder ? (
-                          <NoPhoto />
-                        ) : (
-                          <span className="pj-img">
-                            <Media
-                              image={project.heroImage}
-                              tone="dark"
-                              fit={project.imageFit ?? "cover"}
-                              focus={project.imageFocus}
-                              className="h-full w-full !bg-transparent"
-                              sizes="96px"
-                              defer
-                            />
-                          </span>
-                        )}
-                      </span>
-                      <span className="pj-row-text">
-                        <span className="pj-row-name">{project.name}</span>
-                        <span className="pj-row-meta">
-                          {project.city} · <span className={statusClass(project)}>{statusText(project)}</span>
-                        </span>
-                      </span>
-                      <span className="pj-arrow" aria-hidden>
-                        →
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </section>
+          )}
+        </section>
+      </div>
     </>
   );
 }
