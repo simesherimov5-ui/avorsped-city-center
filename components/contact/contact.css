@@ -215,6 +215,7 @@
   flex: none;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   min-height: 32px;
   padding: 0 2px;
   border: 0;

@@ -785,7 +785,7 @@ export function ContactForm({
               </div>
               {index > 0 && (
                 <button type="button" className="ct-back" onClick={back}>
-                  <span aria-hidden>← </span>Назад
+                  <span aria-hidden>←</span>Назад
                 </button>
               )}
             </div>
