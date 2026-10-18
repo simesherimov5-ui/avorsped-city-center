@@ -1,5 +1,6 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { RevealHeading } from "@/components/motion/RevealHeading";
 import { Reveal } from "@/components/motion/Reveal";
 import { PrimaryFace } from "@/components/ui/Button";
@@ -23,7 +24,7 @@ export function ClosingCta({
           image={{ ...image, alt: "", isPlaceholder: false }}
           tone="dark"
           defer
-          sizes="(max-width: 767px) 160vw, 100vw"
+          sizes={coverSizes(image.src, [{ w: "100vw", h: "640px" }])}
           className="h-full w-full"
         />
       </div>

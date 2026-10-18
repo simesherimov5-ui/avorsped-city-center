@@ -2,7 +2,11 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { Placeholder } from "./Placeholder";
 import { cn } from "@/lib/cn";
+import { isNarrowPhoto } from "@/lib/image-sizes";
 import type { ImageFocus } from "@/types";
+
+/** The quality every photo is requested at (also in next.config.ts → images.qualities). */
+const QUALITY = 80;
 
 // The soft fade at the edges of a shrunken picture: transparent at each edge, solid by 5% in.
 const EDGE_FADE =
@@ -31,6 +35,7 @@ export function Media({
   focus,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   crisp = false,
+  wholeAlign = "center",
 }: {
   image: MediaImage;
   className?: string;
@@ -48,9 +53,52 @@ export function Media({
    * the optimizer's lossy re-encoding smears thin lines. The drawing must then not be shown larger than its own pixels.
    */
   crisp?: boolean;
+  /**
+   * A square or portrait photo in a wide frame is shown whole (see below); this is the side it sits on when the frame
+   * is wide, e.g. "right" when the layout has text on the left.
+   */
+  wholeAlign?: "center" | "left" | "right";
 }) {
   if (image.isPlaceholder || !image.src) {
     return <Placeholder label={label ?? image.alt} tone={tone} className={className} />;
+  }
+
+  // The first big photo of a page loads first and at once; every other one waits until it is near the screen.
+  const loading = priority
+    ? ({ loading: "eager", fetchPriority: "high" } as const)
+    : ({ loading: "lazy", fetchPriority: defer ? "low" : undefined } as const);
+
+  // A square or portrait photo (narrower than 1.2:1, e.g. the Станбена Куќа facade) that would cover a wide frame would
+  // lose its top floor and roof. Where the frame is wider than about 1.25:1 it is shown whole, at its own proportions,
+  // on the chosen side, and the rest of the frame is the same photo enlarged, blurred (40px) and darkened (Оникс 55%).
+  // In a frame that is not wide (a phone, a tall card) it simply covers the frame. The switch is a container query on
+  // the frame itself (.media-whole in globals.css), so it holds in any layout.
+  if (!crisp && isNarrowPhoto(image.src)) {
+    return (
+      <div className={cn("media-whole relative overflow-hidden bg-espresso", className)} data-align={wholeAlign}>
+        <Image
+          src={image.src}
+          alt=""
+          aria-hidden
+          fill
+          sizes={sizes}
+          className="media-whole__bg object-cover"
+          quality={QUALITY}
+          loading="lazy"
+        />
+        <div aria-hidden className="media-whole__shade" />
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes={sizes}
+          className="media-whole__photo"
+          style={focus ? { objectPosition: `${focus.x}% ${focus.y}%` } : undefined}
+          quality={QUALITY}
+          {...loading}
+        />
+      </div>
+    );
   }
 
   // Further out than "fill the frame": the picture is drawn at `zoom` times the size it would have to cover the
@@ -103,7 +151,7 @@ export function Media({
   return (
     <div
       className={cn(
-        "relative overflow-hidden",
+        "relative overflow-hidden bg-espresso",
         sizedPicture && "[container-type:size]",
         contained && (tone === "dark" ? "bg-chrome" : "bg-silver"),
         className
@@ -117,10 +165,9 @@ export function Media({
             fill
             sizes={sizes}
             className={contained ? "object-contain" : "object-cover"}
-            priority={priority}
-            fetchPriority={defer ? "low" : undefined}
-            quality={90}
+            quality={QUALITY}
             unoptimized={crisp}
+            {...loading}
           />
         </div>
       ) : (
@@ -131,10 +178,9 @@ export function Media({
           sizes={sizes}
           className={contained ? "object-contain" : "object-cover"}
           style={framing}
-          priority={priority}
-          fetchPriority={defer ? "low" : undefined}
-          quality={90}
+          quality={QUALITY}
           unoptimized={crisp}
+          {...loading}
         />
       )}
     </div>

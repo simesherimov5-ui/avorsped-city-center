@@ -4,6 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap, SplitText } from "@/lib/gsap";
 import { useMediaQuery } from "@/lib/useMediaQuery";
@@ -97,7 +98,7 @@ export function Hero() {
             tone="dark"
             className="h-full w-full [&_img]:object-[50%_12%]"
             priority
-            sizes="(max-width: 767px) 160vw, 100vw"
+            sizes={coverSizes(HERO_IMAGE.src, [{ w: "100vw", h: "max(100vh, 560px)" }])}
           />
         </div>
 

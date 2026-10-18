@@ -87,14 +87,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 {project.gallery.length > 0 ? (
                   <PhotoCarousel
                     photos={project.gallery}
-                    className={project.imageFit === "contain" || completed ? "max-w-4xl" : undefined}
-                    sizes={
-                      project.imageFit === "contain"
-                        ? "(max-width: 896px) 100vw, 896px"
-                        : completed
-                          ? "(max-width: 896px) 100vw, 896px"
-                          : undefined
-                    }
+                    // 16:9, up to 896px wide (a square photo in it is shown whole, see Media)
+                    className="max-w-4xl"
+                    sizes="(max-width: 896px) 100vw, 896px"
                     fit={project.imageFit}
                     focus={project.imageFocus}
                   />
@@ -104,7 +99,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     focus={project.imageFocus}
                     label={`${project.name} — насловна визуелизација`}
                     className="aspect-[16/7]"
-                    sizes="100vw"
+                    priority
+                    sizes="(max-width: 1152px) 100vw, 1152px"
                   />
                 )}
               </Reveal>

@@ -84,6 +84,8 @@ export const projects: Project[] = [
       text: "[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]",
     },
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
+    // A narrow frame (the Проекти card) is centred on the main central building, so it is whole from roof to ground.
+    imageFocus: { zoom: 1, x: 52, y: 50 },
     heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
     gallery: [
       { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center — визуелизација 1", isPlaceholder: false },
@@ -115,8 +117,7 @@ export const projects: Project[] = [
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
-    imageFit: "contain",
-    // The hero photo is portrait (1730 × 1787), so cards and the slider show it whole, over a blurred copy of itself.
+    // The hero photo is square (1730 × 1787): in a wide frame Media shows it whole, over a blurred copy of itself.
     imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
     heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
     gallery: [

@@ -3,6 +3,7 @@
 import { useRef, useState, useSyncExternalStore, type KeyboardEvent, type PointerEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
+import { coverSizes } from "@/lib/image-sizes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
@@ -16,8 +17,12 @@ const FADE_S = 1.2;
 
 // A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
 // as wide as its frame is tall.
+// The slide covers the full width at the slider's height (see the section's classes below).
 const slideSizes = (project: Project) =>
-  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 640px" : "(max-width: 767px) 160vw, 100vw";
+  coverSizes(project.heroImage.src, [
+    { media: "(max-width: 767px)", w: "100vw", h: "clamp(400px, 60vh, 520px)" },
+    { w: "100vw", h: "clamp(480px, 72vh, 780px)" },
+  ]);
 const SWIPE_PX = 50;
 
 const subscribeVisibility = (onChange: () => void) => {

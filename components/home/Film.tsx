@@ -22,7 +22,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso lg:mt-10 lg:aspect-auto lg:h-[480px]">
+          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso">
             {src ? (
               <video
                 controls

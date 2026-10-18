@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useI18n } from "@/lib/i18n";
 import { getLenis } from "@/lib/lenis";
@@ -117,7 +118,7 @@ export function ProjectOpening({
               image={{ ...image, isPlaceholder: false }}
               tone="dark"
               priority
-              sizes="100vw"
+              sizes={coverSizes(image.src, [{ w: "100vw", h: "min(max(100vh, 560px), 1000px)" }])}
               className="h-full w-full !bg-transparent"
             />
           </div>

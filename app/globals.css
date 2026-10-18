@@ -337,6 +337,43 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 
+/* A square or portrait photo in a frame (components/ui/Media.tsx). In a frame that is not wide it covers the frame as
+   any photo does; in a wide one (wider than 1.25:1) it is shown whole at its own proportions on the chosen side, over
+   the same photo enlarged, blurred and darkened (no empty bars, no stretching). */
+.media-whole {
+  container-type: size;
+}
+.media-whole__photo {
+  object-fit: cover;
+}
+.media-whole__bg,
+.media-whole__shade {
+  display: none;
+}
+@container (aspect-ratio > 1.25) {
+  .media-whole__photo {
+    object-fit: contain;
+    object-position: center !important;
+  }
+  .media-whole[data-align="left"] .media-whole__photo {
+    object-position: left center !important;
+  }
+  .media-whole[data-align="right"] .media-whole__photo {
+    object-position: right center !important;
+  }
+  .media-whole__bg {
+    display: block;
+    filter: blur(40px);
+    transform: scale(1.15);
+  }
+  .media-whole__shade {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-onyx) 55%, transparent);
+  }
+}
+
 /* Stone grain: add .grain to a Травертин section (and .grain--dark to an Оникс / Еспресо one). The noise sits on its
    own layer above the section's background and behind everything in it, so photos, buttons and cards cover it and the
    text contrast does not change. Barely visible: 35% multiplied on light, 18% screened on dark. Removing the class

@@ -1,5 +1,6 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ArrowRight } from "lucide-react";
+import { coverSizes } from "@/lib/image-sizes";
 import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";
@@ -29,11 +30,11 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                   fit={project.imageFit ?? "cover"}
                   focus={project.imageFocus}
                   className="h-full w-full transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-105"
-                  sizes={
-                    project.imageFit === "contain"
-                      ? "(max-width: 639px) 100vw, 600px"
-                      : "(max-width: 639px) 150vw, (max-width: 1280px) 100vw, 1200px"
-                  }
+                  sizes={coverSizes(project.heroImage.src, [
+                    { media: "(max-width: 639px)", w: "100vw", h: "87vw" },
+                    { media: "(max-width: 1280px)", w: "100vw", h: "47vw" },
+                    { w: "1240px", h: "580px" },
+                  ])}
                 />
               )}
             </ParallaxImage>
