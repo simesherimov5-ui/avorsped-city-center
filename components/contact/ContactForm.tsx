@@ -11,6 +11,8 @@ import {
   type ReactNode,
 } from "react";
 import { flushSync } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import { DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { formatArea } from "@/lib/format";
@@ -94,10 +96,11 @@ function shake(el: Element | null) {
 const fieldIn = (n: number) => ({ animationDelay: `${100 + n * FIELD_GAP}ms` }) as CSSProperties;
 
 /**
- * The guided booking form. It asks one thing at a time, and only the current question is on screen: the project, the
- * building (only for a project that has buildings), whether the visitor has a specific apartment in mind (and which),
- * the day and time, then name and phone. A pick fills the option with foil, the step leaves and the next one comes in;
- * «← Назад» goes back one step and clears that step's answer. A thin gold line along the top of the panel shows how far
+ * The guided booking form. It asks one thing at a time: the project, the building (only for a project that has
+ * buildings), whether the visitor has a specific apartment in mind (and which), the day and time, then name and phone.
+ * A pick fills the option with foil, the step folds into a row (number, question, answer, «Измени») and the next one
+ * comes in. «Измени» reopens that step directly; a new answer clears only the later answers that no longer fit, and the
+ * form continues at the first step that is then unanswered. A thin gold line along the top of the panel shows how far
  * along the visitor is (the path is shorter for «Сè уште не знам»). With reduced motion the steps change at once.
  */
 export function ContactForm({
@@ -182,15 +185,18 @@ export function ContactForm({
     details: false,
   };
 
-  // The one step on screen: a step, or "the step after" one (resolved on the path as it is once the answer is in). It
-  // starts at the first unanswered step (a visitor who came from an apartment page starts further along); `visit` makes
-  // a step that is shown again replay its entrance.
+  // The one open step: a step, or "the first unanswered step after" one, resolved on the path as it is once the answer
+  // is in. That one rule covers both ways back from «Измени»: when the new answer leaves the later answers valid (a new
+  // time) the form skips straight past them, and when it cleared some (a new project) it continues at the first one
+  // that is now empty. It starts at the first unanswered step (a visitor who came from an apartment page starts further
+  // along); `visit` makes a step that is shown again replay its entrance.
   const [position, setPosition] = useState<{ step: StepId; after: boolean }>(() => ({
     step: order.find((id) => !answered[id]) ?? "details",
     after: false,
   }));
+  const nextOpen = (from: StepId) => order.slice(order.indexOf(from) + 1).find((id) => !answered[id]) ?? "details";
   const current: StepId = position.after
-    ? (order[order.indexOf(position.step) + 1] ?? "details")
+    ? nextOpen(position.step)
     : order.includes(position.step)
       ? position.step
       : "project";
@@ -218,10 +224,20 @@ export function ContactForm({
     });
   };
 
-  /** The current step is answered: show the pick, then move on to the next step of the path. */
+  /** The current step is answered: show the pick, then move on to the first unanswered step after it. */
   const finish = (from: StepId) => {
     setPhase("picking");
     goTo({ step: from, after: true }, PICK_HOLD);
+  };
+
+  /** The answer of an answered step, as its row shows it. */
+  const summaryOf = (id: StepId) => {
+    if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
+    if (id === "prefs") return prefs.length ? prefs.join(", ") : "По желба";
+    if (id === "building") return buildingUnknown ? "Не знам која зграда" : (building?.name ?? "");
+    if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
+    if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
+    return "";
   };
 
   const summary = [
@@ -241,32 +257,6 @@ export function ContactForm({
     setUnitId("");
     setUnitText("");
     setUnitTextOk(false);
-  };
-  const clearStep = (id: StepId) => {
-    if (id === "project") {
-      setUndecided(false);
-      setProjectId("");
-      setBuildingId("");
-      setBuildingUnknown(false);
-      setHasUnit("");
-      clearUnit();
-      setPrefs([]);
-      setPrefsDone(false);
-    } else if (id === "building") {
-      setBuildingId("");
-      setBuildingUnknown(false);
-      setHasUnit("");
-      clearUnit();
-    } else if (id === "unit") {
-      setHasUnit("");
-      clearUnit();
-    } else if (id === "prefs") {
-      setPrefs([]);
-      setPrefsDone(false);
-    } else if (id === "when") {
-      setDayIso("");
-      setTime("");
-    }
   };
   const pickProject = (id: string) => {
     if (busy) return;
@@ -338,13 +328,17 @@ export function ContactForm({
     finish("when");
   };
 
-  /** «← Назад»: the step leaves, the one before comes in again with its answer cleared. */
-  const back = () => {
-    if (busy || index === 0) return;
-    const previous = order[index - 1];
-    goTo({ step: previous, after: false }, 0);
-    later(reduce ? 0 : LEAVE, () => clearStep(previous));
+  /**
+   * «Измени» on an answered row: the open step leaves and that step opens again straight away (the rows after it fold
+   * away), with its answer still chosen. Nothing is cleared until the visitor picks something else.
+   */
+  const edit = (id: StepId) => {
+    if (busy || id === current) return;
+    goTo({ step: id, after: false }, 0);
   };
+
+  // The answered steps before the open one, each folded into one row.
+  const rows = order.slice(0, index).filter((id) => answered[id]);
 
   // ---- a step that has just come in: keep it in view (below the header) and move focus to its first option
   const seen = useRef(visit);
@@ -730,7 +724,7 @@ export function ContactForm({
           <button
             ref={submitButton}
             type="submit"
-            className="btn-primary"
+            className="btn-primary btn-primary--filled"
             data-tone="dark"
             disabled={status === "sending"}
             aria-busy={status === "sending"}
@@ -769,6 +763,30 @@ export function ContactForm({
         </div>
         <p className="ct-lead">Неколку кратки чекори. Ние ќе ви се јавиме за потврда на терминот.</p>
 
+        {/* the answered steps, one row each: a new row opens (height and fade, --dur-base); after «Измени» the rows
+            below the chosen step fold away */}
+        <AnimatePresence initial={false}>
+          {rows.map((id) => (
+            <motion.div
+              key={id}
+              className="ct-collapse"
+              initial={reduce ? false : { height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { height: 0, opacity: 0 }}
+              transition={{ duration: reduce ? 0 : DURATION.base, ease: EASE }}
+            >
+              <div className="ct-step ct-sumrow">
+                <b className="ct-step-n bk-mono">{String(order.indexOf(id) + 1).padStart(2, "0")}</b>
+                <span className="ct-sumrow-label bk-label">{TITLES[id]}</span>
+                <span className="ct-sumrow-value">{summaryOf(id)}</span>
+                <button type="button" className="ct-edit" aria-label={`Измени: ${TITLES[id]}`} onClick={() => edit(id)}>
+                  Измени
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
         <div className="ct-stage">
           <section
             key={`${current}-${visit}`}
@@ -783,11 +801,6 @@ export function ContactForm({
                 <b className="ct-step-n bk-mono">{String(index + 1).padStart(2, "0")}</b>
                 <span>{TITLES[current]}</span>
               </div>
-              {index > 0 && (
-                <button type="button" className="ct-back" onClick={back}>
-                  <span aria-hidden>←</span>Назад
-                </button>
-              )}
             </div>
             {body(current)}
           </section>
