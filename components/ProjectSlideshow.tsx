@@ -203,7 +203,9 @@ export function ProjectSlideshow({
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center">
+      {/* The dashes: the strip is full width but lets taps through (on phones the arrows sit in its corners); only the
+          dashes themselves take them. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
         {projects.map((p, i) => {
           const active = i === index;
           return (
@@ -216,7 +218,7 @@ export function ProjectSlideshow({
               }}
               aria-label={p.name}
               aria-current={active}
-              className="focus-ring group flex h-11 w-12 items-center justify-center"
+              className="focus-ring group pointer-events-auto flex h-11 w-12 items-center justify-center"
             >
               <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
                 {active &&
@@ -241,7 +243,8 @@ export function ProjectSlideshow({
       <PauseButton
         paused={manual}
         onToggle={() => setManual((m) => !m)}
-        className="absolute bottom-0 right-2 z-10 sm:right-4"
+        // phones: beside the "next" arrow, not on top of it (both sit in the bottom-right corner there)
+        className="absolute bottom-0 right-14 z-10 sm:right-4"
       />
     </section>
   );

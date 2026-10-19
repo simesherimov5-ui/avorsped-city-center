@@ -751,19 +751,17 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     transform-origin: left;
   }
 }
-/* Touch has no hover: a press shows the filled state, and it stays for at least 150ms after the finger lifts. */
+/* Touch screens (no hover): the foil button is shown already filled, at rest and on tap, with no sweep; a tap only
+   gives the press (scale .97, below). Pointer devices keep the sweep on hover. */
 @media (hover: none) {
-  .btn-primary::before {
-    transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1) 0.15s;
-  }
-  .btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+  .btn-primary,
+  .btn-primary[data-tone="light"] {
     color: var(--color-onyx);
     border-color: var(--foil-mid);
   }
-  .btn-primary:active:not(:disabled):not([aria-disabled="true"])::before {
+  .btn-primary::before {
     transform: scaleX(1);
-    transform-origin: left;
-    transition-delay: 0s;
+    transition: none;
   }
 }
 .btn-primary:active::before {
@@ -811,6 +809,11 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     transition:
       color var(--dur-fast) linear,
       border-color var(--dur-fast) linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: none) {
+  .btn-primary::before {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) and (hover: hover) {
