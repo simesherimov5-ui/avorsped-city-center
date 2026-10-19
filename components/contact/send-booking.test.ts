@@ -41,6 +41,13 @@ describe("bookingLines", () => {
     expect(lines[1]).toBe("Проект: не е избран");
   });
 
+  it("adds the e-mail after the phone only when the visitor gave one", () => {
+    expect(bookingLines(base).some((l) => l.startsWith("Е-пошта"))).toBe(false);
+    const lines = bookingLines({ ...base, email: "ime@primer.com" });
+    expect(lines[lines.length - 1]).toBe("Е-пошта: ime@primer.com");
+    expect(lines[lines.length - 2]).toBe("Телефон: 070 000 000");
+  });
+
   it("carries no building or apartment", () => {
     expect(bookingLines(base).join("\n")).not.toMatch(/Зграда|Стан/);
   });
@@ -51,6 +58,11 @@ describe("bookingEmail", () => {
     const { subject, text } = bookingEmail(base);
     expect(subject).toBe("Нова консултација · 70–100 m² · City Center");
     expect(text.split("\n")[0]).toBe("Површина: 70–100 m²");
+  });
+
+  it("sets the visitor's e-mail as the reply-to, and none when there is none", () => {
+    expect(bookingEmail({ ...base, email: "ime@primer.com" }).replyTo).toBe("ime@primer.com");
+    expect(bookingEmail(base).replyTo).toBeUndefined();
   });
 
   it("keeps the visitor's own words out of the subject", () => {

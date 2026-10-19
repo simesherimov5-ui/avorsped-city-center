@@ -5,7 +5,8 @@ import { bookingEmail } from "@/components/contact/send-booking";
 
 /**
  * The booking form's server side: checks the request again (the browser's checks are only a convenience) and e-mails it to
- * the sales team through Resend's REST API (no SDK). The e-mail starts with the area range the visitor asked for.
+ * the sales team through Resend's REST API (no SDK). The e-mail starts with the area range the visitor asked for; when the
+ * visitor gave an e-mail address it is in the body and set as the reply-to, so the team can answer straight from the message.
  *
  * Settings (environment variables, never in the repository):
  *   RESEND_API_KEY       the Resend API key
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
   });
   if (!checked.ok) return reply(400, { error: checked.error });
 
-  const { subject, text } = bookingEmail(checked.value);
+  const { subject, text, replyTo } = bookingEmail(checked.value);
   const key = process.env.RESEND_API_KEY;
   const to = (process.env.BOOKING_TO_EMAIL ?? "")
     .split(",")
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from, to, subject, text }),
+    body: JSON.stringify({ from, to, subject, text, ...(replyTo ? { reply_to: replyTo } : {}) }),
   }).catch(() => null);
   if (!response?.ok) {
     console.error(`[booking] Resend answered ${response?.status ?? "nothing"}.`);

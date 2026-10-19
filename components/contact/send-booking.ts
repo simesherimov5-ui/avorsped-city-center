@@ -17,6 +17,8 @@ export type BookingRequest = {
   time: string;
   name: string;
   phone: string;
+  /** Optional: where the team can write back. */
+  email?: string;
 };
 
 /** The area line of a request: "65–85 m²", or «Не знае – совет». */
@@ -37,12 +39,14 @@ export function bookingLines(request: BookingRequest): string[] {
     `Термин: ${request.dateLabel}, ${request.time}`,
     `Име: ${request.name}`,
     `Телефон: ${request.phone}`,
+    ...(request.email ? [`Е-пошта: ${request.email}`] : []),
   ];
 }
 
 /** The e-mail's subject and body. The subject carries the area and the project, never the visitor's own words. */
-export function bookingEmail(request: BookingRequest): { subject: string; text: string } {
+export function bookingEmail(request: BookingRequest): { subject: string; text: string; replyTo?: string } {
   return {
+    replyTo: request.email,
     subject: `Нова консултација · ${areaOf(request)} · ${request.project ?? "проект не е избран"}`,
     text: bookingLines(request).join("\n"),
   };

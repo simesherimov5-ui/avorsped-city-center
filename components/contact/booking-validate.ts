@@ -37,6 +37,9 @@ export const isValidPhone = (value: string) => {
   return n >= PHONE_MIN_DIGITS && n <= PHONE_MAX_DIGITS && /^\+?[\d ]+$/.test(value.trim());
 };
 
+/** An e-mail address in a usable shape (something@something.tld, no spaces). Only checked when one is given. */
+export const isValidEmail = (value: string) => value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
 export type ValidationResult = { ok: true; value: BookingRequest } | { ok: false; error: string };
 
 const isInt = (v: unknown): v is number => typeof v === "number" && Number.isInteger(v);
@@ -86,6 +89,14 @@ export function validateBooking(
   const phone = r.phone.trim();
   if (!isValidPhone(phone)) return { ok: false, error: "The phone must be 8 to 15 digits." };
 
+  // The e-mail is optional: empty or missing is fine, a given one must be an address.
+  let email: string | undefined;
+  if (r.email !== undefined && r.email !== null && r.email !== "") {
+    if (typeof r.email !== "string" || !isValidEmail(r.email.trim()))
+      return { ok: false, error: "The e-mail is not valid." };
+    email = r.email.trim();
+  }
+
   return {
     ok: true,
     value: {
@@ -100,6 +111,7 @@ export function validateBooking(
       time: r.time,
       name,
       phone,
+      ...(email ? { email } : {}),
     },
   };
 }

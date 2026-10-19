@@ -10,7 +10,7 @@ import { AreaSlider } from "./AreaSlider";
 import { RadioGroup } from "./RadioGroup";
 import { BookingConfirmation } from "./BookingConfirmation";
 import { AREA, buildSlots, nextWorkingDays, todayIso } from "./booking-config";
-import { isValidName, isValidPhone, sanitizePhone } from "./booking-validate";
+import { isValidEmail, isValidName, isValidPhone, sanitizePhone } from "./booking-validate";
 import { areaOf, sendBooking, type BookingRequest } from "./send-booking";
 
 /** A project the visitor can ask about. Passed in by the page, from the data. */
@@ -19,7 +19,7 @@ export type ProjectOption = { id: string; name: string };
 export type BookingStart = { projectId?: string };
 
 type StepId = "project" | "area" | "when" | "details";
-type Field = "name" | "phone";
+type Field = "name" | "phone" | "email";
 type Errors = Partial<Record<Field, string>>;
 
 const SLOTS = buildSlots();
@@ -28,6 +28,7 @@ const UNDECIDED = "undecided";
 const MESSAGES: Record<Field, string> = {
   name: "Внесете име и презиме.",
   phone: "Внесете телефонски број со најмалку 8 цифри.",
+  email: "Внесете валидна е-пошта",
 };
 /** The question of each step (the first and the third keep their question as heading, as before). */
 const TITLES: Record<StepId, string> = {
@@ -124,6 +125,8 @@ export function ContactForm({
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  // Optional: empty is fine, but a given address must be valid.
+  const [email, setEmail] = useState("");
   const [editing, setEditing] = useState<StepId | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "failed">("idle");
@@ -240,6 +243,7 @@ export function ContactForm({
     setTime("");
     setName("");
     setPhone("");
+    setEmail("");
     setEditing(null);
     setErrors({});
     setStatus("idle");
@@ -249,12 +253,13 @@ export function ContactForm({
     const next: Errors = {};
     if (!isValidName(name)) next.name = MESSAGES.name;
     if (!isValidPhone(phone)) next.phone = MESSAGES.phone;
+    if (email.trim() && !isValidEmail(email.trim())) next.email = MESSAGES.email;
     return next;
   }
 
   /** Moves focus into the first field that is missing and shakes it once. */
   function showFirstError(next: Errors) {
-    const first = (["name", "phone"] as Field[]).find((f) => next[f]);
+    const first = (["name", "phone", "email"] as Field[]).find((f) => next[f]);
     const field = first && form.current?.querySelector<HTMLElement>(`[data-field="${first}"]`);
     if (!first || !field) return;
     field.querySelector<HTMLElement>("input")?.focus({ preventScroll: true });
@@ -267,9 +272,9 @@ export function ContactForm({
     shake(field);
   }
 
-  // «Закажи» looks disabled until the name and phone are good, but stays clickable (aria-disabled), so pressing it
-  // (or Enter in a field) can say what is missing under the field.
-  const canSend = isValidName(name) && isValidPhone(phone);
+  // «Закажи» looks disabled until the name and phone are good (and the e-mail, if given), but stays clickable
+  // (aria-disabled), so pressing it (or Enter in a field) can say what is missing under the field.
+  const canSend = isValidName(name) && isValidPhone(phone) && (!email.trim() || isValidEmail(email.trim()));
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -294,6 +299,7 @@ export function ContactForm({
       time,
       name: name.trim(),
       phone: phone.trim(),
+      ...(email.trim() ? { email: email.trim() } : {}),
     };
     setStatus("sending");
     // The button is really disabled while sending, which drops focus; it gets focus back (once enabled again)
@@ -542,6 +548,30 @@ export function ContactForm({
                   />
                 </div>
                 {error("phone")}
+              </div>
+              <div className="ct-field ct-field--wide" data-field="email">
+                <label htmlFor="ct-email" className="ct-field-label">
+                  Е-ПОШТА
+                </label>
+                <div className="ct-input">
+                  <input
+                    id="ct-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    inputMode="email"
+                    placeholder="ime@primer.com"
+                    maxLength={254}
+                    value={email}
+                    aria-invalid={errors.email ? true : undefined}
+                    aria-describedby={describe("email")}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      clearError("email");
+                    }}
+                  />
+                </div>
+                {error("email")}
               </div>
             </div>
 

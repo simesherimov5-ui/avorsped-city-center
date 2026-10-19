@@ -55,7 +55,6 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             hours={companyInfo.hours}
             address={companyInfo.address}
             messengerNumber={companyInfo.messengerNumber}
-            coordinates={companyInfo.coordinates}
           />
         </div>
       </ContactStage>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isValidPhone, sanitizePhone, validateBooking } from "./booking-validate";
+import { isValidEmail, isValidPhone, sanitizePhone, validateBooking } from "./booking-validate";
 
 const ctx = { projects: [{ id: "city-center", name: "City Center" }], today: "2026-10-09" }; // a Friday
 const good = {
@@ -39,6 +39,24 @@ describe("isValidPhone", () => {
   });
   it("refuses letters", () => {
     expect(isValidPhone("0701234abc")).toBe(false);
+  });
+});
+
+describe("isValidEmail", () => {
+  it("accepts an address and refuses what is not one", () => {
+    expect(isValidEmail("ime@primer.com")).toBe(true);
+    expect(isValidEmail("ime.prezime+kuka@primer.com.mk")).toBe(true);
+    for (const bad of [
+      "ime",
+      "ime@",
+      "@primer.com",
+      "ime@primer",
+      "ime@primer.c",
+      "ime @primer.com",
+      "ime@@primer.com",
+      "ime@pri mer.com",
+    ])
+      expect(isValidEmail(bad)).toBe(false);
   });
 });
 
@@ -97,6 +115,20 @@ describe("validateBooking", () => {
     expect(validateBooking({ ...good, phone: "123" }, ctx).ok).toBe(false);
     expect(validateBooking({ ...good, phone: "07a0123456" }, ctx).ok).toBe(false);
     expect(validateBooking(null, ctx).ok).toBe(false);
+  });
+
+  it("treats the e-mail as optional: missing or empty is fine and leaves it out", () => {
+    for (const email of [undefined, null, ""]) {
+      const r = validateBooking({ ...good, email }, ctx);
+      expect(r.ok && "email" in r.value).toBe(false);
+    }
+  });
+
+  it("keeps a valid e-mail (trimmed) and refuses an invalid one", () => {
+    const ok = validateBooking({ ...good, email: "  ime@primer.com " }, ctx);
+    expect(ok.ok && ok.value.email).toBe("ime@primer.com");
+    expect(validateBooking({ ...good, email: "ime@primer" }, ctx).ok).toBe(false);
+    expect(validateBooking({ ...good, email: 12 }, ctx).ok).toBe(false);
   });
 
   it("ignores a building or an apartment sent along", () => {

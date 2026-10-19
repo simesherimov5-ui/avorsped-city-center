@@ -1,5 +1,4 @@
-import { LocationMap } from "@/components/location-map/LocationMap";
-import { CITY_CENTER, distanceLabel, kilometres, spotOnDrawing } from "@/lib/locations";
+import { CONTACT_MAP_QUERY, mapEmbedUrl, mapSearchUrl } from "@/lib/locations";
 
 type Props = {
   phone: string;
@@ -8,13 +7,11 @@ type Props = {
   address: string;
   /** Viber / WhatsApp number in international form, e.g. "+389 70 123 456". Empty hides the row. */
   messengerNumber?: string;
-  coordinates: { lat: number; lng: number };
 };
 
-/** The right-hand panel: the direct channels, the working hours, and a dark map of the office. */
-export function DirectPanel({ phone, email, hours, address, messengerNumber, coordinates }: Props) {
+/** The right-hand panel: the direct channels, the working hours, and a Google map of the office. */
+export function DirectPanel({ phone, email, hours, address, messengerNumber }: Props) {
   const digits = messengerNumber?.replace(/\D/g, "") ?? "";
-  const mapsHref = `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
 
   return (
     <aside data-seq="panel" className="ct-side ct-pre" aria-label="Директен контакт">
@@ -63,25 +60,18 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber, coo
         </div>
       </div>
 
-      <LocationMap
-        label="Мапа со локација"
-        pinLabel="ГТЦ Глобал"
-        className="mt-4"
-        places={[
-          {
-            name: CITY_CENTER.name,
-            detail: distanceLabel(kilometres(coordinates, CITY_CENTER)),
-            ...spotOnDrawing(coordinates, CITY_CENTER),
-            // kept to the right of the pin so the line clears the name above it
-            x: 290,
-            side: "right",
-            bend: "horizontal",
-          },
-        ]}
-      />
+      {/* The real Google map (no API key), in the site's 1px frame, with Google's own colours and pin. */}
+      <div className="ct-map">
+        <iframe
+          src={mapEmbedUrl(CONTACT_MAP_QUERY)}
+          title="Локација – ГТЦ Глобал, Струмица"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
       <div className="ct-addr">
         <span>{address}</span>
-        <a href={mapsHref} target="_blank" rel="noopener noreferrer">
+        <a href={mapSearchUrl(CONTACT_MAP_QUERY)} target="_blank" rel="noopener">
           Отвори во Google Maps
         </a>
       </div>
