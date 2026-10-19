@@ -618,22 +618,22 @@ a.ct-val:focus-visible {
   letter-spacing: 0.32em;
 }
 
-/* «Закажи»: the deployed "filling button". At rest a Светол бакар outline and circled arrow; on hover, keyboard focus and
-   press the copper fills in from the left and the text and arrow turn Оникс. */
+/* «Закажи»: an Оникс button with a 1px button-gold outline (--foil-line, the gold of the site's button outlines), the
+   label and the circled arrow in the same gold. No fill on any device (it is its own class, so the foil .btn-primary
+   rules, including the filled look on touch screens, never reach it). Hover and keyboard focus only brighten the
+   outline and text to --foil-light over 0.3s; a press gives it to .97; while sending it is the same at 40%. */
 .ct-btn {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 18px;
   min-height: 44px;
   padding: 22px 36px;
-  border: 1px solid var(--color-copper);
+  border: 1px solid var(--foil-line);
   border-radius: 0;
-  background: none;
-  color: var(--color-copper);
+  background: var(--color-onyx);
+  color: var(--foil-line);
   font:
     600 13px/1.2 var(--font-sans),
     system-ui,
@@ -643,23 +643,10 @@ a.ct-val:focus-visible {
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  outline: none;
-}
-.ct-btn__fill {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--color-copper);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
-}
-.ct-btn__label,
-.ct-btn__arrow {
-  position: relative;
   transition:
-    color 0.5s ease 0.15s,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    border-color 0.3s var(--ease),
+    color 0.3s var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .ct-btn__arrow {
   display: inline-flex;
@@ -671,35 +658,23 @@ a.ct-val:focus-visible {
   border: 1px solid currentColor;
   border-radius: 50%;
 }
-.ct-btn:focus-visible {
-  outline: 2px solid var(--color-copper);
-  outline-offset: 3px;
-}
-.ct-btn:focus-visible:not(:disabled) .ct-btn__fill,
-.ct-btn:active:not(:disabled) .ct-btn__fill {
-  transform: scaleX(1);
-}
-.ct-btn:focus-visible:not(:disabled) .ct-btn__label,
-.ct-btn:focus-visible:not(:disabled) .ct-btn__arrow,
-.ct-btn:active:not(:disabled) .ct-btn__label,
-.ct-btn:active:not(:disabled) .ct-btn__arrow {
-  color: var(--color-onyx);
-}
-.ct-btn:focus-visible:not(:disabled) .ct-btn__arrow,
-.ct-btn:active:not(:disabled) .ct-btn__arrow {
-  transform: translateX(6px) rotate(-45deg);
+.ct-btn:focus-visible:not(:disabled) {
+  border-color: var(--foil-light);
+  color: var(--foil-light);
 }
 @media (hover: hover) {
-  .ct-btn:hover:not(:disabled) .ct-btn__fill {
-    transform: scaleX(1);
+  .ct-btn:hover:not(:disabled) {
+    border-color: var(--foil-light);
+    color: var(--foil-light);
   }
-  .ct-btn:hover:not(:disabled) .ct-btn__label,
-  .ct-btn:hover:not(:disabled) .ct-btn__arrow {
-    color: var(--color-onyx);
-  }
-  .ct-btn:hover:not(:disabled) .ct-btn__arrow {
-    transform: translateX(6px) rotate(-45deg);
-  }
+}
+.ct-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+/* the keyboard focus ring: light foil, 2px, 3px out */
+.ct-btn:focus-visible {
+  outline: 2px solid var(--foil-light);
+  outline-offset: 3px;
 }
 .ct-btn:disabled {
   opacity: 0.4;
@@ -721,14 +696,7 @@ a.ct-val:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ct-btn__fill,
-  .ct-btn__arrow {
-    transition: none;
-  }
-  .ct-btn__label {
-    transition: color 0.2s linear;
-  }
-  .ct-btn:is(:hover, :focus-visible, :active):not(:disabled) .ct-btn__arrow {
+  .ct-btn:active:not(:disabled) {
     transform: none;
   }
 }

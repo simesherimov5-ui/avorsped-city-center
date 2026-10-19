@@ -747,8 +747,7 @@ export function ContactForm({
                 disabled={status === "sending"}
                 aria-busy={status === "sending"}
               >
-                <span aria-hidden className="ct-btn__fill" />
-                <span className="ct-btn__label">{status === "sending" ? "Се испраќа…" : "Закажи"}</span>
+                <span>{status === "sending" ? "Се испраќа…" : "Закажи"}</span>
                 <span aria-hidden className="ct-btn__arrow">
                   <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
                     <path d="M0 4h13M9 1l4 3-4 3" />
