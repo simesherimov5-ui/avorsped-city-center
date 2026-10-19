@@ -27,13 +27,28 @@
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
   --color-bronze: #6d533e;
+  /* Светол бакар: used only by the Контакт confirmation's «Во ред», which keeps the look of the deployed site
+     (components/contact/contact.css). Every other button is the antique foil. */
   --color-copper: #ddb28e;
   /* The two golds of the site. Logo gold: the logos, the preloader, the page transitions and every accent text (eyebrows,
-     labels, numbers, links, the active tab). Светол бакар (copper): every button. */
+     labels, numbers, links, the active tab). No gold on buttons: those use the antique foil below. */
   --color-gold: #c4a454;
   --color-brass: var(--color-gold); /* the older name of the logo gold */
-  --color-button: var(--color-copper);
-  /* The logo's metallic gold (as on the first site): the button gold, with a darker shade and a lighter glint. Used by
+  /* Antique foil: the primary button (and the focus ring). An outline and text in --foil-line at rest; the metallic
+     sheen sweeps in on hover. */
+  --foil-dark: #7e6230;
+  --foil-mid: #b8944f;
+  --foil-light: #d2b477;
+  --foil-line: #c7a46b;
+  --foil-sheen: linear-gradient(
+    110deg,
+    var(--foil-dark) 0%,
+    var(--foil-mid) 35%,
+    var(--foil-light) 50%,
+    var(--foil-mid) 65%,
+    var(--foil-dark) 100%
+  );
+  /* The logo's metallic gold (as on the first site): the logo gold, with a darker shade and a lighter glint. Used by
      the wordmark and the building mark only. */
   --color-gold-shade: color-mix(in srgb, var(--color-gold) 62%, var(--color-onyx));
   --color-gold-glint: color-mix(in srgb, var(--color-gold) 60%, var(--color-travertine));
@@ -61,6 +76,26 @@
   --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
   --nav-h: 61px;
+
+  /* The site's three animation speeds and its one easing (also lib/motion.ts and lib/gsap.ts). Fast: hover, press, small
+     colour changes. Base: menus, pop-ups, form steps, toggles. Slow: image movement, section reveals. What leaves takes
+     about 75% of the time it took to arrive, never under --dur-fast. The intro, the page curtain, the logo drawing and
+     the company ticker keep their own timing. */
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 600ms;
+  --dur-base-out: 210ms;
+  --dur-slow-out: 450ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Small uppercase labels (eyebrows, badges, stat labels, footer headings, text links): never under 12px, letters
+     about 0.13em apart. Nav links are a touch tighter (--tracking-nav). Tailwind: text-label, tracking-label. */
+  /* A very fine stone grain (one 160px noise tile, in a warm Бронза tone) for the flat Травертин and Оникс sections.
+     Used only through .grain below. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.43 0 0 0 0 0.33 0 0 0 0 0.24 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  --label-size: 12px;
+  --label-track: 0.13em;
 
   /*
    * Older names, kept as aliases so the rest of the codebase (cream/warm-white/silver/charcoal/chrome/on-chrome/
@@ -100,9 +135,7 @@
   --color-sand: var(--color-sand);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
-  --color-copper: var(--color-copper);
   --color-brass: var(--color-brass);
-  --color-button: var(--color-button);
   --color-paper: var(--color-paper);
   --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
@@ -125,6 +158,13 @@
   /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
   --font-sans: var(--font-montserrat);
+  /* Tailwind's own transition-* utilities use the site's fast speed and easing. */
+  --default-transition-duration: var(--dur-fast);
+  --default-transition-timing-function: var(--ease);
+  --ease-site: var(--ease);
+  --text-label: var(--label-size);
+  --tracking-label: var(--label-track);
+  --tracking-nav: 0.1em;
 }
 
 @media (min-width: 640px) {
@@ -226,10 +266,10 @@ h4 {
 
 /* Resident quotes: the old words fade out and rise 8px (0.4s), the new ones fade in from 8px below (0.6s). */
 .q-in {
-  animation: q-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: q-in var(--dur-slow) var(--ease) both;
 }
 .q-out {
-  animation: q-out 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: q-out var(--dur-slow-out) var(--ease) both;
 }
 @keyframes q-in {
   from {
@@ -244,7 +284,8 @@ h4 {
   }
 }
 
-/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles slowly. */
+/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles once, from a
+   slight zoom to its full frame (it ends at scale 1, so no building is cut once the opening is over). */
 .opening-rise {
   animation: opening-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
@@ -255,14 +296,14 @@ h4 {
   }
 }
 .opening-settle {
-  animation: opening-settle 18s ease-out infinite alternate;
+  animation: opening-settle 3.2s var(--ease) both;
 }
 @keyframes opening-settle {
   from {
-    transform: scale(1.12);
+    transform: scale(1.06);
   }
   to {
-    transform: scale(1);
+    transform: none;
   }
 }
 /* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
@@ -276,8 +317,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
 .about-col {
   transition:
-    opacity 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s),
-    transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--about-delay, 0s);
+    opacity var(--dur-slow) var(--ease) var(--about-delay, 0s),
+    transform var(--dur-slow) var(--ease) var(--about-delay, 0s);
 }
 .about-col[data-armed="true"] {
   opacity: 0;
@@ -299,6 +340,66 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 
+/* A square or portrait photo in a frame (components/ui/Media.tsx). In a frame that is not wide it covers the frame as
+   any photo does; in a wide one (wider than 1.25:1) it is shown whole at its own proportions on the chosen side, over
+   the same photo enlarged, blurred and darkened (no empty bars, no stretching). */
+.media-whole {
+  container-type: size;
+}
+.media-whole__photo {
+  object-fit: cover;
+}
+.media-whole__bg,
+.media-whole__shade {
+  display: none;
+}
+@container (aspect-ratio > 1.25) {
+  .media-whole__photo {
+    object-fit: contain;
+    object-position: center !important;
+  }
+  .media-whole[data-align="left"] .media-whole__photo {
+    object-position: left center !important;
+  }
+  .media-whole[data-align="right"] .media-whole__photo {
+    object-position: right center !important;
+  }
+  .media-whole__bg {
+    display: block;
+    filter: blur(40px);
+    transform: scale(1.15);
+  }
+  .media-whole__shade {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-onyx) 55%, transparent);
+  }
+}
+
+/* Stone grain: add .grain to a Травертин section (and .grain--dark to an Оникс / Еспресо one). The noise sits on its
+   own layer above the section's background and behind everything in it, so photos, buttons and cards cover it and the
+   text contrast does not change. Barely visible: 35% multiplied on light, 18% screened on dark. Removing the class
+   removes it. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain);
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.grain--dark::before {
+  opacity: 0.18;
+  mix-blend-mode: screen;
+}
+
 /* A dark band on a page whose own surface is light, and its way back: inside .on-dark the light-surface tokens turn into
    their dark-surface partners (text and hairlines in Светол бакар, cards Еспресо);
    .on-light inside it restores them for the one light block of the page. */
@@ -307,7 +408,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   --color-charcoal: var(--color-gold);
   --color-on-chrome: var(--color-gold);
   --color-paper: var(--color-gold);
-  --color-muted: color-mix(in srgb, var(--color-gold) 68%, transparent);
+  --color-muted: color-mix(in srgb, var(--color-gold) 78%, transparent); /* 4.9:1 on Еспресо, 5.2:1 on Оникс */
   --color-line: color-mix(in srgb, var(--color-gold) 22%, transparent);
   --color-gold-deep: var(--color-gold);
   --color-gold-dark: var(--color-gold);
@@ -452,15 +553,15 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* Small uppercase label used above headings and on section eyebrows —
    one consistent size/tracking pair instead of ad hoc tracking-widest calls. */
 .eyebrow {
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 /* For a label in a narrow column ("Ориентација" in a two-column grid): the same label with the letters closer. */
 .eyebrow-tight {
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
 }
 
 /* A 40px gold rule before an eyebrow label. */
@@ -509,8 +610,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
   transition:
-    fill 0.2s,
-    stroke 0.2s;
+    fill var(--dur-fast) var(--ease),
+    stroke var(--dur-fast) var(--ease);
 }
 .fp-poly[data-status="available"] {
   fill: color-mix(in srgb, var(--color-gold) 20%, transparent);
@@ -553,7 +654,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   font-size: 14px;
   font-weight: 500;
   transform: translateY(-200%);
-  transition: transform 0.2s;
+  transition: transform var(--dur-fast) var(--ease);
 }
 .skip-link:focus {
   transform: none;
@@ -565,65 +666,62 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   outline: none;
 }
 .focus-ring:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 3px;
 }
 
-/* The primary button, "копче што се полни". At rest: an outline and a circled
-   arrow in the accent. On hover, keyboard focus and press the accent fills in
-   from the left and the text and arrow take the fill's text colour. Light
-   surfaces: Бронза fill, Травертин text. Dark surfaces (data-tone="dark"):
-   Светол бакар fill, Оникс text. Used by <Button> and by the form submit. */
+/* The primary button, "antique foil sheen". At rest: a 1px foil outline and foil text (and the circled arrow, which
+   follows the text colour). On hover and keyboard focus the metallic foil fill sweeps in from the left, the text turns
+   Оникс; on leave the fill sweeps out to the right. On a light surface (data-tone="light") it rests as an Оникс block
+   with light foil text, and fills the same way. Used by <Button> and by the form submit. */
 .btn-primary {
-  --btn-c: var(--color-button);
-  --btn-on: var(--color-onyx);
   position: relative;
-  isolation: isolate;
   overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 18px;
   min-height: 44px;
   padding: 22px 36px;
-  border: 1px solid var(--btn-c);
+  background: transparent;
+  border: 1px solid var(--foil-line);
   border-radius: 0;
-  background: none;
-  color: var(--btn-c);
+  color: var(--foil-line);
   font:
     600 13px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  outline: none;
+  transition:
+    color 0.5s cubic-bezier(0.7, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.7, 0, 0.2, 1),
+    transform var(--dur-fast) var(--ease);
 }
-.btn-primary[data-tone="dark"] {
-  --btn-c: var(--color-button);
-  --btn-on: var(--color-onyx);
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* the sheen is drawn twice the button's width and centred, so the label always sits on its brighter middle (Оникс
+     text stays above 4.5:1 there; the darkest foil at the ends of the gradient falls outside the button) */
+  background: var(--foil-sheen) center / 200% 100% no-repeat;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.btn-primary[data-tone="light"] {
+  background: var(--color-onyx);
+  border-color: var(--color-onyx);
+  color: var(--foil-light);
 }
 .btn-primary--sm {
   padding: 14px 22px;
   font-size: 12px;
-}
-.btn-primary__fill {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--btn-c);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
-}
-.btn-primary__label,
-.btn-primary__arrow {
-  position: relative;
-  transition:
-    color 0.5s ease 0.15s,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-primary__arrow {
   display: inline-flex;
@@ -635,44 +733,46 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   border: 1px solid currentColor;
   border-radius: 50%;
 }
-.btn-primary:focus-visible {
-  outline: 2px solid var(--btn-c);
-  outline-offset: 3px;
+/* Filled: hover (where there is a pointer), keyboard focus, and the --filled look at rest. */
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]),
+.btn-primary--filled:not(:disabled) {
+  color: var(--color-onyx);
+  border-color: var(--foil-mid);
 }
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"])::before,
+.btn-primary--filled:not(:disabled)::before {
   transform: scaleX(1);
+  transform-origin: left;
 }
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-  color: var(--btn-on);
-}
-.btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow,
-.btn-primary:active:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-  transform: translateX(6px) rotate(-45deg);
-}
-/* Touch has no hover, so hover only counts where there is a pointer. */
 @media (hover: hover) {
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__fill {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--color-onyx);
+    border-color: var(--foil-mid);
+  }
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"])::before {
     transform: scaleX(1);
-  }
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__label,
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-    color: var(--btn-on);
-  }
-  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
-    transform: translateX(6px) rotate(-45deg);
+    transform-origin: left;
   }
 }
-/* The filled look at rest: the fill is in and the text takes the fill's text colour. */
-.btn-primary--filled:not(:disabled) .btn-primary__fill {
-  transform: scaleX(1);
+/* Touch screens (no hover): the foil button is shown already filled, at rest and on tap, with no sweep; a tap only
+   gives the press (scale .97, below). Pointer devices keep the sweep on hover. */
+@media (hover: none) {
+  .btn-primary,
+  .btn-primary[data-tone="light"] {
+    color: var(--color-onyx);
+    border-color: var(--foil-mid);
+  }
+  .btn-primary::before {
+    transform: scaleX(1);
+    transition: none;
+  }
 }
-.btn-primary--filled:not(:disabled) .btn-primary__label,
-.btn-primary--filled:not(:disabled) .btn-primary__arrow {
-  color: var(--btn-on);
+.btn-primary:active::before {
+  filter: brightness(0.92);
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--foil-light);
+  outline-offset: 3px;
 }
 .btn-primary:disabled,
 .btn-primary[aria-disabled="true"] {
@@ -685,7 +785,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     gap: 12px;
     padding: 18px 22px;
     font-size: 12px;
-    letter-spacing: 0.14em;
+    letter-spacing: var(--label-track);
   }
   .btn-primary--sm {
     padding: 14px 22px;
@@ -695,16 +795,187 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     text-align: left;
   }
 }
+/* Reduced motion: no sweep; the fill fades in. */
 @media (prefers-reduced-motion: reduce) {
-  .btn-primary__fill,
-  .btn-primary__arrow {
-    transition: none;
-  }
-  .btn-primary__label {
-    transition: color 0.2s linear;
-  }
-  .btn-primary:is(:hover, :focus-visible, :active):not(:disabled):not([aria-disabled="true"]) .btn-primary__arrow {
+  .btn-primary::before {
     transform: none;
+    opacity: 0;
+    transition: opacity var(--dur-fast) linear;
+  }
+  .btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"])::before,
+  .btn-primary--filled:not(:disabled)::before,
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"])::before {
+    transform: none;
+    opacity: 1;
+  }
+  .btn-primary {
+    transition:
+      color var(--dur-fast) linear,
+      border-color var(--dur-fast) linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: none) {
+  .btn-primary::before {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"])::before {
+    transform: none;
+    opacity: 1;
+  }
+}
+/* Over a photo (the project slideshow): Оникс at 45% under the button at rest, so the foil outline reads on the picture. */
+[aria-roledescription="slide"] .btn-primary {
+  background: color-mix(in srgb, var(--color-onyx) 45%, transparent);
+}
+/* The second level: a 1px foil outline, gold text (Бронза on a light surface, where gold does not read), no fill. It
+   never takes a gold or foil fill (only the primary button has that, so a group has one gold button at most): on hover
+   the outline and text turn Травертин with a 4% Травертин wash and the arrow moves 4px; pressed it gives to .97. Used
+   by <Button variant="secondary"> and any link or button that needs the look. */
+.btn-secondary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid var(--foil-line);
+  border-radius: 0;
+  color: var(--color-gold);
+  font:
+    600 12px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+.btn-secondary[data-tone="light"] {
+  color: var(--color-bronze);
+}
+.btn-secondary--sm {
+  padding: 10px 20px;
+}
+.btn-secondary__arrow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-block: -8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  transition: transform var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: color-mix(in srgb, var(--color-travertine) 60%, transparent);
+    background-color: color-mix(in srgb, var(--color-travertine) 4%, transparent);
+    color: var(--color-travertine);
+  }
+  .btn-secondary[data-tone="light"]:hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: color-mix(in srgb, var(--color-onyx) 60%, transparent);
+    background-color: color-mix(in srgb, var(--color-onyx) 4%, transparent);
+    color: var(--color-onyx);
+  }
+  .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) .btn-secondary__arrow {
+    transform: translateX(4px);
+  }
+}
+/* Focus: a clear ring on both levels. On a light surface the light foil would be 1.7:1, so it is Бронза there (6.2:1). */
+.btn-primary[data-tone="light"]:focus-visible,
+.btn-secondary[data-tone="light"]:focus-visible,
+.btn-tertiary[data-tone="light"]:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 3px;
+}
+/* The third level: a text link with the gold underline ("Нашата приказна"). Бронза on a light surface. */
+.btn-tertiary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-gold);
+  font:
+    600 12px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+.btn-tertiary[data-tone="light"] {
+  color: var(--color-bronze);
+  text-decoration-color: var(--color-bronze);
+}
+@media (hover: hover) {
+  .btn-tertiary:hover {
+    color: var(--color-gold-glint);
+  }
+  .btn-tertiary[data-tone="light"]:hover {
+    color: var(--color-onyx);
+  }
+}
+.btn-secondary:disabled,
+.btn-secondary[aria-disabled="true"],
+.btn-tertiary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* Pressed: every button of the three levels gives a little (scale .97) and springs back. */
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]),
+.btn-secondary:active:not(:disabled):not([aria-disabled="true"]),
+.btn-tertiary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-tertiary:active {
+    transform: none !important;
+  }
+}
+@media (max-width: 640px) {
+  .btn-secondary:not(.btn-secondary--sm) {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Windows high contrast: the system colours take over; the fill is not drawn, so the text always reads. */
+@media (forced-colors: active) {
+  .btn-primary,
+  .btn-primary[data-tone="light"] {
+    border-color: ButtonText;
+    color: ButtonText;
+    background: ButtonFace;
+  }
+  .btn-primary::before {
+    display: none;
   }
 }
 
@@ -719,6 +990,14 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 
+/* Reduced motion: scroll reveals never hide anything, from the first paint on. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* The opening entrance of a page, in plain CSS: the same fade and rise as components/ui/Reveal.tsx (0.5s, 24px, the site
    ease; phones 0.3s, 12px, no delay), but it plays from the first paint, so the first text does not wait for the
    scripts to load. Used for what is on screen when a page opens; everything below keeps the scroll reveal. */
@@ -729,13 +1008,13 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   }
 }
 .enter {
-  animation: enter-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
+  animation: enter-rise var(--dur-slow) var(--ease) calc(var(--enter-delay, 0s) * var(--enter-stagger, 1)) both;
 }
 @media (max-width: 767px) {
   .enter {
     --enter-distance: 12px;
     --enter-stagger: 0;
-    animation-duration: 0.3s;
+    animation-duration: var(--dur-base);
   }
 }
 
@@ -745,7 +1024,7 @@ body {
   overflow-x: clip;
 }
 .mobile-menu {
-  animation: menu-in 0.22s ease-out;
+  animation: menu-in var(--dur-base) var(--ease);
 }
 /* The slider's gold dash: fills over the slide's 4s; its end advances the slide. */
 .slide-progress {
@@ -764,6 +1043,10 @@ body {
   from {
     opacity: 0;
   }
+}
+/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. */
+body:has([data-compare-bar]) {
+  padding-bottom: 140px;
 }
 /* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */
 .grid > * {
@@ -836,7 +1119,7 @@ body {
   background: radial-gradient(circle, color-mix(in srgb, var(--color-gold) 45%, transparent) 0%, transparent 72%);
   transform: scale(0);
   opacity: 0.6;
-  animation: click-pulse 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: click-pulse var(--dur-slow) var(--ease) forwards;
 }
 @keyframes click-pulse {
   to {
@@ -851,9 +1134,9 @@ body {
   }
 }
 
-/* The metallic sheen — one place on the whole site, the footer wordmark. The text is filled with a bronze-to-copper
-   gradient with a bright band that sweeps across during the first 60% of each 4.5s loop and then rests. Not on the
-   hero: the headline there sits on a photo. Reduced motion: no movement, plain Светол бакар. */
+/* The metallic sheen of the footer wordmark. The text is filled with a bronze-to-gold gradient with a bright band that
+   sweeps across once (2.4s) when the footer comes into view (.is-on, components/ui/SheenOnce.tsx), then stays still.
+   Reduced motion: no movement, plain logo gold. */
 .footer-sheen {
   display: inline-block;
   white-space: nowrap;
@@ -873,19 +1156,22 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: footer-sheen 4.5s ease-in-out infinite;
+  background-position: 100% 0;
 }
-@keyframes footer-sheen {
-  0% {
+.footer-sheen.is-on {
+  animation: footer-sheen-once 2.4s var(--ease) both;
+}
+@keyframes footer-sheen-once {
+  from {
     background-position: 100% 0;
   }
-  60%,
-  100% {
+  to {
     background-position: 0% 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .footer-sheen {
+  .footer-sheen,
+  .footer-sheen.is-on {
     animation: none;
     background: none;
     color: var(--color-brass);
@@ -912,6 +1198,32 @@ body {
     color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
     color-mix(in srgb, var(--color-onyx) 20%, transparent) 80%,
     color-mix(in srgb, var(--color-onyx) 40%, transparent) 100%
+  );
+}
+/* The homepage headline: one line, centred, from 600px up (sized so it always fits inside the side padding); on a phone
+   two balanced lines at about 34px. */
+.hero-title {
+  max-width: 100%;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 34px;
+  font-style: normal;
+  text-wrap: balance;
+}
+@media (min-width: 600px) {
+  .hero-title {
+    white-space: nowrap;
+    font-size: clamp(30px, 4.3vw, 68px);
+  }
+}
+
+/* The scrim of the hero's info strip ("Струмица, Северна Македонија" and the line on the right). */
+.hero-info-scrim {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-onyx) 60%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 32%,
+    color-mix(in srgb, var(--color-onyx) 0%, transparent) 55%,
+    color-mix(in srgb, var(--color-onyx) 88%, transparent) 100%
   );
 }
 .hero-scrim-radial {

@@ -98,10 +98,10 @@
 /* pressed: both buttons shrink at once (the buttons themselves are not touched) */
 .cg-actions > a {
   transition:
-    scale 100ms ease-out,
-    color 200ms,
-    background-color 200ms,
-    border-color 200ms;
+    scale var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
 .cg-actions > a:active {
   scale: 0.97;
@@ -136,7 +136,7 @@
 
 /* ───────── The entrance: the building draws, the glass arrives, the text comes ─────────
    "cg-armed" is added by the script, only when it is about to play (so without scripts everything is simply there);
-   "cg-in" is added once, when 40% of the section is on screen. */
+   "cg-in" is added once, as soon as the section is a little way on screen. */
 .cg.cg-armed:not(.cg-in) .cg-glow,
 .cg.cg-armed:not(.cg-in) .cg-glass,
 .cg.cg-armed:not(.cg-in) .cg-glass > * {
@@ -147,16 +147,16 @@
 }
 
 .cg.cg-in .cg-glow {
-  animation: cg-fade 1.4s ease-out 0.4s both;
+  animation: cg-fade var(--dur-slow) var(--ease) 0.4s both;
 }
 .cg.cg-in .cg-mark path {
   animation: cg-draw var(--t, 0.5s) var(--cg-ease) var(--d, 0s) both;
 }
 .cg.cg-in .cg-glass {
-  animation: cg-glass 0.8s var(--cg-ease) 1.15s both;
+  animation: cg-glass var(--dur-slow) var(--ease) 1.15s both;
 }
 .cg.cg-in .cg-glass > * {
-  animation: cg-rise 0.7s var(--cg-ease) both;
+  animation: cg-rise var(--dur-slow) var(--ease) both;
 }
 .cg.cg-in .cg-glass > :nth-child(1) {
   animation-delay: 1.45s;
@@ -247,9 +247,6 @@
     margin-top: -64px;
     padding: 36px 22px 30px;
   }
-  .cg-glass .eyebrow {
-    letter-spacing: 0.2em;
-  }
   .cg-lead {
     font-size: 16px;
   }
@@ -263,7 +260,7 @@
     gap: 12px;
     padding: 18px 16px;
     font-size: 12px;
-    letter-spacing: 0.14em;
+    letter-spacing: var(--label-track);
   }
   .cg-contact {
     flex-direction: column;

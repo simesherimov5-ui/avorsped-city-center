@@ -2,7 +2,8 @@
 
 import { useRef, type ElementType, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
+import { REVEAL_START } from "@/lib/motion";
 
 /**
  * A heading whose lines rise into view one after another (masked, so each line slides out from behind its
@@ -13,8 +14,8 @@ export function RevealHeading({
   as: Tag = "h2",
   className,
   children,
-  duration = 1,
-  ease = "power3.out",
+  duration = DUR.slow,
+  ease = CALM_EASE,
   from = 110,
 }: {
   as?: ElementType;
@@ -44,9 +45,9 @@ export function RevealHeading({
         gsap.to(split.lines, {
           yPercent: 0,
           duration,
-          stagger: 0.12,
+          stagger: 0.05,
           ease,
-          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+          scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
         });
       });
       return () => {

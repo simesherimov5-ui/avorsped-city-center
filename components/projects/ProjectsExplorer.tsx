@@ -1,10 +1,13 @@
 "use client";
 
 import "./projects.css";
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { getLenis } from "@/lib/lenis";
+import { DUR } from "@/lib/gsap";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { projectStatusLabel } from "@/lib/format";
 import {
@@ -27,6 +30,8 @@ const href = (p: Project) => p.href ?? `/projects/${p.slug}`;
 const statusText = (p: Project) => p.statusLabelOverride ?? projectStatusLabel(p.status);
 const statusClass = (p: Project) =>
   p.status === "completed" ? "is-done" : p.status === "upcoming" ? "is-soon" : "is-build";
+/** The old cards fade out in this long (ms) before the new ones come in. */
+const CARDS_OUT = 200;
 
 /** The filter bar, the grid and the map of the projects page. The three choices live in the address (?status=&city=&view=). */
 export function ProjectsExplorer({ projects }: { projects: Project[] }) {
@@ -49,9 +54,17 @@ function Explorer({
   const [view, setView] = useState<View>(initial.view);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
-  // the first showing of the cards rises one after the other; after a choice the whole view fades in instead
+  // the first showing of the cards rises one after the other; after a choice the new cards come in quicker
   const [changed, setChanged] = useState(false);
+  // the old cards are fading out (the new choice is applied when they are gone)
+  const [leaving, setLeaving] = useState(false);
+  const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
   const bar = useRef<HTMLDivElement>(null);
+  const sentinel = useRef<HTMLDivElement>(null);
+  const results = useRef<HTMLElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const underline = useRef<HTMLSpanElement>(null);
+  const timer = useRef(0);
   const cityBox = useRef<HTMLDivElement>(null);
   const listId = useId();
 
@@ -82,48 +95,108 @@ function Explorer({
       y: CITY_PINS[c.city].y,
     }));
 
+  const apply = (s: StatusFilter, c: CityFilter, v: View) => {
+    setStatus(s);
+    setCity(c);
+    setView(v);
+    setChanged(true);
+    setLeaving(false);
+    window.history.replaceState(null, "", `${pathname}${choicesQuery(s, c, v)}`);
+  };
+
+  /**
+   * A choice from the bar. When the top of the list is out of view (the visitor is further down), the page first
+   * scrolls up to it (below the navbar and the bar), so the change is seen; the old cards fade out (200ms) and the new
+   * ones come in. With reduced motion the page jumps and the cards simply change.
+   */
   const choose = (next: { status?: StatusFilter; city?: CityFilter; view?: View }) => {
     const s = next.status ?? status;
     let c = next.city ?? city;
     // a city with no project in the newly chosen status would leave the page empty: go back to all cities
     if (next.status && c !== "all" && !filterProjects(projects, s, "all").some((p) => p.city === c)) c = "all";
     const v = next.view ?? view;
-    setStatus(s);
-    setCity(c);
-    setView(v);
-    setChanged(true);
-    window.history.replaceState(null, "", `${pathname}${choicesQuery(s, c, v)}`);
-  };
+    window.clearTimeout(timer.current);
 
-  // The bar sticks right under the navbar, wherever the navbar really is: it slides away on the way down and back on
-  // the way up, so its measured bottom edge is followed for a moment after every scroll.
+    const list = results.current;
+    const header = document.querySelector("header");
+    const navH = header ? header.getBoundingClientRect().height : 0;
+    const barH = bar.current ? bar.current.getBoundingClientRect().height : 0;
+    // the list's top, under the navbar (which shows on the way up) and the bar stuck below it
+    const target = list ? list.getBoundingClientRect().top + window.scrollY - navH - barH : 0;
+    const outOfView = list ? list.getBoundingClientRect().top < navH + barH - 4 : false;
+
+    if (reduce) {
+      if (outOfView) window.scrollTo({ top: target, behavior: "auto" });
+      apply(s, c, v);
+      return;
+    }
+    setLeaving(true);
+    let scrolled = !outOfView;
+    let faded = false;
+    const done = () => scrolled && faded && apply(s, c, v);
+    timer.current = window.setTimeout(() => {
+      faded = true;
+      done();
+    }, CARDS_OUT);
+    if (outOfView) {
+      const lenis = getLenis();
+      const settle = () => {
+        scrolled = true;
+        done();
+      };
+      if (lenis) lenis.scrollTo(target, { duration: DUR.slow * 1.2, onComplete: settle });
+      else {
+        window.scrollTo({ top: target, behavior: "smooth" });
+        window.setTimeout(settle, 600);
+      }
+    }
+  };
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  // The bar sticks below the navbar only while the list is on screen (it lives in the list's own wrapper). While it is
+  // stuck it gets a soft shadow, and when the navbar slides away it slides up with it (CSS, by transform).
   useEffect(() => {
     const el = bar.current;
-    const header = document.querySelector("header");
-    if (!el || !header) return;
+    const mark = sentinel.current;
+    const wrap = el?.parentElement;
+    if (!el || !mark || !wrap) return;
     let frame = 0;
-    let until = 0;
-    const place = () => {
-      el.style.setProperty("--pj-top", `${Math.max(0, Math.round(header.getBoundingClientRect().bottom))}px`);
+    const check = () => {
+      frame = 0;
+      const top = parseFloat(getComputedStyle(el).top);
+      if (Number.isNaN(top)) return void (el.dataset.stuck = "false"); // phones: not sticky
+      const stuck =
+        mark.getBoundingClientRect().top < top && wrap.getBoundingClientRect().bottom > top + el.offsetHeight + 1;
+      el.dataset.stuck = String(stuck);
     };
-    const follow = () => {
-      place();
-      if (performance.now() < until) frame = requestAnimationFrame(follow);
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(check);
     };
-    const onMove = () => {
-      until = performance.now() + 700;
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(follow);
-    };
-    place();
-    window.addEventListener("scroll", onMove, { passive: true });
-    window.addEventListener("resize", onMove);
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onMove);
-      window.removeEventListener("resize", onMove);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
+
+  // The active tab's underline slides to the newly chosen tab (by transform).
+  useLayoutEffect(() => {
+    const group = tabsRef.current;
+    const line = underline.current;
+    const tab = group?.querySelector<HTMLElement>('.pj-tab[aria-pressed="true"]');
+    if (!group || !line || !tab) return;
+    const place = () => {
+      line.style.transform = `translateX(${tab.offsetLeft}px) scaleX(${tab.offsetWidth})`;
+    };
+    place();
+    // from the second placement on it slides
+    requestAnimationFrame(() => line.classList.add("is-ready"));
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [status]);
 
   // A click outside the city list closes it.
   useEffect(() => {
@@ -163,10 +236,12 @@ function Explorer({
   const countLine = shown.length === 0 ? "Нема проекти за овој избор." : `Прикажани ${projectsText(shown.length)}`;
 
   return (
-    <>
+    <div className="pj-explorer grain">
+      <div ref={sentinel} aria-hidden className="pj-sentinel" />
       <div ref={bar} className="pj-bar">
         <div className="pj-wrap pj-bar-inner">
-          <div className="pj-tabs">
+          <div ref={tabsRef} className="pj-tabs">
+            <span ref={underline} aria-hidden className="pj-tab-line" />
             {tabs.map((t) => (
               <button
                 key={t.value}
@@ -264,13 +339,13 @@ function Explorer({
         </div>
       </div>
 
-      <section className="pj-wrap pj-results">
+      <section ref={results} className="pj-wrap pj-results">
         <div className="pj-count" role="status" aria-live="polite">
           {countLine}
         </div>
 
         {view === "grid" && shown.length > 0 && (
-          <div key={`grid-${status}-${city}`} className={changed ? "pj-view pj-groups" : "pj-groups"}>
+          <div key={`grid-${status}-${city}`} className={leaving ? "pj-groups is-leaving" : "pj-groups"}>
             {groups.map((group) => {
               let n = 0;
               return (
@@ -284,7 +359,12 @@ function Explorer({
                   )}
                   <div className="pj-grid">
                     {group.projects.map((project) => (
-                      <GridCard key={project.id} project={project} delay={changed ? undefined : n++ * 0.09} />
+                      <GridCard
+                        key={project.id}
+                        project={project}
+                        delay={changed ? n++ * 0.04 : n++ * 0.05}
+                        swap={changed}
+                      />
                     ))}
                   </div>
                 </div>
@@ -294,7 +374,7 @@ function Explorer({
         )}
 
         {view === "map" && (
-          <div key={`map-${status}-${city}`} className={changed ? "pj-view pj-map-view" : "pj-map-view"}>
+          <div key={`map-${status}-${city}`} className={cnView(changed, leaving)}>
             <ProjectsMap pins={pins} selected={city} onPick={(c) => choose({ city: c })} />
             <div className="pj-rows">
               {groups.map((group) => (
@@ -341,15 +421,18 @@ function Explorer({
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 }
 
-function GridCard({ project, delay }: { project: Project; delay?: number }) {
+const cnView = (changed: boolean, leaving: boolean) =>
+  ["pj-map-view", changed && "pj-view", leaving && "is-leaving"].filter(Boolean).join(" ");
+
+function GridCard({ project, delay, swap = false }: { project: Project; delay?: number; swap?: boolean }) {
   return (
     <Link
       href={href(project)}
-      className={`pj-card${delay !== undefined ? " is-rising" : ""}`}
+      className={`pj-card${delay !== undefined ? (swap ? " is-swapping" : " is-rising") : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay.toFixed(2)}s` } : undefined}
     >
       <div className="pj-photo">

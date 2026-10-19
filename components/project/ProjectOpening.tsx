@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useI18n } from "@/lib/i18n";
 import { getLenis } from "@/lib/lenis";
@@ -117,7 +118,7 @@ export function ProjectOpening({
               image={{ ...image, isPlaceholder: false }}
               tone="dark"
               priority
-              sizes="100vw"
+              sizes={coverSizes(image.src, [{ w: "100vw", h: "min(max(100vh, 560px), 1000px)" }])}
               className="h-full w-full !bg-transparent"
             />
           </div>
@@ -135,7 +136,7 @@ export function ProjectOpening({
 
         <Link
           href={backHref}
-          className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-[11px] font-semibold uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent/80"
+          className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-accent transition-colors hover:text-accent/80"
         >
           {t("opening.back")}
         </Link>
@@ -158,11 +159,9 @@ export function ProjectOpening({
       <div className="opening-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-3 bg-chrome px-[5%] py-5 md:py-6">
         <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
           <h1 className="m-0 font-display text-[clamp(32px,3.6vw,56px)] font-normal leading-none text-paper">{name}</h1>
-          <div className="eyebrow uppercase text-accent" style={{ letterSpacing: "0.3em" }}>
-            {eyebrow}
-          </div>
+          <div className="eyebrow uppercase text-accent">{eyebrow}</div>
         </div>
-        <div className="flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
+        <div className="flex items-center gap-8 text-label font-semibold uppercase tracking-label text-accent">
           {showVideo && <PauseButton paused={filmPaused} onToggle={toggleFilm} />}
           {showSound && (
             <button
@@ -170,7 +169,7 @@ export function ProjectOpening({
               onClick={toggleSound}
               aria-pressed={!muted}
               aria-label={muted ? t("opening.soundOn") : t("opening.soundOff")}
-              className="focus-ring inline-flex min-h-11 items-center gap-2 uppercase tracking-[0.3em]"
+              className="focus-ring inline-flex min-h-11 items-center gap-2 uppercase tracking-label"
             >
               {t("opening.sound")} <span aria-hidden>{muted ? "×" : "♪"}</span>
             </button>
@@ -178,7 +177,7 @@ export function ProjectOpening({
           <a
             href={`#${nextId}`}
             onClick={scrollNext}
-            className="focus-ring inline-flex min-h-11 items-center uppercase tracking-[0.3em]"
+            className="focus-ring inline-flex min-h-11 items-center uppercase tracking-label"
           >
             {t("opening.scroll")}
           </a>

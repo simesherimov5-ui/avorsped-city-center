@@ -19,7 +19,7 @@ export function Prose({
   return (
     <>
       <div className="ab-prose">
-        <RevealHeading as="h2" className="bk-h2 bk-serif" duration={1.1} ease="power4.out" from={115}>
+        <RevealHeading as="h2" className="bk-h2 bk-serif" from={115}>
           {heading}
         </RevealHeading>
         <Reveal>

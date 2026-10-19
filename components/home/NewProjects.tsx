@@ -4,12 +4,12 @@ import { Reveal } from "@/components/motion/Reveal";
 import type { Project } from "@/types";
 
 /**
- * "Во изградба сега": the company's current projects, in the same full-width slideshow as the Проекти page: one project
+ * "Сега во изградба": the company's current projects, in the same full-width slideshow as the Проекти page: one project
  * at a time with its status, name, place and a way in.
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
   return (
-    <section id="new" className="bg-chrome pb-16 text-on-chrome sm:pb-24">
+    <section id="new" className="grain grain--dark bg-chrome text-on-chrome">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-5">
@@ -18,14 +18,9 @@ export function NewProjects({ projects }: { projects: Project[] }) {
                 <span aria-hidden className="block h-2 w-2 rounded-full bg-accent" />
                 <div className="eyebrow text-accent">Ново · во продажба</div>
               </div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Во изградба <em className="italic text-accent">сега.</em>
-              </h2>
+              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">Сега во изградба.</h2>
             </div>
-            <Link
-              href="/projects"
-              className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
-            >
+            <Link href="/projects" className="btn-tertiary focus-ring">
               Сите проекти →
             </Link>
           </div>

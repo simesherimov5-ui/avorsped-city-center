@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { usePageReady } from "@/components/page-transition/PageTransition";
 
 export type HeroStat = {
@@ -95,7 +96,10 @@ export function AboutHero({ image, eyebrow, lines, stats }: Props) {
         <Media
           image={{ ...image, isPlaceholder: false }}
           priority
-          sizes="(max-width: 767px) 160vw, 100vw"
+          sizes={coverSizes(image.src, [
+            { media: "(max-width: 760px)", w: "100vw", h: "max(420px, 70vh)" },
+            { w: "100vw", h: "clamp(420px, 42vw, 600px)" },
+          ])}
           tone="dark"
           className="h-full w-full"
         />

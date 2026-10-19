@@ -74,16 +74,14 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
     <section
       ref={root}
       aria-label={t("quotes.eyebrow")}
-      className="bg-espresso text-on-chrome"
+      className="grain grain--dark bg-espresso text-on-chrome"
       onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
       onPointerLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}
       onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setFocused(false)}
     >
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-9 px-5 py-20 text-center sm:px-8 md:py-[120px] lg:px-10">
-        <div className="eyebrow text-accent" style={{ letterSpacing: "0.32em" }}>
-          {t("quotes.eyebrow")}
-        </div>
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-9 px-5 pb-16 pt-20 text-center sm:px-8 md:pb-20 md:pt-[120px] lg:px-10">
+        <div className="eyebrow text-accent">{t("quotes.eyebrow")}</div>
         <div
           aria-live={used ? "polite" : "off"}
           className="flex min-h-[200px] w-full max-w-[960px] flex-col items-center justify-center gap-9"
@@ -92,7 +90,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
             <blockquote className="m-0 font-display text-[clamp(30px,3.4vw,48px)] font-normal italic leading-[1.3] text-paper">
               „{quote.text}“
             </blockquote>
-            <p className="mt-9 text-[10px] font-semibold uppercase tracking-[0.32em] text-accent">{by}</p>
+            <p className="mt-9 text-label font-semibold uppercase tracking-label text-accent">{by}</p>
           </div>
         </div>
         {count > 1 && (
@@ -120,7 +118,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
                   className="focus-ring flex h-11 w-11 items-center justify-center"
                 >
                   <span
-                    className={`block h-0.5 transition-[width,background-color] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`block h-0.5 transition-[width,background-color] duration-(--dur-slow) ease-(--ease) ${
                       active ? "w-9 bg-accent" : "w-3.5 bg-on-chrome/20"
                     }`}
                   />

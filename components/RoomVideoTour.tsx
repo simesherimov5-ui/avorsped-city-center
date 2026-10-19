@@ -44,12 +44,12 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
               <Media
                 // the button is named by its label, so the picture inside needs no second description
                 image={{ ...room.image, alt: "" }}
-                className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
+                className="h-full w-full transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, 256px"
               />
-              <div className="absolute inset-0 bg-chrome/25 transition-colors duration-300 group-hover:bg-chrome/40" />
+              <div className="absolute inset-0 bg-chrome/25 transition-colors duration-(--dur-fast) group-hover:bg-chrome/40" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-on-chrome/90 text-chrome transition-transform duration-300 group-hover:scale-110">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-on-chrome/90 text-chrome transition-transform duration-(--dur-fast) group-hover:scale-110">
                   <Play className="h-5 w-5 translate-x-0.5" fill="currentColor" />
                 </span>
               </div>

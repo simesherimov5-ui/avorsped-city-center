@@ -87,9 +87,9 @@
 .ab-meta > span {
   padding: 0 24px;
   border-left: 1px solid var(--gold-line);
-  font-size: 11px;
+  font-size: var(--label-size);
   font-weight: 400;
-  letter-spacing: 0.24em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 .ab-meta > span:first-child {
@@ -132,6 +132,14 @@
   max-width: 760px;
   margin-inline: auto;
 }
+/* The larger sentence that opens the story, in the display serif. */
+[data-theme="black"] .ab-story-text {
+  max-width: 720px;
+  margin-inline: auto;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.45;
+}
 .ab-story-text {
   margin: 24px 0 0;
   /* The statement is a long text, so it is Montserrat (Playfair is for headings); its accent words are coloured, not
@@ -156,15 +164,27 @@
   margin-top: 1em;
 }
 
-/* The running texts (За нас, Визија, Мисија): the heading on the left, the words on the right */
+/* The running texts (За нас, Квалитетна изградба, Визија, Мисија): on a phone the title above the text; from 900px the
+   title in a 220px column on the left, pinned below the navbar while the text on the right scrolls past it. */
 .ab-prose {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
-  gap: clamp(28px, 5vw, 80px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
   align-items: start;
 }
+@media (min-width: 900px) {
+  .ab-prose {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 96px);
+  }
+  .ab-prose > h2 {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+    margin-top: 0;
+  }
+}
 .ab-prose-body {
-  max-width: 64ch;
+  max-width: 62ch;
   font-size: 17px;
   font-weight: 400;
   line-height: 1.75;
@@ -195,9 +215,6 @@
   line-height: 1.7;
 }
 @media (max-width: 880px) {
-  .ab-prose {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .ab-aims {
     grid-template-columns: minmax(0, 1fr);
     margin-top: 32px;
@@ -228,7 +245,7 @@
   gap: 8px;
   padding: 22px 0;
   border-top: 1px solid var(--color-line);
-  transition: border-color 0.4s;
+  transition: border-color var(--dur-fast) var(--ease);
 }
 .ab-v:last-child {
   border-bottom: 1px solid var(--color-line);
@@ -246,7 +263,7 @@
   letter-spacing: 0;
   font-size: var(--fs-h3);
   line-height: 1.2;
-  transition: color 0.4s;
+  transition: color var(--dur-fast) var(--ease);
 }
 .ab-v p {
   margin: 0;
@@ -308,7 +325,7 @@
   cursor: pointer;
 }
 .ab-card:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--foil-light);
   outline-offset: 4px;
 }
 .ab-card-photo {
@@ -329,7 +346,7 @@
 .ab-card-img {
   position: absolute;
   inset: 0;
-  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--dur-slow) var(--ease);
 }
 .ab-card:hover .ab-card-img,
 .ab-card:focus-visible .ab-card-img {
@@ -341,7 +358,7 @@
   inset: 0;
   background: var(--black);
   opacity: 0.15;
-  transition: opacity 0.6s;
+  transition: opacity var(--dur-fast) var(--ease);
 }
 .ab-card:hover .ab-card-veil,
 .ab-card:focus-visible .ab-card-veil {
@@ -360,7 +377,7 @@
   background: var(--color-gold);
   color: var(--black);
   opacity: 0;
-  transition: opacity 0.4s;
+  transition: opacity var(--dur-fast) var(--ease);
 }
 .ab-card:hover .ab-card-plus,
 .ab-card:focus-visible .ab-card-plus {
@@ -491,6 +508,6 @@
   text-align: center;
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   color: var(--mute);
 }

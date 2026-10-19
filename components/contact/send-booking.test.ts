@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { bookingLines, type BookingRequest } from "./send-booking";
+import { bookingEmail, bookingLines, type BookingRequest } from "./send-booking";
 
 const base: BookingRequest = {
-  project: null,
-  projectId: null,
-  undecided: true,
-  preferences: ["Двособен", "Трособен"],
+  project: "City Center",
+  projectId: "city-center",
+  undecided: false,
+  areaMin: 70,
+  areaMax: 100,
+  areaUnknown: false,
   date: "2026-10-12",
   dateLabel: "Пон 12 окт",
   time: "10:00",
@@ -14,39 +16,56 @@ const base: BookingRequest = {
 };
 
 describe("bookingLines", () => {
-  it("says no project was chosen and lists what an undecided visitor is looking for", () => {
-    const lines = bookingLines(base);
-    expect(lines[0]).toBe("Проект: не е избран");
-    expect(lines[1]).toBe("Што бара: Двособен, Трособен");
+  it("starts with the area range, then the project, the appointment, the name and the phone", () => {
+    expect(bookingLines(base)).toEqual([
+      "Површина: 70–100 m²",
+      "Проект: City Center",
+      "Термин: Пон 12 окт, 10:00",
+      "Име: Тест Тестовски",
+      "Телефон: 070 000 000",
+    ]);
   });
 
-  it("says nothing was named when the visitor skipped the question", () => {
-    expect(bookingLines({ ...base, preferences: [] })[1]).toBe("Што бара: не е наведено");
+  it("writes the top of the scale as 150+", () => {
+    expect(bookingLines({ ...base, areaMin: 105, areaMax: 150 })[0]).toBe("Површина: 105–150+ m²");
   });
 
-  it("names the project and building when one was chosen", () => {
-    const lines = bookingLines({
-      ...base,
-      project: "City Center",
-      projectId: "city-center",
-      undecided: false,
-      preferences: [],
-      building: "Зграда 06",
-    });
-    expect(lines.slice(0, 2)).toEqual(["Проект: City Center", "Зграда: Зграда 06"]);
+  it("says «Не знае – совет» when the visitor does not know the area", () => {
+    expect(bookingLines({ ...base, areaMin: null, areaMax: null, areaUnknown: true })[0]).toBe(
+      "Површина: Не знае – совет"
+    );
   });
 
-  it("says the building was not chosen when the visitor does not know which one", () => {
-    const lines = bookingLines({
-      ...base,
-      project: "City Center",
-      projectId: "city-center",
-      undecided: false,
-      preferences: [],
-      building: null,
-      buildingId: null,
-      buildingUnknown: true,
-    });
-    expect(lines.slice(0, 2)).toEqual(["Проект: City Center", "Зграда: не е избрана"]);
+  it("says no project was chosen when the visitor is undecided", () => {
+    const lines = bookingLines({ ...base, project: null, projectId: null, undecided: true });
+    expect(lines[1]).toBe("Проект: не е избран");
+  });
+
+  it("adds the e-mail after the phone only when the visitor gave one", () => {
+    expect(bookingLines(base).some((l) => l.startsWith("Е-пошта"))).toBe(false);
+    const lines = bookingLines({ ...base, email: "ime@primer.com" });
+    expect(lines[lines.length - 1]).toBe("Е-пошта: ime@primer.com");
+    expect(lines[lines.length - 2]).toBe("Телефон: 070 000 000");
+  });
+
+  it("carries no building or apartment", () => {
+    expect(bookingLines(base).join("\n")).not.toMatch(/Зграда|Стан/);
+  });
+});
+
+describe("bookingEmail", () => {
+  it("puts the area and the project in the subject and the area first in the body", () => {
+    const { subject, text } = bookingEmail(base);
+    expect(subject).toBe("Нова консултација · 70–100 m² · City Center");
+    expect(text.split("\n")[0]).toBe("Површина: 70–100 m²");
+  });
+
+  it("sets the visitor's e-mail as the reply-to, and none when there is none", () => {
+    expect(bookingEmail({ ...base, email: "ime@primer.com" }).replyTo).toBe("ime@primer.com");
+    expect(bookingEmail(base).replyTo).toBeUndefined();
+  });
+
+  it("keeps the visitor's own words out of the subject", () => {
+    expect(bookingEmail({ ...base, name: "Некој Некојовски" }).subject).not.toContain("Некојовски");
   });
 });

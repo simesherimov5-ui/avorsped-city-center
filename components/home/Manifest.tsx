@@ -1,23 +1,20 @@
 import { Reveal } from "@/components/motion/Reveal";
 
 /**
- * "Во што веруваме": the company's manifest on a light surface, set in the display serif, centred, one thought to a
- * line. The last line is italic Бронза (the accent on light).
+ * "Во што веруваме": the company's manifest on a light surface: two sentences in the display serif, large and centred,
+ * between the label and the signature.
  */
 export function Manifest() {
   return (
-    <section className="bg-cream text-charcoal">
+    <section className="grain bg-cream text-charcoal">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 py-20 text-center sm:px-8 sm:py-28 lg:px-10">
         <Reveal>
           <div className="eyebrow text-gold-deep">Во што веруваме</div>
         </Reveal>
         <Reveal delay={0.1}>
-          <p className="flex max-w-[980px] flex-col gap-1.5 font-display text-(length:--fs-statement) leading-[1.45]">
-            <span>Има еден момент што никогаш не се заборава:</span>
-            <span>кога за првпат ќе го свртите клучот</span>
-            <span>и ќе сфатите дека сте дома.</span>
-            <span>Тој момент го градиме веќе повеќе од тридесет години.</span>
-            <span className="mt-3 italic text-gold-deep">Нашата работа е тој момент да трае цел живот.</span>
+          <p className="mx-auto max-w-[720px] text-balance font-display text-[clamp(24px,2.4vw,32px)] leading-[1.45]">
+            Моментот кога првпат ќе го свртите клучот и ќе знаете дека сте дома. Тој момент го градиме веќе повеќе од 30
+            години.
           </p>
         </Reveal>
         <Reveal delay={0.2}>

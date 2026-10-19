@@ -3,6 +3,7 @@
 import "./projects.css";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Media } from "@/components/ui/Media";
+import { SheenOnce } from "@/components/ui/SheenOnce";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
@@ -74,7 +75,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
 
       <div className="pj-wrap pj-hero-inner">
         <div className="pj-hero-text">
-          <div className="pj-sheen">JAVOR SPED · ПРОЕКТИ</div>
+          <SheenOnce className="pj-sheen">JAVOR SPED · ПРОЕКТИ</SheenOnce>
           <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
           <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>
         </div>

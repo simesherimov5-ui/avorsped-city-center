@@ -3,12 +3,24 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { Modal } from "@/components/ui/Modal";
+import { Modal, type ModalTiming } from "@/components/ui/Modal";
 
 /**
  * The pop-up shown after a booking is sent. Inside it, in sequence: a gold ring draws itself (1s) and a check
  * draws inside it (0.45s), then the eyebrow, the thank-you, the booking summary, the note and the button.
  */
+/** The Контакт page keeps the deployed site's speeds for its pop-up (the site's Modal is quicker now). */
+const DEPLOYED_TIMING: ModalTiming = {
+  reducedFade: 0.2,
+  backdropIn: 0.4,
+  backdropInEase: "power2.out",
+  panelIn: 0.6,
+  panelInDelay: 0.1,
+  panelInEase: "power3.out",
+  out: 0.3,
+  outEase: "power2.in",
+};
+
 export function BookingConfirmation({
   open,
   onClose,
@@ -20,7 +32,14 @@ export function BookingConfirmation({
   summary: string;
 }) {
   return (
-    <Modal open={open} onClose={onClose} label="Барањето е применето" overlay={0.86}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      label="Барањето е применето"
+      overlay={0.86}
+      className="ct-modal"
+      timing={DEPLOYED_TIMING}
+    >
       <Content onClose={onClose} summary={summary} />
     </Modal>
   );

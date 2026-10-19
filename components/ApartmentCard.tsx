@@ -22,7 +22,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
     <div
       onPointerDown={spawnClickPulse}
       className={cn(
-        "group relative isolate border bg-warm-white transition-[border-color,box-shadow,background-color] duration-300",
+        "group relative isolate border bg-warm-white transition-[border-color,box-shadow,background-color] duration-(--dur-fast)",
         selected ? "border-gold-deep" : "border-line hover:border-ink/30"
       )}
     >
@@ -36,7 +36,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             priority={priority}
             // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
             className={cn(
-              "aspect-[4/3] transition-transform duration-700 ease-out group-hover:scale-[1.03]",
+              "aspect-[4/3] transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]",
               apartment.status === "sold" && "opacity-50"
             )}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

@@ -2,6 +2,8 @@
 
 import { useRef, useState, useSyncExternalStore, type KeyboardEvent, type PointerEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
+import { coverSizes } from "@/lib/image-sizes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
@@ -15,8 +17,12 @@ const FADE_S = 1.2;
 
 // A phone crops the photo into a tall frame (it is drawn about 1.6x wider than the screen); a "contain" photo is only
 // as wide as its frame is tall.
+// The slide covers the full width at the slider's height (see the section's classes below).
 const slideSizes = (project: Project) =>
-  project.imageFit === "contain" ? "(max-width: 767px) 100vw, 640px" : "(max-width: 767px) 160vw, 100vw";
+  coverSizes(project.heroImage.src, [
+    { media: "(max-width: 767px)", w: "100vw", h: "clamp(400px, 60vh, 520px)" },
+    { w: "100vw", h: "clamp(480px, 72vh, 780px)" },
+  ]);
 const SWIPE_PX = 50;
 
 const subscribeVisibility = (onChange: () => void) => {
@@ -91,7 +97,7 @@ export function ProjectSlideshow({
       : {
           initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay: 0.55 + step * 0.1, ease: "easeOut" as const },
+          transition: { duration: DURATION.slow, delay: 0.55 + step * 0.05, ease: EASE },
         };
 
   return (
@@ -197,7 +203,9 @@ export function ProjectSlideshow({
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center">
+      {/* The dashes: the strip is full width but lets taps through (on phones the arrows sit in its corners); only the
+          dashes themselves take them. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
         {projects.map((p, i) => {
           const active = i === index;
           return (
@@ -210,7 +218,7 @@ export function ProjectSlideshow({
               }}
               aria-label={p.name}
               aria-current={active}
-              className="focus-ring group flex h-11 w-12 items-center justify-center"
+              className="focus-ring group pointer-events-auto flex h-11 w-12 items-center justify-center"
             >
               <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
                 {active &&
@@ -235,7 +243,8 @@ export function ProjectSlideshow({
       <PauseButton
         paused={manual}
         onToggle={() => setManual((m) => !m)}
-        className="absolute bottom-0 right-2 z-10 sm:right-4"
+        // phones: beside the "next" arrow, not on top of it (both sit in the bottom-right corner there)
+        className="absolute bottom-0 right-14 z-10 sm:right-4"
       />
     </section>
   );

@@ -4,12 +4,38 @@ import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, 
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
 import { cn } from "@/lib/cn";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+/** How the pop-up comes and goes, in seconds (GSAP eases). */
+export type ModalTiming = {
+  /** With reduced motion: the plain fade in and out. */
+  reducedFade: number;
+  backdropIn: number;
+  backdropInEase: string;
+  panelIn: number;
+  panelInDelay: number;
+  panelInEase: string;
+  /** The panel and the overlay leaving. */
+  out: number;
+  outEase: string;
+};
+
+/** The site's speeds (--dur-fast / --dur-base, the calm ease; leaving in 75% of the arrival). */
+const SITE_TIMING: ModalTiming = {
+  reducedFade: DUR.fast,
+  backdropIn: DUR.base,
+  backdropInEase: CALM_EASE,
+  panelIn: DUR.base,
+  panelInDelay: 0.05,
+  panelInEase: CALM_EASE,
+  out: DUR.base * 0.75,
+  outEase: CALM_EASE,
+};
 
 type Props = {
   open: boolean;
@@ -22,6 +48,8 @@ type Props = {
   closeIn?: "panel" | "screen";
   /** Classes of the animated content box (width, background, border, padding). */
   className?: string;
+  /** Other speeds than the site's (the Контакт page keeps the deployed site's). */
+  timing?: ModalTiming;
   children: ReactNode;
 };
 
@@ -31,7 +59,16 @@ type Props = {
  * trapped there, Esc / the ✕ / a click on the overlay close it, focus returns to whatever opened it, and the
  * page behind is locked (Lenis paused) while it is open. It renders nothing while closed.
  */
-export function Modal({ open, onClose, label, overlay = 0.86, closeIn = "panel", className, children }: Props) {
+export function Modal({
+  open,
+  onClose,
+  label,
+  overlay = 0.86,
+  closeIn = "panel",
+  className,
+  timing = SITE_TIMING,
+  children,
+}: Props) {
   // Stays mounted through the exit animation: `open` starts the animation, `shown` ends it.
   const [shown, setShown] = useState(open);
   if (open && !shown) setShown(true);
@@ -51,23 +88,29 @@ export function Modal({ open, onClose, label, overlay = 0.86, closeIn = "panel",
       const panel = panelRef.current;
       if (!dialog || !backdrop || !panel) return;
 
+      const t = timing;
       if (prefersReducedMotion()) {
-        if (open) gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: 0.2 });
-        else gsap.to(dialog, { opacity: 0, duration: 0.2, onComplete: () => setShown(false) });
+        if (open) gsap.fromTo(dialog, { opacity: 0 }, { opacity: 1, duration: t.reducedFade });
+        else gsap.to(dialog, { opacity: 0, duration: t.reducedFade, onComplete: () => setShown(false) });
         return;
       }
 
       if (open) {
         gsap.set(backdrop, { opacity: 0 });
         gsap.set(panel, { opacity: 0, y: 24, scale: 0.97 });
-        gsap.to(backdrop, { opacity: 1, duration: 0.4, ease: "power2.out" });
-        gsap.to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.6, delay: 0.1, ease: "power3.out" });
+        gsap.to(backdrop, { opacity: 1, duration: t.backdropIn, ease: t.backdropInEase });
+        gsap.to(panel, { opacity: 1, y: 0, scale: 1, duration: t.panelIn, delay: t.panelInDelay, ease: t.panelInEase });
       } else {
-        gsap.to(panel, { opacity: 0, y: 12, duration: 0.3, ease: "power2.in" });
-        gsap.to(backdrop, { opacity: 0, duration: 0.3, ease: "power2.in", onComplete: () => setShown(false) });
+        gsap.to(panel, { opacity: 0, y: 12, duration: t.out, ease: t.outEase });
+        gsap.to(backdrop, {
+          opacity: 0,
+          duration: t.out,
+          ease: t.outEase,
+          onComplete: () => setShown(false),
+        });
       }
     },
-    { dependencies: [open, shown], scope: dialogRef }
+    { dependencies: [open, shown, timing], scope: dialogRef }
   );
 
   // While it is on screen: lock the page, move focus in, and give focus back afterwards.

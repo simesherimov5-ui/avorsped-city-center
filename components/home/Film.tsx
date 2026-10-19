@@ -8,21 +8,21 @@ import { Reveal } from "@/components/motion/Reveal";
  */
 export function Film({ still, src }: { still: { src: string; alt: string }; src?: string }) {
   return (
-    <section id="film" className="bg-chrome text-on-chrome">
+    <section id="film" className="grain grain--dark bg-chrome text-on-chrome">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="eyebrow text-accent">Филм</div>
               <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                Три децении, <em className="italic text-accent">во една минута.</em>
+                Три децении, во една минута.
               </h2>
             </div>
             <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso lg:mt-10 lg:aspect-auto lg:h-[480px]">
+          <div className="relative mt-10 aspect-[16/9] overflow-hidden bg-espresso">
             {src ? (
               <video
                 controls

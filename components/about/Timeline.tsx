@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { Plus } from "lucide-react";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
+import { REVEAL_START } from "@/lib/motion";
 import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
 import { PhotoViewer } from "./PhotoViewer";
@@ -27,14 +28,14 @@ export function Timeline({ milestones }: { milestones: Milestone[] }) {
     () => {
       const el = list.current;
       if (!el || prefersReducedMotion()) return;
-      gsap.set(el.children, { opacity: 0, y: 40 });
+      gsap.set(el.children, { opacity: 0, y: 24 });
       gsap.to(el.children, {
         opacity: 1,
         y: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        duration: DUR.slow,
+        stagger: 0.05,
+        ease: CALM_EASE,
+        scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
       });
     },
     { scope: list }

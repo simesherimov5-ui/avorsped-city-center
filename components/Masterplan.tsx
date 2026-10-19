@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import type { Apartment, Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
@@ -122,7 +123,7 @@ export function Masterplan({
                     scale: isSelected ? 1.25 : isHovered ? 1.15 : 1,
                     opacity: isDimmed ? 0.45 : 1,
                   }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: DURATION.base, ease: EASE }}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-9 sm:w-9 sm:text-sm",
                     (isSelected || isHovered) && "outline outline-1 outline-offset-4 outline-accent/50",
@@ -145,7 +146,7 @@ export function Masterplan({
                   className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="text-base font-medium">{building.name}</div>
-                  <div className="mt-2 space-y-1 text-[11px] text-on-chrome/70">
+                  <div className="mt-2 space-y-1 text-label text-on-chrome/70">
                     <div>
                       {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
@@ -218,7 +219,7 @@ export function Masterplan({
               >
                 <span
                   className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold",
+                    "flex h-6 w-6 items-center justify-center rounded-full border text-label font-semibold",
                     isSelected ? "border-accent bg-accent text-chrome" : "border-line text-muted"
                   )}
                 >
@@ -291,7 +292,7 @@ function PanelStack({
           key="idle"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: DURATION.base, ease: EASE }}
           className="col-start-1 row-start-1"
         >
           {idle}
@@ -303,7 +304,7 @@ function PanelStack({
             key={`${b.id}-on`}
             initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: DURATION.base, ease: EASE }}
             className="col-start-1 row-start-1"
           >
             <BuildingPanel
@@ -355,7 +356,7 @@ function BuildingPanel({
         {floorsText(building.floors.length)} · {unitsText(building.totalApartments)} · {building.available}{" "}
         {availableWord(building.available)}
       </p>
-      <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-ink">
+      <div className="flex items-center gap-3 text-label font-semibold uppercase tracking-label text-ink">
         <span aria-hidden className="block h-2 w-2 rounded-full bg-bronze" />
         {building.status === "completed" ? "Завршено" : "Во изградба"}
         {building.available > 0 && <> · Во продажба</>}
@@ -365,7 +366,8 @@ function BuildingPanel({
         href={`${basePath}/${building.id}`}
         label={building.name}
         originRect={originRect ? () => originRect : undefined}
-        className="focus-ring flex w-full items-center justify-center gap-2 whitespace-nowrap border border-ink/30 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink hover:bg-ink/5 active:scale-[0.97]"
+        className="btn-secondary focus-ring w-full"
+        data-tone="light"
       >
         Разгледајте ја зградата →
       </ZoomNavLink>

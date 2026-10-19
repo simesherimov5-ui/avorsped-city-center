@@ -16,9 +16,7 @@ export function ProjectCta({
   return (
     <section className="bg-chrome text-on-chrome">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-8 px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
-        <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-          Дојдете да <em className="italic text-accent">го видите</em>
-        </h2>
+        <h2 className="font-display text-(length:--fs-h2) font-normal leading-[1.2]">Дојдете да го видите</h2>
         <Button href={href ?? `/contact?project=${projectId}`} variant="primary" tone="dark">
           {label}
         </Button>

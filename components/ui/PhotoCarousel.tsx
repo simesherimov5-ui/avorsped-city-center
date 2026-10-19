@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { DURATION, EASE } from "@/lib/motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
@@ -36,7 +37,7 @@ export function PhotoCarousel({
           initial={{ opacity: 0, x: direction >= 0 ? 48 : -48 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: direction >= 0 ? -48 : 48 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: DURATION.base, ease: EASE }}
           className="absolute inset-0"
         >
           <Media

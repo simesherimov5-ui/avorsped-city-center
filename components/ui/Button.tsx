@@ -3,14 +3,12 @@
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import type { MouseEvent, ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { spawnClickPulse } from "@/lib/clickPulse";
 
-/** The inside of the filling primary button: the fill that slides in, the label, the circled arrow. */
+/** The inside of the primary button: the label and the circled arrow (the foil fill is the button's own ::before). */
 export function PrimaryFace({ children, arrow = true }: { children: ReactNode; arrow?: boolean }) {
   return (
     <>
-      <span aria-hidden className="btn-primary__fill" />
-      <span className="btn-primary__label">{children}</span>
+      <span>{children}</span>
       {arrow && (
         <span aria-hidden className="btn-primary__arrow">
           <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
@@ -26,7 +24,7 @@ interface ButtonProps {
   children: ReactNode;
   href?: string;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
   tone?: "light" | "dark";
   size?: "sm" | "md";
   className?: string;
@@ -36,6 +34,8 @@ interface ButtonProps {
   filled?: boolean;
   /** For a button that switches something on and off: sets aria-pressed. */
   pressed?: boolean;
+  /** The secondary button with the circled arrow (as the primary one has), e.g. beside a primary button. */
+  arrow?: boolean;
 }
 
 export function Button({
@@ -50,6 +50,7 @@ export function Button({
   disabled,
   filled = false,
   pressed,
+  arrow = false,
 }: ButtonProps) {
   if (variant === "primary") {
     // The filling button has its own look (see .btn-primary in globals.css); no click pulse, it would fight the fill.
@@ -76,24 +77,31 @@ export function Button({
     );
   }
 
-  const base = cn(
-    "relative isolate inline-flex min-h-12 items-center justify-center lg:min-h-0 gap-2 whitespace-nowrap max-sm:whitespace-normal max-sm:text-center font-semibold uppercase transition-[color,background-color,border-color,transform] duration-200 focus-ring active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100",
-    size === "sm" ? "px-5 py-2.5 text-[12px] tracking-[0.18em]" : "px-7 py-3.5 text-[12px] tracking-[0.18em]"
+  // The second and third levels (see .btn-secondary and .btn-tertiary in globals.css). "ghost" is the older name of
+  // the tertiary text link. Neither has the gold click pulse: only the primary button ever turns gold.
+  const content =
+    variant === "secondary" && arrow ? (
+      <>
+        <span>{children}</span>
+        <span aria-hidden className="btn-secondary__arrow">
+          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
+            <path d="M0 4h13M9 1l4 3-4 3" />
+          </svg>
+        </span>
+      </>
+    ) : (
+      children
+    );
+  const classes = cn(
+    "focus-ring",
+    variant === "secondary" ? cn("btn-secondary", size === "sm" && "btn-secondary--sm") : "btn-tertiary",
+    className
   );
-  const styles = {
-    secondary:
-      tone === "dark"
-        ? "border border-button text-button hover:bg-button hover:text-chrome"
-        : "border border-charcoal/25 text-charcoal hover:border-charcoal hover:bg-charcoal/5",
-    ghost: tone === "dark" ? "text-button hover:text-button/80" : "text-charcoal/70 hover:text-charcoal",
-  }[variant];
-
-  const classes = cn(base, styles, className);
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick} onPointerDown={spawnClickPulse} aria-pressed={pressed}>
-        {children}
+      <Link href={href} className={classes} onClick={onClick} data-tone={tone} aria-pressed={pressed}>
+        {content}
       </Link>
     );
   }
@@ -101,12 +109,12 @@ export function Button({
     <button
       type={type}
       onClick={onClick}
-      onPointerDown={spawnClickPulse}
       disabled={disabled}
       className={classes}
+      data-tone={tone}
       aria-pressed={pressed}
     >
-      {children}
+      {content}
     </button>
   );
 }

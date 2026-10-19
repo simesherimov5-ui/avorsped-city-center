@@ -28,7 +28,7 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
         columns.forEach((c) => (c.dataset.armed = "false"));
         observer.disconnect();
       },
-      { threshold: 0.2 }
+      { threshold: 0, rootMargin: "0px 0px -5% 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -41,7 +41,7 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
           <div className="eyebrow text-gold-deep">{head.kicker}</div>
           <h2 className="font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">
             {head.title}
-            <em className="italic text-gold-deep">{head.titleItalic}</em>
+            {head.titleItalic}
           </h2>
         </div>
         <div

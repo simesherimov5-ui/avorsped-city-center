@@ -1,53 +1,66 @@
+import { AREA_UNKNOWN_TEXT, areaText } from "./booking-config";
+
 export type BookingRequest = {
-  /** The project the visitor is looking at: its name and id in the data. Null when they are undecided. */
+  /** The project the visitor is asking about: its name and id in the data. Null when they are undecided. */
   project: string | null;
   projectId: string | null;
-  /** True for «Сè уште не знам»: the team prepares an overview of all projects. */
+  /** True for «Сè уште не знам» on the project question: the team prepares an overview of all projects. */
   undecided: boolean;
-  /** What an undecided visitor is looking for (Двособен, Трособен…); empty if they skipped it or chose a project. */
-  preferences: string[];
-  /** Only when the project has several buildings. Null when the visitor does not know which one. */
-  building?: string | null;
-  buildingId?: string | null;
-  /** True for «Не знам која зграда»: the team shows the buildings at the consultation. */
-  buildingUnknown?: boolean;
-  /** A specific apartment, if the visitor has one in mind: its label ("Стан 21 · Кат 3") and, if picked from the list, its id. */
-  unit?: string;
-  unitId?: string;
+  /** The area range the visitor wants, in m² (the top end 150 means "150+"); null when they do not know yet. */
+  areaMin: number | null;
+  areaMax: number | null;
+  /** True for «Сè уште не знам» on the area question: the team advises at the meeting. */
+  areaUnknown: boolean;
   /** ISO date and the readable label the visitor saw ("Пон 05 окт"). */
   date: string;
   dateLabel: string;
   time: string;
   name: string;
   phone: string;
+  /** Optional: where the team can write back. */
+  email?: string;
 };
 
+/** The area line of a request: "65–85 m²", or «Не знае – совет». */
+export const areaOf = (request: Pick<BookingRequest, "areaMin" | "areaMax" | "areaUnknown">): string =>
+  request.areaUnknown || request.areaMin === null || request.areaMax === null
+    ? AREA_UNKNOWN_TEXT
+    : areaText(request.areaMin, request.areaMax);
+
 /**
- * The request as plain lines, for the confirmation and for the e-mail the company receives. An undecided visitor reads
- * «Проект: не е избран» and what they are looking for, so the team knows to prepare an overview of all projects.
+ * The request as plain lines, for the e-mail the company receives. The area comes first: it is what sales has to
+ * prepare before the meeting. An undecided visitor reads «Проект: не е избран», so the team knows to prepare an
+ * overview of all projects.
  */
 export function bookingLines(request: BookingRequest): string[] {
   return [
+    `Површина: ${areaOf(request)}`,
     request.project ? `Проект: ${request.project}` : "Проект: не е избран",
-    request.undecided
-      ? `Што бара: ${request.preferences.length ? request.preferences.join(", ") : "не е наведено"}`
-      : "",
-    request.buildingUnknown ? "Зграда: не е избрана" : request.building ? `Зграда: ${request.building}` : "",
-    request.unit ? `Стан: ${request.unit}` : "",
     `Термин: ${request.dateLabel}, ${request.time}`,
     `Име: ${request.name}`,
     `Телефон: ${request.phone}`,
-  ].filter(Boolean);
+    ...(request.email ? [`Е-пошта: ${request.email}`] : []),
+  ];
+}
+
+/** The e-mail's subject and body. The subject carries the area and the project, never the visitor's own words. */
+export function bookingEmail(request: BookingRequest): { subject: string; text: string; replyTo?: string } {
+  return {
+    replyTo: request.email,
+    subject: `Нова консултација · ${areaOf(request)} · ${request.project ?? "проект не е избран"}`,
+    text: bookingLines(request).join("\n"),
+  };
 }
 
 /**
- * Hands the request to the sales team.
- *
- * TODO(client): there is no backend yet, so nothing is delivered — this only waits as a real send would. Decide
- * where bookings go (an e-mail address, a mail service or a CRM), then replace the body with that call and let
- * it throw on failure: the form already keeps the visitor's answers and shows the phone number when it does.
+ * Hands the request to the sales team: the server (app/api/booking/route.ts) checks it again and sends the e-mail.
+ * It throws on any failure; the form already keeps the visitor's answers and shows the phone number when it does.
  */
 export async function sendBooking(request: BookingRequest): Promise<void> {
-  void request;
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const response = await fetch("/api/booking", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) throw new Error(`The booking was not sent (${response.status}).`);
 }

@@ -41,20 +41,17 @@ export default function HomePage() {
       <NewProjects projects={projects.filter((p) => p.status !== "completed")} />
 
       {/* 5. The numbers */}
-      <section className="border-t border-on-chrome/10 bg-chrome text-on-chrome">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
+      <section className="grain grain--dark border-t border-on-chrome/10 bg-chrome text-on-chrome">
+        <div className="mx-auto max-w-7xl px-5 pb-16 pt-[70px] sm:px-8 sm:pb-24 lg:px-10">
           <ScrollReveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <div className="eyebrow text-accent">Од {companyInfo.founded}</div>
                 <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-                  Изградени <em className="italic text-accent">на доверба.</em>
+                  Изградени на доверба.
                 </h2>
               </div>
-              <Link
-                href="/about"
-                className="focus-ring inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
-              >
+              <Link href="/about" className="btn-tertiary focus-ring">
                 Нашата приказна
               </Link>
             </div>
@@ -75,14 +72,11 @@ export default function HomePage() {
       <Soon />
 
       {/* A line the company stands behind, on the dark */}
-      <section className="bg-chrome py-20 text-on-chrome sm:py-28">
+      <section className="grain grain--dark bg-chrome pb-10 pt-20 text-on-chrome sm:pb-12 sm:pt-28">
         <div className="mx-auto max-w-5xl px-5 sm:px-8 lg:px-10">
           <ScrollReveal>
             <PullQuote>„Зад нас стојат дела. Пред нас — визија.“</PullQuote>
-            <Link
-              href="/about"
-              className="focus-ring mt-10 inline-flex min-h-11 items-center border-b border-accent pb-1 text-xs font-semibold uppercase tracking-[0.32em] text-accent"
-            >
+            <Link href="/about" className="btn-tertiary focus-ring mt-10">
               За нас
             </Link>
           </ScrollReveal>

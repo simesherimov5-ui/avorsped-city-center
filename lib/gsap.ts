@@ -28,6 +28,9 @@ if (typeof window !== "undefined") {
   }
 }
 
+/** The site's three speeds in seconds (the CSS variables --dur-fast / --dur-base / --dur-slow), with CALM_EASE as --ease. */
+export const DUR = { fast: 0.16, base: 0.28, slow: 0.6 } as const;
+
 export function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }

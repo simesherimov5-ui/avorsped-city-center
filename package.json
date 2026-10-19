@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "image-dims": "node scripts/image-dims.mjs",
     "check": "npm run lint && npm run typecheck && npm run format:check && npm test"
   },
   "dependencies": {

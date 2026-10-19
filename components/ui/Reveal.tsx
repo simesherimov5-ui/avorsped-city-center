@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
-import { DURATION, EASE, REVEAL_DISTANCE } from "@/lib/motion";
+import { DURATION, EASE, REVEAL_DISTANCE, REVEAL_VIEWPORT } from "@/lib/motion";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 
 /**
@@ -30,11 +30,15 @@ export function Reveal({
     );
   }
 
+  // Reduced motion: the content is simply there (also before the scripts run, see [data-reveal] in globals.css).
+  if (reduceMotion) return <div>{children}</div>;
+
   return (
     <motion.div
+      data-reveal
       initial={{ opacity: 0, y: reduceMotion ? 0 : isPhone ? REVEAL_DISTANCE / 2 : REVEAL_DISTANCE }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={REVEAL_VIEWPORT}
       transition={{
         duration: reduceMotion ? DURATION.instant : isPhone ? DURATION.base : DURATION.slow,
         delay: reduceMotion || isPhone ? 0 : delay,

@@ -69,3 +69,31 @@ export function nextWorkingDays(today: string, closed: string[] = CLOSED_DATES, 
   }
   return out;
 }
+
+/** The area the visitor asks for, in m². The slider runs from `min` to `max` in steps of `step`; `max` means "and more". */
+export const AREA = { min: 55, max: 150, step: 5, defaultMin: 65, defaultMax: 85 };
+
+/** "65–85 m²", or "65–150+ m²" when the top handle is at the end of the scale. */
+export function areaText(min: number, max: number): string {
+  return `${min}–${max >= AREA.max ? `${AREA.max}+` : max} m²`;
+}
+
+/** What the booking carries when the visitor does not know the area yet. */
+export const AREA_UNKNOWN_TEXT = "Не знае – совет";
+
+/** "Пон 05 окт" for an ISO date: the label the form shows, so the server never has to trust the one it was sent. */
+export function dayLabelOf(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return `${WEEKDAYS[date.getUTCDay()]} ${pad(d)} ${MONTHS[m - 1]}`;
+}
+
+/** True for a real calendar date ("2026-10-05") that falls on Monday to Friday and is not a closed day. */
+export function isWorkingDay(iso: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  if (date.getUTCFullYear() !== y || date.getUTCMonth() !== m - 1 || date.getUTCDate() !== d) return false;
+  const dow = date.getUTCDay();
+  return dow >= 1 && dow <= 5 && !CLOSED_DATES.includes(iso);
+}

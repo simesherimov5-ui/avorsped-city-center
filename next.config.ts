@@ -16,7 +16,13 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    qualities: [75, 90, 100],
+    // Photos are requested at quality 80 (components/ui/Media.tsx); 75 is next/image's own default.
+    qualities: [75, 80],
+    // AVIF first, WebP for browsers without it.
+    formats: ["image/avif", "image/webp"],
+    // No file wider than 3200px: the largest original photo, which also covers the widest real use (a phone hero at
+    // 3x needs about 2900px; a 1920px screen at 2x is limited by the original anyway).
+    deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920, 2400, 3200],
   },
   // The old consultation page is gone: every "Закажи консултација" goes to the Контакт page. Query values
   // (project, building, apartment) are passed through, so old links keep their reference.

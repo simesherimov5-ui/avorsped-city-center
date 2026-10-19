@@ -4,6 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Media } from "@/components/ui/Media";
+import { coverSizes } from "@/lib/image-sizes";
 import { useIntro } from "@/components/intro/IntroProvider";
 import { gsap, SplitText } from "@/lib/gsap";
 import { useMediaQuery } from "@/lib/useMediaQuery";
@@ -97,7 +98,7 @@ export function Hero() {
             tone="dark"
             className="h-full w-full [&_img]:object-[50%_12%]"
             priority
-            sizes="(max-width: 767px) 160vw, 100vw"
+            sizes={coverSizes(HERO_IMAGE.src, [{ w: "100vw", h: "max(100vh, 560px)" }])}
           />
         </div>
 
@@ -121,12 +122,10 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* A dark scrim behind the invitation and the info strip: ink fading in from nothing at the top of its 460px to
-          85% at the bottom, above the photo and under the text, so their text always sits on the dark part. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[460px] bg-gradient-to-b from-ink/0 via-ink/55 to-ink/85 max-sm:to-ink/90"
-      />
+      {/* The info strip's scrim: Оникс at 60% at the top (under the navbar), clear through the middle of the photo, and
+          88% at the bottom, so the strip's text always sits on the dark part. Above the photo, under the text; the
+          photo itself is not touched. */}
+      <div aria-hidden className="hero-info-scrim pointer-events-none absolute inset-0" />
 
       {/* Sky text — the eyebrow and headline sit in the cloud band right
           below the nav, not stamped over the building. Kept deliberately
@@ -145,11 +144,11 @@ export function Hero() {
           Основано 1994
         </div>
 
-        {/* The page's h1, in the display serif: the last words in italic Светол бакар. It sits in the sky band above the
-            roofline, so its size is capped to keep both lines inside it. */}
+        {/* The page's h1, in the display serif, plain: one line from 600px up, two balanced lines on a phone (.hero-title
+            in globals.css). It sits in the sky band above the roofline. */}
         <h1
           ref={headlineRef}
-          className="mx-auto mt-3 max-w-[760px] text-balance text-(length:--fs-hero)! font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
+          className="hero-title mx-auto mt-3 font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
         >
           Добредојдовте во вашиот нов дом
         </h1>
@@ -161,15 +160,13 @@ export function Hero() {
       {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
-          <span className="text-[12px] font-medium uppercase tracking-[0.24em] text-gold sm:text-[13px]">
+          <span className="text-label font-medium uppercase tracking-label text-gold sm:text-[13px]">
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-brass sm:text-[12px]">
-              — Javor Sped Holding
-            </span>
-            <span className="text-[14px] font-normal leading-[1.5] text-gold sm:text-[15px]">
-              Секоја адреса има своја приказна. Откријте ја вашата.
+            <span className="text-label font-semibold uppercase tracking-label text-brass">— Javor Sped Holding</span>
+            <span className="text-[17px] font-normal leading-[1.5] text-gold">
+              Секоја адреса има приказна. Најдете ја вашата.
             </span>
           </span>
         </div>
