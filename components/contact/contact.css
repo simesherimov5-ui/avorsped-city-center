@@ -66,6 +66,7 @@
 
 /* B3 — the form: a bordered panel like the «Директно» card (same border, padding and surface), the lead inside it */
 .ct-panel {
+  position: relative;
   width: 100%;
   max-width: none;
   min-width: 0;
@@ -91,6 +92,29 @@
   padding: 24px 0;
   border-top: 1px solid var(--color-line);
 }
+/* The thin gold line along the top edge of the form: the share of the four steps answered. It grows by scale (600ms). */
+.ct-progress {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ct-progress i {
+  display: block;
+  height: 100%;
+  background: var(--color-gold);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-progress i {
+    transition: none;
+  }
+}
+
 /* The options of a step come in one after another. */
 @keyframes ct-opt-in {
   from {
@@ -151,29 +175,6 @@
 .ct-edit:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
-}
-.ct-sub {
-  padding-top: 20px;
-}
-.ct-sub-label {
-  margin: 0 0 10px;
-  color: var(--mute);
-}
-.ct-sub-label:not(:first-child) {
-  margin-top: 20px;
-}
-.ct-unit-text {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 16px 20px;
-}
-.ct-unit-text .ct-field {
-  flex: 1 1 220px;
-}
-.ct-go:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 .ct-step-h {
   display: flex;
@@ -248,13 +249,6 @@
   font-size: 14px;
   line-height: 1.6;
   color: var(--mute);
-}
-.ct-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 20px;
-  margin-top: 20px;
 }
 .ct-chip.is-mono {
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -744,4 +738,264 @@ a.ct-val:focus-visible {
 .bk-btn:focus-visible {
   outline: 2px solid var(--color-copper);
   outline-offset: 3px;
+}
+
+/* ───────── Step 02, the area range ───────── */
+
+/* The area and contact steps open with a small label, then the question, then (for the area) one line of help. */
+.ct-step-h2 {
+  margin: 0 0 20px;
+}
+.ct-eyebrow,
+.ct-field-label,
+.ct-area-ends {
+  font:
+    600 12px/1.6 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
+}
+.ct-eyebrow,
+.ct-field-label {
+  text-transform: uppercase;
+}
+.ct-eyebrow {
+  color: var(--color-gold);
+}
+.ct-step-title {
+  margin: 8px 0 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: var(--fs-statement);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--color-paper);
+}
+.ct-step-help {
+  margin: 8px 0 0;
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mute);
+}
+
+.ct-area {
+  --thumb: 44px;
+}
+/* the big readout, centred, in the heading font and the gold */
+.ct-area-read {
+  text-align: center;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-gold);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.ct-area-ends {
+  display: flex;
+  justify-content: space-between;
+  margin: 18px 0 0;
+  padding: 0 calc(var(--thumb) / 2 - 12px);
+  color: var(--mute);
+  transition: opacity var(--dur-base) var(--ease);
+}
+.ct-area-ends.is-off {
+  opacity: 0.4;
+}
+
+/* One track, two overlaid range inputs. The inputs are for the keyboard and screen readers: the pointer is handled on
+   the track (AreaSlider.tsx), which grabs the nearest handle. A handle is dragged sideways; a vertical swipe still
+   scrolls the page. */
+.ct-range {
+  position: relative;
+  height: var(--thumb);
+  margin-top: 4px;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ct-range-track,
+.ct-range-fill {
+  position: absolute;
+  top: 50%;
+  pointer-events: none;
+}
+.ct-range-track {
+  left: calc(var(--thumb) / 2);
+  right: calc(var(--thumb) / 2);
+  height: 1px;
+  background: color-mix(in srgb, var(--color-paper) 30%, transparent);
+  transform: translateY(-50%);
+}
+.ct-range-fill {
+  height: 2px;
+  background: var(--color-gold);
+  transform: translateY(-50%);
+  transition: opacity var(--dur-base) var(--ease);
+}
+.ct-range.is-off .ct-range-fill {
+  opacity: 0;
+}
+.ct-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.ct-range-input::-webkit-slider-runnable-track {
+  height: var(--thumb);
+  background: transparent;
+  border: 0;
+}
+.ct-range-input::-moz-range-track {
+  height: var(--thumb);
+  background: transparent;
+  border: 0;
+}
+/* The handle: a 44px target (easy to drag on touch) that draws a 24px round handle, dark with a 1px gold border. */
+.ct-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb);
+  height: var(--thumb);
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-ink) 0 11px, var(--color-gold) 11px 12px, transparent 12px);
+}
+.ct-range-input::-moz-range-thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-ink) 0 11px, var(--color-gold) 11px 12px, transparent 12px);
+}
+/* the keyboard focus ring, round, around the 24px handle */
+.ct-range-input:focus-visible::-webkit-slider-thumb {
+  background: radial-gradient(
+    circle,
+    var(--color-ink) 0 11px,
+    var(--color-gold) 11px 12px,
+    transparent 12px 15px,
+    var(--foil-light) 15px 17px,
+    transparent 17px
+  );
+}
+.ct-range-input:focus-visible::-moz-range-thumb {
+  background: radial-gradient(
+    circle,
+    var(--color-ink) 0 11px,
+    var(--color-gold) 11px 12px,
+    transparent 12px 15px,
+    var(--foil-light) 15px 17px,
+    transparent 17px
+  );
+}
+.ct-range.is-off .ct-range-input::-webkit-slider-thumb {
+  opacity: 0.6;
+}
+.ct-range.is-off .ct-range-input::-moz-range-thumb {
+  opacity: 0.6;
+}
+
+/* the scale under the track */
+.ct-range-scale {
+  position: relative;
+  height: 20px;
+  margin-top: 2px;
+}
+.ct-range-scale span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font:
+    400 12px/1.6 var(--font-sans),
+    system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--mute);
+}
+
+.ct-area-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 24px;
+}
+/* «Сè уште не знам» when it is on: a gold outline (it is a chosen state, not a hover) */
+.ct-area-actions .btn-secondary[aria-pressed="true"] {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+.ct-btn--sm {
+  padding: 14px 28px;
+}
+@media (max-width: 480px) {
+  .ct-area-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ct-area-actions .btn-secondary,
+  .ct-area-actions .ct-btn {
+    width: 100%;
+  }
+}
+
+/* ───────── Step 04, the contact fields ───────── */
+
+.ct-field-label {
+  color: var(--color-gold);
+}
+.ct-fields .ct-input input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--color-paper) 30%, transparent);
+  background: transparent;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.ct-fields .ct-input input::placeholder {
+  color: color-mix(in srgb, var(--color-paper) 40%, transparent);
+}
+.ct-fields .ct-input input:focus {
+  border-color: var(--color-gold);
+}
+/* the gold border replaces the growing underline here */
+.ct-fields .ct-input::after {
+  display: none;
+}
+.ct-fields .ct-input input[aria-invalid="true"] {
+  border-color: var(--color-gold-light);
+}
+@media (max-width: 760px) and (min-width: 481px) {
+  .ct-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .ct-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* «Закажи» looks disabled until the name and phone are good (it stays clickable, to say what is missing) */
+.ct-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+@media (hover: hover) {
+  .ct-btn[aria-disabled="true"]:hover:not(:disabled) {
+    border-color: var(--foil-line);
+    color: var(--foil-line);
+  }
+}
+.ct-btn[aria-disabled="true"]:active:not(:disabled) {
+  transform: none;
 }

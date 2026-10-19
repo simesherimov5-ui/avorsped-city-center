@@ -5,59 +5,51 @@ import { flushSync } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis";
-import { formatArea } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import { AreaSlider } from "./AreaSlider";
 import { RadioGroup } from "./RadioGroup";
 import { BookingConfirmation } from "./BookingConfirmation";
-import { buildSlots, nextWorkingDays, todayIso } from "./booking-config";
-import { sendBooking, type BookingRequest } from "./send-booking";
+import { AREA, buildSlots, nextWorkingDays, todayIso } from "./booking-config";
+import { isValidName, isValidPhone, sanitizePhone } from "./booking-validate";
+import { areaOf, sendBooking, type BookingRequest } from "./send-booking";
 
-/** A project the visitor can ask about, with its buildings if it has any. Passed in by the page, from the data. */
-export type ProjectOption = { id: string; name: string; buildings: { id: string; name: string }[] };
-/** An apartment that can be asked about (available, or the one the visitor came from). */
-export type UnitOption = {
-  id: string;
-  projectId: string;
-  buildingId?: string;
-  floor: number;
-  /** The floor's name as its building's data calls it ("Кат 2", "Поткровје"). */
-  floorLabel: string;
-  number: string;
-  area: number;
-  areaDecimals?: number;
-};
-export type BookingStart = { projectId?: string; buildingId?: string; unitId?: string };
+/** A project the visitor can ask about. Passed in by the page, from the data. */
+export type ProjectOption = { id: string; name: string };
+/** Set when the visitor arrives from a project page (an apartment or building in the link only tells us the project). */
+export type BookingStart = { projectId?: string };
 
-type StepId = "project" | "building" | "unit" | "prefs" | "when" | "details";
+type StepId = "project" | "area" | "when" | "details";
 type Field = "name" | "phone";
 type Errors = Partial<Record<Field, string>>;
 
 const SLOTS = buildSlots();
-/** The «not sure yet» answer to the first question: no project, and the visitor is advised at the consultation. */
+/** The «not sure yet» answer to the first question: no project, and the visitor is advised at the meeting. */
 const UNDECIDED = "undecided";
-/** The same for the building: «Не знам која зграда» skips the apartment question. */
-const UNKNOWN_BUILDING = "unknown-building";
-const PREFERENCES = ["Гарсоњера", "Еднособен", "Двособен", "Трособен"];
 const MESSAGES: Record<Field, string> = {
   name: "Внесете име и презиме.",
   phone: "Внесете телефонски број со најмалку 8 цифри.",
 };
+/** The question of each step (the first and the third keep their question as heading, as before). */
 const TITLES: Record<StepId, string> = {
   project: "Каде барате?",
-  building: "Која зграда?",
-  unit: "Дали имате конкретен стан?",
-  prefs: "Што барате?",
+  area: "Колкава површина ви е потребна?",
   when: "Изберете ден и час",
-  details: "Ваши податоци",
+  details: "Како да ве контактираме?",
 };
+/** What an answered row calls its step. */
+const ROW_LABELS: Record<StepId, string> = {
+  project: "Каде барате?",
+  area: "Површина",
+  when: "Изберете ден и час",
+  details: "Контакт",
+};
+/** The small label above the heading of the area and contact steps. */
+const EYEBROWS: Partial<Record<StepId, string>> = { area: "ПОВРШИНА", details: "КОНТАКТ" };
 
 // "Today" in the booking time zone as a string snapshot: the server renders no days (its clock is not the
 // visitor's), the browser fills them in on hydration, and a cached page can never show old dates.
 const subscribeNever = () => () => {};
 const noToday = () => "";
-
-const floorName = (floor: number, units: UnitOption[]) =>
-  units.find((u) => u.floor === floor)?.floorLabel ?? (floor === 0 ? "Приземје" : `Кат ${floor}`);
 
 /** Slides a field 6px each way once, gently, to point at what is missing. */
 function shake(el: Element | null) {
@@ -104,39 +96,30 @@ function Collapse({
 }
 
 /**
- * The guided booking form. It asks one thing at a time: the project, the building (only for a project that has
- * buildings), whether the visitor has a specific apartment in mind (and which), the day and time, then name and phone.
- * An answered step folds into one summary row with «Измени»; changing an answer clears the answers that depended on it.
+ * The guided booking form. It asks one thing at a time: the project, the area range the visitor wants (so sales knows
+ * what to prepare), the day and time, then name and phone. An answered step folds into one summary row with «Измени»,
+ * which jumps straight back to that step; afterwards the form returns to the first step still unanswered. Nothing
+ * depends on anything else, so changing an answer never clears another.
  */
 export function ContactForm({
   projects,
-  units,
   start,
   phone: officePhone,
 }: {
   projects: ProjectOption[];
-  units: UnitOption[];
-  /** Set when the visitor arrives from an apartment, building or project page. */
+  /** Set when the visitor arrives from a project (or apartment) page. */
   start?: BookingStart;
   /** The office phone, shown if sending fails. */
   phone: string;
 }) {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const startUnit = units.find((u) => u.id === start?.unitId);
   const [projectId, setProjectId] = useState(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
-  const [buildingId, setBuildingId] = useState(start?.buildingId ?? "");
-  const [buildingUnknown, setBuildingUnknown] = useState(false);
-  const [hasUnit, setHasUnit] = useState<"" | "yes" | "no">(startUnit ? "yes" : "");
-  const [floor, setFloor] = useState(startUnit ? String(startUnit.floor) : "");
-  const [unitId, setUnitId] = useState(startUnit?.id ?? "");
-  // Without a list of apartments for the project the visitor types the number, and confirms it.
-  const [unitText, setUnitText] = useState("");
-  const [unitTextOk, setUnitTextOk] = useState(false);
   const [undecided, setUndecided] = useState(false);
-  // What the undecided visitor is looking for. Optional: the step is a folded row that «Додај» opens, and it never
-  // holds up the day and time step.
-  const [prefs, setPrefs] = useState<string[]>([]);
-  const [prefsOpen, setPrefsOpen] = useState(false);
+  const [areaLow, setAreaLow] = useState<number>(AREA.defaultMin);
+  const [areaHigh, setAreaHigh] = useState<number>(AREA.defaultMax);
+  const [areaUnknown, setAreaUnknown] = useState(false);
+  // The area step is answered when the visitor confirms it (the default range is only a starting point).
+  const [areaDone, setAreaDone] = useState(false);
   const [dayIso, setDayIso] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
@@ -154,40 +137,17 @@ export function ContactForm({
   const day = days.find((d) => d.iso === dayIso);
 
   const project = projects.find((p) => p.id === projectId);
-  const needsBuilding = (project?.buildings.length ?? 0) > 0;
-  const building = project?.buildings.find((b) => b.id === buildingId);
-  // The apartments the visitor can pick: those of the chosen building. A project with no list gets the text field.
-  const pool = !project
-    ? []
-    : needsBuilding
-      ? building
-        ? units.filter((u) => u.buildingId === building.id)
-        : []
-      : units.filter((u) => u.projectId === project.id);
-  const floors = [...new Set(pool.map((u) => u.floor))].sort((a, b) => a - b);
-  const floorUnits = pool.filter((u) => String(u.floor) === floor);
-  const unit = pool.find((u) => u.id === unitId);
-  const unitLabel = unit
-    ? `Стан ${unit.number} · ${unit.floorLabel}`
-    : unitTextOk && unitText.trim()
-      ? `Стан ${unitText.trim()}`
-      : "";
+  const areaText = areaOf({
+    areaMin: areaLow,
+    areaMax: areaHigh,
+    areaUnknown,
+  });
 
   // Which steps are answered, and so which are on screen: every step up to the first unanswered one.
-  const order: StepId[] = undecided
-    ? ["project", "prefs", "when", "details"]
-    : [
-        "project",
-        ...(needsBuilding ? (["building"] as const) : []),
-        ...(buildingUnknown ? [] : (["unit"] as const)),
-        "when",
-        "details",
-      ];
+  const order: StepId[] = ["project", "area", "when", "details"];
   const answered: Record<StepId, boolean> = {
     project: Boolean(project) || undecided,
-    building: Boolean(building) || buildingUnknown,
-    unit: hasUnit === "no" || (hasUnit === "yes" && Boolean(unit || unitTextOk)),
-    prefs: true,
+    area: areaDone,
     when: Boolean(day && time),
     details: false,
   };
@@ -201,80 +161,32 @@ export function ContactForm({
 
   const summaryOf = (id: StepId) => {
     if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
-    if (id === "prefs") return prefs.length ? prefs.join(", ") : "По желба";
-    if (id === "building") return buildingUnknown ? "Не знам која зграда" : (building?.name ?? "");
-    if (id === "unit") return hasUnit === "no" ? "Не" : unitLabel;
+    if (id === "area") return areaUnknown ? "Сè уште не знам" : areaText.replace("–", " – ");
     if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
     return "";
   };
   const summary = [
     undecided ? "Проект: не е избран" : project?.name,
-    undecided && prefs.length ? `Што бара: ${prefs.join(", ")}` : undefined,
-    buildingUnknown ? "Зграда: не е избрана" : building?.name,
-    hasUnit === "yes" ? unitLabel : undefined,
+    `Површина: ${areaText}`,
     day?.label,
     time || undefined,
   ]
     .filter(Boolean)
     .join(" · ");
 
-  // ---- answers: each one clears what depended on it
-  const clearUnit = () => {
-    setFloor("");
-    setUnitId("");
-    setUnitText("");
-    setUnitTextOk(false);
-  };
+  // ---- answers (nothing depends on anything else, so each one only sets itself)
   const pickProject = (id: string) => {
     const next = id === UNDECIDED;
-    if (next !== undecided || (!next && id !== projectId)) {
-      // a different answer: whatever hung on the old one goes
-      setUndecided(next);
-      setProjectId(next ? "" : id);
-      setBuildingId("");
-      setBuildingUnknown(false);
-      setHasUnit("");
-      clearUnit();
-      setPrefs([]);
-      setPrefsOpen(false);
-    }
+    setUndecided(next);
+    setProjectId(next ? "" : id);
     setEditing(null);
   };
-  const togglePref = (value: string) => {
-    setPrefs((list) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value]));
+  const moveArea = (low: number, high: number) => {
+    setAreaLow(low);
+    setAreaHigh(high);
   };
-  /** «Додај» / «Измени» opens the chips and moves focus into them; «Готово» folds them and returns focus to the row. */
-  const setPrefsShown = (open: boolean) => {
-    setPrefsOpen(open);
-    window.setTimeout(
-      () => {
-        const wrap = form.current?.querySelector<HTMLElement>('[data-step-wrap="prefs"]');
-        wrap?.querySelector<HTMLElement>(open ? "button.ct-tog" : "button.ct-edit")?.focus({ preventScroll: true });
-      },
-      reduce ? 0 : 340
-    );
-  };
-  const pickBuilding = (id: string) => {
-    const unknown = id === UNKNOWN_BUILDING;
-    if (unknown !== buildingUnknown || (!unknown && id !== buildingId)) {
-      setBuildingUnknown(unknown);
-      setBuildingId(unknown ? "" : id);
-      setHasUnit("");
-      clearUnit();
-    }
-    setEditing(null);
-  };
-  const pickHasUnit = (value: "yes" | "no") => {
-    if (value !== hasUnit) clearUnit();
-    setHasUnit(value);
-    setEditing(null);
-  };
-  const pickFloor = (value: string) => {
-    if (value !== floor) setUnitId("");
-    setFloor(value);
-  };
-  const pickUnit = (id: string) => {
-    setUnitId(id);
+  const confirmArea = () => {
+    setAreaDone(true);
     setEditing(null);
   };
   const pickDay = (iso: string) => {
@@ -308,9 +220,7 @@ export function ContactForm({
           if (lenis) lenis.scrollTo(y, { duration: reduce ? 0 : 0.9, immediate: reduce });
           else window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
         }
-        step
-          .querySelector<HTMLElement>('[role="radio"][tabindex="0"], input, button.ct-go, button.ct-tog')
-          ?.focus({ preventScroll: true });
+        step.querySelector<HTMLElement>('[role="radio"][tabindex="0"], input')?.focus({ preventScroll: true });
       },
       reduce ? 0 : 340
     );
@@ -322,15 +232,10 @@ export function ContactForm({
   function reset() {
     setProjectId(projects.some((p) => p.id === start?.projectId) ? start!.projectId! : "");
     setUndecided(false);
-    setPrefs([]);
-    setPrefsOpen(false);
-    setBuildingId(start?.buildingId ?? "");
-    setBuildingUnknown(false);
-    setHasUnit(startUnit ? "yes" : "");
-    setFloor(startUnit ? String(startUnit.floor) : "");
-    setUnitId(startUnit?.id ?? "");
-    setUnitText("");
-    setUnitTextOk(false);
+    setAreaLow(AREA.defaultMin);
+    setAreaHigh(AREA.defaultMax);
+    setAreaUnknown(false);
+    setAreaDone(false);
     setDayIso("");
     setTime("");
     setName("");
@@ -342,16 +247,15 @@ export function ContactForm({
 
   function validate(): Errors {
     const next: Errors = {};
-    if (name.trim().length < 2) next.name = MESSAGES.name;
-    const digits = phone.replace(/\D/g, "");
-    if (digits.length < 8 || digits.length > 15 || !/^[+\d\s()/.-]+$/.test(phone.trim())) next.phone = MESSAGES.phone;
+    if (!isValidName(name)) next.name = MESSAGES.name;
+    if (!isValidPhone(phone)) next.phone = MESSAGES.phone;
     return next;
   }
 
   /** Moves focus into the first field that is missing and shakes it once. */
   function showFirstError(next: Errors) {
     const first = (["name", "phone"] as Field[]).find((f) => next[f]);
-    const field = first && form.current?.querySelector<HTMLElement>(`[data-step="${first}"]`);
+    const field = first && form.current?.querySelector<HTMLElement>(`[data-field="${first}"]`);
     if (!first || !field) return;
     field.querySelector<HTMLElement>("input")?.focus({ preventScroll: true });
     const header = document.querySelector("header");
@@ -363,6 +267,10 @@ export function ContactForm({
     shake(field);
   }
 
+  // «Закажи» looks disabled until the name and phone are good, but stays clickable (aria-disabled), so pressing it
+  // (or Enter in a field) can say what is missing under the field.
+  const canSend = isValidName(name) && isValidPhone(phone);
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (status === "sending") return;
@@ -373,18 +281,14 @@ export function ContactForm({
       return;
     }
     // every earlier step must be answered (they always are once this step is on screen)
-    if (!day || !time) return;
-    if (!undecided && (!project || !answered.building || (!buildingUnknown && !answered.unit))) return;
+    if (!day || !time || !areaDone || (!undecided && !project)) return;
     const request: BookingRequest = {
       project: undecided ? null : project!.name,
       projectId: undecided ? null : project!.id,
       undecided,
-      preferences: undecided ? prefs : [],
-      building: undecided ? undefined : buildingUnknown ? null : building?.name,
-      buildingId: undecided ? undefined : buildingUnknown ? null : building?.id,
-      buildingUnknown: !undecided && buildingUnknown,
-      unit: !undecided && !buildingUnknown && hasUnit === "yes" ? unitLabel || undefined : undefined,
-      unitId: !undecided && !buildingUnknown && hasUnit === "yes" ? unit?.id : undefined,
+      areaMin: areaUnknown ? null : areaLow,
+      areaMax: areaUnknown ? null : areaHigh,
+      areaUnknown,
       date: day.iso,
       dateLabel: day.label,
       time,
@@ -416,39 +320,48 @@ export function ContactForm({
     ) : null;
 
   /** One step: a summary row when answered and closed, the question itself when open, nothing before its turn. */
-  const step = (id: StepId, body: ReactNode, note?: ReactNode) => {
+  const step = (id: StepId, body: ReactNode, note?: ReactNode, help?: string) => {
     const index = visible.indexOf(id);
     if (index < 0) return null;
     const number = String(index + 1).padStart(2, "0");
-    // «Што барате?» is optional: it opens and closes on its own and is not part of the one-step-at-a-time flow.
-    const optional = id === "prefs";
-    const isOpen = optional ? prefsOpen : openId === id;
+    const isOpen = openId === id;
     const isFolded = !isOpen && answered[id];
-    const empty = optional && prefs.length === 0;
-    const action = optional && empty ? "Додај" : "Измени";
+    const eyebrow = EYEBROWS[id];
     return (
       <div key={id} className="ct-step-wrap" data-step-wrap={id}>
         <Collapse show={isOpen} reduce={reduce} enter>
           <section data-step={id} className="ct-step" aria-labelledby={`ct-h-${id}`}>
-            <div className="ct-step-h bk-label" id={`ct-h-${id}`} role="heading" aria-level={2}>
-              <b className="ct-step-n bk-mono">{number}</b>
-              <span>{TITLES[id]}</span>
-            </div>
+            {eyebrow ? (
+              <div className="ct-step-h2">
+                <div className="ct-eyebrow">
+                  {number} · {eyebrow}
+                </div>
+                <h2 id={`ct-h-${id}`} className="ct-step-title">
+                  {TITLES[id]}
+                </h2>
+                {help && <p className="ct-step-help">{help}</p>}
+              </div>
+            ) : (
+              <div className="ct-step-h bk-label" id={`ct-h-${id}`} role="heading" aria-level={2}>
+                <b className="ct-step-n bk-mono">{number}</b>
+                <span>{TITLES[id]}</span>
+              </div>
+            )}
             {body}
           </section>
         </Collapse>
         <Collapse show={isFolded} reduce={reduce}>
           <div className="ct-step ct-sumrow">
             <b className="ct-step-n bk-mono">{number}</b>
-            <span className="ct-sumrow-label bk-label">{TITLES[id]}</span>
-            <span className={empty ? "ct-sumrow-value is-muted" : "ct-sumrow-value"}>{summaryOf(id)}</span>
+            <span className="ct-sumrow-label bk-label">{ROW_LABELS[id]}</span>
+            <span className="ct-sumrow-value">{summaryOf(id)}</span>
             <button
               type="button"
               className="ct-edit"
-              aria-label={`${action}: ${TITLES[id]}`}
-              onClick={() => (optional ? setPrefsShown(true) : setEditing(id))}
+              aria-label={`Измени: ${ROW_LABELS[id]}`}
+              onClick={() => setEditing(id)}
             >
-              {action}
+              Измени
             </button>
           </div>
         </Collapse>
@@ -461,6 +374,9 @@ export function ContactForm({
     );
   };
 
+  // How far along: the share of the four steps answered (all of it once the booking is sent).
+  const progress = confirmation.open ? 1 : order.filter((id) => answered[id]).length / order.length;
+
   return (
     <>
       <form
@@ -471,6 +387,9 @@ export function ContactForm({
         onSubmit={onSubmit}
         aria-label="Закажете консултација"
       >
+        <div className="ct-progress" aria-hidden>
+          <i style={{ transform: `scaleX(${progress})` }} />
+        </div>
         <p className="ct-lead">Неколку кратки чекори. Ние ќе ви се јавиме за потврда на терминот.</p>
 
         {step(
@@ -496,154 +415,39 @@ export function ContactForm({
           undecided ? "Нема проблем – на консултацијата заедно ќе ги разгледаме сите проекти." : null
         )}
 
-        {undecided &&
-          step(
-            "prefs",
-            <>
-              <div role="group" aria-label={TITLES.prefs} data-group="prefs" data-stagger className="ct-chips">
-                {PREFERENCES.map((label, i) => (
-                  <button
-                    key={label}
-                    type="button"
-                    aria-pressed={prefs.includes(label)}
-                    className="ct-chip ct-tog"
-                    style={{ animationDelay: `${i * 40}ms` }}
-                    onClick={() => togglePref(label)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className="ct-actions">
-                <button type="button" className="ct-chip ct-go" onClick={() => setPrefsShown(false)}>
-                  Готово
-                </button>
-              </div>
-            </>
-          )}
-
-        {needsBuilding &&
-          !undecided &&
-          step(
-            "building",
-            <RadioGroup
-              groupId="building"
-              label={TITLES.building}
-              className="ct-chips"
-              itemClassName="ct-chip"
-              stagger
-              value={buildingUnknown ? UNKNOWN_BUILDING : buildingId}
-              onChange={pickBuilding}
-              options={[
-                ...(project?.buildings ?? []).map((b) => ({ value: b.id, label: b.name, content: b.name })),
-                {
-                  value: UNKNOWN_BUILDING,
-                  label: "Не знам која зграда",
-                  content: "Не знам која зграда",
-                  className: "is-secondary",
-                },
-              ]}
+        {step(
+          "area",
+          <>
+            <AreaSlider
+              low={areaLow}
+              high={areaHigh}
+              unknown={areaUnknown}
+              onRange={moveArea}
+              onUnknown={setAreaUnknown}
             />
-          )}
-
-        {!undecided &&
-          step(
-            "unit",
-            <>
-              <RadioGroup
-                groupId="has-unit"
-                label={TITLES.unit}
-                className="ct-chips"
-                itemClassName="ct-chip"
-                stagger
-                value={hasUnit}
-                onChange={(v) => pickHasUnit(v as "yes" | "no")}
-                options={[
-                  { value: "yes", label: "Да", content: "Да" },
-                  { value: "no", label: "Не", content: "Не" },
-                ]}
-              />
-              <Collapse show={hasUnit === "yes"} reduce={reduce}>
-                <div className="ct-sub">
-                  {pool.length > 0 ? (
-                    <>
-                      <div className="ct-sub-label bk-label">Кат</div>
-                      <RadioGroup
-                        groupId="floor"
-                        label="Кат"
-                        className="ct-chips"
-                        itemClassName="ct-chip"
-                        stagger
-                        value={floor}
-                        onChange={pickFloor}
-                        options={floors.map((f) => ({
-                          value: String(f),
-                          label: floorName(f, pool),
-                          content: floorName(f, pool),
-                        }))}
-                      />
-                      <Collapse show={floorUnits.length > 0} reduce={reduce}>
-                        <div className="ct-sub-label bk-label">Стан</div>
-                        <RadioGroup
-                          groupId="unit"
-                          label="Стан"
-                          className="ct-chips"
-                          itemClassName="ct-chip is-mono"
-                          stagger
-                          value={unitId}
-                          onChange={pickUnit}
-                          options={floorUnits.map((u) => ({
-                            value: u.id,
-                            label: `Стан ${u.number}, ${formatArea(u.area, u.areaDecimals)}`,
-                            content: u.number,
-                          }))}
-                        />
-                      </Collapse>
-                    </>
-                  ) : (
-                    <div className="ct-unit-text">
-                      <div className="ct-field">
-                        <label htmlFor="ct-unit-text" className="bk-label">
-                          Број на стан
-                        </label>
-                        <div className="ct-input">
-                          <input
-                            id="ct-unit-text"
-                            type="text"
-                            inputMode="text"
-                            autoComplete="off"
-                            value={unitText}
-                            onChange={(e) => {
-                              setUnitText(e.target.value);
-                              setUnitTextOk(false);
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && unitText.trim()) {
-                                e.preventDefault();
-                                setUnitTextOk(true);
-                                setEditing(null);
-                              }
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className="ct-chip ct-go"
-                        disabled={!unitText.trim()}
-                        onClick={() => {
-                          setUnitTextOk(true);
-                          setEditing(null);
-                        }}
-                      >
-                        Продолжи
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </Collapse>
-            </>
-          )}
+            <div className="ct-area-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                data-tone="dark"
+                aria-pressed={areaUnknown}
+                onClick={() => setAreaUnknown((v) => !v)}
+              >
+                Сè уште не знам
+              </button>
+              <button type="button" className="ct-btn ct-btn--sm" onClick={confirmArea}>
+                <span>Продолжи</span>
+                <span aria-hidden className="ct-btn__arrow">
+                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
+                    <path d="M0 4h13M9 1l4 3-4 3" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </>,
+          undefined,
+          "Поместете ги двата граничника. Нашиот тим ќе подготви станови во овој опсег."
+        )}
 
         {step(
           "when",
@@ -691,9 +495,9 @@ export function ContactForm({
           "details",
           <>
             <div className="ct-fields">
-              <div className="ct-field" data-step="name">
-                <label htmlFor="ct-name" className="bk-label">
-                  Име и презиме
+              <div className="ct-field" data-field="name">
+                <label htmlFor="ct-name" className="ct-field-label">
+                  ИМЕ И ПРЕЗИМЕ
                 </label>
                 <div className="ct-input">
                   <input
@@ -701,6 +505,7 @@ export function ContactForm({
                     name="name"
                     type="text"
                     autoComplete="name"
+                    maxLength={100}
                     value={name}
                     aria-required="true"
                     aria-invalid={errors.name ? true : undefined}
@@ -713,9 +518,9 @@ export function ContactForm({
                 </div>
                 {error("name")}
               </div>
-              <div className="ct-field" data-step="phone">
-                <label htmlFor="ct-phone" className="bk-label">
-                  Телефон
+              <div className="ct-field" data-field="phone">
+                <label htmlFor="ct-phone" className="ct-field-label">
+                  ТЕЛЕФОН
                 </label>
                 <div className="ct-input">
                   <input
@@ -724,12 +529,14 @@ export function ContactForm({
                     type="tel"
                     inputMode="tel"
                     autoComplete="tel"
+                    placeholder="+389 7_ ___ ___"
                     value={phone}
                     aria-required="true"
                     aria-invalid={errors.phone ? true : undefined}
                     aria-describedby={describe("phone")}
                     onChange={(e) => {
-                      setPhone(e.target.value);
+                      // numbers only, as typed or pasted
+                      setPhone(sanitizePhone(e.target.value));
                       clearError("phone");
                     }}
                   />
@@ -745,6 +552,7 @@ export function ContactForm({
                 className="ct-btn"
                 data-tone="dark"
                 disabled={status === "sending"}
+                aria-disabled={canSend ? undefined : true}
                 aria-busy={status === "sending"}
               >
                 <span>{status === "sending" ? "Се испраќа…" : "Закажи"}</span>

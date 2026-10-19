@@ -222,8 +222,8 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 
 ### 6.2 Where the bookings go
 
-- **Where:** `components/contact/send-booking.ts` (separate follow-up).
-- **Needed:** the e-mail address(es) that receive a booking, the Web3Forms access key (created by the company), and who answers within what time (the confirmation text promises a call back).
+- **Where:** `app/api/booking/route.ts` (the settings are listed in its comment and in `docs/before-launch.md`).
+- **Needed:** the e-mail address(es) that receive a booking, a Resend account with a verified sender domain and its API key (created by the company), and who answers within what time (the confirmation text promises a call back).
 - **Do not paste the key into chat or into a commit:** it goes into an environment variable.
 
 ### 6.3 Map provider
