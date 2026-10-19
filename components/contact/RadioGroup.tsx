@@ -1,13 +1,15 @@
 "use client";
 
-import type { KeyboardEvent, ReactNode } from "react";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export type RadioOption = { value: string; content: ReactNode; label: string; className?: string };
 
 /**
- * A real radio group: one choice at a time, Tab moves into and out of the group (to the chosen option, or the
- * first), and the arrow keys move the choice inside it. Visible focus comes from the item class.
+ * A radio group: one choice at a time. Tab moves into and out of the group (to the option last focused, else the chosen
+ * one, else the first). The arrow keys, Home and End only move focus between the options; an option is picked only with
+ * Enter, Space or a click, because in the booking form a pick also answers the step and moves on. Visible focus comes
+ * from the item class.
  */
 export function RadioGroup({
   options,
@@ -43,7 +45,9 @@ export function RadioGroup({
 }) {
   const gap = enterGap ?? (options.length <= 4 ? 350 : 180);
   const chosen = options.findIndex((o) => o.value === value);
-  const tabStop = chosen >= 0 ? chosen : 0;
+  // the option the keyboard is on (it keeps the one tab stop of the group)
+  const [focused, setFocused] = useState<number | null>(null);
+  const tabStop = focused !== null && focused < options.length ? focused : chosen >= 0 ? chosen : 0;
 
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
     const last = options.length - 1;
@@ -54,7 +58,7 @@ export function RadioGroup({
     else if (e.key === "End") next = last;
     if (next < 0) return;
     e.preventDefault();
-    onChange(options[next].value);
+    setFocused(next);
     e.currentTarget.parentElement?.querySelectorAll<HTMLElement>('[role="radio"]')[next]?.focus();
   };
 
@@ -78,7 +82,9 @@ export function RadioGroup({
           tabIndex={i === tabStop ? 0 : -1}
           className={cn(itemClassName, option.className)}
           style={stagger ? { animationDelay: `${enterStart + i * gap}ms` } : undefined}
+          // a button: Enter and Space click it, so they pick as a click does
           onClick={() => onChange(option.value)}
+          onFocus={() => setFocused(i)}
           onKeyDown={(e) => onKeyDown(e, i)}
         >
           {option.content}
