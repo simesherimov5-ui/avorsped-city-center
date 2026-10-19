@@ -27,6 +27,9 @@
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
   --color-bronze: #6d533e;
+  /* Светол бакар: used only by the Контакт page, which keeps the look of the deployed site (its «Закажи» and the
+     confirmation's «Во ред», components/contact/contact.css). Every other button is the antique foil. */
+  --color-copper: #ddb28e;
   /* The two golds of the site. Logo gold: the logos, the preloader, the page transitions and every accent text (eyebrows,
      labels, numbers, links, the active tab). No gold on buttons: those use the antique foil below. */
   --color-gold: #c4a454;

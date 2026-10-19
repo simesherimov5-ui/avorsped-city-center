@@ -59,14 +59,14 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const start = { projectId: project?.id, buildingId: building?.id, unitId: apartment?.id };
 
   return (
-    <div data-theme="black" className="bk-page grain grain--dark">
+    <div data-theme="black" className="bk-page">
       <ContactStage>
         <header className="ct-head bk-wrap">
           <div data-seq="eyebrow" className="bk-eyebrow ct-pre">
             Контакт
           </div>
           <h1 data-seq="h1" className="ct-h1 bk-serif ct-pre">
-            Закажете приватна консултација.
+            Закажете <em>приватна</em> консултација.
           </h1>
         </header>
 

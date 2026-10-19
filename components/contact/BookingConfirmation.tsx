@@ -2,13 +2,25 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
-import { Modal } from "@/components/ui/Modal";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { Modal, type ModalTiming } from "@/components/ui/Modal";
 
 /**
  * The pop-up shown after a booking is sent. Inside it, in sequence: a gold ring draws itself (1s) and a check
  * draws inside it (0.45s), then the eyebrow, the thank-you, the booking summary, the note and the button.
  */
+/** The Контакт page keeps the deployed site's speeds for its pop-up (the site's Modal is quicker now). */
+const DEPLOYED_TIMING: ModalTiming = {
+  reducedFade: 0.2,
+  backdropIn: 0.4,
+  backdropInEase: "power2.out",
+  panelIn: 0.6,
+  panelInDelay: 0.1,
+  panelInEase: "power3.out",
+  out: 0.3,
+  outEase: "power2.in",
+};
+
 export function BookingConfirmation({
   open,
   onClose,
@@ -20,7 +32,14 @@ export function BookingConfirmation({
   summary: string;
 }) {
   return (
-    <Modal open={open} onClose={onClose} label="Барањето е применето" overlay={0.86}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      label="Барањето е применето"
+      overlay={0.86}
+      className="ct-modal"
+      timing={DEPLOYED_TIMING}
+    >
       <Content onClose={onClose} summary={summary} />
     </Modal>
   );
@@ -42,13 +61,12 @@ function Content({ onClose, summary }: { onClose: () => void; summary: string })
       }
       gsap.set([ring, check], { strokeDashoffset: 1 });
       gsap.set(lines, { opacity: 0, y: 12 });
-      // The panel itself arrives in --dur-base; then the gold circle draws (900ms), the check mark (500ms), and the
-      // title and the line under it fade up.
+      // The panel itself takes 0.7s to arrive; the sequence starts as it settles.
       gsap
-        .timeline({ delay: DUR.base })
-        .to(ring, { strokeDashoffset: 0, duration: 0.9, ease: CALM_EASE })
-        .to(check, { strokeDashoffset: 0, duration: 0.5, ease: CALM_EASE })
-        .to(lines, { opacity: 1, y: 0, duration: DUR.slow, stagger: 0.1, ease: CALM_EASE });
+        .timeline({ delay: 0.55 })
+        .to(ring, { strokeDashoffset: 0, duration: 1, ease: "power2.inOut" })
+        .to(check, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, "-=0.1")
+        .to(lines, { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: "power3.out" }, "-=0.3");
     },
     { scope: root }
   );
@@ -70,7 +88,7 @@ function Content({ onClose, summary }: { onClose: () => void; summary: string })
       </div>
       <p data-line>Ќе ви се јавиме за потврда на терминот.</p>
       <div data-line>
-        <button type="button" data-autofocus className="btn-secondary focus-ring" data-tone="dark" onClick={onClose}>
+        <button type="button" data-autofocus className="bk-btn" onClick={onClose}>
           Во ред
         </button>
       </div>

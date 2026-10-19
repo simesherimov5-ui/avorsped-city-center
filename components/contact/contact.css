@@ -18,6 +18,12 @@
     opacity: 0;
   }
 }
+/* A chosen chip settles in from a touch smaller. */
+@keyframes ct-settle {
+  from {
+    transform: scale(0.94);
+  }
+}
 
 /* B1 — header */
 .ct-head {
@@ -60,7 +66,6 @@
 
 /* B3 — the form: a bordered panel like the «Директно» card (same border, padding and surface), the lead inside it */
 .ct-panel {
-  position: relative;
   width: 100%;
   max-width: none;
   min-width: 0;
@@ -75,47 +80,30 @@
   font-weight: 400;
   color: var(--mute);
 }
-/* The thin gold line along the top edge of the form: how far along the visitor is. It grows (and shrinks after «Измени»)
-   by scale, 600ms. */
-.ct-progress {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  height: 2px;
+/* A step opens and folds with its height animating; the padding keeps focus outlines from being clipped. */
+.ct-collapse {
+  margin: -6px;
+  padding: 6px;
   overflow: hidden;
-  pointer-events: none;
-}
-.ct-progress i {
-  display: block;
-  height: 100%;
-  background: var(--foil-sheen);
-  transform-origin: left center;
-  transition: transform var(--dur-slow) var(--ease);
-}
-
-/* Only the current step is on screen. The stage keeps a floor height so the panel does not jump between short and tall
-   steps on a phone (where the direct panel sits below the form). */
-.ct-stage {
-  min-height: 260px;
-}
-@media (max-width: 980px) {
-  .ct-stage {
-    min-height: 320px;
-  }
 }
 .ct-step {
   position: relative;
   padding: 24px 0;
   border-top: 1px solid var(--color-line);
 }
-/* A row opens and folds with its height animating; the padding keeps the focus ring of «Измени» from being clipped. */
-.ct-collapse {
-  margin: -6px;
-  padding: 6px;
-  overflow: hidden;
+/* The options of a step come in one after another. */
+@keyframes ct-opt-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
-/* An answered step folded into one row: number, question, answer, «Измени» on the right. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-stagger] > * {
+    animation: ct-opt-in 0.4s ease-out both;
+  }
+}
+/* An answered step folded into one row: number, question, answer, «Измени». */
 .ct-sumrow {
   display: flex;
   flex-wrap: wrap;
@@ -135,7 +123,10 @@
   color: var(--color-paper);
   overflow-wrap: anywhere;
 }
-/* «Измени»: a real button, the gold underlined text link on the right of a row. */
+.ct-sumrow-value.is-muted {
+  font-weight: 400;
+  color: var(--mute);
+}
 .ct-edit {
   flex: none;
   min-width: 44px;
@@ -146,86 +137,20 @@
   background: none;
   color: var(--color-gold);
   font:
-    500 13px var(--font-sans),
+    400 13px var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
+  text-underline-offset: 4px;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
 }
-@media (hover: hover) {
-  .ct-edit:hover {
-    color: var(--color-gold-glint);
-  }
+.ct-edit:hover {
+  color: var(--color-gold-light);
 }
 .ct-edit:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--color-gold);
   outline-offset: 2px;
-}
-
-/* A step comes in: the title first (600ms, 16px), then the options one after another (600ms, 12px each; RadioGroup sets
-   the delays: 350ms apart for up to four options, 180ms for more, a 30ms wave for days, times and apartments), then
-   the fields of the last step 220ms apart. `backwards` holds the start until the delay is over and leaves nothing
-   behind afterwards, so the pick and leave transitions below can act on the same elements. */
-@keyframes ct-title-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-@keyframes ct-opt-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-}
-@keyframes ct-step-out {
-  to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .ct-step-h {
-    animation: ct-title-in var(--dur-slow) var(--ease) backwards;
-  }
-  [data-stagger] > *,
-  .ct-enter {
-    animation: ct-opt-in var(--dur-slow) var(--ease) backwards;
-  }
-  .ct-enter:not([style]) {
-    animation-delay: 100ms;
-  }
-  /* The step leaves: up 10px and out, 300ms. */
-  .ct-step.is-leaving {
-    animation: ct-step-out 300ms var(--ease) forwards;
-  }
-  /* A pick: the options that were not picked fade and shrink a little while the picked one fills with foil. */
-  .ct-step [role="radio"],
-  .ct-step .ct-tog {
-    transition:
-      opacity 300ms var(--ease),
-      transform 300ms var(--ease),
-      border-color var(--dur-fast) var(--ease),
-      color var(--dur-base) var(--ease);
-  }
-  .ct-step.is-picking [role="radio"]:not([aria-checked="true"]),
-  .ct-step.is-picking .ct-tog:not([aria-pressed="true"]),
-  .ct-step.is-picking .ct-go {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-/* While a step is showing a pick or leaving, it takes no more clicks. */
-.ct-step.is-picking,
-.ct-step.is-leaving {
-  pointer-events: none;
-}
-.ct-note {
-  margin: 0 0 16px;
 }
 .ct-sub {
   padding-top: 20px;
@@ -252,16 +177,9 @@
 }
 .ct-step-h {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px 16px;
-  margin: 0 0 16px;
-}
-.ct-step-t {
-  display: flex;
   align-items: baseline;
   gap: 16px;
-  min-width: 0;
+  margin: 0 0 16px;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.6;
@@ -278,30 +196,6 @@
   flex-wrap: wrap;
   gap: 10px;
 }
-/* Options and days: the picked one fills with the antique foil from the left (a ::before layer, 450ms), its text turns
-   Оникс. The foil is drawn twice as wide and centred, as on the primary button, so the text sits on its light middle. */
-.ct-chip,
-.ct-day {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-.ct-chip::before,
-.ct-day::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--foil-sheen) center / 200% 100% no-repeat;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 450ms var(--ease);
-}
-.ct-chip[aria-checked="true"]::before,
-.ct-chip[aria-pressed="true"]::before,
-.ct-day[aria-checked="true"]::before {
-  transform: scaleX(1);
-}
 .ct-chip {
   min-width: 56px;
   min-height: 44px;
@@ -316,41 +210,37 @@
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
-    border-color var(--dur-fast) var(--ease),
-    background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease),
-    transform var(--dur-fast) var(--ease);
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
 }
-@media (hover: hover) {
-  .ct-chip:hover {
-    border-color: var(--color-gold);
-  }
+.ct-chip:hover {
+  border-color: var(--color-gold);
 }
 .ct-chip:active {
   transform: scale(0.96);
 }
 .ct-chip:focus-visible,
 .ct-day:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
 .ct-chip[aria-checked="true"],
 .ct-chip[aria-pressed="true"] {
-  border-color: var(--foil-mid);
-  color: var(--color-onyx);
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--black);
   font-weight: 500;
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 /* «Сè уште не знам»: the same size as the projects, with a quieter border; on its own row on phones. */
 .ct-chip.is-secondary {
   border-color: var(--gold-line);
 }
+.ct-chip.is-secondary:hover,
 .ct-chip.is-secondary[aria-checked="true"] {
-  border-color: var(--foil-mid);
-}
-@media (hover: hover) {
-  .ct-chip.is-secondary:hover {
-    border-color: var(--color-gold);
-  }
+  border-color: var(--color-gold);
 }
 .ct-note {
   margin: 0;
@@ -401,25 +291,23 @@
   color: var(--color-paper);
   cursor: pointer;
   transition:
-    border-color var(--dur-fast) var(--ease),
-    background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease),
-    transform var(--dur-fast) var(--ease);
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
 }
-@media (hover: hover) {
-  .ct-day:hover {
-    border-color: var(--color-gold);
-  }
+.ct-day:hover {
+  border-color: var(--color-gold);
 }
 .ct-day:active {
   transform: scale(0.96);
 }
 .ct-day small {
   font:
-    400 12px/1.2 var(--font-sans),
+    400 11px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: var(--label-track);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--mute);
 }
@@ -431,11 +319,13 @@
   font-variant-numeric: tabular-nums;
 }
 .ct-day[aria-checked="true"] {
-  border-color: var(--foil-mid);
-  color: var(--color-onyx);
+  border-color: var(--color-gold);
+  background: var(--color-ink);
+  color: var(--color-gold);
+  animation: ct-settle 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ct-day[aria-checked="true"] small {
-  color: var(--color-onyx);
+  color: var(--color-gold);
 }
 
 .ct-fields {
@@ -483,7 +373,7 @@
   background: var(--color-gold);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform var(--dur-base) var(--ease);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ct-input:focus-within::after {
   transform: scaleX(1);
@@ -494,7 +384,7 @@
   font-size: 14px;
   font-weight: 400;
   color: var(--color-gold-light);
-  animation: ct-fade var(--dur-base) var(--ease);
+  animation: ct-fade 0.3s;
 }
 .ct-submit {
   display: flex;
@@ -513,7 +403,7 @@
   color: var(--mute);
 }
 .ct-sum > span {
-  animation: ct-fade var(--dur-fast) var(--ease);
+  animation: ct-fade 0.18s;
 }
 .ct-fail {
   margin: 16px 0 0;
@@ -603,26 +493,21 @@
   text-align: right;
   overflow-wrap: anywhere;
   transition:
-    color var(--dur-fast) var(--ease),
-    transform var(--dur-fast) var(--ease);
+    color 0.3s,
+    transform 0.3s;
 }
 /* A 44px tap target without changing the row: the padding is cancelled by the negative margin. */
 a.ct-val {
   padding-block: 11px;
   margin-block: -11px;
 }
+a.ct-val:hover,
 a.ct-val:focus-visible {
   color: var(--color-gold);
   transform: translateX(6px);
 }
-@media (hover: hover) {
-  a.ct-val:hover {
-    color: var(--color-gold);
-    transform: translateX(6px);
-  }
-}
 a.ct-val:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--color-gold);
   outline-offset: 4px;
 }
 /* Working hours: one line per range, the days on the left and the times on the right. */
@@ -643,25 +528,6 @@ a.ct-val:focus-visible {
 .ct-hours .bk-mono {
   font-size: 14px;
   font-weight: 400;
-}
-/* Phones: each label sits above its value, and a long value (the e-mail) wraps instead of running off the screen. */
-@media (max-width: 560px) {
-  .ct-row {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 6px;
-  }
-  .ct-val,
-  .ct-row > .ct-val {
-    text-align: left;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-  .ct-hours {
-    flex: none;
-    width: 100%;
-  }
 }
 .ct-addr {
   display: flex;
@@ -686,7 +552,7 @@ a.ct-val:focus-visible {
   color: var(--color-gold-light);
 }
 .ct-addr a:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
 /* the map in the panel is a little shorter, so the two columns stay in proportion */
@@ -739,4 +605,175 @@ a.ct-val:focus-visible {
   font-size: 15px;
   font-weight: 400;
   color: var(--mute);
+}
+
+/* ───────── The deployed look (avorsped-city-center.vercel.app/contact), scoped to this page ─────────
+   The Контакт page is kept as it is on the deployed site. Where shared styles have moved on since (the labels' letter
+   spacing, the primary button, the small outline button), these rules restore the deployed look here only. */
+
+/* Labels and eyebrows: 0.32em apart, as deployed (the shared label style is now 0.13em). */
+.bk-page:has(.ct-cols) .bk-eyebrow,
+.bk-page:has(.ct-cols) .bk-label,
+.ct-confirm .bk-eyebrow {
+  letter-spacing: 0.32em;
+}
+
+/* «Закажи»: the deployed "filling button". At rest a Светол бакар outline and circled arrow; on hover, keyboard focus and
+   press the copper fills in from the left and the text and arrow turn Оникс. */
+.ct-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 44px;
+  padding: 22px 36px;
+  border: 1px solid var(--color-copper);
+  border-radius: 0;
+  background: none;
+  color: var(--color-copper);
+  font:
+    600 13px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+}
+.ct-btn__fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-copper);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.ct-btn__label,
+.ct-btn__arrow {
+  position: relative;
+  transition:
+    color 0.5s ease 0.15s,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ct-btn__arrow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.ct-btn:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 3px;
+}
+.ct-btn:focus-visible:not(:disabled) .ct-btn__fill,
+.ct-btn:active:not(:disabled) .ct-btn__fill {
+  transform: scaleX(1);
+}
+.ct-btn:focus-visible:not(:disabled) .ct-btn__label,
+.ct-btn:focus-visible:not(:disabled) .ct-btn__arrow,
+.ct-btn:active:not(:disabled) .ct-btn__label,
+.ct-btn:active:not(:disabled) .ct-btn__arrow {
+  color: var(--color-onyx);
+}
+.ct-btn:focus-visible:not(:disabled) .ct-btn__arrow,
+.ct-btn:active:not(:disabled) .ct-btn__arrow {
+  transform: translateX(6px) rotate(-45deg);
+}
+@media (hover: hover) {
+  .ct-btn:hover:not(:disabled) .ct-btn__fill {
+    transform: scaleX(1);
+  }
+  .ct-btn:hover:not(:disabled) .ct-btn__label,
+  .ct-btn:hover:not(:disabled) .ct-btn__arrow {
+    color: var(--color-onyx);
+  }
+  .ct-btn:hover:not(:disabled) .ct-btn__arrow {
+    transform: translateX(6px) rotate(-45deg);
+  }
+}
+.ct-btn:disabled {
+  opacity: 0.4;
+  cursor: progress;
+}
+@media (max-width: 640px) {
+  .ct-btn {
+    gap: 12px;
+    padding: 18px 22px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    white-space: normal;
+    text-align: left;
+  }
+}
+@media (max-width: 760px) {
+  .ct-submit .ct-btn {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-btn__fill,
+  .ct-btn__arrow {
+    transition: none;
+  }
+  .ct-btn__label {
+    transition: color 0.2s linear;
+  }
+  .ct-btn:is(:hover, :focus-visible, :active):not(:disabled) .ct-btn__arrow {
+    transform: none;
+  }
+}
+
+/* The confirmation's round close button: the deployed 0.3s (the shared one now uses the site's 160ms). */
+.ct-modal .bk-modal-close {
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+
+/* «Во ред» in the confirmation: the deployed small outline button. */
+.bk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--color-copper);
+  background: transparent;
+  color: var(--color-copper);
+  font:
+    500 11px/1 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s,
+    transform 0.2s;
+}
+.bk-btn:hover {
+  background: var(--color-copper);
+  color: var(--black);
+}
+.bk-btn:active {
+  transform: scale(0.98);
+}
+.bk-btn:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 3px;
 }
