@@ -306,6 +306,34 @@ h4 {
     transform: none;
   }
 }
+/* Local scrims for text on a photo (a full-screen hero; reusable). The top one lies under the header and the back link, the
+   bottom one under the title block; the middle of the photo is left in its own colours. Strengths were raised from 55% /
+   75% in small steps until the gold label and back link and the header links read at 4.5:1 over the brightest 5% of the
+   sky behind them (measured at six sizes). */
+.hero-scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 250px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-onyx) 80%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 80%, transparent) 45%,
+    transparent 100%
+  );
+}
+.hero-scrim-bottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 65%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-onyx) 82%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 82%, transparent) 45%,
+    transparent 100%
+  );
+}
 /* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
 body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   background-color: transparent;
