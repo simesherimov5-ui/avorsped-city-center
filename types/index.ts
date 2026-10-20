@@ -220,6 +220,8 @@ export interface Project {
   units?: number;
   description: string;
   heroImage: { src: string; alt: string; isPlaceholder: boolean };
+  /** The photo of the slideshow at the top of the Проекти page: exactly 16:9, so it is shown whole. A project without one is not in the slideshow. */
+  slideImage?: { src: string; alt: string; isPlaceholder: boolean };
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   specifications: { label: string; value: string }[];
   /** How gallery/hero images should fit their frame — "contain" for near-square source photos that would otherwise be aggressively cropped. */

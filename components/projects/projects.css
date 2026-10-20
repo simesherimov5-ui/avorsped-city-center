@@ -33,21 +33,23 @@
   background: var(--color-onyx);
   color: var(--color-travertine);
 }
-/* the photos: under 900px a 2:1 picture at the top, the text below it on Оникс; from 900px the text lies on the picture */
+/* the photos are 16:9 and so is their frame, so nothing is cropped: under 1100px the picture is at the top and the text
+   below it on Оникс; from 1100px the text lies on the picture. The hero has no height cap: where it is taller than the
+   screen it goes on below the fold, and the text block is held at the bottom of the first screen. */
 .pj-media {
   position: relative;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
 }
 .pj-media .hero-scrim-bottom {
   display: none;
 }
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
   .pj-hero {
     display: flex;
     overflow: hidden;
-    aspect-ratio: 2 / 1;
-    max-height: calc(100svh - var(--nav-h));
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
   }
   .pj-media {
     position: absolute;
@@ -82,12 +84,13 @@
   padding-top: 28px;
   padding-bottom: 32px;
 }
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
   .pj-hero-inner {
     flex: 1;
     gap: 48px;
     padding-top: 0;
-    padding-bottom: 56px;
+    /* at the bottom of the visible first screen: 56px, plus whatever the hero is taller than the screen under the header */
+    padding-bottom: max(56px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h)) + 56px));
   }
 }
 .pj-hero-text {

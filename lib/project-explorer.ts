@@ -95,10 +95,10 @@ export function choicesQuery(status: StatusFilter, city: CityFilter, view: View)
   return text ? `?${text}` : "";
 }
 
-/** The hero's slides: projects with a main photo, the ones being built first, at most five. */
+/** The hero's slides: projects with a 16:9 slide photo, the ones being built first, at most five. */
 export function heroSlides(projects: Project[]) {
   return projects
-    .filter((p) => !p.heroImage.isPlaceholder && p.heroImage.src !== "")
+    .filter((p) => p.slideImage && !p.slideImage.isPlaceholder && p.slideImage.src !== "")
     .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
     .slice(0, 5);
 }

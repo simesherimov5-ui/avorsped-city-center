@@ -86,13 +86,11 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
           <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
             <div className="pj-slide-photo">
               <Media
-                image={project.heroImage}
+                image={project.slideImage ?? project.heroImage}
                 tone="dark"
-                fit={project.imageFit ?? "cover"}
-                focus={project.imageFocus}
                 alwaysCover
                 className="h-full w-full !bg-transparent"
-                // the photo is shown as wide as the screen (a 2:1 frame)
+                // the photo is 16:9 and so is the frame: shown whole, as wide as the screen
                 sizes="100vw"
                 priority={i === 0}
                 defer={i !== 0}

@@ -78,6 +78,7 @@ export const projects: Project[] = [
     // A narrow frame (the Проекти card) is centred on the main central building, so it is whole from roof to ground.
     imageFocus: { zoom: 1, x: 52, y: 50 },
     heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
+    slideImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
     gallery: [
       { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center — визуелизација 1", isPlaceholder: false },
       { src: "/images/exteriors/exterior-gallery-2.jpg", alt: "City Center — визуелизација 2", isPlaceholder: false },
@@ -228,6 +229,11 @@ export const projects: Project[] = [
     // off the roof. Show it a little further out; the edges are filled with a blurred copy of the photo.
     imageFocus: { zoom: 0.87, x: 50, y: 46, aspect: 2 },
     heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
+    slideImage: {
+      src: "/images/dojran/aerial-beach.jpg",
+      alt: "Дојрански Рај — поглед од воздух",
+      isPlaceholder: false,
+    },
     gallery: [
       { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
       { src: "/images/dojran/facade-2.jpg", alt: "Дојрански Рај — фасада 2", isPlaceholder: false },
