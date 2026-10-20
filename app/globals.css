@@ -1303,3 +1303,83 @@ body:has([data-compare-bar]) footer {
 .mf-text[data-live] .mf-w {
   transition: color 0.3s ease;
 }
+/* «Што нè разликува» (components/home/DifferencesStage.tsx). Under 900px: every point carries its own photo (16:10) above
+   its text, 32px apart, nothing dimmed, no sticky photo. From 900px: a square sticky photo on the left (its side is the
+   column's width, at most 640px and the screen height less the bar), the four points on the right, each at least 52vh
+   tall; the one in the middle of the screen is at full strength, the others at 32% (once the script has armed it). */
+.df-col {
+  display: none;
+}
+.df-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.df-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.df-pic {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+@media (min-width: 900px) {
+  .df {
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    column-gap: 72px;
+  }
+  .df-col {
+    display: block;
+    container-type: inline-size;
+  }
+  .df-frame {
+    position: sticky;
+    top: 96px;
+    width: 100%;
+    height: min(calc(100svh - 192px), 640px, 100cqw);
+    overflow: hidden;
+    background: var(--color-espresso);
+  }
+  .df-photo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 0.8s ease,
+      transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .df-photo.is-active {
+    opacity: 1;
+    transform: none;
+  }
+  .df-list {
+    gap: 0;
+  }
+  .df-point {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 52vh;
+    border-top: 1px solid var(--color-line);
+  }
+  .df-pic {
+    display: none;
+  }
+  .df-inner {
+    transition: opacity 0.5s ease;
+  }
+  .df[data-armed] .df-point:not(.is-active) .df-inner {
+    opacity: 0.32;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .df-photo {
+    transform: none;
+    transition: none;
+  }
+}
