@@ -10,7 +10,7 @@ export default function ProjectsPage() {
   return (
     <>
       <ProjectsHero slides={heroSlides(projects)} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<div aria-hidden className="grain min-h-[640px] bg-sand" />}>
         <ProjectsExplorer projects={projects} />
       </Suspense>
       <SoonBand />

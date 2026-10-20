@@ -194,8 +194,15 @@ function Explorer({
     place();
     // from the second placement on it slides
     requestAnimationFrame(() => line.classList.add("is-ready"));
-    window.addEventListener("resize", place);
-    return () => window.removeEventListener("resize", place);
+    // only a change of width moves the tabs (a phone's address bar sliding in and out fires `resize` too)
+    let width = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === width) return;
+      width = window.innerWidth;
+      place();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [status]);
 
   // A click outside the city list closes it.

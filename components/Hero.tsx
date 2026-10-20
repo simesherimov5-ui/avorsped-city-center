@@ -78,10 +78,7 @@ export function Hero() {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative flex h-[100dvh] min-h-[560px] flex-col overflow-hidden bg-ink text-paper"
-    >
+    <section ref={sectionRef} className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-paper">
       <motion.div style={{ y: photoY }} className="absolute inset-0">
         {/* No entrance animation on the photo itself. data-hero-image marks it so the
             opening can wait until it is loaded before the black screen opens. */}

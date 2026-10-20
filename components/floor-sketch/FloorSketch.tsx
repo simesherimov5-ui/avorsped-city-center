@@ -41,6 +41,7 @@ export function FloorSketch({
   levelKey,
   hovered = null,
   onHover,
+  priority = true,
 }: {
   image: DrawingImage;
   /** The apartments of the chosen floor. */
@@ -49,6 +50,8 @@ export function FloorSketch({
   levelKey: string | number;
   hovered?: string | null;
   onHover?: (id: string | null) => void;
+  /** The drawing is the first big thing on its page: fetched at once. Where it sits further down it is not (it is a large file). */
+  priority?: boolean;
 }) {
   // the picture that is leaving fades out under the new one
   const [shown, setShown] = useState(image);
@@ -92,7 +95,7 @@ export function FloorSketch({
             crisp
             className="h-full w-full !bg-transparent"
             sizes="(max-width: 1024px) 100vw, 800px"
-            priority
+            priority={priority}
           />
         </div>
         <svg

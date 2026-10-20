@@ -144,7 +144,6 @@ export function ProjectSlideshow({
               focus={project.imageFocus}
               className="h-full w-full !bg-transparent"
               sizes={slideSizes(project)}
-              priority={index === 0}
             />
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/55 to-chrome/20" />
@@ -174,7 +173,8 @@ export function ProjectSlideshow({
         </motion.div>
       </AnimatePresence>
 
-      {/* Preloads the next photo so the crossfade never waits on the network. */}
+      {/* Loads the next photo ahead (at low priority) so the crossfade never waits on the network. The slideshow is below the
+          first screen of the homepage, so none of its photos is fetched at high priority: that would delay the first photo. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
         <Media
           image={next.heroImage}
@@ -182,7 +182,7 @@ export function ProjectSlideshow({
           focus={next.imageFocus}
           className="h-full w-full"
           sizes={slideSizes(next)}
-          priority
+          defer
         />
       </div>
 

@@ -111,6 +111,7 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
             levelKey={current.number}
             hovered={hot}
             onHover={setHot}
+            priority={false}
           />
         )}
         {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
