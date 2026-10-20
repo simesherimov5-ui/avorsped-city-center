@@ -2,6 +2,7 @@
 
 import "./projects.css";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { projectStatusLabel } from "@/lib/format";
@@ -70,9 +71,8 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
           </div>
         </div>
       ))}
-      <div className="pj-hero-scrim-top" aria-hidden />
-      <div className="pj-hero-scrim-x" />
-      <div className="pj-hero-scrim-y" />
+      <div className="hero-scrim-top" aria-hidden />
+      <div className="hero-scrim-bottom" aria-hidden />
 
       <div className="pj-wrap pj-hero-inner">
         <div className="pj-hero-text">
@@ -124,6 +124,11 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
               </span>
             )}
           </div>
+          {current && (
+            <Link href={current.href ?? `/projects/${current.slug}`} className="pj-view">
+              ПОГЛЕДНЕТЕ ГО ПРОЕКТОТ <span aria-hidden>→</span>
+            </Link>
+          )}
         </div>
       </div>
     </section>

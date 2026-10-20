@@ -334,7 +334,8 @@ h4 {
     transparent 100%
   );
 }
-/* The header's links while the bar is clear over a photo: full Травертин (not 75%). The active link keeps its own colour. */
+/* The header's links while the bar is clear over a photo: full Травертин (not 75%), the current page's link too (the
+   Navbar gives it gold only on a solid bar; over a photo its underline tells it apart: gold read at 2.5:1 on a bright sky). */
 header[data-clear] a.nav-link:not(#site-logo),
 body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) a.nav-link:not(#site-logo) {
   color: var(--color-travertine);
