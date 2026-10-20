@@ -14,11 +14,9 @@ export function NewProjects({ projects }: { projects: Project[] }) {
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <div className="flex items-center gap-3">
-                <span aria-hidden className="block h-2 w-2 rounded-full bg-accent" />
-                <div className="eyebrow text-accent">Ново · во продажба</div>
-              </div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">Сега во изградба.</h2>
+              <h2 className="font-display text-[length:calc(var(--fs-h2)*1.15)] font-normal leading-[1.2] text-balance">
+                Сега во изградба.
+              </h2>
             </div>
             <Link href="/projects" className="btn-tertiary focus-ring">
               Сите проекти →

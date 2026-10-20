@@ -63,7 +63,7 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
   return (
     <div ref={root} className="grid gap-9 sm:grid-cols-3 sm:gap-8 lg:gap-12">
       {items.map((item, i) => (
-        <div key={item.label} className="flex flex-col gap-3">
+        <div key={item.label} className="flex flex-col items-center gap-3 text-center">
           <div
             className="font-display text-(length:--fs-hero) leading-[0.95] text-accent"
             style={{ fontVariantNumeric: "lining-nums tabular-nums" }}
