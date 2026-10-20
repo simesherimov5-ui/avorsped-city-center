@@ -240,7 +240,13 @@ function Explorer({
   };
 
   const cityLabel = city === "all" ? "Сите градови" : city;
-  const countLine = shown.length === 0 ? "Нема проекти за овој избор." : `Прикажани ${projectsText(shown.length)}`;
+  // The grid names a town only once one is picked ("Струмица · 3 проекти"); the map view keeps its own count.
+  const countLine =
+    view === "map"
+      ? `Прикажани ${projectsText(shown.length)}`
+      : city === "all"
+        ? ""
+        : `${city} · ${projectsText(shown.length)}`;
 
   return (
     <div className="pj-explorer grain">
@@ -348,35 +354,31 @@ function Explorer({
 
       <section ref={results} className="pj-wrap pj-results">
         <div className="pj-count" role="status" aria-live="polite">
-          {countLine}
+          {shown.length === 0 ? (
+            <>
+              Нема проекти за овој избор.{" "}
+              <button type="button" className="pj-reset" onClick={() => choose({ status: "all", city: "all" })}>
+                Прикажи ги сите
+              </button>
+            </>
+          ) : (
+            <span className="pj-count-line">{countLine}</span>
+          )}
         </div>
 
         {view === "grid" && shown.length > 0 && (
           <div key={`grid-${status}-${city}`} className={leaving ? "pj-groups is-leaving" : "pj-groups"}>
-            {groups.map((group) => {
-              let n = 0;
-              return (
-                <div key={group.city || "none"}>
-                  {group.city && (
-                    <h2 className="pj-group-head">
-                      <PinIcon />
-                      <span className="pj-group-name">{group.city}</span>
-                      <span className="pj-group-count">{projectsText(group.projects.length)}</span>
-                    </h2>
-                  )}
-                  <div className="pj-grid">
-                    {group.projects.map((project) => (
-                      <GridCard
-                        key={project.id}
-                        project={project}
-                        delay={changed ? n++ * 0.04 : n++ * 0.05}
-                        swap={changed}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            <div className="pj-grid">
+              {shown.map((project, i) => (
+                <GridCard
+                  key={project.id}
+                  project={project}
+                  // the first showing rises one card after the other; a choice swaps the whole grid at once (280ms)
+                  delay={changed ? 0 : i * 0.05}
+                  swap={changed}
+                />
+              ))}
+            </div>
           </div>
         )}
 
@@ -465,7 +467,6 @@ function GridCard({ project, delay, swap = false }: { project: Project; delay?: 
           <i />
           {statusText(project)}
         </span>
-        {project.city && <span className="pj-photo-city">{project.city}</span>}
       </div>
       <div className="pj-title-row">
         <span className="pj-name">{project.name}</span>
