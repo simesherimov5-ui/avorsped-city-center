@@ -28,11 +28,35 @@
 .pj-hero {
   --pj-ease: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
-  display: flex;
-  overflow: hidden;
-  min-height: max(100svh, 560px);
+  /* the solid header is fixed: the hero starts right under it */
+  margin-top: var(--nav-h);
   background: var(--color-onyx);
   color: var(--color-travertine);
+}
+/* the photos: under 900px a 2:1 picture at the top, the text below it on Оникс; from 900px the text lies on the picture */
+.pj-media {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+}
+.pj-media .hero-scrim-bottom {
+  display: none;
+}
+@media (min-width: 900px) {
+  .pj-hero {
+    display: flex;
+    overflow: hidden;
+    aspect-ratio: 2 / 1;
+    max-height: calc(100svh - var(--nav-h));
+  }
+  .pj-media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  .pj-media .hero-scrim-bottom {
+    display: block;
+  }
 }
 .pj-slide {
   position: absolute;
@@ -47,11 +71,6 @@
 .pj-slide-photo {
   position: absolute;
   inset: 0;
-  transform: scale(1.1);
-  transition: transform 7s ease-out;
-}
-.pj-slide.is-on .pj-slide-photo {
-  transform: scale(1);
 }
 .pj-hero-inner {
   position: relative;
@@ -59,9 +78,17 @@
   flex-direction: column;
   /* the heading and the line sit low, above the caption row, where the bottom scrim is */
   justify-content: flex-end;
-  gap: 48px;
-  padding-top: 140px;
-  padding-bottom: 56px;
+  gap: 24px;
+  padding-top: 28px;
+  padding-bottom: 32px;
+}
+@media (min-width: 900px) {
+  .pj-hero-inner {
+    flex: 1;
+    gap: 48px;
+    padding-top: 0;
+    padding-bottom: 56px;
+  }
 }
 .pj-hero-text {
   display: flex;
@@ -176,58 +203,12 @@
   text-transform: uppercase;
   color: var(--color-travertine);
 }
-/* «ПОГЛЕДНЕТЕ ГО ПРОЕКТОТ →»: the way into the project on the slide, at the right of the caption */
-.pj-view {
-  position: relative;
-  flex: none;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--color-travertine);
-}
-.pj-view::after {
-  content: "";
-  position: absolute;
-  inset: -14px -8px;
-}
-.pj-view span {
-  display: inline-block;
-  transition: transform var(--dur-fast) var(--ease);
-}
-.pj-view:focus-visible {
-  outline: 2px solid var(--foil-light);
-  outline-offset: 4px;
-}
-.pj-view:active {
-  opacity: 0.7;
-}
-@media (hover: hover) {
-  .pj-view:hover span {
-    transform: translateX(4px);
-  }
-}
 @media (max-width: 639px) {
   .pj-hero-text {
     gap: 8px;
   }
 }
 @media (max-width: 767px) {
-  .pj-hero-inner {
-    gap: 16px;
-    padding-top: 120px;
-    padding-bottom: 40px;
-  }
-  .pj-hero-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding-top: 12px;
-  }
   .pj-wrap {
     padding-inline: 20px;
   }

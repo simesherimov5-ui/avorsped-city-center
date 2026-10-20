@@ -2,7 +2,6 @@
 
 import "./projects.css";
 import { useRef, useState, useSyncExternalStore } from "react";
-import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { projectStatusLabel } from "@/lib/format";
@@ -82,39 +81,27 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setKeyboardFocus(false);
       }}
     >
-      <PauseButton
-        paused={stopped}
-        onToggle={() => {
-          if (reduce) return;
-          if (stopped) {
-            // play again, whatever stopped it
-            setManual(false);
-            writeStop(false);
-          } else if (pointer.current !== "mouse") writeStop(true);
-          else setManual(true);
-        }}
-        className="absolute right-[5%] top-[calc(var(--nav-h)+16px)] z-10"
-      />
-      {slides.map((project, i) => (
-        <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
-          <div className="pj-slide-photo">
-            <Media
-              image={project.heroImage}
-              tone="dark"
-              fit={project.imageFit ?? "cover"}
-              focus={project.imageFocus}
-              alwaysCover
-              className="h-full w-full !bg-transparent"
-              // the frame is tall and the photo is drawn at the height of it times its aspect, so wider than the screen on a phone or a tablet
-              sizes="(max-width: 767px) 330vw, (max-width: 900px) 170vw, (max-width: 1280px) 130vw, 100vw"
-              priority={i === 0}
-              defer={i !== 0}
-            />
+      <div className="pj-media">
+        {slides.map((project, i) => (
+          <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
+            <div className="pj-slide-photo">
+              <Media
+                image={project.heroImage}
+                tone="dark"
+                fit={project.imageFit ?? "cover"}
+                focus={project.imageFocus}
+                alwaysCover
+                className="h-full w-full !bg-transparent"
+                // the photo is shown as wide as the screen (a 2:1 frame)
+                sizes="100vw"
+                priority={i === 0}
+                defer={i !== 0}
+              />
+            </div>
           </div>
-        </div>
-      ))}
-      <div className="hero-scrim-top" aria-hidden />
-      <div className="hero-scrim-bottom" aria-hidden />
+        ))}
+        <div className="hero-scrim-bottom" aria-hidden />
+      </div>
 
       <div className="pj-wrap pj-hero-inner">
         <div className="pj-hero-text">
@@ -169,11 +156,19 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
               </span>
             )}
           </div>
-          {current && (
-            <Link href={current.href ?? `/projects/${current.slug}`} className="pj-view" onClick={touched}>
-              ПОГЛЕДНЕТЕ ГО ПРОЕКТОТ <span aria-hidden>→</span>
-            </Link>
-          )}
+          <PauseButton
+            paused={stopped}
+            onToggle={() => {
+              if (reduce) return;
+              if (stopped) {
+                // play again, whatever stopped it
+                setManual(false);
+                writeStop(false);
+              } else if (pointer.current !== "mouse") writeStop(true);
+              else setManual(true);
+            }}
+            className="shrink-0"
+          />
         </div>
       </div>
     </section>

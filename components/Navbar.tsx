@@ -49,8 +49,8 @@ export function Navbar() {
   // While the curtain runs, the line already points at the tab that was clicked.
   const activeHref = tabFor(transition?.target ?? pathname);
 
-  // The homepage and the projects page open on a full-screen photo that the bar floats over.
-  const overHero = pathname === "/" || pathname === "/projects";
+  // The homepage opens on a full-screen photo that the bar floats over (the projects page has a solid bar).
+  const overHero = pathname === "/";
   // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
   const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
@@ -175,7 +175,7 @@ export function Navbar() {
   // (The Проекти filter bar follows the navbar: it reads data-nav-hidden below.)
   const hidden = hideState.hidden && hideState.path === pathname && !open;
 
-  // Overlay the hero when we're at the top of the homepage or the projects page; everywhere else
+  // Overlay the hero when we are at the top of the homepage; everywhere else
   // (and once scrolled past the hero, or with the mobile menu open) the bar
   // is solid so it always reads against light page backgrounds.
   const solid = !overHero || scrolled || open;
