@@ -60,6 +60,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
               tone="dark"
               fit={project.imageFit ?? "cover"}
               focus={project.imageFocus}
+              alwaysCover
               className="h-full w-full !bg-transparent"
               // the frame is tall and the photo is drawn at the height of it times its aspect, so wider than the screen on a phone or a tablet
               sizes="(max-width: 767px) 330vw, (max-width: 900px) 170vw, (max-width: 1280px) 130vw, 100vw"
@@ -69,6 +70,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
           </div>
         </div>
       ))}
+      <div className="pj-hero-scrim-top" aria-hidden />
       <div className="pj-hero-scrim-x" />
       <div className="pj-hero-scrim-y" />
 

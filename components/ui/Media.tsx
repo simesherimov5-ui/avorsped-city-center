@@ -36,6 +36,7 @@ export function Media({
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   crisp = false,
   wholeAlign = "center",
+  alwaysCover = false,
 }: {
   image: MediaImage;
   className?: string;
@@ -58,6 +59,8 @@ export function Media({
    * is wide, e.g. "right" when the layout has text on the left.
    */
   wholeAlign?: "center" | "left" | "right";
+  /** A full-bleed frame (a hero): the photo always covers it, never shown whole over a blurred copy, keeping its focal point. */
+  alwaysCover?: boolean;
 }) {
   if (image.isPlaceholder || !image.src) {
     return <Placeholder label={label ?? image.alt} tone={tone} className={className} />;
@@ -73,7 +76,7 @@ export function Media({
   // on the chosen side, and the rest of the frame is the same photo enlarged, blurred (40px) and darkened (Оникс 55%).
   // In a frame that is not wide (a phone, a tall card) it simply covers the frame. The switch is a container query on
   // the frame itself (.media-whole in globals.css), so it holds in any layout.
-  if (!crisp && isNarrowPhoto(image.src)) {
+  if (!crisp && !alwaysCover && isNarrowPhoto(image.src)) {
     return (
       <div className={cn("media-whole relative overflow-hidden bg-espresso", className)} data-align={wholeAlign}>
         <Image

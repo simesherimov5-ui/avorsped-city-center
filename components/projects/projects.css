@@ -30,7 +30,7 @@
   position: relative;
   display: flex;
   overflow: hidden;
-  min-height: clamp(560px, 82dvh, 760px);
+  min-height: max(100svh, 560px);
   background: var(--color-onyx);
   color: var(--color-travertine);
 }
@@ -52,6 +52,20 @@
 }
 .pj-slide.is-on .pj-slide-photo {
   transform: scale(1);
+}
+/* Under the header, the heading and the italic line: dark enough that they read over the brightest sky of every slide
+   (measured: 3:1 for the heading and the header, 4.5:1 for the italic line), fading out below them. */
+.pj-hero-scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 440px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-onyx) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 72%, transparent) 55%,
+    transparent 100%
+  );
 }
 .pj-hero-scrim-x {
   position: absolute;
@@ -80,7 +94,6 @@
 }
 .pj-hero-text {
   display: flex;
-  max-width: 820px;
   flex-direction: column;
   gap: 12px;
   opacity: 0;
@@ -96,11 +109,17 @@
 .pj-h1 {
   margin: 0;
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: clamp(40px, 5vw, 80px);
+  font-size: clamp(35px, 4.4vw, 70px);
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: -0.01em;
   overflow-wrap: break-word;
+  text-wrap: balance;
+}
+@media (min-width: 900px) {
+  .pj-h1 {
+    white-space: nowrap;
+  }
 }
 .pj-under {
   font-family: var(--font-display), "Times New Roman", serif;
