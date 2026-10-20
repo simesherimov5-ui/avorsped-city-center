@@ -234,14 +234,16 @@ export interface Project {
   statusLabelOverride?: string;
   tagline?: string;
   /**
-   * The cinematic opening of the project page (full-screen picture or film, the name low and centred). A project without
+   * The cinematic opening of the project page (the 16:9 picture or film under the header, the text on it from 1101px wide and below it under that). A project without
    * `heroOpening` keeps the ordinary page top.
    */
   heroOpening?: boolean;
-  /** A short drone film for the opening, a path under public/ (mp4). Without it the hero image is shown, slowly settling. */
-  heroVideo?: string;
-  /** False when the film has no sound track, so the page shows no sound button. Default: it has sound. */
-  heroVideoSound?: boolean;
+  /**
+   * The film of the opening (muted, no sound), paths under public/: `hd` 1080p for screens wider than 1280px, `sd` 720p
+   * for the rest, and the `poster` frame that is shown first, and alone where the film does not play (up to 1100px wide,
+   * reduced motion, Save-Data). Without it the hero image is shown.
+   */
+  heroFilm?: { hd: string; sd: string; poster: string };
   /** The line under the name in the opening; split at its first comma (sans, then serif italic). Falls back to `tagline`. */
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */

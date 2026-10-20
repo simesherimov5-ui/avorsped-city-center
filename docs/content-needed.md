@@ -170,10 +170,10 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ---
 
-### 3.10 City Center: the drone film for the opening
+### 3.10 City Center: the film for the opening
 
-- **Where:** `heroVideo` of the `city-center` entry in `data/index.ts` (a path under `public/`, e.g. `/videos/city-center-opening.mp4`). Drop the file in `public/videos/` and fill the field; the opening then plays it. Until then the opening shows the hero photo, slowly settling. If the film has no sound track, also set `heroVideoSound: false` (the sound button is then not shown).
-- **Format:** MP4 (H.264), 1920 × 1080, 15–30 seconds, loops cleanly, under 8 MB, no important detail in the top 20% or the bottom 35% (the name and the menu sit there). It is muted by default; sound is optional. It is not played on phones or with reduced motion (the photo is shown).
+- **Where:** `heroFilm` of the `city-center` entry in `data/index.ts`: `hd` (1920 × 1080), `sd` (1280 × 720) and the `poster` frame, all under `public/videos/city-center/`. They are in place; to change the film, replace the three files (same names) or the paths.
+- **Format:** MP4 (H.264), 16:9, about 25 seconds, loops cleanly, no sound track (the page has no sound button). No important detail at the bottom of the frame, where the name and the line lie. It plays from 1101px wide and up, without reduced motion and without Save-Data; below that, and in those two cases, only the poster is shown and no film is downloaded.
 
 ### 3.11 City Center: the "За проектот" text
 

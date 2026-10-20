@@ -13,8 +13,7 @@ export function ProjectOpeningSection({ project }: { project: Project }) {
         eyebrow={`${project.city} · ${status}`}
         tagline={project.openingTagline ?? project.tagline}
         image={project.heroImage}
-        video={project.heroVideo}
-        hasSound={project.heroVideoSound !== false}
+        film={project.heroFilm}
       />
       {project.about && (
         <div className="on-light">

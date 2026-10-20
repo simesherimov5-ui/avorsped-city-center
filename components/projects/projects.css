@@ -27,48 +27,6 @@
 /* ───────── hero ───────── */
 .pj-hero {
   --pj-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  /* the solid header is fixed: the hero starts right under it */
-  margin-top: var(--nav-h);
-  background: var(--color-onyx);
-  color: var(--color-travertine);
-}
-/* the photos are 16:9 and so is their frame, so nothing is cropped: under 1100px the picture is at the top and the text
-   below it on Оникс; from 1100px the text lies on the picture. The hero has no height cap: where it is taller than the
-   screen it goes on below the fold, and the text block is held at the bottom of the first screen. */
-.pj-media {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-}
-.pj-media .hero-scrim-bottom {
-  display: none;
-}
-@media (min-width: 1100px) {
-  .pj-hero {
-    display: flex;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-    container-type: inline-size;
-  }
-  .pj-media {
-    position: absolute;
-    inset: 0;
-    aspect-ratio: auto;
-    /* how far the text block is lifted (see .pj-hero-inner): the hero's height less the visible height, when it is taller */
-    --lift: max(0px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h))));
-  }
-  /* the shared bottom scrim (65% at its darkest) with its solid zone lifted by the same amount, so it stays behind the text */
-  .pj-media .hero-scrim-bottom {
-    display: block;
-    height: calc(100cqw * 9 / 16 * 0.6 + var(--lift));
-    background: linear-gradient(
-      to top,
-      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
-      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(100cqw * 9 / 16 * 0.33 + var(--lift)),
-      transparent 100%
-    );
-  }
 }
 .pj-slide {
   position: absolute;
@@ -83,25 +41,6 @@
 .pj-slide-photo {
   position: absolute;
   inset: 0;
-}
-.pj-hero-inner {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  /* the heading and the line sit low, above the caption row, where the bottom scrim is */
-  justify-content: flex-end;
-  gap: 24px;
-  padding-top: 28px;
-  padding-bottom: 32px;
-}
-@media (min-width: 1100px) {
-  .pj-hero-inner {
-    flex: 1;
-    gap: 48px;
-    padding-top: 0;
-    /* at the bottom of the visible first screen: 56px, plus whatever the hero is taller than the screen under the header */
-    padding-bottom: max(56px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h)) + 56px));
-  }
 }
 .pj-hero-text {
   display: flex;

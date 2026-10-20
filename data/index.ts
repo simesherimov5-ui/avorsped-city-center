@@ -24,7 +24,11 @@ export const projects: Project[] = [
     description: development.description,
     tagline: "Најдобрата локација за вашиот нов дом",
     heroOpening: true,
-    // TODO(client): the drone film (docs/content-needed.md). Drop the file in public/ and set `heroVideo: "/videos/<file>.mp4"`.
+    heroFilm: {
+      hd: "/videos/city-center/city-center-hero-1080p.mp4",
+      sd: "/videos/city-center/city-center-hero-720p.mp4",
+      poster: "/videos/city-center/city-center-hero-poster.jpg",
+    },
     openingTagline: "Шест згради, една нова адреса за центарот на Струмица.",
     about: {
       kicker: "ЗА ПРОЕКТОТ",

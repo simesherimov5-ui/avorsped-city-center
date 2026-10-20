@@ -284,8 +284,7 @@ h4 {
   }
 }
 
-/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles once, from a
-   slight zoom to its full frame (it ends at scale 1, so no building is cut once the opening is over). */
+/* The cinematic opening of a project page: the text rises once on load. */
 .opening-rise {
   animation: opening-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
@@ -293,17 +292,6 @@ h4 {
   from {
     opacity: 0;
     transform: translateY(24px);
-  }
-}
-.opening-settle {
-  animation: opening-settle 3.2s var(--ease) both;
-}
-@keyframes opening-settle {
-  from {
-    transform: scale(1.06);
-  }
-  to {
-    transform: none;
   }
 }
 /* Local scrims for text on a photo (a full-screen hero; reusable). The top one lies under the header and the back link, the
@@ -334,20 +322,77 @@ h4 {
     transparent 100%
   );
 }
-/* The header's links while the bar is clear over a photo: full Травертин (not 75%), the current page's link too (the
-   Navbar gives it gold only on a solid bar; over a photo its underline tells it apart: gold read at 2.5:1 on a bright sky). */
-header[data-clear] a.nav-link:not(#site-logo),
-body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) a.nav-link:not(#site-logo) {
+/* The photo hero (the Проекти slideshow, a project's opening): a 16:9 frame under the solid header, full width, nothing
+   cropped, no height cap. At the hero breakpoint (HERO_OVERLAY_MIN_WIDTH in lib/hero.ts, 1101px) and over, the text lies on
+   the photo, at the bottom of the visible first screen, on the bottom scrim lifted by the same amount; under it the photo is
+   at the top and the text below it on Оникс. hero breakpoint */
+.photo-hero {
+  position: relative;
+  margin-top: var(--nav-h);
+  background: var(--color-onyx);
   color: var(--color-travertine);
 }
-/* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
-body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
-  background-color: transparent;
-  border-color: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+.photo-hero__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.photo-hero__media .hero-scrim-bottom {
+  display: none;
+}
+.photo-hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 24px;
+  padding-top: 28px;
+  padding-bottom: 32px;
+}
+@media (min-width: 1101px) {
+  .photo-hero {
+    display: flex;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
+  }
+  .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    /* how far the text block is lifted: the hero's height less the visible height, when it is taller */
+    --lift: max(0px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h))));
+  }
+  /* the shared bottom scrim (65% at its darkest) with its solid zone lifted by the same amount, so it stays behind the text */
+  .photo-hero__media .hero-scrim-bottom {
+    display: block;
+    height: calc(100cqw * 9 / 16 * 0.6 + var(--lift));
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(100cqw * 9 / 16 * 0.33 + var(--lift)),
+      transparent 100%
+    );
+  }
+  /* the back link: top left on the picture */
+  .photo-hero__back {
+    position: absolute;
+    inset: 8px 0 auto;
+  }
+  .photo-hero__content {
+    flex: 1;
+    gap: 48px;
+    padding-top: 0;
+    /* at the bottom of the visible first screen: 56px, plus whatever the hero is taller than the screen under the header */
+    padding-bottom: max(56px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h)) + 56px));
+  }
 }
 
+/* The header's links while the bar is clear over a photo: full Травертин (not 75%), the current page's link too (the
+   Navbar gives it gold only on a solid bar; over a photo its underline tells it apart: gold read at 2.5:1 on a bright sky). */
+header[data-clear] a.nav-link:not(#site-logo) {
+  color: var(--color-travertine);
+}
 /* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
 .about-col {
   transition:
@@ -360,7 +405,6 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 }
 @media (prefers-reduced-motion: reduce) {
   .opening-rise,
-  .opening-settle,
   .q-in,
   .q-out {
     animation: none;

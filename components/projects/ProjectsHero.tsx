@@ -73,7 +73,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
 
   return (
     <section
-      className="pj-hero"
+      className="pj-hero photo-hero"
       aria-label="Проекти"
       onPointerDownCapture={(e) => (pointer.current = e.pointerType)}
       onFocus={(e) => e.target.matches(":focus-visible") && setKeyboardFocus(true)}
@@ -81,7 +81,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setKeyboardFocus(false);
       }}
     >
-      <div className="pj-media">
+      <div className="pj-media photo-hero__media">
         {slides.map((project, i) => (
           <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
             <div className="pj-slide-photo">
@@ -101,7 +101,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
         <div className="hero-scrim-bottom" aria-hidden />
       </div>
 
-      <div className="pj-wrap pj-hero-inner">
+      <div className="pj-wrap photo-hero__content">
         <div className="pj-hero-text">
           <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
           <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>

@@ -23,9 +23,6 @@ const dictionaries: Record<Locale, Record<string, string>> = {
     "quotes.by": "{name} · RESIDENT AT {project}",
     "quotes.indicator": "Quote {n}",
     "opening.back": "← ALL PROJECTS",
-    "opening.sound": "SOUND",
-    "opening.soundOn": "Turn sound on",
-    "opening.soundOff": "Turn sound off",
     "about.eyebrow": "ABOUT THE PROJECT",
   },
   mk: {
@@ -43,9 +40,6 @@ const dictionaries: Record<Locale, Record<string, string>> = {
     "quotes.by": "{name} · СТАНАР ВО {project}",
     "quotes.indicator": "Цитат {n}",
     "opening.back": "← СИТЕ ПРОЕКТИ",
-    "opening.sound": "ЗВУК",
-    "opening.soundOn": "Вклучи звук",
-    "opening.soundOff": "Исклучи звук",
     "about.eyebrow": "ЗА ПРОЕКТОТ",
   },
 };
