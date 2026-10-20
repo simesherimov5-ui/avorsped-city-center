@@ -676,20 +676,18 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
    with light foil text, and fills the same way. Used by <Button> and by the form submit. */
 .btn-primary {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  min-height: 44px;
-  padding: 22px 36px;
+  gap: 14px;
+  padding: 17px 29px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   color: var(--foil-line);
   font:
-    600 13px/1.2 var(--font-sans),
+    600 12px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -710,6 +708,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   /* the sheen is drawn twice the button's width and centred, so the label always sits on its brighter middle (Оникс
      text stays above 4.5:1 there; the darkest foil at the ends of the gradient falls outside the button) */
   background: var(--foil-sheen) center / 200% 100% no-repeat;
+  /* the button itself is not clipped (its tap area on phones reaches past the box), so the sweep layer is */
+  clip-path: inset(0);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
@@ -720,7 +720,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   color: var(--foil-light);
 }
 .btn-primary--sm {
-  padding: 14px 22px;
+  padding: 9px 18px;
   font-size: 12px;
 }
 .btn-primary__arrow {
@@ -728,10 +728,15 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border: 1px solid currentColor;
   border-radius: 50%;
+}
+.btn-primary__arrow svg,
+.btn-secondary__arrow svg {
+  width: 11px;
+  height: 6px;
 }
 /* Filled: hover (where there is a pointer), keyboard focus, and the --filled look at rest. */
 .btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]),
@@ -782,13 +787,13 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* Phones: tighter, so "ЗАКАЖИ КОНСУЛТАЦИЈА" fits at 360px; a longer label wraps rather than overflows. */
 @media (max-width: 640px) {
   .btn-primary {
-    gap: 12px;
-    padding: 18px 22px;
+    gap: 10px;
+    padding: 14px 18px;
     font-size: 12px;
     letter-spacing: var(--label-track);
   }
   .btn-primary--sm {
-    padding: 14px 22px;
+    padding: 9px 18px;
   }
   .btn-primary:not(.btn-primary--sm) {
     white-space: normal;
@@ -839,9 +844,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 14px 28px;
+  gap: 8px;
+  padding: 9px 22px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
@@ -865,16 +869,16 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   color: var(--color-bronze);
 }
 .btn-secondary--sm {
-  padding: 10px 20px;
+  padding: 9px 16px;
 }
 .btn-secondary__arrow {
   display: inline-flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin-block: -8px;
+  width: 24px;
+  height: 24px;
+  margin-block: -5px;
   border: 1px solid currentColor;
   border-radius: 50%;
   transition: transform var(--dur-fast) var(--ease);
@@ -963,6 +967,22 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .btn-secondary:not(.btn-secondary--sm) {
     white-space: normal;
     text-align: center;
+  }
+}
+/* Phones: the visible buttons are small, the tap area is not. An invisible box at least 44px tall, centred on the button
+   (a taller box only where the button is shorter), so a finger always has room. Used by every button with a label. */
+@media (max-width: 767px) {
+  .btn-primary::after,
+  .btn-secondary::after,
+  .ct-btn::after,
+  .bk-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
   }
 }
 

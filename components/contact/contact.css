@@ -641,15 +641,14 @@ a.ct-val:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  min-height: 44px;
-  padding: 22px 36px;
+  gap: 14px;
+  padding: 17px 29px;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   background: var(--color-onyx);
   color: var(--foil-line);
   font:
-    600 13px/1.2 var(--font-sans),
+    600 12px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: 0.2em;
@@ -667,10 +666,14 @@ a.ct-val:focus-visible {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border: 1px solid currentColor;
   border-radius: 50%;
+}
+.ct-btn__arrow svg {
+  width: 11px;
+  height: 6px;
 }
 .ct-btn:focus-visible:not(:disabled) {
   border-color: var(--foil-light);
@@ -696,8 +699,8 @@ a.ct-val:focus-visible {
 }
 @media (max-width: 640px) {
   .ct-btn {
-    gap: 12px;
-    padding: 18px 22px;
+    gap: 10px;
+    padding: 14px 18px;
     font-size: 12px;
     letter-spacing: 0.14em;
     white-space: normal;
@@ -724,17 +727,18 @@ a.ct-val:focus-visible {
 
 /* «Во ред» in the confirmation: the deployed small outline button. */
 .bk-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 0 22px;
+  gap: 10px;
+  min-height: 35px;
+  padding: 0 18px;
   border: 1px solid var(--color-copper);
   background: transparent;
   color: var(--color-copper);
   font:
-    500 11px/1 var(--font-sans),
+    500 12px/1 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: 0.26em;
@@ -956,7 +960,11 @@ a.ct-val:focus-visible {
   color: var(--color-gold);
 }
 .ct-btn--sm {
-  padding: 14px 28px;
+  padding: 7.5px 22px;
+}
+.ct-btn--sm .ct-btn__arrow {
+  width: 18px;
+  height: 18px;
 }
 @media (max-width: 480px) {
   .ct-area-actions {
