@@ -145,7 +145,9 @@ export function ProjectOpening({
       {/* under it, on Оникс: the name, where it is and its state, and on the right the sound and the way on */}
       <div className="opening-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-3 bg-chrome px-[5%] py-5 md:py-6">
         <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
-          <h1 className="m-0 font-display text-[clamp(32px,3.6vw,56px)] font-normal leading-none text-paper">{name}</h1>
+          <h1 className="m-0 font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper">
+            {name}
+          </h1>
           <div className="eyebrow uppercase text-accent">{eyebrow}</div>
         </div>
         <div className="flex items-center gap-8 text-label font-semibold uppercase tracking-label text-accent">
