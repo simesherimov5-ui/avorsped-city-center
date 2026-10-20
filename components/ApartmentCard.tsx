@@ -36,12 +36,12 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             priority={priority}
             // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
             className={cn(
-              "aspect-[4/3] transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]",
+              "aspect-[4/3] !bg-sand transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]",
               apartment.status === "sold" && "opacity-50"
             )}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-on-chrome/95" />
+          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-chrome/90" />
         </div>
       </Link>
 
@@ -56,7 +56,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           <Link
             href={`/development/apartment/${apartment.id}`}
             aria-label={`Погледни го стан ${apartment.number}`}
-            className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
+            className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:border-gold-light hover:text-gold-light"
           >
             <ArrowRight className="h-4 w-4" />
           </Link>

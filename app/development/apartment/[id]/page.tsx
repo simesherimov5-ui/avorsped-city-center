@@ -95,7 +95,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         <Spec label="Статус" value={statusLabel(apartment.status)} />
       </dl>
       <div className="space-y-3 border-t border-line pt-6">
-        <Button href={inquiryHref} variant="primary" className="w-full">
+        <Button href={inquiryHref} variant="primary" tone="dark" className="w-full">
           Прашај за овој стан
         </Button>
       </div>
@@ -110,7 +110,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
   );
 
   return (
-    <ZoomEnter className="pt-24 sm:pt-28">
+    <ZoomEnter className="on-dark pt-24 sm:pt-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-6 lg:px-10">
         <ZoomNavLink
           href={back.href}
@@ -137,8 +137,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             <div>
               <h2 className="t-h3">Архитектонска основа</h2>
               <div className="mt-6 grid gap-8 lg:grid-cols-[3fr_2fr]">
-                <div className="relative border border-line bg-cream p-4 sm:p-6">
-                  <span className="eyebrow absolute left-4 top-4 z-10 bg-warm-white/90 px-2.5 py-1 text-muted">
+                <div className="relative rounded-xl border border-gold/50 bg-sand p-4 sm:p-6">
+                  <span className="eyebrow absolute left-4 top-4 z-10 rounded-sm bg-chrome/90 px-2.5 py-1 text-gold">
                     Основа
                   </span>
                   {/* never cropped, and a line drawing is served as it is, never larger than its own pixels */}
@@ -159,7 +159,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     <tbody>
                       {apartment.rooms.map((room, i) => (
                         <tr key={`${room.name}-${i}`} className="border-b border-line">
-                          <td className="py-2.5 text-ink/70">{room.name}</td>
+                          <td className="py-2.5 text-gold-light/90">{room.name}</td>
                           <td className="py-2.5 text-right font-medium">
                             {formatArea(room.area, apartment.areaDecimals)}
                           </td>

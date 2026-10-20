@@ -47,7 +47,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
   const counts = availabilityCounts(units);
 
   return (
-    <ZoomEnter className="pt-24 sm:pt-28">
+    <ZoomEnter className="on-dark pt-24 sm:pt-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
         <Link
           href="/development"

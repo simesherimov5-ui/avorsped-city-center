@@ -55,7 +55,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   });
 
   return (
-    <ZoomEnter className="pt-24 sm:pt-28">
+    <ZoomEnter className="on-dark pt-24 sm:pt-28">
       {/* A quiet wayfinding line, not a spec header — the visitor already
           arrived through the building, so it doesn't need repeating as a
           prominent heading. The floor plan and its apartments are the
