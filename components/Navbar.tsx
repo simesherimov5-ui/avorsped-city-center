@@ -194,6 +194,7 @@ export function Navbar() {
         <header
           ref={navRef}
           data-at-top={!scrolled}
+          data-clear={!solid ? "" : undefined}
           data-open={open}
           // Keyboard focus anywhere in the bar brings it back.
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}

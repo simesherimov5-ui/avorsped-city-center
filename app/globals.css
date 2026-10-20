@@ -307,32 +307,37 @@ h4 {
   }
 }
 /* Local scrims for text on a photo (a full-screen hero; reusable). The top one lies under the header and the back link, the
-   bottom one under the title block; the middle of the photo is left in its own colours. Strengths were raised from 55% /
-   75% in small steps until the gold label and back link and the header links read at 4.5:1 over the brightest 5% of the
-   sky behind them (measured at six sizes). */
+   bottom one under the title block; the middle of the photo is left in its own colours. The small text on them (the label,
+   the back link, the header links) is Травертин, not gold, so the scrims can stay light: never darker than 65%. Each holds
+   its 65% under the text and then fades out (a plain 55% → clear fade left the text on the bright sky at 2:1). */
 .hero-scrim-top {
   position: absolute;
   inset: 0 0 auto 0;
-  height: 250px;
+  height: 200px;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--color-onyx) 80%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 80%, transparent) 45%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 55%,
     transparent 100%
   );
 }
 .hero-scrim-bottom {
   position: absolute;
   inset: auto 0 0 0;
-  height: 65%;
+  height: 60%;
   pointer-events: none;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--color-onyx) 82%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 82%, transparent) 45%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 55%,
     transparent 100%
   );
+}
+/* The header's links while the bar is clear over a photo: full Травертин (not 75%). The active link keeps its own colour. */
+header[data-clear] a.nav-link:not(#site-logo),
+body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) a.nav-link:not(#site-logo) {
+  color: var(--color-travertine);
 }
 /* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
 body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {

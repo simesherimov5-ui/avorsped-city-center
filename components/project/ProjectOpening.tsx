@@ -12,7 +12,8 @@ import { useMediaQuery } from "@/lib/useMediaQuery";
  * The opening of a project page, like the first frame of a film: the picture (or a short film) fills the whole first
  * screen and the text sits on it, in the site's container: the back link top left, and bottom left the place and state,
  * the project's name and the line about it. Two local scrims (.hero-scrim-top, .hero-scrim-bottom) keep the text readable
- * and leave the middle of the picture in its own colours; there are no text shadows. The film is muted, loops, and
+ * and leave the middle of the picture in its own colours; there are no text shadows. The back link and the label are Травертин
+ * (85%), not gold: gold does not read on a bright sky. The film is muted, loops, and
  * is left out on phones and with reduced motion, where the picture is shown instead. The sound button only appears
  * when a film with sound is playing, and always starts muted. With no film the picture settles slowly (still with
  * reduced motion).
@@ -119,7 +120,7 @@ export function ProjectOpening({
         <div className="mx-auto w-full max-w-7xl px-5 pt-[calc(var(--nav-h)+8px)] sm:px-8 lg:px-10">
           <Link
             href={backHref}
-            className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-accent transition-colors hover:text-accent/80"
+            className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper/85 transition-colors hover:text-paper"
           >
             {t("opening.back")}
           </Link>
@@ -129,7 +130,7 @@ export function ProjectOpening({
         <div className="mx-auto w-full max-w-7xl px-5 pb-8 sm:px-8 md:pb-14 lg:px-10">
           <div className="opening-rise flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
             <div className="min-w-0">
-              <div className="eyebrow uppercase text-accent">{eyebrow}</div>
+              <div className="eyebrow uppercase text-paper/85">{eyebrow}</div>
               <h1 className="m-0 mt-3 font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper">
                 {name}
               </h1>
