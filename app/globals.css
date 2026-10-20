@@ -337,7 +337,8 @@ h4 {
   aspect-ratio: 16 / 9;
   overflow: hidden;
 }
-.photo-hero__media .hero-scrim-bottom {
+.photo-hero__media .hero-scrim-bottom,
+.photo-hero__media .hero-scrim-top {
   display: none;
 }
 .photo-hero__content {
@@ -385,6 +386,45 @@ h4 {
     padding-top: 0;
     /* at the bottom of the visible first screen: 56px, plus whatever the hero is taller than the screen under the header */
     padding-bottom: max(56px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h)) + 56px));
+  }
+  /* The fill variant (the Проекти hero): exactly the first screen, from under the header to the bottom of the window, at least
+     560px. The photos cover it (object-fit: cover, a little more of the sky than the road is cut: 50% 55% unless the
+     picture has its own focus point), the text block is plain 56px from the bottom and the scrim hangs at the hero's bottom. */
+  .photo-hero--fill {
+    --hero-h: max(560px, calc(100svh - var(--nav-h)));
+    height: var(--hero-h);
+    aspect-ratio: auto;
+  }
+  .photo-hero--fill .photo-hero__media {
+    --lift: 0px;
+  }
+  .photo-hero--fill .photo-hero__media .hero-scrim-bottom {
+    height: calc(var(--hero-h) * 0.6);
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(var(--hero-h) * 0.33),
+      transparent 100%
+    );
+  }
+  /* the shared top scrim (65% at its darkest), a little longer, under the heading block that stands at the top of the picture */
+  .photo-hero--fill .photo-hero__media .hero-scrim-top {
+    display: block;
+    height: 280px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 62%,
+      transparent 100%
+    );
+  }
+  .photo-hero--fill .photo-hero__content {
+    /* room under the header for a block at the top of the picture (the Проекти heading) */
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+  .photo-hero--fill .photo-hero__media img {
+    object-position: 50% 55%;
   }
 }
 

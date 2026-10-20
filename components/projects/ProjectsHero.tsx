@@ -73,7 +73,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
 
   return (
     <section
-      className="pj-hero photo-hero"
+      className="pj-hero photo-hero photo-hero--fill"
       aria-label="Проекти"
       onPointerDownCapture={(e) => (pointer.current = e.pointerType)}
       onFocus={(e) => e.target.matches(":focus-visible") && setKeyboardFocus(true)}
@@ -98,6 +98,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
             </div>
           </div>
         ))}
+        <div className="hero-scrim-top" aria-hidden />
         <div className="hero-scrim-bottom" aria-hidden />
       </div>
 

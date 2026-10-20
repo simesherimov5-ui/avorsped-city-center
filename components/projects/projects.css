@@ -46,6 +46,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* the heading block goes to the top of the picture where the hero is a full screen; the caption row stays at the bottom
+     (the column is pushed apart, and has no room to spare when the text lies below the photo) */
+  margin-bottom: auto;
   opacity: 0;
   transform: translateY(24px);
   animation: pj-fadeup 1.4s var(--pj-ease) 0.3s forwards;
