@@ -65,8 +65,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <ProjectOpeningSection project={project} />
           <ProjectMaterials project={project} />
           <ProjectParking project={project} />
-          <ProjectLocation project={project} />
           <ProjectBuildProgress project={project} />
+          <ProjectLocation project={project} />
           <ProjectBook project={project} />
         </>
       )}

@@ -141,7 +141,10 @@ export default function DevelopmentPage() {
           <ProjectMaterials project={cityCenter} />
           <ProjectParking project={cityCenter} />
 
-          {/* 6 · Локација: the walking list and the map; the text about the place stays under them */}
+          {/* 6 · Тек на градба · 7 · Локација · 8 · Закажете средба */}
+          <ProjectBuildProgress project={cityCenter} />
+
+          {/* 7 · Локација: the walking list and the map; the text about the place stays under them */}
           <ProjectLocation
             project={cityCenter}
             map={
@@ -182,8 +185,6 @@ export default function DevelopmentPage() {
             }
           />
 
-          {/* 7 · Тек на градба · 8 · Закажете средба */}
-          <ProjectBuildProgress project={cityCenter} />
           <ProjectBook project={cityCenter} />
         </>
       )}
