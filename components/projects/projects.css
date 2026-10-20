@@ -55,9 +55,19 @@
     position: absolute;
     inset: 0;
     aspect-ratio: auto;
+    /* how far the text block is lifted (see .pj-hero-inner): the hero's height less the visible height, when it is taller */
+    --lift: max(0px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h))));
   }
+  /* the shared bottom scrim (65% at its darkest) with its solid zone lifted by the same amount, so it stays behind the text */
   .pj-media .hero-scrim-bottom {
     display: block;
+    height: calc(100cqw * 9 / 16 * 0.6 + var(--lift));
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(100cqw * 9 / 16 * 0.33 + var(--lift)),
+      transparent 100%
+    );
   }
 }
 .pj-slide {
