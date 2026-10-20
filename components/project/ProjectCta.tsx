@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
  */
 export function ProjectCta({
   projectId,
-  label = "Контактирај за овој проект",
+  label = "Контактирај нè",
   href,
 }: {
   projectId: string;
