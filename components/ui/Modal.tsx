@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
 import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
-import { getLenis } from "@/lib/lenis";
+import { lockScroll } from "@/lib/scroll-lock";
 import { cn } from "@/lib/cn";
 
 const FOCUSABLE =
@@ -57,7 +57,7 @@ type Props = {
  * The one pop-up of the site (booking confirmation, photo viewer). A black overlay fades in and the content
  * rises 24px while scaling 0.97 → 1; with reduced motion it is a plain 0.2s fade. Focus moves inside and is
  * trapped there, Esc / the ✕ / a click on the overlay close it, focus returns to whatever opened it, and the
- * page behind is locked (Lenis paused) while it is open. It renders nothing while closed.
+ * page behind is locked (`lib/scroll-lock.ts`) while it is open. It renders nothing while closed.
  */
 export function Modal({
   open,
@@ -117,10 +117,7 @@ export function Modal({
   useEffect(() => {
     if (!shown) return;
     const returnTo = document.activeElement as HTMLElement | null;
-    const html = document.documentElement;
-    const previousOverflow = html.style.overflow;
-    html.style.overflow = "hidden";
-    getLenis()?.stop();
+    const unlock = lockScroll();
 
     const dialog = dialogRef.current;
     const first =
@@ -128,8 +125,7 @@ export function Modal({
     (first ?? dialog)?.focus({ preventScroll: true });
 
     return () => {
-      html.style.overflow = previousOverflow;
-      getLenis()?.start();
+      unlock();
       returnTo?.focus?.({ preventScroll: true });
     };
   }, [shown]);
@@ -177,7 +173,7 @@ export function Modal({
       aria-label="Затвори"
       className={cn(
         "bk-modal-close",
-        closeIn === "screen" ? "absolute right-4 top-4 z-10 sm:right-6 sm:top-6" : "absolute right-3 top-3"
+        closeIn === "screen" ? "fixed right-4 top-4 z-10 sm:right-6 sm:top-6" : "absolute right-3 top-3"
       )}
     >
       <X className="h-5 w-5" strokeWidth={1.25} aria-hidden />
@@ -192,6 +188,8 @@ export function Modal({
       aria-label={label}
       data-theme="black"
       tabIndex={-1}
+      // the smooth scroll is paused while it is open and would swallow the wheel: a tall pop-up still scrolls inside
+      data-lenis-prevent
       onKeyDown={trapTab}
       className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto overscroll-contain p-5 outline-none"
     >

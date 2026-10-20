@@ -10,6 +10,7 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { CALM_EASE, DUR, gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { lockScroll } from "@/lib/scroll-lock";
 import { isBlackPage } from "@/lib/theme";
 import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
@@ -96,11 +97,11 @@ export function Navbar() {
 
   useEffect(() => {
     if (!open) return;
-    document.documentElement.style.overflow = "hidden";
+    const unlock = lockScroll();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => {
-      document.documentElement.style.overflow = "";
+      unlock();
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -141,7 +142,12 @@ export function Navbar() {
     };
     place(linePlaced.current);
     linePlaced.current = true;
-    const onResize = () => place(false);
+    let width = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === width) return;
+      width = window.innerWidth;
+      place(false);
+    };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [activeHref]);

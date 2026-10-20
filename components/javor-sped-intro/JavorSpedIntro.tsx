@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, CALM_EASE, PREMIUM_EASE } from "@/lib/gsap";
 import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
+import { lockScroll } from "@/lib/scroll-lock";
 import "./javor-sped-intro.css";
 
 type Props = {
@@ -31,12 +32,7 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
   const [gone, setGone] = useState(false);
 
   // Page scrolling stays locked for as long as the intro is on screen.
-  useEffect(() => {
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      document.documentElement.style.overflow = "";
-    };
-  }, []);
+  useEffect(() => lockScroll(), []);
 
   useGSAP(
     () => {
