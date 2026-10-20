@@ -1044,8 +1044,9 @@ body {
     opacity: 0;
   }
 }
-/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. */
-body:has([data-compare-bar]) {
+/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. The room
+   is added inside the footer: padding on the body would show a band of the page colour under the dark footer. */
+body:has([data-compare-bar]) footer {
   padding-bottom: 140px;
 }
 /* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */
