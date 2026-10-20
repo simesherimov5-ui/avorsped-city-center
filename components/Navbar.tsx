@@ -273,7 +273,7 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Мени"
-          className="mobile-menu fixed inset-0 z-40 flex flex-col overflow-y-auto bg-ink px-5 pb-8 pt-24 sm:px-8 lg:hidden"
+          className="mobile-menu fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-ink px-5 pb-8 pt-24 sm:px-8 lg:hidden"
         >
           <nav className="flex flex-1 flex-col justify-center">
             {LINKS.map((link, i) => (
