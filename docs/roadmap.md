@@ -38,7 +38,7 @@ Move existing files into `features/` when you touch them, not in one big-bang mo
 - The i18n scaffold in `lib/i18n.tsx` is used by two files; almost all UI text is hardcoded Macedonian.
 - Forms (consultation, contact) are mocks.
 - Two animation systems coexist: Framer Motion (`components/ui/Reveal.tsx`, older pages) and GSAP + Lenis (`components/motion/`, `components/intro/`, `lib/gsap.ts`).
-  `components/ui/SmoothScroll.tsx` appears unused (only the `components/motion/` version is imported). Decide whether to consolidate.
+  Decide whether to consolidate.
 - Hex colours outside the tokens: `FloorPlan.tsx` (baseline in `eslint.config.mjs`).
 - One `eslint-disable react-hooks/set-state-in-effect` line is a deliberate post-mount sync (`app/apartments/page.tsx`).
   `useSyncExternalStore` would remove it but needs a browser test.
