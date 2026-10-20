@@ -38,24 +38,22 @@ export function Hero() {
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const eyebrow = eyebrowRef.current;
       const headline = headlineRef.current;
       const stats = statsBarRef.current;
-      const scrollCue = scrollIndicatorRef.current;
-      if (!eyebrow || !headline || !stats || !scrollCue) return;
+      if (!eyebrow || !headline || !stats) return;
 
       if (!revealing) {
-        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 0 });
-        gsap.set([eyebrow, stats, scrollCue], { y: 14 });
+        gsap.set([eyebrow, headline, stats], { opacity: 0 });
+        gsap.set([eyebrow, stats], { y: 14 });
         return;
       }
 
       if (instant || revealedAtMount.current) {
-        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 1, y: 0 });
+        gsap.set([eyebrow, headline, stats], { opacity: 1, y: 0 });
         return;
       }
 
@@ -66,8 +64,7 @@ export function Hero() {
       const tl = gsap.timeline();
       tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1)
         .to(split.lines, { yPercent: 0, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.3)
-        .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1)
-        .to(scrollCue, { opacity: 1, y: 0, duration: 0.7 }, 1.3);
+        .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1);
 
       return () => {
         split.revert();
@@ -167,20 +164,6 @@ export function Hero() {
             </span>
           </span>
         </div>
-      </div>
-
-      {/* Scroll indicator — a thin gold line pulsing downward in a loop. */}
-      <div
-        ref={scrollIndicatorRef}
-        className="absolute bottom-28 right-6 flex flex-col items-center gap-3 text-paper/62 sm:bottom-20 lg:right-10"
-      >
-        <span className="relative h-9 w-px overflow-hidden bg-line-dark">
-          <motion.span
-            animate={reduceMotion ? undefined : { y: ["-100%", "100%"] }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            className="absolute inset-x-0 h-1/2 bg-gold"
-          />
-        </span>
       </div>
     </section>
   );

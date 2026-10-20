@@ -6,7 +6,6 @@ import { Media } from "@/components/ui/Media";
 import { coverSizes } from "@/lib/image-sizes";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useI18n } from "@/lib/i18n";
-import { getLenis } from "@/lib/lenis";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 
 /**
@@ -25,7 +24,6 @@ export function ProjectOpening({
   video,
   hasSound = true,
   backHref = "/projects",
-  nextId = "za-proektot",
 }: {
   name: string;
   /** "CITY · STATUS", already joined. */
@@ -35,8 +33,6 @@ export function ProjectOpening({
   video?: string;
   hasSound?: boolean;
   backHref?: string;
-  /** The id of the section the "scroll" link goes to. */
-  nextId?: string;
 }) {
   const { t } = useI18n();
   const phone = useMediaQuery("(max-width: 767px)");
@@ -79,15 +75,6 @@ export function ProjectOpening({
     if (!el) return;
     el.muted = !el.muted;
     setMuted(el.muted);
-  };
-
-  const scrollNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const target = document.getElementById(nextId);
-    const top = target ? target.getBoundingClientRect().top + window.scrollY : window.innerHeight;
-    const lenis = getLenis();
-    if (lenis && !reduceMotion) lenis.scrollTo(top, { duration: 1.2 });
-    else window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
   };
 
   return (
@@ -174,13 +161,6 @@ export function ProjectOpening({
               {t("opening.sound")} <span aria-hidden>{muted ? "×" : "♪"}</span>
             </button>
           )}
-          <a
-            href={`#${nextId}`}
-            onClick={scrollNext}
-            className="focus-ring inline-flex min-h-11 items-center uppercase tracking-label"
-          >
-            {t("opening.scroll")}
-          </a>
         </div>
       </div>
     </section>

@@ -26,7 +26,6 @@ const dictionaries: Record<Locale, Record<string, string>> = {
     "opening.sound": "SOUND",
     "opening.soundOn": "Turn sound on",
     "opening.soundOff": "Turn sound off",
-    "opening.scroll": "SCROLL ↓",
     "about.eyebrow": "ABOUT THE PROJECT",
   },
   mk: {
@@ -47,7 +46,6 @@ const dictionaries: Record<Locale, Record<string, string>> = {
     "opening.sound": "ЗВУК",
     "opening.soundOn": "Вклучи звук",
     "opening.soundOff": "Исклучи звук",
-    "opening.scroll": "СКРОЛАЈ ↓",
     "about.eyebrow": "ЗА ПРОЕКТОТ",
   },
 };

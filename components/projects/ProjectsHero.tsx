@@ -122,12 +122,6 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
               </span>
             )}
           </div>
-          <span className="pj-scroll" aria-hidden>
-            СКРОЛАЈ
-            <span className="pj-cue-line">
-              <span className="pj-cue" />
-            </span>
-          </span>
         </div>
       </div>
     </section>

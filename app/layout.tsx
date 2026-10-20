@@ -11,6 +11,7 @@ import { TransitionOverlayProvider } from "@/components/ui/ZoomTransition";
 import { IntroProvider } from "@/components/intro/IntroProvider";
 import { PageTransition } from "@/components/page-transition/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 import { companyInfo, projects } from "@/data";
 import { SITE_NAME, siteUrl } from "@/lib/seo";
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <CompareProvider>
                   <PageTransition>
                     <SmoothScroll />
+                    <ScrollIndicator />
                     <GrayscaleToggle />
                     <Navbar />
                     <main id="main" tabIndex={-1} className="outline-none">
