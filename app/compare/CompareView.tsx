@@ -10,7 +10,6 @@ import { floorLabelOf, getApartment, placeLabel } from "@/data";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 
 const ROWS: { label: string; get: (a: NonNullable<ReturnType<typeof getApartment>>) => string }[] = [
   { label: "Проект", get: (a) => placeLabel(a).project },
@@ -63,7 +62,7 @@ export function CompareView() {
             <div>
               <div className="t-h3">Сè уште немате избрано станови</div>
               <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                Додајте до 3 станови за споредба од листата со достапни единици.
+                Додајте до 3 станови за споредба.
               </p>
             </div>
             <Button href="/development" variant="primary" tone="dark" size="sm">
@@ -85,7 +84,6 @@ export function CompareView() {
                         Стан {a.number}
                       </Link>
                       <div className="mt-1 text-sm font-normal text-muted">{placeLabel(a).text}</div>
-                      <StatusBadge status={a.status} variant="pill" className="mt-2" />
                     </th>
                   ))}
                 </tr>

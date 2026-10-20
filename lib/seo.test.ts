@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { pageMetadata, truncate } from "@/lib/seo";
-import { availableWord, floorsText, unitsText } from "@/lib/plural";
+import { floorsText, unitsText } from "@/lib/plural";
 
 describe("truncate", () => {
   it("leaves a short text alone", () => {
@@ -39,9 +39,6 @@ describe("pageMetadata", () => {
 
 describe("plural helpers", () => {
   it("use the singular form only for 1", () => {
-    expect(availableWord(1)).toBe("достапен");
-    expect(availableWord(0)).toBe("достапни");
-    expect(availableWord(2)).toBe("достапни");
     expect(unitsText(1)).toBe("1 стан");
     expect(unitsText(5)).toBe("5 станови");
     expect(floorsText(1)).toBe("1 кат");

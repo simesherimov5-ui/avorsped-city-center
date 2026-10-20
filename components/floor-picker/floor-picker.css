@@ -161,24 +161,6 @@
   font-weight: 400;
   line-height: 1.5;
 }
-.fp-unit-st {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--label-size);
-  font-weight: 600;
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-.fp-unit-st.is-available {
-  color: var(--color-gold);
-}
-.fp-unit-st.is-reserved {
-  color: var(--color-travertine);
-}
-.fp-unit-st.is-sold {
-  color: color-mix(in srgb, var(--color-travertine) 55%, transparent);
-}
 .fp-floorlink {
   display: inline-flex;
   align-items: center;

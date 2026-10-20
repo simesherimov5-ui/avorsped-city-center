@@ -12,9 +12,8 @@ import {
   placeOf,
   companyInfo,
 } from "@/data";
-import { formatArea, orientationLabel, statusLabel, typeLabel } from "@/lib/format";
+import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
 import { ApartmentTour } from "@/components/ApartmentTour";
 import { ApartmentCard } from "@/components/ApartmentCard";
@@ -92,7 +91,6 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
         )}
         {apartment.orientation && <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />}
         <Spec label="Кат" value={floorLabelOf(apartment)} />
-        <Spec label="Статус" value={statusLabel(apartment.status)} />
       </dl>
       <div className="space-y-3 border-t border-line pt-6">
         <Button href={inquiryHref} variant="primary" tone="dark" className="w-full">
@@ -129,7 +127,6 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
             </div>
             <h1 className="t-h1 mt-1.5">Стан {apartment.number}</h1>
           </div>
-          <StatusBadge status={apartment.status} variant="pill" className="mt-2" />
         </div>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-3">

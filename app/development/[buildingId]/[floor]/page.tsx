@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronRight } from "lucide-react";
-import { getBuilding, getApartmentsForFloor, buildings, apartments, development, availabilityCounts } from "@/data";
-import { availableWord, unitsText } from "@/lib/plural";
+import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
+import { unitsText } from "@/lib/plural";
 import { pageMetadata } from "@/lib/seo";
 import { ApartmentCard } from "@/components/ApartmentCard";
 import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
-import { StatusLegend } from "@/components/ui/StatusBadge";
 import { FloorList } from "@/components/FloorList";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 
@@ -25,10 +24,9 @@ export async function generateMetadata({
   const level = building?.floors.find((f) => f.number === floorNumber);
   if (!building || !level) return { title: "Кат", robots: { index: false } };
   const units = getApartmentsForFloor(building.id, floorNumber);
-  const open = availabilityCounts(units).available;
   return pageMetadata({
     title: `${building.name}, ${level.label} — ${development.name}`,
-    description: `${level.label} во ${building.name}: ${unitsText(units.length)}, од кои ${open} ${availableWord(open)}. Изберете стан на основата на катот.`,
+    description: `${level.label} во ${building.name}: ${unitsText(units.length)}. Изберете стан на основата на катот.`,
     path: `/development/${building.id}/${floorNumber}`,
     image: "/development/opengraph-image",
   });
@@ -46,11 +44,10 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   const units = getApartmentsForFloor(building.id, floorNum);
   const floorNavItems = building.floors.map((f) => {
     const floorUnits = apartments.filter((a) => a.buildingId === building.id && a.floor === f.number);
-    const available = floorUnits.filter((a) => a.status === "available").length;
     return {
       number: f.number,
       label: f.label,
-      meta: `${unitsText(floorUnits.length)} · ${available} ${availableWord(available)}`,
+      meta: unitsText(floorUnits.length),
     };
   });
 
@@ -89,11 +86,9 @@ export default async function FloorPage({ params }: { params: Promise<{ building
                     area: a.area,
                     areaDecimals: a.areaDecimals,
                     bedrooms: a.bedrooms,
-                    status: a.status,
                     outline: a.outline,
                   }))}
                 />
-                <StatusLegend className="mt-4" />
               </>
             ) : (
               // a floor without a sketch: its apartments, as cards

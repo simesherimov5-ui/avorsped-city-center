@@ -178,7 +178,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             ...floor,
             apartments: apartmentsOf(project.id)
               .filter((a) => a.floor === floor.number)
-              .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms, status: a.status })),
+              .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms })),
           }))}
         />
       )}

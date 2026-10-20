@@ -78,15 +78,6 @@
     fill var(--dur-fast) var(--ease),
     stroke var(--dur-fast) var(--ease);
 }
-/* by shape and not by colour alone: free is filled, reserved is an outline, sold is a darker fill */
-.fs-shape[data-status="reserved"] polygon {
-  fill: transparent;
-  stroke: color-mix(in srgb, var(--color-onyx) 40%, transparent);
-  stroke-width: 1px;
-}
-.fs-shape[data-status="sold"] polygon {
-  fill: color-mix(in srgb, var(--color-onyx) 18%, transparent);
-}
 .fs-shape:hover polygon,
 .fs-shape.is-hot polygon,
 .fs-shape:focus-visible polygon {
@@ -108,8 +99,7 @@
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 9px 3px 8px;
+  padding: 3px 9px;
   transform: translate(-50%, -50%);
   border: 1px solid transparent;
   background: var(--color-sand);
@@ -127,7 +117,7 @@
 /* floors with ten or more apartments: smaller numbers, so they never overlap */
 .fs-chips.is-dense .fs-chip {
   gap: 3px;
-  padding: 1px 5px 1px 4px;
+  padding: 1px 5px;
   font-size: clamp(9px, 1.15vw, 13px);
 }
 .fs-chip.is-hot {
@@ -167,8 +157,4 @@
   .fs-chip {
     transition: none;
   }
-}
-
-.fs-mk {
-  color: var(--color-bronze);
 }

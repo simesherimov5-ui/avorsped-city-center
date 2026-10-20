@@ -3,11 +3,11 @@
 import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
-import type { Apartment, Building, MediaImage } from "@/types";
+import type { Building, MediaImage } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { cn } from "@/lib/cn";
-import { availableWord, floorsText, unitsText } from "@/lib/plural";
+import { floorsText, unitsText } from "@/lib/plural";
 
 interface Rect {
   x: number;
@@ -33,8 +33,6 @@ const STATUS_LABEL: Record<string, string> = {
 interface MasterplanProps {
   /** The buildings to plot — any project with more than one building can pass its own. */
   buildings: Building[];
-  /** Used to compute each building's live availability count. */
-  apartments: Apartment[];
   /** The aerial/site-plan photo the hotspots are positioned over. */
   image: MediaImage;
   /** Marker position per building.id, as percentages of `image`. */
@@ -47,11 +45,8 @@ interface MasterplanProps {
   north?: number;
 }
 
-type BuildingWithAvailability = Building & { available: number };
-
 export function Masterplan({
   buildings,
-  apartments,
   image,
   hotspots,
   basePath,
@@ -63,12 +58,7 @@ export function Masterplan({
   const [selected, setSelected] = useState<string | null>(null);
   const [selectedRect, setSelectedRect] = useState<Rect | null>(null);
 
-  const buildingStats: BuildingWithAvailability[] = buildings.map((building) => ({
-    ...building,
-    available: apartments.filter((a) => a.buildingId === building.id && a.status === "available").length,
-  }));
-
-  const active = buildingStats.find((b) => b.id === selected) ?? null;
+  const active = buildings.find((b) => b.id === selected) ?? null;
   const choose = (id: string, el: Element) => {
     setSelectedRect(rectOf(el));
     setSelected(id);
@@ -92,13 +82,12 @@ export function Masterplan({
 
           {north !== undefined && <Compass north={north} />}
 
-          {buildingStats.map((building) => {
+          {buildings.map((building) => {
             const spot = hotspots[building.id];
             if (!spot) return null;
 
             const isHovered = hovered === building.id;
             const isSelected = selected === building.id;
-            const isUnavailable = building.available === 0;
             const isDimmed = Boolean(selected) && !isSelected && !isHovered;
 
             return (
@@ -129,11 +118,9 @@ export function Masterplan({
                     (isSelected || isHovered) && "outline outline-1 outline-offset-4 outline-accent/50",
                     isSelected
                       ? "border-accent bg-accent text-chrome"
-                      : isUnavailable
-                        ? "border-on-chrome/20 bg-ink/20 text-on-chrome/62"
-                        : isHovered
-                          ? "border-accent bg-accent/25 text-chrome"
-                          : "border-on-chrome/50 bg-chrome/85 text-on-chrome"
+                      : isHovered
+                        ? "border-accent bg-accent/25 text-chrome"
+                        : "border-on-chrome/50 bg-chrome/85 text-on-chrome"
                   )}
                 >
                   {building.shortLabel}
@@ -150,9 +137,6 @@ export function Masterplan({
                     <div>
                       {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
-                    <div>
-                      {building.available} {availableWord(building.available)} сега
-                    </div>
                     <div>{STATUS_LABEL[building.status]}</div>
                   </div>
                 </motion.div>
@@ -164,7 +148,7 @@ export function Masterplan({
         {/* Desktop — persistent, refined info panel beside the plan */}
         <div className="hidden lg:block">
           <PanelStack
-            buildings={buildingStats}
+            buildings={buildings}
             active={active}
             basePath={basePath}
             originRect={selectedRect}
@@ -172,10 +156,10 @@ export function Masterplan({
             idle={
               <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
                 <p className="text-sm leading-relaxed text-muted">
-                  Изберете зграда од планот за катови, достапност и фаза на изградба.
+                  Изберете зграда од планот за катови и фаза на изградба.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-2">
-                  {buildingStats.map((b) => (
+                  {buildings.map((b) => (
                     <button
                       key={b.id}
                       type="button"
@@ -202,7 +186,7 @@ export function Masterplan({
       {/* Mobile — a dedicated selector strip instead of a shrunken hover UI */}
       <div className="mt-6 lg:hidden">
         <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
-          {buildingStats.map((building) => {
+          {buildings.map((building) => {
             const isSelected = selected === building.id;
             return (
               <button
@@ -233,7 +217,7 @@ export function Masterplan({
 
         <div className="mt-4">
           <PanelStack
-            buildings={buildingStats}
+            buildings={buildings}
             active={active}
             basePath={basePath}
             originRect={selectedRect}
@@ -241,7 +225,7 @@ export function Masterplan({
             idle={
               <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
                 <p className="text-sm leading-relaxed text-muted">
-                  Допрете на зграда погоре за катови, достапност и фаза на изградба.
+                  Допрете на зграда погоре за катови и фаза на изградба.
                 </p>
               </div>
             }
@@ -254,7 +238,7 @@ export function Masterplan({
           aria-hidden={active ? true : undefined}
           className={cn("mx-auto mt-6 hidden max-w-md text-center text-sm text-muted lg:block", active && "invisible")}
         >
-          Сите згради се достапни за истражување — изберете од планот или од листата.
+          Сите згради може да ги разгледате — изберете од планот или од листата.
         </p>
       )}
     </div>
@@ -274,8 +258,8 @@ function PanelStack({
   onChoose,
   idle,
 }: {
-  buildings: BuildingWithAvailability[];
-  active: BuildingWithAvailability | null;
+  buildings: Building[];
+  active: Building | null;
   basePath: string;
   originRect: Rect | null;
   onChoose: (id: string, el: Element) => void;
@@ -339,11 +323,11 @@ function BuildingPanel({
   onChoose,
   all,
 }: {
-  building: BuildingWithAvailability;
+  building: Building;
   basePath: string;
   originRect: Rect | null;
   onChoose: (id: string, el: Element) => void;
-  all: BuildingWithAvailability[];
+  all: Building[];
   /** Only takes up the room: see PanelStack. */
   standIn?: boolean;
 }) {
@@ -353,13 +337,11 @@ function BuildingPanel({
       <div aria-hidden className="h-px w-full bg-line" />
       {building.description && <p className="m-0 text-base leading-[1.8] text-muted">{building.description}</p>}
       <p className="m-0 text-sm text-muted">
-        {floorsText(building.floors.length)} · {unitsText(building.totalApartments)} · {building.available}{" "}
-        {availableWord(building.available)}
+        {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
       </p>
       <div className="flex items-center gap-3 text-label font-semibold uppercase tracking-label text-ink">
         <span aria-hidden className="block h-2 w-2 rounded-full bg-bronze" />
         {building.status === "completed" ? "Завршено" : "Во изградба"}
-        {building.available > 0 && <> · Во продажба</>}
         <span className="sr-only"> · {STATUS_LABEL[building.status]}</span>
       </div>
       <ZoomNavLink

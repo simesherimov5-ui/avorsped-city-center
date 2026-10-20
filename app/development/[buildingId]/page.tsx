@@ -3,14 +3,12 @@ import type { Metadata } from "next";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ChevronLeft } from "lucide-react";
 import { getBuilding, apartments, buildings, development } from "@/data";
-import { availabilityCounts } from "@/data";
 import { Media } from "@/components/ui/Media";
 import { FloorPicker } from "@/components/floor-picker/FloorPicker";
-import { StatusLegend } from "@/components/ui/StatusBadge";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { pageMetadata } from "@/lib/seo";
-import { availableWord, floorsText, unitsText } from "@/lib/plural";
+import { floorsText, unitsText } from "@/lib/plural";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
@@ -29,10 +27,9 @@ export async function generateMetadata({ params }: { params: Promise<{ buildingI
   const { buildingId } = await params;
   const building = getBuilding(buildingId);
   if (!building) return { title: "Зграда", robots: { index: false } };
-  const counts = availabilityCounts(apartments.filter((a) => a.buildingId === building.id));
   return pageMetadata({
     title: `${building.name} — ${development.name}`,
-    description: `${building.name} во ${development.name}: ${floorsText(building.floors.length)} и ${unitsText(building.totalApartments)}, од кои ${counts.available} ${availableWord(counts.available)}. Изберете кат за да ги видите становите.`,
+    description: `${building.name} во ${development.name}: ${floorsText(building.floors.length)} и ${unitsText(building.totalApartments)}. Изберете кат за да ги видите становите.`,
     path: `/development/${building.id}`,
     image: "/development/opengraph-image",
   });
@@ -44,7 +41,6 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
   if (!building) notFound();
 
   const units = apartments.filter((a) => a.buildingId === building.id);
-  const counts = availabilityCounts(units);
 
   return (
     <ZoomEnter className="on-dark pt-24 sm:pt-28">
@@ -68,14 +64,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           <div>
             <div className="eyebrow text-muted">Вие сте овде</div>
             <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
-            <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
+            <dl className="mt-8 grid grid-cols-2 gap-6">
               <Stat label="Катови" value={String(building.floors.length)} />
               <Stat label="Станови" value={String(building.totalApartments)} />
-              <Stat label="Достапни" value={String(counts.available)} />
-              <Stat label="Резервирани" value={String(counts.reserved)} />
-              <Stat label="Продадени" value={String(counts.sold)} />
             </dl>
-            <StatusLegend className="mt-8" />
           </div>
         </div>
       </section>
@@ -98,7 +90,6 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                     area: a.area,
                     areaDecimals: a.areaDecimals,
                     bedrooms: a.bedrooms,
-                    status: a.status,
                     outline: a.outline,
                   })),
               }))}

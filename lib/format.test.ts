@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, orientationLabel, projectStatusLabel, statusLabel, typeLabel } from "@/lib/format";
+import { formatArea, orientationLabel, projectStatusLabel, typeLabel } from "@/lib/format";
 
 describe("formatArea", () => {
   it("uses one decimal and the м² unit", () => {
@@ -15,12 +15,6 @@ describe("formatArea", () => {
 });
 
 describe("labels", () => {
-  it("maps every unit status to a Macedonian label", () => {
-    expect(statusLabel("available")).toBe("Достапен");
-    expect(statusLabel("reserved")).toBe("Резервиран");
-    expect(statusLabel("sold")).toBe("Продаден");
-  });
-
   it("maps project statuses and orientations", () => {
     expect(projectStatusLabel("under-construction")).toBe("Во изградба");
     expect(orientationLabel("North-East")).toBe("Северо-исток");

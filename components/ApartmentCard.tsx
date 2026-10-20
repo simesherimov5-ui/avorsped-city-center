@@ -4,7 +4,6 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { BedDouble, Compass, Ruler, ArrowRight } from "lucide-react";
 import type { Apartment } from "@/types";
 import { formatArea, orientationLabel } from "@/lib/format";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { floorLabelOf, placeLabel } from "@/data";
@@ -34,14 +33,9 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             fit="contain"
             crisp={floorPlanImageForApartment(apartment).transparent}
             priority={priority}
-            // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
-            className={cn(
-              "aspect-[4/3] !bg-sand transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]",
-              apartment.status === "sold" && "opacity-50"
-            )}
+            className="aspect-[4/3] !bg-sand transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-chrome/90" />
         </div>
       </Link>
 

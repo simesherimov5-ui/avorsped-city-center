@@ -4,11 +4,10 @@ import "./floor-picker.css";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
-import { StatusMarker } from "@/components/ui/StatusBadge";
-import { formatArea, statusLabel } from "@/lib/format";
+import { formatArea } from "@/lib/format";
 import { roomsText } from "@/lib/plural";
 import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
-import type { ApartmentOutline, DrawingImage, UnitStatus } from "@/types";
+import type { ApartmentOutline, DrawingImage } from "@/types";
 
 export interface PickerApartment {
   id: string;
@@ -16,7 +15,6 @@ export interface PickerApartment {
   area: number;
   areaDecimals?: number;
   bedrooms: number;
-  status: UnitStatus;
   /** Where it is on its floor's sketch, for its shape there. */
   outline?: ApartmentOutline;
 }
@@ -35,17 +33,14 @@ const DENSE_FROM = 7;
 /**
  * "Избор на стан по кат": the building drawn as one row per floor (top floor first, one window per apartment) and,
  * beside it, the apartments of the chosen floor. Hovering a row with a mouse, or clicking / tapping it, chooses it;
- * Up and Down move the choice. It starts on the lowest floor that has a free apartment. The page passes the data
+ * Up and Down move the choice. It starts on the lowest floor that has apartments. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  */
 export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
   // A floor with no apartments listed yet (the details are not here yet) is shown, with a short «soon» line in its panel.
-  const start =
-    lowestFirst.find((f) => f.apartments.some((a) => a.status === "available")) ??
-    lowestFirst.find((f) => f.apartments.length > 0) ??
-    lowestFirst[0];
+  const start = lowestFirst.find((f) => f.apartments.length > 0) ?? lowestFirst[0];
 
   const [selected, setSelected] = useState(start?.number);
   // the apartment the pointer or the keyboard is on, in the sketch or in the cards: both light up
@@ -133,10 +128,6 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
                   </b>
                   <span className="fp-unit-spec">
                     {formatArea(a.area, a.areaDecimals)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
-                  </span>
-                  <span className={`fp-unit-st is-${a.status}`}>
-                    <StatusMarker status={a.status} className="h-[7px] w-[7px]" />
-                    {statusLabel(a.status)}
                   </span>
                 </Link>
               </li>

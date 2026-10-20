@@ -9,15 +9,6 @@ export const development = generated.development;
 /** City Center's buildings. Other projects' buildings are in `projects[n].buildings`; read them through `projectsOnSale()`. */
 export const buildings: Building[] = generated.development.buildings;
 
-export function availabilityCounts(list: Apartment[] = apartments) {
-  return {
-    available: list.filter((a) => a.status === "available").length,
-    reserved: list.filter((a) => a.status === "reserved").length,
-    sold: list.filter((a) => a.status === "sold").length,
-    total: list.length,
-  };
-}
-
 export { residentQuotes } from "./quotes";
 
 export const projects: Project[] = [

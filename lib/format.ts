@@ -9,10 +9,6 @@ export function formatArea(value: number, decimals = 1): string {
   return `${value.toFixed(decimals).replace(".", ",")} м²`;
 }
 
-export function statusLabel(status: "available" | "reserved" | "sold"): string {
-  return { available: "Достапен", reserved: "Резервиран", sold: "Продаден" }[status];
-}
-
 const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
   completed: "Завршено",
   "under-construction": "Во изградба",

@@ -48,7 +48,7 @@ export default function DojranPage() {
           label: f.label,
           apartments: apartmentsOf("dojranski-raj")
             .filter((a) => a.floor === f.number)
-            .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms, status: a.status })),
+            .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms })),
         }))}
       />
 
