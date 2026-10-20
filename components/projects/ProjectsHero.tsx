@@ -1,7 +1,7 @@
 "use client";
 
 import "./projects.css";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
 import { PauseButton } from "@/components/ui/PauseButton";
@@ -9,48 +9,90 @@ import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
 
-const SLIDE_MS = 5500;
-
 const subscribeVisibility = (onChange: () => void) => {
   document.addEventListener("visibilitychange", onChange);
   return () => document.removeEventListener("visibilitychange", onChange);
 };
 
+// A tap on the indicators, the pause button or the link stops the slideshow for the rest of the visit (a phone has no
+// hover to say "I am looking at this"): the flag lives in sessionStorage.
+const STOP_KEY = "pj-hero-stopped";
+const stopListeners = new Set<() => void>();
+const subscribeStop = (onChange: () => void) => {
+  stopListeners.add(onChange);
+  return () => void stopListeners.delete(onChange);
+};
+const readStop = () => {
+  try {
+    return sessionStorage.getItem(STOP_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+const writeStop = (stopped: boolean) => {
+  try {
+    if (stopped) sessionStorage.setItem(STOP_KEY, "1");
+    else sessionStorage.removeItem(STOP_KEY);
+  } catch {
+    // storage blocked: the stop then lasts until the page is closed, through the listeners
+  }
+  stopListeners.forEach((l) => l());
+};
+
 /**
  * The top of the projects page: a slideshow of the projects' photos on Оникс with the page's one heading. A slide stays
- * 5.5s; the track of the current slide fills in exactly that time and its end moves on to the next slide. It pauses
- * while the tab is hidden and while a slide button has keyboard focus. With reduced motion the tracks are full and a
- * timer changes the slides (the photos still cross-fade).
+ * 5.5s; the track of the current slide fills in exactly that time and its end moves on to the next slide. It never
+ * changes the slide under a click: it pauses while the tab is hidden, while the mouse is over the caption row, while
+ * anything in the hero has keyboard focus, and after the pause button; a tap on the indicators, the pause button or the
+ * link (touch) stops it for the rest of the visit. With reduced motion it does not advance by itself at all.
  */
 export function ProjectsHero({ slides }: { slides: Project[] }) {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [slide, setSlide] = useState(0);
   // a click on a slide button restarts the timer: bumping the key restarts the track's animation
   const [run, setRun] = useState(0);
-  const [focused, setFocused] = useState(false);
+  // the mouse is over the caption row / something in the hero has keyboard focus: the slide stays
+  const [hovered, setHovered] = useState(false);
+  const [keyboardFocus, setKeyboardFocus] = useState(false);
   const [manual, setManual] = useState(false);
+  const stoppedForVisit = useSyncExternalStore(subscribeStop, readStop, () => false);
+  // what the last press was (mouse, touch, pen), to tell a tap from a click
+  const pointer = useRef("mouse");
   const hidden = useSyncExternalStore(
     subscribeVisibility,
     () => document.hidden,
     () => false
   );
-  const paused = focused || hidden || manual;
+  const stopped = manual || stoppedForVisit || reduce;
+  const paused = hovered || keyboardFocus || hidden || stopped;
   const count = slides.length;
-
-  // With reduced motion there is no animation to end a slide, so a timer does it.
-  useEffect(() => {
-    if (!reduce || paused || count < 2) return;
-    const id = window.setTimeout(() => setSlide((s) => (s + 1) % count), SLIDE_MS);
-    return () => window.clearTimeout(id);
-  }, [reduce, paused, count, slide, run]);
+  const touched = () => {
+    if (pointer.current !== "mouse") writeStop(true);
+  };
 
   const current = slides[slide];
 
   return (
-    <section className="pj-hero" aria-label="Проекти">
+    <section
+      className="pj-hero"
+      aria-label="Проекти"
+      onPointerDownCapture={(e) => (pointer.current = e.pointerType)}
+      onFocus={(e) => e.target.matches(":focus-visible") && setKeyboardFocus(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setKeyboardFocus(false);
+      }}
+    >
       <PauseButton
-        paused={manual}
-        onToggle={() => setManual((m) => !m)}
+        paused={stopped}
+        onToggle={() => {
+          if (reduce) return;
+          if (stopped) {
+            // play again, whatever stopped it
+            setManual(false);
+            writeStop(false);
+          } else if (pointer.current !== "mouse") writeStop(true);
+          else setManual(true);
+        }}
         className="absolute right-[5%] top-[calc(var(--nav-h)+16px)] z-10"
       />
       {slides.map((project, i) => (
@@ -80,7 +122,11 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
           <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>
         </div>
 
-        <div className="pj-hero-row">
+        <div
+          className="pj-hero-row"
+          onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
+          onPointerLeave={(e) => e.pointerType === "mouse" && setHovered(false)}
+        >
           <div className="pj-hero-left">
             {count > 1 && (
               <div className="pj-tracks">
@@ -94,9 +140,8 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
                     onClick={() => {
                       setSlide(i);
                       setRun((r) => r + 1);
+                      touched();
                     }}
-                    onFocus={(e) => setFocused(e.currentTarget.matches(":focus-visible"))}
-                    onBlur={() => setFocused(false)}
                   >
                     <span className="pj-track">
                       {i === slide &&
@@ -125,7 +170,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
             )}
           </div>
           {current && (
-            <Link href={current.href ?? `/projects/${current.slug}`} className="pj-view">
+            <Link href={current.href ?? `/projects/${current.slug}`} className="pj-view" onClick={touched}>
               ПОГЛЕДНЕТЕ ГО ПРОЕКТОТ <span aria-hidden>→</span>
             </Link>
           )}

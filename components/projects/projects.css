@@ -174,7 +174,7 @@
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-travertine) 85%, transparent);
+  color: var(--color-travertine);
 }
 /* «ПОГЛЕДНЕТЕ ГО ПРОЕКТОТ →»: the way into the project on the slide, at the right of the caption */
 .pj-view {
@@ -188,7 +188,7 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  color: color-mix(in srgb, var(--color-travertine) 85%, transparent);
+  color: var(--color-travertine);
 }
 .pj-view::after {
   content: "";
@@ -218,15 +218,15 @@
 }
 @media (max-width: 767px) {
   .pj-hero-inner {
-    gap: 24px;
+    gap: 16px;
     padding-top: 120px;
-    padding-bottom: 32px;
+    padding-bottom: 40px;
   }
   .pj-hero-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    padding-top: 16px;
+    padding-top: 12px;
   }
   .pj-wrap {
     padding-inline: 20px;
