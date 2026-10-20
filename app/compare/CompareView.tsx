@@ -53,7 +53,7 @@ export function CompareView() {
   }, [addressKey, storedKey]);
 
   return (
-    <div className="pt-24 sm:pt-28">
+    <div className="on-dark min-h-svh pt-24 sm:pt-28">
       <section className="mx-auto max-w-5xl px-5 sm:px-8 py-14 lg:px-10">
         <SectionHeading as="h1" eyebrow="Споредба" title="Спореди станови" />
 
@@ -66,7 +66,7 @@ export function CompareView() {
                 Додајте до 3 станови за споредба од листата со достапни единици.
               </p>
             </div>
-            <Button href="/development" variant="primary" size="sm">
+            <Button href="/development" variant="primary" tone="dark" size="sm">
               Разгледај станови
             </Button>
           </div>

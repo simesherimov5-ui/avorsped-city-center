@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
 export default function ComparePage() {
   // The list can come from the address (?ids=…), which a statically built page may only read behind Suspense.
   return (
-    <Suspense>
+    <Suspense fallback={<div aria-hidden className="on-dark min-h-svh" />}>
       <CompareView />
     </Suspense>
   );
