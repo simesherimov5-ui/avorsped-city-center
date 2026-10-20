@@ -1290,3 +1290,16 @@ body:has([data-compare-bar]) footer {
     height: 56px;
   }
 }
+
+/* «Во што веруваме» (components/home/ManifestText.tsx): without scripts, with reduced motion and before hydration the text is
+   full Оникс. Once the script arms it each sentence starts at 18% Оникс and turns dark (`.on`) as the paragraph scrolls
+   through the screen; the colour eases over 0.9s, switched on a frame after the grey start. */
+.mf-text[data-armed] .mf-s {
+  color: color-mix(in srgb, var(--color-onyx) 18%, transparent);
+}
+.mf-text[data-armed] .mf-s.on {
+  color: var(--color-onyx);
+}
+.mf-text[data-live] .mf-s {
+  transition: color 0.9s ease;
+}
