@@ -9,7 +9,7 @@ export function SoonBand() {
   return (
     <section className="pj-soon grain grain--dark">
       <div className="pj-wrap pj-soon-inner">
-        <h2 className="pj-soon-heading">Нешто ново се подготвува. Бидете први што ќе ги дознаете деталите.</h2>
+        <h2 className="pj-soon-heading">Нешто ново се подготвува. Бидете први што ќе&nbsp;ги дознаете деталите.</h2>
         <div className="pj-soon-actions">
           <Button href="/contact" variant="primary" tone="dark" filled>
             Пријави се
