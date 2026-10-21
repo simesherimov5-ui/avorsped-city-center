@@ -21,6 +21,7 @@ export function ProjectOpeningSection({ project }: { project: Project }) {
         tagline={project.openingTagline ?? project.tagline}
         slides={slides}
         storageKey={`hero-stopped-${project.slug}`}
+        intro={project.openingIntro}
       />
       {project.about && (
         <div className="on-light">

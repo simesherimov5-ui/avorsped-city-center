@@ -412,6 +412,15 @@ h4 {
     height: var(--hero-h);
     aspect-ratio: auto;
   }
+  /* an opening is sized in dvh (vh where dvh is not known): a phone's address bars neither crop it nor move it */
+  .photo-hero--fill.photo-hero--dvh {
+    --hero-h: max(560px, calc(100vh - var(--nav-h)));
+  }
+  @supports (height: 100dvh) {
+    .photo-hero--fill.photo-hero--dvh {
+      --hero-h: max(560px, calc(100dvh - var(--nav-h)));
+    }
+  }
   .photo-hero--fill .photo-hero__media {
     --lift: 0px;
   }

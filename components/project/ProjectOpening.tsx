@@ -1,9 +1,18 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useRef, type CSSProperties } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { HeroSlideshow, type HeroSlide } from "@/components/ui/HeroSlideshow";
+import { OpeningIntroLayers, useOpeningIntro, type IntroFilm } from "@/components/project/OpeningIntro";
 import { useI18n } from "@/lib/i18n";
+
+// The classes of the heading and the line: the real ones and the copies the intro builds over the film use the same
+// (without the margins), so they are the same size, font and wrap.
+const H1_CLASS = "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper";
+const P_CLASS = "max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline";
+
+// width of the slideshow controls: the indicators (44px, 10px apart), the gap and the pause button
+const controlsWidth = (count: number) => count * 44 + (count - 1) * 10 + 12 + 44;
 
 /**
  * The opening of a project page: the same photo slideshow hero as the Проекти page (HeroSlideshow, see app/globals.css,
@@ -12,13 +21,18 @@ import { useI18n } from "@/lib/i18n";
  * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
  * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is Травертин; the label and the
  * line under the name are the site's gold (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`).
+ *
+ * With an intro film (`intro`) the first visit of the week begins with the cinematic intro (OpeningIntro.tsx): the film, the
+ * line and the name building over it, then this page. The slideshow starts with its first photo only; the others, the
+ * indicators and the timer come when the page does.
  */
 export function ProjectOpening({
   name,
   eyebrow,
-  tagline,
+  tagline = "",
   slides,
   storageKey,
+  intro,
   backHref = "/projects",
 }: {
   name: string;
@@ -27,53 +41,70 @@ export function ProjectOpening({
   tagline?: string;
   slides: HeroSlide[];
   storageKey: string;
+  intro?: IntroFilm;
   backHref?: string;
 }) {
   const { t } = useI18n();
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const pRef = useRef<HTMLParagraphElement>(null);
+  const { phase, startTitle } = useOpeningIntro(intro, tagline.split(" ").length);
+  const slidesNow = phase === "leave" || phase === "page" ? slides : slides.slice(0, 1);
 
   return (
-    <HeroSlideshow slides={slides} storageKey={storageKey} label={name}>
-      {({ tracks, pause, rowProps }) => (
-        <div className="photo-hero__content">
-          <div className="photo-hero__back">
-            <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
-              <Link
-                href={backHref}
-                className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper/85 transition-colors hover:text-paper"
-              >
-                {t("opening.back")}
-              </Link>
-            </div>
-          </div>
-
-          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
-            {/* the bottom row: the text left, the controls at the right end (below the text where they do not fit beside it) */}
-            <div className="opening-rise flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
-              <div className="min-w-0 flex-1 basis-[420px]">
-                <div className="eyebrow photo-hero__eyebrow uppercase">{eyebrow}</div>
-                <h1 className="m-0 mt-3 font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper">
-                  {name}
-                </h1>
-                {tagline && (
-                  <p className="m-0 mt-4 max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline">
-                    {tagline}
-                  </p>
-                )}
+    <>
+      <OpeningIntroLayers
+        phase={phase}
+        film={intro}
+        startTitle={startTitle}
+        name={name}
+        tagline={tagline}
+        h1Ref={h1Ref}
+        pRef={pRef}
+        h1Class={H1_CLASS}
+        pClass={P_CLASS}
+      />
+      <HeroSlideshow slides={slidesNow} storageKey={storageKey} label={name} className="photo-hero--dvh">
+        {({ tracks, pause, rowProps }) => (
+          <div className="photo-hero__content">
+            <div className="photo-hero__back cc-late">
+              <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+                <Link
+                  href={backHref}
+                  className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper/85 transition-colors hover:text-paper"
+                >
+                  {t("opening.back")}
+                </Link>
               </div>
-              {tracks && (
+            </div>
+
+            <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+              {/* the bottom row: the text left, the controls at the right end (below the text where they do not fit beside it) */}
+              <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
+                <div className="min-w-0 flex-1 basis-[420px]">
+                  <div className="eyebrow photo-hero__eyebrow cc-late uppercase">{eyebrow}</div>
+                  <h1 ref={h1Ref} className={`m-0 mt-3 ${H1_CLASS}`}>
+                    {name}
+                  </h1>
+                  {tagline && (
+                    <p ref={pRef} className={`m-0 mt-4 ${P_CLASS}`}>
+                      {tagline}
+                    </p>
+                  )}
+                </div>
+                {/* the controls keep their place (empty) until the slideshow has all its photos */}
                 <div
-                  className="flex shrink-0 items-center gap-3"
-                  style={{ "--pj-track-w": "44px" } as CSSProperties}
+                  className="cc-late flex min-h-11 shrink-0 items-center gap-3"
+                  style={{ "--pj-track-w": "44px", width: controlsWidth(slides.length) } as CSSProperties}
                   {...rowProps}
                 >
                   {tracks}
                   {pause}
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </HeroSlideshow>
+        )}
+      </HeroSlideshow>
+    </>
   );
 }
