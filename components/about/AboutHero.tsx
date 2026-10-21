@@ -19,7 +19,7 @@ export type HeroStat = {
 type Props = {
   image: { src: string; alt: string };
   eyebrow: string;
-  /** The two lines of the headline; the second one is set in gold italic. */
+  /** The two lines of the headline; the second one is set in gold. */
   lines: [string, string];
   stats: HeroStat[];
 };

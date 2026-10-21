@@ -70,7 +70,7 @@ export function ProjectBuildProgress({ project }: { project: Project }) {
                   )}
                 />
                 <div className="eyebrow eyebrow-tight text-ink">{NAMES[phase.key]}</div>
-                <div className="font-display text-base italic text-gold-deep">{detail?.date ?? "[месец]"}</div>
+                <div className="font-display text-base text-gold-deep">{detail?.date ?? "[месец]"}</div>
                 <div className="mt-2 aspect-[4/3] w-full overflow-hidden bg-espresso">
                   <Media
                     image={{

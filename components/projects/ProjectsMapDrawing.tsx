@@ -210,14 +210,7 @@ export function ProjectsMapDrawing() {
         stroke="var(--pj-l20)"
         strokeWidth="2"
       />
-      <text
-        x="520"
-        y="340"
-        fill="var(--pj-mute)"
-        fontFamily="var(--font-display), serif"
-        fontStyle="italic"
-        fontSize="12"
-      >
+      <text x="520" y="340" fill="var(--pj-mute)" fontFamily="var(--font-display), serif" fontSize="12">
         р. Струмица
       </text>
       <ellipse
@@ -235,14 +228,7 @@ export function ProjectsMapDrawing() {
         strokeWidth="0.8"
         opacity="0.7"
       />
-      <text
-        x="550"
-        y="625"
-        fill="var(--pj-mute)"
-        fontFamily="var(--font-display), serif"
-        fontStyle="italic"
-        fontSize="13"
-      >
+      <text x="550" y="625" fill="var(--pj-mute)" fontFamily="var(--font-display), serif" fontSize="13">
         Дојранско Езеро
       </text>
       <path d="M215 162 C 260 230, 340 290, 393 363" stroke="var(--color-bronze)" strokeWidth="1.6" />

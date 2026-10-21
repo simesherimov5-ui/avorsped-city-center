@@ -172,7 +172,7 @@ export interface ImageFocus {
 export interface ProjectAbout {
   kicker: string;
   title: string;
-  /** The end of the heading, set in italic Бронза. */
+  /** The end of the heading, set in Бронза. */
   titleItalic: string;
   paragraphs: string[];
   signature: string;
@@ -180,7 +180,7 @@ export interface ProjectAbout {
   en?: { kicker: string; title: string; titleItalic: string };
 }
 
-/** A heading in two parts: the second part is set in italic, in the accent colour. */
+/** A heading in two parts: the second part is set in the accent colour. */
 export interface SplitTitle {
   title: string;
   titleItalic: string;
@@ -244,7 +244,7 @@ export interface Project {
    * reduced motion, Save-Data). Without it the hero image is shown.
    */
   heroFilm?: { hd: string; sd: string; poster: string };
-  /** The line under the name in the opening; split at its first comma (sans, then serif italic). Falls back to `tagline`. */
+  /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */
   about?: ProjectAbout;

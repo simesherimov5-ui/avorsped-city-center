@@ -122,7 +122,7 @@ export function ProjectOpening({
   const videoRef = useRef<HTMLVideoElement>(null);
   const { paused, toggle } = useFilmPlayback(videoRef, playFilm);
 
-  // "Шест згради, " in the sans, the rest in the serif italic; with no comma the whole line is serif italic.
+  // "Шест згради, " in the sans, the rest in the serif; with no comma the whole line is serif.
   const comma = tagline ? tagline.indexOf(",") : -1;
   const lead = tagline && comma >= 0 ? tagline.slice(0, comma + 1) + " " : "";
   const rest = tagline ? (comma >= 0 ? tagline.slice(comma + 1).trim() : tagline) : "";
@@ -166,7 +166,7 @@ export function ProjectOpening({
               {tagline && (
                 <p className="m-0 mt-4 max-w-[min(760px,100%)] text-[clamp(16px,1.7vw,26px)] leading-[1.45] text-paper">
                   {lead && <span className="font-light">{lead}</span>}
-                  <span className="font-display italic">{rest}</span>
+                  <span className="font-display">{rest}</span>
                 </p>
               )}
             </div>

@@ -143,7 +143,7 @@
 .ab-story-text {
   margin: 24px 0 0;
   /* The statement is a long text, so it is Montserrat (Playfair is for headings); its accent words are coloured, not
-     italic (there is no Montserrat italic). */
+     slanted. */
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   font-size: var(--fs-statement);

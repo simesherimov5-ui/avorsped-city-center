@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * A line the company stands behind, set large in Playfair italic. `tone` is the surface it sits on: "dark" for Оникс
+ * A line the company stands behind, set large in Playfair. `tone` is the surface it sits on: "dark" for Оникс
  * (text Травертин, accent Светол бакар) and "light" for Травертин (text Оникс, accent Бронза). The quotation marks are
  * part of the text the caller passes in.
  */
@@ -25,7 +25,7 @@ export function PullQuote({
       />
       <blockquote
         className={cn(
-          "mt-8 font-display text-(length:--fs-statement) font-normal italic leading-[1.2] text-balance",
+          "mt-8 font-display text-(length:--fs-statement) font-normal leading-[1.2] text-balance",
           tone === "dark" ? "text-on-chrome" : "text-charcoal"
         )}
       >

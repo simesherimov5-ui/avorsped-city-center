@@ -77,7 +77,6 @@
 .pj-under {
   font-family: var(--font-display), "Times New Roman", serif;
   font-size: var(--fs-statement);
-  font-style: italic;
   line-height: 1.3;
   /* gold read at under 3:1 over the brightest sky of some slides, so the lighter copper */
   color: var(--color-copper);

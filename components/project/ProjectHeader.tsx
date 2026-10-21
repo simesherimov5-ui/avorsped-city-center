@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** The project's name with its last word set in italic Бронза (the accent on a light surface). */
+/** The project's name with its last word set in Бронза (the accent on a light surface). */
 /**
  * The top of a project page, on a light surface: where it is, its name in the display serif (plain, no accent word), a few lines about it, a row of facts under thin rules and, if given, the way in. Every project page opens
  * with this, so they read as one family.

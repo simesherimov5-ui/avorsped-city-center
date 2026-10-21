@@ -77,7 +77,7 @@
   text-wrap: balance;
 }
 .cg-title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--color-accent);
 }
 .cg-lead {

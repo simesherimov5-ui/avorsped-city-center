@@ -186,6 +186,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* No italic on the site (the italic font files are not loaded either): emphasis and accents are colour, not slant. */
+em,
+i,
+cite,
+address,
+dfn,
+var {
+  font-style: normal;
+}
+
 body {
   background: var(--color-sand);
   color: var(--color-ink);
@@ -407,7 +417,7 @@ h4 {
       transparent 100%
     );
   }
-  /* the shared top scrim, lighter (58% at its darkest, the lowest that keeps the italic line at 3:1), under the heading block that stands at the top of the picture */
+  /* the shared top scrim, lighter (58% at its darkest, the lowest that keeps the line under the heading at 3:1), under the heading block that stands at the top of the picture */
   .photo-hero--fill .photo-hero__media .hero-scrim-top {
     display: block;
     height: 250px;
