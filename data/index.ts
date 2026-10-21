@@ -29,6 +29,44 @@ export const projects: Project[] = [
       sd: "/videos/city-center/city-center-hero-720p.mp4",
       poster: "/videos/city-center/city-center-hero-poster.jpg",
     },
+    openingSlides: [
+      {
+        image: {
+          src: "/images/exteriors/exterior-hero-wide.jpg",
+          alt: "City Center — визуелизација",
+          isPlaceholder: false,
+        },
+        focus: { zoom: 1, x: 50, y: 45 },
+      },
+      {
+        image: {
+          src: "/images/exteriors/exterior-gallery-2.jpg",
+          alt: "City Center — поглед од улица",
+          isPlaceholder: false,
+        },
+        focus: { zoom: 1, x: 50, y: 0 },
+      },
+      {
+        image: {
+          src: "/images/exteriors/exterior-gallery-1.jpg",
+          alt: "City Center — фасада во самрак",
+          isPlaceholder: false,
+        },
+        focus: { zoom: 1, x: 50, y: 30 },
+      },
+      {
+        image: { src: "/images/site/courtyard.jpg", alt: "City Center — заеднички двор", isPlaceholder: false },
+        focus: { zoom: 1, x: 50, y: 50 },
+      },
+      {
+        image: {
+          src: "/images/site/masterplan-aerial.jpg",
+          alt: "City Center — поглед од воздух",
+          isPlaceholder: false,
+        },
+        focus: { zoom: 1, x: 50, y: 0 },
+      },
+    ],
     openingTagline: "Шест згради, една нова адреса во Струмица.",
     about: {
       kicker: "ЗА ПРОЕКТОТ",

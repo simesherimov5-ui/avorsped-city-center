@@ -101,7 +101,7 @@
 }
 .pj-track-btn {
   display: flex;
-  width: 56px;
+  width: var(--pj-track-w, 56px);
   height: 44px;
   align-items: center;
   padding: 0;

@@ -170,10 +170,11 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ---
 
-### 3.10 City Center: the film for the opening
+### 3.10 City Center: the photos of the opening
 
-- **Where:** `heroFilm` of the `city-center` entry in `data/index.ts`: `hd` (1920 × 1080), `sd` (1280 × 720) and the `poster` frame, all under `public/videos/city-center/`. They are in place; to change the film, replace the three files (same names) or the paths.
-- **Format:** MP4 (H.264), 16:9, about 25 seconds, loops cleanly, no sound track (the page has no sound button). No important detail at the bottom of the frame, where the name and the line lie. It plays from 1101px wide and up, without reduced motion and without Save-Data; below that, and in those two cases, only the poster is shown and no film is downloaded.
+- **Where:** `openingSlides` of the `city-center` entry in `data/index.ts`: the photos of the slideshow at the top of the project page, in order, each with the point (`focus`) where the frame holds it. They are renders the site already uses; to change the slideshow, change this list.
+- **Format:** 16:9 renders, at least 1920 px wide, buildings whole in the middle of the picture (the frame trims a little sky or ground on a wide screen). The slideshow works like the one on the Проекти page.
+- **The film:** `heroFilm` (1080p, 720p and poster under `public/videos/city-center/`) is still in the data and the files, but the opening does not show it.
 
 ### 3.11 City Center: the "За проектот" text
 

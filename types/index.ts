@@ -244,6 +244,12 @@ export interface Project {
    * reduced motion, Save-Data). Without it the hero image is shown.
    */
   heroFilm?: { hd: string; sd: string; poster: string };
+  /**
+   * The photos of the opening's slideshow, in order (files the site already uses). `focus` holds a photo where the frame
+   * trims it (x, y in %, zoom 1), so the trim comes out of sky or ground, not out of the buildings. Without it the opening
+   * shows the hero image alone.
+   */
+  openingSlides?: { image: { src: string; alt: string; isPlaceholder: boolean }; focus?: ImageFocus }[];
   /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */
