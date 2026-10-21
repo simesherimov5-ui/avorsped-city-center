@@ -158,9 +158,9 @@ export function Hero() {
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
-            <span className="text-label font-semibold uppercase tracking-label text-brass">— Javor Sped Holding</span>
+            <span className="text-label font-semibold uppercase tracking-label text-brass">— JAVOR SPED HOLDING</span>
             <span className="text-[17px] font-normal leading-[1.5] text-gold">
-              Секоја адреса има приказна. Најдете ја вашата.
+              Секоја адреса има своја приказна. Пронајдете ја вашата.
             </span>
           </span>
         </div>

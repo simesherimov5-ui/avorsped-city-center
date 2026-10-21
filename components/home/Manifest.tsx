@@ -2,7 +2,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ManifestText } from "@/components/home/ManifestText";
 
 /**
- * "Во што веруваме": the company's manifest on a light surface: two sentences in the display serif, large and centred,
+ * "Во што веруваме": the company's manifest on a light surface: three sentences in the display serif, large and centred,
  * between the label and the signature. The sentences turn from grey to dark as the visitor scrolls (ManifestText).
  */
 export function Manifest() {
@@ -15,11 +15,11 @@ export function Manifest() {
         <Reveal delay={0.1}>
           <ManifestText
             className="mx-auto max-w-[720px] text-balance font-display text-[clamp(24px,2.4vw,32px)] leading-[1.45]"
-            text="Моментот кога првпат ќе го свртите клучот и ќе знаете дека сте дома. Тој момент го градиме веќе повеќе од 30 години."
+            text="Има еден момент што никогаш не се заборава: кога за првпат ќе го свртите клучот и ќе сфатите дека сте дома. Тој момент го градиме веќе повеќе од триесет години. Нашата работа е тој момент да трае цел живот."
           />
         </Reveal>
         <Reveal delay={0.2}>
-          <div className="eyebrow text-gold-deep">— Javor Sped Holding</div>
+          <div className="eyebrow text-gold-deep">— JAVOR SPED HOLDING</div>
         </Reveal>
       </div>
     </section>
