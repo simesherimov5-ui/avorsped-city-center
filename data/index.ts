@@ -29,7 +29,7 @@ export const projects: Project[] = [
       sd: "/videos/city-center/city-center-hero-720p.mp4",
       poster: "/videos/city-center/city-center-hero-poster.jpg",
     },
-    openingTagline: "Шест згради, една нова адреса за центарот на Струмица.",
+    openingTagline: "Шест згради, една нова адреса во Струмица.",
     about: {
       kicker: "ЗА ПРОЕКТОТ",
       title: "Нов стандард на живеење, ",

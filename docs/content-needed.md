@@ -179,7 +179,7 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 - **Where:** `about.paragraphs` of the `city-center` entry in `data/index.ts`. Two placeholders in [square brackets] stand there now: `[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]` and `[Втор пасус: за кого е наменет и каков живот нуди.]`
 - **Format:** two paragraphs, 2–4 sentences each, no more than about 600 characters each. The English heading is in `about.en`; the paragraphs stay in Macedonian unless an English text is sent.
-- **Also open:** the line under the name in the opening (`openingTagline`) is "Шест згради, една нова адреса за центарот на Струмица." Confirm it.
+- **Also open:** the line under the name in the opening (`openingTagline`) is "Шест згради, една нова адреса во Струмица." Confirm it.
 
 ---
 
