@@ -4,15 +4,12 @@ import { coverSizes } from "@/lib/image-sizes";
 import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { ParallaxImage } from "@/components/motion/ParallaxImage";
-import { projectStatusLabel } from "@/lib/format";
 import type { Project } from "@/types";
 
 export function ProjectShowcase({ projects }: { projects: Project[] }) {
   return (
     <div className="flex flex-col">
       {projects.map((project) => {
-        const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
-
         return (
           <Link
             key={project.id}
@@ -42,8 +39,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
 
             <div className="absolute inset-0 flex items-end justify-between gap-4 p-6 sm:p-12">
               <div className="text-on-chrome">
-                <span className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">{statusText}</span>
-                <h3 className="mt-3 font-display text-(length:--fs-h3) font-normal leading-[1.3]">{project.name}</h3>
+                <h3 className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">{project.name}</h3>
                 <div className="mt-2 text-sm tracking-wide text-gold">{project.location}</div>
               </div>
 

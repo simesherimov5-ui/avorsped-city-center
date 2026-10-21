@@ -9,7 +9,6 @@ import { getLenis } from "@/lib/lenis";
 import { DUR } from "@/lib/gsap";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { NoPhoto } from "@/components/ui/NoPhoto";
-import { projectStatusLabel } from "@/lib/format";
 import {
   CITY_PINS,
   choicesQuery,
@@ -27,9 +26,6 @@ import { PinIcon } from "./PinIcon";
 import { ProjectsMap, type MapPin } from "./ProjectsMap";
 
 const href = (p: Project) => p.href ?? `/projects/${p.slug}`;
-const statusText = (p: Project) => p.statusLabelOverride ?? projectStatusLabel(p.status);
-const statusClass = (p: Project) =>
-  p.status === "completed" ? "is-done" : p.status === "upcoming" ? "is-soon" : "is-build";
 /** The old cards fade out in this long (ms) before the new ones come in. */
 const CARDS_OUT = 200;
 
@@ -415,9 +411,7 @@ function Explorer({
                       </span>
                       <span className="pj-row-text">
                         <span className="pj-row-name">{project.name}</span>
-                        <span className="pj-row-meta">
-                          {project.city} · <span className={statusClass(project)}>{statusText(project)}</span>
-                        </span>
+                        <span className="pj-row-meta">{project.city}</span>
                       </span>
                       <span className="pj-arrow" aria-hidden>
                         →
@@ -463,10 +457,6 @@ function GridCard({ project, delay, swap = false }: { project: Project; delay?: 
           </div>
         )}
         <div className="pj-photo-scrim" />
-        <span className={`pj-chip ${statusClass(project)}`}>
-          <i />
-          {statusText(project)}
-        </span>
       </div>
       <div className="pj-title-row">
         <span className="pj-name">{project.name}</span>

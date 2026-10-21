@@ -8,7 +8,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
 import { Button } from "@/components/ui/Button";
 import { PauseButton } from "@/components/ui/PauseButton";
-import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
 
@@ -73,7 +72,6 @@ export function ProjectSlideshow({
   const paused = focused || hovered || tabHidden || manual;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
-  const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "ArrowLeft") go(-1);
@@ -153,7 +151,7 @@ export function ProjectSlideshow({
                 {project.name}
               </Heading>
               <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
-                {[project.location, statusText].filter(Boolean).join(" · ")}
+                {project.location}
               </motion.div>
               <motion.div {...textIn(3)} className="mt-4 sm:mt-5">
                 <Button

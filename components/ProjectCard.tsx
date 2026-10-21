@@ -4,19 +4,9 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import type { Project } from "@/types";
 import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
-import { projectStatusLabel } from "@/lib/format";
 import { ConstructionProgress } from "@/components/construction/ConstructionProgress";
-import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
 import { unitsText } from "@/lib/plural";
-
-// Never color-code project phase: every status chip is the same colour, only its words differ.
-const CHIP_STYLE = "bg-accent text-chrome";
-const STATUS_STYLE: Record<Project["status"], string> = {
-  completed: CHIP_STYLE,
-  "under-construction": CHIP_STYLE,
-  upcoming: CHIP_STYLE,
-};
 
 export function ProjectCard({ project }: { project: Project }) {
   const hasHoverDetails = Boolean(project.tagline || project.distanceHighlights?.length);
@@ -45,15 +35,6 @@ export function ProjectCard({ project }: { project: Project }) {
             className="aspect-[4/3] transition-transform duration-[900ms] ease-(--ease) motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.035] motion-reduce:group-hover:scale-100"
           />
         )}
-        <span className={cn("eyebrow absolute left-3 top-3 px-2.5 py-1", STATUS_STYLE[project.status])}>
-          {(() => {
-            const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
-            // a finished project's chip says only «Завршено»; its type is on its own page
-            return project.typeLabel && project.status !== "completed"
-              ? `${project.typeLabel} · ${statusText}`
-              : statusText;
-          })()}
-        </span>
 
         {hasHoverDetails && (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-[opacity,transform] duration-(--dur-base) ease-(--ease) group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
