@@ -78,6 +78,7 @@ function OpeningFilm({ film, videoRef }: { film: Film; videoRef: React.RefObject
     <video
       ref={videoRef}
       className="absolute inset-0 h-full w-full object-cover"
+      style={{ objectPosition: "var(--hero-pos)" }}
       src={src}
       muted
       autoPlay
@@ -128,7 +129,11 @@ export function ProjectOpening({
   const rest = tagline ? (comma >= 0 ? tagline.slice(comma + 1).trim() : tagline) : "";
 
   return (
-    <section aria-label={name} className="photo-hero">
+    <section
+      aria-label={name}
+      className="photo-hero photo-hero--fill"
+      style={{ "--hero-pos": "50% 50%" } as React.CSSProperties}
+    >
       <div className="photo-hero__media">
         {/* the picture; the film lies over it once it plays */}
         <Media
@@ -140,6 +145,7 @@ export function ProjectOpening({
           className="h-full w-full !bg-transparent"
         />
         {playFilm && film && <OpeningFilm film={film} videoRef={videoRef} />}
+        <div aria-hidden className="hero-scrim-top" />
         <div aria-hidden className="hero-scrim-bottom" />
       </div>
 

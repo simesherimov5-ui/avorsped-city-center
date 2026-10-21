@@ -434,7 +434,7 @@ h4 {
     padding-bottom: 56px;
   }
   .photo-hero--fill .photo-hero__media img {
-    object-position: 50% 55%;
+    object-position: var(--hero-pos, 50% 55%);
   }
 }
 
