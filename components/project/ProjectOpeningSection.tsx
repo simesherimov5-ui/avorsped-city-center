@@ -9,6 +9,7 @@ export function ProjectOpeningSection({ project }: { project: Project }) {
     key: `${i}-${s.image.src}`,
     image: s.image,
     focus: "focus" in s ? s.focus : undefined,
+    maxWidth: "maxWidth" in s ? s.maxWidth : undefined,
     label: s.image.alt,
   }));
   const status = project.statusLabelOverride ?? projectStatusLabel(project.status);

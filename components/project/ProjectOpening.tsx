@@ -55,7 +55,7 @@ export function ProjectOpening({
                   {name}
                 </h1>
                 {tagline && (
-                  <p className="m-0 mt-4 max-w-[min(760px,100%)] font-sans text-[clamp(16px,1.7vw,26px)] leading-[1.45] font-normal photo-hero__tagline">
+                  <p className="m-0 mt-4 max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline">
                     {tagline}
                   </p>
                 )}

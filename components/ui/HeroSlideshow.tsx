@@ -42,6 +42,8 @@ export interface HeroSlide {
   image: { src: string; alt: string; isPlaceholder: boolean };
   /** Where the photo is held when the frame trims it (x, y in %; zoom stays 1). */
   focus?: ImageFocus;
+  /** The photo's own width in pixels (no wider variant is requested). */
+  maxWidth?: number;
   /** The name of the slide for the indicator (read by screen readers). */
   label: string;
 }
@@ -70,12 +72,15 @@ export function HeroSlideshow({
   slides,
   storageKey,
   label,
+  className,
   children,
 }: {
   slides: HeroSlide[];
   /** The sessionStorage key of this hero's "stopped for the visit" flag. */
   storageKey: string;
   label: string;
+  /** Added to the section's classes. */
+  className?: string;
   children: (controls: HeroSlideshowControls) => ReactNode;
 }) {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -169,7 +174,7 @@ export function HeroSlideshow({
   return (
     <section
       ref={sectionRef}
-      className="pj-hero photo-hero photo-hero--fill"
+      className={className ? `pj-hero photo-hero photo-hero--fill ${className}` : "pj-hero photo-hero photo-hero--fill"}
       aria-label={label}
       onPointerDownCapture={(e) => (pointer.current = e.pointerType)}
       onFocus={(e) => e.target.matches(":focus-visible") && setKeyboardFocus(true)}
@@ -184,6 +189,7 @@ export function HeroSlideshow({
               <Media
                 image={s.image}
                 focus={s.focus}
+                maxWidth={s.maxWidth}
                 tone="dark"
                 alwaysCover
                 className="h-full w-full !bg-transparent"

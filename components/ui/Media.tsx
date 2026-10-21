@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { type ImageLoaderProps } from "next/image";
 import type { CSSProperties } from "react";
 import { Placeholder } from "./Placeholder";
 import { cn } from "@/lib/cn";
@@ -11,6 +11,12 @@ const QUALITY = 80;
 // The soft fade at the edges of a shrunken picture: transparent at each edge, solid by 5% in.
 const EDGE_FADE =
   "linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 5%, black 95%, transparent)";
+
+/** The optimizer's own URL with the width held at `maxWidth`: a 1920px photo is never asked for 2400 or 3200 on a 2x screen. */
+const cappedLoader = (maxWidth: number) =>
+  function loader({ src, width, quality }: ImageLoaderProps) {
+    return `/_next/image?url=${encodeURIComponent(src)}&w=${Math.min(width, maxWidth)}&q=${quality || 75}`;
+  };
 
 interface MediaImage {
   src: string;
@@ -37,6 +43,7 @@ export function Media({
   crisp = false,
   wholeAlign = "center",
   alwaysCover = false,
+  maxWidth,
 }: {
   image: MediaImage;
   className?: string;
@@ -61,7 +68,10 @@ export function Media({
   wholeAlign?: "center" | "left" | "right";
   /** A full-bleed frame (a hero): the photo always covers it, never shown whole over a blurred copy, keeping its focal point. */
   alwaysCover?: boolean;
+  /** The photo's own width in pixels: no variant wider than this is requested (needs a client component as the parent). */
+  maxWidth?: number;
 }) {
+  const loader = maxWidth ? cappedLoader(maxWidth) : undefined;
   if (image.isPlaceholder || !image.src) {
     return <Placeholder label={label ?? image.alt} tone={tone} className={className} />;
   }
@@ -183,6 +193,7 @@ export function Media({
           style={framing}
           quality={QUALITY}
           unoptimized={crisp}
+          loader={loader}
           {...loading}
         />
       )}
