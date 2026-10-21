@@ -45,7 +45,9 @@
 .pj-hero-text {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
+  text-align: center;
   /* the heading block goes to the top of the picture where the hero is a full screen; the caption row stays at the bottom
      (the column is pushed apart, and has no room to spare when the text lies below the photo) */
   margin-bottom: auto;
@@ -78,6 +80,9 @@
   font-family: var(--font-display), "Times New Roman", serif;
   font-size: var(--fs-statement);
   line-height: 1.3;
+  /* a readable line length, centred under the heading */
+  max-width: 60ch;
+  text-wrap: balance;
   /* gold read at under 3:1 over the brightest sky of some slides, so the lighter copper */
   color: var(--color-copper);
 }
@@ -517,7 +522,6 @@
 .pj-card {
   display: flex;
   flex-direction: column;
-  gap: 18px;
   color: var(--color-onyx);
   text-decoration: none;
   /* press: the card gives a little and springs back (scale, so it never fights the rise-in's transform) */
@@ -586,6 +590,7 @@
   background: var(--color-bronze);
 }
 .pj-title-row {
+  margin-top: 16px;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -612,6 +617,7 @@
   }
 }
 .pj-rule {
+  margin-top: 12px;
   position: relative;
   height: 1px;
   background: var(--color-limestone);
@@ -636,15 +642,22 @@
   }
 }
 .pj-tagline {
-  margin: 0;
+  margin: 12px 0 0;
   font-size: 16px;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.5;
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
 }
 @media (max-width: 767px) {
   .pj-photo {
     height: 320px;
+  }
+  .pj-title-row {
+    margin-top: 12px;
+  }
+  .pj-rule,
+  .pj-tagline {
+    margin-top: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -928,61 +941,43 @@
 }
 .pj-soon-inner {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   gap: 40px;
   padding-block: 88px;
-}
-.pj-soon-text {
-  display: flex;
-  max-width: 680px;
-  flex-direction: column;
-  gap: 18px;
-}
-.pj-soon-label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--color-gold);
-}
-.pj-soon-dot {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-gold);
-  animation: pj-pulse 2s ease-in-out infinite;
-}
-@keyframes pj-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold) 50%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-gold) 0%, transparent);
-  }
+  text-align: center;
 }
 .pj-soon-heading {
+  max-width: 22em;
   margin: 0;
   font-family: var(--font-display), "Times New Roman", serif;
   font-size: var(--fs-h2);
   font-weight: 400;
   line-height: 1.15;
+  text-wrap: balance;
 }
 .pj-soon-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
+}
+/* a narrow phone: the two buttons stack, one width, thumb-sized */
+@media (max-width: 480px) {
+  .pj-soon-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pj-soon-actions > * {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
 }
 @media (max-width: 767px) {
   .pj-soon-inner {
     padding-block: 72px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pj-soon-dot {
-    animation: none;
   }
 }
 
