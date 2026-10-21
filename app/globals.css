@@ -438,6 +438,16 @@ h4 {
   }
 }
 
+/* The label and the line under the name of a project's opening: the logo gold, lightened (same hue and saturation, only the
+   lightness raised) as far as it takes to read on the brightest spot of every slide, without a shadow or a darker scrim.
+   The label is at 4.5:1 or more, the line at 3:1 or more (see docs/design-brief.md). Only these two use them. */
+.photo-hero__eyebrow {
+  color: rgb(236 226 200);
+}
+.photo-hero__tagline {
+  color: rgb(198 168 91);
+}
+
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%), the current page's link too (the
    Navbar gives it gold only on a solid bar; over a photo its underline tells it apart: gold read at 2.5:1 on a bright sky). */
 header[data-clear] a.nav-link:not(#site-logo) {

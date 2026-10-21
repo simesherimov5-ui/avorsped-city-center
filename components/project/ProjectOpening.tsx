@@ -11,7 +11,7 @@ import { useI18n } from "@/lib/i18n";
  * back link top left on the photos and, bottom left, the place and state, the name and the line about the project, the
  * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
  * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is Травертин; the label and the
- * start of the line (up to the first comma) are the site's gold. Its "stopped for the visit" flag is its own (`storageKey`).
+ * line under the name are the site's gold (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`).
  */
 export function ProjectOpening({
   name,
@@ -30,11 +30,6 @@ export function ProjectOpening({
   backHref?: string;
 }) {
   const { t } = useI18n();
-
-  // "Шест згради, " in the sans (gold), the rest in the serif; with no comma the whole line is serif.
-  const comma = tagline ? tagline.indexOf(",") : -1;
-  const lead = tagline && comma >= 0 ? tagline.slice(0, comma + 1) + " " : "";
-  const rest = tagline ? (comma >= 0 ? tagline.slice(comma + 1).trim() : tagline) : "";
 
   return (
     <HeroSlideshow slides={slides} storageKey={storageKey} label={name}>
@@ -55,16 +50,13 @@ export function ProjectOpening({
             {/* the bottom row: the text left, the controls at the right end (below the text where they do not fit beside it) */}
             <div className="opening-rise flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
               <div className="min-w-0 flex-1 basis-[420px]">
-                <div className="eyebrow uppercase text-gold [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">{eyebrow}</div>
+                <div className="eyebrow photo-hero__eyebrow uppercase">{eyebrow}</div>
                 <h1 className="m-0 mt-3 font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper">
                   {name}
                 </h1>
                 {tagline && (
-                  <p className="m-0 mt-4 max-w-[min(760px,100%)] text-[clamp(16px,1.7vw,26px)] leading-[1.45] text-paper">
-                    {lead && (
-                      <span className="font-normal text-gold [text-shadow:0_1px_14px_rgba(0,0,0,0.45)]">{lead}</span>
-                    )}
-                    <span className="font-display">{rest}</span>
+                  <p className="m-0 mt-4 max-w-[min(760px,100%)] font-sans text-[clamp(16px,1.7vw,26px)] leading-[1.45] font-normal photo-hero__tagline">
+                    {tagline}
                   </p>
                 )}
               </div>
