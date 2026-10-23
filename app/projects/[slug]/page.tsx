@@ -113,7 +113,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                         href={part.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline underline-offset-2 hover:text-charcoal"
+                        className="underline decoration-gold decoration-2 underline-offset-2 hover:text-charcoal"
                       >
                         {part.text}
                       </a>

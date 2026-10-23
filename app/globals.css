@@ -1088,7 +1088,9 @@ header[data-clear] a.nav-link:not(#site-logo) {
 }
 .btn-tertiary[data-tone="light"] {
   color: var(--color-bronze);
-  text-decoration-color: var(--color-bronze);
+  /* gold on a light surface: a thicker line (gold is 2.1:1 on it) */
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 2px;
 }
 @media (hover: hover) {
   .btn-tertiary:hover {

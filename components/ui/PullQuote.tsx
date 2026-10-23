@@ -21,7 +21,7 @@ export function PullQuote({
     <figure className={cn("m-0", align === "center" && "text-center", className)}>
       <div
         aria-hidden
-        className={cn("h-px w-16", tone === "dark" ? "bg-accent" : "bg-gold-deep", align === "center" && "mx-auto")}
+        className={cn("h-px w-16", tone === "dark" ? "bg-accent" : "bg-gold", align === "center" && "mx-auto")}
       />
       <blockquote
         className={cn(

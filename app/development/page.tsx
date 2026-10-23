@@ -111,7 +111,7 @@ export default function DevelopmentPage() {
                     href={`https://www.google.com/maps/search/?api=1&query=${CITY_CENTER.lat},${CITY_CENTER.lng}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-ring inline-flex min-h-11 items-center text-gold-deep underline underline-offset-4"
+                    className="focus-ring inline-flex min-h-11 items-center text-gold-deep underline decoration-gold decoration-2 underline-offset-4"
                   >
                     Отвори во Google Maps
                   </a>

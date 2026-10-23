@@ -53,7 +53,7 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
               {paragraph}
             </p>
           ))}
-          <div aria-hidden className="mt-2.5 h-px w-full max-w-[62ch] bg-line" />
+          <div aria-hidden className="mt-2.5 h-px w-full max-w-[62ch] bg-gold" />
           <div className="font-display text-xl text-gold-deep">{about.signature}</div>
         </div>
       </div>
