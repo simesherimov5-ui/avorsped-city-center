@@ -835,13 +835,14 @@ header[data-clear] a.nav-link:not(#site-logo) {
   align-items: center;
   justify-content: center;
   gap: 14px;
-  padding: 17px 29px;
+  min-height: 48px;
+  padding: 0 24px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   color: var(--foil-line);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 13px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -874,7 +875,8 @@ header[data-clear] a.nav-link:not(#site-logo) {
   color: var(--foil-light);
 }
 .btn-primary--sm {
-  padding: 9px 18px;
+  min-height: 36px;
+  padding: 0 18px;
   font-size: 12px;
 }
 .btn-primary__arrow {
@@ -942,16 +944,18 @@ header[data-clear] a.nav-link:not(#site-logo) {
 @media (max-width: 640px) {
   .btn-primary {
     gap: 10px;
-    padding: 14px 18px;
-    font-size: 12px;
-    letter-spacing: var(--label-track);
-  }
-  .btn-primary--sm {
-    padding: 9px 18px;
   }
   .btn-primary:not(.btn-primary--sm) {
     white-space: normal;
     text-align: left;
+  }
+}
+/* Phones: the standard buttons are 44px tall (the small ones stay 36px, their tap area is 44 below). */
+@media (max-width: 480px) {
+  .btn-primary:not(.btn-primary--sm),
+  .btn-secondary:not(.btn-secondary--sm) {
+    min-height: 44px;
+    padding-inline: 20px;
   }
 }
 /* Reduced motion: no sweep; the fill fades in. */
@@ -999,13 +1003,14 @@ header[data-clear] a.nav-link:not(#site-logo) {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 9px 22px;
+  min-height: 48px;
+  padding: 0 24px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   color: var(--color-gold);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 13px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -1023,7 +1028,9 @@ header[data-clear] a.nav-link:not(#site-logo) {
   color: var(--color-bronze);
 }
 .btn-secondary--sm {
-  padding: 9px 16px;
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 12px;
 }
 .btn-secondary__arrow {
   display: inline-flex;
@@ -1032,7 +1039,6 @@ header[data-clear] a.nav-link:not(#site-logo) {
   justify-content: center;
   width: 24px;
   height: 24px;
-  margin-block: -5px;
   border: 1px solid currentColor;
   border-radius: 50%;
   transition: transform var(--dur-fast) var(--ease);

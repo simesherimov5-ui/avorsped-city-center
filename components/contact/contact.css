@@ -642,16 +642,17 @@ a.ct-val:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 14px;
-  padding: 17px 29px;
+  min-height: 48px;
+  padding: 0 24px;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   background: var(--color-onyx);
   color: var(--foil-line);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 13px/1.2 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
@@ -700,11 +701,14 @@ a.ct-val:focus-visible {
 @media (max-width: 640px) {
   .ct-btn {
     gap: 10px;
-    padding: 14px 18px;
-    font-size: 12px;
-    letter-spacing: 0.14em;
     white-space: normal;
     text-align: left;
+  }
+}
+@media (max-width: 480px) {
+  .ct-btn:not(.ct-btn--sm) {
+    min-height: 44px;
+    padding-inline: 20px;
   }
 }
 @media (max-width: 760px) {
@@ -732,7 +736,7 @@ a.ct-val:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 35px;
+  min-height: 36px;
   padding: 0 18px;
   border: 1px solid var(--color-copper);
   background: transparent;
@@ -741,7 +745,7 @@ a.ct-val:focus-visible {
     500 12px/1 var(--font-sans),
     system-ui,
     sans-serif;
-  letter-spacing: 0.26em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
@@ -752,9 +756,11 @@ a.ct-val:focus-visible {
     border-color 0.3s,
     transform 0.2s;
 }
-.bk-btn:hover {
-  background: var(--color-copper);
-  color: var(--black);
+@media (hover: hover) {
+  .bk-btn:hover {
+    background: var(--color-copper);
+    color: var(--black);
+  }
 }
 .bk-btn:active {
   transform: scale(0.98);
@@ -959,8 +965,16 @@ a.ct-val:focus-visible {
   border-color: var(--color-gold);
   color: var(--color-gold);
 }
+/* the two buttons of this row are one size (the small one) */
+.ct-area-actions .btn-secondary {
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 12px;
+}
 .ct-btn--sm {
-  padding: 7.5px 22px;
+  min-height: 36px;
+  padding: 0 18px;
+  font-size: 12px;
 }
 .ct-btn--sm .ct-btn__arrow {
   width: 18px;

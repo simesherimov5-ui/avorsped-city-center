@@ -258,9 +258,8 @@
   /* the label of the filling button is one line even on the narrowest phone */
   .cg .cg-actions a.btn-primary:not(.btn-primary--sm) {
     gap: 10px;
-    padding: 14px 13px;
-    font-size: 12px;
-    letter-spacing: var(--label-track);
+    min-height: 44px;
+    padding: 0 13px;
   }
   .cg-contact {
     flex-direction: column;
