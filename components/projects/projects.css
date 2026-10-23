@@ -384,11 +384,40 @@
   stroke-width: 1.5;
 }
 .pj-view-btn[aria-pressed="true"] {
-  border-color: var(--color-onyx);
-  background: var(--color-onyx);
+  border-color: var(--color-bronze);
+  background: var(--color-copper);
 }
 .pj-view-btn[aria-pressed="true"] svg {
-  stroke: var(--color-travertine);
+  stroke: var(--color-onyx);
+}
+/* hover only where there is a hover (never stuck after a tap); pressed works on touch too */
+@media (hover: hover) {
+  .pj-view-btn[aria-pressed="false"]:hover {
+    background: var(--color-limestone);
+  }
+}
+.pj-view-btn[aria-pressed="false"]:active {
+  background: var(--color-limestone);
+}
+
+/* The tap flash of the browser (a dark square on Android) is off on everything here that is pressed; each of them has a
+   pressed state in the cream tone instead. */
+.pj-tab,
+.pj-city-btn,
+.pj-opt,
+.pj-row,
+.pj-pin,
+.pj-zoom button,
+.pj-view-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+.pj-tab:active,
+.pj-city-btn:active,
+.pj-opt:active,
+.pj-row:active,
+.pj-pin:active,
+.pj-zoom button:active {
+  background: var(--color-limestone);
 }
 @media (max-width: 767px) {
   .pj-bar-inner {
