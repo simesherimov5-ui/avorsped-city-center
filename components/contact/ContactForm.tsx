@@ -441,7 +441,7 @@ export function ContactForm({
               >
                 Сè уште не знам
               </button>
-              <button type="button" className="ct-btn ct-btn--sm" onClick={confirmArea}>
+              <button type="button" className="ct-btn" onClick={confirmArea}>
                 <span>Продолжи</span>
                 <span aria-hidden className="ct-btn__arrow">
                   <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">

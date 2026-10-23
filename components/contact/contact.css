@@ -706,7 +706,7 @@ a.ct-val:focus-visible {
   }
 }
 @media (max-width: 480px) {
-  .ct-btn:not(.ct-btn--sm) {
+  .ct-btn {
     min-height: 44px;
     padding-inline: 20px;
   }
@@ -964,21 +964,6 @@ a.ct-val:focus-visible {
 .ct-area-actions .btn-secondary[aria-pressed="true"] {
   border-color: var(--color-gold);
   color: var(--color-gold);
-}
-/* the two buttons of this row are one size (the small one) */
-.ct-area-actions .btn-secondary {
-  min-height: 36px;
-  padding: 0 16px;
-  font-size: 12px;
-}
-.ct-btn--sm {
-  min-height: 36px;
-  padding: 0 18px;
-  font-size: 12px;
-}
-.ct-btn--sm .ct-btn__arrow {
-  width: 18px;
-  height: 18px;
 }
 @media (max-width: 480px) {
   .ct-area-actions {
