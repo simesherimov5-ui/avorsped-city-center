@@ -61,8 +61,8 @@ export function ProjectCard({ project }: { project: Project }) {
             </svg>
           </span>
         </div>
-        <div className="relative mt-3 h-px bg-gold/40">
-          <i className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-gold transition-transform duration-(--dur-slow) ease-(--ease) [@media(hover:hover)]:group-hover:scale-x-100" />
+        <div className="relative mt-3 h-px bg-gold">
+          <i className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gold transition-transform duration-(--dur-slow) ease-(--ease) [@media(hover:hover)]:group-hover:scale-x-100" />
         </div>
         <div className="mt-3 text-sm text-muted">{project.location}</div>
         <div className="mt-4 flex gap-4 border-t border-line pt-4 text-xs text-muted">

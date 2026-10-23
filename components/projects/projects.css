@@ -624,13 +624,14 @@
   margin-top: 12px;
   position: relative;
   height: 1px;
-  background: color-mix(in srgb, var(--color-gold) 40%, transparent);
+  background: var(--color-gold);
 }
+/* on hover a 2px gold line grows over the 1px rule, left to right: the rule visibly thickens */
 .pj-rule i {
   position: absolute;
   top: 0;
   left: 0;
-  height: 1px;
+  height: 2px;
   width: 100%;
   background: var(--color-gold);
   transform: scaleX(0);
