@@ -2,9 +2,9 @@
 
 import { Fragment, useEffect, useRef } from "react";
 
-/** Where the reveal starts and ends, as a share of the visible height: the paragraph's top at 85%, its bottom past 55%. */
+/** Where the reveal starts and ends, as a share of the visible height: the paragraph's top at 85%, its bottom past 70%. */
 const START = 0.85;
-const END = 0.55;
+const END = 0.7;
 /** The words of a text, split at the spaces: the punctuation stays attached to its word. */
 const splitWords = (text: string) => text.split(/\s+/).filter(Boolean);
 
