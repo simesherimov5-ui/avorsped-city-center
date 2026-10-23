@@ -384,18 +384,13 @@
   stroke-width: 1.5;
 }
 .pj-view-btn[aria-pressed="true"] {
-  border-color: var(--color-bronze);
-  background: var(--color-copper);
+  border-color: var(--color-onyx);
+  background: var(--color-onyx);
 }
 .pj-view-btn[aria-pressed="true"] svg {
-  stroke: var(--color-onyx);
+  stroke: var(--color-travertine);
 }
-/* hover only where there is a hover (never stuck after a tap); pressed works on touch too */
-@media (hover: hover) {
-  .pj-view-btn[aria-pressed="false"]:hover {
-    background: var(--color-limestone);
-  }
-}
+/* pressed (touch too): the unselected one turns limestone; the selected one stays black */
 .pj-view-btn[aria-pressed="false"]:active {
   background: var(--color-limestone);
 }
