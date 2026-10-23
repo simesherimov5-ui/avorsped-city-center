@@ -9,7 +9,16 @@ import type { ProjectAbout as ProjectAboutData } from "@/types";
  * paragraphs and a signature. When the section comes into view the left column rises 24px (1s) and the right one 0.15s
  * later; reduced motion: no movement.
  */
-export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAboutData; id?: string }) {
+export function ProjectAbout({
+  about,
+  id = "za-proektot",
+  tightBottom = false,
+}: {
+  about: ProjectAboutData;
+  id?: string;
+  /** No bottom padding: the next block (the numbers) brings its own spacing. */
+  tightBottom?: boolean;
+}) {
   const { locale } = useI18n();
   const root = useRef<HTMLElement>(null);
   const head = locale === "en" && about.en ? about.en : about;
@@ -36,7 +45,9 @@ export function ProjectAbout({ about, id = "za-proektot" }: { about: ProjectAbou
 
   return (
     <section ref={root} id={id}>
-      <div className="mx-auto flex max-w-[1320px] flex-wrap items-start gap-16 px-[5%] pb-20 pt-24 md:pb-[120px] md:pt-[140px]">
+      <div
+        className={`mx-auto flex max-w-[1320px] flex-wrap items-start gap-16 px-[5%] pt-[70px] ${tightBottom ? "pb-0" : "pb-20 md:pb-[120px]"}`}
+      >
         <div className="about-col flex flex-[1_1_360px] flex-col gap-[22px]">
           <div className="eyebrow text-gold-deep">{head.kicker}</div>
           <h2 className="font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">

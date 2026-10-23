@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import { StatCell, STAT_GRID } from "@/components/ui/StatCell";
 
 const DURATION = 1600;
 
@@ -61,26 +62,19 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
   }, [founded, figures]);
 
   return (
-    <div ref={root} className="grid gap-9 sm:grid-cols-3 sm:gap-8 lg:gap-12">
+    <div ref={root} className={STAT_GRID}>
       {items.map((item, i) => (
-        <div key={item.label} className="flex flex-col items-center gap-3 text-center">
-          <div
-            className="font-display text-(length:--fs-hero) leading-[0.95] text-accent"
-            style={{ fontVariantNumeric: "lining-nums tabular-nums" }}
+        <StatCell key={item.label} label={item.label}>
+          <span
+            ref={(el) => {
+              cells.current[i] = el;
+            }}
+            suppressHydrationWarning
           >
-            <span
-              ref={(el) => {
-                cells.current[i] = el;
-              }}
-              suppressHydrationWarning
-            >
-              {format(item.target)}
-              {item.suffix}
-            </span>
-          </div>
-          <div aria-hidden className="h-px w-12 bg-accent" />
-          <div className="text-label font-semibold uppercase tracking-label text-accent">{item.label}</div>
-        </div>
+            {format(item.target)}
+            {item.suffix}
+          </span>
+        </StatCell>
       ))}
     </div>
   );

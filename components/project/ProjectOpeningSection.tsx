@@ -4,7 +4,14 @@ import { projectStatusLabel } from "@/lib/format";
 import type { Project } from "@/types";
 
 /** The cinematic opening of a project page and, when the project has the text, "За проектот" under it. Everything comes from the project's data. */
-export function ProjectOpeningSection({ project }: { project: Project }) {
+export function ProjectOpeningSection({
+  project,
+  tightBottom = false,
+}: {
+  project: Project;
+  /** The page brings its own spacing under "За проектот" (the numbers block follows it). */
+  tightBottom?: boolean;
+}) {
   const slides = (project.openingSlides ?? [{ image: project.heroImage }]).map((s, i) => ({
     key: `${i}-${s.image.src}`,
     image: s.image,
@@ -25,7 +32,7 @@ export function ProjectOpeningSection({ project }: { project: Project }) {
       />
       {project.about && (
         <div className="on-light">
-          <ProjectAbout about={project.about} />
+          <ProjectAbout about={project.about} tightBottom={tightBottom} />
         </div>
       )}
     </>

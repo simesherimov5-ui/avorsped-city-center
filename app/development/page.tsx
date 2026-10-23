@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CountUp } from "@/components/ui/CountUp";
+import { StatCell, STAT_GRID } from "@/components/ui/StatCell";
 import { Reveal } from "@/components/ui/Reveal";
 import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
 import { OtherProjects } from "@/components/OtherProjects";
@@ -31,12 +32,18 @@ export default function DevelopmentPage() {
     // Оникс is the page's base; the building picker is its one light block.
     <div className={opening ? undefined : "pt-24 sm:pt-28"}>
       {/* 1 · the cinematic opening and 2 · "За проектот" replace the plain header (the title and the intro text) */}
-      {opening && <ProjectOpeningSection project={opening} />}
+      {opening && <ProjectOpeningSection project={opening} tightBottom />}
 
       {/* the light part of the page: the numbers and the building picker */}
       <div className="on-light">
         {/* The plain header, for a project without the opening; the numbers stay in both cases */}
-        <section className="mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-8 lg:px-10">
+        <section
+          className={`mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 ${
+            // under «За проектот»: 48px to the numbers (as heading to stats on Почетна), and 70px from them to the next
+            // section, whose own top padding is 48px (64px from 640px)
+            opening ? "pb-[22px] pt-12 sm:pb-[6px]" : "pb-12 pt-10"
+          }`}
+        >
           {!opening && (
             <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
               <Reveal immediate>
@@ -52,12 +59,16 @@ export default function DevelopmentPage() {
           )}
 
           <Reveal immediate delay={0.16}>
-            <div
-              className={`${opening ? "" : "mt-10 "}grid grid-cols-2 gap-x-6 gap-y-10 border-t border-line pt-10 sm:grid-cols-3 sm:divide-x sm:divide-line`}
-            >
-              <Stat label="Згради" value="6" />
-              <Stat label="Станови" value={String(development.totalApartments)} className="sm:pl-8" />
-              <Stat label="Завршување" value={development.expectedCompletion} className="sm:pl-8" />
+            <div className={`${opening ? "" : "mt-10 "}${STAT_GRID}`}>
+              <StatCell tone="light" label="Згради">
+                <CountUp value="6" duration={1600} />
+              </StatCell>
+              <StatCell tone="light" label="Станови">
+                <CountUp value={String(development.totalApartments)} duration={1600} />
+              </StatCell>
+              <StatCell tone="light" label="Завршување">
+                <CountUp value={development.expectedCompletion} />
+              </StatCell>
             </div>
           </Reveal>
         </section>
@@ -145,17 +156,6 @@ export default function DevelopmentPage() {
       )}
 
       <OtherProjects currentProjectId="city-center" light />
-    </div>
-  );
-}
-
-function Stat({ label, value, className }: { label: string; value: string; className?: string }) {
-  return (
-    <div className={className}>
-      <div className="font-display text-3xl text-gold-deep sm:text-4xl">
-        <CountUp value={value} />
-      </div>
-      <div className="eyebrow eyebrow-tight mt-2 text-muted">{label}</div>
     </div>
   );
 }
