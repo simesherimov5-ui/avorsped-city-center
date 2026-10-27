@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CountUp } from "@/components/ui/CountUp";
 import { StatCell, STAT_GRID } from "@/components/ui/StatCell";
 import { Reveal } from "@/components/ui/Reveal";
@@ -77,13 +76,17 @@ export default function DevelopmentPage() {
         <section className="py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
             <Reveal>
-              <SectionHeading
-                eyebrow="Ситуационен план"
-                title="Шест згради, еден заеднички двор"
-                description="Комплексот е распореден околу централен пејзажиран двор — секоја зграда гледа кон зеленило наместо кон паркинг или улица."
-                size="compact"
-                className="max-w-2xl"
-              />
+              <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+                <div>
+                  <div className="eyebrow text-gold-deep">КОМПЛЕКСОТ</div>
+                  <h2 className="mt-3 text-balance font-display text-(length:--fs-h2) font-normal leading-[1.1] text-charcoal">
+                    Изберете зграда.
+                  </h2>
+                </div>
+                <p className="text-balance text-base leading-relaxed text-ink/65 lg:pb-1">
+                  Кликнете на зграда за да ги видите нејзините катови и станови.
+                </p>
+              </div>
             </Reveal>
             <Reveal delay={0.1}>
               <div className="mt-12">
