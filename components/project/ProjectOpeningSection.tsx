@@ -6,11 +6,11 @@ import type { Project } from "@/types";
 /** The photo opening of a project page and, when the project has the text, "За проектот" under it. Everything comes from the project's data. */
 export function ProjectOpeningSection({
   project,
-  tightBottom = false,
+  aboutTarget,
 }: {
   project: Project;
-  /** The page brings its own spacing under "За проектот" (the numbers block follows it). */
-  tightBottom?: boolean;
+  /** The id of the section that «ИЗБЕРЕТЕ ЗГРАДА ↓» in "За проектот" leads to (the building picker). */
+  aboutTarget?: string;
 }) {
   const slides = (project.openingSlides ?? [{ image: project.heroImage }]).map((s, i) => ({
     key: `${i}-${s.image.src}`,
@@ -29,11 +29,7 @@ export function ProjectOpeningSection({
         slides={slides}
         storageKey={`hero-stopped-${project.slug}`}
       />
-      {project.about && (
-        <div className="on-light">
-          <ProjectAbout about={project.about} tightBottom={tightBottom} />
-        </div>
-      )}
+      {project.about && <ProjectAbout about={project.about} target={aboutTarget} />}
     </>
   );
 }

@@ -94,9 +94,10 @@ export const projects: Project[] = [
       title: "Нов стандард на живеење, ",
       titleItalic: "во срцето на Струмица.",
       paragraphs: [
-        "[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]",
-        "[Втор пасус: за кого е наменет и каков живот нуди.]",
+        "Секоја зграда што сме ја изградиле од 1994 година наваму нè научила нешто ново. Сето тоа искуство го вградивме во City Center: шест згради во центарот на Струмица, со плоштад, деловни простори и подземна гаража.",
+        "Резултатот е дом изграден онака како што и ние би сакале да живееме. Ве покануваме да откриете зошто.",
       ],
+      accents: ["нешто ново", "дом", "зошто"],
       signature: "Javor Sped Holding",
       en: {
         kicker: "ABOUT THE PROJECT",
@@ -106,8 +107,8 @@ export const projects: Project[] = [
     },
     // TODO(client): the north direction on the aerial photo, in degrees (docs/content-needed.md).
     masterplanNorth: 0,
-    // TODO(client): the material photos, makers and the headings (docs/content-needed.md).
-    materialsHeading: { title: "[Наслов за квалитетот] ", titleItalic: "[продолжение]" },
+    // TODO(client): the material photos and makers (docs/content-needed.md).
+    materialsHeading: { title: "Изградено да трае.", titleItalic: "" },
     equippedBy: "Luxury Home",
     materials: ["Гранит", "Плочки", "Санитарија", "Подови"].map((name) => ({
       name,
@@ -131,7 +132,11 @@ export const projects: Project[] = [
       ],
     },
     // TODO(client): the date of the last update, the month of each phase and the construction photos.
-    progress: { title: "Следете како ", titleItalic: "расте." },
+    progress: {
+      title: "Следете ја градбата.",
+      titleItalic: "",
+      lede: "Нови фотографии од градилиштето секој месец.",
+    },
     book: {
       title: "[Наслов за покана] ",
       titleItalic: "[продолжение]",

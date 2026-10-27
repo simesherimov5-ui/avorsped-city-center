@@ -175,6 +175,8 @@ export interface ProjectAbout {
   /** The end of the heading, set in Бронза. */
   titleItalic: string;
   paragraphs: string[];
+  /** Phrases of the paragraphs set in Playfair and the accent colour (each where it first appears). */
+  accents?: string[];
   signature: string;
   /** The heading in English (the paragraphs stay as written). */
   en?: { kicker: string; title: string; titleItalic: string };
@@ -194,6 +196,8 @@ export interface MaterialItem {
 }
 
 export interface ProjectProgress extends SplitTitle {
+  /** The line under the heading. */
+  lede?: string;
   /** ISO date of the last update, or free text; a [placeholder] is shown while it is missing. */
   updated?: string;
   /** Per phase: the month it is planned or done in, and a photo from the site. */

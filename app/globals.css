@@ -605,6 +605,82 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   }
 }
 
+/* City Center's "За проектот" (components/project/ProjectAbout.tsx): the logo mark faint in the middle of the band, under
+   a darkening that is lighter in the middle (Оникс 55%) than at the edges (92%). */
+.pa-intro-mark,
+.pa-intro-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pa-intro-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pa-intro-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-onyx) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 92%, transparent) 100%
+  );
+}
+
+/* "Тек на градба" (components/project/ProjectBuildProgress.tsx): each phase draws the stretch of line from its dot to
+   the next one (Бронза while the phase is passed), through the middle of the dots. Under 1024px the phases stack and
+   the line runs down the left; from 1024px the five stand side by side and the line runs across. */
+.tl {
+  display: grid;
+  gap: 40px;
+}
+.tl-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 31px;
+}
+.tl-dot {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-bronze);
+  border-radius: 50%;
+}
+.tl-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  width: 1px;
+  height: calc(100% + 40px);
+  background: var(--color-line);
+}
+.tl-step.is-passed::before {
+  background: var(--color-bronze);
+}
+@media (min-width: 1024px) {
+  .tl {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .tl-step {
+    padding-left: 0;
+    padding-top: 29px;
+  }
+  .tl-dot {
+    top: 0;
+  }
+  .tl-step:not(:last-child)::before {
+    top: 7px;
+    width: calc(100% + 24px);
+    height: 1px;
+  }
+}
+
 /* The pin that drops onto the real map: it falls from above and two rings spread where it lands (a still pin with reduced motion). */
 .gm-pin {
   position: absolute;

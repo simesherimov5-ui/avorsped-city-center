@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, listNames, orientationLabel, projectStatusLabel, typeLabel } from "@/lib/format";
+import { formatArea, listNames, orientationLabel, projectStatusLabel, realText, typeLabel } from "@/lib/format";
+
+describe("realText", () => {
+  it("keeps real text", () => {
+    expect(realText("Luxury Home")).toBe("Luxury Home");
+    expect(realText(" 200 м ")).toBe("200 м");
+  });
+
+  it("drops empty text and placeholders in square brackets", () => {
+    expect(realText("[месец]")).toBeUndefined();
+    expect(realText("[Каде се користи · производител]")).toBeUndefined();
+    expect(realText("Плоштад [ 3 МИН ]")).toBeUndefined();
+    expect(realText("")).toBeUndefined();
+    expect(realText(undefined)).toBeUndefined();
+  });
+});
 
 describe("listNames", () => {
   it("puts commas between the names and «и» only before the last", () => {

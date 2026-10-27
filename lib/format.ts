@@ -19,6 +19,15 @@ export function projectStatusLabel(status: ProjectStatus): string {
   return PROJECT_STATUS_LABELS[status];
 }
 
+/**
+ * The text if it is real, else undefined: empty, or a placeholder still waiting for the client's text ("[месец]",
+ * "[Каде се користи · производител]", anything in square brackets) is never shown.
+ */
+export function realText(value: string | undefined | null): string | undefined {
+  const text = value?.trim();
+  return text && !/\[[^\]]*\]/.test(text) ? text : undefined;
+}
+
 /** Names listed in a sentence, the Macedonian way: commas between them, «и» only before the last ("А, Б и В"). */
 export function listNames(names: string[]): string {
   if (names.length <= 1) return names.join("");
