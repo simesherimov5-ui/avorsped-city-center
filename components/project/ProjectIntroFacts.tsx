@@ -1,17 +1,20 @@
 import { Reveal } from "@/components/ui/Reveal";
+import { ScrollToLink } from "@/components/ui/ScrollToLink";
 import type { SplitTitle } from "@/types";
 
 /**
  * «ЗА ПРОЕКТОТ» of a photo-led project page, on the cream page: on the left the heading (its end in Бронза) and a short
  * gold line under it; on the right the project's facts, one row each between thin lines, the label left and the value
- * right. One column on a phone, the heading first.
+ * right. One column on a phone, the heading first. With `link`, a way down under the gold line (to the object picker).
  */
 export function ProjectIntroFacts({
   heading,
   facts,
+  link,
 }: {
   heading: SplitTitle;
   facts: { label: string; value: string }[];
+  link?: { target: string; label: string };
 }) {
   return (
     <section aria-label="За проектот" className="on-light grain">
@@ -23,6 +26,14 @@ export function ProjectIntroFacts({
             <span className="text-gold-deep">{heading.titleItalic}</span>
           </h2>
           <span aria-hidden className="mt-8 block h-px w-14 bg-gold" />
+          {link && (
+            <ScrollToLink
+              target={link.target}
+              className="focus-ring mt-6 inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-[0.3em] text-gold-deep"
+            >
+              {link.label}
+            </ScrollToLink>
+          )}
         </Reveal>
         <Reveal delay={0.1}>
           <dl className="m-0 border-t border-line">

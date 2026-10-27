@@ -28,6 +28,7 @@ import { ProjectHeroDiptych } from "@/components/project/ProjectHeroDiptych";
 import { ProjectIntroFacts } from "@/components/project/ProjectIntroFacts";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectPlace } from "@/components/project/ProjectPlace";
+import { ObjectPicker } from "@/components/project/ObjectPicker";
 import type { Project } from "@/types";
 
 export function generateStaticParams() {
@@ -241,7 +242,28 @@ function DiptychProjectPage({ project }: { project: Project }) {
         <ProjectIntroFacts
           heading={project.intro}
           facts={[...(project.facts ?? []), { label: "Град", value: project.city }, { label: "Статус", value: status }]}
+          link={
+            project.objects && project.sitePlan ? { target: "izberete-objekt", label: "Изберете објект ↓" } : undefined
+          }
         />
+      )}
+      {project.objects && project.sitePlan && (
+        <section
+          id="izberete-objekt"
+          aria-label="Изберете објект"
+          className="on-light grain scroll-mt-(--nav-h) border-t border-line"
+        >
+          <div className="mx-auto max-w-[1320px] px-[5%] py-16 md:py-24">
+            <div className="eyebrow tracking-[0.32em] text-gold-deep">КОМПЛЕКСОТ</div>
+            <h2 className="m-0 mt-4 font-display text-[clamp(40px,4.8vw,72px)] font-normal leading-[1.05] text-ink">
+              Изберете објект.
+            </h2>
+            <p className="m-0 mt-4 text-base text-muted">Изберете објект од планот.</p>
+            <div className="mt-12">
+              <ObjectPicker projectName={project.name} objects={project.objects} plan={project.sitePlan} />
+            </div>
+          </div>
+        </section>
       )}
       {project.gallery.length > 0 && <ProjectGallery photos={project.gallery} />}
       {project.place && <ProjectPlace name={project.name} city={project.city} place={project.place} />}

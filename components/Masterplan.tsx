@@ -378,7 +378,7 @@ function BuildingPanel({
  * in the accent colour on a soft dark backing so it reads on the bright parts of the photo. The whole compass turns by
  * `north` degrees, so the needle points to north on the photo. It is decoration only and sits under the markers.
  */
-function Compass({ north }: { north: number }) {
+export function Compass({ north }: { north: number }) {
   return (
     <svg
       aria-hidden="true"

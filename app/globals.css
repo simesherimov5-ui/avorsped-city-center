@@ -111,6 +111,9 @@
   --color-accent-soft: var(--color-travertine);
   --color-chrome: var(--color-onyx);
   --color-on-chrome: var(--color-travertine);
+  /* Greenery on drawn plans and maps only (lawns on a site plan): a muted sage that sits calmly beside Варовник and
+     Бронза. Never text, buttons or backgrounds. */
+  --color-plan-green: #c9cfb8;
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
@@ -155,6 +158,7 @@
   --color-accent-soft: var(--color-accent-soft);
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
+  --color-plan-green: var(--color-plan-green);
   /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
   --font-sans: var(--font-montserrat);

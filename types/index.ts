@@ -326,6 +326,39 @@ export interface Project {
   facts?: { label: string; value: string }[];
   /** Where the project is on the map. `approximate` while it only marks the town: replace it with the address. */
   place?: { lat: number; lng: number; approximate?: boolean };
+  /** The objects (buildings) of a project picked on its drawn site plan; floors and units are attached later. */
+  objects?: ProjectObject[];
+  /** The drawn site plan of the object picker, in the plan's own units (`viewBox`). */
+  sitePlan?: SitePlan;
+}
+
+/** One building of a project on its site plan. */
+export interface ProjectObject {
+  id: string;
+  /** 1, 2, … as on the plan. */
+  number: number;
+  /** The building plot, e.g. "ГП Ѓ30". */
+  plot: string;
+  status: ProjectStatus;
+  /** Filled in once the floors are known (none yet). */
+  floors?: { number: number; label: string }[];
+}
+
+type PlanRect = { x: number; y: number; width: number; height: number };
+
+/** A simple drawing of a site plan (streets, the plot, parking, lawns and the objects), traced from the architect's. */
+export interface SitePlan {
+  viewBox: string;
+  /** Where north is, in degrees clockwise from up. */
+  north: number;
+  /** Streets as centrelines with a width; the named ones carry a label placed along them. */
+  streets: { d: string; width: number; label?: string; labelAt?: { x: number; y: number }; labelAngle?: number }[];
+  site: PlanRect & { radius: number };
+  innerStreets: PlanRect[];
+  parking: PlanRect[];
+  lawns: PlanRect[];
+  /** Each object's footprint, by its id. */
+  footprints: Record<string, PlanRect>;
 }
 
 export interface CompanyStat {

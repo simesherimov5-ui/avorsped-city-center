@@ -3,8 +3,8 @@ import { companyStats, companyTimeline } from "@/data";
 
 describe("the company-level texts of За нас", () => {
   it("count the buildings being built without the projects known only by name", () => {
-    // City Center's six, Станбена куќа 1, Дојрански Рај and Радовиш Twins (no building list yet: counted as one)
-    expect(companyStats.find((s) => s.label === "Згради во изградба")?.value).toBe("9");
+    // City Center's six, Станбена куќа 1, Дојрански Рај and Радовиш Twins's four objects
+    expect(companyStats.find((s) => s.label === "Згради во изградба")?.value).toBe("12");
   });
 
   it("name the projects being built, the Macedonian way, without the projects known only by name", () => {

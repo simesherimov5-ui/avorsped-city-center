@@ -496,6 +496,43 @@ export const projects: Project[] = [
     ],
     // TODO(client): the exact address. For now the centre of Радовиш, marked approximate.
     place: { lat: 41.6383, lng: 22.4647, approximate: true },
+    // the four objects of the site plan (СИТУАЦИЈА: Комплекс, Радовиш); floors and units follow when the client sends them
+    objects: [
+      { id: "rt-1", number: 1, plot: "ГП Ѓ30", status: "under-construction" },
+      { id: "rt-2", number: 2, plot: "ГП Ѓ1", status: "under-construction" },
+      { id: "rt-3", number: 3, plot: "ГП Ѓ31", status: "under-construction" },
+      { id: "rt-4", number: 4, plot: "ГП Ѓ2", status: "under-construction" },
+    ],
+    // traced from the site plan (the PDF at 110 dpi, in its pixels): two rows of two objects of equal width, the inner
+    // street between the rows, parking along the edges and the middle, lawns along the rows; north from its wind rose
+    sitePlan: {
+      viewBox: "470 175 820 785",
+      north: 47,
+      streets: [
+        { d: "M470 268 L612 292 L1240 284 L1290 281", width: 40 },
+        { d: "M607 175 L507 960", width: 58, label: "Улица бр.1", labelAt: { x: 584, y: 480 }, labelAngle: -83 },
+        { d: "M1244 175 L1205 960", width: 55, label: "Улица бр.2", labelAt: { x: 1226, y: 500 }, labelAngle: -87 },
+      ],
+      site: { x: 632, y: 330, width: 528, height: 565, radius: 40 },
+      innerStreets: [{ x: 632, y: 598, width: 528, height: 42 }],
+      parking: [
+        { x: 640, y: 535, width: 505, height: 57 },
+        { x: 648, y: 370, width: 52, height: 155 },
+        { x: 648, y: 650, width: 52, height: 200 },
+        { x: 1086, y: 365, width: 52, height: 160 },
+        { x: 1086, y: 668, width: 52, height: 182 },
+      ],
+      lawns: [
+        { x: 708, y: 523, width: 364, height: 12 },
+        { x: 705, y: 830, width: 372, height: 48 },
+      ],
+      footprints: {
+        "rt-1": { x: 708, y: 352, width: 180, height: 171 },
+        "rt-2": { x: 892, y: 352, width: 180, height: 171 },
+        "rt-3": { x: 708, y: 655, width: 180, height: 175 },
+        "rt-4": { x: 892, y: 655, width: 180, height: 175 },
+      },
+    },
     specifications: [],
     capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
   },
@@ -642,10 +679,11 @@ export const companyStats: CompanyStat[] = [
   { value: "30+", label: "Години искуство" },
   { value: "5", label: "Завршени проекти" },
   { value: "540+", label: "Изградени станови" },
-  // the buildings of the projects that are under construction (a project that is one building counts as one); the
+  // the buildings of the projects that are under construction (its buildings, else its objects on the site plan; a
+  // project that is one building counts as one); the
   // projects known only by name (stub) are not counted until their buildings are known
   {
-    value: String(underConstruction().reduce((n, p) => n + (p.buildings?.length ?? 1), 0)),
+    value: String(underConstruction().reduce((n, p) => n + (p.buildings?.length ?? p.objects?.length ?? 1), 0)),
     label: "Згради во изградба",
   },
 ];
