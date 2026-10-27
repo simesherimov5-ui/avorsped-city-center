@@ -38,7 +38,7 @@ export default function HomePage() {
       <Film still={FILM_STILL} />
 
       {/* 4. What is being built now */}
-      <NewProjects projects={projects.filter((p) => p.status !== "completed")} />
+      <NewProjects projects={projects.filter((p) => p.status !== "completed" && !p.stub)} />
 
       {/* 5. The numbers */}
       <section className="grain grain--dark border-t border-on-chrome/10 bg-chrome text-on-chrome">

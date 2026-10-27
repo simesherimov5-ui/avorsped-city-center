@@ -5,8 +5,14 @@ describe("projectsOnSale", () => {
   const sale = projectsOnSale();
 
   it("lists every project that is not completed, in the order of the projects page", () => {
-    expect(sale.map((p) => p.project.id)).toEqual(projects.filter((p) => p.status !== "completed").map((p) => p.id));
+    expect(sale.map((p) => p.project.id)).toEqual(
+      projects.filter((p) => p.status !== "completed" && !p.stub).map((p) => p.id)
+    );
     expect(sale.length).toBeGreaterThan(1);
+  });
+
+  it("leaves out the projects known only by name (stub), so the contact form does not offer them", () => {
+    expect(sale.map((p) => p.project.id)).toEqual(["city-center", "stanbena-kukja", "dojranski-raj"]);
   });
 
   it("gives every apartment to a project on sale and to one building of it", () => {

@@ -305,6 +305,11 @@ export interface Project {
     hasBuildings?: boolean;
     hasApartmentSelection?: boolean;
   };
+  /**
+   * Only the name, the city and the status are known so far: the project has a card on Проекти (and Завршени проекти)
+   * and a plain page of its own, and stays out of the homepage slideshow, «Другите наши проекти» and the contact form.
+   */
+  stub?: boolean;
 }
 
 export interface CompanyStat {

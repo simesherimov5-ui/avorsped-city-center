@@ -14,7 +14,8 @@ export function OtherProjects({
   /** The cream ground with dark text instead of Оникс. */
   light?: boolean;
 }) {
-  const others = projects.filter((p) => p.id !== currentProjectId);
+  // the projects known only by name (stub) have no photo or text to show here yet
+  const others = projects.filter((p) => p.id !== currentProjectId && !p.stub);
   if (others.length === 0) return null;
 
   return (

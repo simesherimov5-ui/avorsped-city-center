@@ -11,6 +11,24 @@ export const buildings: Building[] = generated.development.buildings;
 
 export { residentQuotes } from "./quotes";
 
+/** A project known only by its name, city and status: no photo (the cards and the page show the logo mark), no text. */
+function stub(slug: string, name: string, status: Project["status"], city: string): Project {
+  return {
+    id: slug,
+    slug,
+    name,
+    location: city,
+    city,
+    status,
+    description: "",
+    heroImage: { src: "", alt: name, isPlaceholder: true },
+    gallery: [],
+    specifications: [],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
+    stub: true,
+  };
+}
+
 export const projects: Project[] = [
   {
     id: "city-center",
@@ -145,22 +163,26 @@ export const projects: Project[] = [
   {
     id: "stanbena-kukja",
     slug: "stanbena-kukja",
-    name: "Станбена Куќа",
+    name: "Станбена куќа 1",
     location: "Ул. Цветан Димов бр. 16, Струмица, Северна Македонија",
     city: "Струмица",
-    status: "upcoming",
+    status: "under-construction",
     year: 2028,
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
     // The hero photo is square (1730 × 1787): in a wide frame Media shows it whole, over a blurred copy of itself.
     imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
-    heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
+    heroImage: {
+      src: "/images/stanbena-zgrada/facade-night.jpg",
+      alt: "Станбена куќа 1 — фасада",
+      isPlaceholder: false,
+    },
     gallery: [
-      { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена Куќа — кујна и трпезарија", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена Куќа — двор", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена куќа 1 — фасада", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена куќа 1 — дневен престој", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена куќа 1 — кујна и трпезарија", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена куќа 1 — двор", isPlaceholder: false },
     ],
     roomTour: [
       {
@@ -367,11 +389,22 @@ export const projects: Project[] = [
     specifications: [],
     capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
   },
+  // Projects of which only the name, the city and the status are known yet (stub: see types/index.ts). No year, photo,
+  // tagline or text until the client sends them.
+  stub("stanbena-kukja-2", "Станбена куќа 2", "under-construction", "Струмица"),
+  stub("city-center-2", "City Center 2", "under-construction", "Струмица"),
+  stub("radovish-twins", "Радовиш Twins", "under-construction", "Радовиш"),
+  stub("boro-pochkov", "Боро Почков", "under-construction", "Струмица"),
+  stub("dojranski-raj-2", "Дојрански Рај 2", "under-construction", "Дојран"),
+  stub("sigal-zgrada", "Сигал зграда", "completed", "Струмица"),
+  stub("skopje-aerodrom", "Скопје Аеродром", "completed", "Скопје"),
+  stub("karposh-strumica", "Карпош Струмица", "completed", "Струмица"),
+  stub("boro-pochkov-stara-zgrada", "Боро Почков — стара зграда", "completed", "Струмица"),
 ];
 
 // ---- the apartments of every project
 
-/** What is known of Станбена Куќа's seven apartments (its floors, areas and types are the project's own data). */
+/** What is known of Станбена куќа 1's seven apartments (its floors, areas and types are the project's own data). */
 function stanbenaKukjaUnits(): SampleUnit[] {
   const types = projects.find((p) => p.id === "stanbena-kukja")?.apartmentTypes ?? [];
   const [ground, odd, even] = [types[0]?.image, types[2]?.image, types[1]?.image];
@@ -464,7 +497,7 @@ export const placeOf = (a: Apartment) => a.buildingId ?? a.projectId;
  */
 export function projectsOnSale(): SaleProject[] {
   return projects
-    .filter((p) => p.status !== "completed")
+    .filter((p) => p.status !== "completed" && !p.stub)
     .map((project) => {
       const own = apartments.filter((a) => a.projectId === project.id);
       const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
