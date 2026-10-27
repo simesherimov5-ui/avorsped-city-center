@@ -26,7 +26,7 @@ export function PullQuote({
       <blockquote
         className={cn(
           "mt-8 font-display text-(length:--fs-statement) font-normal leading-[1.2] text-balance",
-          tone === "dark" ? "text-on-dark" : "text-charcoal"
+          tone === "dark" ? "text-on-chrome" : "text-charcoal"
         )}
       >
         {children}

@@ -5,9 +5,7 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { HeroSlideshow, type HeroSlide } from "@/components/ui/HeroSlideshow";
 import { useI18n } from "@/lib/i18n";
 
-// cream-text (the name and the back link): gold over the brightest photos fell under 3:1.
-const H1_CLASS =
-  "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-on-dark cream-text";
+const H1_CLASS = "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper";
 const P_CLASS = "max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline";
 
 // width of the slideshow controls: the indicators (44px, 10px apart), the gap and the pause button
@@ -18,7 +16,7 @@ const controlsWidth = (count: number) => count * 44 + (count - 1) * 10 + 12 + 44
  * .photo-hero--fill), with this project's photos. Above the hero breakpoint (lib/hero.ts) it is exactly the first screen, the
  * back link top left on the photos and, bottom left, the place and state, the name and the line about the project, the
  * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
- * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is Травертин; the label and the
+ * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is full Травертин; the label and the
  * line under the name are the site's gold (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`).
  * It is on screen from the first paint: no film before it, no entrance of its own.
  */
@@ -48,7 +46,7 @@ export function ProjectOpening({
             <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
               <Link
                 href={backHref}
-                className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-on-dark/85 transition-colors hover:text-on-dark cream-text"
+                className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper"
               >
                 {t("opening.back")}
               </Link>

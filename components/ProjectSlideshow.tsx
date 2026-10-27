@@ -146,11 +146,11 @@ export function ProjectSlideshow({
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/55 to-chrome/20" />
           <div className="absolute inset-x-0 bottom-0">
-            <div className="mx-auto max-w-7xl px-5 pb-14 text-on-dark sm:px-8 sm:pb-16 lg:px-10">
+            <div className="mx-auto max-w-7xl px-5 pb-14 text-on-chrome sm:px-8 sm:pb-16 lg:px-10">
               <Heading {...textIn(1)} className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">
                 {project.name}
               </Heading>
-              <motion.div {...textIn(2)} className="mt-1 text-base text-on-dark-muted sm:text-sm">
+              <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
                 {project.location}
               </motion.div>
               <motion.div {...textIn(3)} className="mt-4 sm:mt-5">

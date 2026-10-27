@@ -24,9 +24,16 @@ const LINKS = [
   { href: "/contact", key: "nav.contact" },
 ];
 
-// Which tab a path belongs to ("/projects/city-center" is under "Проекти"); null when it is none of them.
+// The pages that have no tab of their own but belong to Проекти: a project's own page, the finished projects, the
+// comparison and the apartments (with everything under them).
+const UNDER_PROJECTS = ["/development", "/dojran", "/completed-projects", "/compare", "/apartments"];
+const within = (path: string, base: string) => path === base || path.startsWith(base + "/");
+
+// Which tab a path belongs to ("/projects/…" and the pages above are under "Проекти"); null when it is none of them.
 const tabFor = (path: string) =>
-  LINKS.find((l) => (l.href === "/" ? path === "/" : path === l.href || path.startsWith(l.href + "/")))?.href ?? null;
+  UNDER_PROJECTS.some((base) => within(path, base))
+    ? "/projects"
+    : (LINKS.find((l) => (l.href === "/" ? path === "/" : within(path, l.href)))?.href ?? null);
 
 // The bar slides away once the visitor has scrolled this far down, and comes back on any scroll up.
 const HIDE_AFTER_PX = 160;
@@ -230,9 +237,11 @@ export function Navbar() {
                     }}
                     onPointerDown={spawnClickPulse}
                     aria-current={pathname === link.href ? "page" : undefined}
+                    // the current page's tab is gold (with the underline) on the solid bar and over the photo alike
+                    data-current={activeHref === link.href || undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-dark-muted hover:text-gold",
-                      activeHref === link.href && solid && "text-gold!"
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      activeHref === link.href && "text-gold!"
                     )}
                   >
                     {t(link.key)}
@@ -286,7 +295,7 @@ export function Navbar() {
                 aria-current={pathname === link.href ? "page" : undefined}
                 className={cn(
                   "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-sans font-normal text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
-                  pathname === link.href ? "text-gold" : "text-on-dark"
+                  activeHref === link.href ? "text-gold" : "text-paper"
                 )}
               >
                 <span className="eyebrow text-gold">{String(i + 1).padStart(2, "0")}</span>

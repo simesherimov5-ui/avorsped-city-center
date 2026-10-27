@@ -41,16 +41,16 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
           className="absolute inset-0"
         />
         <button
-          className="focus-ring absolute right-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-dark hover:bg-on-chrome/10"
+          className="focus-ring absolute right-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-chrome hover:bg-on-chrome/10"
           aria-label="Цел екран"
         >
-          <Maximize2 className="h-3.5 w-3.5 text-on-chrome" /> Цел екран
+          <Maximize2 className="h-3.5 w-3.5" /> Цел екран
         </button>
         <button
-          className="focus-ring absolute left-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-dark hover:bg-on-chrome/10"
+          className="focus-ring absolute left-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-chrome hover:bg-on-chrome/10"
           aria-label="Ротирај поглед"
         >
-          <RotateCw className="h-3.5 w-3.5 text-on-chrome" /> Ротирај
+          <RotateCw className="h-3.5 w-3.5" /> Ротирај
         </button>
       </div>
       <div className="flex flex-wrap gap-2 border-t border-on-chrome/10 p-3">
@@ -61,11 +61,11 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
             className={cn(
               "focus-ring flex items-center gap-1.5 border px-3 py-1.5 text-xs transition-colors",
               room === key
-                ? "border-accent bg-accent/20 text-on-dark"
-                : "border-on-chrome/20 text-on-dark-muted hover:border-on-chrome/40"
+                ? "border-accent bg-accent/20 text-on-chrome"
+                : "border-on-chrome/20 text-on-chrome/70 hover:border-on-chrome/40"
             )}
           >
-            <Icon className={cn("h-3.5 w-3.5", room === key ? "text-on-chrome" : "text-on-chrome/70")} /> {label}
+            <Icon className="h-3.5 w-3.5" /> {label}
           </button>
         ))}
       </div>

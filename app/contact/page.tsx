@@ -42,8 +42,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           <div data-seq="eyebrow" className="bk-eyebrow ct-pre">
             Контакт
           </div>
-          {/* cream-text: the plain part stays Травертин, so the gold accent word still stands out */}
-          <h1 data-seq="h1" className="ct-h1 bk-serif ct-pre cream-text">
+          <h1 data-seq="h1" className="ct-h1 bk-serif ct-pre">
             Закажете <em>приватна</em> консултација.
           </h1>
         </header>

@@ -120,7 +120,7 @@ export function Masterplan({
                       ? "border-accent bg-accent text-chrome"
                       : isHovered
                         ? "border-accent bg-accent/25 text-chrome"
-                        : "border-on-chrome/50 bg-chrome/85 text-on-dark"
+                        : "border-on-chrome/50 bg-chrome/85 text-on-chrome"
                   )}
                 >
                   {building.shortLabel}
@@ -130,10 +130,10 @@ export function Masterplan({
                 <motion.div
                   initial={false}
                   animate={{ opacity: isHovered && !isSelected ? 1 : 0, y: isHovered && !isSelected ? 0 : 6 }}
-                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-dark"
+                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="text-base font-medium">{building.name}</div>
-                  <div className="mt-2 space-y-1 text-label text-on-dark-muted">
+                  <div className="mt-2 space-y-1 text-label text-on-chrome/70">
                     <div>
                       {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
                     </div>
@@ -362,7 +362,7 @@ function BuildingPanel({
             onClick={(e) => onChoose(b.id, e.currentTarget)}
             className={cn(
               "focus-ring min-h-12 border px-1 py-3 text-center font-display text-base transition-colors",
-              b.id === building.id ? "border-onyx bg-onyx text-on-dark" : "border-line text-ink hover:border-ink/40"
+              b.id === building.id ? "border-onyx bg-onyx text-travertine" : "border-line text-ink hover:border-ink/40"
             )}
           >
             Зграда {Number(b.shortLabel)}

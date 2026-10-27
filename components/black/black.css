@@ -12,10 +12,10 @@
   --color-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
   --color-line-dark: color-mix(in srgb, var(--color-travertine) 12%, transparent);
   --gold-line: color-mix(in srgb, var(--color-gold) 30%, transparent);
-  --mute: var(--text-on-dark-muted);
+  --mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
   --bk-px: clamp(20px, 5vw, 64px);
   --bk-gap: clamp(64px, 7.5vw, 112px);
-  color: var(--text-on-dark);
+  color: var(--color-paper);
   font-size: 15px;
   font-weight: 400;
   line-height: 1.6;

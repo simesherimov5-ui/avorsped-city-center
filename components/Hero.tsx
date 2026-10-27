@@ -75,10 +75,7 @@ export function Hero() {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-on-dark"
-    >
+    <section ref={sectionRef} className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-paper">
       <motion.div style={{ y: photoY }} className="absolute inset-0">
         {/* No entrance animation on the photo itself. data-hero-image marks it so the
             opening can wait until it is loaded before the black screen opens. */}
@@ -145,7 +142,7 @@ export function Hero() {
             in globals.css). It sits in the sky band above the roofline. */}
         <h1
           ref={headlineRef}
-          className="hero-title mx-auto mt-3 font-normal! leading-[1.1]! tracking-[-0.01em]! text-on-dark"
+          className="hero-title mx-auto mt-3 font-normal! leading-[1.1]! tracking-[-0.01em]! text-paper"
         >
           Добредојдовте во вашиот нов дом
         </h1>

@@ -12,7 +12,7 @@
   min-height: min(760px, 100svh);
   padding: 72px 20px;
   background: var(--color-onyx);
-  color: var(--text-on-dark);
+  color: var(--color-travertine);
 }
 .cg > * {
   grid-area: 1 / 1;
@@ -86,7 +86,7 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 1.65;
-  color: var(--text-on-dark-muted);
+  color: color-mix(in srgb, var(--color-travertine) 84%, transparent);
 }
 .cg-actions {
   display: flex;
@@ -121,11 +121,11 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--text-on-dark-muted);
+  color: color-mix(in srgb, var(--color-travertine) 90%, transparent);
   text-decoration: none;
 }
 .cg-contact a:hover {
-  color: var(--text-on-dark);
+  color: var(--color-travertine);
 }
 .cg-contact i {
   width: 3px;

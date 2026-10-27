@@ -96,8 +96,7 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
 
       <div className="cg-glass">
         <div className="eyebrow text-accent">Следен чекор</div>
-        {/* cream-text: the plain part stays Травертин, so the gold accent line still stands out */}
-        <h2 className="cg-title cream-text" id="cg-title">
+        <h2 className="cg-title" id="cg-title">
           Вашето следно поглавје <em>започнува тука.</em>
         </h2>
         <p className="cg-lead">Нашиот тим ќе ви помогне да го најдете вистинскиот стан.</p>

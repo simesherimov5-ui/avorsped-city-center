@@ -33,10 +33,10 @@ export function Placeholder({ label, className, tone = "light" }: PlaceholderPro
       <div
         className={cn(
           "relative flex flex-col items-center gap-2 px-4 text-center",
-          isDark ? "text-on-dark-muted" : "text-muted"
+          isDark ? "text-on-chrome/80" : "text-muted"
         )}
       >
-        <ImageOff className={cn("h-5 w-5", isDark && "text-on-chrome/80")} strokeWidth={1.5} />
+        <ImageOff className="h-5 w-5" strokeWidth={1.5} />
         <span className="text-label uppercase tracking-label">{label}</span>
       </div>
     </div>

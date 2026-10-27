@@ -44,8 +44,8 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
                   isClickable
                     ? isHovered
                       ? "scale-110 border-accent bg-accent text-chrome"
-                      : "border-on-chrome/60 bg-chrome/80 text-on-dark"
-                    : "border-transparent bg-chrome/75 text-on-dark"
+                      : "border-on-chrome/60 bg-chrome/80 text-on-chrome"
+                    : "border-transparent bg-chrome/75 text-on-chrome"
                 )}
               >
                 {spot.number}
@@ -76,7 +76,7 @@ export function InteractiveFloorPlan({ image, hotspots, rooms }: FloorPlanExplor
               className="aspect-video h-full w-full object-cover"
             />
             <div className="absolute inset-x-0 top-0 flex items-center justify-between bg-gradient-to-b from-chrome/80 to-transparent p-4">
-              <span className="text-sm uppercase tracking-label text-on-dark">{rooms[activeRoom].label}</span>
+              <span className="text-sm uppercase tracking-label text-on-chrome">{rooms[activeRoom].label}</span>
               <button
                 type="button"
                 onClick={() => setActiveRoom(null)}
