@@ -1031,3 +1031,81 @@ a.ct-val:focus-visible {
 .ct-field--wide {
   grid-column: 1 / -1;
 }
+
+/* «Продолжи» of the area step: ready only once the range has been moved. Not ready, it is the plain outline with its
+   gold text (aria-disabled, but at full strength, unlike «Закажи», so it stays readable); pressing it shows the hint
+   under the buttons. Ready, the gold sweeps in from the left over 0.6s and the text and the arrow turn Оникс; the
+   arrow's circle stays. It follows the state, not the pointer, so a phone sees the same; a mouse only nudges the
+   arrow 6px. Reduced motion: no sweep, no nudge. */
+.ct-btn--continue {
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.6s cubic-bezier(0.77, 0, 0.18, 1),
+    transform var(--dur-fast) var(--ease);
+}
+.ct-btn--continue::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--foil-line);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.ct-btn--continue[data-ready] {
+  color: var(--color-onyx);
+}
+.ct-btn--continue[data-ready]::before {
+  transform: scaleX(1);
+}
+.ct-btn--continue[aria-disabled="true"] {
+  opacity: 1;
+  cursor: pointer;
+}
+.ct-btn--continue:focus-visible:not(:disabled) {
+  border-color: var(--foil-line);
+  color: var(--foil-line);
+}
+.ct-btn--continue[data-ready]:focus-visible:not(:disabled) {
+  color: var(--color-onyx);
+}
+.ct-btn--continue .ct-btn__arrow {
+  transition: transform var(--dur-fast) var(--ease);
+}
+@media (hover: hover) {
+  .ct-btn--continue:hover:not(:disabled),
+  .ct-btn--continue[aria-disabled="true"]:hover:not(:disabled) {
+    border-color: var(--foil-line);
+    color: var(--foil-line);
+  }
+  .ct-btn--continue[data-ready]:hover:not(:disabled) {
+    color: var(--color-onyx);
+  }
+  .ct-btn--continue:hover .ct-btn__arrow {
+    transform: translateX(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-btn--continue,
+  .ct-btn--continue::before,
+  .ct-btn--continue .ct-btn__arrow {
+    transition: none;
+  }
+  .ct-btn--continue:hover .ct-btn__arrow {
+    transform: none;
+  }
+}
+/* the hint under the area buttons (empty until «Продолжи» is pressed too early) */
+.ct-area-hint {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--mute);
+}
+/* a step's heading takes the focus when the step opens (for screen readers and the keyboard); it is not a control */
+.ct-step [tabindex="-1"]:focus {
+  outline: none;
+}

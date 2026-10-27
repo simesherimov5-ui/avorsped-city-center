@@ -2,6 +2,7 @@ import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./g
 import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
 import { listNames } from "@/lib/format";
+import { carouselProjects } from "@/lib/project-explorer";
 
 const generated = generateDevelopment();
 
@@ -497,35 +498,33 @@ export interface SaleProject {
 export const placeOf = (a: Apartment) => a.buildingId ?? a.projectId;
 
 /**
- * The projects that are on sale (not the completed ones), in the order of the projects page, each with its buildings and
- * apartments. Everything that lists apartments reads through this: adding a project (and its apartments) to the data
- * makes it appear everywhere. A project with no apartments yet is still listed, as one building with no floors.
+ * The projects that are on sale: every project being built, the ones known only by name too, in the order of the
+ * carousels (carouselProjects), each with its buildings and apartments. The Контакт form and the booking check read
+ * through this. A project with no apartments yet (a stub) is still listed, as one building with no floors.
  */
 export function projectsOnSale(): SaleProject[] {
-  return projects
-    .filter((p) => p.status !== "completed" && !p.stub)
-    .map((project) => {
-      const own = apartments.filter((a) => a.projectId === project.id);
-      const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
-        ? project.buildings
-            .filter((b) => own.some((a) => a.buildingId === b.id))
-            .map((b) => ({ id: b.id, name: b.name, labels: new Map(b.floors.map((f) => [f.number, f.label])) }))
-        : [{ id: project.id, name: project.name }];
-      const buildingsOfProject: SaleBuilding[] = places.map((place) => {
-        const here = own.filter((a) => placeOf(a) === place.id);
-        const numbers = [...new Set(here.map((a) => a.floor))].sort((a, b) => a - b);
-        return {
-          id: place.id,
-          name: place.name,
-          floors: numbers.map((number) => ({
-            number,
-            label: place.labels?.get(number) ?? floorLabel(number),
-            apartmentIds: here.filter((a) => a.floor === number).map((a) => a.id),
-          })),
-        };
-      });
-      return { project, buildings: buildingsOfProject, apartments: own };
+  return carouselProjects(projects).map((project) => {
+    const own = apartments.filter((a) => a.projectId === project.id);
+    const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
+      ? project.buildings
+          .filter((b) => own.some((a) => a.buildingId === b.id))
+          .map((b) => ({ id: b.id, name: b.name, labels: new Map(b.floors.map((f) => [f.number, f.label])) }))
+      : [{ id: project.id, name: project.name }];
+    const buildingsOfProject: SaleBuilding[] = places.map((place) => {
+      const here = own.filter((a) => placeOf(a) === place.id);
+      const numbers = [...new Set(here.map((a) => a.floor))].sort((a, b) => a - b);
+      return {
+        id: place.id,
+        name: place.name,
+        floors: numbers.map((number) => ({
+          number,
+          label: place.labels?.get(number) ?? floorLabel(number),
+          apartmentIds: here.filter((a) => a.floor === number).map((a) => a.id),
+        })),
+      };
     });
+    return { project, buildings: buildingsOfProject, apartments: own };
+  });
 }
 
 /** Where an apartment is, for a label: the project, and the building when the project has several. */

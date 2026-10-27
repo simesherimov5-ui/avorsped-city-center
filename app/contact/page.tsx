@@ -6,6 +6,7 @@ import { DirectPanel } from "@/components/contact/DirectPanel";
 import "@/components/black/black.css";
 import "@/components/contact/contact.css";
 import { pageMetadata } from "@/lib/seo";
+import { startProjectId } from "@/lib/contact-start";
 
 export const metadata: Metadata = pageMetadata({
   title: "Контакт и консултација",
@@ -16,9 +17,6 @@ export const metadata: Metadata = pageMetadata({
 
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-
-/** Old `?project=` values from before a project was renamed: they still pre-select it. */
-const LEGACY_PROJECTS: Record<string, string> = { "vista-heights": "stanbena-kukja" };
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<Params> }) {
   const params = await searchParams;
@@ -31,7 +29,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const buildingParam = first(params.building) ?? "";
   const project =
     (apartment && getProject(apartment.projectId)) ||
-    getProject(LEGACY_PROJECTS[first(params.project) ?? ""] ?? first(params.project) ?? "") ||
+    getProject(
+      startProjectId(
+        first(params.project),
+        options.map((o) => o.id)
+      ) ?? ""
+    ) ||
     onSale.find((p) => p.project.buildings?.some((b) => b.id === buildingParam))?.project;
   const start = { projectId: project?.id };
 

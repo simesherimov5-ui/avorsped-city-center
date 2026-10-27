@@ -4,15 +4,19 @@ import { apartments, placeLabel, placeOf, projects, projectsOnSale } from "@/dat
 describe("projectsOnSale", () => {
   const sale = projectsOnSale();
 
-  it("lists every project that is not completed, in the order of the projects page", () => {
-    expect(sale.map((p) => p.project.id)).toEqual(
-      projects.filter((p) => p.status !== "completed" && !p.stub).map((p) => p.id)
-    );
-    expect(sale.length).toBeGreaterThan(1);
-  });
-
-  it("leaves out the projects known only by name (stub), so the contact form does not offer them", () => {
-    expect(sale.map((p) => p.project.id)).toEqual(["city-center", "stanbena-kukja", "dojranski-raj"]);
+  it("lists every project being built, the ones known only by name too, in the order of the carousels", () => {
+    expect(sale.map((p) => p.project.id)).toEqual([
+      "city-center",
+      "stanbena-kukja",
+      "dojranski-raj",
+      "stanbena-kukja-2",
+      "city-center-2",
+      "radovish-twins",
+      "boro-pochkov",
+      "dojranski-raj-2",
+    ]);
+    expect(sale.every((p) => p.project.status === "under-construction")).toBe(true);
+    expect(projects.filter((p) => p.status === "under-construction")).toHaveLength(sale.length);
   });
 
   it("gives every apartment to a project on sale and to one building of it", () => {

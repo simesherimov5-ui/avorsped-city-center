@@ -19,6 +19,7 @@ export type ProjectOption = { id: string; name: string };
 export type BookingStart = { projectId?: string };
 
 type StepId = "project" | "area" | "when" | "details";
+const ORDER: StepId[] = ["project", "area", "when", "details"];
 type Field = "name" | "phone" | "email";
 type Errors = Partial<Record<Field, string>>;
 
@@ -77,7 +78,7 @@ function Collapse({
   enter?: boolean;
   children: ReactNode;
 }) {
-  const t = reduce ? 0 : enter ? 0.45 : 0.3;
+  const t = reduce ? 0 : enter ? 0.5 : 0.3;
   return (
     <AnimatePresence initial={false}>
       {show && (
@@ -87,7 +88,7 @@ function Collapse({
           initial={reduce ? false : { height: 0, opacity: 0, y: enter ? 12 : 0 }}
           animate={{ height: "auto", opacity: 1, y: 0 }}
           exit={{ height: 0, opacity: 0, y: 0 }}
-          transition={{ duration: t, ease: "easeOut" }}
+          transition={{ duration: t, ease: enter ? [0.22, 1, 0.36, 1] : "easeOut" }}
         >
           {children}
         </motion.div>
@@ -119,8 +120,13 @@ export function ContactForm({
   const [areaLow, setAreaLow] = useState<number>(AREA.defaultMin);
   const [areaHigh, setAreaHigh] = useState<number>(AREA.defaultMax);
   const [areaUnknown, setAreaUnknown] = useState(false);
-  // The area step is answered when the visitor confirms it (the default range is only a starting point).
+  // The area step is answered when the visitor confirms it (the default range is only a starting point), and
+  // «Продолжи» is only ready once the range has been moved at least once; pressing it before that shows a hint.
   const [areaDone, setAreaDone] = useState(false);
+  const [areaTouched, setAreaTouched] = useState(false);
+  const [areaHint, setAreaHint] = useState(false);
+  // What the live region says when a new step opens.
+  const [announce, setAnnounce] = useState("");
   const [dayIso, setDayIso] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
@@ -147,7 +153,7 @@ export function ContactForm({
   });
 
   // Which steps are answered, and so which are on screen: every step up to the first unanswered one.
-  const order: StepId[] = ["project", "area", "when", "details"];
+  const order = ORDER;
   const answered: Record<StepId, boolean> = {
     project: Boolean(project) || undecided,
     area: areaDone,
@@ -187,8 +193,21 @@ export function ContactForm({
   const moveArea = (low: number, high: number) => {
     setAreaLow(low);
     setAreaHigh(high);
+    setAreaTouched(true);
+    setAreaHint(false);
   };
   const confirmArea = () => {
+    if (!areaTouched) {
+      setAreaHint(true);
+      return;
+    }
+    setAreaDone(true);
+    setEditing(null);
+  };
+  // «Сè уште не знам» answers the step at once
+  const areaNotYet = () => {
+    setAreaUnknown(true);
+    setAreaHint(false);
     setAreaDone(true);
     setEditing(null);
   };
@@ -223,7 +242,9 @@ export function ContactForm({
           if (lenis) lenis.scrollTo(y, { duration: reduce ? 0 : 0.9, immediate: reduce });
           else window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
         }
-        step.querySelector<HTMLElement>('[role="radio"][tabindex="0"], input')?.focus({ preventScroll: true });
+        step.querySelector<HTMLElement>(`#ct-h-${openId}`)?.focus({ preventScroll: true });
+        const index = ORDER.indexOf(openId) + 1;
+        setAnnounce(`Чекор ${index} од ${ORDER.length}: ${TITLES[openId]}`);
       },
       reduce ? 0 : 340
     );
@@ -239,6 +260,9 @@ export function ContactForm({
     setAreaHigh(AREA.defaultMax);
     setAreaUnknown(false);
     setAreaDone(false);
+    setAreaTouched(false);
+    setAreaHint(false);
+    setAnnounce("");
     setDayIso("");
     setTime("");
     setName("");
@@ -342,13 +366,13 @@ export function ContactForm({
                 <div className="ct-eyebrow">
                   {number} · {eyebrow}
                 </div>
-                <h2 id={`ct-h-${id}`} className="ct-step-title">
+                <h2 id={`ct-h-${id}`} className="ct-step-title" tabIndex={-1}>
                   {TITLES[id]}
                 </h2>
                 {help && <p className="ct-step-help">{help}</p>}
               </div>
             ) : (
-              <div className="ct-step-h bk-label" id={`ct-h-${id}`} role="heading" aria-level={2}>
+              <div className="ct-step-h bk-label" id={`ct-h-${id}`} role="heading" aria-level={2} tabIndex={-1}>
                 <b className="ct-step-n bk-mono">{number}</b>
                 <span>{TITLES[id]}</span>
               </div>
@@ -397,6 +421,10 @@ export function ContactForm({
           <i style={{ transform: `scaleX(${progress})` }} />
         </div>
         <p className="ct-lead">Неколку кратки чекори. Ние ќе ви се јавиме за потврда на терминот.</p>
+        {/* says which step has just opened (focus also moves to its heading) */}
+        <p className="sr-only" aria-live="polite">
+          {announce}
+        </p>
 
         {step(
           "project",
@@ -432,16 +460,17 @@ export function ContactForm({
               onUnknown={setAreaUnknown}
             />
             <div className="ct-area-actions">
-              <button
-                type="button"
-                className="btn-secondary"
-                data-tone="dark"
-                aria-pressed={areaUnknown}
-                onClick={() => setAreaUnknown((v) => !v)}
-              >
+              <button type="button" className="btn-secondary" data-tone="dark" onClick={areaNotYet}>
                 Сè уште не знам
               </button>
-              <button type="button" className="ct-btn" onClick={confirmArea}>
+              <button
+                type="button"
+                className="ct-btn ct-btn--continue"
+                data-ready={areaTouched ? "" : undefined}
+                aria-disabled={areaTouched ? undefined : "true"}
+                aria-describedby={areaHint && !areaTouched ? "ct-area-hint" : undefined}
+                onClick={confirmArea}
+              >
                 <span>Продолжи</span>
                 <span aria-hidden className="ct-btn__arrow">
                   <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
@@ -450,6 +479,9 @@ export function ContactForm({
                 </span>
               </button>
             </div>
+            <p id="ct-area-hint" role="status" className="ct-area-hint">
+              {areaHint && !areaTouched ? "Изберете површина или „Сè уште не знам“" : ""}
+            </p>
           </>,
           undefined,
           "Поместете ги двата граничника. Нашиот тим ќе подготви станови во овој опсег."
