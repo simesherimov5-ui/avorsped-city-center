@@ -465,10 +465,11 @@ h4 {
 }
 
 /* The Проекти hero (photo-hero--top): like Почетна, it starts at the very top of the window and the header lies over it,
-   clear until the page scrolls (components/Navbar.tsx), on Почетна's top scrim (Оникс 70% fading out over 180px) so the
-   header links read over every slide. Under the hero breakpoint the hero is the whole first screen (100svh, at least
-   560px): the text keeps its own height at the bottom and the photo takes the rest from the top, never less than the old
-   16:9 plus the bar. From the breakpoint it is the whole screen and its text starts below the bar. */
+   clear until the page scrolls (components/Navbar.tsx), on Почетна's top scrim (Оникс 70% fading out over 180px) plus the
+   hero's own top scrim, so the header links read over every slide. Under 1024px the hero is at least the whole first
+   screen (100svh, at least 560px): the text keeps its own height at the bottom and the photo takes the rest from the top,
+   never less than the old 16:9 plus the bar. From 1024px (earlier than the shared hero breakpoint, 1101px, which the
+   other photo heroes keep) it is exactly the whole screen with its text over the photo, the heading 40px below the bar. */
 .photo-hero--top {
   margin-top: 0;
 }
@@ -480,7 +481,19 @@ h4 {
   pointer-events: none;
   background: linear-gradient(to bottom, color-mix(in srgb, var(--color-onyx) 70%, transparent), transparent);
 }
-@media (max-width: 1100px) {
+/* the hero's own top scrim (the shared one, as from the breakpoint) at every width: the clear header's current link is
+   gold, and over the brighter skies of the narrower crops Почетна's alone left it at 2.5:1 */
+.photo-hero--top .photo-hero__media .hero-scrim-top {
+  display: block;
+  height: 250px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 58%, transparent) 68%,
+    transparent 100%
+  );
+}
+@media (max-width: 1023px) {
   .photo-hero--top {
     display: flex;
     flex-direction: column;
@@ -494,25 +507,56 @@ h4 {
   .photo-hero--top .photo-hero__content {
     flex: none;
   }
-  /* the hero's own top scrim (as from the breakpoint) under Почетна's: the clear header's current link is gold, and over
-     the brighter skies of this crop Почетна's alone left it at 2.5:1 */
-  .photo-hero--top .photo-hero__media .hero-scrim-top {
-    display: block;
-    height: 250px;
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) 68%,
-      transparent 100%
-    );
-  }
 }
-@media (min-width: 1101px) {
+@media (min-width: 1024px) {
   .photo-hero--top.photo-hero--fill {
     --hero-h: max(560px, 100svh);
   }
+  /* the heading block starts below the bar, so the hero's top scrim does too: the same 58% held for 170px under the bar
+     (as when the hero itself started there), fading out 80px later */
+  .photo-hero--top .photo-hero__media .hero-scrim-top {
+    height: calc(var(--nav-h) + 250px);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) calc(var(--nav-h) + 170px),
+      transparent 100%
+    );
+  }
   .photo-hero--top.photo-hero--fill .photo-hero__content {
-    padding-top: var(--nav-h);
+    padding-top: calc(var(--nav-h) + 40px);
+  }
+}
+/* 1024–1100px: the shared full-screen layout (.photo-hero from 1101px, with its fill variant), for this hero only */
+@media (min-width: 1024px) and (max-width: 1100px) {
+  .photo-hero--top {
+    display: flex;
+    overflow: hidden;
+    container-type: inline-size;
+    height: var(--hero-h);
+  }
+  .photo-hero--top .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: block;
+    height: calc(var(--hero-h) * 0.6);
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(var(--hero-h) * 0.33),
+      transparent 100%
+    );
+  }
+  .photo-hero--top .photo-hero__media img {
+    object-position: var(--hero-pos, 50% 55%);
+  }
+  .photo-hero--top .photo-hero__content {
+    flex: 1;
+    gap: 48px;
+    padding-bottom: 56px;
   }
 }
 
