@@ -69,11 +69,6 @@ export const projects: Project[] = [
         maxWidth: 1920,
       },
     ],
-    openingIntro: {
-      hd: "/videos/city-center/city-center-intro-v2-1080p.mp4",
-      sd: "/videos/city-center/city-center-intro-v2-720p.mp4",
-      poster: "/videos/city-center/city-center-intro-v2-poster.jpg",
-    },
     openingTagline: "Шест згради, една нова адреса во Струмица.",
     about: {
       kicker: "ЗА ПРОЕКТОТ",

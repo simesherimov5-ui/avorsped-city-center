@@ -255,11 +255,6 @@ export interface Project {
     /** The photo's own width in pixels: the page never asks for a wider variant. */
     maxWidth?: number;
   }[];
-  /**
-   * The intro film of the opening (muted, no sound), paths under public/: `hd` 1080p for screens wider than 1280px, `sd` 720p
-   * for the rest, and the `poster` frame. It plays once per visitor per week before the slideshow; without it there is no intro.
-   */
-  openingIntro?: { hd: string; sd: string; poster: string };
   /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */

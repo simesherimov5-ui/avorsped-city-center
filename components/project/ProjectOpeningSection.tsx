@@ -3,7 +3,7 @@ import { ProjectAbout } from "@/components/project/ProjectAbout";
 import { projectStatusLabel } from "@/lib/format";
 import type { Project } from "@/types";
 
-/** The cinematic opening of a project page and, when the project has the text, "За проектот" under it. Everything comes from the project's data. */
+/** The photo opening of a project page and, when the project has the text, "За проектот" under it. Everything comes from the project's data. */
 export function ProjectOpeningSection({
   project,
   tightBottom = false,
@@ -28,7 +28,6 @@ export function ProjectOpeningSection({
         tagline={project.openingTagline ?? project.tagline}
         slides={slides}
         storageKey={`hero-stopped-${project.slug}`}
-        intro={project.openingIntro}
       />
       {project.about && (
         <div className="on-light">

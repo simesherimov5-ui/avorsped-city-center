@@ -11,10 +11,6 @@ describe("the hero breakpoint", () => {
     expect(block).toContain(`@media (min-width: ${HERO_OVERLAY_MIN_WIDTH}px)`);
   });
 
-  it("is the same in the CSS of the intro", () => {
-    expect(read("components/project/opening-intro.css")).toContain(`@media (min-width: ${HERO_OVERLAY_MIN_WIDTH}px)`);
-  });
-
   it("is not repeated in the CSS of a single hero", () => {
     const projects = read("components/projects/projects.css");
     expect(projects).not.toMatch(/min-width:\s*1(10[01])px/);

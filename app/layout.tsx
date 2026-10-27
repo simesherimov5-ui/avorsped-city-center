@@ -15,7 +15,6 @@ import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { GrayscaleToggle } from "@/components/dev/GrayscaleToggle";
 import { companyInfo, projects } from "@/data";
 import { SITE_NAME, siteUrl } from "@/lib/seo";
-import { introBootScript } from "@/lib/opening-intro";
 
 // Exactly two families on the whole site (the identity "Бронза & Травертин"), both with their Cyrillic letters, served from
 // app/fonts (see fonts.css): the site is in Macedonian, and a family without them silently falls back to a different
@@ -45,19 +44,8 @@ export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)", colorScheme: 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // suppressHydrationWarning: the boot script below puts data-cc-intro on <html> before React hydrates it
-    <html lang="mk" suppressHydrationWarning>
+    <html lang="mk">
       <body className="antialiased">
-        {/* A project's cinematic intro (see lib/opening-intro.ts): on its pages the covered state is set before the first paint. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: introBootScript(
-              projects
-                .filter((p) => p.openingIntro)
-                .flatMap((p) => [...(p.href ? [p.href] : []), `/projects/${p.slug}`])
-            ),
-          }}
-        />
         {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
         <a href="#main" className="skip-link">
           Прескокни до содржината
