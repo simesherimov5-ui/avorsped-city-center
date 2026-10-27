@@ -19,6 +19,12 @@ export function projectStatusLabel(status: ProjectStatus): string {
   return PROJECT_STATUS_LABELS[status];
 }
 
+/** Names listed in a sentence, the Macedonian way: commas between them, «и» only before the last ("А, Б и В"). */
+export function listNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} и ${names[names.length - 1]}`;
+}
+
 const ORIENTATION_LABELS: Record<Orientation, string> = {
   North: "Север",
   South: "Југ",

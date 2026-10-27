@@ -1,6 +1,7 @@
 import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./generate";
 import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
+import { listNames } from "@/lib/format";
 
 const generated = generateDevelopment();
 
@@ -530,15 +531,19 @@ export function placeLabel(a: Apartment): { project: string; building: string; t
   return { project: projectName, building, text: building ? `${projectName} · ${building}` : projectName };
 }
 
+/** The projects being built that the company-level texts name and count: not the ones known only by name (stub). */
+function underConstruction() {
+  return projects.filter((p) => p.status === "under-construction" && !p.stub);
+}
+
 export const companyStats: CompanyStat[] = [
   { value: "30+", label: "Години искуство" },
   { value: "5", label: "Завршени проекти" },
   { value: "540+", label: "Изградени станови" },
-  // the buildings of the projects that are under construction (a project that is one building counts as one)
+  // the buildings of the projects that are under construction (a project that is one building counts as one); the
+  // projects known only by name (stub) are not counted until their buildings are known
   {
-    value: String(
-      projects.filter((p) => p.status === "under-construction").reduce((n, p) => n + (p.buildings?.length ?? 1), 0)
-    ),
+    value: String(underConstruction().reduce((n, p) => n + (p.buildings?.length ?? 1), 0)),
     label: "Згради во изградба",
   },
 ];
@@ -556,10 +561,7 @@ export const companyTimeline: CompanyMilestone[] = [
   },
   {
     year: "2026",
-    text: `Во изградба: ${projects
-      .filter((p) => p.status === "under-construction")
-      .map((p) => p.name)
-      .join(" и ")}.`,
+    text: `Во изградба: ${listNames(underConstruction().map((p) => p.name))}.`,
     image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
   },
 ];

@@ -1,5 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, orientationLabel, projectStatusLabel, typeLabel } from "@/lib/format";
+import { formatArea, listNames, orientationLabel, projectStatusLabel, typeLabel } from "@/lib/format";
+
+describe("listNames", () => {
+  it("puts commas between the names and «и» only before the last", () => {
+    expect(listNames(["City Center", "Станбена куќа 1", "Дојрански Рај"])).toBe(
+      "City Center, Станбена куќа 1 и Дојрански Рај"
+    );
+    expect(listNames(["City Center", "Дојрански Рај"])).toBe("City Center и Дојрански Рај");
+  });
+
+  it("returns one name as it is, and nothing for none", () => {
+    expect(listNames(["City Center"])).toBe("City Center");
+    expect(listNames([])).toBe("");
+  });
+});
 
 describe("formatArea", () => {
   it("uses one decimal and the м² unit", () => {
