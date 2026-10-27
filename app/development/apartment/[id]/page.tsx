@@ -156,7 +156,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
                     <tbody>
                       {apartment.rooms.map((room, i) => (
                         <tr key={`${room.name}-${i}`} className="border-b border-line">
-                          <td className="py-2.5 text-gold-light/90">{room.name}</td>
+                          <td className="py-2.5 text-on-dark-muted">{room.name}</td>
                           <td className="py-2.5 text-right font-medium">
                             {formatArea(room.area, apartment.areaDecimals)}
                           </td>

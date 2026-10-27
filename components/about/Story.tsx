@@ -54,7 +54,8 @@ export function Story({ eyebrow, statement, gold, more = [] }: Props) {
     <section className="ab-story bk-wrap">
       <div className="ab-story-inner">
         <div className="bk-eyebrow is-center">{eyebrow}</div>
-        <p ref={text} className="ab-story-text">
+        {/* cream-text: the plain words stay Травертин, so the gold accent words still stand out */}
+        <p ref={text} className="ab-story-text cream-text">
           {words.map((w, i) => (
             <Fragment key={i}>
               <span data-word className={cn(w.gold && "bk-gold-i")}>

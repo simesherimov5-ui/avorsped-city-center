@@ -37,13 +37,13 @@ export function SectionHeading({
                 Heading === "h1" ? "text-(length:--fs-h1)" : "text-(length:--fs-h2)"
               )
             : cn("mt-4", Heading === "h1" ? "t-h1" : "t-h2"),
-          tone === "dark" ? "text-on-chrome" : "text-charcoal"
+          tone === "dark" ? "text-on-dark" : "text-charcoal"
         )}
       >
         {title}
       </Heading>
       {description && (
-        <p className={cn("mt-4 text-base leading-relaxed", tone === "dark" ? "text-on-chrome/70" : "text-ink/65")}>
+        <p className={cn("mt-4 text-base leading-relaxed", tone === "dark" ? "text-on-dark-muted" : "text-ink/65")}>
           {description}
         </p>
       )}

@@ -231,7 +231,7 @@ export function Navbar() {
                     onPointerDown={spawnClickPulse}
                     aria-current={pathname === link.href ? "page" : undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-dark-muted hover:text-gold",
                       activeHref === link.href && solid && "text-gold!"
                     )}
                   >
@@ -286,7 +286,7 @@ export function Navbar() {
                 aria-current={pathname === link.href ? "page" : undefined}
                 className={cn(
                   "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-sans font-normal text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
-                  pathname === link.href ? "text-gold" : "text-paper"
+                  pathname === link.href ? "text-gold" : "text-on-dark"
                 )}
               >
                 <span className="eyebrow text-gold">{String(i + 1).padStart(2, "0")}</span>

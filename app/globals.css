@@ -7,12 +7,13 @@
    *
    *   Оникс         main dark background
    *   Еспресо       cards and surfaces on dark
-   *   Травертин     light background; text on dark
+   *   Травертин     light background (text on dark only where an element opts out with .cream-text)
    *   Варовник      surfaces and form fields on light
    *   Бронза        accent and labels on LIGHT only (6.2:1 on Травертин)
    *   Светол бакар  accent on DARK only: buttons, links, numbers (6.9:1 on Оникс)
    *
-   * On Оникс / Еспресо: text Травертин, accent Светол бакар. On Травертин / Варовник: text Оникс, accent Бронза.
+   * On Оникс / Еспресо and over photos: text in the logo gold (--text-on-dark, below), accent Светол бакар. On Травертин /
+   * Варовник: text Оникс, accent Бронза.
    * On a Светол бакар fill: text Оникс. On a Бронза fill: text Травертин.
    * Never Светол бакар as text on light (1.7:1), never Бронза as text on dark (2.7:1).
    */
@@ -111,6 +112,11 @@
   --color-accent-soft: var(--color-travertine);
   --color-chrome: var(--color-onyx);
   --color-on-chrome: var(--color-travertine);
+  /* Text on dark (Оникс, Еспресо, photos and films): the logo gold, one switch for all of it (Tailwind: text-on-dark,
+     text-on-dark-muted). Muted text is the same gold at 78%, as in .on-dark. on-chrome / paper stay Травертин for the
+     backgrounds, hairlines and icons. .cream-text (below) puts an element, and everything in it, back to Травертин. */
+  --text-on-dark: var(--color-gold);
+  --text-on-dark-muted: color-mix(in srgb, var(--color-gold) 78%, transparent);
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
@@ -155,6 +161,8 @@
   --color-accent-soft: var(--color-accent-soft);
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
+  --color-on-dark: var(--text-on-dark);
+  --color-on-dark-muted: var(--text-on-dark-muted);
   /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
   --font-display: var(--font-playfair);
   --font-sans: var(--font-montserrat);
@@ -340,7 +348,7 @@ h4 {
   position: relative;
   margin-top: var(--nav-h);
   background: var(--color-onyx);
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
 }
 .photo-hero__media {
   position: relative;
@@ -467,7 +475,7 @@ h4 {
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%), the current page's link too (the
    Navbar gives it gold only on a solid bar; over a photo its underline tells it apart: gold read at 2.5:1 on a bright sky). */
 header[data-clear] a.nav-link:not(#site-logo) {
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
 }
 /* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
 .about-col {
@@ -586,6 +594,22 @@ header[data-clear] a.nav-link:not(#site-logo) {
   --color-silver: var(--color-sand);
   background-color: var(--color-sand);
   color: var(--color-onyx);
+}
+
+/* The one exception to gold text on dark: this element, and everything in it, back to Травертин (the muted shades of
+   the black pages and the floor picker too). Accents set in their own colour (an <em> in gold) keep it. Not named
+   cream-text: Tailwind already makes that a colour utility (--color-cream, which is Еспресо inside .on-dark). Its colour
+   sits under every utility (:where, in the utilities layer), so a muted utility on the same element stays muted. */
+.cream-text {
+  --text-on-dark: var(--color-travertine);
+  --text-on-dark-muted: color-mix(in srgb, var(--color-travertine) 78%, transparent);
+  --mute: var(--text-on-dark-muted);
+  --fp-mute: var(--text-on-dark-muted);
+}
+@layer utilities {
+  :where(.cream-text) {
+    color: var(--text-on-dark);
+  }
 }
 
 /* The current phase of the construction timeline: a soft pulse (still with reduced motion). */
@@ -1047,7 +1071,7 @@ header[data-clear] a.nav-link:not(#site-logo) {
   .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
     border-color: color-mix(in srgb, var(--color-travertine) 60%, transparent);
     background-color: color-mix(in srgb, var(--color-travertine) 4%, transparent);
-    color: var(--color-travertine);
+    color: var(--text-on-dark);
   }
   .btn-secondary[data-tone="light"]:hover:not(:disabled):not([aria-disabled="true"]) {
     border-color: color-mix(in srgb, var(--color-onyx) 60%, transparent);

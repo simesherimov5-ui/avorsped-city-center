@@ -22,7 +22,8 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
         return (
           <div className="pj-wrap photo-hero__content">
             <div className="pj-hero-text">
-              <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
+              {/* cream-text (here and on the slide's name): gold over the brightest photos fell under 3:1 */}
+              <h1 className="pj-h1 cream-text">Разгледајте ги нашите проекти.</h1>
               <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>
             </div>
 
@@ -30,7 +31,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
               <div className="pj-hero-left">
                 {tracks}
                 {current && (
-                  <span className="pj-now" aria-live="off">
+                  <span className="pj-now cream-text" aria-live="off">
                     <span className="pj-now-name">{current.name}</span>
                     <span className="pj-now-meta">
                       {current.city} · {current.statusLabelOverride ?? projectStatusLabel(current.status)}

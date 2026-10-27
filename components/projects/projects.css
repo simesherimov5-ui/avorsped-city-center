@@ -153,14 +153,14 @@
 .pj-now-name {
   font-family: var(--font-display), "Times New Roman", serif;
   font-size: 21px;
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
 }
 .pj-now-meta {
   font-size: var(--label-size);
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
 }
 @media (max-width: 639px) {
   .pj-hero-text {
@@ -933,7 +933,7 @@
 /* ───────── "Наскоро" band ───────── */
 .pj-soon {
   background: var(--color-onyx);
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
 }
 .pj-soon-inner {
   display: flex;

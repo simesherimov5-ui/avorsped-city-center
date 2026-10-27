@@ -38,7 +38,8 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
             <div className="absolute inset-0 bg-gradient-to-t from-chrome/85 via-chrome/15 to-transparent transition-colors duration-(--dur-fast) group-hover:from-chrome/95" />
 
             <div className="absolute inset-0 flex items-end justify-between gap-4 p-6 sm:p-12">
-              <div className="text-on-chrome">
+              {/* cream-text: gold over the brighter photos fell under 4.5:1 */}
+              <div className="text-on-dark cream-text">
                 <h3 className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">{project.name}</h3>
                 <div className="mt-2 text-sm tracking-wide text-gold">{project.location}</div>
               </div>

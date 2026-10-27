@@ -2,12 +2,12 @@
    It sits in a dark band, so every colour here is the dark-surface pair: Травертин text, Светол бакар accent. */
 .fp {
   --fp-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
-  --fp-mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
+  --fp-mute: var(--text-on-dark-muted);
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   border: 1px solid var(--fp-line);
   background: var(--color-espresso);
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
   text-align: left;
 }
 
@@ -117,7 +117,7 @@
 .fp-soon {
   margin: 0;
   max-width: 40ch;
-  color: color-mix(in srgb, var(--color-travertine) 72%, transparent);
+  color: var(--text-on-dark-muted);
   font-size: 16px;
   line-height: 1.6;
 }

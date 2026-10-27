@@ -7,8 +7,10 @@ import { OpeningIntroLayers, useOpeningIntro, type IntroFilm } from "@/component
 import { useI18n } from "@/lib/i18n";
 
 // The classes of the heading and the line: the real ones and the copies the intro builds over the film use the same
-// (without the margins), so they are the same size, font and wrap.
-const H1_CLASS = "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper";
+// (without the margins), so they are the same size, font and wrap. cream-text (the name and the back link): gold over the
+// brightest photos fell under 3:1.
+const H1_CLASS =
+  "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-on-dark cream-text";
 const P_CLASS = "max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline";
 
 // width of the slideshow controls: the indicators (44px, 10px apart), the gap and the pause button
@@ -70,7 +72,7 @@ export function ProjectOpening({
               <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
                 <Link
                   href={backHref}
-                  className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper/85 transition-colors hover:text-paper"
+                  className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-on-dark/85 transition-colors hover:text-on-dark cream-text"
                 >
                   {t("opening.back")}
                 </Link>

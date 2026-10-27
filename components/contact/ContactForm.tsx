@@ -318,9 +318,10 @@ export function ContactForm({
   }
 
   const describe = (field: Field) => (errors[field] ? `ct-err-${field}` : undefined);
+  // cream-text: an error (and the failed request below) stands apart from the gold around it
   const error = (field: Field) =>
     errors[field] ? (
-      <p id={`ct-err-${field}`} className="ct-error">
+      <p id={`ct-err-${field}`} className="ct-error cream-text">
         {errors[field]}
       </p>
     ) : null;
@@ -597,7 +598,7 @@ export function ContactForm({
               </span>
             </div>
             {status === "failed" && (
-              <p role="alert" className="ct-fail">
+              <p role="alert" className="ct-fail cream-text">
                 Барањето не беше испратено. Вашите одговори се зачувани: обидете се повторно или повикајте нè на{" "}
                 <a href={`tel:${officePhone.replace(/ /g, "")}`}>{officePhone}</a>.
               </p>

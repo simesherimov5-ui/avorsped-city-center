@@ -72,7 +72,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         </div>
       </section>
 
-      <section className="bg-chrome py-16 text-on-chrome sm:py-20">
+      <section className="bg-chrome py-16 text-on-dark sm:py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" tone="dark" />
           <div className="mt-10">

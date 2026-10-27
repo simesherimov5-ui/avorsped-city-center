@@ -144,7 +144,7 @@
   min-width: 0;
   font-size: 16px;
   font-weight: 500;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
   overflow-wrap: anywhere;
 }
 .ct-sumrow-value.is-muted {
@@ -170,7 +170,7 @@
   cursor: pointer;
 }
 .ct-edit:hover {
-  color: var(--color-gold-light);
+  color: var(--text-on-dark);
 }
 .ct-edit:focus-visible {
   outline: 2px solid var(--color-gold);
@@ -203,7 +203,7 @@
   padding: 0 20px;
   border: 1px solid var(--color-line);
   background: transparent;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
   font:
     400 14px var(--font-sans),
     system-ui,
@@ -282,7 +282,7 @@
   padding: 12px 4px;
   border: 1px solid var(--color-line);
   background: transparent;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
   cursor: pointer;
   transition:
     border-color 0.25s,
@@ -344,7 +344,7 @@
   border-bottom: 1px solid var(--color-line);
   border-radius: 0;
   background: transparent;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
   /* 16px at least, or iOS zooms the page when a field is focused */
   font:
     400 16px var(--font-sans),
@@ -353,7 +353,7 @@
   outline: none;
 }
 .ct-input input:-webkit-autofill {
-  -webkit-text-fill-color: var(--color-paper);
+  -webkit-text-fill-color: var(--text-on-dark);
   box-shadow: 0 0 0 1000px var(--black) inset;
 }
 /* The gold underline grows from the left on focus. */
@@ -377,7 +377,7 @@
   margin: 12px 0 0;
   font-size: 14px;
   font-weight: 400;
-  color: var(--color-gold-light);
+  color: var(--text-on-dark);
   animation: ct-fade 0.3s;
 }
 .ct-submit {
@@ -401,7 +401,7 @@
 }
 .ct-fail {
   margin: 16px 0 0;
-  color: var(--color-gold-light);
+  color: var(--text-on-dark);
 }
 .ct-fail a {
   text-decoration: underline;
@@ -483,7 +483,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 1.3;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
   text-align: right;
   overflow-wrap: anywhere;
   transition:
@@ -543,7 +543,7 @@ a.ct-val:focus-visible {
   text-underline-offset: 4px;
 }
 .ct-addr a:hover {
-  color: var(--color-gold-light);
+  color: var(--text-on-dark);
 }
 .ct-addr a:focus-visible {
   outline: 2px solid var(--color-gold);
@@ -798,7 +798,7 @@ a.ct-val:focus-visible {
   font-size: var(--fs-statement);
   font-weight: 400;
   line-height: 1.25;
-  color: var(--color-paper);
+  color: var(--text-on-dark);
 }
 .ct-step-help {
   margin: 8px 0 0;
@@ -989,7 +989,8 @@ a.ct-val:focus-visible {
   transition: border-color var(--dur-fast) var(--ease);
 }
 .ct-fields .ct-input input::placeholder {
-  color: color-mix(in srgb, var(--color-paper) 40%, transparent);
+  /* a hint only (the fields have labels): clearly weaker than typed text, still 3.5:1 on Оникс */
+  color: color-mix(in srgb, var(--text-on-dark) 60%, transparent);
 }
 .ct-fields .ct-input input:focus {
   border-color: var(--color-gold);

@@ -147,7 +147,7 @@ html[data-cc-intro="slam"] .cc-flash {
   padding: 0 16px;
   border: 1px solid color-mix(in srgb, var(--color-travertine) 55%, transparent);
   background: rgb(0 0 0 / 0.35);
-  color: var(--color-travertine);
+  color: var(--text-on-dark);
   font-size: var(--label-size);
   font-weight: 600;
   letter-spacing: var(--label-track);

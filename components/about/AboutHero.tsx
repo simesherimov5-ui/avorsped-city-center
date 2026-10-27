@@ -111,7 +111,8 @@ export function AboutHero({ image, eyebrow, lines, stats }: Props) {
           <div data-hero="eyebrow" className="bk-eyebrow ab-pre">
             {eyebrow}
           </div>
-          <h1 data-hero="h1" className="bk-h1 bk-serif ab-pre">
+          {/* cream-text: the plain line stays Травертин, so the gold accent line still stands out */}
+          <h1 data-hero="h1" className="bk-h1 bk-serif ab-pre cream-text">
             {lines[0]}
             <br />
             <em>{lines[1]}</em>

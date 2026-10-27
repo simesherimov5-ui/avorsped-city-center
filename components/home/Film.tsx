@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion/Reveal";
  */
 export function Film({ still, src }: { still: { src: string; alt: string }; src?: string }) {
   return (
-    <section id="film" className="grain grain--dark bg-chrome text-on-chrome">
+    <section id="film" className="grain grain--dark bg-chrome text-on-dark">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
@@ -18,7 +18,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
                 Три децении, во една минута.
               </h2>
             </div>
-            <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-chrome/70">Од 1994 до денес.</p>
+            <p className="max-w-[340px] text-sm font-normal leading-[1.7] text-on-dark-muted">Од 1994 до денес.</p>
           </div>
         </Reveal>
         <Reveal delay={0.1}>
