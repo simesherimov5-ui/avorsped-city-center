@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Media } from "@/components/ui/Media";
 import { Reveal } from "@/components/motion/Reveal";
 import { coverSizes } from "@/lib/image-sizes";
@@ -16,36 +16,61 @@ export type DifferenceItem = {
 const COLUMN_WIDE = "513px";
 const COLUMN_NARROW = "calc((100vw - 152px) * 0.4545)";
 const FRAMES = [
-  { media: "(min-width: 1280px)", w: COLUMN_WIDE, h: `min(${COLUMN_WIDE}, calc(100svh - 192px), 640px)` },
-  { media: "(min-width: 900px)", w: COLUMN_NARROW, h: `min(${COLUMN_NARROW}, calc(100svh - 192px), 640px)` },
+  { media: "(min-width: 1280px)", w: COLUMN_WIDE, h: `min(${COLUMN_WIDE}, 640px)` },
+  { media: "(min-width: 1024px)", w: COLUMN_NARROW, h: `min(${COLUMN_NARROW}, 640px)` },
   { w: "100vw", h: "62.5vw" },
 ];
 
 /**
- * «Што нè разликува»: from 900px a photo stays in place on the left while the four points scroll past on the right; the
- * point crossing the middle of the screen is the active one (full strength, the rest dimmed) and its photo is the one
- * shown. Under 900px there is no sticky photo and no dimming: every point carries its own photo above it. The photos are
- * decorative (empty alt): the titles carry the meaning. The dimming is armed by the script, so without scripts all four
- * texts are at full strength.
+ * «Што нè разликува»: from 1024px the heading and a photo stay in place on the left (one sticky block) while the four
+ * points scroll past on the right; the active point is the one whose middle is nearest the middle of the photo (full
+ * strength, the rest dimmed) and its photo is the one shown. So the first point is active when the photo settles and the
+ * last stays active until the block moves on. Under 1024px nothing is sticky or dimmed: the heading, then every point
+ * with its own photo above it. The photos are decorative (empty alt): the titles carry the meaning. The dimming is armed
+ * by the script, so without scripts all four texts are at full strength.
  */
-export function DifferencesStage({ items }: { items: DifferenceItem[] }) {
+export function DifferencesStage({ heading, items }: { heading: ReactNode; items: DifferenceItem[] }) {
   const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = root.current;
-    if (!el) return;
-    el.setAttribute("data-armed", "");
+    const frame = el?.querySelector<HTMLElement>(".df-frame");
+    if (!el || !frame) return;
+    const desktop = window.matchMedia("(min-width: 1024px)");
     const points = [...el.querySelectorAll<HTMLElement>("[data-df-point]")];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setActive(points.indexOf(entry.target as HTMLElement));
-      },
-      { rootMargin: "-45% 0px -45% 0px" }
-    );
-    points.forEach((point) => observer.observe(point));
+    let raf = 0;
+    // Once per frame, reads only: the new active point reaches the page through React, after this frame's reads.
+    const measure = () => {
+      raf = 0;
+      if (!desktop.matches) return;
+      const f = frame.getBoundingClientRect();
+      const middle = f.top + f.height / 2;
+      let nearest = 0;
+      let distance = Infinity;
+      points.forEach((point, i) => {
+        const r = point.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - middle);
+        if (d < distance) {
+          distance = d;
+          nearest = i;
+        }
+      });
+      setActive(nearest);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(measure);
+    };
+    el.setAttribute("data-armed", "");
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    desktop.addEventListener("change", schedule);
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      desktop.removeEventListener("change", schedule);
+      if (raf) cancelAnimationFrame(raf);
       el.removeAttribute("data-armed");
     };
   }, []);
@@ -53,18 +78,21 @@ export function DifferencesStage({ items }: { items: DifferenceItem[] }) {
   return (
     <div ref={root} className="df">
       <div className="df-col">
-        <div className="df-frame">
-          {items.map((item, i) => (
-            <div key={item.title} className={i === active ? "df-photo is-active" : "df-photo"}>
-              <Media
-                image={{ src: item.photo.src, alt: "", isPlaceholder: false }}
-                focus={{ zoom: 1, x: item.photo.x, y: item.photo.y ?? 50 }}
-                alwaysCover
-                className="h-full w-full !bg-transparent"
-                sizes={coverSizes(item.photo.src, FRAMES)}
-              />
-            </div>
-          ))}
+        <div className="df-stick">
+          {heading}
+          <div className="df-frame">
+            {items.map((item, i) => (
+              <div key={item.title} className={i === active ? "df-photo is-active" : "df-photo"}>
+                <Media
+                  image={{ src: item.photo.src, alt: "", isPlaceholder: false }}
+                  focus={{ zoom: 1, x: item.photo.x, y: item.photo.y ?? 50 }}
+                  alwaysCover
+                  className="h-full w-full !bg-transparent"
+                  sizes={coverSizes(item.photo.src, FRAMES)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="df-list">
@@ -78,7 +106,8 @@ export function DifferencesStage({ items }: { items: DifferenceItem[] }) {
                     focus={{ zoom: 1, x: item.photo.x, y: item.photo.y ?? 50 }}
                     alwaysCover
                     className="h-full w-full !bg-transparent"
-                    sizes="100vw"
+                    // under 1024px only (hidden above): the page's width less its side padding
+                    sizes="(min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)"
                   />
                 </div>
                 <div className="eyebrow text-gold-deep">{String(i + 1).padStart(2, "0")}</div>

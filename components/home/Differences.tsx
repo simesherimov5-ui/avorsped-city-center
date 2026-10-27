@@ -25,27 +25,28 @@ const ITEMS: DifferenceItem[] = [
 ];
 
 /**
- * "Што нè разликува": four short texts on a light surface, numbered because they are a list of four. From 900px a photo
- * stays in place beside them and follows the point in the middle of the screen (DifferencesStage); under 900px every
- * point has its own photo.
+ * "Што нè разликува": four short texts on a light surface, numbered because they are a list of four. From 1024px the
+ * heading (one line) and a photo stay in place beside them, the photo following the point beside it (DifferencesStage);
+ * under 1024px the heading is on two lines and every point has its own photo.
  */
 export function Differences() {
   return (
     <section className="grain bg-cream text-charcoal">
       <div className="mx-auto max-w-7xl px-5 pb-16 pt-[70px] sm:px-8 sm:pb-24 lg:px-10">
-        <Reveal>
-          <div>
-            <div className="eyebrow text-gold-deep">Што нè разликува</div>
-            <h2 className="mt-4 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
-              Деталите
-              <br />
-              се сè.
-            </h2>
-          </div>
-        </Reveal>
-        <div className="mt-12">
-          <DifferencesStage items={ITEMS} />
-        </div>
+        <DifferencesStage
+          heading={
+            <Reveal>
+              <div>
+                <div className="eyebrow text-gold-deep">Што нè разликува</div>
+                <h2 className="mt-4 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
+                  Деталите <br className="lg:hidden" />
+                  се сè.
+                </h2>
+              </div>
+            </Reveal>
+          }
+          items={ITEMS}
+        />
       </div>
     </section>
   );
