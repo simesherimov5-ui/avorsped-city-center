@@ -235,3 +235,8 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 
 - **Where:** the environment variable `NEXT_PUBLIC_SITE_URL` in Vercel (canonical links, sitemap, share images).
 - **Needed:** the domain the site will live on, e.g. `https://<domain>`.
+
+### Радовиш Twins
+
+- **Where:** the `radovish-twins` entry in `data/index.ts` (its page is `/projects/radovish-twins`).
+- **Needed:** the intro text (none is shown until it arrives), the exact address (replace the approximate pin in `place`, marked `approximate: true`), the phases and their dates, the floors and units, and higher-resolution renders (3000 px wide or more; the current ones are 1672 px).

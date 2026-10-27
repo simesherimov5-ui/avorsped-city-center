@@ -1737,3 +1737,57 @@ body:has([data-compare-bar]) footer {
     transition: none;
   }
 }
+
+/* The gallery row of a photo-led project page (components/project/ProjectGallery.tsx): it starts at the content's edge
+   (the 1320px container with its 5% sides) and ends there too, and snaps photo by photo to that edge; 16:9 photos 72vw
+   wide (at most 1100px), 88vw on a phone, so the next one peeks in. */
+.pg-track {
+  --pg-edge: calc((100vw - min(100vw, 1320px)) / 2 + min(100vw, 1320px) * 0.05);
+  padding-inline: var(--pg-edge);
+  scroll-padding-inline: var(--pg-edge);
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+.pg-slide {
+  width: min(72vw, 1100px);
+  scroll-snap-align: start;
+}
+@media (max-width: 767px) {
+  .pg-slide {
+    width: 88vw;
+  }
+}
+
+/* The scrims of the diptych opening (components/project/ProjectHeroDiptych.tsx), the site's own values only. Top: Почетна's
+   (Оникс 70% fading out) over the hero's 58% held under the bar and the back link, as on the Проекти hero, over the bar
+   plus 250px. Bottom: Оникс 75% held behind the label, the name and the dashes (320px), then fading out, at least 45% of
+   the screen. These renders have large white façades and bright skies: with lighter scrims the gold current link, the
+   back link, the label and the name all fell under their targets. */
+.dip-scrim-top,
+.dip-scrim-bottom {
+  position: absolute;
+  inset-inline: 0;
+  pointer-events: none;
+}
+.dip-scrim-top {
+  top: 0;
+  height: calc(var(--nav-h) + 250px);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-onyx) 70%, transparent), transparent),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) calc(var(--nav-h) + 170px),
+      transparent 100%
+    );
+}
+.dip-scrim-bottom {
+  bottom: 0;
+  height: max(45%, 420px);
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-onyx) 75%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 75%, transparent) 320px,
+    transparent 100%
+  );
+}

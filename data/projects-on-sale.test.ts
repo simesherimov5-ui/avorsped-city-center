@@ -9,9 +9,9 @@ describe("projectsOnSale", () => {
       "city-center",
       "stanbena-kukja",
       "dojranski-raj",
+      "radovish-twins",
       "stanbena-kukja-2",
       "city-center-2",
-      "radovish-twins",
       "boro-pochkov",
       "dojranski-raj-2",
     ]);

@@ -432,6 +432,8 @@ const cnView = (changed: boolean, leaving: boolean) =>
   ["pj-map-view", changed && "pj-view", leaving && "is-leaving"].filter(Boolean).join(" ");
 
 function GridCard({ project, delay, swap = false }: { project: Project; delay?: number; swap?: boolean }) {
+  // the card's own photo when the project has one (Радовиш Twins: a daylight corner, not its evening hero)
+  const photo = project.cardImage ?? project.heroImage;
   return (
     <Link
       href={href(project)}
@@ -439,12 +441,12 @@ function GridCard({ project, delay, swap = false }: { project: Project; delay?: 
       style={delay !== undefined ? { animationDelay: `${delay.toFixed(2)}s` } : undefined}
     >
       <div className="pj-photo">
-        {project.heroImage.isPlaceholder ? (
+        {photo.isPlaceholder ? (
           <NoPhoto />
         ) : (
           <div className="pj-img">
             <Media
-              image={project.heroImage}
+              image={photo}
               label={project.name}
               tone="dark"
               fit={project.imageFit ?? "cover"}

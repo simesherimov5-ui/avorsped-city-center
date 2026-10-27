@@ -24,6 +24,10 @@ import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { NoPhoto } from "@/components/ui/NoPhoto";
+import { ProjectHeroDiptych } from "@/components/project/ProjectHeroDiptych";
+import { ProjectIntroFacts } from "@/components/project/ProjectIntroFacts";
+import { ProjectGallery } from "@/components/project/ProjectGallery";
+import { ProjectPlace } from "@/components/project/ProjectPlace";
 import type { Project } from "@/types";
 
 export function generateStaticParams() {
@@ -34,6 +38,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return { title: "Проект", robots: { index: false } };
+  if (project.layout === "diptych")
+    return pageMetadata({
+      title: project.name,
+      description: `${project.name}, ${project.city}: ${(project.facts ?? []).map((f) => `${f.value} ${f.label.toLowerCase()}`).join(", ")}. ${projectStatusLabel(project.status)}.`,
+      path: `/projects/${project.slug}`,
+      image: null,
+    });
   if (project.stub)
     return pageMetadata({
       title: project.name,
@@ -57,6 +68,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   // address permanently redirects to the main one, so each project has one page for search engines and sharing.
   if (project.href) permanentRedirect(project.href);
   if (project.stub) return <StubProjectPage project={project} />;
+  if (project.layout === "diptych") return <DiptychProjectPage project={project} />;
 
   const completed = project.status === "completed";
   const hasPhotos = project.gallery.length > 0 || !project.heroImage.isPlaceholder;
@@ -207,6 +219,33 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <ProjectCta projectId={project.id} />
       )}
 
+      <OtherProjects currentProjectId={project.id} />
+    </div>
+  );
+}
+
+/**
+ * A photo-led project page («diptych»): the two-photo opening under a clear header, «ЗА ПРОЕКТОТ» with the facts, the
+ * gallery, the location, the invitation and the other projects. Only what the data has is shown (no phases, floors or
+ * units until they are known).
+ */
+function DiptychProjectPage({ project }: { project: Project }) {
+  const status = projectStatusLabel(project.status);
+  const pairs = (project.heroPairs ?? [[0, 1]]).map(
+    ([a, b]) => [project.gallery[a], project.gallery[b]] as [Project["heroImage"], Project["heroImage"]]
+  );
+  return (
+    <div>
+      <ProjectHeroDiptych name={project.name} eyebrow={`${project.city} · ${status}`} pairs={pairs} />
+      {project.intro && (
+        <ProjectIntroFacts
+          heading={project.intro}
+          facts={[...(project.facts ?? []), { label: "Град", value: project.city }, { label: "Статус", value: status }]}
+        />
+      )}
+      {project.gallery.length > 0 && <ProjectGallery photos={project.gallery} />}
+      {project.place && <ProjectPlace name={project.name} city={project.city} place={project.place} />}
+      <ProjectCta projectId={project.id} />
       <OtherProjects currentProjectId={project.id} />
     </div>
   );

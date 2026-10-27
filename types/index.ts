@@ -314,6 +314,18 @@ export interface Project {
    * and a plain page of its own, and stays out of the homepage slideshow, «Другите наши проекти» and the contact form.
    */
   stub?: boolean;
+  /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */
+  cardImage?: { src: string; alt: string; isPlaceholder: boolean };
+  /** The page layout: "diptych" is the photo-led page (two-photo hero, intro with facts, gallery, location). */
+  layout?: "diptych";
+  /** The diptych hero's photo pairs, as positions in `gallery` (each pair the same light, two different views). */
+  heroPairs?: [number, number][];
+  /** The heading of the page's intro; the second part is set in the accent colour. */
+  intro?: SplitTitle;
+  /** The intro's facts beside the heading (the city and the status are added from the project). */
+  facts?: { label: string; value: string }[];
+  /** Where the project is on the map. `approximate` while it only marks the town: replace it with the address. */
+  place?: { lat: number; lng: number; approximate?: boolean };
 }
 
 export interface CompanyStat {

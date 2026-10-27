@@ -16,6 +16,7 @@ import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { HERO_UNDER_HEADER_PATHS } from "@/lib/hero";
 
 const LINKS = [
   { href: "/", key: "nav.home" },
@@ -56,8 +57,9 @@ export function Navbar() {
   // While the curtain runs, the line already points at the tab that was clicked.
   const activeHref = tabFor(transition?.target ?? pathname);
 
-  // Почетна and Проекти open on a full-screen photo that the bar floats over (clear until the page scrolls).
-  const overHero = pathname === "/" || pathname === "/projects";
+  // Почетна, Проекти and the photo-led project pages open on a full-screen photo that the bar floats over (clear until
+  // the page scrolls).
+  const overHero = HERO_UNDER_HEADER_PATHS.includes(pathname);
   // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
   const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked

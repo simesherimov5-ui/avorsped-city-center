@@ -72,9 +72,9 @@ describe("carouselProjects and heroSlides (the real data)", () => {
       "city-center",
       "stanbena-kukja",
       "dojranski-raj",
+      "radovish-twins",
       "stanbena-kukja-2",
       "city-center-2",
-      "radovish-twins",
       "boro-pochkov",
       "dojranski-raj-2",
     ]);
@@ -88,31 +88,31 @@ describe("carouselProjects and heroSlides (the real data)", () => {
     expect(heroSlides(projects).map((x) => x.id)).toEqual([
       "city-center",
       "dojranski-raj",
+      "radovish-twins",
       "stanbena-kukja",
       "stanbena-kukja-2",
       "city-center-2",
-      "radovish-twins",
       "boro-pochkov",
       "dojranski-raj-2",
     ]);
   });
 
   it("moves a project up by itself once the data gives it a photo (here only in the test, not in the data)", () => {
-    const photo = { src: "/images/test/radovish.jpg", alt: "Радовиш Twins", isPlaceholder: false };
+    const photo = { src: "/images/test/boro-pochkov.jpg", alt: "Боро Почков", isPlaceholder: false };
     const withPhoto = projects.map((x) =>
-      x.id === "radovish-twins" ? { ...x, heroImage: photo, slideImage: photo } : x
+      x.id === "boro-pochkov" ? { ...x, heroImage: photo, slideImage: photo } : x
     );
     expect(
       carouselProjects(withPhoto)
         .map((x) => x.id)
-        .slice(0, 4)
-    ).toEqual(["city-center", "stanbena-kukja", "dojranski-raj", "radovish-twins"]);
+        .slice(0, 5)
+    ).toEqual(["city-center", "stanbena-kukja", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
     expect(
       heroSlides(withPhoto)
         .map((x) => x.id)
-        .slice(0, 3)
-    ).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
+        .slice(0, 4)
+    ).toEqual(["city-center", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
     // the data itself is untouched
-    expect(projects.find((x) => x.id === "radovish-twins")?.heroImage.isPlaceholder).toBe(true);
+    expect(projects.find((x) => x.id === "boro-pochkov")?.heroImage.isPlaceholder).toBe(true);
   });
 });

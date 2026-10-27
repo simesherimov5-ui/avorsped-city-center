@@ -400,7 +400,105 @@ export const projects: Project[] = [
   // tagline or text until the client sends them.
   stub("stanbena-kukja-2", "Станбена куќа 2", "under-construction", "Струмица"),
   stub("city-center-2", "City Center 2", "under-construction", "Струмица"),
-  stub("radovish-twins", "Радовиш Twins", "under-construction", "Радовиш"),
+  {
+    id: "radovish-twins",
+    slug: "radovish-twins",
+    name: "Радовиш Twins",
+    location: "Радовиш",
+    city: "Радовиш",
+    status: "under-construction",
+    // TODO(client): the intro text, the exact address, the phases and dates, the floors and units, and renders of 3000px
+    // or more (docs/content-needed.md). Until then the page shows only what is known.
+    description: "",
+    layout: "diptych",
+    // the evening front view: the hero photo of the carousels and the share image
+    heroImage: {
+      src: "/images/radovish-twins/exterior-06.jpg",
+      alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+      isPlaceholder: false,
+    },
+    slideImage: {
+      src: "/images/radovish-twins/exterior-06.jpg",
+      alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+      isPlaceholder: false,
+    },
+    // the daylight corner: the card on the Проекти grid
+    cardImage: {
+      src: "/images/radovish-twins/exterior-01.jpg",
+      alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
+      isPlaceholder: false,
+    },
+    // ten distinct views, daylight first, then evening (1672 × 941 renders)
+    gallery: [
+      {
+        src: "/images/radovish-twins/exterior-01.jpg",
+        alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-02.jpg",
+        alt: "Радовиш Twins — двата објекти и паркингот, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-03.jpg",
+        alt: "Радовиш Twins — фасадата кон улицата со клупите, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-04.jpg",
+        alt: "Радовиш Twins — поглед меѓу двата објекти, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-05.jpg",
+        alt: "Радовиш Twins — аголот од улицата, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-06.jpg",
+        alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-07.jpg",
+        alt: "Радовиш Twins — аголот над паркингот на зајдисонце, визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-08.jpg",
+        alt: "Радовиш Twins — двата објекти над влажниот паркинг, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-09.jpg",
+        alt: "Радовиш Twins — улицата со уличната светилка, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-10.jpg",
+        alt: "Радовиш Twins — поглед низ улицата во самрак, визуелизација",
+        isPlaceholder: false,
+      },
+    ],
+    // evening (front with the lawn + corner at sunset), daylight (corner + street with the benches), evening (street with
+    // the lamp post + the two buildings over the wet parking)
+    heroPairs: [
+      [5, 6],
+      [0, 2],
+      [8, 7],
+    ],
+    intro: { title: "Нов дом во Радовиш, ", titleItalic: "изграден да трае." },
+    // from the site plan
+    facts: [
+      { label: "Објекти", value: "4" },
+      { label: "Паркинг места", value: "51" },
+    ],
+    // TODO(client): the exact address. For now the centre of Радовиш, marked approximate.
+    place: { lat: 41.6383, lng: 22.4647, approximate: true },
+    specifications: [],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
+  },
   stub("boro-pochkov", "Боро Почков", "under-construction", "Струмица"),
   stub("dojranski-raj-2", "Дојрански Рај 2", "under-construction", "Дојран"),
   stub("sigal-zgrada", "Сигал зграда", "completed", "Струмица"),
