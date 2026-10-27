@@ -215,7 +215,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 /**
  * The page of a project known only by its name, city and status (`stub`): the way back, the photo frame with the logo
  * mark, the city and status and the name. Being built: one line and the contact invitation. Finished: the year, if known.
- * Nothing about apartments, floors or availability. To be redesigned once the project's photos and text arrive.
+ * Nothing about apartments, floors or availability; it ends with «Другите наши проекти». To be redesigned once the
+ * project's photos and text arrive.
  */
 function StubProjectPage({ project }: { project: Project }) {
   const completed = project.status === "completed";
@@ -247,6 +248,8 @@ function StubProjectPage({ project }: { project: Project }) {
       </section>
 
       {!completed && <ProjectCta projectId={project.id} href="/contact" />}
+
+      <OtherProjects currentProjectId={project.id} />
     </div>
   );
 }

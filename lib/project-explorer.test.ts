@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { Project } from "@/types";
+import { projects } from "@/data";
 import {
+  carouselProjects,
   choicesQuery,
   citiesWithCounts,
   filterProjects,
   groupByCity,
+  heroSlides,
   parseChoices,
   projectsText,
 } from "./project-explorer";
@@ -60,5 +63,56 @@ describe("the address", () => {
   it("writes 1 проект and 2 проекти", () => {
     expect(projectsText(1)).toBe("1 проект");
     expect(projectsText(2)).toBe("2 проекти");
+  });
+});
+
+describe("carouselProjects and heroSlides (the real data)", () => {
+  it("lists every project being built, stubs too, the ones with a photo first, each in the order of the data", () => {
+    expect(carouselProjects(projects).map((x) => x.id)).toEqual([
+      "city-center",
+      "stanbena-kukja",
+      "dojranski-raj",
+      "stanbena-kukja-2",
+      "city-center-2",
+      "radovish-twins",
+      "boro-pochkov",
+      "dojranski-raj-2",
+    ]);
+  });
+
+  it("never lists a finished or a coming project", () => {
+    expect(carouselProjects(projects).every((x) => x.status === "under-construction")).toBe(true);
+  });
+
+  it("puts the projects with a wide slide photo first in the Проекти hero", () => {
+    expect(heroSlides(projects).map((x) => x.id)).toEqual([
+      "city-center",
+      "dojranski-raj",
+      "stanbena-kukja",
+      "stanbena-kukja-2",
+      "city-center-2",
+      "radovish-twins",
+      "boro-pochkov",
+      "dojranski-raj-2",
+    ]);
+  });
+
+  it("moves a project up by itself once the data gives it a photo (here only in the test, not in the data)", () => {
+    const photo = { src: "/images/test/radovish.jpg", alt: "Радовиш Twins", isPlaceholder: false };
+    const withPhoto = projects.map((x) =>
+      x.id === "radovish-twins" ? { ...x, heroImage: photo, slideImage: photo } : x
+    );
+    expect(
+      carouselProjects(withPhoto)
+        .map((x) => x.id)
+        .slice(0, 4)
+    ).toEqual(["city-center", "stanbena-kukja", "dojranski-raj", "radovish-twins"]);
+    expect(
+      heroSlides(withPhoto)
+        .map((x) => x.id)
+        .slice(0, 3)
+    ).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
+    // the data itself is untouched
+    expect(projects.find((x) => x.id === "radovish-twins")?.heroImage.isPlaceholder).toBe(true);
   });
 });

@@ -167,6 +167,23 @@
     gap: 8px;
   }
 }
+/* Phones: the indicators take their own row and share its width (each at most 56px, at least 24px wide, 44px tall),
+   so all of the carousel's projects fit beside the pause button. */
+@media (max-width: 767px) {
+  .pj-hero-left {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .pj-hero-left .pj-tracks {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .pj-hero-left .pj-track-btn {
+    flex: 1 1 0;
+    min-width: 24px;
+    max-width: var(--pj-track-w, 56px);
+  }
+}
 @media (max-width: 767px) {
   .pj-wrap {
     padding-inline: 20px;

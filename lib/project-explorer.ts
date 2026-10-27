@@ -95,10 +95,22 @@ export function choicesQuery(status: StatusFilter, city: CityFilter, view: View)
   return text ? `?${text}` : "";
 }
 
-/** The hero's slides: projects with a 16:9 slide photo, the ones being built first, at most five. */
+const hasPhoto = (image?: { src: string; isPlaceholder: boolean }) =>
+  Boolean(image && !image.isPlaceholder && image.src);
+
+/**
+ * The projects of every carousel on the site (Почетна «Сега во изградба», «Другите наши проекти», the Проекти hero):
+ * every project being built, the ones known only by name too; never a finished or a coming one. The ones with a photo
+ * come first, then the ones without (they show the no-photo mark), each in the order of the data, so a project that
+ * gets its photo moves up by itself.
+ */
+export function carouselProjects(projects: Project[]) {
+  const building = projects.filter((p) => p.status === "under-construction");
+  return [...building.filter((p) => hasPhoto(p.heroImage)), ...building.filter((p) => !hasPhoto(p.heroImage))];
+}
+
+/** The Проекти hero's slides: the carousel's projects, the ones with a wide (16:9) slide photo first. */
 export function heroSlides(projects: Project[]) {
-  return projects
-    .filter((p) => p.slideImage && !p.slideImage.isPlaceholder && p.slideImage.src !== "")
-    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
-    .slice(0, 5);
+  const all = carouselProjects(projects);
+  return [...all.filter((p) => hasPhoto(p.slideImage)), ...all.filter((p) => !hasPhoto(p.slideImage))];
 }

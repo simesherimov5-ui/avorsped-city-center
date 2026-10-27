@@ -1,21 +1,21 @@
-import { ProjectShowcase } from "@/components/ProjectShowcase";
+import { ProjectSlideshow } from "@/components/ProjectSlideshow";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data";
+import { carouselProjects } from "@/lib/project-explorer";
 
-// A closing beat for any single-project experience (the generic project page,
-// /development, /dojran): moves the visitor toward another development
-// instead of ending at a dead end, without ever repeating the current one.
+// A closing beat for any single-project experience (the generic project page, /development, /dojran): the same
+// carousel as Почетна's «Сега во изградба», with the projects being built (carouselProjects), never the current one.
+// With one project it has no controls; with none the section is not there.
 export function OtherProjects({
   currentProjectId,
   light = false,
 }: {
   currentProjectId: string;
-  /** The cream ground with dark text instead of Оникс. */
+  /** The cream ground with dark text for the heading, instead of Оникс. */
   light?: boolean;
 }) {
-  // the projects known only by name (stub) have no photo or text to show here yet
-  const others = projects.filter((p) => p.id !== currentProjectId && !p.stub);
+  const others = carouselProjects(projects).filter((p) => p.id !== currentProjectId);
   if (others.length === 0) return null;
 
   return (
@@ -30,8 +30,8 @@ export function OtherProjects({
         </Reveal>
       </div>
       <Reveal delay={0.1}>
-        <div className="mx-auto mt-12 max-w-7xl px-5 sm:px-8 lg:px-10">
-          <ProjectShowcase projects={others} />
+        <div className="mt-12">
+          <ProjectSlideshow projects={others} headingAs="h3" autoplayMs={7000} />
         </div>
       </Reveal>
     </section>

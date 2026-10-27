@@ -3,6 +3,7 @@
 import "@/components/projects/projects.css";
 import { useEffect, useRef, useState, useSyncExternalStore, type HTMLAttributes, type ReactNode } from "react";
 import { Media } from "@/components/ui/Media";
+import { NoPhoto } from "@/components/ui/NoPhoto";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { ImageFocus } from "@/types";
@@ -186,18 +187,23 @@ export function HeroSlideshow({
         {slides.map((s, i) => (
           <div key={s.key} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
             <div className="pj-slide-photo">
-              <Media
-                image={s.image}
-                focus={s.focus}
-                maxWidth={s.maxWidth}
-                tone="dark"
-                alwaysCover
-                className="h-full w-full !bg-transparent"
-                // the frame is the first screen (or 16:9 on a phone): the photo covers it, as wide as the screen
-                sizes="100vw"
-                priority={i === 0}
-                defer={i !== 0}
-              />
+              {s.image.isPlaceholder || !s.image.src ? (
+                // a project without a photo yet: the site's no-photo slide (Еспресо with the logo mark)
+                <NoPhoto />
+              ) : (
+                <Media
+                  image={s.image}
+                  focus={s.focus}
+                  maxWidth={s.maxWidth}
+                  tone="dark"
+                  alwaysCover
+                  className="h-full w-full !bg-transparent"
+                  // the frame is the first screen (or 16:9 on a phone): the photo covers it, as wide as the screen
+                  sizes="100vw"
+                  priority={i === 0}
+                  defer={i !== 0}
+                />
+              )}
             </div>
           </div>
         ))}
