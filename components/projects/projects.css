@@ -83,8 +83,8 @@
   /* a readable line length, centred under the heading */
   max-width: 60ch;
   text-wrap: balance;
-  /* gold read at under 3:1 over the brightest sky of some slides, so the lighter copper */
-  color: var(--color-copper);
+  /* Травертин, like the heading: gold read at under 3:1 over the brightest sky of some slides and copper at 2.4:1 */
+  color: var(--color-travertine);
 }
 .pj-hero-row {
   display: flex;

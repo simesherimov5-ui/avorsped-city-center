@@ -512,6 +512,11 @@ h4 {
   .photo-hero--top.photo-hero--fill {
     --hero-h: max(560px, 100svh);
   }
+  /* Почетна's top scrim fades out over the same span as the hero's own one (below), so it also lies under the line under
+     the heading: over the brightest façades the line read at 4.3:1 without it */
+  .photo-hero--top .photo-hero__media::after {
+    height: calc(var(--nav-h) + 250px);
+  }
   /* the heading block starts below the bar, so the hero's top scrim does too: the same 58% held for 170px under the bar
      (as when the hero itself started there), fading out 80px later */
   .photo-hero--top .photo-hero__media .hero-scrim-top {
