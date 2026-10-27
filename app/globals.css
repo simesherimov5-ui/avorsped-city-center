@@ -464,6 +464,58 @@ h4 {
   color: rgb(202 173 100);
 }
 
+/* The Проекти hero (photo-hero--top): like Почетна, it starts at the very top of the window and the header lies over it,
+   clear until the page scrolls (components/Navbar.tsx), on Почетна's top scrim (Оникс 70% fading out over 180px) so the
+   header links read over every slide. Under the hero breakpoint the hero is the whole first screen (100svh, at least
+   560px): the text keeps its own height at the bottom and the photo takes the rest from the top, never less than the old
+   16:9 plus the bar. From the breakpoint it is the whole screen and its text starts below the bar. */
+.photo-hero--top {
+  margin-top: 0;
+}
+.photo-hero--top .photo-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 180px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-onyx) 70%, transparent), transparent);
+}
+@media (max-width: 1100px) {
+  .photo-hero--top {
+    display: flex;
+    flex-direction: column;
+    min-height: max(560px, 100svh);
+  }
+  .photo-hero--top .photo-hero__media {
+    flex: 1 0 auto;
+    aspect-ratio: auto;
+    min-height: calc(var(--nav-h) + 100vw * 9 / 16);
+  }
+  .photo-hero--top .photo-hero__content {
+    flex: none;
+  }
+  /* the hero's own top scrim (as from the breakpoint) under Почетна's: the clear header's current link is gold, and over
+     the brighter skies of this crop Почетна's alone left it at 2.5:1 */
+  .photo-hero--top .photo-hero__media .hero-scrim-top {
+    display: block;
+    height: 250px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 68%,
+      transparent 100%
+    );
+  }
+}
+@media (min-width: 1101px) {
+  .photo-hero--top.photo-hero--fill {
+    --hero-h: max(560px, 100svh);
+  }
+  .photo-hero--top.photo-hero--fill .photo-hero__content {
+    padding-top: var(--nav-h);
+  }
+}
+
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%). The current page's link stays gold
    with its underline (data-current, set by the Navbar), as on the solid bar. */
 header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {

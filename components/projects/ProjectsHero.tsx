@@ -16,7 +16,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
   }));
 
   return (
-    <HeroSlideshow slides={items} storageKey="pj-hero-stopped" label="Проекти">
+    <HeroSlideshow slides={items} storageKey="pj-hero-stopped" label="Проекти" className="photo-hero--top">
       {({ slide, tracks, pause, rowProps }) => {
         const current = slides[slide];
         return (

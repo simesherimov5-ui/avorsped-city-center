@@ -56,8 +56,8 @@ export function Navbar() {
   // While the curtain runs, the line already points at the tab that was clicked.
   const activeHref = tabFor(transition?.target ?? pathname);
 
-  // The homepage opens on a full-screen photo that the bar floats over (the projects page has a solid bar).
-  const overHero = pathname === "/";
+  // Почетна and Проекти open on a full-screen photo that the bar floats over (clear until the page scrolls).
+  const overHero = pathname === "/" || pathname === "/projects";
   // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
   const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
