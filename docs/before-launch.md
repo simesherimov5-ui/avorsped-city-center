@@ -17,6 +17,7 @@ The site must not go live until every item under "Blocking" is done. Tick them o
 - [ ] **Google map on the City Center page.** The "Локација" section embeds the real Google map (with a pin that drops onto it), so Google content loads there again. Mention it in the privacy policy (and decide whether a consent step is needed) before launch.
 - [ ] **Privacy policy.** The form collects a name and a phone number. The page structure is ready but unpublished (`components/privacy/privacy-content.ts`): it needs the text, then it must be linked from the footer and mentioned under the form.
 - [ ] **Project photos.** Every во изградба project has a card photo and a wide slide photo; no logo-mark fallback slides visible at launch. (The carousels show the no-photo slide for any project without one: Станбена куќа 2, City Center 2, Радовиш Twins, Боро Почков and Дојрански Рај 2 today, and Станбена куќа 1 has no wide slide photo.)
+      After adding photos, rerun the carousel contrast check across all slides at 1440 and 390 (name/address ≥ 4.5:1; Проекти hero heading ≥ 3:1, it was 4.01 over the current Станбена куќа 1 photo). Add a wide hero photo for Станбена куќа 1.
 
 ## Should be done soon after launch
 
