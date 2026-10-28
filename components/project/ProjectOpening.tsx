@@ -17,7 +17,7 @@ const controlsWidth = (count: number) => count * 44 + (count - 1) * 10 + 12 + 44
  * back link top left on the photos and, bottom left, the place and state, the name and the line about the project, the
  * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
  * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is full Травертин; the label and the
- * line under the name are the site's gold (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`).
+ * line under the name are the site's gold (Golos Text, upright). Its "stopped for the visit" flag is its own (`storageKey`).
  * It is on screen from the first paint: no film before it, no entrance of its own.
  */
 export function ProjectOpening({

@@ -175,7 +175,7 @@ export interface ProjectAbout {
   /** The end of the heading, set in Бронза. */
   titleItalic: string;
   paragraphs: string[];
-  /** Phrases of the paragraphs set in Playfair and the accent colour (each where it first appears). */
+  /** Phrases of the paragraphs set in Cormorant Garamond and the accent colour (each where it first appears). */
   accents?: string[];
   signature: string;
   /** The heading in English (the paragraphs stay as written). */

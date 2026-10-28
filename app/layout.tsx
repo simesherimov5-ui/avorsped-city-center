@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { MotionConfig } from "framer-motion";
+import { preload } from "react-dom";
 import "./fonts/fonts.css";
 import "./globals.css";
+import golosCyrillic from "./fonts/GolosText-cyrillic.woff2";
+import cormorantCyrillic from "./fonts/CormorantGaramond-500-cyrillic.woff2";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { I18nProvider } from "@/lib/i18n";
@@ -18,7 +21,7 @@ import { SITE_NAME, siteUrl } from "@/lib/seo";
 
 // Exactly two families on the whole site (the identity "Бронза & Травертин"), both with their Cyrillic letters, served from
 // app/fonts (see fonts.css): the site is in Macedonian, and a family without them silently falls back to a different
-// system font. Playfair Display is for headings and large display numbers; Montserrat is for everything else.
+// system font. Cormorant Garamond is for headings and large display numbers; Golos Text is for everything else.
 
 export const metadata: Metadata = {
   // The public address (see lib/seo.ts): canonical links, the sitemap and share images are built from it.
@@ -43,6 +46,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "rgb(20, 17, 15)", colorScheme: "dark" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // The two files the top of every page needs first (its Macedonian text, and its headings at weight 400, which is the
+  // Cormorant 500 file): fetched straight away instead of when the stylesheet is read. Nothing else is preloaded.
+  preload(golosCyrillic, { as: "font", type: "font/woff2", crossOrigin: "" });
+  preload(cormorantCyrillic, { as: "font", type: "font/woff2", crossOrigin: "" });
   return (
     <html lang="mk">
       <body className="antialiased">

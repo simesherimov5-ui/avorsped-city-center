@@ -159,9 +159,9 @@
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
   --color-plan-green: var(--color-plan-green);
-  /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
-  --font-display: var(--font-playfair);
-  --font-sans: var(--font-montserrat);
+  /* Two families only: Cormorant Garamond for headings and large display numbers, Golos Text for everything else. */
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-golos);
   /* Tailwind's own transition-* utilities use the site's fast speed and easing. */
   --default-transition-duration: var(--dur-fast);
   --default-transition-timing-function: var(--ease);
@@ -922,7 +922,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   background: var(--color-gold);
 }
 
-/* Counters, stats, measurements: Montserrat 500 with tabular numbers, so digits don't shift width as they
+/* Counters, stats, measurements: Golos Text 500 with tabular numbers, so digits don't shift width as they
    change (stat count-ups). The old name stays; there is no monospace font any more. */
 .mono-stat {
   font-family: var(--font-sans), system-ui, sans-serif;

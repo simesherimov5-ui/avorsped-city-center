@@ -6,7 +6,7 @@ import { getLenis } from "@/lib/lenis";
 import { useI18n } from "@/lib/i18n";
 import type { ProjectAbout as ProjectAboutData } from "@/types";
 
-/** The paragraph with its accent phrases (each set once, where it first appears) in Playfair, gold and a little larger. */
+/** The paragraph with its accent phrases (each set once, where it first appears) in Cormorant Garamond, gold and a little larger. */
 function withAccents(text: string, accents: string[]): ReactNode[] {
   const marks = accents
     .map((phrase) => ({ phrase, at: text.indexOf(phrase) }))
