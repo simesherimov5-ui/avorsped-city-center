@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, CALM_EASE, PREMIUM_EASE } from "@/lib/gsap";
 import { MARK_STROKES, MARK_VIEWBOX } from "@/lib/logo-mark";
 import { lockScroll } from "@/lib/scroll-lock";
+import { HOLDING_GLYPHS, WORDMARK_GLYPHS, type GlyphGroup } from "./wordmark-glyphs";
 import "./javor-sped-intro.css";
 
 type Props = {
@@ -16,6 +17,37 @@ type Props = {
   waitFor?: () => Promise<void>;
 };
 
+const em = (units: number) => `${units / 1000}em`;
+
+/**
+ * A part of the wordmark at the size its text had: it gives the part its width (what the "width: auto" unfolds open to)
+ * and puts the part's baseline where the text's was, so the row lines up exactly as before.
+ */
+function GlyphBox({ g, children }: { g: GlyphGroup; children?: ReactNode }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 ${-g.baseline} ${g.w} ${g.h}`}
+      preserveAspectRatio="none"
+      // inline (the base styles make every svg a block), so the part keeps a baseline for the row to line up on
+      style={{ display: "inline", width: em(g.w), height: em(g.h), verticalAlign: em(g.baseline - g.h) }}
+    >
+      {children}
+    </svg>
+  );
+}
+
+/**
+ * The gold letters: the part's gold sheen shows only through the letter shapes, as it did through the text. The mask
+ * keeps the letters' full size while the part unfolds, so they are uncovered, never squeezed.
+ */
+function goldLetters(g: GlyphGroup): CSSProperties {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 ${-g.baseline} ${g.w} ${g.h}" preserveAspectRatio="none"><path d="${g.d}"/></svg>`;
+  const image = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+  const size = `${em(g.w)} ${em(g.h)}`;
+  return { maskImage: image, WebkitMaskImage: image, maskSize: size, WebkitMaskSize: size };
+}
+
 /**
  * Homepage opening sequence on a black screen (about 9.7 seconds; a click, tap, Esc, Enter or Space skips to the last step):
  * 1. The building draws itself, stroke by stroke
@@ -26,6 +58,7 @@ type Props = {
  * 6. The wordmark and "HOLDING" lift away together, as the black screen opens exactly as the site always has:
  *    top half up, bottom half down, 1.1s on the "premium" curve.
  * The hero photo is already rendered underneath; this only uncovers it.
+ * The wordmark's letters are drawn shapes (wordmark-glyphs.ts), not text, so the opening needs no font of its own.
  */
 export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
   const root = useRef<HTMLDivElement>(null);
@@ -193,15 +226,27 @@ export default function JavorSpedIntro({ onReveal, onDone, waitFor }: Props) {
       <div className="jsi-stage">
         <div className="jsi-lock">
           <div className="jsi-wm" aria-hidden="true">
-            <span className="jsi-gold jsi-j">J</span>
-            <span className="jsi-gold jsi-x jsi-avor">AVOR</span>
-            {/* The space between the two words: a no-break space, so it keeps its width (prettier writes it as the literal character). */}
-            <span className="jsi-gold jsi-x jsi-gap"> </span>
-            <span className="jsi-gold jsi-s">S</span>
-            <span className="jsi-gold jsi-x jsi-ped">PED</span>
+            <span className="jsi-gold jsi-j" style={goldLetters(WORDMARK_GLYPHS.j)}>
+              <GlyphBox g={WORDMARK_GLYPHS.j} />
+            </span>
+            <span className="jsi-gold jsi-x jsi-avor" style={goldLetters(WORDMARK_GLYPHS.avor)}>
+              <GlyphBox g={WORDMARK_GLYPHS.avor} />
+            </span>
+            {/* The space between the two words: only its width. */}
+            <span className="jsi-x jsi-gap">
+              <GlyphBox g={WORDMARK_GLYPHS.gap} />
+            </span>
+            <span className="jsi-gold jsi-s" style={goldLetters(WORDMARK_GLYPHS.s)}>
+              <GlyphBox g={WORDMARK_GLYPHS.s} />
+            </span>
+            <span className="jsi-gold jsi-x jsi-ped" style={goldLetters(WORDMARK_GLYPHS.ped)}>
+              <GlyphBox g={WORDMARK_GLYPHS.ped} />
+            </span>
           </div>
           <div className="jsi-hold" aria-hidden="true">
-            HOLDING
+            <GlyphBox g={HOLDING_GLYPHS}>
+              <path d={HOLDING_GLYPHS.d} fill="currentColor" />
+            </GlyphBox>
           </div>
         </div>
       </div>

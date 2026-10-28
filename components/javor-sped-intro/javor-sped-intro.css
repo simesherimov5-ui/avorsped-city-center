@@ -94,7 +94,8 @@
   opacity: 0;
 }
 /* The wordmark and "HOLDING" lift away together. --wm is the wordmark's size; "HOLDING" is 28% of it and hangs
-   below without moving the wordmark, so the wordmark stays exactly where it always was. */
+   below without moving the wordmark, so the wordmark stays exactly where it always was. Both are drawn shapes
+   (wordmark-glyphs.ts) sized in em, so they scale with --wm; line-height 0 keeps the page font out of their boxes. */
 .jsi-lock {
   --wm: clamp(34px, 4.6vw, 60px);
   position: relative;
@@ -107,12 +108,9 @@
   right: 0;
   margin-top: calc(var(--wm) * 0.12);
   text-align: center;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 500;
   font-size: calc(var(--wm) * 0.28);
-  letter-spacing: 0.5em;
+  line-height: 0;
   padding-left: 0.5em; /* the spacing after the last letter, so the word sits centred under the wordmark */
-  text-transform: uppercase;
   color: var(--color-brass);
   opacity: 0;
 }
@@ -120,30 +118,24 @@
   display: inline-flex;
   align-items: baseline;
   white-space: nowrap;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.02em;
   font-size: var(--wm);
-  line-height: 1.1;
-  color: var(--color-brass);
+  line-height: 0;
 }
 .jsi-wm span {
   display: inline-block;
 }
+/* The gold sheen fills the part and shows through its letter shapes (the mask, set per part in JavorSpedIntro.tsx). */
 .jsi-gold {
-  color: transparent;
   background: var(--gold-sheen);
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
 }
 /* Hidden from the first paint, so nothing flashes before the animation code runs. */
 .jsi-j,
 .jsi-s {
   opacity: 0;
-}
-/* The space between JAVOR and SPED is a no-break space; pre keeps it from collapsing to nothing. */
-.jsi-gap {
-  white-space: pre;
 }
 .jsi-x {
   clip-path: inset(-30% 0);
