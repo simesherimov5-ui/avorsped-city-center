@@ -1762,11 +1762,11 @@ body:has([data-compare-bar]) footer {
   }
 }
 
-/* The scrims of the diptych opening (components/project/ProjectHeroDiptych.tsx), the site's own values only. Top: Почетна's
-   (Оникс 70% fading out) over the hero's 58% held under the bar and the back link, as on the Проекти hero, over the bar
-   plus 250px. Bottom: Оникс 75% held behind the label, the name and the dashes (320px), then fading out, at least 45% of
-   the screen. These renders have large white façades and bright skies: with lighter scrims the gold current link, the
-   back link, the label and the name all fell under their targets. */
+/* The scrims of the photo-led opening (components/project/ProjectHeroSlideshow.tsx), the site's own values only. Top:
+   Почетна's (Оникс 70% fading out) over the hero's 58% held under the bar and the back link, as on the Проекти hero,
+   over the bar plus 250px. Bottom: Оникс 75% held behind the label, the name and the dashes (320px), then fading out,
+   at least 45% of the screen. These renders have large white façades and bright skies: with lighter scrims the gold
+   current link, the back link, the label and the name all fell under their targets. */
 .dip-scrim-top,
 .dip-scrim-bottom {
   position: absolute;

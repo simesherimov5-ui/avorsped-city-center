@@ -19,8 +19,8 @@ describe("the hero breakpoint", () => {
 });
 
 describe("the pages the header floats over", () => {
-  it("include every photo-led (diptych) project page", () => {
-    for (const p of projects.filter((x) => x.layout === "diptych"))
+  it("include every photo-led project page", () => {
+    for (const p of projects.filter((x) => x.layout === "photo-led"))
       expect(HERO_UNDER_HEADER_PATHS).toContain(`/projects/${p.slug}`);
   });
 });

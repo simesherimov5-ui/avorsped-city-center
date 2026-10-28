@@ -316,10 +316,11 @@ export interface Project {
   stub?: boolean;
   /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */
   cardImage?: { src: string; alt: string; isPlaceholder: boolean };
-  /** The page layout: "diptych" is the photo-led page (two-photo hero, intro with facts, gallery, location). */
-  layout?: "diptych";
-  /** The diptych hero's photo pairs, as positions in `gallery` (each pair the same light, two different views). */
-  heroPairs?: [number, number][];
+  /**
+   * The page layout: "photo-led" is the photo-led page (a full-screen photo slideshow from `openingSlides`, intro with
+   * facts, gallery, location).
+   */
+  layout?: "photo-led";
   /** The heading of the page's intro; the second part is set in the accent colour. */
   intro?: SplitTitle;
   /** The intro's facts beside the heading (the city and the status are added from the project). */
