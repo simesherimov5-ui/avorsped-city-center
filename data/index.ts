@@ -91,9 +91,8 @@ export const projects: Project[] = [
     ],
     openingTagline: "Шест згради, една нова адреса во Струмица.",
     about: {
-      kicker: "ЗА ПРОЕКТОТ",
-      title: "Нов стандард на живеење, ",
-      titleItalic: "во срцето на Струмица.",
+      title: "Нов стандард на живеење",
+      subtitle: "Во срцето на Струмица",
       paragraphs: [
         "Секоја зграда што сме ја изградиле од 1994 година наваму нè научила нешто ново. Сето тоа искуство го вградивме во City Center: шест згради во центарот на Струмица, со плоштад, деловни простори и подземна гаража.",
         "Резултатот е дом изграден онака како што и ние би сакале да живееме. Ве покануваме да откриете зошто.",
@@ -101,9 +100,8 @@ export const projects: Project[] = [
       accents: ["нешто ново", "дом", "зошто"],
       signature: "Javor Sped Holding",
       en: {
-        kicker: "ABOUT THE PROJECT",
-        title: "A new standard of living, ",
-        titleItalic: "in the heart of Strumica.",
+        title: "A new standard of living",
+        subtitle: "In the heart of Strumica",
       },
     },
     // TODO(client): the north direction on the aerial photo, in degrees (docs/content-needed.md).

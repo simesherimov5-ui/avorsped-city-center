@@ -170,16 +170,16 @@ export interface ImageFocus {
 }
 
 export interface ProjectAbout {
-  kicker: string;
-  title: string;
-  /** The end of the heading, set in Бронза. */
-  titleItalic: string;
+  /** The section's headline (an h2, one line); without it the section has no headline. */
+  title?: string;
+  /** The line under the headline (set in capitals by CSS); without it there is none. */
+  subtitle?: string;
   paragraphs: string[];
   /** Phrases of the paragraphs set in Cormorant Garamond and the accent colour (each where it first appears). */
   accents?: string[];
   signature: string;
-  /** The heading in English (the paragraphs stay as written). */
-  en?: { kicker: string; title: string; titleItalic: string };
+  /** The headline and the line under it in English (the paragraphs stay as written). */
+  en?: { title?: string; subtitle?: string };
 }
 
 /** A heading in two parts: the second part is set in the accent colour. */

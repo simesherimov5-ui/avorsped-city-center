@@ -730,6 +730,69 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
     color-mix(in srgb, var(--color-onyx) 92%, transparent) 100%
   );
 }
+/* Its motion (the script in ProjectAbout.tsx). The hidden start exists only once the script has armed the section
+   (data-state="armed", set only while all its lines are below the screen); "shown" plays the entrance: the headline fades
+   in over 1.2s while its letter spacing settles from .12em, then each line rises 16px (0.9s, its own --pa-delay). */
+.pa-intro .pa-headline {
+  transition:
+    opacity 1.2s var(--ease),
+    letter-spacing 1.2s var(--ease);
+}
+.pa-intro .pa-reveal {
+  transition:
+    opacity 0.9s var(--ease) var(--pa-delay, 0s),
+    transform 0.9s var(--ease) var(--pa-delay, 0s);
+}
+.pa-intro[data-state="armed"] .pa-headline {
+  opacity: 0;
+  letter-spacing: 0.12em;
+}
+.pa-intro[data-state="armed"] .pa-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+/* Under 768px the headline rises 16px like the other lines and its spacing never changes, so it is never clipped. */
+@media (max-width: 767px) {
+  .pa-intro .pa-headline {
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease);
+  }
+  .pa-intro[data-state="armed"] .pa-headline {
+    letter-spacing: normal;
+    transform: translateY(16px);
+  }
+}
+/* The keywords: already in their serif and size, in the paragraph's colour until lit (data-lit, set as the section
+   scrolls by), then gold with a 1px gold line drawn left to right under them. */
+.pa-key {
+  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition:
+    color 0.8s var(--ease),
+    background-size 0.8s var(--ease);
+}
+.pa-key[data-lit] {
+  color: var(--color-gold);
+  background-size: 100% 1px;
+}
+/* Landed on it or past it ("static"): the keywords are simply lit, no fade. */
+.pa-intro[data-state="static"] .pa-key {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pa-intro .pa-headline,
+  .pa-intro .pa-reveal,
+  .pa-key {
+    transition: none;
+  }
+  .pa-key {
+    color: var(--color-gold);
+    background-size: 100% 1px;
+  }
+}
 
 /* "Тек на градба" (components/project/ProjectBuildProgress.tsx): each phase draws the stretch of line from its dot to
    the next one (Бронза while the phase is passed), through the middle of the dots. Under 1024px the phases stack and
