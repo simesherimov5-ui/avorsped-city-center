@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 import { isNarrowPhoto } from "@/lib/image-sizes";
 import type { ImageFocus } from "@/types";
 
-/** The quality every photo is requested at (also in next.config.ts → images.qualities). */
+/** The default quality of a photo (every quality used is also in next.config.ts → images.qualities). */
 const QUALITY = 80;
 
 // The soft fade at the edges of a shrunken picture: transparent at each edge, solid by 5% in.
@@ -44,6 +44,7 @@ export function Media({
   wholeAlign = "center",
   alwaysCover = false,
   maxWidth,
+  quality = QUALITY,
 }: {
   image: MediaImage;
   className?: string;
@@ -70,6 +71,8 @@ export function Media({
   alwaysCover?: boolean;
   /** The photo's own width in pixels: no variant wider than this is requested (needs a client component as the parent). */
   maxWidth?: number;
+  /** The encoding quality (80 by default; a full-screen opening asks for 85). Must be listed in next.config.ts. */
+  quality?: number;
 }) {
   const loader = maxWidth ? cappedLoader(maxWidth) : undefined;
   if (image.isPlaceholder || !image.src) {
@@ -96,7 +99,7 @@ export function Media({
           fill
           sizes={sizes}
           className="media-whole__bg object-cover"
-          quality={QUALITY}
+          quality={quality}
           loading="lazy"
         />
         <div aria-hidden className="media-whole__shade" />
@@ -107,7 +110,7 @@ export function Media({
           sizes={sizes}
           className="media-whole__photo"
           style={focus ? { objectPosition: `${focus.x}% ${focus.y}%` } : undefined}
-          quality={QUALITY}
+          quality={quality}
           {...loading}
         />
       </div>
@@ -178,7 +181,7 @@ export function Media({
             fill
             sizes={sizes}
             className={contained ? "object-contain" : "object-cover"}
-            quality={QUALITY}
+            quality={quality}
             unoptimized={crisp}
             {...loading}
           />
@@ -191,7 +194,7 @@ export function Media({
           sizes={sizes}
           className={contained ? "object-contain" : "object-cover"}
           style={framing}
-          quality={QUALITY}
+          quality={quality}
           unoptimized={crisp}
           loader={loader}
           {...loading}
