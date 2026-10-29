@@ -239,4 +239,14 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 ### Радовиш Twins
 
 - **Where:** the `radovish-twins` entry in `data/index.ts` (its page is `/projects/radovish-twins`).
-- **Needed:** the intro text (none is shown until it arrives), the exact address (replace the approximate pin in `place`, marked `approximate: true`), the phases and their dates, the floors and units, and higher-resolution renders (3000 px wide or more; the current ones are 1672 px).
+- **Needed:** the intro text (none is shown until it arrives), the exact address (replace the approximate pin in `place`, marked `approximate: true`), the phases and their dates, the floors and units, and the higher-resolution originals listed under «Need higher-resolution originals» below.
+
+### Need higher-resolution originals
+
+The site has these pictures only at the size listed; on a large screen or a phone with a sharp display they are shown larger than the file, so they look soft. Send the original exports (the file as it came out of the render, not a copy from a chat app or a PDF), **3840 px wide or more**.
+
+| Picture                                                                  | Where it is used                                             | Now        |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------ | ---------- |
+| Радовиш Twins, `exterior-07.jpg` (the corner over the parking at sunset) | the opening of `/projects/radovish-twins`, first photo       | 1672 × 941 |
+| Радовиш Twins, `exterior-06.jpg` (the evening front with the lawn)       | the opening, second photo; the carousels and the share image | 1672 × 941 |
+| Радовиш Twins, `exterior-01.jpg` (the daylight corner over the parking)  | the opening, third photo; the card on Проекти                | 1672 × 941 |

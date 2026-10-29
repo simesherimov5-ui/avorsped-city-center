@@ -405,8 +405,8 @@ export const projects: Project[] = [
     location: "Радовиш",
     city: "Радовиш",
     status: "under-construction",
-    // TODO(client): the intro text, the exact address, the phases and dates, the floors and units, and renders of 3000px
-    // or more (docs/content-needed.md). Until then the page shows only what is known.
+    // TODO(client): the intro text, the exact address, the phases and dates, the floors and units, and the original
+    // exports of the renders, 3840px wide or more (docs/content-needed.md). Until then the page shows only what is known.
     description: "",
     layout: "photo-led",
     // the evening front view: the hero photo of the carousels and the share image
