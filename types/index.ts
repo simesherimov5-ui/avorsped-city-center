@@ -210,7 +210,7 @@ export interface ResidentQuote {
   project: string;
 }
 
-export interface Project {
+interface ProjectFields {
   id: string;
   slug: string;
   name: string;
@@ -248,17 +248,6 @@ export interface Project {
    * reduced motion, Save-Data). Without it the hero image is shown.
    */
   heroFilm?: { hd: string; sd: string; poster: string };
-  /**
-   * The photos of the opening's slideshow, in order (files the site already uses). `focus` holds a photo where the frame
-   * trims it (x, y in %, zoom 1), so the trim comes out of sky or ground, not out of the buildings. Without it the opening
-   * shows the hero image alone.
-   */
-  openingSlides?: {
-    image: { src: string; alt: string; isPlaceholder: boolean };
-    focus?: ImageFocus;
-    /** The photo's own width in pixels: the page never asks for a wider variant. */
-    maxWidth?: number;
-  }[];
   /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
   /** The "За проектот" section under the opening. Without it the page has no such section. */
@@ -316,11 +305,6 @@ export interface Project {
   stub?: boolean;
   /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */
   cardImage?: { src: string; alt: string; isPlaceholder: boolean };
-  /**
-   * The page layout: "photo-led" is the photo-led page (a full-screen photo slideshow from `openingSlides`, intro with
-   * facts, gallery, location).
-   */
-  layout?: "photo-led";
   /** The heading of the page's intro; the second part is set in the accent colour. */
   intro?: SplitTitle;
   /** The intro's facts beside the heading (the city and the status are added from the project). */
@@ -332,6 +316,52 @@ export interface Project {
   /** The drawn site plan of the object picker, in the plan's own units (`viewBox`). */
   sitePlan?: SitePlan;
 }
+
+/** A rectangle of a photo in % of the photo (x, y from its top left corner, w and h its width and height). */
+export interface PhotoBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * One photo of an opening's slideshow (a file the site already uses). `focus` holds it where the frame trims it (x, y in
+ * %, zoom 1), so the trim comes out of sky or ground, not out of the buildings.
+ */
+export interface OpeningSlide {
+  image: { src: string; alt: string; isPlaceholder: boolean };
+  focus?: ImageFocus;
+  /** The photo's own width in pixels: the page never asks for a wider variant. */
+  maxWidth?: number;
+}
+
+/**
+ * One photo of a photo-led opening, always shown whole. `box` is the rectangle holding the whole building (every building
+ * of the project in the photo) plus 3% of the photo on each side.
+ */
+export interface PhotoLedSlide extends OpeningSlide {
+  box: PhotoBox;
+}
+
+export type Project = ProjectFields &
+  (
+    | {
+        /**
+         * The page layout: "photo-led" is the photo-led page (the opening's photos framed whole on Оникс, intro with
+         * facts, gallery, location), its opening from `openingSlides`, in order.
+         */
+        layout: "photo-led";
+        openingSlides: PhotoLedSlide[];
+      }
+    | {
+        layout?: undefined;
+        /** The photos of the opening's slideshow, in order. Without them the opening shows the hero image alone. */
+        openingSlides?: OpeningSlide[];
+      }
+  );
+
+export type PhotoLedProject = Extract<Project, { layout: "photo-led" }>;
 
 /** One building of a project on its site plan. */
 export interface ProjectObject {

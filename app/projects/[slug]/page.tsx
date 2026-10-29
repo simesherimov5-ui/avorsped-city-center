@@ -29,7 +29,7 @@ import { ProjectIntroFacts } from "@/components/project/ProjectIntroFacts";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectPlace } from "@/components/project/ProjectPlace";
 import { ObjectPicker } from "@/components/project/ObjectPicker";
-import type { Project } from "@/types";
+import type { PhotoLedProject, Project } from "@/types";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -226,18 +226,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 }
 
 /**
- * A photo-led project page: the full-screen photo slideshow under a clear header, «ЗА ПРОЕКТОТ» with the facts, the
+ * A photo-led project page: the photo slideshow on Оникс under a clear header, «ЗА ПРОЕКТОТ» with the facts, the
  * gallery, the location, the invitation and the other projects. Only what the data has is shown (no phases, floors or
  * units until they are known).
  */
-function PhotoLedProjectPage({ project }: { project: Project }) {
+function PhotoLedProjectPage({ project }: { project: PhotoLedProject }) {
   const status = projectStatusLabel(project.status);
   return (
     <div>
       <ProjectHeroSlideshow
         name={project.name}
         eyebrow={`${project.city} · ${status}`}
-        slides={project.openingSlides ?? [{ image: project.heroImage }]}
+        slides={project.openingSlides}
       />
       {project.intro && (
         <ProjectIntroFacts

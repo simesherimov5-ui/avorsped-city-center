@@ -479,9 +479,10 @@ export const projects: Project[] = [
         isPlaceholder: false,
       },
     ],
-    // The opening, one photo at a time: the corner at sunset first, then the evening front, then the daylight corner,
-    // the street with the benches, the street with the lamp post and the two buildings over the wet parking. The focus
-    // keeps the main building behind the title where a phone trims the sides.
+    // The opening, one photo at a time, each shown whole: the corner at sunset first, then the evening front, then the
+    // daylight corner. `box` is the rectangle of the buildings with 3% of the photo on each side (in %). exterior-03, -08
+    // and -09 stay in the gallery only: the building of -03 fills the whole width, the right building of -08 is cut in
+    // the file, and in -09 the lamp post is the subject.
     openingSlides: [
       {
         image: {
@@ -489,7 +490,7 @@ export const projects: Project[] = [
           alt: "Радовиш Twins — аголот над паркингот на зајдисонце, визуелизација",
           isPlaceholder: false,
         },
-        focus: { zoom: 1, x: 54, y: 50 },
+        box: { x: 20.3, y: 14, w: 72.7, h: 73 },
       },
       {
         image: {
@@ -497,7 +498,7 @@ export const projects: Project[] = [
           alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
           isPlaceholder: false,
         },
-        focus: { zoom: 1, x: 50, y: 45 },
+        box: { x: 8.7, y: 18, w: 87, h: 56.2 },
       },
       {
         image: {
@@ -505,27 +506,7 @@ export const projects: Project[] = [
           alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
           isPlaceholder: false,
         },
-      },
-      {
-        image: {
-          src: "/images/radovish-twins/exterior-03.jpg",
-          alt: "Радовиш Twins — фасадата кон улицата со клупите, дневна визуелизација",
-          isPlaceholder: false,
-        },
-      },
-      {
-        image: {
-          src: "/images/radovish-twins/exterior-09.jpg",
-          alt: "Радовиш Twins — улицата со уличната светилка, вечерна визуелизација",
-          isPlaceholder: false,
-        },
-      },
-      {
-        image: {
-          src: "/images/radovish-twins/exterior-08.jpg",
-          alt: "Радовиш Twins — двата објекти над влажниот паркинг, вечерна визуелизација",
-          isPlaceholder: false,
-        },
+        box: { x: 17.8, y: 1.3, w: 67.1, h: 86.7 },
       },
     ],
     intro: { title: "Нов дом во Радовиш, ", titleItalic: "изграден да трае." },

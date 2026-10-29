@@ -1825,36 +1825,52 @@ body:has([data-compare-bar]) footer {
   }
 }
 
-/* The scrims of the photo-led opening (components/project/ProjectHeroSlideshow.tsx), the site's own values only. Top:
-   Почетна's (Оникс 70% fading out) over the hero's 58% held under the bar and the back link, as on the Проекти hero,
-   over the bar plus 250px. Bottom: Оникс 75% held behind the label, the name and the dashes (320px), then fading out,
-   at least 45% of the screen. These renders have large white façades and bright skies: with lighter scrims the gold
-   current link, the back link, the label and the name all fell under their targets. */
-.dip-scrim-top,
-.dip-scrim-bottom {
-  position: absolute;
-  inset-inline: 0;
-  pointer-events: none;
+/* The photo-led opening (components/project/ProjectHeroSlideshow.tsx): its photos always whole, on Оникс, with nothing
+   over them (no scrim). Under the opening shape (OPENING_WIDE_QUERY in lib/hero.ts, 13:10) the photo is full width right
+   under the header, then the back link and the text. From it the opening is the whole first screen: the back link under
+   the header, the photo as large as fits between it and the text at the bottom, centred, never closer to the sides than
+   --pl-gap (the gap above it); the photo's `sizes` in the component is the same sum. opening shape */
+.pl-opening {
+  display: flex;
+  flex-direction: column;
 }
-.dip-scrim-top {
-  top: 0;
-  height: calc(var(--nav-h) + 250px);
-  background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--color-onyx) 70%, transparent), transparent),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) calc(var(--nav-h) + 170px),
-      transparent 100%
-    );
+.pl-opening__stage {
+  order: -1;
+  margin-top: var(--nav-h);
 }
-.dip-scrim-bottom {
-  bottom: 0;
-  height: max(45%, 420px);
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-onyx) 75%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 75%, transparent) 320px,
-    transparent 100%
-  );
+.pl-opening__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--pl-aspect);
+}
+.pl-opening__back {
+  padding-top: 16px;
+}
+.pl-opening__text {
+  padding-top: 8px;
+  padding-bottom: 40px;
+}
+@media (min-aspect-ratio: 130/100) {
+  .pl-opening {
+    height: 100vh;
+    height: 100svh;
+  }
+  .pl-opening__back {
+    padding-top: var(--nav-h);
+  }
+  .pl-opening__stage {
+    order: 0;
+    flex: 1 1 0;
+    min-height: 0;
+    margin-top: var(--pl-gap);
+    container-type: size;
+  }
+  .pl-opening__frame {
+    width: min(100cqw - 2 * var(--pl-gap), 100cqh * var(--pl-aspect));
+    margin-inline: auto;
+  }
+  .pl-opening__text {
+    padding-top: var(--pl-gap);
+    padding-bottom: var(--pl-pad);
+  }
 }
