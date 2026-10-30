@@ -300,7 +300,7 @@ interface ProjectFields {
   };
   /**
    * Only the name, the city and the status are known so far: the project has a card on Проекти (and Завршени проекти)
-   * and a plain page of its own, and stays out of the homepage slideshow, «Другите наши проекти» and the contact form.
+   * and a plain page of its own, and stays out of the homepage slideshow and the contact form. A stub being built is in «Другите наши проекти», after the projects with a photo, with the no-photo slide.
    */
   stub?: boolean;
   /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */

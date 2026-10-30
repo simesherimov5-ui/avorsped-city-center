@@ -120,25 +120,27 @@ describe("carouselProjects and heroSlides (the real data)", () => {
 
 describe("otherProjects", () => {
   const photo = { src: "/x.jpg", alt: "", isPlaceholder: false };
-  const q = (id: string, status: Project["status"], extra: Partial<Project> = {}) =>
-    ({ id, status, heroImage: photo, ...extra }) as Project;
+  const bare = { src: "", alt: "", isPlaceholder: true };
+  const q = (id: string, status: Project["status"], heroImage = photo, extra: Partial<Project> = {}) =>
+    ({ id, status, heroImage, ...extra }) as Project;
 
-  it("leaves out the current project, the ones known only by name and the ones without a photo", () => {
+  it("lists only the ones being built, never the current project, the ones with a photo first", () => {
     const list = [
-      q("a", "completed"),
+      q("done", "completed"),
+      q("stub1", "under-construction", bare, { stub: true }),
       q("b", "under-construction"),
-      q("c", "under-construction"),
-      q("stub", "under-construction", { stub: true }),
-      q("bare", "completed", { heroImage: { src: "", alt: "", isPlaceholder: true } }),
+      q("cur", "under-construction"),
       q("soon", "upcoming"),
+      q("stub2", "under-construction", bare, { stub: true }),
+      q("c", "under-construction"),
     ];
-    expect(otherProjects(list, "c").map((x) => x.id)).toEqual(["b", "a", "soon"]);
+    expect(otherProjects(list, "cur").map((x) => x.id)).toEqual(["b", "c", "stub1", "stub2"]);
   });
-  it("lists the ones being built first, then the finished ones, and stops at six", () => {
+  it("stops at six", () => {
     const list = [
-      ...["d1", "d2", "d3", "d4"].map((id) => q(id, "completed")),
-      ...["b1", "b2", "b3", "b4"].map((id) => q(id, "under-construction")),
+      ...["s1", "s2", "s3"].map((id) => q(id, "under-construction", bare, { stub: true })),
+      ...["p1", "p2", "p3", "p4"].map((id) => q(id, "under-construction")),
     ];
-    expect(otherProjects(list, "none").map((x) => x.id)).toEqual(["b1", "b2", "b3", "b4", "d1", "d2"]);
+    expect(otherProjects(list, "none").map((x) => x.id)).toEqual(["p1", "p2", "p3", "p4", "s1", "s2"]);
   });
 });

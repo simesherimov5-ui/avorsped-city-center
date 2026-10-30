@@ -11,24 +11,23 @@ import type { Project } from "@/types";
 const WHOLE = { x: 0, y: 0, w: 100, h: 100 };
 
 function slideOf(p: Project): OtherSlide {
-  // otherProjects() only lists projects with a photo
-  const { image, lead } = slidePhoto(p)!;
+  const photo = slidePhoto(p);
   return {
     key: p.id,
     href: p.href ?? `/projects/${p.slug}`,
     name: p.name,
     eyebrow: `${p.city} · ${projectStatusLabel(p.status)}`,
     tagline: p.tagline,
-    image,
-    box: lead?.box ?? WHOLE,
-    focus: lead?.focus,
-    maxWidth: lead?.maxWidth,
+    image: photo?.image ?? null,
+    box: photo?.lead?.box ?? WHOLE,
+    focus: photo?.lead?.focus,
+    maxWidth: photo?.lead?.maxWidth,
   };
 }
 
-// A closing beat for any single-project experience (the generic project page, /development, /dojran): every other
-// project in one slideshow, the ones being built first. With one project it has no controls; with none the section is
-// not there.
+// A closing beat for any single-project experience (the generic project page, /development, /dojran): the other projects
+// being built in one slideshow, the ones with a photo first. With one project it has no controls; with none the section
+// is not there.
 export function OtherProjects({
   currentProjectId,
   light = false,

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
+import { BuildingMark } from "@/components/ui/Logo";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { CALM_EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { boxSizes } from "@/lib/image-sizes";
@@ -18,7 +19,8 @@ export interface OtherSlide {
   /** "CITY · STATUS", already joined. */
   eyebrow: string;
   tagline?: string;
-  image: { src: string; alt: string; isPlaceholder: boolean };
+  /** Null: the project has no photo yet and gets the no-photo slide. */
+  image: { src: string; alt: string; isPlaceholder: boolean } | null;
   /** The building box of the photo; the whole photo where the data has none. */
   box: PhotoBox;
   focus?: ImageFocus;
@@ -38,12 +40,22 @@ const FRAMES = [
   },
 ];
 
+/** A project without a photo yet: Оникс, a thin gold line inside the frame and the logo mark at 18% (as the no-photo card on Проекти). */
+function NoPhotoSlide() {
+  return (
+    <div aria-hidden className="absolute inset-0 flex items-center justify-center bg-onyx">
+      <div className="absolute inset-4 border border-gold/30 sm:inset-6" />
+      <BuildingMark className="text-on-chrome" style={{ height: 96, width: "auto", opacity: 0.18 }} />
+    </div>
+  );
+}
+
 const arrowButton =
   "focus-ring flex h-11 w-11 items-center justify-center border text-lg leading-none transition-colors";
 
 /**
  * «Другите наши проекти»: one project at a time in one frame (16:9, 4:5 on a phone), the photo whole on Оникс (never
- * cropped), the slide itself a link to the project. The timing, swipe, keys and pause rules are useSlideshow's, the same
+ * cropped; a project without one gets the no-photo slide), the slide itself a link to the project. The timing, swipe, keys and pause rules are useSlideshow's, the same
  * as the Радовиш Twins opening's; this one also waits while it is out of view. With one project there are no controls.
  */
 export function OtherProjectsSlideshow({ slides, light = false }: { slides: OtherSlide[]; light?: boolean }) {
@@ -69,7 +81,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
     () => {
       const el = frame.current;
       if (!el || prefersReducedMotion()) return;
-      const text = el.querySelectorAll("[data-slide-text]");
+      const text = el.firstElementChild?.querySelectorAll("[data-slide-text]") ?? [];
       gsap.set(el, { clipPath: "inset(100% 0% 0% 0%)" });
       gsap.set(text, { autoAlpha: 0, y: 12 });
       const tl = gsap.timeline({ paused: true, defaults: { ease: CALM_EASE } });
@@ -123,16 +135,20 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                 if (i === index && e.target === e.currentTarget) clearPrevious();
               }}
             >
-              <Media
-                image={slide.image}
-                tone="dark"
-                box={slide.box}
-                focus={slide.focus}
-                maxWidth={slide.maxWidth}
-                className="h-full w-full !bg-onyx"
-                sizes={boxSizes(slide.image.src, slide.box, FRAMES)}
-                defer
-              />
+              {slide.image ? (
+                <Media
+                  image={slide.image}
+                  tone="dark"
+                  box={slide.box}
+                  focus={slide.focus}
+                  maxWidth={slide.maxWidth}
+                  className="h-full w-full !bg-onyx"
+                  sizes={boxSizes(slide.image.src, slide.box, FRAMES)}
+                  defer
+                />
+              ) : (
+                <NoPhotoSlide />
+              )}
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-onyx/75 to-onyx/0"

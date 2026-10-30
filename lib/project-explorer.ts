@@ -126,15 +126,14 @@ export function slidePhoto(p: Project) {
 export const OTHER_PROJECTS_MAX = 6;
 
 /**
- * «Другите наши проекти»: the other projects that have a page of their own (not the ones known only by name, `stub`) and
- * a photo, the ones being built first, then the finished ones, each group in the order of the data; at most six.
+ * «Другите наши проекти»: the other projects being built, the ones known only by name (stub) too: first the ones with a
+ * photo, then the ones without (they get the no-photo slide), each group in the order of the data; at most six.
  */
 export function otherProjects(projects: Project[], currentId: string) {
-  const rank = (p: Project) => (p.status === "under-construction" ? 0 : p.status === "completed" ? 1 : 2);
   return projects
-    .filter((p) => p.id !== currentId && !p.stub && slidePhoto(p))
-    .map((p, i) => ({ p, i }))
-    .sort((a, b) => rank(a.p) - rank(b.p) || a.i - b.i)
+    .filter((p) => p.id !== currentId && p.status === "under-construction")
+    .map((p, i) => ({ p, i, rank: slidePhoto(p) ? 0 : 1 }))
+    .sort((a, b) => a.rank - b.rank || a.i - b.i)
     .map(({ p }) => p)
     .slice(0, OTHER_PROJECTS_MAX);
 }
