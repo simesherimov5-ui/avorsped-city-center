@@ -29,22 +29,24 @@ export interface OtherSlide {
 
 const SLIDE_MS = 6000;
 
-// The frame is 16:9 from 720px (the container is the screen less 64px of padding, 1280px at most) and 4:5 below.
+// The frame is as wide as the window: 4:5 below 720px, from 720px clamp(420px, 70svh, 760px) high. (`sizes` only needs the
+// width as a hint, so 100vw is fine here: the frame itself is a plain block, never wider than the page.)
 const FRAMES = [
-  { media: "(max-width: 719px)", w: "calc(100vw - 40px)", h: "calc((100vw - 40px) * 1.25)", top: "0px" },
-  {
-    media: "(min-width: 720px)",
-    w: "min(100vw - 64px, 1280px)",
-    h: "min((100vw - 64px) * 0.5625, 720px)",
-    top: "0px",
-  },
+  { media: "(max-width: 719px)", w: "100vw", h: "calc(100vw * 1.25)", top: "0px" },
+  { media: "(min-width: 720px)", w: "100vw", h: "clamp(420px, 70svh, 760px)", top: "0px" },
 ];
+
+// The page's container: the head row, the text on the slides and the controls all start at the same left edge.
+const CONTAINER = "mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10";
 
 /** A project without a photo yet: Оникс, a thin gold line inside the frame and the logo mark at 18% (as the no-photo card on Проекти). */
 function NoPhotoSlide() {
   return (
     <div aria-hidden className="absolute inset-0 flex items-center justify-center bg-onyx">
-      <div className="absolute inset-4 border border-gold/30 sm:inset-6" />
+      {/* the thin line runs just outside the text column, so it follows the container, not the screen edge */}
+      <div className={cn(CONTAINER, "absolute inset-0 py-4 sm:py-6")}>
+        <div className="-mx-3 h-full border border-gold/30 sm:-mx-4" />
+      </div>
       <BuildingMark className="text-on-chrome" style={{ height: 96, width: "auto", opacity: 0.18 }} />
     </div>
   );
@@ -54,7 +56,7 @@ const arrowButton =
   "focus-ring flex h-11 w-11 items-center justify-center border text-lg leading-none transition-colors";
 
 /**
- * «Другите наши проекти»: one project at a time in one frame (16:9, 4:5 on a phone), the photo whole on Оникс (never
+ * «Другите наши проекти»: one project at a time in one frame (the window's full width, 4:5 on a phone, clamp(420px, 70svh, 760px) high from 720px), the photo whole on Оникс (never
  * cropped; a project without one gets the no-photo slide), the slide itself a link to the project. The timing, swipe, keys and pause rules are useSlideshow's, the same
  * as the Радовиш Twins opening's; this one also waits while it is out of view. With one project there are no controls.
  */
@@ -105,7 +107,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
     : "border-on-chrome/40 text-on-chrome hover:border-gold hover:text-gold";
 
   return (
-    <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+    <>
       <section
         ref={ref}
         aria-roledescription="carousel"
@@ -114,7 +116,10 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
         {...sectionProps}
         className="focus-ring touch-pan-y"
       >
-        <div ref={frame} className="relative isolate aspect-[4/5] overflow-hidden bg-onyx min-[720px]:aspect-video">
+        <div
+          ref={frame}
+          className="relative isolate aspect-[4/5] overflow-hidden bg-onyx min-[720px]:aspect-auto min-[720px]:h-[clamp(420px,70svh,760px)]"
+        >
           {slides.map((slide, i) => (
             <div
               key={slide.key}
@@ -153,26 +158,25 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-onyx/75 to-onyx/0"
               />
-              <Link
-                href={slide.href}
-                className="focus-ring absolute inset-0 flex flex-col justify-end px-5 pb-6 text-on-chrome sm:px-8 sm:pb-9"
-              >
-                <span data-slide-text className="eyebrow uppercase text-gold">
-                  {slide.eyebrow}
-                </span>
-                <span
-                  data-slide-text
-                  className="mt-2 block font-display text-(length:--fs-h3) font-normal leading-[1.2]"
-                >
-                  {slide.name}
-                </span>
-                {slide.tagline && (
-                  <span data-slide-text className="mt-1 block truncate text-sm text-on-chrome/85">
-                    {slide.tagline}
+              <Link href={slide.href} className="focus-ring absolute inset-0 flex items-end text-on-chrome">
+                <span className={cn(CONTAINER, "block pb-6 sm:pb-9")}>
+                  <span data-slide-text className="eyebrow uppercase text-gold">
+                    {slide.eyebrow}
                   </span>
-                )}
-                <span data-slide-text className="mt-4 block text-label font-semibold uppercase tracking-label">
-                  Разгледајте го проектот →
+                  <span
+                    data-slide-text
+                    className="mt-2 block font-display text-(length:--fs-h3) font-normal leading-[1.2]"
+                  >
+                    {slide.name}
+                  </span>
+                  {slide.tagline && (
+                    <span data-slide-text className="mt-1 block truncate text-sm text-on-chrome/85">
+                      {slide.tagline}
+                    </span>
+                  )}
+                  <span data-slide-text className="mt-4 block text-label font-semibold uppercase tracking-label">
+                    Разгледајте го проектот →
+                  </span>
                 </span>
               </Link>
             </div>
@@ -180,7 +184,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
         </div>
 
         {count > 1 && (
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+          <div className={cn(CONTAINER, "mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1")}>
             <div className="flex basis-full items-center sm:basis-auto sm:flex-1">
               {slides.map((slide, i) => (
                 <button
@@ -240,6 +244,6 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }
