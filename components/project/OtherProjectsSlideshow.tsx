@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
-import { NoPhoto } from "@/components/ui/NoPhoto";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { CALM_EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { boxSizes } from "@/lib/image-sizes";
@@ -19,8 +18,7 @@ export interface OtherSlide {
   /** "CITY · STATUS", already joined. */
   eyebrow: string;
   tagline?: string;
-  /** Null: the project has no photo yet and gets the site's no-photo card. */
-  image: { src: string; alt: string; isPlaceholder: boolean } | null;
+  image: { src: string; alt: string; isPlaceholder: boolean };
   /** The building box of the photo; the whole photo where the data has none. */
   box: PhotoBox;
   focus?: ImageFocus;
@@ -125,20 +123,16 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                 if (i === index && e.target === e.currentTarget) clearPrevious();
               }}
             >
-              {slide.image && !slide.image.isPlaceholder && slide.image.src ? (
-                <Media
-                  image={slide.image}
-                  tone="dark"
-                  box={slide.box}
-                  focus={slide.focus}
-                  maxWidth={slide.maxWidth}
-                  className="h-full w-full !bg-onyx"
-                  sizes={boxSizes(slide.image.src, slide.box, FRAMES)}
-                  defer
-                />
-              ) : (
-                <NoPhoto />
-              )}
+              <Media
+                image={slide.image}
+                tone="dark"
+                box={slide.box}
+                focus={slide.focus}
+                maxWidth={slide.maxWidth}
+                className="h-full w-full !bg-onyx"
+                sizes={boxSizes(slide.image.src, slide.box, FRAMES)}
+                defer
+              />
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-onyx/75 to-onyx/0"

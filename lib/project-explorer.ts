@@ -115,15 +115,26 @@ export function heroSlides(projects: Project[]) {
   return [...all.filter((p) => hasPhoto(p.slideImage)), ...all.filter((p) => !hasPhoto(p.slideImage))];
 }
 
+/** The photo a project's slide shows: the first photo of a photo-led opening, else the hero photo; never a placeholder. */
+export function slidePhoto(p: Project) {
+  const lead = p.layout === "photo-led" ? p.openingSlides[0] : undefined;
+  const image = lead?.image ?? p.heroImage;
+  return hasPhoto(image) ? { image, lead } : undefined;
+}
+
+/** The most slides «Другите наши проекти» shows. */
+export const OTHER_PROJECTS_MAX = 6;
+
 /**
- * «Другите наши проекти»: every project but the current one, the ones being built first, then the finished ones (then the
- * coming ones), each group in the order of the data.
+ * «Другите наши проекти»: the other projects that have a page of their own (not the ones known only by name, `stub`) and
+ * a photo, the ones being built first, then the finished ones, each group in the order of the data; at most six.
  */
 export function otherProjects(projects: Project[], currentId: string) {
   const rank = (p: Project) => (p.status === "under-construction" ? 0 : p.status === "completed" ? 1 : 2);
   return projects
-    .filter((p) => p.id !== currentId)
+    .filter((p) => p.id !== currentId && !p.stub && slidePhoto(p))
     .map((p, i) => ({ p, i }))
     .sort((a, b) => rank(a.p) - rank(b.p) || a.i - b.i)
-    .map(({ p }) => p);
+    .map(({ p }) => p)
+    .slice(0, OTHER_PROJECTS_MAX);
 }

@@ -119,7 +119,26 @@ describe("carouselProjects and heroSlides (the real data)", () => {
 });
 
 describe("otherProjects", () => {
-  it("leaves out the current project, the ones being built first, then the finished ones, then the coming ones", () => {
-    expect(otherProjects(data, "c").map((x) => x.id)).toEqual(["b", "a", "f", "d", "e"]);
+  const photo = { src: "/x.jpg", alt: "", isPlaceholder: false };
+  const q = (id: string, status: Project["status"], extra: Partial<Project> = {}) =>
+    ({ id, status, heroImage: photo, ...extra }) as Project;
+
+  it("leaves out the current project, the ones known only by name and the ones without a photo", () => {
+    const list = [
+      q("a", "completed"),
+      q("b", "under-construction"),
+      q("c", "under-construction"),
+      q("stub", "under-construction", { stub: true }),
+      q("bare", "completed", { heroImage: { src: "", alt: "", isPlaceholder: true } }),
+      q("soon", "upcoming"),
+    ];
+    expect(otherProjects(list, "c").map((x) => x.id)).toEqual(["b", "a", "soon"]);
+  });
+  it("lists the ones being built first, then the finished ones, and stops at six", () => {
+    const list = [
+      ...["d1", "d2", "d3", "d4"].map((id) => q(id, "completed")),
+      ...["b1", "b2", "b3", "b4"].map((id) => q(id, "under-construction")),
+    ];
+    expect(otherProjects(list, "none").map((x) => x.id)).toEqual(["b1", "b2", "b3", "b4", "d1", "d2"]);
   });
 });

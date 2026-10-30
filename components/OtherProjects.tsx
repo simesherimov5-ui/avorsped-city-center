@@ -4,23 +4,22 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data";
 import { projectStatusLabel } from "@/lib/format";
-import { otherProjects } from "@/lib/project-explorer";
+import { otherProjects, slidePhoto } from "@/lib/project-explorer";
 import type { Project } from "@/types";
 
 // no building box in the data yet (docs/content-needed.md): the whole photo is the box, so it is never cropped
 const WHOLE = { x: 0, y: 0, w: 100, h: 100 };
 
 function slideOf(p: Project): OtherSlide {
-  const lead = p.layout === "photo-led" ? p.openingSlides[0] : undefined;
-  const image = lead?.image ?? p.heroImage;
-  const hasPhoto = !image.isPlaceholder && image.src !== "";
+  // otherProjects() only lists projects with a photo
+  const { image, lead } = slidePhoto(p)!;
   return {
     key: p.id,
     href: p.href ?? `/projects/${p.slug}`,
     name: p.name,
     eyebrow: `${p.city} · ${projectStatusLabel(p.status)}`,
     tagline: p.tagline,
-    image: hasPhoto ? image : null,
+    image,
     box: lead?.box ?? WHOLE,
     focus: lead?.focus,
     maxWidth: lead?.maxWidth,
