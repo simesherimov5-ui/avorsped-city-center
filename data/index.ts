@@ -2,6 +2,7 @@ import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./g
 import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
 import { listNames } from "@/lib/format";
+import { CONTACT_EMAIL } from "@/lib/site";
 import { carouselProjects } from "@/lib/project-explorer";
 
 const generated = generateDevelopment();
@@ -755,7 +756,7 @@ export const companyInfo = {
   ],
   address: "Ул. Ленинова, ГТЦ Глобал, 4-ти кат, Струмица",
   phone: "+389 2 3123 456",
-  email: "info@javorsped.mk",
+  email: CONTACT_EMAIL,
   // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
   // empty, the Контакт page leaves that row out rather than guessing a number.
   messengerNumber: "",
