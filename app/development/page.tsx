@@ -137,7 +137,7 @@ export default function DevelopmentPage() {
             }
           />
 
-          <ProjectBook project={cityCenter} />
+          <ProjectBook project={cityCenter} scrollTarget="izberete-zgrada" />
         </>
       )}
 

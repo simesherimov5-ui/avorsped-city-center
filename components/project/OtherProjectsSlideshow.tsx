@@ -1,9 +1,12 @@
 "use client";
 
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { PauseButton } from "@/components/ui/PauseButton";
+import { CALM_EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { boxSizes } from "@/lib/image-sizes";
 import { cn } from "@/lib/cn";
 import { useSlideshow } from "@/lib/useSlideshow";
@@ -61,6 +64,32 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
     sectionProps,
   } = useSlideshow({ count: slides.length, pauseOffscreen: true });
   const count = slides.length;
+  const frame = useRef<HTMLDivElement>(null);
+
+  // Once, as the frame comes into view: it opens with a clip from the bottom (1.1s), then the first slide's text fades in.
+  useGSAP(
+    () => {
+      const el = frame.current;
+      if (!el || prefersReducedMotion()) return;
+      const text = el.querySelectorAll("[data-slide-text]");
+      gsap.set(el, { clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(text, { autoAlpha: 0, y: 12 });
+      const tl = gsap.timeline({ paused: true, defaults: { ease: CALM_EASE } });
+      tl.to(el, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, clearProps: "clipPath" }).to(
+        text,
+        { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, clearProps: "opacity,visibility,transform" },
+        0.9
+      );
+      const trigger = ScrollTrigger.create({
+        trigger: el,
+        start: "top 85%",
+        once: true,
+        onEnter: () => void tl.play(),
+      });
+      return () => trigger.kill();
+    },
+    { scope: frame }
+  );
   const lineTone = light
     ? "border-ink/30 text-ink hover:border-gold-deep hover:text-gold-deep"
     : "border-on-chrome/40 text-on-chrome hover:border-gold hover:text-gold";
@@ -75,7 +104,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
         {...sectionProps}
         className="focus-ring touch-pan-y"
       >
-        <div className="relative isolate aspect-[4/5] overflow-hidden bg-onyx min-[720px]:aspect-video">
+        <div ref={frame} className="relative isolate aspect-[4/5] overflow-hidden bg-onyx min-[720px]:aspect-video">
           {slides.map((slide, i) => (
             <div
               key={slide.key}
@@ -118,14 +147,21 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                 href={slide.href}
                 className="focus-ring absolute inset-0 flex flex-col justify-end px-5 pb-6 text-on-chrome sm:px-8 sm:pb-9"
               >
-                <span className="eyebrow uppercase text-gold">{slide.eyebrow}</span>
-                <span className="mt-2 block font-display text-(length:--fs-h3) font-normal leading-[1.2]">
+                <span data-slide-text className="eyebrow uppercase text-gold">
+                  {slide.eyebrow}
+                </span>
+                <span
+                  data-slide-text
+                  className="mt-2 block font-display text-(length:--fs-h3) font-normal leading-[1.2]"
+                >
                   {slide.name}
                 </span>
                 {slide.tagline && (
-                  <span className="mt-1 block truncate text-sm text-on-chrome/85">{slide.tagline}</span>
+                  <span data-slide-text className="mt-1 block truncate text-sm text-on-chrome/85">
+                    {slide.tagline}
+                  </span>
                 )}
-                <span className="mt-4 block text-label font-semibold uppercase tracking-label">
+                <span data-slide-text className="mt-4 block text-label font-semibold uppercase tracking-label">
                   Разгледајте го проектот →
                 </span>
               </Link>
