@@ -1,3 +1,5 @@
+import type { BoxFrame } from "@/lib/image-sizes";
+
 /**
  * The width from which the text of a full-width photo hero (the Проекти slideshow, a project's opening) lies on the
  * photo; at this width and under, the photo is at the top and the text below it on Оникс. One value for both heroes:
@@ -22,6 +24,18 @@ export const NAV_HEIGHTS: readonly (readonly [minWidth: number, height: number])
   [640, 69],
   [0, 61],
 ];
+
+/**
+ * The layouts of a photo under the clear header on a wide screen, for boxSizes: one per header height, the frame the
+ * full width and `h` high, its building box kept 16px under the header (--photo-top in app/globals.css).
+ */
+export const wideBoxFrames = (h: string): BoxFrame[] =>
+  NAV_HEIGHTS.map(([min, nav]) => ({
+    media: `${OPENING_WIDE_QUERY}${min ? ` and (min-width: ${min}px)` : ""}`,
+    w: "100vw",
+    h,
+    top: `${nav + 16}px`,
+  }));
 
 /**
  * The pages whose first screen the header floats over (clear until the page scrolls): the full photo of Почетна and

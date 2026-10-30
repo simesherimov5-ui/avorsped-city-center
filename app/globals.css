@@ -1866,11 +1866,12 @@ body:has([data-compare-bar]) footer {
   }
 }
 
-/* The photo-led opening (components/project/ProjectHeroSlideshow.tsx): its photos always whole, on Оникс, with nothing
-   over them (no scrim). Under the opening shape (OPENING_WIDE_QUERY in lib/hero.ts, 13:10) the photo is full width right
-   under the header, then the back link and the text. From it the opening is the whole first screen: the back link under
-   the header, the photo as large as fits between it and the text at the bottom, centred, never closer to the sides than
-   --pl-gap (the gap above it); the photo's `sizes` in the component is the same sum. opening shape */
+/* The photo-led opening (components/project/ProjectHeroSlideshow.tsx). Under the opening shape (OPENING_WIDE_QUERY in
+   lib/hero.ts, 13:10) the photo is whole and full width right under the header, then the back link and the text, on
+   Оникс with nothing over the photo. From it the opening is the whole first screen, edge to edge, the text on the photo:
+   each photo covers the screen unless that would cut its building box or put it under the header and 16px (--photo-top,
+   .media-box), and the only shading is one gradient behind the text at the bottom and a light one under the clear
+   header. opening shape */
 .pl-opening {
   display: flex;
   flex-direction: column;
@@ -1884,6 +1885,9 @@ body:has([data-compare-bar]) footer {
   width: 100%;
   aspect-ratio: var(--pl-aspect);
 }
+.pl-opening__shade {
+  display: none;
+}
 .pl-opening__back {
   padding-top: 16px;
 }
@@ -1893,25 +1897,52 @@ body:has([data-compare-bar]) footer {
 }
 @media (min-aspect-ratio: 130/100) {
   .pl-opening {
+    --photo-top: calc(var(--nav-h) + 16px);
     height: 100vh;
     height: 100svh;
+    justify-content: space-between;
+  }
+  .pl-opening__stage,
+  .pl-opening__frame {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    width: auto;
+    aspect-ratio: auto;
+  }
+  /* The only shading, measured against the brightest 1% of each photo behind each text at every wide size, all three
+     slides, for 4.5:1 or more: Оникс 78% behind the header (its gold current link is the darkest text), 55% at the back
+     link, gone 180px under the header; at the bottom Оникс 70% behind the label and the name (--pl-hold: the space,
+     the name, the label and 16px), gone 200px above them. */
+  .pl-opening__shade {
+    --pl-hold: calc(56px + 0.95 * clamp(56px, 8vw, 128px) + 16px + 20.4px + 16px);
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-onyx) 78%, transparent) var(--nav-h),
+        color-mix(in srgb, var(--color-onyx) 55%, transparent) calc(var(--nav-h) + 60px),
+        transparent calc(var(--nav-h) + 180px)
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-onyx) 70%, transparent) var(--pl-hold),
+        transparent calc(var(--pl-hold) + 200px)
+      );
+  }
+  .pl-opening__back,
+  .pl-opening__text {
+    position: relative;
+    z-index: 1;
   }
   .pl-opening__back {
-    padding-top: var(--nav-h);
-  }
-  .pl-opening__stage {
-    order: 0;
-    flex: 1 1 0;
-    min-height: 0;
-    margin-top: var(--pl-gap);
-    container-type: size;
-  }
-  .pl-opening__frame {
-    width: min(100cqw - 2 * var(--pl-gap), 100cqh * var(--pl-aspect));
-    margin-inline: auto;
+    padding-top: calc(var(--nav-h) + 16px);
   }
   .pl-opening__text {
-    padding-top: var(--pl-gap);
-    padding-bottom: var(--pl-pad);
+    padding-top: 0;
+    padding-bottom: 56px;
   }
 }
