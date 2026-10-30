@@ -27,14 +27,16 @@ export const NAV_HEIGHTS: readonly (readonly [minWidth: number, height: number])
 
 /**
  * The layouts of a photo under the clear header on a wide screen, for boxSizes: one per header height, the frame the
- * full width and `h` high, its building box kept 16px under the header (--photo-top in app/globals.css).
+ * full width and `h` high, its building box kept 16px under the header (--photo-top in app/globals.css) and above
+ * `bottom` (--photo-bottom) when the frame can be taller than the screen.
  */
-export const wideBoxFrames = (h: string): BoxFrame[] =>
+export const wideBoxFrames = (h: string, bottom?: string): BoxFrame[] =>
   NAV_HEIGHTS.map(([min, nav]) => ({
     media: `${OPENING_WIDE_QUERY}${min ? ` and (min-width: ${min}px)` : ""}`,
     w: "100vw",
     h,
     top: `${nav + 16}px`,
+    ...(bottom && { bottom }),
   }));
 
 /**

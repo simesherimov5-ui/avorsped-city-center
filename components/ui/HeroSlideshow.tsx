@@ -6,7 +6,7 @@ import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useMediaQuery } from "@/lib/useMediaQuery";
-import type { ImageFocus } from "@/types";
+import type { ImageFocus, PhotoBox } from "@/types";
 
 const subscribeVisibility = (onChange: () => void) => {
   document.addEventListener("visibilitychange", onChange);
@@ -45,6 +45,9 @@ export interface HeroSlide {
   focus?: ImageFocus;
   /** The photo's own width in pixels (no wider variant is requested). */
   maxWidth?: number;
+  /** The photo's building box (Media's `box`), where the hero keeps the building whole; then also its `sizes`. */
+  box?: PhotoBox;
+  sizes?: string;
   /** The name of the slide for the indicator (read by screen readers). */
   label: string;
 }
@@ -194,12 +197,14 @@ export function HeroSlideshow({
                 <Media
                   image={s.image}
                   focus={s.focus}
+                  box={s.box}
                   maxWidth={s.maxWidth}
                   tone="dark"
                   alwaysCover
-                  className="h-full w-full !bg-transparent"
+                  // a photo drawn smaller than the frame for its building sits on Оникс, so it fades in as a whole
+                  className={s.box ? "h-full w-full !bg-onyx" : "h-full w-full !bg-transparent"}
                   // the frame is the first screen (or 16:9 on a phone): the photo covers it, as wide as the screen
-                  sizes="100vw"
+                  sizes={s.sizes ?? "100vw"}
                   priority={i === 0}
                   defer={i !== 0}
                 />

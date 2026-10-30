@@ -536,6 +536,31 @@ h4 {
     padding-top: calc(var(--nav-h) + 40px);
   }
 }
+/* A slide of this hero with a building box (the Радовиш Twins render, Media's `box`): on a wide screen (OPENING_WIDE_QUERY in
+   lib/hero.ts) its building stays whole and 16px under the clear header, the photo drawn smaller on Оникс if it has to;
+   narrower it covers the hero like every other slide, centred, and from 1024px held at 50% 55% as they are. */
+.photo-hero--top .media-box__photo {
+  --w: var(--cover-w);
+  --x: var(--cover-x);
+  --y: var(--cover-y);
+}
+@media (min-width: 1024px) {
+  .photo-hero--top .media-box__photo {
+    --fy: 0.55;
+  }
+}
+@media (min-aspect-ratio: 130/100) {
+  .photo-hero--top {
+    --photo-top: calc(var(--nav-h) + 16px);
+    /* the hero starts at the top of the window and is at least 560px: the building stays on the first screen */
+    --photo-bottom: 100svh;
+  }
+  .photo-hero--top .media-box__photo {
+    --w: var(--box-w);
+    --x: var(--box-x);
+    --y: var(--box-y);
+  }
+}
 /* 1024–1100px: the shared full-screen layout (.photo-hero from 1101px, with its fill variant), for this hero only */
 @media (min-width: 1024px) and (max-width: 1100px) {
   .photo-hero--top {
@@ -637,7 +662,8 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
 }
 
 /* A photo placed by its building box (Media's `box`): as large as it can be without the box going above --photo-top
-   (set by a frame that runs under the header) or past a side, never larger than covering the frame; held on its focus
+   (set by a frame that runs under the header), below --photo-bottom (set by a frame taller than the screen: the bottom
+   of the screen) or past a side, never larger than covering the frame; held on its focus
    and moved only as far as the box needs. Where it stops short of the frame, the frame's own colour shows and the photo
    fades into it over at most 64px (no fade on an edge that reaches the frame). Media sets the numbers: --a (width ÷
    height), the box as fractions (--bx, --by, --bw, --bh) and the focus (--fx, --fy). A frame that wants the plain cover
@@ -647,15 +673,18 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   container-type: size;
 }
 .media-box__photo {
+  --fx: 0.5;
+  --fy: 0.5;
   --cover-w: max(100cqw, 100cqh * var(--a));
   --cover-x: calc((100cqw - var(--w)) * var(--fx));
   --cover-y: calc((100cqh - var(--h)) * var(--fy));
-  --box-w: min(var(--cover-w), 100cqw / var(--bw), (100cqh - var(--photo-top, 0px)) * var(--a) / var(--bh));
+  --box-bottom: min(100cqh, var(--photo-bottom, 100cqh));
+  --box-w: min(var(--cover-w), 100cqw / var(--bw), (var(--box-bottom) - var(--photo-top, 0px)) * var(--a) / var(--bh));
   --box-x: clamp(-1 * var(--bx) * var(--w), var(--cover-x), 100cqw - (var(--bx) + var(--bw)) * var(--w));
   --box-y: clamp(
     var(--photo-top, 0px) - var(--by) * var(--h),
     var(--cover-y),
-    100cqh - (var(--by) + var(--bh)) * var(--h)
+    var(--box-bottom) - (var(--by) + var(--bh)) * var(--h)
   );
   --w: var(--box-w);
   --h: calc(var(--w) / var(--a));

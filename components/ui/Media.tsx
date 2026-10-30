@@ -76,7 +76,7 @@ export function Media({
   quality?: number;
   /**
    * The rectangle of the photo that must stay whole (the project's buildings, in % of the photo): the photo is drawn as
-   * large as it can be with the box below the frame's --photo-top and inside its sides, never larger than covering the
+   * large as it can be with the box between the frame's --photo-top and --photo-bottom and inside its sides, never larger than covering the
    * frame, held on `focus` (the centre by default). Where it stops short, the frame's own colour shows. The `sizes`
    * to go with it: boxSizes in lib/image-sizes.ts.
    */
@@ -101,8 +101,8 @@ export function Media({
       "--by": percentToFraction(box.y),
       "--bw": percentToFraction(box.w),
       "--bh": percentToFraction(box.h),
-      "--fx": percentToFraction(focus?.x ?? 50),
-      "--fy": percentToFraction(focus?.y ?? 50),
+      // the focus only when given: otherwise the frame's CSS says where (the centre by default)
+      ...(focus && { "--fx": percentToFraction(focus.x), "--fy": percentToFraction(focus.y) }),
     } as CSSProperties;
     return (
       <div className={cn("media-box relative overflow-hidden bg-espresso", className)}>

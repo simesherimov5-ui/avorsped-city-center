@@ -38,7 +38,7 @@ export function coverSizes(src: string, frames: Frame[]): string {
 export const percentToFraction = (percent: number) => String(+(percent / 100).toFixed(4));
 
 /** One layout of a frame for a photo placed by its building box: a Frame with its `media` and `top`, the CSS length the box stays under. */
-export type BoxFrame = Frame & { media: string; top: string };
+export type BoxFrame = Frame & { media: string; top: string; bottom?: string };
 
 /**
  * The `sizes` of a photo placed by its building box (Media's `box`, .media-box in globals.css): the width the layout
@@ -48,6 +48,6 @@ export type BoxFrame = Frame & { media: string; top: string };
 export function boxSizes(src: string, box: PhotoBox, frames: BoxFrame[], fallback = "100vw"): string {
   const a = (aspectOf(src) ?? 16 / 9).toFixed(4);
   const value = (f: BoxFrame) =>
-    `min(max(${f.w}, ${f.h} * ${a}), ${f.w} / ${percentToFraction(box.w)}, (${f.h} - ${f.top}) * ${a} / ${percentToFraction(box.h)})`;
+    `min(max(${f.w}, ${f.h} * ${a}), ${f.w} / ${percentToFraction(box.w)}, (${f.bottom ? `min(${f.h}, ${f.bottom})` : f.h} - ${f.top}) * ${a} / ${percentToFraction(box.h)})`;
   return [...frames.map((f) => `${f.media} ${value(f)}`), fallback].join(", ");
 }
