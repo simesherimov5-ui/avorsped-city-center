@@ -1,25 +1,19 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent } from "react";
+import type { CSSProperties } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { useI18n } from "@/lib/i18n";
 import { wideBoxFrames } from "@/lib/hero";
 import { aspectOf, boxSizes } from "@/lib/image-sizes";
-import { useMediaQuery } from "@/lib/useMediaQuery";
+import { useSlideshow } from "@/lib/useSlideshow";
 import { cn } from "@/lib/cn";
 import type { PhotoBox } from "@/types";
 
 type Slide = { image: { src: string; alt: string; isPlaceholder: boolean }; maxWidth?: number; box: PhotoBox };
 
 const SLIDE_MS = 7000;
-const SWIPE_PX = 50;
-
-const subscribeVisibility = (onChange: () => void) => {
-  document.addEventListener("visibilitychange", onChange);
-  return () => document.removeEventListener("visibilitychange", onChange);
-};
 
 /**
  * The opening of a photo-led project page, with the header clear over it. On a wide screen (OPENING_WIDE_QUERY in
@@ -46,63 +40,16 @@ export function ProjectHeroSlideshow({
   backHref?: string;
 }) {
   const { t } = useI18n();
-  const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const [index, setIndex] = useState(0);
-  // the photo being faded over: it stays fully shown underneath until the new one has come in
-  const [previous, setPrevious] = useState<number | null>(null);
-  // each move of the visitor restarts the 7s of the photo they chose
-  const [restart, setRestart] = useState(0);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [stopped, setStopped] = useState(false);
-  const tabHidden = useSyncExternalStore(
-    subscribeVisibility,
-    () => document.hidden,
-    () => false
-  );
-  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  const { reduce, index, previous, clearPrevious, restart, stopped, toggleStop, paused, show, goTo, sectionProps } =
+    useSlideshow({ count: slides.length });
   const count = slides.length;
-  const paused = hovered || focused || tabHidden || stopped;
   const aspect = aspectOf(slides[0].image.src) ?? 16 / 9;
-
-  const show = (i: number) => {
-    const next = (i + count) % count;
-    if (next === index) return;
-    setPrevious(reduce ? null : index);
-    setIndex(next);
-  };
-  const goTo = (i: number) => {
-    show(i);
-    setRestart((n) => n + 1);
-  };
-  const onPointerDown = (e: PointerEvent) => {
-    if (e.pointerType !== "mouse") swipeStart.current = { x: e.clientX, y: e.clientY };
-  };
-  const onPointerUp = (e: PointerEvent) => {
-    const start = swipeStart.current;
-    swipeStart.current = null;
-    if (!start || count < 2) return;
-    const dx = e.clientX - start.x;
-    if (Math.abs(dx) > SWIPE_PX && Math.abs(dx) > Math.abs(e.clientY - start.y)) goTo(index + (dx < 0 ? 1 : -1));
-  };
 
   return (
     <section
       aria-roledescription="carousel"
       aria-label={name}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerCancel={() => (swipeStart.current = null)}
-      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
-      onFocus={(e) => setFocused(e.target.matches(":focus-visible"))}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "ArrowLeft") goTo(index - 1);
-        else if (e.key === "ArrowRight") goTo(index + 1);
-      }}
+      {...sectionProps}
       className="pl-opening relative isolate touch-pan-y overflow-hidden bg-onyx text-paper"
     >
       <div className="pl-opening__back mx-auto w-full max-w-[1320px] px-[5%]">
@@ -134,7 +81,7 @@ export function ProjectHeroSlideshow({
                     : "z-0 opacity-0"
               )}
               onTransitionEnd={(e) => {
-                if (i === index && e.target === e.currentTarget) setPrevious(null);
+                if (i === index && e.target === e.currentTarget) clearPrevious();
               }}
             >
               <Media
@@ -190,7 +137,7 @@ export function ProjectHeroSlideshow({
                 </span>
               </button>
             ))}
-            <PauseButton paused={stopped || reduce} onToggle={() => !reduce && setStopped((s) => !s)} />
+            <PauseButton paused={stopped || reduce} onToggle={toggleStop} />
           </div>
         )}
       </div>

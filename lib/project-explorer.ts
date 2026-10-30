@@ -114,3 +114,16 @@ export function heroSlides(projects: Project[]) {
   const all = carouselProjects(projects);
   return [...all.filter((p) => hasPhoto(p.slideImage)), ...all.filter((p) => !hasPhoto(p.slideImage))];
 }
+
+/**
+ * «Другите наши проекти»: every project but the current one, the ones being built first, then the finished ones (then the
+ * coming ones), each group in the order of the data.
+ */
+export function otherProjects(projects: Project[], currentId: string) {
+  const rank = (p: Project) => (p.status === "under-construction" ? 0 : p.status === "completed" ? 1 : 2);
+  return projects
+    .filter((p) => p.id !== currentId)
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => rank(a.p) - rank(b.p) || a.i - b.i)
+    .map(({ p }) => p);
+}

@@ -8,6 +8,7 @@ import {
   filterProjects,
   groupByCity,
   heroSlides,
+  otherProjects,
   parseChoices,
   projectsText,
 } from "./project-explorer";
@@ -114,5 +115,11 @@ describe("carouselProjects and heroSlides (the real data)", () => {
     ).toEqual(["city-center", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
     // the data itself is untouched
     expect(projects.find((x) => x.id === "boro-pochkov")?.heroImage.isPlaceholder).toBe(true);
+  });
+});
+
+describe("otherProjects", () => {
+  it("leaves out the current project, the ones being built first, then the finished ones, then the coming ones", () => {
+    expect(otherProjects(data, "c").map((x) => x.id)).toEqual(["b", "a", "f", "d", "e"]);
   });
 });

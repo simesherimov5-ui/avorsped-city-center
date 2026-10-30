@@ -236,6 +236,11 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 - **Where:** the environment variable `NEXT_PUBLIC_SITE_URL` in Vercel (canonical links, sitemap, share images).
 - **Needed:** the domain the site will live on, e.g. `https://<domain>`.
 
+### Building boxes for the slide photos
+
+- **Where:** the `box` of each project's slide photo in `data/index.ts` (read by «Другите наши проекти»; until it is there the whole photo is the box and sits on Оникс).
+- **Needed:** building boxes for every project's slide photo (from the photo audit).
+
 ### Радовиш Twins
 
 - **Where:** the `radovish-twins` entry in `data/index.ts` (its page is `/projects/radovish-twins`).
