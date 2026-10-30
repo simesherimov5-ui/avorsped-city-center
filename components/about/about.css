@@ -281,8 +281,10 @@
   .ab-duo {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* not sticky in one column; still relative, so its photo layers (absolute, inset 0) stay inside it: static, they
+     spread over the whole page wherever no transform happened to hold them (reduced motion) */
   .ab-duo-photo {
-    position: static;
+    position: relative;
     aspect-ratio: 4 / 3;
   }
 }
