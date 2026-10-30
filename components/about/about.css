@@ -142,7 +142,7 @@
 }
 .ab-story-text {
   margin: 24px 0 0;
-  /* The statement is a long text, so it is Golos Text (Cormorant Garamond is for headings); its accent words are coloured, not
+  /* The statement is a long text, so it is Montserrat (the serif, here Cormorant Garamond, is for headings); its accent words are coloured, not
      slanted. */
   font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;

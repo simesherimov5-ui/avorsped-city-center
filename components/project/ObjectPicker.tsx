@@ -12,7 +12,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * The object picker of a project with a drawn site plan, working like City Center's masterplan: the plan on the left (its
  * own fixed proportions, so it never zooms, crops or moves), the chosen object's panel on the right (under the plan on a
  * phone) and the buttons 01–04 under the panel, always in step with the plan. The plan is drawn from the data (streets,
- * the plot, parking, lawns); each object on it is a real button (the number in Cormorant Garamond; chosen = filled Бронза with a
+ * the plot, parking, lawns); each object on it is a real button (the number in Playfair; chosen = filled Бронза with a
  * cream number; a mouse only tints it). Nothing is chosen at first. The panel keeps one height whatever it shows.
  */
 export function ObjectPicker({

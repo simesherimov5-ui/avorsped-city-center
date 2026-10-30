@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 // (next/og draws with Satori: absolutely placed boxes need explicit top / left / right / bottom, not `inset`.)
-// The social share image (1200 × 630): a darkened photo of the project, a copper rule, and the name in Cormorant Garamond.
+// The social share image (1200 × 630): a darkened photo of the project, a copper rule, and the name in Playfair Display.
 // Colours are three of the site's six (Травертин, Оникс, Светол бакар), written as rgb() because an image has no CSS
 // variables: keep them equal to the tokens in app/globals.css.
 export const OG_SIZE = { width: 1200, height: 630 };
@@ -26,9 +26,8 @@ type OgOptions = {
 };
 
 export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
-  // The font file holds the Latin and Macedonian Cyrillic letters (next/og's default font has no Cyrillic). It is the
-  // site's heading face at the weight its headings are drawn at (500), as a .ttf because next/og cannot read woff2.
-  const font = await readFile(join(process.cwd(), "assets/fonts/CormorantGaramond-Medium.ttf"));
+  // The font file holds the Latin and Macedonian Cyrillic letters (next/og's default font has no Cyrillic).
+  const font = await readFile(join(process.cwd(), "assets/fonts/PlayfairDisplay-Regular.woff"));
   const picture = photo
     ? `data:image/jpeg;base64,${(await readFile(join(process.cwd(), "public", photo))).toString("base64")}`
     : null;
@@ -42,7 +41,7 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
         position: "relative",
         backgroundColor: INK,
         color: PAPER,
-        fontFamily: "Cormorant",
+        fontFamily: "Playfair",
       }}
     >
       {picture && (
@@ -97,6 +96,6 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
         )}
       </div>
     </div>,
-    { ...OG_SIZE, fonts: [{ name: "Cormorant", data: font, weight: 500, style: "normal" }] }
+    { ...OG_SIZE, fonts: [{ name: "Playfair", data: font, weight: 400, style: "normal" }] }
   );
 }

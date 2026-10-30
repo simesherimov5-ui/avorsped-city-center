@@ -1,12 +1,67 @@
-/* The site's two families, served from this folder (latin + cyrillic subsets), so they load the same in development
-   and in production and never depend on a download from Google at build time. Cormorant Garamond is for headings and
-   large display numbers, Golos Text for everything else. */
-
+/* The site's two families, served from this folder (latin + cyrillic subsets, variable fonts), so they load the same in
+   development and in production and never depend on a download from Google at build time. Cormorant Garamond, the
+   brand voice, is the serif of three places only (Почетна's «Во што веруваме», the City Center intro, За нас): see
+   --font-voice and .brand-voice in app/globals.css. */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url("./Montserrat-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("./PlayfairDisplay-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url("./Montserrat-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("./PlayfairDisplay-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* The arrows the site writes as text (← and →: «← Сите проекти», the arrows on links and buttons) are in Montserrat but
+   not in its latin subset, so they come from this 4 KB file, fetched only on a page that shows one (they fell back to
+   Arial). */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url("./Montserrat-arrows.woff2") format("woff2");
+  unicode-range: U+2190, U+2192;
+}
+/* Latin letters beyond the latin subset (Latin Extended-A: š, č, ć, ž, đ in names such as «Rašo»), fetched only on a
+   page that shows one. */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url("./Montserrat-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-017F;
+}
 /* Cormorant Garamond comes as fixed-weight files (500 and 600), each mapped onto a range of the weights the components
-   ask for, so they keep asking for the weights they always did: text set at 400 (or lighter) is drawn with the 500
-   file, text at 500 or bolder with the 600 file. Because each face covers its whole range, the browser never fakes a
-   bolder or lighter weight. Italic follows the same mapping (the site sets no italic today, so those files are not
-   loaded). */
+   ask for: text set at 400 (or lighter) is drawn with the 500 file, text at 500 or bolder with the 600 file, so the
+   browser never fakes a bolder or lighter weight. Upright only: the three places set no italic. */
 @font-face {
   font-family: "Cormorant Garamond";
   font-style: normal;
@@ -43,94 +98,24 @@
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
     U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* What shows until a family has loaded: the system font, stretched and spaced to the family's own measures (width of the
+   letters, height above and below the line), so the text does not move when the real font arrives. Measured on the
+   Macedonian text of the site: Montserrat is 11.2% wider than Arial, Playfair Display 1.2% narrower than Georgia,
+   Cormorant Garamond (the 500 file) 13.6% narrower than Georgia (its heights 0.924 / 0.287 em over the size-adjust). */
 @font-face {
-  font-family: "Cormorant Garamond";
-  font-style: italic;
-  font-weight: 1 499;
-  font-display: swap;
-  src: url("./CormorantGaramond-500-italic-cyrillic.woff2") format("woff2");
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: italic;
-  font-weight: 1 499;
-  font-display: swap;
-  src: url("./CormorantGaramond-500-italic-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
-    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: italic;
-  font-weight: 500 1000;
-  font-display: swap;
-  src: url("./CormorantGaramond-600-italic-cyrillic.woff2") format("woff2");
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: italic;
-  font-weight: 500 1000;
-  font-display: swap;
-  src: url("./CormorantGaramond-600-italic-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
-    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* Golos Text is one variable file per subset, held to 400–600: a lighter weight (300) is drawn at 400 (Golos has no
-   300) and a bolder one at 600, never faked. */
-@font-face {
-  font-family: "Golos Text";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("./GolosText-cyrillic.woff2") format("woff2");
-  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-@font-face {
-  font-family: "Golos Text";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("./GolosText-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
-    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* Latin letters beyond the latin subset (š, č, ć, ž, đ in names such as «Rašo»), fetched only on a page that shows one. */
-@font-face {
-  font-family: "Golos Text";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("./GolosText-latin-ext.woff2") format("woff2");
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-/* The arrows the site writes as text (← and →: «← Сите проекти», the arrows on links and buttons) are in Golos but not
-   in its latin subset, so they come from this 1 KB file, fetched only on a page that shows one (they fell back to Arial). */
-@font-face {
-  font-family: "Golos Text";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("./GolosText-arrows.woff2") format("woff2");
-  unicode-range: U+2190, U+2192;
-}
-/* What shows until a family has loaded: the system font, stretched and spaced to the family's own measures (width of
-   the letters, height above and below the line), so the text does not move when the real font arrives. Measured on the
-   Macedonian text of the site: Golos Text is 6.0% wider than Arial, Cormorant Garamond (the 500 file) 13.6% narrower
-   than Georgia. The heights are the families' own (Golos 0.98 / 0.22 em, Cormorant 0.924 / 0.287 em) over the
-   size-adjust. */
-@font-face {
-  font-family: "Golos Text Fallback";
+  font-family: "Montserrat Fallback";
   src: local("Arial");
-  size-adjust: 106%;
-  ascent-override: 92.5%;
-  descent-override: 20.8%;
+  size-adjust: 111.2%;
+  ascent-override: 87%;
+  descent-override: 22.6%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Playfair Display Fallback";
+  src: local("Georgia"), local("Times New Roman");
+  size-adjust: 98.8%;
+  ascent-override: 109.5%;
+  descent-override: 25.4%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -142,6 +127,7 @@
   line-gap-override: 0%;
 }
 :root {
-  --font-golos: "Golos Text", "Golos Text Fallback";
+  --font-montserrat: "Montserrat", "Montserrat Fallback";
+  --font-playfair: "Playfair Display", "Playfair Display Fallback";
   --font-cormorant: "Cormorant Garamond", "Cormorant Garamond Fallback";
 }

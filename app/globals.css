@@ -159,9 +159,8 @@
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
   --color-plan-green: var(--color-plan-green);
-  /* Two families only: Cormorant Garamond for headings and large display numbers, Golos Text for everything else. */
-  --font-display: var(--font-cormorant);
-  --font-sans: var(--font-golos);
+  /* Montserrat for everything that is not a heading (--font-display, below). */
+  --font-sans: var(--font-montserrat);
   /* Tailwind's own transition-* utilities use the site's fast speed and easing. */
   --default-transition-duration: var(--dur-fast);
   --default-transition-timing-function: var(--ease);
@@ -169,6 +168,20 @@
   --text-label: var(--label-size);
   --tracking-label: var(--label-track);
   --tracking-nav: 0.1em;
+}
+
+/* Playfair Display for headings and large display numbers, everywhere but the three places of the brand voice. Not
+   inline, so the font-display utility reads the variable and a section can switch it (.brand-voice). */
+@theme {
+  --font-display: var(--font-playfair);
+  --font-voice: var(--font-cormorant);
+}
+
+/* The brand voice: Cormorant Garamond as the serif of three places only, Почетна's «Во што веруваме», the City Center
+   intro (ProjectAbout) and За нас. On their root it switches every serif inside (the font-display utility and
+   var(--font-display) alike); their sans text stays Montserrat, as everywhere. */
+.brand-voice {
+  --font-display: var(--font-voice);
 }
 
 @media (min-width: 640px) {
@@ -1055,7 +1068,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   background: var(--color-gold);
 }
 
-/* Counters, stats, measurements: Golos Text 500 with tabular numbers, so digits don't shift width as they
+/* Counters, stats, measurements: Montserrat 500 with tabular numbers, so digits don't shift width as they
    change (stat count-ups). The old name stays; there is no monospace font any more. */
 .mono-stat {
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -1941,26 +1954,35 @@ body:has([data-compare-bar]) footer {
   }
   /* The only shading, measured against the brightest 1% of each photo behind each text at every wide size, all three
      slides, for 4.5:1 or more: Оникс 78% behind the header (its gold current link is the darkest text), 55% at the back
-     link, gone 180px under the header; at the bottom Оникс 70% behind the label and the name (--pl-hold: the space,
-     the name, the label and 16px), gone 200px above them. */
+     link, gone 180px under the header; and (.pl-opening__text::before) Оникс 70% behind the label, the name and the
+     dashes, whatever height they take, gone 200px above them. */
   .pl-opening__shade {
-    --pl-hold: calc(56px + 0.95 * clamp(56px, 8vw, 128px) + 16px + 20.4px + 16px);
     display: block;
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background:
-      linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--color-onyx) 78%, transparent) var(--nav-h),
-        color-mix(in srgb, var(--color-onyx) 55%, transparent) calc(var(--nav-h) + 60px),
-        transparent calc(var(--nav-h) + 180px)
-      ),
-      linear-gradient(
-        to top,
-        color-mix(in srgb, var(--color-onyx) 70%, transparent) var(--pl-hold),
-        transparent calc(var(--pl-hold) + 200px)
-      );
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 78%, transparent) var(--nav-h),
+      color-mix(in srgb, var(--color-onyx) 55%, transparent) calc(var(--nav-h) + 60px),
+      transparent calc(var(--nav-h) + 180px)
+    );
+  }
+  .pl-opening__text::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -216px;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 70%, transparent) calc(100% - 200px),
+      transparent
+    );
   }
   .pl-opening__back,
   .pl-opening__text {

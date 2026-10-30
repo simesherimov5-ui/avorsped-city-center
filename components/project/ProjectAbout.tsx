@@ -132,7 +132,7 @@ export function ProjectAbout({
     <section
       ref={sectionRef}
       id={id}
-      className="pa-intro relative isolate overflow-hidden bg-espresso md:flex md:min-h-[820px] md:items-center"
+      className="brand-voice pa-intro relative isolate overflow-hidden bg-espresso md:flex md:min-h-[820px] md:items-center"
     >
       <div aria-hidden className="pa-intro-mark">
         <BuildingMark className="text-on-chrome" style={{ height: 200, width: "auto", opacity: 0.06 }} />

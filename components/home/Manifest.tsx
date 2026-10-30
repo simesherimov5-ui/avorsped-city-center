@@ -2,12 +2,13 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ManifestText } from "@/components/home/ManifestText";
 
 /**
- * "Во што веруваме": the company's manifest on a light surface: three sentences in the display serif, large and centred,
+ * "Во што веруваме": the company's manifest on a light surface: three sentences in the brand voice (Cormorant Garamond,
+ * .brand-voice in globals.css), large and centred,
  * between the label and the signature. The sentences turn from grey to dark as the visitor scrolls (ManifestText).
  */
 export function Manifest() {
   return (
-    <section className="grain bg-cream text-charcoal">
+    <section className="brand-voice grain bg-cream text-charcoal">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 py-20 text-center sm:px-8 sm:py-28 lg:px-10">
         <Reveal>
           <div className="eyebrow text-gold-deep">Во што веруваме</div>
