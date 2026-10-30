@@ -636,6 +636,47 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   }
 }
 
+/* A photo placed by its building box (Media's `box`): as large as it can be without the box going above --photo-top
+   (set by a frame that runs under the header) or past a side, never larger than covering the frame; held on its focus
+   and moved only as far as the box needs. Where it stops short of the frame, the frame's own colour shows and the photo
+   fades into it over at most 64px (no fade on an edge that reaches the frame). Media sets the numbers: --a (width ÷
+   height), the box as fractions (--bx, --by, --bw, --bh) and the focus (--fx, --fy). A frame that wants the plain cover
+   sets --w, --x and --y to the --cover-* values. All of it is the frame's container units, so it follows every resize;
+   lib/image-sizes.ts (boxSizes) does the same sum for `sizes`. */
+.media-box {
+  container-type: size;
+}
+.media-box__photo {
+  --cover-w: max(100cqw, 100cqh * var(--a));
+  --cover-x: calc((100cqw - var(--w)) * var(--fx));
+  --cover-y: calc((100cqh - var(--h)) * var(--fy));
+  --box-w: min(var(--cover-w), 100cqw / var(--bw), (100cqh - var(--photo-top, 0px)) * var(--a) / var(--bh));
+  --box-x: clamp(-1 * var(--bx) * var(--w), var(--cover-x), 100cqw - (var(--bx) + var(--bw)) * var(--w));
+  --box-y: clamp(
+    var(--photo-top, 0px) - var(--by) * var(--h),
+    var(--cover-y),
+    100cqh - (var(--by) + var(--bh)) * var(--h)
+  );
+  --w: var(--box-w);
+  --h: calc(var(--w) / var(--a));
+  --x: var(--box-x);
+  --y: var(--box-y);
+  --fade-l: min(64px, 3 * max(0px, var(--x)));
+  --fade-r: min(64px, 3 * max(0px, 100cqw - var(--x) - var(--w)));
+  --fade-t: min(64px, 3 * max(0px, var(--y)));
+  --fade-b: min(64px, 3 * max(0px, 100cqh - var(--y) - var(--h)));
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  mask-image:
+    linear-gradient(to right, transparent, black var(--fade-l), black calc(100% - var(--fade-r)), transparent),
+    linear-gradient(to bottom, transparent, black var(--fade-t), black calc(100% - var(--fade-b)), transparent);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
 /* Stone grain: add .grain to a Травертин section (and .grain--dark to an Оникс / Еспресо one). The noise sits on its
    own layer above the section's background and behind everything in it, so photos, buttons and cards cover it and the
    text contrast does not change. Barely visible: 35% multiplied on light, 18% screened on dark. Removing the class

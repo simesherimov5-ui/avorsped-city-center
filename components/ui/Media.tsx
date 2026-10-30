@@ -2,8 +2,8 @@ import Image, { type ImageLoaderProps } from "next/image";
 import type { CSSProperties } from "react";
 import { Placeholder } from "./Placeholder";
 import { cn } from "@/lib/cn";
-import { isNarrowPhoto } from "@/lib/image-sizes";
-import type { ImageFocus } from "@/types";
+import { aspectOf, isNarrowPhoto, percentToFraction } from "@/lib/image-sizes";
+import type { ImageFocus, PhotoBox } from "@/types";
 
 /** The default quality of a photo (every quality used is also in next.config.ts → images.qualities). */
 const QUALITY = 80;
@@ -45,6 +45,7 @@ export function Media({
   alwaysCover = false,
   maxWidth,
   quality = QUALITY,
+  box,
 }: {
   image: MediaImage;
   className?: string;
@@ -73,6 +74,13 @@ export function Media({
   maxWidth?: number;
   /** The encoding quality (80 by default; a full-screen opening asks for 85). Must be listed in next.config.ts. */
   quality?: number;
+  /**
+   * The rectangle of the photo that must stay whole (the project's buildings, in % of the photo): the photo is drawn as
+   * large as it can be with the box below the frame's --photo-top and inside its sides, never larger than covering the
+   * frame, held on `focus` (the centre by default). Where it stops short, the frame's own colour shows. The `sizes`
+   * to go with it: boxSizes in lib/image-sizes.ts.
+   */
+  box?: PhotoBox;
 }) {
   const loader = maxWidth ? cappedLoader(maxWidth) : undefined;
   if (image.isPlaceholder || !image.src) {
@@ -83,6 +91,36 @@ export function Media({
   const loading = priority
     ? ({ loading: "eager", fetchPriority: "high" } as const)
     : ({ loading: "lazy", fetchPriority: defer ? "low" : undefined } as const);
+
+  // Placed by its building box (.media-box in globals.css): the sum is CSS on the frame's container units, so it follows
+  // every resize without a script and the page renders the same on the server.
+  if (box) {
+    const place = {
+      "--a": (aspectOf(image.src) ?? 16 / 9).toFixed(4),
+      "--bx": percentToFraction(box.x),
+      "--by": percentToFraction(box.y),
+      "--bw": percentToFraction(box.w),
+      "--bh": percentToFraction(box.h),
+      "--fx": percentToFraction(focus?.x ?? 50),
+      "--fy": percentToFraction(focus?.y ?? 50),
+    } as CSSProperties;
+    return (
+      <div className={cn("media-box relative overflow-hidden bg-espresso", className)}>
+        <div className="media-box__photo" style={place}>
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes={sizes}
+            className="object-cover"
+            quality={quality}
+            loader={loader}
+            {...loading}
+          />
+        </div>
+      </div>
+    );
+  }
 
   // A square or portrait photo (narrower than 1.2:1, e.g. the Станбена Куќа facade) that would cover a wide frame would
   // lose its top floor and roof. Where the frame is wider than about 1.25:1 it is shown whole, at its own proportions,
