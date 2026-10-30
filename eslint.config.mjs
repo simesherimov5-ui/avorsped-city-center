@@ -79,6 +79,8 @@ const eslintConfig = defineConfig([
     // (with its build output) left inside this folder. Neither is tracked by git.
     "javor-sped-complete/**",
     "meridian/**",
+    // Claude Code's own folder, with the git worktrees it makes (each a full copy of the project and its node_modules).
+    ".claude/**",
   ]),
 ]);
 
