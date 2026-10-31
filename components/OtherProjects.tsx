@@ -1,7 +1,4 @@
-import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { OtherProjectsSlideshow, type OtherSlide } from "@/components/project/OtherProjectsSlideshow";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data";
 import { projectStatusLabel } from "@/lib/format";
 import { otherProjects, slidePhoto } from "@/lib/project-explorer";
@@ -28,34 +25,15 @@ function slideOf(p: Project): OtherSlide {
 // A closing beat for any single-project experience (the generic project page, /development, /dojran): the other projects
 // being built in one slideshow, the ones with a photo first. With one project it has no controls; with none the section
 // is not there.
-export function OtherProjects({
-  currentProjectId,
-  light = false,
-}: {
-  currentProjectId: string;
-  /** The cream ground with dark text for the heading, instead of Оникс. */
-  light?: boolean;
-}) {
+export function OtherProjects({ currentProjectId }: { currentProjectId: string }) {
   const others = otherProjects(projects, currentProjectId);
   if (others.length === 0) return null;
 
+  // On Оникс, with 28px (56px from 720px) of it above the frame so it never runs into a dark section above. The heading
+  // and «Сите проекти →» are on the frame itself (OtherProjectsSlideshow).
   return (
-    <section className={`${light ? "on-light" : "bg-chrome"} py-16 sm:py-24`}>
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-        <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-            <SectionHeading eyebrow="JAVOR SPED HOLDING" title="Другите наши проекти" tone={light ? "light" : "dark"} />
-            <Link href="/projects" data-tone={light ? "light" : undefined} className="btn-tertiary focus-ring">
-              Сите проекти →
-            </Link>
-          </div>
-        </Reveal>
-      </div>
-      <Reveal delay={0.1}>
-        <div className="mt-10 sm:mt-12">
-          <OtherProjectsSlideshow slides={others.map(slideOf)} light={light} />
-        </div>
-      </Reveal>
+    <section className="bg-chrome pb-16 pt-7 min-[720px]:pb-24 min-[720px]:pt-14">
+      <OtherProjectsSlideshow slides={others.map(slideOf)} />
     </section>
   );
 }

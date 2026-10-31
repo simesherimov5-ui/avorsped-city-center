@@ -60,7 +60,7 @@ const arrowButton =
  * cropped; a project without one gets the no-photo slide), the slide itself a link to the project. The timing, swipe, keys and pause rules are useSlideshow's, the same
  * as the Радовиш Twins opening's; this one also waits while it is out of view. With one project there are no controls.
  */
-export function OtherProjectsSlideshow({ slides, light = false }: { slides: OtherSlide[]; light?: boolean }) {
+export function OtherProjectsSlideshow({ slides }: { slides: OtherSlide[] }) {
   const {
     reduce,
     index,
@@ -83,7 +83,11 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
     () => {
       const el = frame.current;
       if (!el || prefersReducedMotion()) return;
-      const text = el.firstElementChild?.querySelectorAll("[data-slide-text]") ?? [];
+      // the heading layer, then the text of the first slide
+      const text = [
+        ...el.querySelectorAll("[data-head]"),
+        ...(el.querySelector("[role=group]")?.querySelectorAll("[data-slide-text]") ?? []),
+      ];
       gsap.set(el, { clipPath: "inset(100% 0% 0% 0%)" });
       gsap.set(text, { autoAlpha: 0, y: 12 });
       const tl = gsap.timeline({ paused: true, defaults: { ease: CALM_EASE } });
@@ -102,9 +106,13 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
     },
     { scope: frame }
   );
-  const lineTone = light
-    ? "border-ink/30 text-ink hover:border-gold-deep hover:text-gold-deep"
-    : "border-on-chrome/40 text-on-chrome hover:border-gold hover:text-gold";
+  const lineTone = "border-on-chrome/40 text-on-chrome hover:border-gold hover:text-gold";
+  // «Сите проекти →»: top right of the frame from 720px, under the controls on a phone (never both on screen)
+  const allProjects = (className: string) => (
+    <Link href="/projects" data-head className={cn("btn-tertiary focus-ring", className)}>
+      Сите проекти →
+    </Link>
+  );
 
   return (
     <>
@@ -112,7 +120,6 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
         ref={ref}
         aria-roledescription="carousel"
         aria-label="Другите наши проекти"
-        tabIndex={count > 1 ? 0 : undefined}
         {...sectionProps}
         className="focus-ring touch-pan-y"
       >
@@ -120,6 +127,28 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
           ref={frame}
           className="relative isolate aspect-[4/5] overflow-hidden bg-onyx min-[720px]:aspect-auto min-[720px]:h-[clamp(420px,70svh,760px)]"
         >
+          {/* The heading layer: fixed, above every slide, outside the slide links. Its DOM place first makes «Сите проекти →»
+              the first stop of the tab order. A soft top shadow lies under it for the text. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 z-[3] h-[42%] bg-gradient-to-b from-onyx/90 via-onyx/78 via-55% to-onyx/0"
+          />
+          <div className="absolute inset-x-0 top-[22px] z-[4] min-[720px]:top-[34px]">
+            <div className={CONTAINER}>
+              <div data-head className="eyebrow text-gold">
+                JAVOR SPED HOLDING
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-6">
+                <h2
+                  data-head
+                  className="m-0 font-display text-(length:--fs-h2) font-normal leading-[1.1] text-on-chrome"
+                >
+                  Другите наши проекти
+                </h2>
+                <div className="hidden shrink-0 min-[720px]:block">{allProjects("")}</div>
+              </div>
+            </div>
+          </div>
           {slides.map((slide, i) => (
             <div
               key={slide.key}
@@ -156,7 +185,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
               )}
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-onyx/75 to-onyx/0"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-onyx/92 via-onyx/80 via-45% to-onyx/0"
               />
               <Link href={slide.href} className="focus-ring absolute inset-0 flex items-end text-on-chrome">
                 <span className={cn(CONTAINER, "block pb-6 sm:pb-9")}>
@@ -195,12 +224,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                   onClick={() => goTo(i)}
                   className="focus-ring flex h-11 min-w-0 flex-1 items-center justify-center sm:max-w-12"
                 >
-                  <span
-                    className={cn(
-                      "relative block h-[2px] w-full max-w-8 overflow-hidden",
-                      light ? "bg-ink/20" : "bg-on-chrome/30"
-                    )}
-                  >
+                  <span className="relative block h-[2px] w-full max-w-8 overflow-hidden bg-on-chrome/30">
                     {i === index &&
                       (reduce ? (
                         <span className="absolute inset-0 bg-gold" />
@@ -219,7 +243,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
                 </button>
               ))}
             </div>
-            <div className={cn("font-display text-lg tabular-nums", light ? "text-ink" : "text-on-chrome")}>
+            <div className="font-display text-lg tabular-nums text-on-chrome">
               {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
             </div>
             <div className="flex items-center gap-2">
@@ -243,6 +267,7 @@ export function OtherProjectsSlideshow({ slides, light = false }: { slides: Othe
             </div>
           </div>
         )}
+        <div className={cn(CONTAINER, "min-[720px]:hidden", count > 1 ? "mt-1" : "mt-4")}>{allProjects("")}</div>
       </section>
     </>
   );

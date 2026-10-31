@@ -141,7 +141,7 @@ export default function DevelopmentPage() {
         </>
       )}
 
-      <OtherProjects currentProjectId="city-center" light />
+      <OtherProjects currentProjectId="city-center" />
     </div>
   );
 }
