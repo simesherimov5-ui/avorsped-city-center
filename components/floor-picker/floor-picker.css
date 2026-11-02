@@ -1,4 +1,4 @@
-/* The floor picker on the building page: the building on the left, the apartments of the chosen floor on the right.
+/* The floor picker on the building page: the building with the apartments of the chosen floor under it on the left, the floor on the right.
    It sits in a dark band, so every colour here is the dark-surface pair: Травертин text, Светол бакар accent. */
 .fp {
   --fp-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
@@ -95,7 +95,7 @@
 .fp-panel {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 22px;
   min-width: 0;
   padding: 48px 44px;
@@ -121,45 +121,65 @@
   font-size: 16px;
   line-height: 1.6;
 }
-.fp-units {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.fp-unit {
+/* The apartments of the chosen floor, under the building: rows like the floor rows */
+.fp-apts {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  height: 100%;
-  padding: 16px;
+  width: min(360px, 100%);
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  animation: fp-fade var(--dur-base) var(--ease) both;
+}
+@keyframes fp-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fp-apt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 18px;
   border: 1px solid var(--fp-line);
-  color: inherit;
+  background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
+  color: var(--fp-mute);
+  font:
+    600 12px/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
+  letter-spacing: var(--label-track);
   text-decoration: none;
-  transition: border-color var(--dur-fast) var(--ease);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
 }
-.fp-unit:hover,
-.fp-unit.is-hot {
+/* «СТАН» in capitals like the floor labels; the number is written as it is (11a, not 11А) */
+.fp-apt-lbl {
+  text-transform: uppercase;
+}
+.fp-apt:hover,
+.fp-apt.is-hot {
   border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--color-onyx);
 }
-.fp-unit:focus-visible {
+.fp-apt:focus-visible {
   outline: 2px solid var(--foil-light);
   outline-offset: 2px;
 }
-.fp-unit-no {
-  font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 22px;
-  font-variant-numeric: lining-nums;
+.fp-apt-spec {
+  min-width: 0;
   font-weight: 400;
-  line-height: 1.2;
-}
-.fp-unit-spec {
-  color: var(--fp-mute);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.5;
+  letter-spacing: 0;
+  text-align: right;
 }
 .fp-floorlink {
   display: inline-flex;
@@ -186,16 +206,6 @@
   outline-offset: 3px;
 }
 
-@media (min-width: 560px) {
-  .fp-units {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1200px) {
-  .fp-units {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
 @media (max-width: 879px) {
   .fp {
     grid-template-columns: minmax(0, 1fr);
@@ -214,17 +224,17 @@
   .fp-floorlink:hover svg {
     transform: none;
   }
+  .fp-apts {
+    animation: none;
+  }
 }
 
-/* A building with a floor sketch: the panel gets the room it needs, the heading is smaller, the cards sit in one row */
+/* A building with a floor sketch: the panel gets the room it needs, the heading is smaller */
 .fp.has-sketch {
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
 }
 .fp.has-sketch .fp-title {
   font-size: var(--fs-h3);
-}
-.fp.has-sketch .fp-units {
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 @media (max-width: 879px) {
   .fp.has-sketch {

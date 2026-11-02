@@ -32,8 +32,8 @@ export interface PickerFloor {
 const DENSE_FROM = 7;
 
 /**
- * "Избор на стан по кат": the building drawn as one row per floor (top floor first, one window per apartment) and,
- * beside it, the apartments of the chosen floor. Hovering a row with a mouse, or clicking / tapping it, chooses it;
+ * "Избор на стан по кат": the building drawn as one row per floor (top floor first, one window per apartment) with the
+ * apartments of the chosen floor listed under it and, beside it, the floor's sketch. Hovering a row with a mouse, or clicking / tapping it, chooses it;
  * Up and Down move the choice. It starts on the lowest floor that has apartments. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  */
@@ -44,13 +44,13 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
   const start = lowestFirst.find((f) => f.apartments.length > 0) ?? lowestFirst[0];
 
   const [selected, setSelected] = useState(start?.number);
-  // the apartment the pointer or the keyboard is on, in the sketch or in the cards: both light up
+  // the apartment the pointer or the keyboard is on, in the sketch or in the list: both light up
   const [hot, setHot] = useState<string | null>(null);
   const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   if (!start) return null;
   const current = rows.find((f) => f.number === selected) ?? start;
-  // A floor with a sketch and shapes shows the sketch above its cards; a building without them shows cards only.
+  // A floor with a sketch and shapes shows the sketch in the panel; a building without them shows the list only.
   const hasSketch = floors.some((f) => f.sketch && f.apartments.some((a) => a.outline));
   const currentSketch = current.sketch && current.apartments.some((a) => a.outline) ? current.sketch : undefined;
 
@@ -95,6 +95,30 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
           ))}
         </div>
         <div className="fp-base" aria-hidden />
+        {current.apartments.length > 0 && (
+          // keyed by the floor, so the list fades in again whenever the floor changes
+          <ul key={current.number} className="fp-apts" aria-label={`Станови — ${floorTitle(current.label)}`}>
+            {current.apartments.map((a) => (
+              <li key={a.id}>
+                <Link
+                  href={`/development/apartment/${a.id}`}
+                  className={`fp-apt${hot === a.id ? " is-hot" : ""}`}
+                  onMouseEnter={() => setHot(a.id)}
+                  onMouseLeave={() => setHot(null)}
+                  onFocus={() => setHot(a.id)}
+                  onBlur={() => setHot(null)}
+                >
+                  <span>
+                    <span className="fp-apt-lbl">Стан</span> {a.number}
+                  </span>
+                  <span className="fp-apt-spec">
+                    {formatArea(a.area, a.areaDecimals)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="fp-panel" aria-live="polite">
@@ -111,30 +135,6 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
           />
         )}
         {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
-        {current.apartments.length > 0 && (
-          <ul className="fp-units">
-            {current.apartments.map((a) => (
-              <li key={a.id}>
-                <Link
-                  href={`/development/apartment/${a.id}`}
-                  className={`fp-unit${hot === a.id ? " is-hot" : ""}`}
-                  onMouseEnter={() => setHot(a.id)}
-                  onMouseLeave={() => setHot(null)}
-                  onFocus={() => setHot(a.id)}
-                  onBlur={() => setHot(null)}
-                >
-                  <b className="fp-unit-no">
-                    <span className="sr-only">Стан </span>
-                    {a.number}
-                  </b>
-                  <span className="fp-unit-spec">
-                    {formatArea(a.area, a.areaDecimals)} · {a.bedrooms === 0 ? "Студио" : roomsText(a.bedrooms)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
         {basePath && current.apartments.length > 0 && (
           <ZoomNavLink
             href={`${basePath}/${current.number}`}
