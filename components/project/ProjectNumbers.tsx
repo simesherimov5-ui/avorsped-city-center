@@ -22,7 +22,7 @@ export function ProjectNumbers({ project, scrollTarget }: { project: Project; sc
     {
       text:
         s.areaMin !== undefined && s.areaMax !== undefined
-          ? `${areaNumber(s.areaMin)}–${areaNumber(s.areaMax)}`
+          ? `${areaNumber(s.areaMin, 0)}–${areaNumber(s.areaMax, 0)}`
           : "[од–до]",
       label: "M² ПОВРШИНИ",
     },

@@ -65,9 +65,13 @@ describe("labels", () => {
 });
 
 describe("area ranges", () => {
-  it("writes two decimals with a decimal comma, as the drawings do", () => {
+  it("writes an area number with a decimal comma", () => {
     expect(areaNumber(28.7)).toBe("28,70");
-    expect(formatAreaRange(28.7, 186.9)).toBe("28,70–186,90 м²");
-    expect(formatAreaRange(79.25, 209.7)).toBe("79,25–209,70 м²");
+    expect(areaNumber(28.7, 0)).toBe("29");
+  });
+  it("rounds a range to whole m²", () => {
+    expect(formatAreaRange(28.7, 186.9)).toBe("29–187 м²");
+    expect(formatAreaRange(79.25, 209.7)).toBe("79–210 м²");
+    expect(formatAreaRange(42.2, 177.35)).toBe("42–177 м²");
   });
 });

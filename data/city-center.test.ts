@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { formatAreaRange } from "@/lib/format";
 import { apartments, buildings, getApartment, getBuilding, projects } from "@/data";
 
 // City Center's six buildings, from the architect's plans (data/plans/city-center.json): the apartments, floors,
@@ -121,6 +122,16 @@ describe("City Center's buildings, counted from the apartments", () => {
       expect(building.areaRange).toEqual({ min, max });
     }
   );
+  it("shows each building's range rounded to whole m²", () => {
+    expect(buildings.map((b) => formatAreaRange(b.areaRange!.min, b.areaRange!.max))).toEqual([
+      "79–187 м²",
+      "79–210 м²",
+      "42–177 м²",
+      "57–209 м²",
+      "29–187 м²",
+      "53–125 м²",
+    ]);
+  });
   it("gives the project page the same count and range, computed", () => {
     const stats = projects.find((p) => p.id === "city-center")!.stats!;
     expect(stats).toMatchObject({ buildings: 6, apartments: 207, areaMin: 28.7, areaMax: 209.7 });

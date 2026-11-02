@@ -9,14 +9,14 @@ export function formatArea(value: number, decimals = 1): string {
   return `${areaNumber(value, decimals)} м²`;
 }
 
-/** An area without its unit, with a decimal comma: "28,70" (two decimals, as the architect's drawings write them). */
+/** An area without its unit, with a decimal comma ("28,70"; two decimals unless told otherwise). */
 export function areaNumber(value: number, decimals = 2): string {
   return value.toFixed(decimals).replace(".", ",");
 }
 
-/** A range of areas as the site writes it everywhere: "28,70–186,90 м²". */
-export function formatAreaRange(min: number, max: number, decimals = 2): string {
-  return `${areaNumber(min, decimals)}–${areaNumber(max, decimals)} м²`;
+/** A range of areas as the site writes it: rounded to whole m², "29–187 м²". */
+export function formatAreaRange(min: number, max: number): string {
+  return `${areaNumber(min, 0)}–${areaNumber(max, 0)} м²`;
 }
 
 const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
