@@ -155,8 +155,8 @@ export function generateDevelopment(): GeneratedDevelopment {
       phase: PHASE_OF_STATUS[buildingStatuses[b]],
       floorsLabel: floorsLabelOf(plan.floors.map((f) => f.label)),
       areaRange: {
-        min: Math.round(Math.min(...plan.apartments.map((a) => a.area))),
-        max: Math.round(Math.max(...plan.apartments.map((a) => a.area))),
+        min: Math.min(...plan.apartments.map((a) => a.area)),
+        max: Math.max(...plan.apartments.map((a) => a.area)),
       },
       // TODO(client): a short text about each building (docs/content-needed.md).
       description: `[Краток опис на зграда ${plan.number}: каква е, што има во приземјето, каков поглед имаат становите.]`,

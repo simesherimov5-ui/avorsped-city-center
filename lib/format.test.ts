@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { formatArea, listNames, orientationLabel, projectStatusLabel, realText, typeLabel } from "@/lib/format";
+import {
+  areaNumber,
+  formatArea,
+  formatAreaRange,
+  listNames,
+  orientationLabel,
+  projectStatusLabel,
+  realText,
+  typeLabel,
+} from "@/lib/format";
 
 describe("realText", () => {
   it("keeps real text", () => {
@@ -52,5 +61,13 @@ describe("labels", () => {
   it("falls back to the raw key for unknown apartment types", () => {
     expect(typeLabel("2-bedroom")).toBe("Двособен");
     expect(typeLabel("penthouse")).toBe("penthouse");
+  });
+});
+
+describe("area ranges", () => {
+  it("writes two decimals with a decimal comma, as the drawings do", () => {
+    expect(areaNumber(28.7)).toBe("28,70");
+    expect(formatAreaRange(28.7, 186.9)).toBe("28,70–186,90 м²");
+    expect(formatAreaRange(79.25, 209.7)).toBe("79,25–209,70 м²");
   });
 });

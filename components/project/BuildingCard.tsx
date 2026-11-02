@@ -1,5 +1,6 @@
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { cn } from "@/lib/cn";
+import { formatAreaRange } from "@/lib/format";
 import type { Building, ConstructionPhase } from "@/types";
 
 /** The five steps of a building, in order (the line and the labels under it). */
@@ -42,7 +43,7 @@ export function BuildingCard({
   const rows: [string, string][] = [
     ["Катови", building.floorsLabel ?? "[катови]"],
     ["Станови", String(building.totalApartments)],
-    ["Големини", building.areaRange ? `${building.areaRange.min}–${building.areaRange.max} м²` : "[од–до м²]"],
+    ["Големини", building.areaRange ? formatAreaRange(building.areaRange.min, building.areaRange.max) : "[од–до м²]"],
     ["Вселување", year !== undefined ? String(year) : "[година]"],
   ];
 

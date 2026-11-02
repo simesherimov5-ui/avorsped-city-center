@@ -6,7 +6,17 @@ import type { Orientation, ProjectStatus } from "@/types";
  * data at build/SSR time can differ from a browser's, which would make the server and the browser disagree.
  */
 export function formatArea(value: number, decimals = 1): string {
-  return `${value.toFixed(decimals).replace(".", ",")} м²`;
+  return `${areaNumber(value, decimals)} м²`;
+}
+
+/** An area without its unit, with a decimal comma: "28,70" (two decimals, as the architect's drawings write them). */
+export function areaNumber(value: number, decimals = 2): string {
+  return value.toFixed(decimals).replace(".", ",");
+}
+
+/** A range of areas as the site writes it everywhere: "28,70–186,90 м²". */
+export function formatAreaRange(min: number, max: number, decimals = 2): string {
+  return `${areaNumber(min, decimals)}–${areaNumber(max, decimals)} м²`;
 }
 
 const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {

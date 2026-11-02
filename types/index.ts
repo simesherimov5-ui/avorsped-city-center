@@ -86,7 +86,7 @@ export interface Building {
   phase?: ConstructionPhase;
   /** The floors as the card writes them ("5 ката + поткровје"). A [bracket] shows where it is missing. */
   floorsLabel?: string;
-  /** The smallest and the largest apartment, in whole m² (from the plans). */
+  /** The smallest and the largest apartment, in m² exactly as the plans give them (written with two decimals). */
   areaRange?: { min: number; max: number };
   /** The year of moving in, where it differs from the project's. */
   moveInYear?: number;
@@ -190,7 +190,7 @@ export interface ProjectAbout {
   en?: { title?: string; subtitle?: string };
 }
 
-/** The four numbers of «… во бројки»: buildings, apartments, the smallest and largest apartment (m², whole numbers), the year of moving in. */
+/** The four numbers of «… во бројки»: buildings, apartments, the smallest and largest apartment (m², as the plans give them), the year of moving in. */
 export interface ProjectStats {
   buildings?: number;
   apartments?: number;

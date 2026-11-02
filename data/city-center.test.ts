@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { apartments, buildings, getApartment, getBuilding } from "@/data";
+import { apartments, buildings, getApartment, getBuilding, projects } from "@/data";
 
 // City Center's six buildings, from the architect's plans (data/plans/city-center.json): the apartments, floors,
 // sketches and plans are real; the status of each apartment is not known yet (all available).
@@ -96,5 +96,33 @@ describe("City Center's plans", () => {
 
   it("looks up an apartment by its id", () => {
     expect(getApartment("b06-f2-11a")?.number).toBe("11a");
+  });
+});
+
+// What the architect's drawings give per building (Ламела 1–6): the apartments, the smallest and the largest, the floors.
+describe("City Center's buildings, counted from the apartments", () => {
+  const drawn = [
+    { id: "b01", apartments: 30, min: 79.25, max: 186.9 },
+    { id: "b02", apartments: 30, min: 79.25, max: 209.7 },
+    { id: "b03", apartments: 35, min: 42.2, max: 177.35 },
+    { id: "b04", apartments: 23, min: 57.33, max: 208.59 },
+    { id: "b05", apartments: 24, min: 28.7, max: 186.9 },
+    { id: "b06", apartments: 65, min: 52.82, max: 124.83 },
+  ];
+  it.each(drawn)(
+    "$id has $apartments apartments from $min to $max m² on 6 floors",
+    ({ id, apartments: count, min, max }) => {
+      const building = getBuilding(id)!;
+      const areas = of(id).map((a) => a.area);
+      expect(of(id)).toHaveLength(count);
+      expect(building.totalApartments).toBe(count);
+      expect(building.floors).toHaveLength(6);
+      expect([Math.min(...areas), Math.max(...areas)]).toEqual([min, max]);
+      expect(building.areaRange).toEqual({ min, max });
+    }
+  );
+  it("gives the project page the same count and range, computed", () => {
+    const stats = projects.find((p) => p.id === "city-center")!.stats!;
+    expect(stats).toMatchObject({ buildings: 6, apartments: 207, areaMin: 28.7, areaMax: 209.7 });
   });
 });

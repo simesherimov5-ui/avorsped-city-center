@@ -1,6 +1,7 @@
 import { Numbers, type NumberItem } from "@/components/home/Numbers";
 import { ScrollToButton } from "@/components/project/ScrollToButton";
 import { Reveal } from "@/components/ui/Reveal";
+import { areaNumber } from "@/lib/format";
 import type { Project } from "@/types";
 
 /** 4 columns from 1024px, 2 × 2 below. */
@@ -19,7 +20,10 @@ export function ProjectNumbers({ project, scrollTarget }: { project: Project; sc
     whole(s.buildings, "ЗГРАДИ", "[број]"),
     whole(s.apartments, "СТАНОВИ", "[број]"),
     {
-      text: s.areaMin !== undefined && s.areaMax !== undefined ? `${s.areaMin}–${s.areaMax}` : "[од–до]",
+      text:
+        s.areaMin !== undefined && s.areaMax !== undefined
+          ? `${areaNumber(s.areaMin)}–${areaNumber(s.areaMax)}`
+          : "[од–до]",
       label: "M² ПОВРШИНИ",
     },
     s.moveInYear !== undefined

@@ -13,13 +13,13 @@ const yearIn = (text: string) => {
   const year = text.match(/\d{4}/)?.[0];
   return year ? Number(year) : undefined;
 };
-/** The smallest and the largest apartment of a list, in whole m². */
+/** The smallest and the largest apartment of a list, in m² exactly as the plans give them. */
 const areaRange = (list: Apartment[]) =>
   list.length === 0
     ? {}
     : {
-        areaMin: Math.round(Math.min(...list.map((a) => a.area))),
-        areaMax: Math.round(Math.max(...list.map((a) => a.area))),
+        areaMin: Math.min(...list.map((a) => a.area)),
+        areaMax: Math.max(...list.map((a) => a.area)),
       };
 
 /** City Center's own development (its masterplan, buildings and text): only City Center's pages read this. */
