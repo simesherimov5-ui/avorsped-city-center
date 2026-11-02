@@ -58,11 +58,11 @@ export default function DevelopmentPage() {
           </section>
         )}
 
-        {/* 3 · pick a building: the aerial photo with its markers and the compass; beside it only the facts of the chosen building */}
-        <section id="izberete-zgrada" className="scroll-mt-(--nav-h) py-12 sm:py-16">
+        {/* 3 · pick a building: the aerial photo with its markers and the compass, the building numbers under it, the card of the chosen building beside it */}
+        <section id="izberete-zgrada" className="scroll-mt-(--nav-h) bg-parchment py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
             <Reveal>
-              <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end lg:gap-6">
                 <div>
                   <div className="eyebrow text-gold-deep">КОМПЛЕКСОТ</div>
                   <h2 className="mt-3 text-balance font-display text-(length:--fs-h2) font-normal leading-[1.1] text-charcoal">
@@ -77,12 +77,12 @@ export default function DevelopmentPage() {
             <Reveal delay={0.1}>
               <div className="mt-12">
                 <Masterplan
-                  variant="full"
                   buildings={buildings}
                   image={development.masterplanImage}
                   hotspots={development.buildingHotspots}
                   basePath="/development"
                   north={cityCenter?.masterplanNorth}
+                  moveInYear={cityCenter?.stats?.moveInYear}
                 />
               </div>
             </Reveal>

@@ -57,6 +57,13 @@ export interface PlannedBuilding {
  * on its floor's sketch; every floor gets its own sketch. The status is not on the drawings: all are available until the
  * real availability arrives.
  */
+/** The short name of a floor, as the site writes it everywhere: 01, 02, 03, 04, 05, then ПК for the attic (поткровје). */
+export function floorLabel(name: string): string {
+  if (/поткровје/i.test(name)) return "ПК";
+  const n = name.match(/(\d+)/)?.[1];
+  return n ? n.padStart(2, "0") : name;
+}
+
 export function buildFromPlans(
   plans: PlansFile,
   options: {
@@ -111,7 +118,7 @@ export function buildFromPlans(
         apartments.push(...planned);
         return {
           number: floor.floor,
-          label: floor.name,
+          label: floorLabel(floor.name),
           apartmentIds: planned.map((a) => a.id),
           sketch: {
             src: `${options.imageDir}/${floor.sketch}`,

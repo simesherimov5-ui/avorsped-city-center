@@ -1,6 +1,7 @@
 import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./generate";
 import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
+import { floorTitle } from "@/lib/floor";
 import { listNames } from "@/lib/format";
 import { CONTACT_EMAIL } from "@/lib/site";
 import { carouselProjects } from "@/lib/project-explorer";
@@ -651,10 +652,11 @@ export function getApartmentsForFloor(buildingId: string, floor: number): Apartm
 
 const floorLabel = (number: number) => (number === 0 ? "Приземје" : `Кат ${number}`);
 
-/** The name of an apartment's floor, as its building's data calls it ("Кат 2", "Поткровје"); a plain "Кат n" otherwise. */
+/** The name of an apartment's floor, as the site writes it ("Кат 02", "Поткровје"); a plain "Кат n" otherwise. */
 export function floorLabelOf(a: Apartment): string {
   const building = getProject(a.projectId)?.buildings?.find((b) => b.id === a.buildingId);
-  return building?.floors.find((f) => f.number === a.floor)?.label ?? floorLabel(a.floor);
+  const label = building?.floors.find((f) => f.number === a.floor)?.label;
+  return label ? floorTitle(label) : floorLabel(a.floor);
 }
 
 /** A building of a project on sale, as the Пронајди стан street draws it. */

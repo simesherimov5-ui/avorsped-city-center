@@ -26,6 +26,8 @@
   ); /* retired as a surface; only a hairline tone is left */
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
+  /* The ground of the building picker on City Center (set by the owner): a shade deeper than the page. */
+  --color-parchment: #ece4d8;
   --color-bronze: #6d533e;
   /* Светол бакар: used only by the Контакт confirmation's «Во ред», which keeps the look of the deployed site
      (components/contact/contact.css). Every other button is the antique foil. */
@@ -136,6 +138,7 @@
   --color-espresso: var(--color-espresso);
   --color-travertine: var(--color-travertine);
   --color-sand: var(--color-sand);
+  --color-parchment: var(--color-parchment);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-brass: var(--color-brass);

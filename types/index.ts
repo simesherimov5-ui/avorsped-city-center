@@ -82,6 +82,14 @@ export interface Building {
   position: { row: number; col: number }; // grid position in the masterplan
   /** A short text about the building, shown in the building picker. */
   description?: string;
+  /** Where the building stands now, one of the five phases (the building picker's card). A [bracket] shows where it is missing. */
+  phase?: ConstructionPhase;
+  /** The floors as the card writes them ("5 ката + поткровје"). A [bracket] shows where it is missing. */
+  floorsLabel?: string;
+  /** The smallest and the largest apartment, in whole m² (from the plans). */
+  areaRange?: { min: number; max: number };
+  /** The year of moving in, where it differs from the project's. */
+  moveInYear?: number;
 }
 
 export interface ConstructionStage {

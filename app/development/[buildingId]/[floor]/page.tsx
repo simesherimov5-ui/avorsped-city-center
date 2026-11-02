@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronRight } from "lucide-react";
 import { getBuilding, getApartmentsForFloor, buildings, apartments, development } from "@/data";
+import { floorTitle } from "@/lib/floor";
 import { unitsText } from "@/lib/plural";
 import { pageMetadata } from "@/lib/seo";
 import { ApartmentCard } from "@/components/ApartmentCard";
@@ -25,8 +26,8 @@ export async function generateMetadata({
   if (!building || !level) return { title: "Кат", robots: { index: false } };
   const units = getApartmentsForFloor(building.id, floorNumber);
   return pageMetadata({
-    title: `${building.name}, ${level.label} — ${development.name}`,
-    description: `${level.label} во ${building.name}: ${unitsText(units.length)}. Изберете стан на основата на катот.`,
+    title: `${building.name}, ${floorTitle(level.label)} — ${development.name}`,
+    description: `${floorTitle(level.label)} во ${building.name}: ${unitsText(units.length)}. Изберете стан на основата на катот.`,
     path: `/development/${building.id}/${floorNumber}`,
     image: "/development/opengraph-image",
   });
@@ -67,7 +68,7 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             {building.name}
           </ZoomNavLink>
           <ChevronRight className="h-3 w-3" aria-hidden />
-          <span className="text-muted">{floor.label}</span>
+          <span className="text-muted">{floorTitle(floor.label)}</span>
         </nav>
         <h1 className="t-h1 mt-3 text-charcoal">Изберете го вашиот стан</h1>
       </div>

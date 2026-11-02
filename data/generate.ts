@@ -1,4 +1,14 @@
-import type { Apartment, Building, ConstructionStage, Development, Orientation, Room, UnitStatus } from "@/types";
+import type {
+  Apartment,
+  Building,
+  ConstructionPhase,
+  ConstructionStage,
+  Development,
+  Orientation,
+  Room,
+  UnitStatus,
+} from "@/types";
+import { floorsText } from "@/lib/plural";
 import { buildFromPlans, type PlansFile } from "./plans";
 import cityCenterPlans from "./plans/city-center.json";
 import { unitSlug } from "./slug";
@@ -72,6 +82,21 @@ export interface GeneratedDevelopment {
   apartments: Apartment[];
 }
 
+/** The five phases of the building picker's card, from a building's status. */
+const PHASE_OF_STATUS: Partial<Record<Building["status"], ConstructionPhase>> = {
+  foundation: "foundation",
+  structure: "structure",
+  exterior: "facade",
+  interior: "interior",
+  completed: "handover",
+};
+
+/** "5 ката + поткровје": the floors counted, the attic (ПК) named. */
+function floorsLabelOf(labels: string[]): string {
+  const floors = labels.filter((l) => l !== "ПК").length;
+  return `${floorsText(floors)}${labels.includes("ПК") ? " + поткровје" : ""}`;
+}
+
 export function generateDevelopment(): GeneratedDevelopment {
   const allApartments: Apartment[] = [];
   const buildings: Building[] = [];
@@ -125,6 +150,14 @@ export function generateDevelopment(): GeneratedDevelopment {
       exteriorImage: { src: buildingExteriors[b], alt: `Зграда ${label} — надворешен изглед`, isPlaceholder: false },
       status: buildingStatuses[b],
       position: positions[b],
+      // The phase is the building's sample status above (provisional: docs/content-needed.md); the floors and the areas are
+      // from the plans.
+      phase: PHASE_OF_STATUS[buildingStatuses[b]],
+      floorsLabel: floorsLabelOf(plan.floors.map((f) => f.label)),
+      areaRange: {
+        min: Math.round(Math.min(...plan.apartments.map((a) => a.area))),
+        max: Math.round(Math.max(...plan.apartments.map((a) => a.area))),
+      },
       // TODO(client): a short text about each building (docs/content-needed.md).
       description: `[Краток опис на зграда ${plan.number}: каква е, што има во приземјето, каков поглед имаат становите.]`,
     });

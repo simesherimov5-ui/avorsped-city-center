@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
 import type { Building, MediaImage } from "@/types";
+import { BuildingCard } from "@/components/project/BuildingCard";
 import { Media } from "@/components/ui/Media";
-import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { cn } from "@/lib/cn";
 import { floorsText, unitsText } from "@/lib/plural";
 
@@ -39,45 +39,37 @@ interface MasterplanProps {
   hotspots: Record<string, { top: string; left: string }>;
   /** Route prefix a building detail page lives under, e.g. "/development". */
   basePath: string;
-  variant?: "preview" | "full";
   className?: string;
   /** Where north is on `image`, in degrees (0 = up, clockwise). Without it the photo has no compass. */
   north?: number;
+  /** The year of moving in of the project, for a building that has none of its own. */
+  moveInYear?: number;
 }
 
-export function Masterplan({
-  buildings,
-  image,
-  hotspots,
-  basePath,
-  variant = "full",
-  className,
-  north,
-}: MasterplanProps) {
+/**
+ * The building picker: the aerial photo with a marker on every building, a row of the building numbers under it
+ * (the chosen one filled) and, beside it (under it on a phone), the card of the chosen building. The first building is
+ * chosen at the start; a marker or a number changes it. The photo keeps its own 16:9 box whatever the card beside it does
+ * (stretching it would crop the photo and slide the markers off their buildings).
+ */
+export function Masterplan({ buildings, image, hotspots, basePath, className, north, moveInYear }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(buildings[0]?.id ?? null);
   const [selectedRect, setSelectedRect] = useState<Rect | null>(null);
 
-  const active = buildings.find((b) => b.id === selected) ?? null;
+  const active = buildings.find((b) => b.id === selected) ?? buildings[0];
   const choose = (id: string, el: Element) => {
     setSelectedRect(rectOf(el));
     setSelected(id);
   };
 
   return (
-    <div className="w-full">
-      {/* items-start: the plan keeps its own 16:9 box whatever the panel beside it does (stretching it would crop the photo
-            and slide the markers off their buildings). */}
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+    <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-6">
+      <div className="min-w-0">
         {/* Real aerial photo with selectable hotspots per building */}
-        <div
-          className={cn(
-            "relative mx-auto aspect-[16/9] w-full overflow-hidden border border-line",
-            className ?? "max-w-4xl"
-          )}
-        >
+        <div className={cn("relative aspect-[16/9] w-full overflow-hidden border border-line", className)}>
           <div className="absolute inset-0">
-            <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 1024px" />
+            <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 836px" />
           </div>
 
           {north !== undefined && <Compass north={north} />}
@@ -87,8 +79,8 @@ export function Masterplan({
             if (!spot) return null;
 
             const isHovered = hovered === building.id;
-            const isSelected = selected === building.id;
-            const isDimmed = Boolean(selected) && !isSelected && !isHovered;
+            const isSelected = active?.id === building.id;
+            const isDimmed = !isSelected && !isHovered;
 
             return (
               <button
@@ -98,10 +90,7 @@ export function Masterplan({
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(building.id)}
                 onBlur={() => setHovered(null)}
-                onClick={(e) => {
-                  setSelectedRect(rectOf(e.currentTarget));
-                  setSelected((current) => (current === building.id ? null : building.id));
-                }}
+                onClick={(e) => choose(building.id, e.currentTarget)}
                 aria-pressed={isSelected}
                 aria-label={`${building.name} — детали`}
                 className="focus-ring group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center active:scale-90"
@@ -126,16 +115,20 @@ export function Masterplan({
                   {building.shortLabel}
                 </motion.div>
 
-                {/* Quick hover preview — independent of the persistent selected panel */}
+                {/* Quick hover preview — independent of the chosen building's card */}
                 <motion.div
                   initial={false}
-                  animate={{ opacity: isHovered && !isSelected ? 1 : 0, y: isHovered && !isSelected ? 0 : 6 }}
+                  animate={{
+                    opacity: isHovered && !isSelected ? 1 : 0,
+                    y: isHovered && !isSelected ? 0 : 6,
+                  }}
                   className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="text-base font-medium">{building.name}</div>
                   <div className="mt-2 space-y-1 text-label text-on-chrome/70">
                     <div>
-                      {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
+                      {building.floorsLabel ?? floorsText(building.floors.length)} ·{" "}
+                      {unitsText(building.totalApartments)}
                     </div>
                     <div>{STATUS_LABEL[building.status]}</div>
                   </div>
@@ -145,230 +138,31 @@ export function Masterplan({
           })}
         </div>
 
-        {/* Desktop — persistent, refined info panel beside the plan */}
-        <div className="hidden lg:block">
-          <PanelStack
-            buildings={buildings}
-            active={active}
-            basePath={basePath}
-            originRect={selectedRect}
-            onChoose={choose}
-            idle={
-              <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
-                <p className="text-sm leading-relaxed text-muted">
-                  Изберете зграда од планот за катови и фаза на изградба.
-                </p>
-                <div className="mt-6 flex flex-wrap justify-center gap-2">
-                  {buildings.map((b) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      aria-pressed={selected === b.id}
-                      aria-label={`Зграда ${b.shortLabel}`}
-                      onClick={(e) => {
-                        setSelectedRect(rectOf(e.currentTarget));
-                        setSelected(b.id);
-                      }}
-                      onMouseEnter={() => setHovered(b.id)}
-                      onMouseLeave={() => setHovered(null)}
-                      className="focus-ring flex h-11 w-11 items-center justify-center border border-line text-base font-medium text-muted transition-colors hover:border-accent hover:text-gold-deep"
-                    >
-                      {b.shortLabel}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            }
-          />
+        {/* The building numbers, the chosen one filled */}
+        <div role="group" aria-label="Згради" className="mt-4 flex flex-wrap gap-2">
+          {buildings.map((b) => (
+            <button
+              key={b.id}
+              type="button"
+              aria-pressed={b.id === active?.id}
+              aria-label={b.name}
+              onClick={(e) => choose(b.id, e.currentTarget)}
+              onMouseEnter={() => setHovered(b.id)}
+              onMouseLeave={() => setHovered(null)}
+              className={cn(
+                "focus-ring flex h-11 w-12 items-center justify-center border text-base font-medium transition-colors",
+                b.id === active?.id ? "border-onyx bg-onyx text-travertine" : "border-line text-ink hover:border-ink/40"
+              )}
+            >
+              {b.shortLabel}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Mobile — a dedicated selector strip instead of a shrunken hover UI */}
-      <div className="mt-6 lg:hidden">
-        <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
-          {buildings.map((building) => {
-            const isSelected = selected === building.id;
-            return (
-              <button
-                key={building.id}
-                type="button"
-                onClick={(e) => {
-                  setSelectedRect(rectOf(e.currentTarget));
-                  setSelected((current) => (current === building.id ? null : building.id));
-                }}
-                className={cn(
-                  "focus-ring flex min-h-12 shrink-0 items-center gap-2.5 border px-4 py-2.5 text-base transition-colors active:scale-[0.97]",
-                  isSelected ? "border-accent bg-accent/10 text-charcoal" : "border-line text-muted"
-                )}
-              >
-                <span
-                  className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-full border text-label font-semibold",
-                    isSelected ? "border-accent bg-accent text-chrome" : "border-line text-muted"
-                  )}
-                >
-                  {building.shortLabel}
-                </span>
-                Зграда {building.shortLabel}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="mt-4">
-          <PanelStack
-            buildings={buildings}
-            active={active}
-            basePath={basePath}
-            originRect={selectedRect}
-            onChoose={choose}
-            idle={
-              <div className="flex h-full flex-col justify-center border border-dashed border-line p-6 text-center">
-                <p className="text-sm leading-relaxed text-muted">
-                  Допрете на зграда погоре за катови и фаза на изградба.
-                </p>
-              </div>
-            }
-          />
-        </div>
-      </div>
-
-      {variant === "full" && (
-        <p
-          aria-hidden={active ? true : undefined}
-          className={cn("mx-auto mt-6 hidden max-w-md text-center text-sm text-muted lg:block", active && "invisible")}
-        >
-          Сите згради може да ги разгледате — изберете од планот или од листата.
-        </p>
+      {active && (
+        <BuildingCard building={active} basePath={basePath} originRect={selectedRect} moveInYear={moveInYear} />
       )}
-    </div>
-  );
-}
-
-/**
- * The idle note and the six building panels share one grid cell, and only one of them is shown: the cell is as tall as
- * the tallest, so choosing (or changing) a building never moves what is below. The others are invisible stand-ins
- * without the photo, so they cost nothing to load and cannot be reached.
- */
-function PanelStack({
-  buildings,
-  active,
-  basePath,
-  originRect,
-  onChoose,
-  idle,
-}: {
-  buildings: Building[];
-  active: Building | null;
-  basePath: string;
-  originRect: Rect | null;
-  onChoose: (id: string, el: Element) => void;
-  idle: ReactNode;
-}) {
-  return (
-    <div className="grid">
-      {active ? (
-        <div aria-hidden inert className="invisible col-start-1 row-start-1">
-          {idle}
-        </div>
-      ) : (
-        <motion.div
-          key="idle"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: DURATION.base, ease: EASE }}
-          className="col-start-1 row-start-1"
-        >
-          {idle}
-        </motion.div>
-      )}
-      {buildings.map((b) =>
-        b.id === active?.id ? (
-          <motion.div
-            key={`${b.id}-on`}
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: DURATION.base, ease: EASE }}
-            className="col-start-1 row-start-1"
-          >
-            <BuildingPanel
-              building={b}
-              basePath={basePath}
-              originRect={originRect}
-              onChoose={onChoose}
-              all={buildings}
-            />
-          </motion.div>
-        ) : (
-          <div key={b.id} aria-hidden inert className="invisible col-start-1 row-start-1">
-            <BuildingPanel
-              building={b}
-              basePath={basePath}
-              originRect={null}
-              onChoose={onChoose}
-              all={buildings}
-              standIn
-            />
-          </div>
-        )
-      )}
-    </div>
-  );
-}
-
-function BuildingPanel({
-  building,
-  basePath,
-  originRect,
-  onChoose,
-  all,
-}: {
-  building: Building;
-  basePath: string;
-  originRect: Rect | null;
-  onChoose: (id: string, el: Element) => void;
-  all: Building[];
-  /** Only takes up the room: see PanelStack. */
-  standIn?: boolean;
-}) {
-  return (
-    <div className="flex h-full flex-col gap-5">
-      <h3 className="m-0 font-display text-(length:--fs-h2) font-normal leading-[1.1]">{building.name}</h3>
-      <div aria-hidden className="h-px w-full bg-line" />
-      {building.description && <p className="m-0 text-base leading-[1.8] text-muted">{building.description}</p>}
-      <p className="m-0 text-sm text-muted">
-        {floorsText(building.floors.length)} · {unitsText(building.totalApartments)}
-      </p>
-      <div className="flex items-center gap-3 text-label font-semibold uppercase tracking-label text-ink">
-        <span aria-hidden className="block h-2 w-2 rounded-full bg-bronze" />
-        {building.status === "completed" ? "Завршено" : "Во изградба"}
-        <span className="sr-only"> · {STATUS_LABEL[building.status]}</span>
-      </div>
-      <ZoomNavLink
-        href={`${basePath}/${building.id}`}
-        label={building.name}
-        originRect={originRect ? () => originRect : undefined}
-        className="btn-secondary focus-ring w-full"
-        data-tone="light"
-      >
-        Разгледајте ја зградата →
-      </ZoomNavLink>
-      <div className="mt-1 grid grid-cols-3 gap-2">
-        {all.map((b) => (
-          <button
-            key={b.id}
-            type="button"
-            aria-pressed={b.id === building.id}
-            onClick={(e) => onChoose(b.id, e.currentTarget)}
-            className={cn(
-              "focus-ring min-h-12 border px-1 py-3 text-center font-display text-base transition-colors",
-              b.id === building.id ? "border-onyx bg-onyx text-travertine" : "border-line text-ink hover:border-ink/40"
-            )}
-          >
-            Зграда {Number(b.shortLabel)}
-          </button>
-        ))}
-      </div>
     </div>
   );
 }

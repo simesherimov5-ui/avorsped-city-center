@@ -4,6 +4,7 @@ import "./floor-picker.css";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
+import { floorTitle } from "@/lib/floor";
 import { formatArea } from "@/lib/format";
 import { roomsText } from "@/lib/plural";
 import { FloorSketch } from "@/components/floor-sketch/FloorSketch";
@@ -98,7 +99,7 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
 
       <div className="fp-panel" aria-live="polite">
         <div className="fp-label">Избор на стан по кат</div>
-        <h3 className="fp-title">{current.label}</h3>
+        <h3 className="fp-title">{floorTitle(current.label)}</h3>
         {currentSketch && (
           <FloorSketch
             image={currentSketch}
@@ -135,7 +136,11 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
           </ul>
         )}
         {basePath && current.apartments.length > 0 && (
-          <ZoomNavLink href={`${basePath}/${current.number}`} label={current.label} className="fp-floorlink">
+          <ZoomNavLink
+            href={`${basePath}/${current.number}`}
+            label={floorTitle(current.label)}
+            className="fp-floorlink"
+          >
             Погледни ја основата на катот
             <svg
               width="18"

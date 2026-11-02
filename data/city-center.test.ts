@@ -19,9 +19,9 @@ describe("City Center's plans", () => {
     expect(apartments.every((a) => a.projectId !== "city-center" || a.sample === undefined)).toBe(true);
   });
 
-  it("has six floors in every building, from Кат 1 to Поткровје, and none on the ground floor", () => {
+  it("has six floors in every building, 01 to 05 and ПК for the attic, and none on the ground floor", () => {
     for (const b of buildings) {
-      expect(b.floors.map((f) => f.label)).toEqual(["Кат 1", "Кат 2", "Кат 3", "Кат 4", "Кат 5", "Поткровје"]);
+      expect(b.floors.map((f) => f.label)).toEqual(["01", "02", "03", "04", "05", "ПК"]);
       expect(b.floors.some((f) => f.number === 0)).toBe(false);
     }
   });
@@ -45,22 +45,22 @@ describe("City Center's plans", () => {
         `${b} ${n}`
       ).toEqual([area, rooms, floor]);
     };
-    check("b01", "1", 186.9, 4, "Кат 1");
-    check("b01", "6", 94.05, 3, "Кат 2");
-    check("b01", "30", 94.05, 3, "Поткровје");
-    check("b02", "4", 119.2, 3, "Кат 1");
-    check("b02", "5", 209.7, 4, "Кат 1");
-    check("b03", "12", 42.2, 2, "Кат 2");
-    check("b03", "36", 42.2, 2, "Поткровје");
-    check("b04", "1", 117.26, 3, "Кат 1");
-    check("b04", "2", 133.07, 3, "Кат 1");
-    check("b04", "3", 208.59, 4, "Кат 1");
-    check("b05", "3", 28.7, 1, "Кат 1");
-    check("b05", "8", 186.9, 5, "Кат 2");
-    check("b05", "10", 81, 3, "Кат 3");
-    check("b06", "11a", 52.82, 2, "Кат 2");
-    check("b06", "33", 115.16, 4, "Кат 4");
-    check("b06", "60", 77.13, 3, "Поткровје");
+    check("b01", "1", 186.9, 4, "01");
+    check("b01", "6", 94.05, 3, "02");
+    check("b01", "30", 94.05, 3, "ПК");
+    check("b02", "4", 119.2, 3, "01");
+    check("b02", "5", 209.7, 4, "01");
+    check("b03", "12", 42.2, 2, "02");
+    check("b03", "36", 42.2, 2, "ПК");
+    check("b04", "1", 117.26, 3, "01");
+    check("b04", "2", 133.07, 3, "01");
+    check("b04", "3", 208.59, 4, "01");
+    check("b05", "3", 28.7, 1, "01");
+    check("b05", "8", 186.9, 5, "02");
+    check("b05", "10", 81, 3, "03");
+    check("b06", "11a", 52.82, 2, "02");
+    check("b06", "33", 115.16, 4, "04");
+    check("b06", "60", 77.13, 3, "ПК");
   });
 
   it("has rooms that add up to the total, except where the drawing itself does not", () => {
