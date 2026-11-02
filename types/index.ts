@@ -182,6 +182,15 @@ export interface ProjectAbout {
   en?: { title?: string; subtitle?: string };
 }
 
+/** The four numbers of «… во бројки»: buildings, apartments, the smallest and largest apartment (m², whole numbers), the year of moving in. */
+export interface ProjectStats {
+  buildings?: number;
+  apartments?: number;
+  areaMin?: number;
+  areaMax?: number;
+  moveInYear?: number;
+}
+
 /** A heading in two parts: the second part is set in the accent colour. */
 export interface SplitTitle {
   title: string;
@@ -264,6 +273,11 @@ interface ProjectFields {
   walking?: SplitTitle & { places: { name: string; time: string }[] };
   /** The "Тек на градба" section (the phase itself comes from `construction.currentPhase`). */
   progress?: ProjectProgress;
+  /**
+   * The numbers of the project's page («City Center во бројки»). A value that is not there shows as a [bracket] and is
+   * listed in docs/content-needed.md.
+   */
+  stats?: ProjectStats;
   /** The "Закажете средба" section. */
   book?: SplitTitle & { text: string };
   distanceHighlights?: string[];

@@ -194,6 +194,7 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 - **Паркинг** (`parking`): the heading `[Наслов за паркингот] [продолжение]` and the text `[Подземна гаража и паркинг места во комплексот: како се влегува, дали има лифт од гаража до станот, гаражни места за продажба.]` The drawing is simplified (caption `[ ПОЕДНОСТАВЕНА ОСНОВА НА ГАРАЖАТА ]`); a real garage plan can replace it.
 - **Локација** (`walking`): the real places and the minutes on foot. Placeholders now: `[Плоштад]` `[ 3 МИН ПЕШКИ ]`, `[Училиште]` `[ 5 МИН ]`, `[Градинка]` `[ 5 МИН ]`, `[Маркет]` `[ 2 МИН ]`, `[Парк]` `[ 6 МИН ]`.
 - **Тек на градба** (`progress`, `construction`): the date of the last update (`[датум]`), the month of each of the five phases (`[месец]`) and a construction photo for each phase (the placeholder `[ ФОТО ОД ГРАДИЛИШТЕ ]` shows until then). The current phase is `construction.currentPhase` (Конструкција today).
+- **«City Center во бројки»** (`stats`): the buildings, the apartments, the smallest and largest apartment (m²) and the year of moving in. All four are computed from the plans and `expectedCompletion` in `data/generate.ts` (6, 207, 29–210, 2027), so nothing is waiting; a value that goes missing shows as a `[bracket]` (`[број]`, `[од–до]`, `[година]`) until it is back. Confirm that the year of moving in is 2027.
 - **Закажете средба** (`book`): the text (the heading «Да го прошетаме City Center заедно» is in) `[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]`
 
 ---

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Masterplan } from "@/components/Masterplan";
-import { CountUp } from "@/components/ui/CountUp";
-import { StatCell, STAT_GRID } from "@/components/ui/StatCell";
 import { Reveal } from "@/components/ui/Reveal";
 import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
 import { OtherProjects } from "@/components/OtherProjects";
@@ -11,6 +9,7 @@ import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectBuildProgress } from "@/components/project/ProjectBuildProgress";
 import { ProjectBook } from "@/components/project/ProjectBook";
 import { ProjectOpeningSection } from "@/components/project/ProjectOpeningSection";
+import { ProjectNumbers } from "@/components/project/ProjectNumbers";
 import { development, buildings, projects } from "@/data";
 import { CITY_CENTER } from "@/lib/locations";
 import { pageMetadata } from "@/lib/seo";
@@ -30,20 +29,21 @@ export default function DevelopmentPage() {
   return (
     // Оникс is the page's base; the building picker is its one light block.
     <div className={opening ? undefined : "pt-24 sm:pt-28"}>
-      {/* 1 · the cinematic opening and 2 · "За проектот" replace the plain header (the title and the intro text) */}
-      {opening && <ProjectOpeningSection project={opening} aboutTarget="izberete-zgrada" />}
+      {/* 1 · the cinematic opening, then «City Center во бројки», then 2 · "За проектот": they replace the plain header (the title and the intro text) */}
+      {opening && (
+        <ProjectOpeningSection
+          project={opening}
+          aboutTarget="izberete-zgrada"
+          afterOpening={<ProjectNumbers project={opening} scrollTarget="izberete-zgrada" />}
+        />
+      )}
+      {!opening && cityCenter && <ProjectNumbers project={cityCenter} scrollTarget="izberete-zgrada" />}
 
-      {/* the light part of the page: the numbers and the building picker */}
+      {/* the light part of the page: the building picker */}
       <div className="on-light">
-        {/* The plain header, for a project without the opening; the numbers stay in both cases */}
-        <section
-          className={`mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 ${
-            // under the dark «За проектот» band: 48px to the numbers, and 70px from them to the next section, whose own top
-            // padding is 48px (64px from 640px)
-            opening ? "pb-[22px] pt-12 sm:pb-[6px]" : "pb-12 pt-10"
-          }`}
-        >
-          {!opening && (
+        {/* The plain header, for a project without the opening */}
+        {!opening && (
+          <section className="mx-auto max-w-7xl px-5 pb-12 pt-10 sm:px-8 lg:px-10">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
               <Reveal immediate>
                 <div className="eyebrow text-gold-deep">{development.location}</div>
@@ -55,22 +55,8 @@ export default function DevelopmentPage() {
                 <p className="text-lead text-ink/70 lg:pb-1">{development.description}</p>
               </Reveal>
             </div>
-          )}
-
-          <Reveal immediate delay={0.16}>
-            <div className={`${opening ? "" : "mt-10 "}${STAT_GRID}`}>
-              <StatCell tone="light" label="Згради">
-                <CountUp value="6" duration={1600} />
-              </StatCell>
-              <StatCell tone="light" label="Станови">
-                <CountUp value={String(development.totalApartments)} duration={1600} />
-              </StatCell>
-              <StatCell tone="light" label="Завршување">
-                <CountUp value={development.expectedCompletion} />
-              </StatCell>
-            </div>
-          </Reveal>
-        </section>
+          </section>
+        )}
 
         {/* 3 · pick a building: the aerial photo with its markers and the compass; beside it only the facts of the chosen building */}
         <section id="izberete-zgrada" className="scroll-mt-(--nav-h) py-12 sm:py-16">

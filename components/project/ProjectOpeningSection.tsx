@@ -1,16 +1,20 @@
+import type { ReactNode } from "react";
 import { ProjectOpening } from "@/components/project/ProjectOpening";
 import { ProjectAbout } from "@/components/project/ProjectAbout";
 import { projectStatusLabel } from "@/lib/format";
 import type { Project } from "@/types";
 
-/** The photo opening of a project page and, when the project has the text, "За проектот" under it. Everything comes from the project's data. */
+/** The photo opening of a project page and, when the project has the text, "За проектот" under it (with `afterOpening` between them). Everything comes from the project's data. */
 export function ProjectOpeningSection({
   project,
   aboutTarget,
+  afterOpening,
 }: {
   project: Project;
   /** The id of the section that «ИЗБЕРЕТЕ ЗГРАДА ↓» in "За проектот" leads to (the building picker). */
   aboutTarget?: string;
+  /** A section between the opening photo and "За проектот". */
+  afterOpening?: ReactNode;
 }) {
   const slides = (project.openingSlides ?? [{ image: project.heroImage }]).map((s, i) => ({
     key: `${i}-${s.image.src}`,
@@ -29,6 +33,7 @@ export function ProjectOpeningSection({
         slides={slides}
         storageKey={`hero-stopped-${project.slug}`}
       />
+      {afterOpening}
       {project.about && <ProjectAbout about={project.about} target={aboutTarget} />}
     </>
   );

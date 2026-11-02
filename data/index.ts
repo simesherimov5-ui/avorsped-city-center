@@ -7,6 +7,20 @@ import { carouselProjects } from "@/lib/project-explorer";
 
 const generated = generateDevelopment();
 
+/** The year in a text like "Q2 2027". */
+const yearIn = (text: string) => {
+  const year = text.match(/\d{4}/)?.[0];
+  return year ? Number(year) : undefined;
+};
+/** The smallest and the largest apartment of a list, in whole m². */
+const areaRange = (list: Apartment[]) =>
+  list.length === 0
+    ? {}
+    : {
+        areaMin: Math.round(Math.min(...list.map((a) => a.area))),
+        areaMax: Math.round(Math.max(...list.map((a) => a.area))),
+      };
+
 /** City Center's own development (its masterplan, buildings and text): only City Center's pages read this. */
 export const development = generated.development;
 /** City Center's buildings. Other projects' buildings are in `projects[n].buildings`; read them through `projectsOnSale()`. */
@@ -158,6 +172,13 @@ export const projects: Project[] = [
       { label: "Очекуван завршеток", value: development.expectedCompletion },
       { label: "Локација", value: development.location },
     ],
+    // «City Center во бројки»: all of it from the plans and the schedule above, nothing typed in.
+    stats: {
+      buildings: development.buildings.length,
+      apartments: development.totalApartments,
+      ...areaRange(generated.apartments),
+      moveInYear: yearIn(development.expectedCompletion),
+    },
     href: "/development",
     constructionStages: development.constructionStages,
     // Derived from the stage data above: foundations are done and the structure is at 90%.
