@@ -1,4 +1,4 @@
-import { ZoomNavLink } from "@/components/ui/ZoomTransition";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { cn } from "@/lib/cn";
 import { formatAreaRange } from "@/lib/format";
 import type { Building, ConstructionPhase } from "@/types";
@@ -14,13 +14,6 @@ const STEPS: { key: ConstructionPhase; label: string }[] = [
 
 const ROW_LABEL = "text-label font-semibold uppercase tracking-label text-muted";
 
-interface Rect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 /**
  * The card of the building chosen in the picker: its name, its phase with the five-step line, the floors, the
  * apartments, the sizes and the year of moving in, and the way to its page. A value the data does not have shows as a
@@ -29,12 +22,10 @@ interface Rect {
 export function BuildingCard({
   building,
   basePath,
-  originRect,
   moveInYear,
 }: {
   building: Building;
   basePath: string;
-  originRect: Rect | null;
   /** The project's year of moving in, for a building that has none of its own. */
   moveInYear?: number;
 }) {
@@ -94,15 +85,9 @@ export function BuildingCard({
         ))}
       </dl>
 
-      <ZoomNavLink
-        href={`${basePath}/${building.id}`}
-        label={building.name}
-        originRect={originRect ? () => originRect : undefined}
-        className="btn-secondary focus-ring w-full"
-        data-tone="light"
-      >
+      <Link href={`${basePath}/${building.id}`} className="btn-secondary focus-ring w-full" data-tone="light">
         Разгледајте ја зградата →
-      </ZoomNavLink>
+      </Link>
     </div>
   );
 }

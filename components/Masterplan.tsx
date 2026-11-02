@@ -9,18 +9,6 @@ import { Media } from "@/components/ui/Media";
 import { cn } from "@/lib/cn";
 import { floorsText, unitsText } from "@/lib/plural";
 
-interface Rect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-function rectOf(el: Element): Rect {
-  const r = el.getBoundingClientRect();
-  return { x: r.x, y: r.y, width: r.width, height: r.height };
-}
-
 const STATUS_LABEL: Record<string, string> = {
   planning: "Планирање",
   foundation: "Темели",
@@ -55,13 +43,9 @@ interface MasterplanProps {
 export function Masterplan({ buildings, image, hotspots, basePath, className, north, moveInYear }: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(buildings[0]?.id ?? null);
-  const [selectedRect, setSelectedRect] = useState<Rect | null>(null);
 
   const active = buildings.find((b) => b.id === selected) ?? buildings[0];
-  const choose = (id: string, el: Element) => {
-    setSelectedRect(rectOf(el));
-    setSelected(id);
-  };
+  const choose = (id: string) => setSelected(id);
 
   return (
     <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-6">
@@ -90,7 +74,7 @@ export function Masterplan({ buildings, image, hotspots, basePath, className, no
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered(building.id)}
                 onBlur={() => setHovered(null)}
-                onClick={(e) => choose(building.id, e.currentTarget)}
+                onClick={() => choose(building.id)}
                 aria-pressed={isSelected}
                 aria-label={`${building.name} — детали`}
                 className="focus-ring group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center active:scale-90"
@@ -146,7 +130,7 @@ export function Masterplan({ buildings, image, hotspots, basePath, className, no
               type="button"
               aria-pressed={b.id === active?.id}
               aria-label={b.name}
-              onClick={(e) => choose(b.id, e.currentTarget)}
+              onClick={() => choose(b.id)}
               onMouseEnter={() => setHovered(b.id)}
               onMouseLeave={() => setHovered(null)}
               className={cn(
@@ -160,9 +144,7 @@ export function Masterplan({ buildings, image, hotspots, basePath, className, no
         </div>
       </div>
 
-      {active && (
-        <BuildingCard building={active} basePath={basePath} originRect={selectedRect} moveInYear={moveInYear} />
-      )}
+      {active && <BuildingCard building={active} basePath={basePath} moveInYear={moveInYear} />}
     </div>
   );
 }
