@@ -169,8 +169,8 @@ export function ContactForm({
   const openId: StepId = editing && visible.includes(editing) ? editing : firstOpen;
 
   const summaryOf = (id: StepId) => {
-    if (id === "project") return undecided ? "Сè уште не знам" : (project?.name ?? "");
-    if (id === "area") return areaUnknown ? "Сè уште не знам" : areaText.replace("–", " – ");
+    if (id === "project") return undecided ? "Уште не знам" : (project?.name ?? "");
+    if (id === "area") return areaUnknown ? "Уште не знам" : areaText.replace("–", " – ");
     if (id === "when") return [day?.label, time].filter(Boolean).join(" · ");
     return "";
   };
@@ -204,7 +204,7 @@ export function ContactForm({
     setAreaDone(true);
     setEditing(null);
   };
-  // «Сè уште не знам» answers the step at once
+  // «Уште не знам» answers the step at once
   const areaNotYet = () => {
     setAreaUnknown(true);
     setAreaHint(false);
@@ -388,10 +388,10 @@ export function ContactForm({
             <button
               type="button"
               className="ct-edit"
-              aria-label={`Измени: ${ROW_LABELS[id]}`}
+              aria-label={`Изменете: ${ROW_LABELS[id]}`}
               onClick={() => setEditing(id)}
             >
-              Измени
+              Изменете
             </button>
           </div>
         </Collapse>
@@ -440,8 +440,8 @@ export function ContactForm({
               ...projects.map((p) => ({ value: p.id, label: p.name, content: p.name })),
               {
                 value: UNDECIDED,
-                label: "Сè уште не знам",
-                content: "Сè уште не знам",
+                label: "Уште не знам",
+                content: "Уште не знам",
                 className: "is-secondary",
               },
             ]}
@@ -461,7 +461,7 @@ export function ContactForm({
             />
             <div className="ct-area-actions">
               <button type="button" className="btn-secondary" data-tone="dark" onClick={areaNotYet}>
-                Сè уште не знам
+                Уште не знам
               </button>
               <button
                 type="button"
@@ -471,7 +471,7 @@ export function ContactForm({
                 aria-describedby={areaHint && !areaTouched ? "ct-area-hint" : undefined}
                 onClick={confirmArea}
               >
-                <span>Продолжи</span>
+                <span>Продолжете</span>
                 <span aria-hidden className="ct-btn__arrow">
                   <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
                     <path d="M0 4h13M9 1l4 3-4 3" />
@@ -480,7 +480,7 @@ export function ContactForm({
               </button>
             </div>
             <p id="ct-area-hint" role="status" className="ct-area-hint">
-              {areaHint && !areaTouched ? "Изберете површина или „Сè уште не знам“" : ""}
+              {areaHint && !areaTouched ? "Изберете површина или „Уште не знам“" : ""}
             </p>
           </>,
           undefined,
@@ -617,7 +617,7 @@ export function ContactForm({
                 aria-disabled={canSend ? undefined : true}
                 aria-busy={status === "sending"}
               >
-                <span>{status === "sending" ? "Се испраќа…" : "Закажи"}</span>
+                <span>{status === "sending" ? "Се испраќа…" : "Закажете"}</span>
                 <span aria-hidden className="ct-btn__arrow">
                   <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1">
                     <path d="M0 4h13M9 1l4 3-4 3" />
@@ -630,7 +630,7 @@ export function ContactForm({
             </div>
             {status === "failed" && (
               <p role="alert" className="ct-fail">
-                Барањето не беше испратено. Вашите одговори се зачувани: обидете се повторно или повикајте нè на{" "}
+                Барањето не беше испратено. Вашите одговори се зачувани: обидете се повторно или јавете ни се на{" "}
                 <a href={`tel:${officePhone.replace(/ /g, "")}`}>{officePhone}</a>.
               </p>
             )}

@@ -54,19 +54,19 @@ export function CompareView() {
   return (
     <div className="on-dark min-h-svh pt-24 sm:pt-28">
       <section className="mx-auto max-w-5xl px-5 sm:px-8 py-14 lg:px-10">
-        <SectionHeading as="h1" eyebrow="Споредба" title="Спореди станови" />
+        <SectionHeading as="h1" eyebrow="Споредба" title="Споредете станови" />
 
         {selected.length === 0 ? (
           <div className="mt-12 flex flex-col items-center gap-4 border border-dashed border-line px-6 py-16 sm:py-20 text-center">
             <Layers className="h-8 w-8 text-muted" strokeWidth={1.5} />
             <div>
-              <div className="t-h3">Сè уште немате избрано станови</div>
+              <div className="t-h3">Засега немате избрано станови</div>
               <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
                 Додајте до 3 станови за споредба.
               </p>
             </div>
             <Button href="/development" variant="primary" tone="dark" size="sm">
-              Разгледај станови
+              Разгледајте станови
             </Button>
           </div>
         ) : (
@@ -102,7 +102,7 @@ export function CompareView() {
               </tbody>
             </table>
             <button onClick={clear} className="focus-ring mt-6 text-sm text-muted hover:text-charcoal">
-              Исчисти споредба
+              Исчистете споредба
             </button>
           </div>
         )}

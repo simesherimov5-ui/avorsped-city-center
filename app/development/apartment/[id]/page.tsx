@@ -94,7 +94,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
       </dl>
       <div className="space-y-3 border-t border-line pt-6">
         <Button href={inquiryHref} variant="primary" tone="dark" className="w-full">
-          Прашај за овој стан
+          Прашајте за овој стан
         </Button>
       </div>
       <a
@@ -206,7 +206,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             {apartment.tour?.available && (
               <div>
-                <h2 className="t-h3">Истражи го станот</h2>
+                <h2 className="t-h3">Истражете го станот</h2>
                 <p className="mt-2 text-sm text-muted">
                   {apartment.tour?.available
                     ? "Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите."

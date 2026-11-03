@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         {/* The first thing a keyboard reaches: it jumps over the navbar to the page's content. */}
         <a href="#main" className="skip-link">
-          Прескокни до содржината
+          Прескокнете до содржината
         </a>
         <script
           type="application/ld+json"

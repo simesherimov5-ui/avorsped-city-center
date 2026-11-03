@@ -49,7 +49,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           </div>
           <Link
             href={`/development/apartment/${apartment.id}`}
-            aria-label={`Погледни го стан ${apartment.number}`}
+            aria-label={`Погледнете го стан ${apartment.number}`}
             className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:border-gold-light hover:text-gold-light"
           >
             <ArrowRight className="h-4 w-4" />
@@ -86,7 +86,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             onChange={() => toggle(apartment.id)}
             className="h-5 w-5 accent-[color:var(--color-accent)] lg:h-3.5 lg:w-3.5"
           />
-          {selected ? "Додаден за споредба" : "Додади за споредба"}
+          {selected ? "Додаден за споредба" : "Додадете за споредба"}
         </label>
       </div>
     </div>

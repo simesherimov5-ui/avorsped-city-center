@@ -215,7 +215,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       )}
 
       {completed ? (
-        <ProjectCta projectId={project.id} label="Закажи консултација" href="/contact" />
+        <ProjectCta projectId={project.id} label="Закажете консултација" href="/contact" />
       ) : (
         <ProjectCta projectId={project.id} />
       )}

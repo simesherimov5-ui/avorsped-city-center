@@ -36,7 +36,7 @@ export default function DojranPage() {
             facts={project.specifications}
           >
             <Button href="/contact?project=dojranski-raj" variant="primary" size="sm">
-              Закажи консултација
+              Закажете консултација
             </Button>
           </ProjectHeader>
         </div>

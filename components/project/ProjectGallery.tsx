@@ -125,7 +125,7 @@ export function ProjectGallery({ photos }: { photos: Photo[] }) {
             <button
               type="button"
               onClick={() => setViewer(i)}
-              aria-label={`Отвори ја фотографијата ${i + 1} од ${count}: ${photo.alt}`}
+              aria-label={`Отворете ја фотографијата ${i + 1} од ${count}: ${photo.alt}`}
               className="focus-ring group block aspect-video w-full overflow-hidden bg-espresso"
             >
               <span className="block h-full w-full transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.03] motion-reduce:group-hover:scale-100">

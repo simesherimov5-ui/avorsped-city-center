@@ -141,7 +141,7 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
             label={floorTitle(current.label)}
             className="fp-floorlink"
           >
-            Погледни ја основата на катот
+            Погледнете ја основата на катот
             <svg
               width="18"
               height="10"

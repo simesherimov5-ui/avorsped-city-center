@@ -29,7 +29,7 @@ export function ProjectPlace({
             rel="noopener noreferrer"
             className="focus-ring mt-6 inline-flex min-h-11 items-center text-sm text-gold-deep underline decoration-gold decoration-2 underline-offset-4"
           >
-            Отвори во Google Maps
+            Отворете во Google Maps
           </a>
         </Reveal>
         <div className="flex min-w-0 flex-col">

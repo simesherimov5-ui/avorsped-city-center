@@ -170,7 +170,7 @@ export function Modal({
     <button
       type="button"
       onClick={onClose}
-      aria-label="Затвори"
+      aria-label="Затворете"
       className={cn(
         "bk-modal-close",
         closeIn === "screen" ? "fixed right-4 top-4 z-10 sm:right-6 sm:top-6" : "absolute right-3 top-3"

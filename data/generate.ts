@@ -198,7 +198,7 @@ export function generateDevelopment(): GeneratedDevelopment {
     },
     {
       key: "interior",
-      label: "Внатрешно доуредување",
+      label: "Завршни работи",
       date: "Q4 2025",
       percentComplete: 25,
       description: "Инсталација на инсталации и внатрешно доуредување започнува во Зградите 01–02.",

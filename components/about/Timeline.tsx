@@ -61,7 +61,7 @@ export function Timeline({ milestones }: { milestones: Milestone[] }) {
             <button
               type="button"
               className="ab-card"
-              aria-label={`${m.year}. ${m.text} — отвори ја фотографијата`}
+              aria-label={`${m.year}. ${m.text} — отворете ја фотографијата`}
               onClick={() => {
                 setIndex(i);
                 setOpen(true);

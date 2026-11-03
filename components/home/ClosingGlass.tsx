@@ -102,10 +102,10 @@ export function ClosingGlass({ phone, email }: { phone: string; email: string })
         <p className="cg-lead">Нашиот тим ќе ви помогне да го најдете вистинскиот стан.</p>
         <div className="cg-actions">
           <Button href="/contact" variant="primary" tone="dark" filled>
-            Закажи консултација
+            Закажете консултација
           </Button>
           <Button href="/projects" variant="secondary" tone="dark">
-            Погледни ги проектите
+            Истражете ги проектите
           </Button>
         </div>
         <div className="cg-contact">

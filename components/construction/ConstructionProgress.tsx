@@ -99,8 +99,8 @@ function Full({ data, className }: { data: ConstructionProgressData | null; clas
   );
 
   return (
-    <section className={className} aria-label="Тек на изградба">
-      <div className="eyebrow eyebrow-ruled text-gold-deep">Тек на изградба</div>
+    <section className={className} aria-label="Тек на градба">
+      <div className="eyebrow eyebrow-ruled text-gold-deep">Тек на градба</div>
       <RevealHeading as="h2" className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
         Градбата, фаза по фаза
       </RevealHeading>

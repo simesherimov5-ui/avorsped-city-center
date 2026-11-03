@@ -167,10 +167,10 @@ export function ProjectsMap({
       </div>
 
       <div className="pj-zoom">
-        <button type="button" aria-label="Зумирај" onClick={() => zoomCentre(1.4)}>
+        <button type="button" aria-label="Зумирајте" onClick={() => zoomCentre(1.4)}>
           +
         </button>
-        <button type="button" aria-label="Одзумирај" onClick={() => zoomCentre(1 / 1.4)}>
+        <button type="button" aria-label="Одзумирајте" onClick={() => zoomCentre(1 / 1.4)}>
           −
         </button>
         <button type="button" aria-label="Почетен приказ" onClick={() => setView({ sc: 1, tx: 0, ty: 0 })}>

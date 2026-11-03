@@ -179,7 +179,7 @@ export function ProjectSlideshow({
                   tone="dark"
                   className="w-full sm:w-auto"
                 >
-                  Погледни го проектот
+                  Погледнете го проектот
                 </Button>
               </motion.div>
             </div>

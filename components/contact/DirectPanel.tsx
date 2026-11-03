@@ -72,7 +72,7 @@ export function DirectPanel({ phone, email, hours, address, messengerNumber }: P
       <div className="ct-addr">
         <span>{address}</span>
         <a href={mapSearchUrl(CONTACT_MAP_QUERY)} target="_blank" rel="noopener">
-          Отвори во Google Maps
+          Отворете во Google Maps
         </a>
       </div>
     </aside>

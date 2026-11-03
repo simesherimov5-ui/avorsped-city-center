@@ -16,7 +16,7 @@ const label = (v: number) => (v >= AREA.max ? `${AREA.max}+` : String(v));
  * what the keyboard and screen readers use: each is a native range input, so Tab reaches it and the arrow keys move it
  * by 5 m². The pointer (mouse or finger) is handled on the track itself: it grabs the handle nearest to where it
  * went down, so each handle can be taken even when the two are close, which two stacked 44px targets cannot offer.
- * The handles cannot cross: they stay at least one step (5 m²) apart. «Сè уште не знам» switches the range off
+ * The handles cannot cross: they stay at least one step (5 m²) apart. «Уште не знам» switches the range off
  * ("we will advise"); moving a handle switches it on again.
  */
 export function AreaSlider({

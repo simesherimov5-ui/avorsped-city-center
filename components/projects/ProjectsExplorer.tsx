@@ -354,7 +354,7 @@ function Explorer({
             <>
               Нема проекти за овој избор.{" "}
               <button type="button" className="pj-reset" onClick={() => choose({ status: "all", city: "all" })}>
-                Прикажи ги сите
+                Прикажете ги сите
               </button>
             </>
           ) : (

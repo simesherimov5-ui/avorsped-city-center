@@ -16,7 +16,7 @@ export function Soon() {
         </Reveal>
         <Reveal delay={0.1}>
           <Button href="/contact" variant="primary" tone="dark">
-            Пријави се
+            Пријавете се
           </Button>
         </Reveal>
       </div>

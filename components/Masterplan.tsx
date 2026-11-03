@@ -14,7 +14,7 @@ const STATUS_LABEL: Record<string, string> = {
   foundation: "Темели",
   structure: "Конструкција",
   exterior: "Фасада",
-  interior: "Внатрешно доуредување",
+  interior: "Завршни работи",
   completed: "Завршено",
 };
 

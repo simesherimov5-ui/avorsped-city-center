@@ -76,7 +76,7 @@ export function CompareBar() {
                     <button
                       type="button"
                       onClick={() => toggle(id)}
-                      aria-label={`Отстрани стан ${apt.number}`}
+                      aria-label={`Отстранете стан ${apt.number}`}
                       className="focus-ring -my-1 -mr-1.5 inline-flex h-6 w-6 items-center justify-center"
                     >
                       <X className="h-3 w-3" />
@@ -87,7 +87,7 @@ export function CompareBar() {
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <Button variant="tertiary" tone="dark" size="sm" onClick={clear}>
-                Исчисти
+                Исчистете
               </Button>
               <Button
                 href={`/compare?ids=${encodeURIComponent(ids.join(","))}`}
@@ -95,7 +95,7 @@ export function CompareBar() {
                 tone="dark"
                 size="sm"
               >
-                Спореди
+                Споредете
               </Button>
             </div>
           </div>

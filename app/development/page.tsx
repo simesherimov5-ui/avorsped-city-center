@@ -117,7 +117,7 @@ export default function DevelopmentPage() {
                   rel="noopener noreferrer"
                   className="focus-ring mt-2 inline-flex min-h-11 w-fit items-center text-sm text-gold-deep underline decoration-gold decoration-2 underline-offset-4"
                 >
-                  Отвори во Google Maps
+                  Отворете во Google Maps
                 </a>
               </>
             }

@@ -269,7 +269,7 @@ export function Navbar() {
                 className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center text-on-chrome"
                 aria-controls="mobile-menu"
                 onClick={() => setOpen((v) => !v)}
-                aria-label={open ? "Затвори мени" : "Отвори мени"}
+                aria-label={open ? "Затворете мени" : "Отворете мени"}
                 aria-expanded={open}
               >
                 {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

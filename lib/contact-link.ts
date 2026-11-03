@@ -1,7 +1,7 @@
 import { getLenis } from "@/lib/lenis";
 
 /**
- * Where a "Закажи консултација" button on `pathname` goes: the Контакт page, carrying what the visitor is
+ * Where a "Закажете консултација" button on `pathname` goes: the Контакт page, carrying what the visitor is
  * looking at (an apartment, a building or a project), so the booking form opens with the interest pre-selected
  * and a reference tag. Anywhere else it is the plain Контакт page.
  */
