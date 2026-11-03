@@ -129,16 +129,12 @@ export function ProjectAbout({
   const delay = (n: number) => ({ "--pa-delay": `${0.3 + 0.15 * n}s` }) as CSSProperties;
 
   return (
-    <section
-      ref={sectionRef}
-      id={id}
-      className="brand-voice pa-intro relative isolate overflow-hidden bg-espresso md:flex md:min-h-[820px] md:items-center"
-    >
+    <section ref={sectionRef} id={id} className="brand-voice pa-intro relative isolate overflow-hidden bg-espresso">
       <div aria-hidden className="pa-intro-mark">
         <BuildingMark className="text-on-chrome" style={{ height: 200, width: "auto", opacity: 0.06 }} />
       </div>
       <div className="pa-intro-scrim" aria-hidden />
-      <div className="relative mx-auto flex w-full max-w-[860px] flex-col items-center px-[5%] py-20 text-center md:py-[130px]">
+      <div className="relative mx-auto flex w-full max-w-[860px] flex-col items-center px-[5%] py-14 text-center md:py-24">
         <span aria-hidden className="block h-14 w-px bg-gold" />
         {head.title && (
           <h2 className="pa-headline m-0 mt-8 whitespace-nowrap font-display text-[clamp(30px,5.2vw,60px)] font-normal leading-[1.1] text-paper">
