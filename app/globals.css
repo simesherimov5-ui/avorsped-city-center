@@ -691,10 +691,20 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   .photo-hero--top .pj-slide-photo {
     inset: 0;
   }
+  /* where the heading block ends: under the bar, its padding, the heading (1.08 lines), the 8px gap and the line under it (1.3
+     lines), and 14px of room; a slide whose roof (--hero-roof, a fraction of the photo's height) is higher than that is let
+     down by the difference, so the block stays in the sky. The strip it leaves at the top is under the header's own
+     shade (94% Оникс at the very top), and the photo's own top is dark sky, so no edge shows. */
+  .photo-hero--top {
+    --pj-h1: calc(clamp(30px, 2.6vw + 12px, 52px) * var(--type-scale, 1) * 1.08);
+    --pj-sub: calc(clamp(16px, 0.4vw + 11px, 18px) * var(--type-scale, 1) * 1.3);
+    --pj-sky: calc(var(--nav-h) + 20px + var(--pj-h1) + 8px + var(--pj-sub) + 14px);
+  }
   .photo-hero--top .media-fit__photo:not([data-fade]) {
     --w: max(100cqw, 100cqh * var(--a));
+    --hero-dy: max(0px, var(--pj-sky) - var(--hero-roof, 1) * var(--w) / var(--a));
     left: calc((100cqw - var(--w)) * var(--hero-fx, 0.5));
-    top: calc((100cqh - var(--w) / var(--a)) * var(--hero-fy, 0.5));
+    top: calc((100cqh - var(--w) / var(--a)) * var(--hero-fy, 0.5) + var(--hero-dy));
   }
   .photo-hero--top .photo-hero__media .hero-scrim-bottom {
     display: none;
@@ -735,12 +745,12 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   /* a shorter laptop screen (1280×720 and lower): the heading block closer under the header and the group a little lower,
      so more of the architecture shows between them */
   @media (max-height: 760px) {
+    .photo-hero--top {
+      --pj-sky: calc(var(--nav-h) + 10px + var(--pj-h1) + 8px + var(--pj-sub) + 14px);
+    }
     .photo-hero--top.photo-hero--fill .photo-hero__content {
       padding-top: calc(var(--nav-h) + 10px);
       padding-bottom: 40px;
-    }
-    .photo-hero--top .pj-hero-text {
-      gap: 4px;
     }
   }
   .photo-hero--top .pj-hero-row::before {

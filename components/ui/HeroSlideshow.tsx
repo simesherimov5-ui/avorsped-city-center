@@ -52,6 +52,9 @@ export interface HeroSlide {
   image: { src: string; alt: string; isPlaceholder: boolean };
   /** Where the photo is held when the frame trims it (x, y in %; zoom stays 1). */
   focus?: ImageFocus;
+  /** The line of the building's roof, as a fraction of the photo's height (0.2 = a fifth of the way down): from 1024px the
+   *  photo is let down just far enough that the heading block stays above it, in the sky (.photo-hero--top). */
+  roof?: number;
   /** The photo's own width in pixels (no wider variant is requested). */
   maxWidth?: number;
   /** The photo's building box (Media's `box`), where the hero keeps the building whole; then also its `sizes`. */
@@ -214,7 +217,11 @@ export function HeroSlideshow({
               // where a whole photo is held where the hero's frame trims it (.photo-hero--top from 1024px)
               style={
                 wholePhotos && s.focus
-                  ? ({ "--hero-fx": s.focus.x / 100, "--hero-fy": s.focus.y / 100 } as CSSProperties)
+                  ? ({
+                      "--hero-fx": s.focus.x / 100,
+                      "--hero-fy": s.focus.y / 100,
+                      ...(s.roof !== undefined && { "--hero-roof": s.roof }),
+                    } as CSSProperties)
                   : undefined
               }
             >

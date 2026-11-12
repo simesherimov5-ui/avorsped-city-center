@@ -20,6 +20,16 @@ const SLIDE_FRAMING: Record<string, ImageFocus> = {
   "radovish-twins": { zoom: 1, x: 50, y: 0 },
 };
 
+// Where each slide's roof line is, as a fraction of its picture's height (measured on the pictures: City Center's roofs at 34%,
+// the aerial Дојрански Рај's building from 28%, Радовиш Twins' roof at 20.7%). From 1024px the photo is let down just far enough
+// that the heading and the line under it stay above it, in the sky (.photo-hero--top in app/globals.css); a slide that
+// already clears it is not moved.
+const SLIDE_ROOF: Record<string, number> = {
+  "city-center": 0.34,
+  "dojranski-raj": 0.28,
+  "radovish-twins": 0.207,
+};
+
 /**
  * The top of the projects page: a slideshow of the projects' photos on Оникс with the page's one heading (the
  * slideshow itself, its timing and its pause rules are HeroSlideshow's). Each photo keeps its own proportions (Media's
@@ -38,6 +48,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
       image,
       label: project.name,
       focus: SLIDE_FRAMING[project.id],
+      roof: SLIDE_ROOF[project.id],
       ...(width && {
         maxWidth: width,
         // from 1024px a wide photo covers the first screen, a narrow one fits inside it; the full width narrower
