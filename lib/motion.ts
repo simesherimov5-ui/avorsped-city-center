@@ -37,5 +37,8 @@ export const exitDuration = (d: number) => Math.max(DURATION.fast, d * 0.75);
 /** Scroll reveals start as soon as the element is inside the screen, less a 5% band at the bottom. */
 export const REVEAL_VIEWPORT = { once: true, margin: "0px 0px -5% 0px", amount: 0 } as const;
 
+/** A reveal that, when its component starts in the browser, is still at or below this line (its top 95% of the screen's height down, the same line as REVEAL_VIEWPORT) waits to rise in; one above it is already readable and stays as it is. */
+export const startsBelowRevealLine = (top: number, viewportHeight: number) => top >= viewportHeight * 0.95;
+
 /** The same point for GSAP ScrollTrigger: the element's top passes 95% of the screen's height. */
 export const REVEAL_START = "top 95%";
