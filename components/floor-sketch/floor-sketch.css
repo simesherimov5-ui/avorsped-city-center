@@ -12,6 +12,11 @@
   color: var(--color-onyx);
   animation: fs-sheet var(--dur-slow) var(--ease) both;
 }
+/* On a cream page (a building's floor page) the card is the same light colour as the page: a 1px Оникс 10% border
+   keeps it from melting into it, instead of the gold one meant for the dark page. */
+.fs-on-cream .fs {
+  border-color: color-mix(in srgb, var(--color-onyx) 10%, transparent);
+}
 @keyframes fs-sheet {
   from {
     opacity: 0;

@@ -17,18 +17,50 @@ export function FloorList({
   floors,
   basePath,
   activeFloor,
+  tone,
 }: {
   floors: FloorListItem[];
   basePath: string;
   activeFloor?: number;
+  /** "light": on a cream page (a building's floor page): names in Оникс, the unit counts in Бронза, the current floor a
+   *  Бронза circle with a cream number, the others a 1px Оникс 20% outline. Without it the list keeps its own colours. */
+  tone?: "light";
 }) {
   const floorsTopDown = [...floors].sort((a, b) => b.number - a.number);
+  const light = tone === "light";
 
   return (
     <div className="relative">
       <div className="absolute bottom-5 left-[17px] top-5 w-px bg-line" aria-hidden />
       {floorsTopDown.map((floor) => {
         const isActive = activeFloor === floor.number;
+
+        if (light) {
+          return (
+            <ZoomNavLink
+              key={floor.number}
+              href={`${basePath}/${floor.number}`}
+              label={floor.label}
+              aria-current={isActive ? "page" : undefined}
+              className="focus-ring group relative flex min-h-14 items-start gap-4 py-2 transition-transform focus-visible:!outline-bronze active:scale-[0.99]"
+            >
+              <span
+                className={cn(
+                  "relative z-10 mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors",
+                  isActive
+                    ? "border-bronze bg-bronze text-travertine"
+                    : "border-onyx/20 bg-travertine text-onyx group-hover:border-bronze"
+                )}
+              >
+                {floor.number}
+              </span>
+              <span className="flex flex-1 flex-col gap-1 border-b border-onyx/12 py-2.5 group-last:border-0">
+                <span className={cn("text-base text-onyx", isActive && "font-semibold")}>{floor.label}</span>
+                <span className="text-xs text-bronze">{floor.meta}</span>
+              </span>
+            </ZoomNavLink>
+          );
+        }
 
         return (
           <ZoomNavLink

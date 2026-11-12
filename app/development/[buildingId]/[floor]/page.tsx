@@ -53,7 +53,10 @@ export default async function FloorPage({ params }: { params: Promise<{ building
   });
 
   return (
-    <ZoomEnter className="on-dark pt-24 sm:pt-28">
+    // On cream (Травертин): .on-light gives the light-surface tokens (Оникс text, Бронза labels); the ground needs the
+    // important utility because .on-light's own background would win over a plain one. fs-on-cream gives the plan card
+    // its quiet border (floor-sketch.css). The site header is not part of this page.
+    <ZoomEnter className="on-light fs-on-cream !bg-travertine pt-24 sm:pt-28">
       {/* A quiet wayfinding line, not a spec header — the visitor already
           arrived through the building, so it doesn't need repeating as a
           prominent heading. The floor plan and its apartments are the
@@ -101,8 +104,13 @@ export default async function FloorPage({ params }: { params: Promise<{ building
             )}
           </div>
           <div>
-            <div className="eyebrow mb-3 text-muted">Други катови</div>
-            <FloorList basePath={`/development/${building.id}`} activeFloor={floorNum} floors={floorNavItems} />
+            <div className="eyebrow mb-3 text-gold-deep">Други катови</div>
+            <FloorList
+              basePath={`/development/${building.id}`}
+              activeFloor={floorNum}
+              floors={floorNavItems}
+              tone="light"
+            />
           </div>
         </div>
       </section>
