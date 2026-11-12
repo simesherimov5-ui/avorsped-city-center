@@ -218,8 +218,9 @@ export function Navbar() {
           )}
         >
           {/* the bar is as high as the shared --nav-h (64 / 72 / 90px, app/globals.css), less its hairline; from 1024px a grid whose
-              middle column is the links, so they sit on the page centre whatever the widths on either side */}
-          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-10">
+              middle column is the free space between the logo and the button, with the links centred in it (the logo is narrow
+              and the button wide, so the links sit left of the page centre: the optical centre of what is between them) */}
+          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:px-10">
             <Link
               id="site-logo"
               href="/"

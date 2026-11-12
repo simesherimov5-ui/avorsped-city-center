@@ -97,7 +97,7 @@
    below without moving the wordmark, so the wordmark stays exactly where it always was. Both are drawn shapes
    (wordmark-glyphs.ts) sized in em, so they scale with --wm; line-height 0 keeps the page font out of their boxes. */
 .jsi-lock {
-  --wm: clamp(34px, 4.6vw, 60px);
+  --wm: clamp(40.8px, 5.52vw, 72px); /* 20% more than clamp(34px, 4.6vw, 60px) at every width */
   position: relative;
   display: inline-block;
 }
