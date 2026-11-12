@@ -323,6 +323,9 @@ export const projects: Project[] = [
     // off the roof. Show it a little further out; the edges are filled with a blurred copy of the photo.
     imageFocus: { zoom: 0.87, x: 50, y: 46, aspect: 2 },
     heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
+    // the card on the Проекти grid: the whole building with its roof and both side edges
+    cardImage: { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
+    cardFocus: { zoom: 1, x: 46, y: 50 },
     slideImage: {
       src: "/images/dojran/aerial-beach.jpg",
       alt: "Дојрански Рај — поглед од воздух",
@@ -443,12 +446,13 @@ export const projects: Project[] = [
       alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
       isPlaceholder: false,
     },
-    // the daylight corner: the card on the Проекти grid
+    // the daylight view of the whole building and its neighbour: the card on the Проекти grid, held to the right
     cardImage: {
-      src: "/images/radovish-twins/exterior-01.jpg",
-      alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
+      src: "/images/radovish-twins/exterior-05.jpg",
+      alt: "Радовиш Twins — целата зграда и соседниот објект, дневна визуелизација",
       isPlaceholder: false,
     },
+    cardFocus: { zoom: 1, x: 75, y: 50 },
     // ten distinct views, daylight first, then evening (1672 × 941 renders)
     gallery: [
       {

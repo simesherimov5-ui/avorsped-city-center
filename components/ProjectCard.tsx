@@ -10,6 +10,8 @@ import { unitsText } from "@/lib/plural";
 
 export function ProjectCard({ project }: { project: Project }) {
   const hasHoverDetails = Boolean(project.tagline || project.distanceHighlights?.length);
+  // the card's own photo and framing where the project has one (the whole building in this frame), else its hero photo
+  const photo = project.cardImage ?? project.heroImage;
 
   return (
     <Link
@@ -18,26 +20,26 @@ export function ProjectCard({ project }: { project: Project }) {
       className="focus-ring group relative isolate block border border-line bg-warm-white transition-[border-color,scale] duration-(--dur-fast) ease-(--ease) active:scale-[0.985] motion-reduce:active:scale-100 [@media(hover:hover)]:hover:border-ink/30"
     >
       <div className="relative overflow-hidden">
-        {project.heroImage.isPlaceholder ? (
+        {photo.isPlaceholder ? (
           <NoPhoto className="aspect-[4/3]" />
         ) : (
           <Media
-            image={project.heroImage}
+            image={photo}
             label={`${project.name} — визуелизација`}
             fit={project.imageFit}
-            focus={project.imageFocus}
+            focus={project.cardFocus ?? project.imageFocus}
             // a 2:1 photo in a 4:3 frame is drawn about 1.5x wider than the card, so the sizes allow for the crop
             sizes={
               project.imageFit === "contain"
                 ? "(max-width: 640px) 80vw, 320px"
                 : "(max-width: 640px) 150vw, (max-width: 1024px) 75vw, 50vw"
             }
-            className="aspect-[4/3] transition-transform duration-[900ms] ease-(--ease) motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.035] motion-reduce:group-hover:scale-100"
+            className="aspect-[4/3]"
           />
         )}
 
         {hasHoverDetails && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-[opacity,transform] duration-(--dur-base) ease-(--ease) group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-chrome/95 via-chrome/85 via-75% to-transparent px-4 pb-4 pt-14 opacity-0 transition-[opacity,transform] duration-(--dur-base) ease-(--ease) group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100">
             {project.tagline && <div className="text-sm text-on-chrome sm:text-base">{project.tagline}</div>}
             {project.distanceHighlights && project.distanceHighlights.length > 0 && (
               <ul className="mt-1.5 space-y-0.5 text-label uppercase tracking-label text-on-chrome/80">

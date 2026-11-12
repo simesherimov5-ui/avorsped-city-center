@@ -327,6 +327,11 @@ interface ProjectFields {
   stub?: boolean;
   /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */
   cardImage?: { src: string; alt: string; isPlaceholder: boolean };
+  /**
+   * Where the card's photo is held in the card's photo frame (x in %, zoom stays 1): chosen so the whole building, its roof
+   * and both side edges, stays in the frame.
+   */
+  cardFocus?: ImageFocus;
   /** The heading of the page's intro; the second part is set in the accent colour. */
   intro?: SplitTitle;
   /** The intro's facts beside the heading (the city and the status are added from the project). */
