@@ -2043,19 +2043,20 @@ body:has([data-compare-bar]) footer {
 .mf-text[data-live] .mf-w {
   transition: color 0.3s ease;
 }
-/* «Што нè разликува» (components/home/DifferencesStage.tsx). Under 1024px: the heading, then every point with its own photo
-   (16:10) above its text, 32px apart, nothing dimmed, nothing sticky. From 1024px: on the left one sticky block, the
-   heading (one line) and under it a square photo (its side is the column's width, at most 640px; it gives way only if the
-   block would not fit the screen less the bar); on the right the four points, each at least 52vh tall, in a column as wide
-   as the text (34rem) so the rules between them end with it. The point nearest the photo's middle is at full strength, the
-   others at 32% (once the script has armed it). */
+/* «Што нè разликува» (components/home/DifferencesStage.tsx). Under 1024px: the heading, then every point as a pair, its
+   photo (at its own proportions, the full content width) 16px above the number, title and text, the pairs 48px apart,
+   nothing dimmed, nothing sticky. From 1024px: on the left one sticky block under the bar (--nav-h and 32px), the heading
+   (one line) and under it a 4:3 photo as wide as the column; on the right the four points, each at least 52vh tall, in
+   a column as wide as the text (34rem) so the rules between them end with it. The point crossing the middle of the
+   window is at full strength and its photo is shown (a 600ms crossfade, instant with reduced motion); the others are
+   dimmed (once the script has armed it) to colours that keep 4.5:1 on the section's Пясок: Оникс at 62%, Бронза at 88%. */
 .df-frame {
   display: none;
 }
 .df-list {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 48px;
   margin-top: 48px;
 }
 .df-inner {
@@ -2065,8 +2066,8 @@ body:has([data-compare-bar]) footer {
 }
 .df-pic {
   position: relative;
-  aspect-ratio: 16 / 10;
-  margin-bottom: 8px;
+  aspect-ratio: var(--a, 1.5);
+  margin-bottom: 4px;
   overflow: hidden;
 }
 @media (min-width: 1024px) {
@@ -2080,19 +2081,16 @@ body:has([data-compare-bar]) footer {
   }
   .df-stick {
     position: sticky;
-    top: 96px;
+    top: calc(var(--nav-h) + 32px);
     display: flex;
     flex-direction: column;
     gap: 32px;
-    max-height: calc(100svh - 192px);
   }
   .df-frame {
     display: block;
     position: relative;
-    flex: 0 1 auto;
     width: 100%;
-    height: min(100cqw, 640px);
-    min-height: 0;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--color-espresso);
   }
@@ -2100,14 +2098,10 @@ body:has([data-compare-bar]) footer {
     position: absolute;
     inset: 0;
     opacity: 0;
-    transform: scale(1.04);
-    transition:
-      opacity 0.8s ease,
-      transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.6s ease;
   }
   .df-photo.is-active {
     opacity: 1;
-    transform: none;
   }
   .df-list {
     gap: 0;
@@ -2124,17 +2118,24 @@ body:has([data-compare-bar]) footer {
   .df-pic {
     display: none;
   }
-  .df-inner {
-    transition: opacity 0.5s ease;
+  .df-num,
+  .df-title,
+  .df-text {
+    transition: color 0.5s ease;
   }
-  .df[data-armed] .df-point:not(.is-active) .df-inner {
-    opacity: 0.32;
+  .df[data-armed] .df-point:not(.is-active) .df-num {
+    color: color-mix(in srgb, var(--color-gold-deep) 88%, transparent);
+  }
+  .df[data-armed] .df-point:not(.is-active) .df-title,
+  .df[data-armed] .df-point:not(.is-active) .df-text {
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .df-photo,
-  .df-inner {
-    transform: none;
+  .df-num,
+  .df-title,
+  .df-text {
     transition: none;
   }
 }

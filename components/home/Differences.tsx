@@ -4,23 +4,43 @@ import { DifferencesStage, type DifferenceItem } from "@/components/home/Differe
 const ITEMS: DifferenceItem[] = [
   {
     title: "Квалитет што трае",
-    text: "Секој материјал го избираме внимателно. Квалитетот се чувствува.",
-    photo: { src: "/images/exteriors/exterior-02-facade.jpg", x: 42 },
+    text: "Темните рамки на прозорците и топлите тонови на облогите се внимателно усогласени.",
+    photo: {
+      src: "/images/home-differences/01-city-center-facade.png",
+      alt: "Фасада со темни рамки на прозорците и топли облоги",
+      x: 40,
+      y: 50,
+    },
   },
   {
-    title: "Локации блиску до сè",
-    text: "Градиме блиску до сè што ви треба секој ден.",
-    photo: { src: "/images/site/courtyard.jpg", x: 50 },
+    title: "Јасни архитектонски линии",
+    text: "Длабоките балкони ѝ даваат ритам на фасадата и сенка на терасите.",
+    photo: {
+      src: "/images/home-differences/03-radovish-twins-daylight.png",
+      alt: "Станбена зграда со длабоки балкони и ритмична фасада на дневна светлина",
+      x: 62,
+      y: 50,
+    },
   },
   {
     title: "Грижа за секој детал",
-    text: "Наши инженери и наша механизација, од темелот до клучот.",
-    photo: { src: "/images/stanbena-zgrada/dvor.jpg", x: 55 },
+    text: "Од влезот до балконите, линиите и материјалите се надоврзуваат.",
+    photo: {
+      src: "/images/home-differences/03-facade-street-original.jpeg",
+      alt: "Висока станбена зграда со влез под настрешница и вертикални линии на фасадата",
+      x: 22,
+      y: 60,
+    },
   },
   {
-    title: "Секој проект, чекор понапред",
-    text: "Со секој проект учиме. Затоа секоја следна зграда е подобра.",
-    photo: { src: "/images/exteriors/exterior-05-object5.jpg", x: 30 },
+    title: "Удобност со мера",
+    text: "Мекото осветлување ги нагласува текстурите и му дава мирен тон на ентериерот.",
+    photo: {
+      src: "/images/home-differences/04-dojranski-raj-interior.jpg",
+      alt: "Дневна соба со мека светлина, дрвени панели и голем прозорец кон пејзаж",
+      x: 50,
+      y: 60,
+    },
   },
 ];
 
