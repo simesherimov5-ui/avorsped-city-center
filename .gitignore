@@ -50,3 +50,6 @@ reference/photos-originals/
 # local working files: upscaled photo candidates (not used by the site) and Claude's scratch folder
 /public/images/enhanced/
 /.tmp-claude/
+
+# leftover from git filter-branch
+.git-rewrite/
