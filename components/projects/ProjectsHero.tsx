@@ -1,137 +1,95 @@
 "use client";
 
-import "./projects.css";
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { Media } from "@/components/ui/Media";
-import { SheenOnce } from "@/components/ui/SheenOnce";
-import { PauseButton } from "@/components/ui/PauseButton";
+import { HeroSlideshow } from "@/components/ui/HeroSlideshow";
 import { projectStatusLabel } from "@/lib/format";
-import { useMediaQuery } from "@/lib/useMediaQuery";
-import type { Project } from "@/types";
+import { IMAGE_DIMS } from "@/lib/image-dims";
+import { WIDE_PHOTO } from "@/components/ui/Media";
+import { aspectOf, wholeSizes } from "@/lib/image-sizes";
+import type { ImageFocus, Project } from "@/types";
 
-const SLIDE_MS = 5500;
+// Where each slide's wide photo is held from 1024px, where it covers the whole first screen and some sky, foreground or a
+// sliver of the sides gives way (x, y in %: 0 keeps the top / left edge, 50 centres, 100 keeps the bottom / right edge).
+// Chosen from where the buildings stand in each 1672×941 picture, so roofs and bases stay on screen, below the heading
+// where the screen allows. City Center: roofs at 34% of the height, base at 62%, the buildings from 4% to 96% of the width
+// (centred, so a wide screen trims sky and road evenly); Радовиш Twins: roof at 21%, base at 70% (all the trim from the lawn,
+// as there is little sky above the roof); Дојрански Рај, from the air: the building between 28% and 77% (a little more
+// trimmed from the trees at the bottom than from the top). A slide without an entry is centred. zoom stays 1: never enlarged.
+const SLIDE_FRAMING: Record<string, ImageFocus> = {
+  "city-center": { zoom: 1, x: 50, y: 50 },
+  "dojranski-raj": { zoom: 1, x: 50, y: 40 },
+  "radovish-twins": { zoom: 1, x: 50, y: 0 },
+};
 
-const subscribeVisibility = (onChange: () => void) => {
-  document.addEventListener("visibilitychange", onChange);
-  return () => document.removeEventListener("visibilitychange", onChange);
+// Where each slide's roof line is, as a fraction of its picture's height (measured on the pictures: City Center's roofs at 34%,
+// the aerial Дојрански Рај's building from 28%, Радовиш Twins' roof at 20.7%). From 1024px the photo is let down just far enough
+// that the heading and the line under it stay above it, in the sky (.photo-hero--top in app/globals.css); a slide that
+// already clears it is not moved.
+const SLIDE_ROOF: Record<string, number> = {
+  "city-center": 0.34,
+  "dojranski-raj": 0.28,
+  "radovish-twins": 0.207,
 };
 
 /**
- * The top of the projects page: a slideshow of the projects' photos on Оникс with the page's one heading. A slide stays
- * 5.5s; the track of the current slide fills in exactly that time and its end moves on to the next slide. It pauses
- * while the tab is hidden and while a slide button has keyboard focus. With reduced motion the tracks are full and a
- * timer changes the slides (the photos still cross-fade).
+ * The top of the projects page: a slideshow of the projects' photos on Оникс with the page's one heading (the
+ * slideshow itself, its timing and its pause rules are HeroSlideshow's). Each photo keeps its own proportions (Media's
+ * `whole`): from 1024px a wide one covers the hero from edge to edge, framed per slide (SLIDE_FRAMING) so its buildings stay
+ * whole, and a narrow one is shown whole on Оникс; on a phone every photo is whole at the full width. From 1024px exactly the first screen with the heading over the photo and the
+ * indicators, the project's name and its town and status in one group at the bottom left; narrower, the heading above the
+ * photo and the group below it, on Оникс.
  */
 export function ProjectsHero({ slides }: { slides: Project[] }) {
-  const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const [slide, setSlide] = useState(0);
-  // a click on a slide button restarts the timer: bumping the key restarts the track's animation
-  const [run, setRun] = useState(0);
-  const [focused, setFocused] = useState(false);
-  const [manual, setManual] = useState(false);
-  const hidden = useSyncExternalStore(
-    subscribeVisibility,
-    () => document.hidden,
-    () => false
-  );
-  const paused = focused || hidden || manual;
-  const count = slides.length;
-
-  // With reduced motion there is no animation to end a slide, so a timer does it.
-  useEffect(() => {
-    if (!reduce || paused || count < 2) return;
-    const id = window.setTimeout(() => setSlide((s) => (s + 1) % count), SLIDE_MS);
-    return () => window.clearTimeout(id);
-  }, [reduce, paused, count, slide, run]);
-
-  const current = slides[slide];
+  const items = slides.map((project) => {
+    const image = project.slideImage ?? project.heroImage;
+    const width = IMAGE_DIMS[image.src]?.[0];
+    const aspect = aspectOf(image.src) ?? 16 / 9;
+    return {
+      key: project.id,
+      image,
+      label: project.name,
+      focus: SLIDE_FRAMING[project.id],
+      roof: SLIDE_ROOF[project.id],
+      ...(width && {
+        maxWidth: width,
+        // from 1024px a wide photo covers the first screen, a narrow one fits inside it; the full width narrower
+        sizes:
+          aspect >= WIDE_PHOTO
+            ? `(min-width: 1024px) max(100vw, 100svh * ${aspect.toFixed(4)}), 100vw`
+            : wholeSizes(image.src, width, [{ media: "(min-width: 1024px)", w: "100vw", h: "100svh" }, { w: "100vw" }]),
+      }),
+    };
+  });
 
   return (
-    <section className="pj-hero" aria-label="Проекти">
-      <PauseButton
-        paused={manual}
-        onToggle={() => setManual((m) => !m)}
-        className="absolute right-[5%] top-[calc(var(--nav-h)+16px)] z-10"
-      />
-      {slides.map((project, i) => (
-        <div key={project.id} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
-          <div className="pj-slide-photo">
-            <Media
-              image={project.heroImage}
-              tone="dark"
-              fit={project.imageFit ?? "cover"}
-              focus={project.imageFocus}
-              className="h-full w-full !bg-transparent"
-              // the frame is tall and the photo is drawn at the height of it times its aspect, so wider than the screen on a phone or a tablet
-              sizes="(max-width: 767px) 330vw, (max-width: 900px) 170vw, (max-width: 1280px) 130vw, 100vw"
-              priority={i === 0}
-              defer={i !== 0}
-            />
-          </div>
-        </div>
-      ))}
-      <div className="pj-hero-scrim-x" />
-      <div className="pj-hero-scrim-y" />
+    <HeroSlideshow slides={items} storageKey="pj-hero-stopped" label="Проекти" className="photo-hero--top" wholePhotos>
+      {({ slide, tracks, pause, rowProps }) => {
+        const current = slides[slide];
+        return (
+          <div className="pj-wrap photo-hero__content">
+            <div className="pj-hero-text">
+              <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
+              <div className="pj-under photo-hero__eyebrow">Можеби вашиот дом веќе ве чека.</div>
+            </div>
 
-      <div className="pj-wrap pj-hero-inner">
-        <div className="pj-hero-text">
-          <SheenOnce className="pj-sheen">JAVOR SPED · ПРОЕКТИ</SheenOnce>
-          <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
-          <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>
-        </div>
-
-        <div className="pj-hero-row">
-          <div className="pj-hero-left">
-            {count > 1 && (
-              <div className="pj-tracks">
-                {slides.map((project, i) => (
-                  <button
-                    key={project.id}
-                    type="button"
-                    className="pj-track-btn"
-                    aria-label={project.name}
-                    aria-current={i === slide ? "true" : undefined}
-                    onClick={() => {
-                      setSlide(i);
-                      setRun((r) => r + 1);
-                    }}
-                    onFocus={(e) => setFocused(e.currentTarget.matches(":focus-visible"))}
-                    onBlur={() => setFocused(false)}
-                  >
-                    <span className="pj-track">
-                      {i === slide &&
-                        (reduce ? (
-                          <span className="pj-track-fill is-static" />
-                        ) : (
-                          <span
-                            key={`${slide}-${run}`}
-                            className="pj-track-fill is-on"
-                            style={{ animationPlayState: paused ? "paused" : "running" }}
-                            onAnimationEnd={() => setSlide((s) => (s + 1) % count)}
-                          />
-                        ))}
+            <div className="pj-hero-row" {...rowProps}>
+              <div className="pj-hero-left">
+                <div className="pj-controls">
+                  {tracks}
+                  {pause}
+                </div>
+                {current && (
+                  <span className="pj-now" aria-live="off">
+                    <span className="pj-now-name">{current.name}</span>
+                    <span className="pj-now-meta">
+                      {current.city} · {current.statusLabelOverride ?? projectStatusLabel(current.status)}
                     </span>
-                  </button>
-                ))}
+                  </span>
+                )}
               </div>
-            )}
-            {current && (
-              <span className="pj-now" aria-live="off">
-                <span className="pj-now-name">{current.name}</span>
-                <span className="pj-now-meta">
-                  {current.city} · {current.statusLabelOverride ?? projectStatusLabel(current.status)}
-                </span>
-              </span>
-            )}
+            </div>
           </div>
-          <span className="pj-scroll" aria-hidden>
-            СКРОЛАЈ
-            <span className="pj-cue-line">
-              <span className="pj-cue" />
-            </span>
-          </span>
-        </div>
-      </div>
-    </section>
+        );
+      }}
+    </HeroSlideshow>
   );
 }

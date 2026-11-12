@@ -1,24 +1,51 @@
 import { buildSampleApartments, generateDevelopment, type SampleUnit } from "./generate";
 import { dojranFloors } from "./dojran";
 import type { Apartment, Building, CompanyMilestone, CompanyStat, Project } from "@/types";
+import { floorTitle } from "@/lib/floor";
+import { listNames } from "@/lib/format";
+import { CONTACT_EMAIL } from "@/lib/site";
+import { carouselProjects } from "@/lib/project-explorer";
 
 const generated = generateDevelopment();
+
+/** The year in a text like "Q2 2027". */
+const yearIn = (text: string) => {
+  const year = text.match(/\d{4}/)?.[0];
+  return year ? Number(year) : undefined;
+};
+/** The smallest and the largest apartment of a list, in m² exactly as the plans give them. */
+const areaRange = (list: Apartment[]) =>
+  list.length === 0
+    ? {}
+    : {
+        areaMin: Math.min(...list.map((a) => a.area)),
+        areaMax: Math.max(...list.map((a) => a.area)),
+      };
 
 /** City Center's own development (its masterplan, buildings and text): only City Center's pages read this. */
 export const development = generated.development;
 /** City Center's buildings. Other projects' buildings are in `projects[n].buildings`; read them through `projectsOnSale()`. */
 export const buildings: Building[] = generated.development.buildings;
 
-export function availabilityCounts(list: Apartment[] = apartments) {
+export { residentQuotes } from "./quotes";
+
+/** A project known only by its name, city and status: no photo (the cards and the page show the logo mark), no text. */
+function stub(slug: string, name: string, status: Project["status"], city: string): Project {
   return {
-    available: list.filter((a) => a.status === "available").length,
-    reserved: list.filter((a) => a.status === "reserved").length,
-    sold: list.filter((a) => a.status === "sold").length,
-    total: list.length,
+    id: slug,
+    slug,
+    name,
+    location: city,
+    city,
+    status,
+    description: "",
+    heroImage: { src: "", alt: name, isPlaceholder: true },
+    gallery: [],
+    specifications: [],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
+    stub: true,
   };
 }
-
-export { residentQuotes } from "./quotes";
 
 export const projects: Project[] = [
   {
@@ -33,27 +60,54 @@ export const projects: Project[] = [
     description: development.description,
     tagline: "Најдобрата локација за вашиот нов дом",
     heroOpening: true,
-    // TODO(client): the drone film (docs/content-needed.md). Drop the file in public/ and set `heroVideo: "/videos/<file>.mp4"`.
-    openingTagline: "Шест згради, една нова адреса за центарот на Струмица.",
+    heroFilm: {
+      hd: "/videos/city-center/city-center-hero-1080p.mp4",
+      sd: "/videos/city-center/city-center-hero-720p.mp4",
+      poster: "/videos/city-center/city-center-hero-poster.jpg",
+    },
+    // The opening is one photo, shown whole under the header (the edited sunset visualization, 1672px wide: Media's `whole`
+    // with the sky hero in app/globals.css); `maxWidth` keeps the optimizer from asking for more than the file has.
+    openingSlides: [
+      {
+        image: {
+          src: "/images/city-center-selected/hero-city-center-sunset-edited.png",
+          alt: "City Center — комплексот во зајдисонце",
+          isPlaceholder: false,
+        },
+        focus: { zoom: 1, x: 50, y: 0 },
+        maxWidth: 1672,
+      },
+    ],
+    openingTagline: "Шест згради, една нова адреса во Струмица.",
+    showcase: [
+      ["gallery-01-wide-sunset", "комплексот во зајдисонце"],
+      ["gallery-02-golden-view", "поглед во златно светло"],
+      ["gallery-03-facade-approved-sunlight", "фасада на сончева светлина"],
+      ["gallery-04-balcony-details", "детали од балконите"],
+      ["gallery-05-complex-greenery", "комплексот и зеленилото"],
+    ].map(([file, what]) => ({
+      src: `/images/city-center-selected/${file}.png`,
+      alt: `City Center — ${what}`,
+      isPlaceholder: false,
+    })),
     about: {
-      kicker: "ЗА ПРОЕКТОТ",
-      title: "Нов стандард на живеење, ",
-      titleItalic: "во срцето на Струмица.",
+      title: "Нов стандард на живеење",
+      subtitle: "Во срцето на Струмица",
       paragraphs: [
-        "[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]",
-        "[Втор пасус: за кого е наменет и каков живот нуди.]",
+        "Од секоја зграда што сме ја изградиле од 1994 година наваму научивме нешто ново. Сето тоа искуство го вградивме во City Center: шест згради во центарот на Струмица, со плоштад, деловни простори и подземна гаража.",
+        "Резултатот е дом изграден онака како што и ние би сакале да живееме. Ве покануваме да откриете зошто.",
       ],
+      accents: ["нешто ново", "дом", "зошто"],
       signature: "Javor Sped Holding",
       en: {
-        kicker: "ABOUT THE PROJECT",
-        title: "A new standard of living, ",
-        titleItalic: "in the heart of Strumica.",
+        title: "A new standard of living",
+        subtitle: "In the heart of Strumica",
       },
     },
     // TODO(client): the north direction on the aerial photo, in degrees (docs/content-needed.md).
     masterplanNorth: 0,
-    // TODO(client): the material photos, makers and the headings (docs/content-needed.md).
-    materialsHeading: { title: "[Наслов за квалитетот] ", titleItalic: "[продолжение]" },
+    // TODO(client): the material photos and makers (docs/content-needed.md).
+    materialsHeading: { title: "Изградено да трае.", titleItalic: "" },
     equippedBy: "Luxury Home",
     materials: ["Гранит", "Плочки", "Санитарија", "Подови"].map((name) => ({
       name,
@@ -77,16 +131,25 @@ export const projects: Project[] = [
       ],
     },
     // TODO(client): the date of the last update, the month of each phase and the construction photos.
-    progress: { title: "Следете како ", titleItalic: "расте." },
+    progress: {
+      title: "Следете ја градбата.",
+      titleItalic: "",
+      lede: "Нови фотографии од градилиштето секој месец.",
+    },
     book: {
-      title: "[Наслов за покана] ",
-      titleItalic: "[продолжение]",
+      title: "Да го прошетаме ",
+      titleItalic: "City Center заедно",
       text: "[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]",
     },
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
     // A narrow frame (the Проекти card) is centred on the main central building, so it is whole from roof to ground.
     imageFocus: { zoom: 1, x: 52, y: 50 },
-    heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
+    heroImage: { src: "/images/approved-rich/city-center-exterior-rich.png", alt: "City Center", isPlaceholder: false },
+    slideImage: {
+      src: "/images/approved-rich/city-center-exterior-rich.png",
+      alt: "City Center",
+      isPlaceholder: false,
+    },
     gallery: [
       { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center — визуелизација 1", isPlaceholder: false },
       { src: "/images/exteriors/exterior-gallery-2.jpg", alt: "City Center — визуелизација 2", isPlaceholder: false },
@@ -98,6 +161,13 @@ export const projects: Project[] = [
       { label: "Очекуван завршеток", value: development.expectedCompletion },
       { label: "Локација", value: development.location },
     ],
+    // «City Center во бројки»: all of it from the plans and the schedule above, nothing typed in.
+    stats: {
+      buildings: development.buildings.length,
+      apartments: development.totalApartments,
+      ...areaRange(generated.apartments),
+      moveInYear: yearIn(development.expectedCompletion),
+    },
     href: "/development",
     constructionStages: development.constructionStages,
     // Derived from the stage data above: foundations are done and the structure is at 90%.
@@ -109,22 +179,30 @@ export const projects: Project[] = [
   {
     id: "stanbena-kukja",
     slug: "stanbena-kukja",
-    name: "Станбена Куќа",
+    name: "Станбена куќа 1",
     location: "Ул. Цветан Димов бр. 16, Струмица, Северна Македонија",
     city: "Струмица",
-    status: "upcoming",
+    status: "under-construction",
     year: 2028,
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
-    // The hero photo is square (1730 × 1787): in a wide frame Media shows it whole, over a blurred copy of itself.
-    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
-    heroImage: { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
+    // The hero photo is square (1234 × 1275): in a wide frame Media shows it whole, over a blurred copy of itself.
+    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1234 / 1275 },
+    heroImage: {
+      src: "/images/approved-rich/stanbena-kukja-facade-rich.png",
+      alt: "Станбена куќа 1 — фасада",
+      isPlaceholder: false,
+    },
     gallery: [
-      { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена Куќа — фасада", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена Куќа — дневен престој", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена Куќа — кујна и трпезарија", isPlaceholder: false },
-      { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена Куќа — двор", isPlaceholder: false },
+      {
+        src: "/images/approved-rich/stanbena-kukja-facade-rich.png",
+        alt: "Станбена куќа 1 — фасада",
+        isPlaceholder: false,
+      },
+      { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена куќа 1 — дневен престој", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена куќа 1 — кујна и трпезарија", isPlaceholder: false },
+      { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена куќа 1 — двор", isPlaceholder: false },
     ],
     roomTour: [
       {
@@ -237,13 +315,25 @@ export const projects: Project[] = [
     // off the roof. Show it a little further out; the edges are filled with a blurred copy of the photo.
     imageFocus: { zoom: 0.87, x: 50, y: 46, aspect: 2 },
     heroImage: { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
+    // the card on the Проекти grid: the whole building with its roof and both side edges
+    cardImage: { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
+    cardFocus: { zoom: 1, x: 46, y: 50 },
+    slideImage: {
+      src: "/images/approved-rich/dojran-aerial-beach-rich.png",
+      alt: "Дојрански Рај — поглед од воздух",
+      isPlaceholder: false,
+    },
     gallery: [
       { src: "/images/dojran/facade.jpg", alt: "Дојрански Рај — фасада", isPlaceholder: false },
       { src: "/images/dojran/facade-2.jpg", alt: "Дојрански Рај — фасада 2", isPlaceholder: false },
       { src: "/images/dojran/facade-3.jpg", alt: "Дојрански Рај — фасада 3", isPlaceholder: false },
       { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
       { src: "/images/dojran/aerial-1.jpg", alt: "Дојрански Рај — аерален поглед", isPlaceholder: false },
-      { src: "/images/dojran/aerial-beach.jpg", alt: "Дојрански Рај — плажа Фук Так", isPlaceholder: false },
+      {
+        src: "/images/approved-rich/dojran-aerial-beach-rich.png",
+        alt: "Дојрански Рај — плажа Фук Так",
+        isPlaceholder: false,
+      },
     ],
     specifications: [
       { label: "Локација", value: "Стар Дојран, Сретеново (плажа Фук Так)" },
@@ -326,11 +416,181 @@ export const projects: Project[] = [
     specifications: [],
     capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
   },
+  // Projects of which only the name, the city and the status are known yet (stub: see types/index.ts). No year, photo,
+  // tagline or text until the client sends them.
+  stub("stanbena-kukja-2", "Станбена куќа 2", "under-construction", "Струмица"),
+  stub("city-center-2", "City Center 2", "under-construction", "Струмица"),
+  {
+    id: "radovish-twins",
+    slug: "radovish-twins",
+    name: "Радовиш Twins",
+    location: "Радовиш",
+    city: "Радовиш",
+    status: "under-construction",
+    // TODO(client): the intro text, the exact address, the phases and dates, the floors and units, and the original
+    // exports of the renders, 3840px wide or more (docs/content-needed.md). Until then the page shows only what is known.
+    description: "",
+    layout: "photo-led",
+    // the evening front view: the hero photo of the carousels and the share image
+    heroImage: {
+      src: "/images/radovish-twins/exterior-06.jpg",
+      alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+      isPlaceholder: false,
+    },
+    slideImage: {
+      src: "/images/radovish-twins/exterior-06.jpg",
+      alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+      isPlaceholder: false,
+    },
+    // the daylight view of the whole building and its neighbour: the card on the Проекти grid, held to the right
+    cardImage: {
+      src: "/images/radovish-twins/exterior-05.jpg",
+      alt: "Радовиш Twins — целата зграда и соседниот објект, дневна визуелизација",
+      isPlaceholder: false,
+    },
+    cardFocus: { zoom: 1, x: 75, y: 50 },
+    // ten distinct views, daylight first, then evening (1672 × 941 renders)
+    gallery: [
+      {
+        src: "/images/radovish-twins/exterior-01.jpg",
+        alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-02.jpg",
+        alt: "Радовиш Twins — двата објекти и паркингот, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-03.jpg",
+        alt: "Радовиш Twins — фасадата кон улицата со клупите, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-04.jpg",
+        alt: "Радовиш Twins — поглед меѓу двата објекти, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-05.jpg",
+        alt: "Радовиш Twins — аголот од улицата, дневна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-06.jpg",
+        alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-07.jpg",
+        alt: "Радовиш Twins — аголот над паркингот на зајдисонце, визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-08.jpg",
+        alt: "Радовиш Twins — двата објекти над влажниот паркинг, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-09.jpg",
+        alt: "Радовиш Twins — улицата со уличната светилка, вечерна визуелизација",
+        isPlaceholder: false,
+      },
+      {
+        src: "/images/radovish-twins/exterior-10.jpg",
+        alt: "Радовиш Twins — поглед низ улицата во самрак, визуелизација",
+        isPlaceholder: false,
+      },
+    ],
+    // The opening, one photo at a time, each shown whole: the corner at sunset first, then the evening front, then the
+    // daylight corner. `box` is the rectangle of the buildings with 3% of the photo on each side (in %). exterior-03, -08
+    // and -09 stay in the gallery only: the building of -03 fills the whole width, the right building of -08 is cut in
+    // the file, and in -09 the lamp post is the subject.
+    openingSlides: [
+      {
+        image: {
+          src: "/images/radovish-twins/exterior-07.jpg",
+          alt: "Радовиш Twins — аголот над паркингот на зајдисонце, визуелизација",
+          isPlaceholder: false,
+        },
+        box: { x: 20.3, y: 14, w: 72.7, h: 73 },
+      },
+      {
+        image: {
+          src: "/images/radovish-twins/exterior-06.jpg",
+          alt: "Радовиш Twins — предната фасада со тревникот, вечерна визуелизација",
+          isPlaceholder: false,
+        },
+        box: { x: 8.7, y: 18, w: 87, h: 56.2 },
+      },
+      {
+        image: {
+          src: "/images/radovish-twins/exterior-01.jpg",
+          alt: "Радовиш Twins — аголот на зградата над паркингот, дневна визуелизација",
+          isPlaceholder: false,
+        },
+        box: { x: 17.8, y: 1.3, w: 67.1, h: 86.7 },
+      },
+    ],
+    intro: { title: "Нов дом во Радовиш, ", titleItalic: "изграден да трае." },
+    // from the site plan
+    facts: [
+      { label: "Објекти", value: "4" },
+      { label: "Паркинг места", value: "51" },
+    ],
+    // TODO(client): the exact address. For now the centre of Радовиш, marked approximate.
+    place: { lat: 41.6383, lng: 22.4647, approximate: true },
+    // the four objects of the site plan (СИТУАЦИЈА: Комплекс, Радовиш); floors and units follow when the client sends them
+    objects: [
+      { id: "rt-1", number: 1, plot: "ГП Ѓ30", status: "under-construction" },
+      { id: "rt-2", number: 2, plot: "ГП Ѓ1", status: "under-construction" },
+      { id: "rt-3", number: 3, plot: "ГП Ѓ31", status: "under-construction" },
+      { id: "rt-4", number: 4, plot: "ГП Ѓ2", status: "under-construction" },
+    ],
+    // traced from the site plan (the PDF at 110 dpi, in its pixels): two rows of two objects of equal width, the inner
+    // street between the rows, parking along the edges and the middle, lawns along the rows; north from its wind rose
+    sitePlan: {
+      viewBox: "470 175 820 785",
+      north: 47,
+      streets: [
+        { d: "M470 268 L612 292 L1240 284 L1290 281", width: 40 },
+        { d: "M607 175 L507 960", width: 58, label: "Улица бр.1", labelAt: { x: 584, y: 480 }, labelAngle: -83 },
+        { d: "M1244 175 L1205 960", width: 55, label: "Улица бр.2", labelAt: { x: 1226, y: 500 }, labelAngle: -87 },
+      ],
+      site: { x: 632, y: 330, width: 528, height: 565, radius: 40 },
+      innerStreets: [{ x: 632, y: 598, width: 528, height: 42 }],
+      parking: [
+        { x: 640, y: 535, width: 505, height: 57 },
+        { x: 648, y: 370, width: 52, height: 155 },
+        { x: 648, y: 650, width: 52, height: 200 },
+        { x: 1086, y: 365, width: 52, height: 160 },
+        { x: 1086, y: 668, width: 52, height: 182 },
+      ],
+      lawns: [
+        { x: 708, y: 523, width: 364, height: 12 },
+        { x: 705, y: 830, width: 372, height: 48 },
+      ],
+      footprints: {
+        "rt-1": { x: 708, y: 352, width: 180, height: 171 },
+        "rt-2": { x: 892, y: 352, width: 180, height: 171 },
+        "rt-3": { x: 708, y: 655, width: 180, height: 175 },
+        "rt-4": { x: 892, y: 655, width: 180, height: 175 },
+      },
+    },
+    specifications: [],
+    capabilities: { hasMasterplan: false, hasBuildings: false, hasApartmentSelection: false },
+  },
+  stub("boro-pochkov", "Боро Почков", "under-construction", "Струмица"),
+  stub("dojranski-raj-2", "Дојрански Рај 2", "under-construction", "Дојран"),
+  stub("sigal-zgrada", "Сигал зграда", "completed", "Струмица"),
+  stub("skopje-aerodrom", "Скопје Аеродром", "completed", "Скопје"),
+  stub("karposh-strumica", "Карпош Струмица", "completed", "Струмица"),
+  stub("boro-pochkov-stara-zgrada", "Боро Почков — стара зграда", "completed", "Струмица"),
 ];
 
 // ---- the apartments of every project
 
-/** What is known of Станбена Куќа's seven apartments (its floors, areas and types are the project's own data). */
+/** What is known of Станбена куќа 1's seven apartments (its floors, areas and types are the project's own data). */
 function stanbenaKukjaUnits(): SampleUnit[] {
   const types = projects.find((p) => p.id === "stanbena-kukja")?.apartmentTypes ?? [];
   const [ground, odd, even] = [types[0]?.image, types[2]?.image, types[1]?.image];
@@ -392,10 +652,11 @@ export function getApartmentsForFloor(buildingId: string, floor: number): Apartm
 
 const floorLabel = (number: number) => (number === 0 ? "Приземје" : `Кат ${number}`);
 
-/** The name of an apartment's floor, as its building's data calls it ("Кат 2", "Поткровје"); a plain "Кат n" otherwise. */
+/** The name of an apartment's floor, as the site writes it ("Кат 02", "Поткровје"); a plain "Кат n" otherwise. */
 export function floorLabelOf(a: Apartment): string {
   const building = getProject(a.projectId)?.buildings?.find((b) => b.id === a.buildingId);
-  return building?.floors.find((f) => f.number === a.floor)?.label ?? floorLabel(a.floor);
+  const label = building?.floors.find((f) => f.number === a.floor)?.label;
+  return label ? floorTitle(label) : floorLabel(a.floor);
 }
 
 /** A building of a project on sale, as the Пронајди стан street draws it. */
@@ -417,35 +678,33 @@ export interface SaleProject {
 export const placeOf = (a: Apartment) => a.buildingId ?? a.projectId;
 
 /**
- * The projects that are on sale (not the completed ones), in the order of the projects page, each with its buildings and
- * apartments. Everything that lists apartments reads through this: adding a project (and its apartments) to the data
- * makes it appear everywhere. A project with no apartments yet is still listed, as one building with no floors.
+ * The projects that are on sale: every project being built, the ones known only by name too, in the order of the
+ * carousels (carouselProjects), each with its buildings and apartments. The Контакт form and the booking check read
+ * through this. A project with no apartments yet (a stub) is still listed, as one building with no floors.
  */
 export function projectsOnSale(): SaleProject[] {
-  return projects
-    .filter((p) => p.status !== "completed")
-    .map((project) => {
-      const own = apartments.filter((a) => a.projectId === project.id);
-      const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
-        ? project.buildings
-            .filter((b) => own.some((a) => a.buildingId === b.id))
-            .map((b) => ({ id: b.id, name: b.name, labels: new Map(b.floors.map((f) => [f.number, f.label])) }))
-        : [{ id: project.id, name: project.name }];
-      const buildingsOfProject: SaleBuilding[] = places.map((place) => {
-        const here = own.filter((a) => placeOf(a) === place.id);
-        const numbers = [...new Set(here.map((a) => a.floor))].sort((a, b) => a - b);
-        return {
-          id: place.id,
-          name: place.name,
-          floors: numbers.map((number) => ({
-            number,
-            label: place.labels?.get(number) ?? floorLabel(number),
-            apartmentIds: here.filter((a) => a.floor === number).map((a) => a.id),
-          })),
-        };
-      });
-      return { project, buildings: buildingsOfProject, apartments: own };
+  return carouselProjects(projects).map((project) => {
+    const own = apartments.filter((a) => a.projectId === project.id);
+    const places: { id: string; name: string; labels?: Map<number, string> }[] = project.buildings?.length
+      ? project.buildings
+          .filter((b) => own.some((a) => a.buildingId === b.id))
+          .map((b) => ({ id: b.id, name: b.name, labels: new Map(b.floors.map((f) => [f.number, f.label])) }))
+      : [{ id: project.id, name: project.name }];
+    const buildingsOfProject: SaleBuilding[] = places.map((place) => {
+      const here = own.filter((a) => placeOf(a) === place.id);
+      const numbers = [...new Set(here.map((a) => a.floor))].sort((a, b) => a - b);
+      return {
+        id: place.id,
+        name: place.name,
+        floors: numbers.map((number) => ({
+          number,
+          label: place.labels?.get(number) ?? floorLabel(number),
+          apartmentIds: here.filter((a) => a.floor === number).map((a) => a.id),
+        })),
+      };
     });
+    return { project, buildings: buildingsOfProject, apartments: own };
+  });
 }
 
 /** Where an apartment is, for a label: the project, and the building when the project has several. */
@@ -456,15 +715,20 @@ export function placeLabel(a: Apartment): { project: string; building: string; t
   return { project: projectName, building, text: building ? `${projectName} · ${building}` : projectName };
 }
 
+/** The projects being built that the company-level texts name and count: not the ones known only by name (stub). */
+function underConstruction() {
+  return projects.filter((p) => p.status === "under-construction" && !p.stub);
+}
+
 export const companyStats: CompanyStat[] = [
   { value: "30+", label: "Години искуство" },
   { value: "5", label: "Завршени проекти" },
   { value: "540+", label: "Изградени станови" },
-  // the buildings of the projects that are under construction (a project that is one building counts as one)
+  // the buildings of the projects that are under construction (its buildings, else its objects on the site plan; a
+  // project that is one building counts as one); the
+  // projects known only by name (stub) are not counted until their buildings are known
   {
-    value: String(
-      projects.filter((p) => p.status === "under-construction").reduce((n, p) => n + (p.buildings?.length ?? 1), 0)
-    ),
+    value: String(underConstruction().reduce((n, p) => n + (p.buildings?.length ?? p.objects?.length ?? 1), 0)),
     label: "Згради во изградба",
   },
 ];
@@ -482,11 +746,8 @@ export const companyTimeline: CompanyMilestone[] = [
   },
   {
     year: "2026",
-    text: `Во изградба: ${projects
-      .filter((p) => p.status === "under-construction")
-      .map((p) => p.name)
-      .join(" и ")}.`,
-    image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
+    text: `Во изградба: ${listNames(underConstruction().map((p) => p.name))}.`,
+    image: { src: "/images/approved-rich/city-center-exterior-rich.png", alt: "City Center — визуелизација" },
   },
 ];
 
@@ -518,7 +779,7 @@ export const companyInfo = {
   ],
   address: "Ул. Ленинова, ГТЦ Глобал, 4-ти кат, Струмица",
   phone: "+389 2 3123 456",
-  email: "info@javorsped.mk",
+  email: CONTACT_EMAIL,
   // TODO(client): the Viber / WhatsApp number (international form, e.g. "+389 70 123 456"). While it is
   // empty, the Контакт page leaves that row out rather than guessing a number.
   messengerNumber: "",

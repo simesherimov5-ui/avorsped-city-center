@@ -57,6 +57,13 @@ export interface PlannedBuilding {
  * on its floor's sketch; every floor gets its own sketch. The status is not on the drawings: all are available until the
  * real availability arrives.
  */
+/** The short name of a floor, as the site writes it everywhere: 01, 02, 03, 04, 05, then ПК for the attic (поткровје). */
+export function floorLabel(name: string): string {
+  if (/поткровје/i.test(name)) return "ПК";
+  const n = name.match(/(\d+)/)?.[1];
+  return n ? n.padStart(2, "0") : name;
+}
+
 export function buildFromPlans(
   plans: PlansFile,
   options: {
@@ -78,6 +85,9 @@ export function buildFromPlans(
           .map((a): Apartment => {
             const rooms: Room[] = a.spaces.map((space) => ({ name: space.name, area: space.area }));
             const outline: ApartmentOutline = { polygon: a.polygon, label: a.label };
+            const terrace = a.spaces
+              .filter((space) => /^(Тераса|Балкон)/.test(space.name))
+              .reduce((sum, space) => sum + space.area, 0);
             return {
               id: `${id}-f${floor.floor}-${unitSlug(a.number)}`,
               projectId: options.projectId,
@@ -91,9 +101,9 @@ export function buildFromPlans(
               bathrooms: a.spaces.filter((space) => space.name.startsWith("Бања")).length,
               area: a.area,
               areaDecimals: 2,
-              balconyArea: a.spaces
-                .filter((space) => /^(Тераса|Балкон)/.test(space.name))
-                .reduce((sum, space) => sum + space.area, 0),
+              // the interior area is the total less the terrace until the company's own figure comes (types: netArea)
+              netArea: Math.round((a.area - terrace) * 100) / 100,
+              balconyArea: terrace,
               status: "available",
               rooms,
               outline,
@@ -111,7 +121,7 @@ export function buildFromPlans(
         apartments.push(...planned);
         return {
           number: floor.floor,
-          label: floor.name,
+          label: floorLabel(floor.name),
           apartmentIds: planned.map((a) => a.id),
           sketch: {
             src: `${options.imageDir}/${floor.sketch}`,

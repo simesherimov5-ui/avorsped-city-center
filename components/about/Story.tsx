@@ -10,7 +10,7 @@ type Props = {
   eyebrow: string;
   /** The big statement. */
   statement: string;
-  /** A phrase inside the statement to set in gold italic. */
+  /** A phrase inside the statement to set in gold. */
   gold?: string;
   /** Smaller paragraphs under the statement. */
   more?: string[];

@@ -51,6 +51,11 @@ export interface Apartment {
   bedrooms: number;
   bathrooms: number;
   area: number; // m² total
+  /**
+   * The interior area in m², without the terrace (the apartment page's «Површина»). For now it is the total less the
+   * terrace (`area` - `balconyArea`); the company's own figure replaces it where it sends one.
+   */
+  netArea: number;
   /** How many decimals the area is written with (2 for an apartment from the architect's drawing); one where left out. */
   areaDecimals?: number;
   balconyArea: number; // m²
@@ -82,6 +87,14 @@ export interface Building {
   position: { row: number; col: number }; // grid position in the masterplan
   /** A short text about the building, shown in the building picker. */
   description?: string;
+  /** Where the building stands now, one of the five phases (the building picker's card). A [bracket] shows where it is missing. */
+  phase?: ConstructionPhase;
+  /** The floors as the card writes them ("5 ката + поткровје"). A [bracket] shows where it is missing. */
+  floorsLabel?: string;
+  /** The smallest and the largest apartment, in m² exactly as the plans give them (the site shows them rounded to whole m²). */
+  areaRange?: { min: number; max: number };
+  /** The year of moving in, where it differs from the project's. */
+  moveInYear?: number;
 }
 
 export interface ConstructionStage {
@@ -170,17 +183,28 @@ export interface ImageFocus {
 }
 
 export interface ProjectAbout {
-  kicker: string;
-  title: string;
-  /** The end of the heading, set in italic Бронза. */
-  titleItalic: string;
+  /** The section's headline (an h2, one line); without it the section has no headline. */
+  title?: string;
+  /** The line under the headline (set in capitals by CSS); without it there is none. */
+  subtitle?: string;
   paragraphs: string[];
+  /** Phrases of the paragraphs set in Cormorant Garamond and the accent colour (each where it first appears). */
+  accents?: string[];
   signature: string;
-  /** The heading in English (the paragraphs stay as written). */
-  en?: { kicker: string; title: string; titleItalic: string };
+  /** The headline and the line under it in English (the paragraphs stay as written). */
+  en?: { title?: string; subtitle?: string };
 }
 
-/** A heading in two parts: the second part is set in italic, in the accent colour. */
+/** The four numbers of «… во бројки»: buildings, apartments, the smallest and largest apartment (m², as the plans give them), the year of moving in. */
+export interface ProjectStats {
+  buildings?: number;
+  apartments?: number;
+  areaMin?: number;
+  areaMax?: number;
+  moveInYear?: number;
+}
+
+/** A heading in two parts: the second part is set in the accent colour. */
 export interface SplitTitle {
   title: string;
   titleItalic: string;
@@ -194,6 +218,8 @@ export interface MaterialItem {
 }
 
 export interface ProjectProgress extends SplitTitle {
+  /** The line under the heading. */
+  lede?: string;
   /** ISO date of the last update, or free text; a [placeholder] is shown while it is missing. */
   updated?: string;
   /** Per phase: the month it is planned or done in, and a photo from the site. */
@@ -206,7 +232,7 @@ export interface ResidentQuote {
   project: string;
 }
 
-export interface Project {
+interface ProjectFields {
   id: string;
   slug: string;
   name: string;
@@ -220,6 +246,8 @@ export interface Project {
   units?: number;
   description: string;
   heroImage: { src: string; alt: string; isPlaceholder: boolean };
+  /** The photo of the slideshow at the top of the Проекти page: exactly 16:9, so it is shown whole. A project without one is not in the slideshow. */
+  slideImage?: { src: string; alt: string; isPlaceholder: boolean };
   gallery: { src: string; alt: string; isPlaceholder: boolean }[];
   specifications: { label: string; value: string }[];
   /** How gallery/hero images should fit their frame — "contain" for near-square source photos that would otherwise be aggressively cropped. */
@@ -232,16 +260,20 @@ export interface Project {
   statusLabelOverride?: string;
   tagline?: string;
   /**
-   * The cinematic opening of the project page (full-screen picture or film, the name low and centred). A project without
+   * The cinematic opening of the project page (the 16:9 picture or film under the header, the text on it from 1101px wide and below it under that). A project without
    * `heroOpening` keeps the ordinary page top.
    */
   heroOpening?: boolean;
-  /** A short drone film for the opening, a path under public/ (mp4). Without it the hero image is shown, slowly settling. */
-  heroVideo?: string;
-  /** False when the film has no sound track, so the page shows no sound button. Default: it has sound. */
-  heroVideoSound?: boolean;
-  /** The line under the name in the opening; split at its first comma (sans, then serif italic). Falls back to `tagline`. */
+  /**
+   * The film of the opening (muted, no sound), paths under public/: `hd` 1080p for screens wider than 1280px, `sd` 720p
+   * for the rest, and the `poster` frame that is shown first, and alone where the film does not play (up to 1100px wide,
+   * reduced motion, Save-Data). Without it the hero image is shown.
+   */
+  heroFilm?: { hd: string; sd: string; poster: string };
+  /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
+  /** The photo slideshow above the building picker («Комплексот низ фотографии»), in the order shown. */
+  showcase?: { src: string; alt: string; isPlaceholder: boolean }[];
   /** The "За проектот" section under the opening. Without it the page has no such section. */
   about?: ProjectAbout;
   /** Direction of north on the aerial photo of the building picker, in degrees (0 = up, clockwise). Without it: no compass. */
@@ -256,6 +288,11 @@ export interface Project {
   walking?: SplitTitle & { places: { name: string; time: string }[] };
   /** The "Тек на градба" section (the phase itself comes from `construction.currentPhase`). */
   progress?: ProjectProgress;
+  /**
+   * The numbers of the project's page («City Center во бројки»). A value that is not there shows as a [bracket] and is
+   * listed in docs/content-needed.md.
+   */
+  stats?: ProjectStats;
   /** The "Закажете средба" section. */
   book?: SplitTitle & { text: string };
   distanceHighlights?: string[];
@@ -290,6 +327,103 @@ export interface Project {
     hasBuildings?: boolean;
     hasApartmentSelection?: boolean;
   };
+  /**
+   * Only the name, the city and the status are known so far: the project has a card on Проекти (and Завршени проекти)
+   * and a plain page of its own, and stays out of the homepage slideshow and the contact form. A stub being built is in «Другите наши проекти», after the projects with a photo, with the no-photo slide.
+   */
+  stub?: boolean;
+  /** The photo of the project's card on the Проекти grid, when it is not the hero photo. */
+  cardImage?: { src: string; alt: string; isPlaceholder: boolean };
+  /**
+   * Where the card's photo is held in the card's photo frame (x in %, zoom stays 1): chosen so the whole building, its roof
+   * and both side edges, stays in the frame.
+   */
+  cardFocus?: ImageFocus;
+  /** The heading of the page's intro; the second part is set in the accent colour. */
+  intro?: SplitTitle;
+  /** The intro's facts beside the heading (the city and the status are added from the project). */
+  facts?: { label: string; value: string }[];
+  /** Where the project is on the map. `approximate` while it only marks the town: replace it with the address. */
+  place?: { lat: number; lng: number; approximate?: boolean };
+  /** The objects (buildings) of a project picked on its drawn site plan; floors and units are attached later. */
+  objects?: ProjectObject[];
+  /** The drawn site plan of the object picker, in the plan's own units (`viewBox`). */
+  sitePlan?: SitePlan;
+}
+
+/** A rectangle of a photo in % of the photo (x, y from its top left corner, w and h its width and height). */
+export interface PhotoBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * One photo of an opening's slideshow (a file the site already uses). `focus` holds it where the frame trims it (x, y in
+ * %, zoom 1), so the trim comes out of sky or ground, not out of the buildings.
+ */
+export interface OpeningSlide {
+  image: { src: string; alt: string; isPlaceholder: boolean };
+  focus?: ImageFocus;
+  /** The photo's own width in pixels: the page never asks for a wider variant. */
+  maxWidth?: number;
+}
+
+/**
+ * One photo of a photo-led opening, always shown whole. `box` is the rectangle holding the whole building (every building
+ * of the project in the photo) plus 3% of the photo on each side.
+ */
+export interface PhotoLedSlide extends OpeningSlide {
+  box: PhotoBox;
+}
+
+export type Project = ProjectFields &
+  (
+    | {
+        /**
+         * The page layout: "photo-led" is the photo-led page (the opening's photos framed whole on Оникс, intro with
+         * facts, gallery, location), its opening from `openingSlides`, in order.
+         */
+        layout: "photo-led";
+        openingSlides: PhotoLedSlide[];
+      }
+    | {
+        layout?: undefined;
+        /** The photos of the opening's slideshow, in order. Without them the opening shows the hero image alone. */
+        openingSlides?: OpeningSlide[];
+      }
+  );
+
+export type PhotoLedProject = Extract<Project, { layout: "photo-led" }>;
+
+/** One building of a project on its site plan. */
+export interface ProjectObject {
+  id: string;
+  /** 1, 2, … as on the plan. */
+  number: number;
+  /** The building plot, e.g. "ГП Ѓ30". */
+  plot: string;
+  status: ProjectStatus;
+  /** Filled in once the floors are known (none yet). */
+  floors?: { number: number; label: string }[];
+}
+
+type PlanRect = { x: number; y: number; width: number; height: number };
+
+/** A simple drawing of a site plan (streets, the plot, parking, lawns and the objects), traced from the architect's. */
+export interface SitePlan {
+  viewBox: string;
+  /** Where north is, in degrees clockwise from up. */
+  north: number;
+  /** Streets as centrelines with a width; the named ones carry a label placed along them. */
+  streets: { d: string; width: number; label?: string; labelAt?: { x: number; y: number }; labelAngle?: number }[];
+  site: PlanRect & { radius: number };
+  innerStreets: PlanRect[];
+  parking: PlanRect[];
+  lawns: PlanRect[];
+  /** Each object's footprint, by its id. */
+  footprints: Record<string, PlanRect>;
 }
 
 export interface CompanyStat {

@@ -6,9 +6,10 @@ import { DURATION, EASE } from "@/lib/motion";
 import { coverSizes } from "@/lib/image-sizes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
+import { NoPhoto } from "@/components/ui/NoPhoto";
+import { projectStatusLabel } from "@/lib/format";
 import { Button } from "@/components/ui/Button";
 import { PauseButton } from "@/components/ui/PauseButton";
-import { projectStatusLabel } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Project } from "@/types";
 
@@ -24,6 +25,7 @@ const slideSizes = (project: Project) =>
     { w: "100vw", h: "clamp(480px, 72vh, 780px)" },
   ]);
 const SWIPE_PX = 50;
+const hasPhoto = (p: Project) => !p.heroImage.isPlaceholder && p.heroImage.src !== "";
 
 const subscribeVisibility = (onChange: () => void) => {
   document.addEventListener("visibilitychange", onChange);
@@ -36,7 +38,8 @@ const subscribeVisibility = (onChange: () => void) => {
  * arrow, dash, swipe or key restarts the timer, so the slide the visitor chose gets a full interval before the show
  * moves on. Slides crossfade over 1.2s while the new photo
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
- * autoplay, no zoom, no text animation.
+ * autoplay, no zoom, no text animation. Callers pass only projects with a photo (projectsWithPhoto in lib/project-explorer.ts); a slide
+ * without one would show the site's no-photo slide (Еспресо with the logo mark). With one project there are no arrows, dashes or pause, and no autoplay.
  */
 export function ProjectSlideshow({
   projects,
@@ -66,14 +69,15 @@ export function ProjectSlideshow({
   );
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
+  const several = projects.length > 1;
   const go = (dir: 1 | -1, byVisitor = true) => {
+    if (!several) return;
     if (byVisitor) setRestart((n) => n + 1);
     setIndex((i) => (i + dir + projects.length) % projects.length);
   };
   const paused = focused || hovered || tabHidden || manual;
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
-  const statusText = project.statusLabelOverride ?? projectStatusLabel(project.status);
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "ArrowLeft") go(-1);
@@ -137,28 +141,37 @@ export function ProjectSlideshow({
               ease: ["easeOut", "linear"],
             }}
           >
-            <Media
-              image={project.heroImage}
-              tone="dark"
-              fit={project.imageFit ?? "cover"}
-              focus={project.imageFocus}
-              className="h-full w-full !bg-transparent"
-              sizes={slideSizes(project)}
-              priority={index === 0}
-            />
+            {hasPhoto(project) ? (
+              <Media
+                image={project.heroImage}
+                tone="dark"
+                fit={project.imageFit ?? "cover"}
+                focus={project.imageFocus}
+                className="h-full w-full !bg-transparent"
+                sizes={slideSizes(project)}
+              />
+            ) : (
+              <NoPhoto />
+            )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-chrome/90 via-chrome/55 to-chrome/20" />
           <div className="absolute inset-x-0 bottom-0">
             <div className="mx-auto max-w-7xl px-5 pb-14 text-on-chrome sm:px-8 sm:pb-16 lg:px-10">
-              <motion.span {...textIn(0)} className="eyebrow inline-block bg-accent px-2.5 py-1 text-chrome">
-                {statusText}
-              </motion.span>
-              <Heading {...textIn(1)} className="mt-3 font-display text-(length:--fs-h3) font-normal leading-[1.3]">
+              <Heading {...textIn(1)} className="font-display text-(length:--fs-h3) font-normal leading-[1.3]">
                 {project.name}
               </Heading>
-              <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
-                {project.location}
-              </motion.div>
+              {hasPhoto(project) ? (
+                <motion.div {...textIn(2)} className="mt-1 text-base text-on-chrome/90 sm:text-sm">
+                  {project.location}
+                </motion.div>
+              ) : (
+                <motion.div
+                  {...textIn(2)}
+                  className="mt-1 text-label font-semibold uppercase tracking-label text-on-chrome/90"
+                >
+                  {project.city} · {projectStatusLabel(project.status)}
+                </motion.div>
+              )}
               <motion.div {...textIn(3)} className="mt-4 sm:mt-5">
                 <Button
                   href={project.href ?? `/projects/${project.slug}`}
@@ -166,7 +179,7 @@ export function ProjectSlideshow({
                   tone="dark"
                   className="w-full sm:w-auto"
                 >
-                  Погледни го проектот
+                  Погледнете го проектот
                 </Button>
               </motion.div>
             </div>
@@ -174,78 +187,87 @@ export function ProjectSlideshow({
         </motion.div>
       </AnimatePresence>
 
-      {/* Preloads the next photo so the crossfade never waits on the network. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
-        <Media
-          image={next.heroImage}
-          fit={next.imageFit ?? "cover"}
-          focus={next.imageFocus}
-          className="h-full w-full"
-          sizes={slideSizes(next)}
-          priority
-        />
-      </div>
+      {/* Loads the next photo ahead (at low priority) so the crossfade never waits on the network. The slideshow is below the
+          first screen of the homepage, so none of its photos is fetched at high priority: that would delay the first photo. */}
+      {several && hasPhoto(next) && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
+          <Media
+            image={next.heroImage}
+            fit={next.imageFit ?? "cover"}
+            focus={next.imageFocus}
+            className="h-full w-full"
+            sizes={slideSizes(next)}
+            defer
+          />
+        </div>
+      )}
 
-      <button
-        type="button"
-        onClick={() => go(-1)}
-        aria-label="Претходен проект"
-        className="focus-ring absolute bottom-0 left-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:left-4 sm:top-1/2 sm:-translate-y-1/2"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        type="button"
-        onClick={() => go(1)}
-        aria-label="Следен проект"
-        className="focus-ring absolute bottom-0 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:right-4 sm:top-1/2 sm:-translate-y-1/2"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
+      {several && (
+        <>
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Претходен проект"
+            className="focus-ring absolute bottom-0 left-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:left-4 sm:top-1/2 sm:-translate-y-1/2"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Следен проект"
+            className="focus-ring absolute bottom-0 right-2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-chrome/55 text-on-chrome transition-colors hover:bg-chrome sm:bottom-auto sm:right-4 sm:top-1/2 sm:-translate-y-1/2"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
 
-      {/* The dashes: the strip is full width but lets taps through (on phones the arrows sit in its corners); only the
+          {/* The dashes: the strip is full width but lets taps through (on phones the arrows sit in its corners); only the
           dashes themselves take them. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
-        {projects.map((p, i) => {
-          const active = i === index;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => {
-                setRestart((n) => n + 1);
-                setIndex(i);
-              }}
-              aria-label={p.name}
-              aria-current={active}
-              className="focus-ring group pointer-events-auto flex h-11 w-12 items-center justify-center"
-            >
-              <span className="relative block h-[3px] w-9 overflow-hidden bg-on-chrome/30">
-                {active &&
-                  (reduceMotion ? (
-                    <span className="absolute inset-0 bg-gold" />
-                  ) : (
-                    <span
-                      key={`${index}-${restart}`}
-                      className="slide-progress absolute inset-0 bg-gold"
-                      style={{
-                        animationDuration: `${autoplayMs}ms`,
-                        animationPlayState: paused ? "paused" : "running",
-                      }}
-                      onAnimationEnd={() => go(1, false)}
-                    />
-                  ))}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-      <PauseButton
-        paused={manual}
-        onToggle={() => setManual((m) => !m)}
-        // phones: beside the "next" arrow, not on top of it (both sit in the bottom-right corner there)
-        className="absolute bottom-0 right-14 z-10 sm:right-4"
-      />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
+            {projects.map((p, i) => {
+              const active = i === index;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    setRestart((n) => n + 1);
+                    setIndex(i);
+                  }}
+                  aria-label={p.name}
+                  aria-current={active}
+                  // phones: a narrow indicator taps go through (arrows and swipe move the slides there), so up to eight
+                  // fit between the arrow-and-pause pair on the left and the next arrow on the right
+                  className="focus-ring group flex h-11 w-[22px] items-center justify-center sm:pointer-events-auto sm:w-12"
+                >
+                  <span className="relative block h-[3px] w-4 overflow-hidden bg-on-chrome/30 sm:w-9">
+                    {active &&
+                      (reduceMotion ? (
+                        <span className="absolute inset-0 bg-gold" />
+                      ) : (
+                        <span
+                          key={`${index}-${restart}`}
+                          className="slide-progress absolute inset-0 bg-gold"
+                          style={{
+                            animationDuration: `${autoplayMs}ms`,
+                            animationPlayState: paused ? "paused" : "running",
+                          }}
+                          onAnimationEnd={() => go(1, false)}
+                        />
+                      ))}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <PauseButton
+            paused={manual}
+            onToggle={() => setManual((m) => !m)}
+            // phones: beside the "previous" arrow in the bottom-left corner, clear of the dashes and the "next" arrow
+            className="absolute bottom-0 left-14 z-10 sm:left-auto sm:right-4"
+          />
+        </>
+      )}
     </section>
   );
 }

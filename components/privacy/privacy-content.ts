@@ -2,6 +2,8 @@
 // The page /privacy stays unpublished (it answers 404, it is not in the sitemap and nothing links to it) until
 // PRIVACY_PUBLISHED is switched to true. Then link it from the footer and put one line under the booking form.
 
+import { CONTACT_EMAIL } from "@/lib/site";
+
 export const PRIVACY_PUBLISHED = false;
 
 export type PrivacySection = {
@@ -20,6 +22,6 @@ export type PrivacyPolicy = {
 
 export const privacyPolicy: PrivacyPolicy = {
   updated: "",
-  controller: { name: "", address: "", email: "" },
+  controller: { name: "", address: "", email: CONTACT_EMAIL },
   sections: [],
 };

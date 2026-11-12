@@ -26,7 +26,7 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
     return (
       <div className="border border-dashed border-concrete bg-cream p-8 text-center">
         <p className="text-sm text-muted">
-          Сè уште нема снимено 360° внатрешна тура за овој стан. Штом стане достапна, ќе се прикаже автоматски овде.
+          Засега нема снимено 360° внатрешна тура за овој стан. Штом стане достапна, ќе се прикаже автоматски овде.
         </p>
       </div>
     );
@@ -48,9 +48,9 @@ export function ApartmentTour({ hasTour }: { hasTour: boolean }) {
         </button>
         <button
           className="focus-ring absolute left-4 top-4 flex items-center gap-1.5 border border-on-chrome/30 px-3 py-1.5 text-xs text-on-chrome hover:bg-on-chrome/10"
-          aria-label="Ротирај поглед"
+          aria-label="Ротирајте поглед"
         >
-          <RotateCw className="h-3.5 w-3.5" /> Ротирај
+          <RotateCw className="h-3.5 w-3.5" /> Ротирајте
         </button>
       </div>
       <div className="flex flex-wrap gap-2 border-t border-on-chrome/10 p-3">

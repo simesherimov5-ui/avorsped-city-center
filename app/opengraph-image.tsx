@@ -9,6 +9,6 @@ export default function Image() {
     label: "Јавор Шпед",
     title: "Javor Sped Holding",
     subtitle: "Премиум станбени проекти во Струмица и Дојран",
-    photo: "/images/exteriors/exterior-hero-wide.jpg",
+    photo: "/images/approved-rich/city-center-exterior-rich.png",
   });
 }

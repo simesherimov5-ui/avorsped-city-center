@@ -21,7 +21,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
       label: "Javor Sped Holding",
       title: "Јавор Шпед",
       subtitle: "Премиум станбени проекти во Струмица и Дојран",
-      photo: "/images/exteriors/exterior-hero-wide.jpg",
+      photo: "/images/approved-rich/city-center-exterior-rich.png",
     });
   }
   return renderOg({

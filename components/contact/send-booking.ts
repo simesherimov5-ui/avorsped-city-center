@@ -4,12 +4,12 @@ export type BookingRequest = {
   /** The project the visitor is asking about: its name and id in the data. Null when they are undecided. */
   project: string | null;
   projectId: string | null;
-  /** True for «Сè уште не знам» on the project question: the team prepares an overview of all projects. */
+  /** True for «Уште не знам» on the project question: the team prepares an overview of all projects. */
   undecided: boolean;
   /** The area range the visitor wants, in m² (the top end 150 means "150+"); null when they do not know yet. */
   areaMin: number | null;
   areaMax: number | null;
-  /** True for «Сè уште не знам» on the area question: the team advises at the meeting. */
+  /** True for «Уште не знам» on the area question: the team advises at the meeting. */
   areaUnknown: boolean;
   /** ISO date and the readable label the visitor saw ("Пон 05 окт"). */
   date: string;

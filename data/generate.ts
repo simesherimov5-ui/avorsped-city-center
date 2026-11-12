@@ -1,4 +1,14 @@
-import type { Apartment, Building, ConstructionStage, Development, Orientation, Room, UnitStatus } from "@/types";
+import type {
+  Apartment,
+  Building,
+  ConstructionPhase,
+  ConstructionStage,
+  Development,
+  Orientation,
+  Room,
+  UnitStatus,
+} from "@/types";
+import { floorsText } from "@/lib/plural";
 import { buildFromPlans, type PlansFile } from "./plans";
 import cityCenterPlans from "./plans/city-center.json";
 import { unitSlug } from "./slug";
@@ -21,6 +31,7 @@ const ORIENTATIONS: Orientation[] = [
   "South-West",
 ];
 
+/** `area` is the interior area: the rooms inside add up to it, and the terrace comes after them. */
 function generateRooms(bedrooms: number, area: number, balconyArea: number): Room[] {
   if (bedrooms === 0) {
     const living = Math.round(area * 0.55 * 10) / 10;
@@ -70,6 +81,21 @@ function pickStatus(buildingIdx: number, floor: number, floorCount: number, idx:
 export interface GeneratedDevelopment {
   development: Development;
   apartments: Apartment[];
+}
+
+/** The five phases of the building picker's card, from a building's status. */
+const PHASE_OF_STATUS: Partial<Record<Building["status"], ConstructionPhase>> = {
+  foundation: "foundation",
+  structure: "structure",
+  exterior: "facade",
+  interior: "interior",
+  completed: "handover",
+};
+
+/** "5 ката + поткровје": the floors counted, the attic (ПК) named. */
+function floorsLabelOf(labels: string[]): string {
+  const floors = labels.filter((l) => l !== "ПК").length;
+  return `${floorsText(floors)}${labels.includes("ПК") ? " + поткровје" : ""}`;
 }
 
 export function generateDevelopment(): GeneratedDevelopment {
@@ -125,6 +151,14 @@ export function generateDevelopment(): GeneratedDevelopment {
       exteriorImage: { src: buildingExteriors[b], alt: `Зграда ${label} — надворешен изглед`, isPlaceholder: false },
       status: buildingStatuses[b],
       position: positions[b],
+      // The phase is the building's sample status above (provisional: docs/content-needed.md); the floors and the areas are
+      // from the plans.
+      phase: PHASE_OF_STATUS[buildingStatuses[b]],
+      floorsLabel: floorsLabelOf(plan.floors.map((f) => f.label)),
+      areaRange: {
+        min: Math.min(...plan.apartments.map((a) => a.area)),
+        max: Math.max(...plan.apartments.map((a) => a.area)),
+      },
       // TODO(client): a short text about each building (docs/content-needed.md).
       description: `[Краток опис на зграда ${plan.number}: каква е, што има во приземјето, каков поглед имаат становите.]`,
     });
@@ -165,7 +199,7 @@ export function generateDevelopment(): GeneratedDevelopment {
     },
     {
       key: "interior",
-      label: "Внатрешно доуредување",
+      label: "Завршни работи",
       date: "Q4 2025",
       percentComplete: 25,
       description: "Инсталација на инсталации и внатрешно доуредување започнува во Зградите 01–02.",
@@ -261,10 +295,13 @@ export function buildSampleApartments(projectId: string, order: number, units: S
       bedrooms: u.bedrooms,
       bathrooms: u.bathrooms,
       area: u.area,
+      // the interior area is the total less the terrace until the company's own figure comes (types: netArea)
+      netArea: Math.round((u.area - balconyArea) * 10) / 10,
       balconyArea,
       orientation: u.orientation ?? ORIENTATIONS[Math.floor(seeded(order, u.floor, idx, 8) * ORIENTATIONS.length)],
       status: pickStatus(order, u.floor, floorCount, idx),
-      rooms: generateRooms(u.bedrooms, u.area, balconyArea),
+      // the rooms inside add up to the interior area; the terrace is the last of them
+      rooms: generateRooms(u.bedrooms, u.area - balconyArea, balconyArea),
       gallery: [
         { src: "", alt: `${projectId} ${u.number} дневна соба`, isPlaceholder: true },
         { src: "", alt: `${projectId} ${u.number} кујна`, isPlaceholder: true },

@@ -116,13 +116,14 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 ### 3.2 Apartment data (before-launch B5)
 
 - **Where:** the six buildings of City Center (Ламела 1–6 = Зграда 01–06) come from the architect's plans, `data/plans/city-center.json` (207 apartments: 30, 30, 35, 23, 24 and 65), turned into site data by `data/plans.ts`; the sketches and plans are in `public/images/floorplans/lamela-N/`. The other projects' apartments are generated mock data (`data/generate.ts`, marked `sample`). Every apartment belongs to a project (`projectId`), optionally to a building, and has a floor; a new project is added to `projects` in `data/index.ts` with its apartments and then appears on Пронајди стан, in Контакт and in the comparison without any other change. Another project's real plans (same file shape) appear the same way, with no code written for it.
-- **Needed for each apartment (other projects):** building, floor, number, area (m²), balcony area, rooms, orientation, status (available, reserved, sold). The site shows no prices.
+- **Needed for each apartment (other projects):** building, floor, number, area (m²), balcony area, rooms, orientation. The site shows no prices and no availability.
 - **Format:** a spreadsheet, one row per apartment. **Example shape:** `B02 | 4 | 407 | 62,4 | 6,0 | 2 | юг | достапен`.
 
-- **Real status of every City Center apartment (needed):** the drawings do not say which apartments are available, reserved or sold, so all 207 are set to available for now. Send the status of each (building, floor, number, status); it replaces the default in `data/plans.ts`. Also not in the drawings, so not shown: the orientation of each apartment.
+- **Apartment status:** the site shows no availability (free / reserved / sold), so none is needed; the `status` field stays in the data, unused. Not in the drawings, so not shown: the orientation of each apartment.
 - **To confirm with the architect:** two drawings whose rooms do not add up to the total shown on the drawing. The site shows the drawing's own numbers, with no note.
   - Зграда 02, Кат 1, Стан 4: the rooms add up to 125,20 m², the total says 119,20 m².
   - Зграда 05, Кат 1, Стан 4: the rooms add up to 169,90 m², the total says 170,00 m².
+  - Зграда 03, Кат 1, Стан 3: the label on the drawing (`checks/lamela-3-kat-1.jpg`, a low-resolution picture) reads 79,22 m², `plans.json` and the site have 79,25 m² (the same apartment type is 79,25 m² on the drawings of Зграда 01 and 02). Please confirm the figure.
 - **When the architect's plans change:** replace `data/plans/city-center.json` and the images in `public/images/floorplans/lamela-N/` (all lossless transparent .webp, the sketch of each floor and the plan of each apartment). `data/city-center.test.ts` checks the counts, the room sums and that every file exists.
 
 ### 3.3 Floor plans and photos for the other buildings
@@ -170,16 +171,17 @@ The items that stop the site from going live are in `docs/before-launch.md`; thi
 
 ---
 
-### 3.10 City Center: the drone film for the opening
+### 3.10 City Center: the photos of the opening
 
-- **Where:** `heroVideo` of the `city-center` entry in `data/index.ts` (a path under `public/`, e.g. `/videos/city-center-opening.mp4`). Drop the file in `public/videos/` and fill the field; the opening then plays it. Until then the opening shows the hero photo, slowly settling. If the film has no sound track, also set `heroVideoSound: false` (the sound button is then not shown).
-- **Format:** MP4 (H.264), 1920 × 1080, 15–30 seconds, loops cleanly, under 8 MB, no important detail in the top 20% or the bottom 35% (the name and the menu sit there). It is muted by default; sound is optional. It is not played on phones or with reduced motion (the photo is shown).
+- **Where:** `openingSlides` of the `city-center` entry in `data/index.ts`: the photos of the slideshow at the top of the project page, in order, each with the point (`focus`) where the frame holds it. They are renders the site already uses; to change the slideshow, change this list.
+- **Format:** 16:9 renders, at least 1920 px wide, buildings whole in the middle of the picture (the frame trims a little sky or ground on a wide screen). The slideshow works like the one on the Проекти page.
+- **The film:** `heroFilm` (1080p, 720p and poster under `public/videos/city-center/`) is still in the data and the files, but the opening does not show it.
 
 ### 3.11 City Center: the "За проектот" text
 
 - **Where:** `about.paragraphs` of the `city-center` entry in `data/index.ts`. Two placeholders in [square brackets] stand there now: `[Неколку реченици за идејата на комплексот: што го прави посебен, како е поставен во центарот на Струмица, светлина, зеленило и простор меѓу зградите. Текстот ќе го напишеме заедно во документот.]` and `[Втор пасус: за кого е наменет и каков живот нуди.]`
 - **Format:** two paragraphs, 2–4 sentences each, no more than about 600 characters each. The English heading is in `about.en`; the paragraphs stay in Macedonian unless an English text is sent.
-- **Also open:** the line under the name in the opening (`openingTagline`) is "Шест згради, една нова адреса за центарот на Струмица." Confirm it.
+- **Also open:** the line under the name in the opening (`openingTagline`) is "Шест згради, една нова адреса во Струмица." Confirm it.
 
 ---
 
@@ -193,7 +195,9 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 - **Паркинг** (`parking`): the heading `[Наслов за паркингот] [продолжение]` and the text `[Подземна гаража и паркинг места во комплексот: како се влегува, дали има лифт од гаража до станот, гаражни места за продажба.]` The drawing is simplified (caption `[ ПОЕДНОСТАВЕНА ОСНОВА НА ГАРАЖАТА ]`); a real garage plan can replace it.
 - **Локација** (`walking`): the real places and the minutes on foot. Placeholders now: `[Плоштад]` `[ 3 МИН ПЕШКИ ]`, `[Училиште]` `[ 5 МИН ]`, `[Градинка]` `[ 5 МИН ]`, `[Маркет]` `[ 2 МИН ]`, `[Парк]` `[ 6 МИН ]`.
 - **Тек на градба** (`progress`, `construction`): the date of the last update (`[датум]`), the month of each of the five phases (`[месец]`) and a construction photo for each phase (the placeholder `[ ФОТО ОД ГРАДИЛИШТЕ ]` shows until then). The current phase is `construction.currentPhase` (Конструкција today).
-- **Закажете средба** (`book`): the heading `[Наслов за покана] [продолжение]` and the text `[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]`
+- **«City Center во бројки»** (`stats`): the buildings, the apartments, the smallest and largest apartment (m²) and the year of moving in. All four are computed from the plans and `expectedCompletion` in `data/generate.ts` (6, 207, 29–210, 2027), so nothing is waiting; a value that goes missing shows as a `[bracket]` (`[број]`, `[од–до]`, `[година]`) until it is back. Confirm that the year of moving in is 2027.
+- **Building picker, the card of each building** (`phase`, `floorsLabel`, `areaRange`, `moveInYear` of each building in `data/generate.ts`): the **phase** of each building (Темели, Конструкција, Фасада, Ентериер, Вселување) is the sample one for now (01–02 Ентериер, 03–04 Фасада, 05 Конструкција, 06 Темели) and is **provisional**: send the real phase of each building. The floors («5 ката + поткровје»), the number of apartments and the sizes come from the architect's plans. The year of moving in is the project's (2027) until a building has its own `moveInYear`. A value that goes missing shows as a `[bracket]`.
+- **Закажете средба** (`book`): the text (the heading «Да го прошетаме City Center заедно» is in) `[Кратка реченица: средба во канцеларија или прошетка низ градилиштето.]`
 
 ---
 
@@ -234,3 +238,23 @@ All of it is in the `city-center` entry of `data/index.ts`; every text in [squar
 
 - **Where:** the environment variable `NEXT_PUBLIC_SITE_URL` in Vercel (canonical links, sitemap, share images).
 - **Needed:** the domain the site will live on, e.g. `https://<domain>`.
+
+### Building boxes for the slide photos
+
+- **Where:** the `box` of each project's slide photo in `data/index.ts` (read by «Другите наши проекти»; until it is there the whole photo is the box and sits on Оникс).
+- **Needed:** building boxes for every project's slide photo (from the photo audit).
+
+### Радовиш Twins
+
+- **Where:** the `radovish-twins` entry in `data/index.ts` (its page is `/projects/radovish-twins`).
+- **Needed:** the intro text (none is shown until it arrives), the exact address (replace the approximate pin in `place`, marked `approximate: true`), the phases and their dates, the floors and units, and the higher-resolution originals listed under «Need higher-resolution originals» below.
+
+### Need higher-resolution originals
+
+The site has these pictures only at the size listed; on a large screen or a phone with a sharp display they are shown larger than the file, so they look soft. Send the original exports (the file as it came out of the render, not a copy from a chat app or a PDF), **3840 px wide or more**.
+
+| Picture                                                                  | Where it is used                                             | Now        |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------ | ---------- |
+| Радовиш Twins, `exterior-07.jpg` (the corner over the parking at sunset) | the opening of `/projects/radovish-twins`, first photo       | 1672 × 941 |
+| Радовиш Twins, `exterior-06.jpg` (the evening front with the lawn)       | the opening, second photo; the carousels and the share image | 1672 × 941 |
+| Радовиш Twins, `exterior-01.jpg` (the daylight corner over the parking)  | the opening, third photo; the card on Проекти                | 1672 × 941 |

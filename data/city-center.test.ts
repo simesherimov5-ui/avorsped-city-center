@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { apartments, buildings, getApartment, getBuilding } from "@/data";
+import { formatAreaRange } from "@/lib/format";
+import { apartments, buildings, getApartment, getBuilding, projects } from "@/data";
 
 // City Center's six buildings, from the architect's plans (data/plans/city-center.json): the apartments, floors,
 // sketches and plans are real; the status of each apartment is not known yet (all available).
@@ -19,9 +20,9 @@ describe("City Center's plans", () => {
     expect(apartments.every((a) => a.projectId !== "city-center" || a.sample === undefined)).toBe(true);
   });
 
-  it("has six floors in every building, from Кат 1 to Поткровје, and none on the ground floor", () => {
+  it("has six floors in every building, 01 to 05 and ПК for the attic, and none on the ground floor", () => {
     for (const b of buildings) {
-      expect(b.floors.map((f) => f.label)).toEqual(["Кат 1", "Кат 2", "Кат 3", "Кат 4", "Кат 5", "Поткровје"]);
+      expect(b.floors.map((f) => f.label)).toEqual(["01", "02", "03", "04", "05", "ПК"]);
       expect(b.floors.some((f) => f.number === 0)).toBe(false);
     }
   });
@@ -45,22 +46,22 @@ describe("City Center's plans", () => {
         `${b} ${n}`
       ).toEqual([area, rooms, floor]);
     };
-    check("b01", "1", 186.9, 4, "Кат 1");
-    check("b01", "6", 94.05, 3, "Кат 2");
-    check("b01", "30", 94.05, 3, "Поткровје");
-    check("b02", "4", 119.2, 3, "Кат 1");
-    check("b02", "5", 209.7, 4, "Кат 1");
-    check("b03", "12", 42.2, 2, "Кат 2");
-    check("b03", "36", 42.2, 2, "Поткровје");
-    check("b04", "1", 117.26, 3, "Кат 1");
-    check("b04", "2", 133.07, 3, "Кат 1");
-    check("b04", "3", 208.59, 4, "Кат 1");
-    check("b05", "3", 28.7, 1, "Кат 1");
-    check("b05", "8", 186.9, 5, "Кат 2");
-    check("b05", "10", 81, 3, "Кат 3");
-    check("b06", "11a", 52.82, 2, "Кат 2");
-    check("b06", "33", 115.16, 4, "Кат 4");
-    check("b06", "60", 77.13, 3, "Поткровје");
+    check("b01", "1", 186.9, 4, "01");
+    check("b01", "6", 94.05, 3, "02");
+    check("b01", "30", 94.05, 3, "ПК");
+    check("b02", "4", 119.2, 3, "01");
+    check("b02", "5", 209.7, 4, "01");
+    check("b03", "12", 42.2, 2, "02");
+    check("b03", "36", 42.2, 2, "ПК");
+    check("b04", "1", 117.26, 3, "01");
+    check("b04", "2", 133.07, 3, "01");
+    check("b04", "3", 208.59, 4, "01");
+    check("b05", "3", 28.7, 1, "01");
+    check("b05", "8", 186.9, 5, "02");
+    check("b05", "10", 81, 3, "03");
+    check("b06", "11a", 52.82, 2, "02");
+    check("b06", "33", 115.16, 4, "04");
+    check("b06", "60", 77.13, 3, "ПК");
   });
 
   it("has rooms that add up to the total, except where the drawing itself does not", () => {
@@ -96,5 +97,43 @@ describe("City Center's plans", () => {
 
   it("looks up an apartment by its id", () => {
     expect(getApartment("b06-f2-11a")?.number).toBe("11a");
+  });
+});
+
+// What the architect's drawings give per building (Ламела 1–6): the apartments, the smallest and the largest, the floors.
+describe("City Center's buildings, counted from the apartments", () => {
+  const drawn = [
+    { id: "b01", apartments: 30, min: 79.25, max: 186.9 },
+    { id: "b02", apartments: 30, min: 79.25, max: 209.7 },
+    { id: "b03", apartments: 35, min: 42.2, max: 177.35 },
+    { id: "b04", apartments: 23, min: 57.33, max: 208.59 },
+    { id: "b05", apartments: 24, min: 28.7, max: 186.9 },
+    { id: "b06", apartments: 65, min: 52.82, max: 124.83 },
+  ];
+  it.each(drawn)(
+    "$id has $apartments apartments from $min to $max m² on 6 floors",
+    ({ id, apartments: count, min, max }) => {
+      const building = getBuilding(id)!;
+      const areas = of(id).map((a) => a.area);
+      expect(of(id)).toHaveLength(count);
+      expect(building.totalApartments).toBe(count);
+      expect(building.floors).toHaveLength(6);
+      expect([Math.min(...areas), Math.max(...areas)]).toEqual([min, max]);
+      expect(building.areaRange).toEqual({ min, max });
+    }
+  );
+  it("shows each building's range rounded to whole m²", () => {
+    expect(buildings.map((b) => formatAreaRange(b.areaRange!.min, b.areaRange!.max))).toEqual([
+      "79–187 м²",
+      "79–210 м²",
+      "42–177 м²",
+      "57–209 м²",
+      "29–187 м²",
+      "53–125 м²",
+    ]);
+  });
+  it("gives the project page the same count and range, computed", () => {
+    const stats = projects.find((p) => p.id === "city-center")!.stats!;
+    expect(stats).toMatchObject({ buildings: 6, apartments: 207, areaMin: 28.7, areaMax: 209.7 });
   });
 });

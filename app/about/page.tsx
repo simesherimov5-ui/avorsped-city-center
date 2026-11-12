@@ -73,7 +73,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div data-theme="black" className="bk-page grain grain--dark">
+    <div data-theme="black" className="brand-voice bk-page grain grain--dark">
       <ReadingProgress />
 
       <AboutHero
@@ -108,7 +108,7 @@ export default function AboutPage() {
 
       {/* Two lines the company stands behind. TODO(client): a real quote with name and role could replace this one. */}
       <section className="bk-wrap bk-section">
-        <PullQuote tone="dark">„Делата зборуваат за нас. Довербата нè води понатаму.“</PullQuote>
+        <PullQuote tone="dark">„Делата зборуваат за нас. Довербата е нашата водилка.“</PullQuote>
       </section>
 
       <section className="bk-wrap bk-section">
@@ -136,7 +136,7 @@ export default function AboutPage() {
       <ClosingCta
         image={CLOSING_PHOTO}
         heading="Вашиот дом е голема животна одлука."
-        label="Закажи консултација"
+        label="Закажете консултација"
         href="/contact"
       />
     </div>

@@ -1,188 +1,89 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
-import { Media } from "@/components/ui/Media";
-import { coverSizes } from "@/lib/image-sizes";
-import { PauseButton } from "@/components/ui/PauseButton";
+import { HeroSlideshow, type HeroSlide } from "@/components/ui/HeroSlideshow";
 import { useI18n } from "@/lib/i18n";
-import { getLenis } from "@/lib/lenis";
-import { useMediaQuery } from "@/lib/useMediaQuery";
+
+const H1_CLASS =
+  "font-display text-[length:calc(clamp(44px,6vw,96px)*var(--type-scale,1))] font-normal leading-[1.05] text-balance text-paper";
+const P_CLASS = "max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline";
+
+// width of the slideshow controls: the indicators (44px, 10px apart), the gap and the pause button
+const controlsWidth = (count: number) => count * 44 + (count - 1) * 10 + 12 + 44;
 
 /**
- * The opening of a project page, like the first frame of a film: the picture (or a short film) fills the screen, and
- * the project's name sits low and centred, small and quiet. One gradient lies over the media: dark at the top (the
- * navigation stays readable), clear in the middle, dark at the bottom (under the text). The film is muted, loops, and
- * is left out on phones and with reduced motion, where the picture is shown instead. The sound button only appears
- * when a film with sound is playing, and always starts muted. With no film the picture settles slowly (still with
- * reduced motion).
+ * The opening of a project page: the same photo slideshow hero as the Проекти page (HeroSlideshow, see app/globals.css,
+ * .photo-hero--fill), with this project's photos. Above the hero breakpoint (lib/hero.ts) it is exactly the first screen, the
+ * back link top left on the photos and, bottom left, the place and state, the name and the line about the project, the
+ * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
+ * Оникс. The photo is shown whole (Media's `whole`, never zoomed) and the opening stays inside the first screen
+ * (.photo-hero--sky in app/globals.css): the text lies in the open sky at the top, with one light local shade, and under
+ * 1024px it is above the photo. The back link is full Травертин; the label and the line under the name are the site's gold
+ * (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`). It is on screen from the first
+ * paint: no film before it, no entrance of its own.
  */
 export function ProjectOpening({
   name,
   eyebrow,
-  tagline,
-  image,
-  video,
-  hasSound = true,
+  tagline = "",
+  slides,
+  storageKey,
   backHref = "/projects",
-  nextId = "za-proektot",
 }: {
   name: string;
   /** "CITY · STATUS", already joined. */
   eyebrow: string;
   tagline?: string;
-  image: { src: string; alt: string };
-  video?: string;
-  hasSound?: boolean;
+  slides: HeroSlide[];
+  storageKey: string;
   backHref?: string;
-  /** The id of the section the "scroll" link goes to. */
-  nextId?: string;
 }) {
   const { t } = useI18n();
-  const phone = useMediaQuery("(max-width: 767px)");
-  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
-  const [playing, setPlaying] = useState(false);
-  const [filmPaused, setFilmPaused] = useState(false);
-  const showVideo = Boolean(video) && !phone && !reduceMotion;
-  const showSound = showVideo && hasSound && playing;
-
-  // React leaves the `muted` attribute out of the server HTML, so the browser may have refused to autoplay: start it
-  // once the film is muted for sure.
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!showVideo || !el) return;
-    el.muted = true;
-    el.play().catch(() => {});
-  }, [showVideo]);
-
-  // "Шест згради, " in the sans, the rest in the serif italic; with no comma the whole line is serif italic.
-  const comma = tagline ? tagline.indexOf(",") : -1;
-  const lead = tagline && comma >= 0 ? tagline.slice(0, comma + 1) + " " : "";
-  const rest = tagline ? (comma >= 0 ? tagline.slice(comma + 1).trim() : tagline) : "";
-
-  const toggleFilm = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    if (el.paused) {
-      el.play().catch(() => {});
-      setFilmPaused(false);
-    } else {
-      el.pause();
-      setFilmPaused(true);
-    }
-  };
-
-  const toggleSound = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.muted = !el.muted;
-    setMuted(el.muted);
-  };
-
-  const scrollNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const target = document.getElementById(nextId);
-    const top = target ? target.getBoundingClientRect().top + window.scrollY : window.innerHeight;
-    const lenis = getLenis();
-    if (lenis && !reduceMotion) lenis.scrollTo(top, { duration: 1.2 });
-    else window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
-  };
 
   return (
-    <section
-      data-opening
-      aria-label={name}
-      className="relative flex h-svh min-h-[560px] max-h-[1000px] w-full flex-col overflow-hidden bg-chrome text-paper"
-    >
-      {/* the picture (or the film) with the line about the project at its top left */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
-        {showVideo ? (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
-            src={video}
-            poster={image.src}
-            muted
-            autoPlay
-            loop
-            playsInline
-            preload="metadata"
-            onPlaying={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-          />
-        ) : (
-          <div className={`absolute inset-0 ${video ? "" : "opening-settle"}`}>
-            <Media
-              image={{ ...image, isPlaceholder: false }}
-              tone="dark"
-              priority
-              sizes={coverSizes(image.src, [{ w: "100vw", h: "min(max(100vh, 560px), 1000px)" }])}
-              className="h-full w-full !bg-transparent"
-            />
+    <HeroSlideshow slides={slides} storageKey={storageKey} label={name} className="photo-hero--sky" wholePhotos>
+      {({ tracks, pause, rowProps }) => (
+        <div className="photo-hero__content">
+          <div className="photo-hero__back">
+            <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+              <Link
+                href={backHref}
+                className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper"
+              >
+                {t("opening.back")}
+              </Link>
+            </div>
           </div>
-        )}
 
-        {/* the one gradient over the media: dark at the top (the navigation), clear below */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, color-mix(in srgb, var(--color-onyx) 55%, transparent) 0%, transparent 32%, transparent 100%)",
-          }}
-        />
-
-        <Link
-          href={backHref}
-          className="focus-ring absolute left-[5%] top-[calc(var(--nav-h)+8px)] z-10 inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-accent transition-colors hover:text-accent/80"
-        >
-          {t("opening.back")}
-        </Link>
-
-        {tagline && (
-          <p
-            style={{
-              textShadow:
-                "0 1px 3px color-mix(in srgb, var(--color-onyx) 60%, transparent), 0 4px 24px color-mix(in srgb, var(--color-onyx) 50%, transparent)",
-            }}
-            className="opening-rise absolute left-[5%] top-[calc(var(--nav-h)+56px)] m-0 max-w-[min(760px,90%)] text-[clamp(16px,1.7vw,26px)] leading-[1.45] text-paper"
-          >
-            {lead && <span className="font-light">{lead}</span>}
-            <span className="font-display italic">{rest}</span>
-          </p>
-        )}
-      </div>
-
-      {/* under it, on Оникс: the name, where it is and its state, and on the right the sound and the way on */}
-      <div className="opening-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-3 bg-chrome px-[5%] py-5 md:py-6">
-        <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
-          <h1 className="m-0 font-display text-[clamp(32px,3.6vw,56px)] font-normal leading-none text-paper">{name}</h1>
-          <div className="eyebrow uppercase text-accent">{eyebrow}</div>
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+            {/* the bottom row: the text left, the controls at the right end (below the text where they do not fit beside it) */}
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
+              <div className="min-w-0 flex-1 basis-[420px]">
+                <div className="eyebrow photo-hero__eyebrow uppercase">{eyebrow}</div>
+                <h1 className={`m-0 mt-3 ${H1_CLASS}`}>{name}</h1>
+                {tagline && (
+                  <p className={`m-0 mt-4 ${P_CLASS}`}>
+                    {/* split at the first comma: the words before it in gold, the comma and the rest in cream */}
+                    <span className="photo-hero__tagline-lead">{tagline.split(",", 1)[0]}</span>
+                    {tagline.slice(tagline.split(",", 1)[0].length)}
+                  </p>
+                )}
+              </div>
+              {slides.length > 1 && (
+                <div
+                  className="flex min-h-11 shrink-0 items-center gap-3"
+                  style={{ "--pj-track-w": "44px", width: controlsWidth(slides.length) } as CSSProperties}
+                  {...rowProps}
+                >
+                  {tracks}
+                  {pause}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-8 text-label font-semibold uppercase tracking-label text-accent">
-          {showVideo && <PauseButton paused={filmPaused} onToggle={toggleFilm} />}
-          {showSound && (
-            <button
-              type="button"
-              onClick={toggleSound}
-              aria-pressed={!muted}
-              aria-label={muted ? t("opening.soundOn") : t("opening.soundOff")}
-              className="focus-ring inline-flex min-h-11 items-center gap-2 uppercase tracking-label"
-            >
-              {t("opening.sound")} <span aria-hidden>{muted ? "×" : "♪"}</span>
-            </button>
-          )}
-          <a
-            href={`#${nextId}`}
-            onClick={scrollNext}
-            className="focus-ring inline-flex min-h-11 items-center uppercase tracking-label"
-          >
-            {t("opening.scroll")}
-          </a>
-        </div>
-      </div>
-    </section>
+      )}
+    </HeroSlideshow>
   );
 }

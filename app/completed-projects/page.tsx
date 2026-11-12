@@ -35,9 +35,9 @@ export default function CompletedProjectsPage() {
             </div>
           ) : (
             <EmptyState
-              title="Сè уште немаме завршен проект"
+              title="Засега немаме завршен проект"
               description="Сите наши проекти во моментов се во изградба или во планирање. Штом еден проект биде целосно завршен и предаден, ќе се појави овде."
-              action={<Button href="/projects">Погледни ги сите проекти</Button>}
+              action={<Button href="/projects">Погледнете ги сите проекти</Button>}
             />
           )}
         </div>

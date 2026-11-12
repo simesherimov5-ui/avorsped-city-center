@@ -21,7 +21,7 @@ type OgOptions = {
   label: string;
   title: string;
   subtitle?: string;
-  /** A photo from /public, e.g. "/images/exteriors/exterior-hero-wide.jpg". */
+  /** A photo from /public, e.g. "/images/approved-rich/city-center-exterior-rich.png". */
   photo?: string;
 };
 
@@ -29,7 +29,7 @@ export async function renderOg({ label, title, subtitle, photo }: OgOptions) {
   // The font file holds the Latin and Macedonian Cyrillic letters (next/og's default font has no Cyrillic).
   const font = await readFile(join(process.cwd(), "assets/fonts/PlayfairDisplay-Regular.woff"));
   const picture = photo
-    ? `data:image/jpeg;base64,${(await readFile(join(process.cwd(), "public", photo))).toString("base64")}`
+    ? `data:${photo.endsWith(".png") ? "image/png" : "image/jpeg"};base64,${(await readFile(join(process.cwd(), "public", photo))).toString("base64")}`
     : null;
 
   return new ImageResponse(

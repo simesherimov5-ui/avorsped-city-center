@@ -16,8 +16,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    // Photos are requested at quality 80 (components/ui/Media.tsx); 75 is next/image's own default.
-    qualities: [75, 80],
+    // Photos are requested at quality 80 (components/ui/Media.tsx), full-screen project openings at 85; 75 is next/image's
+    // own default.
+    qualities: [75, 80, 85],
     // AVIF first, WebP for browsers without it.
     formats: ["image/avif", "image/webp"],
     // No file wider than 3200px: the largest original photo, which also covers the widest real use (a phone hero at

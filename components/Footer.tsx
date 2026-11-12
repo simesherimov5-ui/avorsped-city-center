@@ -17,7 +17,7 @@ export function Footer() {
         </div>
 
         <div>
-          <div className="eyebrow text-accent">Истражи</div>
+          <div className="eyebrow text-accent">Истражете</div>
           <div className="mt-3 flex flex-col text-base text-on-chrome/75 sm:mt-5 sm:gap-2.5 sm:text-sm">
             <Link href="/projects" className="flex min-h-11 w-fit items-center hover:text-on-chrome">
               Проекти

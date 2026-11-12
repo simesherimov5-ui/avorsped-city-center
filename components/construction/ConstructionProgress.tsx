@@ -99,8 +99,8 @@ function Full({ data, className }: { data: ConstructionProgressData | null; clas
   );
 
   return (
-    <section className={className} aria-label="Тек на изградба">
-      <div className="eyebrow eyebrow-ruled text-gold-deep">Тек на изградба</div>
+    <section className={className} aria-label="Тек на градба">
+      <div className="eyebrow eyebrow-ruled text-gold-deep">Тек на градба</div>
       <RevealHeading as="h2" className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
         Градбата, фаза по фаза
       </RevealHeading>
@@ -147,9 +147,14 @@ function Full({ data, className }: { data: ConstructionProgressData | null; clas
                   />
                 </span>
               )}
-              <div className="text-[15px] text-ink">{phase.label}</div>
+              <div className="text-[length:min(calc(15px*var(--type-scale,1)),var(--body-max,999px))] text-ink">
+                {phase.label}
+              </div>
               {sub && (
-                <small className="mono-stat mt-1.5 block text-[12px] text-gold-deep" style={{ letterSpacing: 0 }}>
+                <small
+                  className="mono-stat mt-1.5 block text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] text-gold-deep"
+                  style={{ letterSpacing: 0 }}
+                >
                   {sub}
                 </small>
               )}

@@ -56,7 +56,7 @@ export function CompareBar() {
               ? { opacity: 0, transition: { duration: 0 } }
               : { y: "calc(100% + 18px)", opacity: 0, transition: SLIDE_OUT }
           }
-          className="fixed inset-x-0 bottom-[18px] z-40 mx-auto w-[min(520px,calc(100%-32px))] border border-line bg-warm-white px-4 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+          className="on-dark fixed inset-x-0 bottom-[18px] z-40 mx-auto w-[min(520px,calc(100%-32px))] border border-line px-4 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
         >
           <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
             <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
@@ -76,7 +76,7 @@ export function CompareBar() {
                     <button
                       type="button"
                       onClick={() => toggle(id)}
-                      aria-label={`Отстрани стан ${apt.number}`}
+                      aria-label={`Отстранете стан ${apt.number}`}
                       className="focus-ring -my-1 -mr-1.5 inline-flex h-6 w-6 items-center justify-center"
                     >
                       <X className="h-3 w-3" />
@@ -86,11 +86,16 @@ export function CompareBar() {
               })}
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              <Button variant="tertiary" size="sm" onClick={clear}>
-                Исчисти
+              <Button variant="tertiary" tone="dark" size="sm" onClick={clear}>
+                Исчистете
               </Button>
-              <Button href={`/compare?ids=${encodeURIComponent(ids.join(","))}`} variant="primary" size="sm">
-                Спореди
+              <Button
+                href={`/compare?ids=${encodeURIComponent(ids.join(","))}`}
+                variant="primary"
+                tone="dark"
+                size="sm"
+              >
+                Споредете
               </Button>
             </div>
           </div>

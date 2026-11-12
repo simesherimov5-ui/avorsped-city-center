@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
 import type { Project } from "@/types";
+import { projects } from "@/data";
 import {
+  carouselProjects,
   choicesQuery,
   citiesWithCounts,
   filterProjects,
   groupByCity,
+  heroSlides,
+  otherProjects,
   parseChoices,
   projectsText,
+  projectsWithPhoto,
 } from "./project-explorer";
 
 const p = (id: string, city: string, status: Project["status"]) => ({ id, city, status }) as Project;
@@ -60,5 +65,108 @@ describe("the address", () => {
   it("writes 1 проект and 2 проекти", () => {
     expect(projectsText(1)).toBe("1 проект");
     expect(projectsText(2)).toBe("2 проекти");
+  });
+});
+
+describe("carouselProjects and heroSlides (the real data)", () => {
+  it("lists every project being built, stubs too, the ones with a photo first, each in the order of the data", () => {
+    expect(carouselProjects(projects).map((x) => x.id)).toEqual([
+      "city-center",
+      "stanbena-kukja",
+      "dojranski-raj",
+      "radovish-twins",
+      "stanbena-kukja-2",
+      "city-center-2",
+      "boro-pochkov",
+      "dojranski-raj-2",
+    ]);
+  });
+
+  it("gives the homepage slideshow only the four with a photo (projectsWithPhoto of the carousel list)", () => {
+    expect(projectsWithPhoto(carouselProjects(projects)).map((x) => x.id)).toEqual([
+      "city-center",
+      "stanbena-kukja",
+      "dojranski-raj",
+      "radovish-twins",
+    ]);
+  });
+
+  it("never lists a finished or a coming project", () => {
+    expect(carouselProjects(projects).every((x) => x.status === "under-construction")).toBe(true);
+  });
+
+  it("shows exactly City Center, Дојрански Рај and Радовиш Twins in the Проекти hero, in that order", () => {
+    expect(heroSlides(projects).map((x) => x.id)).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
+  });
+
+  it("leaves a hero project out of the hero while it has no slide photo (here only in the test)", () => {
+    const withoutPhoto = projects.map((x) => (x.id === "dojranski-raj" ? { ...x, slideImage: undefined } : x));
+    expect(heroSlides(withoutPhoto).map((x) => x.id)).toEqual(["city-center", "radovish-twins"]);
+  });
+
+  it("adds a project by itself once the data gives it a photo (here only in the test, not in the data)", () => {
+    const photo = { src: "/images/test/boro-pochkov.jpg", alt: "Боро Почков", isPlaceholder: false };
+    const withPhoto = projects.map((x) =>
+      x.id === "boro-pochkov" ? { ...x, heroImage: photo, slideImage: photo } : x
+    );
+    expect(
+      projectsWithPhoto(carouselProjects(withPhoto))
+        .map((x) => x.id)
+        .slice(0, 5)
+    ).toEqual(["city-center", "stanbena-kukja", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
+    // the Проекти hero keeps its three projects
+    expect(heroSlides(withPhoto).map((x) => x.id)).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
+    // the data itself is untouched
+    expect(projects.find((x) => x.id === "boro-pochkov")?.heroImage.isPlaceholder).toBe(true);
+  });
+});
+
+describe("otherProjects", () => {
+  const photo = { src: "/x.jpg", alt: "", isPlaceholder: false };
+  const bare = { src: "", alt: "", isPlaceholder: true };
+  const q = (id: string, status: Project["status"], heroImage = photo, extra: Partial<Project> = {}) =>
+    ({ id, status, heroImage, ...extra }) as Project;
+
+  it("lists only the ones being built with a photo, never the current project, in the order of the data", () => {
+    const list = [
+      q("done", "completed"),
+      q("stub1", "under-construction", bare, { stub: true }),
+      q("b", "under-construction"),
+      q("cur", "under-construction"),
+      q("soon", "upcoming"),
+      q("stub2", "under-construction", bare, { stub: true }),
+      q("c", "under-construction"),
+    ];
+    expect(otherProjects(list, "cur").map((x) => x.id)).toEqual(["b", "c"]);
+  });
+  it("stops at six", () => {
+    const list = [
+      ...["s1", "s2", "s3"].map((id) => q(id, "under-construction", bare, { stub: true })),
+      ...["p1", "p2", "p3", "p4", "p5", "p6", "p7"].map((id) => q(id, "under-construction")),
+    ];
+    expect(otherProjects(list, "none").map((x) => x.id)).toEqual(["p1", "p2", "p3", "p4", "p5", "p6"]);
+  });
+});
+
+describe("projectsWithPhoto", () => {
+  const photo = { src: "/x.jpg", alt: "", isPlaceholder: false };
+  const bare = { src: "", alt: "", isPlaceholder: true };
+  const q = (id: string, heroImage: Project["heroImage"]) => ({ id, heroImage }) as Project;
+
+  it("keeps the projects with a real photo, in order, and leaves the placeholders out", () => {
+    const list = [q("a", photo), q("b", bare), q("c", photo), q("d", { ...photo, src: "" })];
+    expect(projectsWithPhoto(list).map((x) => x.id)).toEqual(["a", "c"]);
+  });
+  it("is empty when no project has a photo", () => {
+    expect(projectsWithPhoto([q("a", bare), q("b", bare)])).toEqual([]);
+  });
+  it("in the real data, lists exactly the five projects that have a photo (one of them finished)", () => {
+    expect(projectsWithPhoto(projects).map((x) => x.id)).toEqual([
+      "city-center",
+      "stanbena-kukja",
+      "dojranski-raj",
+      "gtc-global",
+      "radovish-twins",
+    ]);
   });
 });

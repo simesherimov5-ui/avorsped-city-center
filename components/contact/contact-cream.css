@@ -1,0 +1,139 @@
+/* PREVIEW ONLY: the Контакт page on Травертин (cream), opened with /contact?preview=cream.
+   Colours only: the layout, the wording, the steps and every interaction are the current page's. Everything here is
+   scoped to [data-tone="cream"], which only the preview sets, so /contact itself is unchanged by this file.
+   How the colours map (the site's own rules for a light surface: text Оникс, accent and labels Бронза, never gold text):
+   --color-paper (text) -> Оникс · --color-gold (labels, lines, selected) -> Бронза · --color-gold-light (errors) -> Оникс ·
+   --color-ink (panels) -> Варовник-toned parchment · --mute -> Оникс 68%. The buttons keep their metallic gold on Оникс. */
+
+[data-theme="black"][data-tone="cream"] {
+  --color-paper: var(--color-onyx);
+  --color-gold: var(--color-bronze);
+  --color-gold-light: var(--color-onyx);
+  --color-ink: var(--color-parchment);
+  --color-line: color-mix(in srgb, var(--color-onyx) 14%, transparent);
+  --gold-line: color-mix(in srgb, var(--color-bronze) 40%, transparent);
+  --mute: color-mix(in srgb, var(--color-onyx) 68%, transparent);
+  /* the boundary of a control (chip, day, field): clearly visible on cream */
+  --cream-control: color-mix(in srgb, var(--color-onyx) 38%, transparent);
+}
+.bk-page[data-tone="cream"] {
+  background: var(--color-travertine);
+}
+[data-theme="black"][data-tone="cream"] ::selection {
+  background: var(--color-bronze);
+  color: var(--color-travertine);
+}
+
+/* The panels: parchment on cream, a Бронза hairline */
+[data-tone="cream"] .ct-panel,
+[data-tone="cream"] .ct-side {
+  background: var(--color-parchment);
+}
+
+/* Chips and days: a visible boundary, Бронза on hover, a filled Бронза when chosen */
+[data-theme="black"][data-tone="cream"] .ct-chip,
+[data-theme="black"][data-tone="cream"] .ct-day {
+  border-color: var(--cream-control);
+}
+[data-theme="black"][data-tone="cream"] .ct-chip.is-secondary {
+  border-color: var(--gold-line);
+}
+[data-theme="black"][data-tone="cream"] .ct-chip:hover,
+[data-theme="black"][data-tone="cream"] .ct-day:hover,
+[data-theme="black"][data-tone="cream"] .ct-chip.is-secondary:hover {
+  border-color: var(--color-bronze);
+}
+[data-theme="black"][data-tone="cream"] .ct-chip[aria-checked="true"],
+[data-theme="black"][data-tone="cream"] .ct-chip[aria-pressed="true"],
+[data-theme="black"][data-tone="cream"] .ct-chip.is-secondary[aria-checked="true"] {
+  border-color: var(--color-bronze);
+  background: var(--color-bronze);
+  color: var(--color-travertine);
+}
+[data-theme="black"][data-tone="cream"] .ct-day[aria-checked="true"] {
+  border-color: var(--color-bronze);
+  background: var(--color-bronze);
+  color: var(--color-travertine);
+}
+[data-theme="black"][data-tone="cream"] .ct-day[aria-checked="true"] small {
+  color: var(--color-travertine);
+}
+
+/* Fields: a lighter field on the parchment panel with a clear border; Бронза and a second line on focus */
+[data-theme="black"][data-tone="cream"] .ct-fields .ct-input input {
+  border-color: var(--cream-control);
+  background: var(--color-travertine);
+}
+[data-theme="black"][data-tone="cream"] .ct-fields .ct-input input:focus {
+  border-color: var(--color-bronze);
+  box-shadow: 0 0 0 1px var(--color-bronze);
+}
+[data-theme="black"][data-tone="cream"] .ct-fields .ct-input input[aria-invalid="true"] {
+  border-color: var(--color-onyx);
+  box-shadow: 0 0 0 1px var(--color-onyx);
+}
+[data-theme="black"][data-tone="cream"] .ct-input input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-onyx);
+  box-shadow: 0 0 0 1000px var(--color-travertine) inset;
+}
+/* Errors: Оникс text with a Бронза bar (no new colour) */
+[data-theme="black"][data-tone="cream"] .ct-error,
+[data-theme="black"][data-tone="cream"] .ct-fail {
+  padding-left: 12px;
+  border-left: 3px solid var(--color-bronze);
+  font-weight: 500;
+}
+
+/* The area slider: the handle's focus ring is Оникс (the light foil ring would not read on cream) */
+[data-theme="black"][data-tone="cream"] .ct-range-input:focus-visible::-webkit-slider-thumb {
+  background: radial-gradient(
+    circle,
+    var(--color-ink) 0 11px,
+    var(--color-bronze) 11px 12px,
+    transparent 12px 15px,
+    var(--color-onyx) 15px 17px,
+    transparent 17px
+  );
+}
+[data-theme="black"][data-tone="cream"] .ct-range-input:focus-visible::-moz-range-thumb {
+  background: radial-gradient(
+    circle,
+    var(--color-ink) 0 11px,
+    var(--color-bronze) 11px 12px,
+    transparent 12px 15px,
+    var(--color-onyx) 15px 17px,
+    transparent 17px
+  );
+}
+
+/* «Уште не знам» (the outline button): Бронза text; its hover turns Оникс, not Травертин */
+@media (hover: hover) {
+  [data-tone="cream"] .btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    border-color: color-mix(in srgb, var(--color-onyx) 60%, transparent);
+    background-color: color-mix(in srgb, var(--color-onyx) 5%, transparent);
+    color: var(--color-onyx);
+  }
+}
+[data-tone="cream"] .btn-secondary:focus-visible {
+  outline: 2px solid var(--color-onyx);
+  outline-offset: 3px;
+}
+
+/* «Закажи» and «Продолжи» keep their Оникс fill and metallic gold; only the focus ring changes, to Оникс, to read on cream */
+[data-tone="cream"] .ct-btn:focus-visible {
+  outline-color: var(--color-onyx);
+}
+
+/* Links and the keyboard focus of the direct panel */
+[data-tone="cream"] .ct-edit:focus-visible,
+[data-tone="cream"] a.ct-val:focus-visible,
+[data-tone="cream"] .ct-addr a:focus-visible,
+[data-tone="cream"] .ct-chip:focus-visible,
+[data-tone="cream"] .ct-day:focus-visible {
+  outline-color: var(--color-onyx);
+}
+
+/* The map's frame */
+[data-tone="cream"] .ct-map {
+  border-color: color-mix(in srgb, var(--color-onyx) 20%, transparent);
+}

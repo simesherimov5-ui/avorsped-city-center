@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** The project's name with its last word set in italic Бронза (the accent on a light surface). */
+/** The project's name with its last word set in Бронза (the accent on a light surface). */
 /**
  * The top of a project page, on a light surface: where it is, its name in the display serif (plain, no accent word), a few lines about it, a row of facts under thin rules and, if given, the way in. Every project page opens
  * with this, so they read as one family.
@@ -39,7 +39,9 @@ export function ProjectHeader({
           {facts.map((fact) => (
             <div key={fact.label} className="flex flex-col gap-1.5 border-t border-line py-4">
               <dt className="eyebrow eyebrow-tight text-muted">{fact.label}</dt>
-              <dd className="text-[15px] font-medium leading-snug text-charcoal">{fact.value}</dd>
+              <dd className="text-[length:min(calc(15px*var(--type-scale,1)),var(--body-max,999px))] font-medium leading-snug text-charcoal">
+                {fact.value}
+              </dd>
             </div>
           ))}
         </dl>

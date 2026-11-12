@@ -4,7 +4,7 @@ import { CompareView } from "./CompareView";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Спореди станови",
+  title: "Споредете станови",
   description: "Споредете до три станови една до друга: површина, спални соби и ориентација.",
   path: "/compare",
   noindex: true, // the page shows whatever is in the address, so it is not worth indexing
@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
 export default function ComparePage() {
   // The list can come from the address (?ids=…), which a statically built page may only read behind Suspense.
   return (
-    <Suspense>
+    <Suspense fallback={<div aria-hidden className="on-dark min-h-svh" />}>
       <CompareView />
     </Suspense>
   );

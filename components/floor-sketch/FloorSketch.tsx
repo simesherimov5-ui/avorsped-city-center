@@ -4,10 +4,9 @@ import "./floor-sketch.css";
 import { useEffect, useState, type CSSProperties } from "react";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { Media } from "@/components/ui/Media";
-import { StatusMarker } from "@/components/ui/StatusBadge";
-import { formatArea, statusLabel } from "@/lib/format";
+import { formatArea } from "@/lib/format";
 import { roomsText } from "@/lib/plural";
-import type { ApartmentOutline, DrawingImage, UnitStatus } from "@/types";
+import type { ApartmentOutline, DrawingImage } from "@/types";
 
 export interface SketchApartment {
   id: string;
@@ -15,7 +14,6 @@ export interface SketchApartment {
   area: number;
   areaDecimals?: number;
   bedrooms: number;
-  status: UnitStatus;
   /** Where it is on the sketch; an apartment without one has no shape. */
   outline?: ApartmentOutline;
 }
@@ -29,8 +27,7 @@ const FADE_MS = 450;
  * number at the shape's label point. The drawing is a lossless line drawing, served as it is and never shown larger than
  * its own pixels. The box that holds the picture and the shapes has the sketch's own proportions, whatever they are, and
  * is never taller than min(68vh, 620px). The shapes are an SVG laid exactly over the picture (viewBox 0 0 100 100,
- * stretched to fit), so the percent values of the data are its coordinates. The status shows in the shape and, never by
- * colour alone, as a mark on the number. Hovering or focusing a shape tells the parent (`onHover`), so the card of the
+ * stretched to fit), so the percent values of the data are its coordinates. Hovering or focusing a shape tells the parent (`onHover`), so the card of the
  * same apartment can light up too, and the other way round (`hovered`). When the floor changes the numbers are replaced
  * one after the other; the picture changes (cross-fading, the box easing to the new proportions) only if the new floor
  * has another sketch.
@@ -41,6 +38,7 @@ export function FloorSketch({
   levelKey,
   hovered = null,
   onHover,
+  priority = true,
 }: {
   image: DrawingImage;
   /** The apartments of the chosen floor. */
@@ -49,6 +47,8 @@ export function FloorSketch({
   levelKey: string | number;
   hovered?: string | null;
   onHover?: (id: string | null) => void;
+  /** The drawing is the first big thing on its page: fetched at once. Where it sits further down it is not (it is a large file). */
+  priority?: boolean;
 }) {
   // the picture that is leaving fades out under the new one
   const [shown, setShown] = useState(image);
@@ -92,7 +92,7 @@ export function FloorSketch({
             crisp
             className="h-full w-full !bg-transparent"
             sizes="(max-width: 1024px) 100vw, 800px"
-            priority
+            priority={priority}
           />
         </div>
         <svg
@@ -107,8 +107,7 @@ export function FloorSketch({
               key={apartment.id}
               href={`/development/apartment/${apartment.id}`}
               className={`fs-shape${hovered === apartment.id ? " is-hot" : ""}`}
-              data-status={apartment.status}
-              aria-label={`Стан ${apartment.number}, ${formatArea(apartment.area, apartment.areaDecimals)}, ${roomsText(apartment.bedrooms)}, ${statusLabel(apartment.status).toLowerCase()}`}
+              aria-label={`Стан ${apartment.number}, ${formatArea(apartment.area, apartment.areaDecimals)}, ${roomsText(apartment.bedrooms)}`}
               onMouseEnter={() => onHover?.(apartment.id)}
               onMouseLeave={() => onHover?.(null)}
               onFocus={() => onHover?.(apartment.id)}
@@ -126,7 +125,6 @@ export function FloorSketch({
               className={`fs-chip${hovered === apartment.id ? " is-hot" : ""}`}
               style={{ left: `${outline.label[0]}%`, top: `${outline.label[1]}%`, "--i": index } as CSSProperties}
             >
-              <StatusMarker status={apartment.status} className="fs-mk" />
               {apartment.number}
             </span>
           ))}

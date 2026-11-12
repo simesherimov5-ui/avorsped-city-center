@@ -4,7 +4,6 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { BedDouble, Compass, Ruler, ArrowRight } from "lucide-react";
 import type { Apartment } from "@/types";
 import { formatArea, orientationLabel } from "@/lib/format";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Media } from "@/components/ui/Media";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { floorLabelOf, placeLabel } from "@/data";
@@ -34,14 +33,9 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             fit="contain"
             crisp={floorPlanImageForApartment(apartment).transparent}
             priority={priority}
-            // A sold apartment's picture is dimmed; its status label and name stay at full contrast.
-            className={cn(
-              "aspect-[4/3] transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]",
-              apartment.status === "sold" && "opacity-50"
-            )}
+            className="aspect-[4/3] !bg-sand transition-transform duration-(--dur-slow) ease-(--ease) group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          <StatusBadge status={apartment.status} variant="pill" className="absolute left-3 top-3 bg-on-chrome/95" />
         </div>
       </Link>
 
@@ -55,8 +49,8 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
           </div>
           <Link
             href={`/development/apartment/${apartment.id}`}
-            aria-label={`Погледни го стан ${apartment.number}`}
-            className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:bg-accent hover:text-chrome"
+            aria-label={`Погледнете го стан ${apartment.number}`}
+            className="focus-ring flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent text-gold-deep transition-colors hover:border-gold-light hover:text-gold-light"
           >
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -92,7 +86,7 @@ export function ApartmentCard({ apartment, priority }: { apartment: Apartment; p
             onChange={() => toggle(apartment.id)}
             className="h-5 w-5 accent-[color:var(--color-accent)] lg:h-3.5 lg:w-3.5"
           />
-          {selected ? "Додаден за споредба" : "Додади за споредба"}
+          {selected ? "Додаден за споредба" : "Додадете за споредба"}
         </label>
       </div>
     </div>

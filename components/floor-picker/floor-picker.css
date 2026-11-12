@@ -1,13 +1,26 @@
-/* The floor picker on the building page: the building on the left, the apartments of the chosen floor on the right.
-   It sits in a dark band, so every colour here is the dark-surface pair: Травертин text, Светол бакар accent. */
+/* The floor picker (a building's page, Дојран, the other project pages): the building with the apartments of the chosen floor under
+   it on the left, the floor on the right. It sits on a cream band (.fp-band), so the colours are the light-surface set: Оникс text,
+   Бронза accent. Every colour below comes from the --fp-* tokens, so the surface can be changed in one place. */
+.fp-band {
+  background-color: var(--color-travertine);
+  color: var(--color-onyx);
+  border-top: 1px solid color-mix(in srgb, var(--color-onyx) 12%, transparent);
+}
 .fp {
-  --fp-line: color-mix(in srgb, var(--color-travertine) 12%, transparent);
-  --fp-mute: color-mix(in srgb, var(--color-travertine) 64%, transparent);
+  --fp-ground: var(--color-travertine);
+  --fp-facade-ground: color-mix(in srgb, var(--color-bronze) 6%, var(--color-travertine));
+  --fp-row: color-mix(in srgb, var(--color-onyx) 4%, var(--color-travertine));
+  --fp-ink: var(--color-onyx);
+  --fp-line: color-mix(in srgb, var(--color-onyx) 16%, transparent);
+  --fp-mute: color-mix(in srgb, var(--color-onyx) 72%, transparent);
+  --fp-accent: var(--color-bronze);
+  --fp-on-accent: var(--color-travertine);
+  --fp-focus: var(--color-bronze);
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   border: 1px solid var(--fp-line);
-  background: var(--color-espresso);
-  color: var(--color-travertine);
+  background: var(--fp-ground);
+  color: var(--fp-ink);
   text-align: left;
 }
 
@@ -16,37 +29,37 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 32px;
-  background: var(--color-onyx);
+  padding: 56px 38px;
+  background: var(--fp-facade-ground);
 }
 .fp-cap {
-  width: 120px;
-  height: 28px;
+  width: 142px;
+  height: 33px;
   border: 1px solid var(--fp-line);
   border-bottom: 0;
 }
 .fp-floors {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: min(360px, 100%);
-  padding: 10px;
+  gap: 7px;
+  width: min(425px, 100%);
+  padding: 12px;
   border: 1px solid var(--fp-line);
 }
 .fp-floor {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  height: 46px;
-  padding: 0 18px;
+  height: 54px;
+  padding: 0 21px;
   border: 1px solid var(--fp-line);
   border-radius: 0;
-  background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
+  background: var(--fp-row);
   color: var(--fp-mute);
   font:
-    600 12px/1 var(--font-sans),
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -58,36 +71,36 @@
     border-color var(--dur-fast) var(--ease);
 }
 .fp-floor:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--fp-focus);
   outline-offset: 2px;
 }
 .fp-floor[aria-pressed="true"] {
-  border-color: var(--color-gold);
-  background: var(--color-gold);
-  color: var(--color-onyx);
+  border-color: var(--fp-accent);
+  background: var(--fp-accent);
+  color: var(--fp-on-accent);
 }
 .fp-wins {
   display: flex;
   min-width: 0;
-  gap: 10px;
+  gap: 12px;
 }
 .fp-wins.is-dense {
-  gap: 4px;
+  gap: 5px;
 }
 .fp-wins i {
   display: block;
-  flex: 0 1 26px;
+  flex: 0 1 31px;
   min-width: 3px;
-  height: 14px;
+  height: 16px;
   border: 1px solid var(--fp-line);
   transition: border-color var(--dur-fast) var(--ease);
 }
 .fp-floor[aria-pressed="true"] .fp-wins i {
-  border-color: var(--color-onyx);
+  border-color: var(--fp-on-accent);
 }
 .fp-base {
-  width: min(440px, 100%);
-  height: 10px;
+  width: min(520px, 100%);
+  height: 12px;
   background: var(--fp-line);
 }
 
@@ -95,14 +108,14 @@
 .fp-panel {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 22px;
+  justify-content: flex-start;
+  gap: 26px;
   min-width: 0;
-  padding: 48px 44px;
+  padding: 56px 44px;
 }
 .fp-label {
-  color: var(--color-gold);
-  font-size: 12px;
+  color: var(--fp-accent);
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
@@ -117,76 +130,78 @@
 .fp-soon {
   margin: 0;
   max-width: 40ch;
-  color: color-mix(in srgb, var(--color-travertine) 72%, transparent);
-  font-size: 16px;
+  color: var(--fp-mute);
+  font-size: min(calc(16px * var(--type-scale, 1)), var(--body-max, 999px));
   line-height: 1.6;
 }
-.fp-units {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.fp-unit {
+/* The apartments of the chosen floor, under the building: rows like the floor rows */
+.fp-apts {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  height: 100%;
-  padding: 16px;
-  border: 1px solid var(--fp-line);
-  color: inherit;
-  text-decoration: none;
-  transition: border-color var(--dur-fast) var(--ease);
+  gap: 7px;
+  width: min(425px, 100%);
+  margin: 33px 0 0;
+  padding: 0;
+  list-style: none;
+  animation: fp-fade var(--dur-base) var(--ease) both;
 }
-.fp-unit:hover,
-.fp-unit.is-hot {
-  border-color: var(--color-gold);
+@keyframes fp-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.fp-unit:focus-visible {
-  outline: 2px solid var(--foil-light);
-  outline-offset: 2px;
-}
-.fp-unit-no {
-  font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 22px;
-  font-variant-numeric: lining-nums;
-  font-weight: 400;
-  line-height: 1.2;
-}
-.fp-unit-spec {
-  color: var(--fp-mute);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-.fp-unit-st {
+.fp-apt {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: var(--label-size);
-  font-weight: 600;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 54px;
+  padding: 0 21px;
+  border: 1px solid var(--fp-line);
+  background: var(--fp-row);
+  color: var(--fp-mute);
+  font:
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
+    system-ui,
+    sans-serif;
   letter-spacing: var(--label-track);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+/* «СТАН» in capitals like the floor labels; the number is written as it is (11a, not 11А) */
+.fp-apt-lbl {
   text-transform: uppercase;
 }
-.fp-unit-st.is-available {
-  color: var(--color-gold);
+.fp-apt:hover,
+.fp-apt.is-hot {
+  border-color: var(--fp-accent);
+  background: var(--fp-accent);
+  color: var(--fp-on-accent);
 }
-.fp-unit-st.is-reserved {
-  color: var(--color-travertine);
+.fp-apt:focus-visible {
+  outline: 2px solid var(--fp-focus);
+  outline-offset: 2px;
 }
-.fp-unit-st.is-sold {
-  color: color-mix(in srgb, var(--color-travertine) 55%, transparent);
+.fp-apt-spec {
+  min-width: 0;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-align: right;
 }
 .fp-floorlink {
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
-  gap: 12px;
-  min-height: 44px;
-  color: var(--color-gold);
-  font-size: 12px;
+  gap: 14px;
+  min-height: 52px;
+  color: var(--fp-accent);
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-decoration: none;
@@ -200,20 +215,10 @@
   transform: translateX(6px);
 }
 .fp-floorlink:focus-visible {
-  outline: 2px solid var(--foil-light);
+  outline: 2px solid var(--fp-focus);
   outline-offset: 3px;
 }
 
-@media (min-width: 560px) {
-  .fp-units {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1200px) {
-  .fp-units {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
 @media (max-width: 879px) {
   .fp {
     grid-template-columns: minmax(0, 1fr);
@@ -232,17 +237,17 @@
   .fp-floorlink:hover svg {
     transform: none;
   }
+  .fp-apts {
+    animation: none;
+  }
 }
 
-/* A building with a floor sketch: the panel gets the room it needs, the heading is smaller, the cards sit in one row */
+/* A building with a floor sketch: the panel gets the room it needs, the heading is smaller */
 .fp.has-sketch {
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
 }
 .fp.has-sketch .fp-title {
   font-size: var(--fs-h3);
-}
-.fp.has-sketch .fp-units {
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 @media (max-width: 879px) {
   .fp.has-sketch {

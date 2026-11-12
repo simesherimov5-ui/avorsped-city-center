@@ -9,7 +9,6 @@ import { getLenis } from "@/lib/lenis";
 import { DUR } from "@/lib/gsap";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { NoPhoto } from "@/components/ui/NoPhoto";
-import { projectStatusLabel } from "@/lib/format";
 import {
   CITY_PINS,
   choicesQuery,
@@ -23,13 +22,11 @@ import {
   type View,
 } from "@/lib/project-explorer";
 import type { Project } from "@/types";
+import { ProjectCard } from "@/components/ProjectCard";
 import { PinIcon } from "./PinIcon";
 import { ProjectsMap, type MapPin } from "./ProjectsMap";
 
 const href = (p: Project) => p.href ?? `/projects/${p.slug}`;
-const statusText = (p: Project) => p.statusLabelOverride ?? projectStatusLabel(p.status);
-const statusClass = (p: Project) =>
-  p.status === "completed" ? "is-done" : p.status === "upcoming" ? "is-soon" : "is-build";
 /** The old cards fade out in this long (ms) before the new ones come in. */
 const CARDS_OUT = 200;
 
@@ -194,8 +191,15 @@ function Explorer({
     place();
     // from the second placement on it slides
     requestAnimationFrame(() => line.classList.add("is-ready"));
-    window.addEventListener("resize", place);
-    return () => window.removeEventListener("resize", place);
+    // only a change of width moves the tabs (a phone's address bar sliding in and out fires `resize` too)
+    let width = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === width) return;
+      width = window.innerWidth;
+      place();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [status]);
 
   // A click outside the city list closes it.
@@ -233,7 +237,13 @@ function Explorer({
   };
 
   const cityLabel = city === "all" ? "Сите градови" : city;
-  const countLine = shown.length === 0 ? "Нема проекти за овој избор." : `Прикажани ${projectsText(shown.length)}`;
+  // The grid names a town only once one is picked ("Струмица · 3 проекти"); the map view keeps its own count.
+  const countLine =
+    view === "map"
+      ? `Прикажани ${projectsText(shown.length)}`
+      : city === "all"
+        ? ""
+        : `${city} · ${projectsText(shown.length)}`;
 
   return (
     <div className="pj-explorer grain">
@@ -341,35 +351,31 @@ function Explorer({
 
       <section ref={results} className="pj-wrap pj-results">
         <div className="pj-count" role="status" aria-live="polite">
-          {countLine}
+          {shown.length === 0 ? (
+            <>
+              Нема проекти за овој избор.{" "}
+              <button type="button" className="pj-reset" onClick={() => choose({ status: "all", city: "all" })}>
+                Прикажете ги сите
+              </button>
+            </>
+          ) : (
+            <span className="pj-count-line">{countLine}</span>
+          )}
         </div>
 
         {view === "grid" && shown.length > 0 && (
           <div key={`grid-${status}-${city}`} className={leaving ? "pj-groups is-leaving" : "pj-groups"}>
-            {groups.map((group) => {
-              let n = 0;
-              return (
-                <div key={group.city || "none"}>
-                  {group.city && (
-                    <h2 className="pj-group-head">
-                      <PinIcon />
-                      <span className="pj-group-name">{group.city}</span>
-                      <span className="pj-group-count">{projectsText(group.projects.length)}</span>
-                    </h2>
-                  )}
-                  <div className="pj-grid">
-                    {group.projects.map((project) => (
-                      <GridCard
-                        key={project.id}
-                        project={project}
-                        delay={changed ? n++ * 0.04 : n++ * 0.05}
-                        swap={changed}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            <div className="pj-grid">
+              {shown.map((project, i) => (
+                <GridCard
+                  key={project.id}
+                  project={project}
+                  // the first showing rises one card after the other; a choice swaps the whole grid at once (280ms)
+                  delay={changed ? 0 : i * 0.05}
+                  swap={changed}
+                />
+              ))}
+            </div>
           </div>
         )}
 
@@ -406,9 +412,7 @@ function Explorer({
                       </span>
                       <span className="pj-row-text">
                         <span className="pj-row-name">{project.name}</span>
-                        <span className="pj-row-meta">
-                          {project.city} · <span className={statusClass(project)}>{statusText(project)}</span>
-                        </span>
+                        <span className="pj-row-meta">{project.city}</span>
                       </span>
                       <span className="pj-arrow" aria-hidden>
                         →
@@ -429,47 +433,14 @@ const cnView = (changed: boolean, leaving: boolean) =>
   ["pj-map-view", changed && "pj-view", leaving && "is-leaving"].filter(Boolean).join(" ");
 
 function GridCard({ project, delay, swap = false }: { project: Project; delay?: number; swap?: boolean }) {
+  // the card is the shared ProjectCard (the same one as on Завршени проекти); the cell around it only carries the rise-in
+  // and the swap of a new choice
   return (
-    <Link
-      href={href(project)}
-      className={`pj-card${delay !== undefined ? (swap ? " is-swapping" : " is-rising") : ""}`}
+    <div
+      className={`pj-cell${delay !== undefined ? (swap ? " is-swapping" : " is-rising") : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay.toFixed(2)}s` } : undefined}
     >
-      <div className="pj-photo">
-        {project.heroImage.isPlaceholder ? (
-          <NoPhoto />
-        ) : (
-          <div className="pj-img">
-            <Media
-              image={project.heroImage}
-              label={project.name}
-              tone="dark"
-              fit={project.imageFit ?? "cover"}
-              focus={project.imageFocus}
-              className="h-full w-full !bg-transparent"
-              // the photo is drawn wider than its card (the crop of a wide photo, and the project's own zoom)
-              sizes="(max-width: 767px) 160vw, (max-width: 1100px) 100vw, 620px"
-              defer
-            />
-          </div>
-        )}
-        <div className="pj-photo-scrim" />
-        <span className={`pj-chip ${statusClass(project)}`}>
-          <i />
-          {statusText(project)}
-        </span>
-        {project.city && <span className="pj-photo-city">{project.city}</span>}
-      </div>
-      <div className="pj-title-row">
-        <span className="pj-name">{project.name}</span>
-        <span className="pj-arrow" aria-hidden>
-          →
-        </span>
-      </div>
-      <div className="pj-rule">
-        <i />
-      </div>
-      {project.tagline && <p className="pj-tagline">{project.tagline}</p>}
-    </Link>
+      <ProjectCard project={project} />
+    </div>
   );
 }

@@ -1,46 +1,64 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import { StatCell, STAT_GRID } from "@/components/ui/StatCell";
 
 const DURATION = 1600;
 
+/** A whole number that counts up (with an optional suffix), or a text that is shown as it is (a range, a year, a [bracket]). */
+export type NumberItem = { label: string } & ({ target: number; suffix?: string } | { text: string });
 type Figure = { target: number; suffix?: string; label: string };
 
 /** 8000 becomes "8.000": the thousands separator is written by hand so the server and the browser agree. */
 const format = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
+/** What the row shows: the page's own `items`, or the years since `founded` (from the visitor's own clock) and `figures`. */
+const buildItems = (founded: number, figures: Figure[], items?: NumberItem[]): NumberItem[] =>
+  items ?? [{ target: new Date().getFullYear() - founded, label: "Години искуство" }, ...figures];
+
+const written = (item: NumberItem) => ("text" in item ? item.text : format(item.target) + (item.suffix ?? ""));
+
 /**
- * "Изградени на доверба": large numbers, each with a short rule and its label. The first is the years since the
- * company was founded (this year minus `founded`); `figures` follow it. The server HTML holds every final number, and
- * when half of the row is on screen they all count up from 0 in 1.6s (ease-out cubic), once. With reduced motion they
- * stay as rendered.
+ * "Изградени на доверба": large numbers, each with a short rule and its label. On Почетна the first is the years since
+ * the company was founded (this year minus `founded`) and `figures` follow it; any other page gives its own `items`
+ * (and its `className` for the grid). The server HTML holds every final number, and when half of the row is on screen
+ * the whole numbers all count up from 0 in 1.6s (ease-out cubic), once; a text item stays as written. With reduced
+ * motion they stay as rendered.
  */
-export function Numbers({ founded, figures }: { founded: number; figures: Figure[] }) {
+export function Numbers({
+  founded = 0,
+  figures = [],
+  items,
+  className = STAT_GRID,
+}: {
+  founded?: number;
+  figures?: Figure[];
+  items?: NumberItem[];
+  className?: string;
+}) {
   const root = useRef<HTMLDivElement>(null);
   const cells = useRef<(HTMLSpanElement | null)[]>([]);
-  const yearsNow = new Date().getFullYear() - founded;
-  const items: Figure[] = [{ target: yearsNow, label: "Години искуство" }, ...figures];
+  const shown = buildItems(founded, figures, items);
 
   useLayoutEffect(() => {
     const block = root.current;
     if (!block || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // The years are counted from the visitor's own clock; the other figures are fixed.
-    const targets = [new Date().getFullYear() - founded, ...figures.map((f) => f.target)];
-    const suffixes = ["", ...figures.map((f) => f.suffix ?? "")];
+    const now = buildItems(founded, figures, items);
     const show = (i: number, value: number) => {
       const el = cells.current[i];
-      if (el) el.textContent = format(value) + suffixes[i];
+      const item = now[i];
+      if (el && "target" in item) el.textContent = format(value) + (item.suffix ?? "");
     };
-    targets.forEach((_, i) => show(i, 0));
+    now.forEach((_, i) => show(i, 0));
 
     let raf = 0;
     const run = () => {
       const t0 = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - t0) / DURATION);
+      const tick = (time: number) => {
+        const p = Math.min(1, (time - t0) / DURATION);
         const eased = 1 - Math.pow(1 - p, 3);
-        targets.forEach((target, i) => show(i, Math.round(target * eased)));
+        now.forEach((item, i) => "target" in item && show(i, Math.round(item.target * eased)));
         if (p < 1) raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
@@ -58,29 +76,21 @@ export function Numbers({ founded, figures }: { founded: number; figures: Figure
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [founded, figures]);
+  }, [founded, figures, items]);
 
   return (
-    <div ref={root} className="grid gap-9 sm:grid-cols-3 sm:gap-8 lg:gap-12">
-      {items.map((item, i) => (
-        <div key={item.label} className="flex flex-col gap-3">
-          <div
-            className="font-display text-(length:--fs-hero) leading-[0.95] text-accent"
-            style={{ fontVariantNumeric: "lining-nums tabular-nums" }}
+    <div ref={root} className={className}>
+      {shown.map((item, i) => (
+        <StatCell key={item.label} label={item.label}>
+          <span
+            ref={(el) => {
+              cells.current[i] = el;
+            }}
+            suppressHydrationWarning
           >
-            <span
-              ref={(el) => {
-                cells.current[i] = el;
-              }}
-              suppressHydrationWarning
-            >
-              {format(item.target)}
-              {item.suffix}
-            </span>
-          </div>
-          <div aria-hidden className="h-px w-12 bg-accent" />
-          <div className="text-label font-semibold uppercase tracking-label text-accent">{item.label}</div>
-        </div>
+            {written(item)}
+          </span>
+        </StatCell>
       ))}
     </div>
   );

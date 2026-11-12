@@ -1,3 +1,4 @@
+import { TypeUp } from "@/components/TypeUp";
 import { Hero } from "@/components/Hero";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
@@ -11,6 +12,7 @@ import { Soon } from "@/components/home/Soon";
 import { Quotes } from "@/components/home/Quotes";
 import { ClosingGlass } from "@/components/home/ClosingGlass";
 import { projects, companyInfo, residentQuotes } from "@/data";
+import { carouselProjects, projectsWithPhoto } from "@/lib/project-explorer";
 import type { Metadata } from "next";
 
 // TODO(client): the film is not made yet; until it is, the frame shows this aerial view of City Center.
@@ -27,7 +29,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (
-    <>
+    <TypeUp>
       {/* 1. Hero — who we are */}
       <Hero />
 
@@ -38,7 +40,7 @@ export default function HomePage() {
       <Film still={FILM_STILL} />
 
       {/* 4. What is being built now */}
-      <NewProjects projects={projects.filter((p) => p.status !== "completed")} />
+      <NewProjects projects={projectsWithPhoto(carouselProjects(projects))} />
 
       {/* 5. The numbers */}
       <section className="grain grain--dark border-t border-on-chrome/10 bg-chrome text-on-chrome">
@@ -85,6 +87,6 @@ export default function HomePage() {
 
       {/* 8. The ending: a pane of glass over the building mark */}
       <ClosingGlass phone={companyInfo.phone} email={companyInfo.email} />
-    </>
+    </TypeUp>
   );
 }

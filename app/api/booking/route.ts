@@ -10,7 +10,7 @@ import { bookingEmail } from "@/components/contact/send-booking";
  *
  * Settings (environment variables, never in the repository):
  *   RESEND_API_KEY       the Resend API key
- *   BOOKING_TO_EMAIL     who receives the bookings; several addresses separated by commas
+ *   BOOKING_TO_EMAIL     who receives the bookings: info@javor-sped.mk (lib/site.ts); several addresses separated by commas
  *   BOOKING_FROM_EMAIL   the sender, e.g. "Јавор Шпед <booking@your-domain.mk>" (a domain verified in Resend)
  *
  * Without them, `next dev` prints the e-mail in the server log and answers "ok", so the form can be tried locally;

@@ -10,11 +10,13 @@ import { useIntro } from "@/components/intro/IntroProvider";
 import { CALM_EASE, DUR, gsap } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { spawnClickPulse } from "@/lib/clickPulse";
+import { lockScroll } from "@/lib/scroll-lock";
 import { isBlackPage } from "@/lib/theme";
 import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
-import { Logo } from "@/components/ui/Logo";
+import { BuildingMark } from "@/components/ui/Logo";
+import { HERO_UNDER_HEADER_PATHS } from "@/lib/hero";
 
 const LINKS = [
   { href: "/", key: "nav.home" },
@@ -23,9 +25,16 @@ const LINKS = [
   { href: "/contact", key: "nav.contact" },
 ];
 
-// Which tab a path belongs to ("/projects/city-center" is under "Проекти"); null when it is none of them.
+// The pages that have no tab of their own but belong to Проекти: a project's own page, the finished projects, the
+// comparison and the apartments (with everything under them).
+const UNDER_PROJECTS = ["/development", "/dojran", "/completed-projects", "/compare", "/apartments"];
+const within = (path: string, base: string) => path === base || path.startsWith(base + "/");
+
+// Which tab a path belongs to ("/projects/…" and the pages above are under "Проекти"); null when it is none of them.
 const tabFor = (path: string) =>
-  LINKS.find((l) => (l.href === "/" ? path === "/" : path === l.href || path.startsWith(l.href + "/")))?.href ?? null;
+  UNDER_PROJECTS.some((base) => within(path, base))
+    ? "/projects"
+    : (LINKS.find((l) => (l.href === "/" ? path === "/" : within(path, l.href)))?.href ?? null);
 
 // The bar slides away once the visitor has scrolled this far down, and comes back on any scroll up.
 const HIDE_AFTER_PX = 160;
@@ -48,7 +57,9 @@ export function Navbar() {
   // While the curtain runs, the line already points at the tab that was clicked.
   const activeHref = tabFor(transition?.target ?? pathname);
 
-  const isHome = pathname === "/";
+  // Почетна, Проекти and the photo-led project pages open on a full-screen photo that the bar floats over (clear until
+  // the page scrolls).
+  const overHero = HERO_UNDER_HEADER_PATHS.includes(pathname);
   // The all-black pages (За нас, Контакт) get a black bar with a hairline; nothing else in the bar changes.
   const black = isBlackPage(pathname);
   // Every consultation button opens the Контакт page, carrying the apartment / building / project being looked
@@ -96,11 +107,11 @@ export function Navbar() {
 
   useEffect(() => {
     if (!open) return;
-    document.documentElement.style.overflow = "hidden";
+    const unlock = lockScroll();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => {
-      document.documentElement.style.overflow = "";
+      unlock();
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -141,7 +152,12 @@ export function Navbar() {
     };
     place(linePlaced.current);
     linePlaced.current = true;
-    const onResize = () => place(false);
+    let width = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === width) return;
+      width = window.innerWidth;
+      place(false);
+    };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [activeHref]);
@@ -168,10 +184,10 @@ export function Navbar() {
   // (The Проекти filter bar follows the navbar: it reads data-nav-hidden below.)
   const hidden = hideState.hidden && hideState.path === pathname && !open;
 
-  // Overlay the hero when we're at the top of the homepage; everywhere else
+  // Overlay the hero when we are at the top of the homepage; everywhere else
   // (and once scrolled past the hero, or with the mobile menu open) the bar
   // is solid so it always reads against light page backgrounds.
-  const solid = !isHome || scrolled || open;
+  const solid = !overHero || scrolled || open;
 
   return (
     <>
@@ -187,6 +203,7 @@ export function Navbar() {
         <header
           ref={navRef}
           data-at-top={!scrolled}
+          data-clear={!solid ? "" : undefined}
           data-open={open}
           // Keyboard focus anywhere in the bar brings it back.
           onFocus={(e) => e.target.matches(":focus-visible") && setHideState({ hidden: false, path: pathname })}
@@ -200,19 +217,22 @@ export function Navbar() {
                 : "border-transparent bg-transparent"
           )}
         >
-          <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
+          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px, app/globals.css), less its hairline; from 1024px a grid whose
+              middle column is the free space between the logo and the button, with the links centred in it (the logo is narrow
+              and the button wide, so the links sit left of the page centre: the optical centre of what is between them) */}
+          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:px-10">
             <Link
               id="site-logo"
               href="/"
               onPointerDown={spawnClickPulse}
-              className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
-              aria-label="Javor Sped Holding — почетна"
+              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:54px]"
+              aria-label="Javor Sped Holding — Почетна"
             >
-              <Logo variant="icon" />
+              <BuildingMark gold className="w-auto shrink-0" style={{ height: "var(--logo-h)" }} />
             </Link>
 
-            <div className="hidden flex-1 items-center justify-center lg:flex">
-              <div ref={linksRef} className="relative flex gap-7 xl:gap-9">
+            <div className="hidden items-center justify-center lg:flex">
+              <div ref={linksRef} className="relative flex gap-5 min-[1100px]:gap-6 xl:gap-9">
                 {LINKS.map((link) => (
                   <Link
                     key={link.href}
@@ -222,8 +242,10 @@ export function Navbar() {
                     }}
                     onPointerDown={spawnClickPulse}
                     aria-current={pathname === link.href ? "page" : undefined}
+                    // the current page's tab is gold (with the underline) on the solid bar and over the photo alike
+                    data-current={activeHref === link.href || undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[14px] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
                       activeHref === link.href && "text-gold!"
                     )}
                   >
@@ -238,19 +260,19 @@ export function Navbar() {
               </div>
             </div>
 
-            <div className="nav-link hidden items-center gap-4 lg:flex">
+            <div className="nav-link hidden items-center justify-self-end lg:flex">
               {/* One button, one style, on every page (the black pages only change the bar's background). */}
               <Button href={consultHref} onClick={consultClick} variant="primary" size="sm" tone="dark">
                 {t("nav.consultation")}
               </Button>
             </div>
 
-            <div className="flex items-center lg:hidden">
+            <div className="flex items-center justify-self-end lg:hidden">
               <button
                 className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center text-on-chrome"
                 aria-controls="mobile-menu"
                 onClick={() => setOpen((v) => !v)}
-                aria-label={open ? "Затвори мени" : "Отвори мени"}
+                aria-label={open ? "Затворете мени" : "Отворете мени"}
                 aria-expanded={open}
               >
                 {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -266,7 +288,7 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Мени"
-          className="mobile-menu fixed inset-0 z-40 flex flex-col overflow-y-auto bg-ink px-5 pb-8 pt-24 sm:px-8 lg:hidden"
+          className="mobile-menu fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-ink px-5 pb-8 pt-24 sm:px-8 lg:hidden"
         >
           <nav className="flex flex-1 flex-col justify-center">
             {LINKS.map((link, i) => (
@@ -278,7 +300,7 @@ export function Navbar() {
                 aria-current={pathname === link.href ? "page" : undefined}
                 className={cn(
                   "focus-ring relative isolate flex min-h-16 items-baseline gap-5 border-b border-line-dark py-4 font-sans font-normal text-[clamp(1.75rem,8vw,2.5rem)] leading-tight last:border-0",
-                  pathname === link.href ? "text-gold" : "text-paper"
+                  activeHref === link.href ? "text-gold" : "text-paper"
                 )}
               >
                 <span className="eyebrow text-gold">{String(i + 1).padStart(2, "0")}</span>

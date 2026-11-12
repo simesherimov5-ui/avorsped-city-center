@@ -1,7 +1,8 @@
+import { navHeight } from "@/lib/header";
 import { getLenis } from "@/lib/lenis";
 
 /**
- * Where a "Закажи консултација" button on `pathname` goes: the Контакт page, carrying what the visitor is
+ * Where a "Закажете консултација" button on `pathname` goes: the Контакт page, carrying what the visitor is
  * looking at (an apartment, a building or a project), so the booking form opens with the interest pre-selected
  * and a reference tag. Anywhere else it is the plain Контакт page.
  */
@@ -25,7 +26,7 @@ export function scrollToBookingForm() {
   if (!form) return;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const lenis = getLenis();
-  if (lenis && !reduced) lenis.scrollTo(form, { offset: -110, duration: 1.1 });
+  if (lenis && !reduced) lenis.scrollTo(form, { offset: -(navHeight() + 20), duration: 1.1 });
   else form.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" });
   form
     .querySelector<HTMLElement>('[data-group="interest"] [role="radio"][tabindex="0"]')

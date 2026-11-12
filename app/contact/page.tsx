@@ -5,20 +5,26 @@ import { ContactStage } from "@/components/contact/ContactStage";
 import { DirectPanel } from "@/components/contact/DirectPanel";
 import "@/components/black/black.css";
 import "@/components/contact/contact.css";
+// the cream colour preview (/contact?preview=cream): rules scoped to data-tone="cream", inert on the normal page
+import "@/components/contact/contact-cream.css";
 import { pageMetadata } from "@/lib/seo";
-
-export const metadata: Metadata = pageMetadata({
-  title: "Контакт и консултација",
-  description:
-    "Закажете консултација за стан или пишете ни: адреса, телефон и е-пошта на Javor Sped Holding во Струмица.",
-  path: "/contact",
-});
+import { startProjectId } from "@/lib/contact-start";
 
 type Params = Record<string, string | string[] | undefined>;
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
-/** Old `?project=` values from before a project was renamed: they still pre-select it. */
-const LEGACY_PROJECTS: Record<string, string> = { "vista-heights": "stanbena-kukja" };
+// /contact?preview=cream is a colour preview of this same page: it is not for search engines
+const isCreamPreview = (params: Params) => first(params.preview) === "cream";
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<Params> }): Promise<Metadata> {
+  return pageMetadata({
+    title: "Контакт и консултација",
+    description:
+      "Закажете консултација за стан или пишете ни: адреса, телефон и е-пошта на Javor Sped Holding во Струмица.",
+    path: "/contact",
+    noindex: isCreamPreview(await searchParams),
+  });
+}
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<Params> }) {
   const params = await searchParams;
@@ -31,12 +37,17 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const buildingParam = first(params.building) ?? "";
   const project =
     (apartment && getProject(apartment.projectId)) ||
-    getProject(LEGACY_PROJECTS[first(params.project) ?? ""] ?? first(params.project) ?? "") ||
+    getProject(
+      startProjectId(
+        first(params.project),
+        options.map((o) => o.id)
+      ) ?? ""
+    ) ||
     onSale.find((p) => p.project.buildings?.some((b) => b.id === buildingParam))?.project;
   const start = { projectId: project?.id };
 
   return (
-    <div data-theme="black" className="bk-page">
+    <div data-theme="black" data-tone={isCreamPreview(params) ? "cream" : undefined} className="bk-page">
       <ContactStage>
         <header className="ct-head bk-wrap">
           <div data-seq="eyebrow" className="bk-eyebrow ct-pre">

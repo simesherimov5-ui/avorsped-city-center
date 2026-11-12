@@ -77,13 +77,13 @@
   text-wrap: balance;
 }
 .cg-title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--color-accent);
 }
 .cg-lead {
   max-width: 480px;
   margin: 0;
-  font-size: 17px;
+  font-size: min(calc(17px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 400;
   line-height: 1.65;
   color: color-mix(in srgb, var(--color-travertine) 84%, transparent);
@@ -113,7 +113,7 @@
   justify-content: center;
   gap: 6px 22px;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 500;
   letter-spacing: 0.06em;
 }
@@ -248,7 +248,7 @@
     padding: 36px 22px 30px;
   }
   .cg-lead {
-    font-size: 16px;
+    font-size: min(calc(16px * var(--type-scale, 1)), var(--body-max, 999px));
   }
   .cg-actions {
     flex-direction: column;
@@ -257,10 +257,9 @@
   }
   /* the label of the filling button is one line even on the narrowest phone */
   .cg .cg-actions a.btn-primary:not(.btn-primary--sm) {
-    gap: 12px;
-    padding: 18px 16px;
-    font-size: 12px;
-    letter-spacing: var(--label-track);
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 13px;
   }
   .cg-contact {
     flex-direction: column;

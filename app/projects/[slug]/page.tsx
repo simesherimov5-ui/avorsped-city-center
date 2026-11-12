@@ -23,6 +23,13 @@ import { FloorPickerSection } from "@/components/floor-picker/FloorPickerSection
 import { OtherProjects } from "@/components/OtherProjects";
 import { projectStatusLabel } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
+import { NoPhoto } from "@/components/ui/NoPhoto";
+import { ProjectHeroSlideshow } from "@/components/project/ProjectHeroSlideshow";
+import { ProjectIntroFacts } from "@/components/project/ProjectIntroFacts";
+import { ProjectGallery } from "@/components/project/ProjectGallery";
+import { ProjectPlace } from "@/components/project/ProjectPlace";
+import { ObjectPicker } from "@/components/project/ObjectPicker";
+import type { PhotoLedProject, Project } from "@/types";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -32,6 +39,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return { title: "Проект", robots: { index: false } };
+  if (project.layout === "photo-led")
+    return pageMetadata({
+      title: project.name,
+      description: `${project.name}, ${project.city}: ${(project.facts ?? []).map((f) => `${f.value} ${f.label.toLowerCase()}`).join(", ")}. ${projectStatusLabel(project.status)}.`,
+      path: `/projects/${project.slug}`,
+      image: null,
+    });
+  if (project.stub)
+    return pageMetadata({
+      title: project.name,
+      description: `${project.name}, ${project.city}. ${projectStatusLabel(project.status)}.`,
+      path: `/projects/${project.slug}`,
+      image: null,
+    });
   return pageMetadata({
     title: project.name,
     description: `${project.name}, ${project.location}. ${project.description}`,
@@ -47,6 +68,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   // A project with its own page (City Center → /development, Дојрански Рај → /dojran) has no second copy here: the
   // address permanently redirects to the main one, so each project has one page for search engines and sharing.
   if (project.href) permanentRedirect(project.href);
+  if (project.stub) return <StubProjectPage project={project} />;
+  if (project.layout === "photo-led") return <PhotoLedProjectPage project={project} />;
 
   const completed = project.status === "completed";
   const hasPhotos = project.gallery.length > 0 || !project.heroImage.isPlaceholder;
@@ -65,8 +88,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <ProjectOpeningSection project={project} />
           <ProjectMaterials project={project} />
           <ProjectParking project={project} />
-          <ProjectLocation project={project} />
           <ProjectBuildProgress project={project} />
+          <ProjectLocation project={project} />
           <ProjectBook project={project} />
         </>
       )}
@@ -105,7 +128,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 )}
               </Reveal>
               {project.photoCredit && (
-                <p className="mt-4 text-[12px] leading-relaxed text-muted">
+                <p className="mt-4 text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] leading-relaxed text-muted">
                   {project.photoCredit.map((part, i) =>
                     part.href ? (
                       <a
@@ -113,7 +136,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                         href={part.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline underline-offset-2 hover:text-charcoal"
+                        className="underline decoration-gold decoration-2 underline-offset-2 hover:text-charcoal"
                       >
                         {part.text}
                       </a>
@@ -178,7 +201,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             ...floor,
             apartments: apartmentsOf(project.id)
               .filter((a) => a.floor === floor.number)
-              .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms, status: a.status })),
+              .map((a) => ({ id: a.id, number: a.number, area: a.area, bedrooms: a.bedrooms })),
           }))}
         />
       )}
@@ -192,10 +215,101 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       )}
 
       {completed ? (
-        <ProjectCta projectId={project.id} label="Закажи консултација" href="/contact" />
+        <ProjectCta projectId={project.id} label="Закажете консултација" href="/contact" />
       ) : (
         <ProjectCta projectId={project.id} />
       )}
+
+      <OtherProjects currentProjectId={project.id} />
+    </div>
+  );
+}
+
+/**
+ * A photo-led project page: the photo slideshow on Оникс under a clear header, «ЗА ПРОЕКТОТ» with the facts, the
+ * gallery, the location, the invitation and the other projects. Only what the data has is shown (no phases, floors or
+ * units until they are known).
+ */
+function PhotoLedProjectPage({ project }: { project: PhotoLedProject }) {
+  const status = projectStatusLabel(project.status);
+  return (
+    <div>
+      <ProjectHeroSlideshow
+        name={project.name}
+        eyebrow={`${project.city} · ${status}`}
+        slides={project.openingSlides}
+      />
+      {project.intro && (
+        <ProjectIntroFacts
+          heading={project.intro}
+          facts={[...(project.facts ?? []), { label: "Град", value: project.city }, { label: "Статус", value: status }]}
+          link={
+            project.objects && project.sitePlan ? { target: "izberete-objekt", label: "Изберете објект ↓" } : undefined
+          }
+        />
+      )}
+      {project.objects && project.sitePlan && (
+        <section
+          id="izberete-objekt"
+          aria-label="Изберете објект"
+          className="on-light grain scroll-mt-(--nav-h) border-t border-line"
+        >
+          <div className="mx-auto max-w-[1320px] px-[5%] py-16 md:py-24">
+            <div className="eyebrow tracking-[0.32em] text-gold-deep">КОМПЛЕКСОТ</div>
+            <h2 className="m-0 mt-4 font-display text-[length:calc(clamp(40px,4.8vw,72px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
+              Изберете објект.
+            </h2>
+            <p className="m-0 mt-4 text-base text-muted">Изберете објект од планот.</p>
+            <div className="mt-12">
+              <ObjectPicker projectName={project.name} objects={project.objects} plan={project.sitePlan} />
+            </div>
+          </div>
+        </section>
+      )}
+      {project.gallery.length > 0 && <ProjectGallery photos={project.gallery} />}
+      {project.place && <ProjectPlace name={project.name} city={project.city} place={project.place} />}
+      <ProjectCta projectId={project.id} />
+      <OtherProjects currentProjectId={project.id} />
+    </div>
+  );
+}
+
+/**
+ * The page of a project known only by its name, city and status (`stub`): the way back, the photo frame with the logo
+ * mark, the city and status and the name. Being built: one line and the contact invitation. Finished: the year, if known.
+ * Nothing about apartments, floors or availability; it ends with «Другите наши проекти». To be redesigned once the
+ * project's photos and text arrive.
+ */
+function StubProjectPage({ project }: { project: Project }) {
+  const completed = project.status === "completed";
+  return (
+    <div className="pt-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-5 pt-6 sm:px-8 lg:px-10">
+        <Link
+          href={completed ? "/completed-projects" : "/projects"}
+          className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-muted hover:text-charcoal sm:text-sm"
+        >
+          <ChevronLeft className="h-4 w-4" /> {completed ? "Назад кон завршените проекти" : "Назад кон проектите"}
+        </Link>
+      </div>
+
+      <section className="mx-auto max-w-6xl px-5 pb-14 pt-6 sm:px-8 lg:px-10">
+        <div className="aspect-[16/7] max-sm:aspect-[4/3]">
+          <NoPhoto />
+        </div>
+        <ProjectHeader
+          className="mt-10"
+          eyebrow={`${project.city} · ${projectStatusLabel(project.status)}`}
+          name={project.name}
+          facts={[]}
+        />
+        {!completed && <p className="mt-5 text-base leading-[1.75] text-ink/75">Деталите следуваат наскоро.</p>}
+        {completed && project.year && (
+          <p className="mt-5 text-base leading-[1.75] text-ink/75">Година: {project.year}</p>
+        )}
+      </section>
+
+      {!completed && <ProjectCta projectId={project.id} href="/contact" />}
 
       <OtherProjects currentProjectId={project.id} />
     </div>

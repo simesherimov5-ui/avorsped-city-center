@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
 import { CALM_EASE, DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
-import { getLenis } from "@/lib/lenis";
+import { lockScroll } from "@/lib/scroll-lock";
 import { cn } from "@/lib/cn";
 
 const FOCUSABLE =
@@ -37,6 +44,20 @@ const SITE_TIMING: ModalTiming = {
   outEase: CALM_EASE,
 };
 
+/** The three layers a choreography moves. */
+export type ModalElements = { dialog: HTMLDivElement; backdrop: HTMLDivElement; panel: HTMLDivElement };
+
+/**
+ * Opt-in: the content moves the pop-up in and out itself (the photo pop-up, components/ui/PhotoLightbox.tsx) instead of
+ * the site's default fade and rise. `enter` runs once the pop-up is on screen (and again if it is opened while it is still
+ * leaving); `exit` runs when it is asked to close and must call `done` when it has left, which unmounts it. A `done` of
+ * an exit that a new opening has replaced does nothing.
+ */
+export type ModalChoreography = {
+  enter: (els: ModalElements) => void;
+  exit: (els: ModalElements, done: () => void) => void;
+};
+
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -50,6 +71,8 @@ type Props = {
   className?: string;
   /** Other speeds than the site's (the Контакт page keeps the deployed site's). */
   timing?: ModalTiming;
+  /** Other motion than the default (see ModalChoreography); the focus, scroll lock and keys stay the Modal's. */
+  choreography?: ModalChoreography;
   children: ReactNode;
 };
 
@@ -57,7 +80,7 @@ type Props = {
  * The one pop-up of the site (booking confirmation, photo viewer). A black overlay fades in and the content
  * rises 24px while scaling 0.97 → 1; with reduced motion it is a plain 0.2s fade. Focus moves inside and is
  * trapped there, Esc / the ✕ / a click on the overlay close it, focus returns to whatever opened it, and the
- * page behind is locked (Lenis paused) while it is open. It renders nothing while closed.
+ * page behind is locked (`lib/scroll-lock.ts`) while it is open. It renders nothing while closed.
  */
 export function Modal({
   open,
@@ -67,6 +90,7 @@ export function Modal({
   closeIn = "panel",
   className,
   timing = SITE_TIMING,
+  choreography,
   children,
 }: Props) {
   // Stays mounted through the exit animation: `open` starts the animation, `shown` ends it.
@@ -81,8 +105,31 @@ export function Modal({
     onCloseRef.current = onClose;
   }, [onClose]);
 
+  const choreographyRef = useRef(choreography);
+  // in the layout phase, before the effect below reads it: an opening with a new origin has its new choreography at once
+  useLayoutEffect(() => {
+    choreographyRef.current = choreography;
+  }, [choreography]);
+  const runRef = useRef(0);
+  // before the first paint of a pop-up that moves itself: its start state is set, so it never flashes
+  useLayoutEffect(() => {
+    const c = choreographyRef.current;
+    const dialog = dialogRef.current;
+    const backdrop = backdropRef.current;
+    const panel = panelRef.current;
+    if (!c || !dialog || !backdrop || !panel) return;
+    const els = { dialog, backdrop, panel };
+    const run = ++runRef.current;
+    if (open) c.enter(els);
+    else
+      c.exit(els, () => {
+        if (runRef.current === run) setShown(false);
+      });
+  }, [open, shown]);
+
   useGSAP(
     () => {
+      if (choreography) return;
       const dialog = dialogRef.current;
       const backdrop = backdropRef.current;
       const panel = panelRef.current;
@@ -110,17 +157,14 @@ export function Modal({
         });
       }
     },
-    { dependencies: [open, shown, timing], scope: dialogRef }
+    { dependencies: [open, shown, timing, choreography === undefined], scope: dialogRef }
   );
 
   // While it is on screen: lock the page, move focus in, and give focus back afterwards.
   useEffect(() => {
     if (!shown) return;
     const returnTo = document.activeElement as HTMLElement | null;
-    const html = document.documentElement;
-    const previousOverflow = html.style.overflow;
-    html.style.overflow = "hidden";
-    getLenis()?.stop();
+    const unlock = lockScroll();
 
     const dialog = dialogRef.current;
     const first =
@@ -128,8 +172,7 @@ export function Modal({
     (first ?? dialog)?.focus({ preventScroll: true });
 
     return () => {
-      html.style.overflow = previousOverflow;
-      getLenis()?.start();
+      unlock();
       returnTo?.focus?.({ preventScroll: true });
     };
   }, [shown]);
@@ -174,10 +217,10 @@ export function Modal({
     <button
       type="button"
       onClick={onClose}
-      aria-label="Затвори"
+      aria-label="Затворете"
       className={cn(
         "bk-modal-close",
-        closeIn === "screen" ? "absolute right-4 top-4 z-10 sm:right-6 sm:top-6" : "absolute right-3 top-3"
+        closeIn === "screen" ? "fixed right-4 top-4 z-10 sm:right-6 sm:top-6" : "absolute right-3 top-3"
       )}
     >
       <X className="h-5 w-5" strokeWidth={1.25} aria-hidden />
@@ -192,6 +235,8 @@ export function Modal({
       aria-label={label}
       data-theme="black"
       tabIndex={-1}
+      // the smooth scroll is paused while it is open and would swallow the wheel: a tall pop-up still scrolls inside
+      data-lenis-prevent
       onKeyDown={trapTab}
       className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto overscroll-contain p-5 outline-none"
     >

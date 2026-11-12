@@ -25,7 +25,7 @@ export function RoomVideoTour({ rooms }: { rooms: Room[] }) {
             const video = e.currentTarget.querySelector("video");
             if (video) void (video.paused ? video.play() : video.pause());
           }}
-          aria-label={`Пушти видео — ${room.label}`}
+          aria-label={`Пуштете видео — ${room.label}`}
           className="focus-ring group relative block aspect-[4/3] overflow-hidden border border-line bg-chrome text-left"
         >
           {active === i ? (

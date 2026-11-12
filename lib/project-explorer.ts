@@ -95,10 +95,55 @@ export function choicesQuery(status: StatusFilter, city: CityFilter, view: View)
   return text ? `?${text}` : "";
 }
 
-/** The hero's slides: projects with a main photo, the ones being built first, at most five. */
+const hasPhoto = (image?: { src: string; isPlaceholder: boolean }) =>
+  Boolean(image && !image.isPlaceholder && image.src);
+
+/**
+ * The projects that have a real photo: a `heroImage` that is not the placeholder (isPlaceholder, or an empty src: the
+ * no-photo tile). The one list every slideshow of projects is made from, so a project joins the slideshows by itself once
+ * the data gives it a photo. Lists, cards and the map are not filtered by it. The order of the data is kept.
+ */
+export function projectsWithPhoto(projects: Project[]) {
+  return projects.filter((p) => hasPhoto(p.heroImage));
+}
+
+/**
+ * Every project being built, the ones known only by name too; never a finished or a coming one. The ones with a photo
+ * come first, then the ones without, each in the order of the data. This is the list of the apartments (projectsOnSale in
+ * data/index.ts), not of a slideshow: the slideshows take projectsWithPhoto(carouselProjects(projects)).
+ */
+export function carouselProjects(projects: Project[]) {
+  const building = projects.filter((p) => p.status === "under-construction");
+  return [...building.filter((p) => hasPhoto(p.heroImage)), ...building.filter((p) => !hasPhoto(p.heroImage))];
+}
+
+/** The projects of the Проекти hero, in this order (the hero only: their pages and cards are unaffected). */
+export const HERO_SLIDE_IDS = ["city-center", "dojranski-raj", "radovish-twins"] as const;
+
+/** The Проекти hero's slides: the projects of HERO_SLIDE_IDS that are in the data with a photo and a wide slide photo, in that order. */
 export function heroSlides(projects: Project[]) {
-  return projects
-    .filter((p) => !p.heroImage.isPlaceholder && p.heroImage.src !== "")
-    .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status])
-    .slice(0, 5);
+  const listed = HERO_SLIDE_IDS.map((id) => projects.find((p) => p.id === id)).filter(
+    (p): p is Project => p !== undefined
+  );
+  return projectsWithPhoto(listed).filter((p) => hasPhoto(p.slideImage));
+}
+
+/** The photo a project's slide shows: the first photo of a photo-led opening, else the hero photo; never a placeholder. */
+export function slidePhoto(p: Project) {
+  const lead = p.layout === "photo-led" ? p.openingSlides[0] : undefined;
+  const image = lead?.image ?? p.heroImage;
+  return hasPhoto(image) ? { image, lead } : undefined;
+}
+
+/** The most slides «Другите наши проекти» shows. */
+export const OTHER_PROJECTS_MAX = 6;
+
+/**
+ * «Другите наши проекти»: the other projects being built that have a photo, in the order of the data; at most six.
+ */
+export function otherProjects(projects: Project[], currentId: string) {
+  return projectsWithPhoto(projects.filter((p) => p.id !== currentId && p.status === "under-construction")).slice(
+    0,
+    OTHER_PROJECTS_MAX
+  );
 }

@@ -1,11 +1,13 @@
-/* The floor sketch of a building with its shapes and numbers. It sits on a cream sheet (the drawings are dark lines on a
-   transparent background and must always be on a light surface). Colours are the tokens of app/globals.css. */
+/* The floor sketch of a building with its shapes and numbers. It sits on a cream card with rounded corners and a thin gold
+   border, inside the black page (the drawings are dark lines on a transparent background and must always be on a light
+   surface, never inverted). Colours are the tokens of app/globals.css. */
 .fs {
   --fs-ease: cubic-bezier(0.22, 1, 0.36, 1);
   box-sizing: border-box;
   width: 100%;
   padding: 16px;
-  border: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
+  border-radius: 12px;
   background: var(--color-sand);
   color: var(--color-onyx);
   animation: fs-sheet var(--dur-slow) var(--ease) both;
@@ -76,15 +78,6 @@
     fill var(--dur-fast) var(--ease),
     stroke var(--dur-fast) var(--ease);
 }
-/* by shape and not by colour alone: free is filled, reserved is an outline, sold is a darker fill */
-.fs-shape[data-status="reserved"] polygon {
-  fill: transparent;
-  stroke: color-mix(in srgb, var(--color-onyx) 40%, transparent);
-  stroke-width: 1px;
-}
-.fs-shape[data-status="sold"] polygon {
-  fill: color-mix(in srgb, var(--color-onyx) 18%, transparent);
-}
 .fs-shape:hover polygon,
 .fs-shape.is-hot polygon,
 .fs-shape:focus-visible polygon {
@@ -106,15 +99,14 @@
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 9px 3px 8px;
+  padding: 3px 9px;
   transform: translate(-50%, -50%);
   border: 1px solid transparent;
   background: var(--color-sand);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-onyx) 12%, transparent);
   color: var(--color-onyx);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(12px, 1.7vw, 18px);
+  font-size: calc(clamp(12px, 1.7vw, 18px) * var(--type-scale, 1));
   font-variant-numeric: lining-nums;
   line-height: 1.2;
   white-space: nowrap;
@@ -125,8 +117,8 @@
 /* floors with ten or more apartments: smaller numbers, so they never overlap */
 .fs-chips.is-dense .fs-chip {
   gap: 3px;
-  padding: 1px 5px 1px 4px;
-  font-size: clamp(9px, 1.15vw, 13px);
+  padding: 1px 5px;
+  font-size: calc(clamp(9px, 1.15vw, 13px) * var(--type-scale, 1));
 }
 .fs-chip.is-hot {
   border-color: var(--color-bronze);
@@ -165,8 +157,4 @@
   .fs-chip {
     transition: none;
   }
-}
-
-.fs-mk {
-  color: var(--color-bronze);
 }

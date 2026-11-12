@@ -26,6 +26,8 @@
   ); /* retired as a surface; only a hairline tone is left */
   /* The page background of light pages (set by the owner). Text on dark stays the lighter Травертин. */
   --color-sand: #f4efe7;
+  /* The ground of the building picker on City Center (set by the owner): a shade deeper than the page. */
+  --color-parchment: #ece4d8;
   --color-bronze: #6d533e;
   /* Светол бакар: used only by the Контакт confirmation's «Во ред», which keeps the look of the deployed site
      (components/contact/contact.css). Every other button is the antique foil. */
@@ -75,7 +77,7 @@
   /* The page background of the all-dark pages (За нас, Контакт): the same Оникс as everywhere, one dark, not two. */
   --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
-  --nav-h: 61px;
+  --nav-h: 64px;
 
   /* The site's three animation speeds and its one easing (also lib/motion.ts and lib/gsap.ts). Fast: hover, press, small
      colour changes. Base: menus, pop-ups, form steps, toggles. Slow: image movement, section reveals. What leaves takes
@@ -94,7 +96,6 @@
      Used only through .grain below. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.43 0 0 0 0 0.33 0 0 0 0 0.24 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  --label-size: 12px;
   --label-track: 0.13em;
 
   /*
@@ -111,21 +112,66 @@
   --color-accent-soft: var(--color-travertine);
   --color-chrome: var(--color-onyx);
   --color-on-chrome: var(--color-travertine);
+  /* Greenery on drawn plans and maps only (lawns on a site plan): a muted sage that sits calmly beside Варовник and
+     Бронза. Never text, buttons or backgrounds. */
+  --color-plan-green: #c9cfb8;
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
-  --text-body-size: 0.9375rem; /* 15px */
   --text-body-leading: 1.7;
-  --text-lead-size: 1.0625rem; /* 17px */
   --text-lead-leading: 1.65;
-  --text-caption-size: 0.8125rem; /* 13px */
   --text-caption-leading: 1.5;
   /* The one type scale of the site; nothing is set larger than these at any width. */
-  --fs-hero: clamp(30px, 3.6vw, 52px);
-  --fs-h1: clamp(28px, 3vw, 44px);
-  --fs-h2: clamp(24px, 2.2vw, 32px);
-  --fs-h3: clamp(18px, 1.4vw, 20px);
-  --fs-statement: clamp(19px, 1.7vw, 22px);
+}
+
+/* The type scale. --type-scale is 1 everywhere except inside .type-up (components/TypeUp.tsx: Почетна, Проекти, City Center,
+   Дојран, Завршени проекти), where it is 1.2. The tokens below are declared on :root and again on .type-up, so each one is
+   worked out with the scale of the place it is used in; every other font size of those pages is written as
+   calc(<size> * var(--type-scale, 1)). Outside .type-up all of it is exactly the size it always was. */
+:root {
+  --type-scale: 1;
+}
+.type-up {
+  --type-scale: 1.2;
+}
+:root,
+.type-up {
+  --label-size: calc(12px * var(--type-scale));
+  --text-label: var(--label-size);
+  --text-body-size: calc(0.9375rem * var(--type-scale)); /* 15px */
+  --text-lead-size: calc(1.0625rem * var(--type-scale)); /* 17px */
+  --text-caption-size: calc(0.8125rem * var(--type-scale)); /* 13px */
+  /* The one type scale of the site; nothing is set larger than these at any width. */
+  --fs-hero: calc(clamp(30px, 3.6vw, 52px) * var(--type-scale));
+  --fs-h1: calc(clamp(28px, 3vw, 44px) * var(--type-scale));
+  --fs-h2: calc(clamp(24px, 2.2vw, 32px) * var(--type-scale));
+  --fs-h3: calc(clamp(18px, 1.4vw, 20px) * var(--type-scale));
+  --fs-statement: calc(clamp(19px, 1.7vw, 22px) * var(--type-scale));
+  /* Tailwind's own sizes (text-xs … text-6xl) */
+  --text-xs: calc(0.75rem * var(--type-scale));
+  --text-sm: calc(0.875rem * var(--type-scale));
+  --text-base: calc(1rem * var(--type-scale));
+  --text-lg: calc(1.125rem * var(--type-scale));
+  --text-xl: calc(1.25rem * var(--type-scale));
+  --text-2xl: calc(1.5rem * var(--type-scale));
+  --text-3xl: calc(1.875rem * var(--type-scale));
+  --text-4xl: calc(2.25rem * var(--type-scale));
+  --text-5xl: calc(3rem * var(--type-scale));
+  --text-6xl: calc(3.75rem * var(--type-scale));
+}
+/* what sets no size of its own inherits the body size of the scope (the body itself is outside it) */
+.type-up {
+  font-size: var(--text-body-size);
+}
+/* Phones: the same 1.2, but body text is never larger than 18px. */
+@media (max-width: 639px) {
+  .type-up {
+    --text-body-size: min(calc(0.9375rem * var(--type-scale)), 18px);
+    --text-lead-size: min(calc(1.0625rem * var(--type-scale)), 18px);
+    --text-base: min(calc(1rem * var(--type-scale)), 18px);
+    --text-lg: min(calc(1.125rem * var(--type-scale)), 18px);
+    --body-max: 18px;
+  }
 }
 
 @theme inline {
@@ -133,6 +179,7 @@
   --color-espresso: var(--color-espresso);
   --color-travertine: var(--color-travertine);
   --color-sand: var(--color-sand);
+  --color-parchment: var(--color-parchment);
   --color-limestone: var(--color-limestone);
   --color-bronze: var(--color-bronze);
   --color-brass: var(--color-brass);
@@ -155,26 +202,41 @@
   --color-accent-soft: var(--color-accent-soft);
   --color-chrome: var(--color-chrome);
   --color-on-chrome: var(--color-on-chrome);
-  /* Two families only: Playfair Display for headings and large display numbers, Montserrat for everything else. */
-  --font-display: var(--font-playfair);
+  --color-plan-green: var(--color-plan-green);
+  /* Montserrat for everything that is not a heading (--font-display, below). */
   --font-sans: var(--font-montserrat);
   /* Tailwind's own transition-* utilities use the site's fast speed and easing. */
   --default-transition-duration: var(--dur-fast);
   --default-transition-timing-function: var(--ease);
   --ease-site: var(--ease);
-  --text-label: var(--label-size);
   --tracking-label: var(--label-track);
   --tracking-nav: 0.1em;
+  /* the size itself follows the scale (the same name is declared again on :root and .type-up below); here it makes the utility exist */
+  --text-label: var(--label-size);
+}
+
+/* Playfair Display for headings and large display numbers, everywhere but the three places of the brand voice. Not
+   inline, so the font-display utility reads the variable and a section can switch it (.brand-voice). */
+@theme {
+  --font-display: var(--font-playfair);
+  --font-voice: var(--font-cormorant);
+}
+
+/* The brand voice: Cormorant Garamond as the serif of three places only, Почетна's «Во што веруваме», the City Center
+   intro (ProjectAbout) and За нас. On their root it switches every serif inside (the font-display utility and
+   var(--font-display) alike); their sans text stays Montserrat, as everywhere. */
+.brand-voice {
+  --font-display: var(--font-voice);
 }
 
 @media (min-width: 640px) {
   :root {
-    --nav-h: 69px;
+    --nav-h: 72px;
   }
 }
 @media (min-width: 1024px) {
   :root {
-    --nav-h: 85px;
+    --nav-h: 90px;
   }
 }
 
@@ -184,6 +246,16 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* No italic on the site (the italic font files are not loaded either): emphasis and accents are colour, not slant. */
+em,
+i,
+cite,
+address,
+dfn,
+var {
+  font-style: normal;
 }
 
 body {
@@ -284,8 +356,7 @@ h4 {
   }
 }
 
-/* The cinematic opening of a project page: the text rises once on load; without a film the picture settles once, from a
-   slight zoom to its full frame (it ends at scale 1, so no building is cut once the opening is over). */
+/* The cinematic opening of a project page: the text rises once on load. */
 .opening-rise {
   animation: opening-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
@@ -295,25 +366,517 @@ h4 {
     transform: translateY(24px);
   }
 }
-.opening-settle {
-  animation: opening-settle 3.2s var(--ease) both;
+/* Local scrims for text on a photo (a full-screen hero; reusable). The top one lies under the header and the back link, the
+   bottom one under the title block; the middle of the photo is left in its own colours. The small text on them (the label,
+   the back link, the header links) is Травертин, not gold, so the scrims can stay light: never darker than 65%. Each holds
+   its 65% under the text and then fades out (a plain 55% → clear fade left the text on the bright sky at 2:1). */
+.hero-scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 200px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 55%,
+    transparent 100%
+  );
 }
-@keyframes opening-settle {
-  from {
-    transform: scale(1.06);
-  }
-  to {
-    transform: none;
-  }
+.hero-scrim-bottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 60%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 65%, transparent) 55%,
+    transparent 100%
+  );
 }
-/* The navigation lies clear over the opening until the page is scrolled (also before the scripts have run). */
-body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
-  background-color: transparent;
-  border-color: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+/* The photo hero (the Проекти slideshow, a project's opening): a 16:9 frame under the solid header, full width, nothing
+   cropped, no height cap. At the hero breakpoint (HERO_OVERLAY_MIN_WIDTH in lib/hero.ts, 1101px) and over, the text lies on
+   the photo, at the bottom of the visible first screen, on the bottom scrim lifted by the same amount; under it the photo is
+   at the top and the text below it on Оникс. hero breakpoint */
+.photo-hero {
+  position: relative;
+  margin-top: var(--nav-h);
+  background: var(--color-onyx);
+  color: var(--color-travertine);
+}
+.photo-hero__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.photo-hero__media .hero-scrim-bottom,
+.photo-hero__media .hero-scrim-top {
+  display: none;
+}
+/* The line under the project's name in its opening: 16px on a phone, and never under 24px where it lies on the photos. */
+.photo-hero__tagline {
+  font-size: calc(clamp(16px, 1.7vw, 26px) * var(--type-scale, 1));
+}
+.photo-hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 24px;
+  padding-top: 28px;
+  padding-bottom: 32px;
+}
+@media (min-width: 1101px) {
+  .photo-hero {
+    display: flex;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    container-type: inline-size;
+  }
+  .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    /* how far the text block is lifted: the hero's height less the visible height, when it is taller */
+    --lift: max(0px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h))));
+  }
+  /* the shared bottom scrim (65% at its darkest) with its solid zone lifted by the same amount, so it stays behind the text */
+  .photo-hero__media .hero-scrim-bottom {
+    display: block;
+    height: calc(100cqw * 9 / 16 * 0.6 + var(--lift));
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(100cqw * 9 / 16 * 0.33 + var(--lift)),
+      transparent 100%
+    );
+  }
+  /* the back link: top left on the picture */
+  .photo-hero__back {
+    position: absolute;
+    inset: 8px 0 auto;
+  }
+  .photo-hero__tagline {
+    font-size: calc(clamp(24px, 1.7vw, 26px) * var(--type-scale, 1));
+  }
+  .photo-hero__content {
+    flex: 1;
+    gap: 48px;
+    padding-top: 0;
+    /* at the bottom of the visible first screen: 56px, plus whatever the hero is taller than the screen under the header */
+    padding-bottom: max(56px, calc(100cqw * 9 / 16 - (100svh - var(--nav-h)) + 56px));
+  }
+  /* The fill variant (the Проекти hero): exactly the first screen, from under the header to the bottom of the window, at least
+     560px. The photos cover it (object-fit: cover, a little more of the sky than the road is cut: 50% 55% unless the
+     picture has its own focus point), the text block is plain 56px from the bottom and the scrim hangs at the hero's bottom. */
+  .photo-hero--fill {
+    --hero-h: max(560px, calc(100svh - var(--nav-h)));
+    height: var(--hero-h);
+    aspect-ratio: auto;
+  }
+  /* an opening is sized in dvh (vh where dvh is not known): a phone's address bars neither crop it nor move it */
+  .photo-hero--fill.photo-hero--dvh {
+    --hero-h: max(560px, calc(100vh - var(--nav-h)));
+  }
+  @supports (height: 100dvh) {
+    .photo-hero--fill.photo-hero--dvh {
+      --hero-h: max(560px, calc(100dvh - var(--nav-h)));
+    }
+  }
+  .photo-hero--fill .photo-hero__media {
+    --lift: 0px;
+  }
+  .photo-hero--fill .photo-hero__media .hero-scrim-bottom {
+    height: calc(var(--hero-h) * 0.6);
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(var(--hero-h) * 0.33),
+      transparent 100%
+    );
+  }
+  /* the shared top scrim, lighter (58% at its darkest, the lowest that keeps the line under the heading at 3:1), under the heading block that stands at the top of the picture */
+  .photo-hero--fill .photo-hero__media .hero-scrim-top {
+    display: block;
+    height: 250px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 58%, transparent) 68%,
+      transparent 100%
+    );
+  }
+  .photo-hero--fill .photo-hero__content {
+    /* room under the header for a block at the top of the picture (the Проекти heading) */
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+  .photo-hero--fill .photo-hero__media img {
+    object-position: var(--hero-pos, 50% 55%);
+  }
 }
 
+/* The label and the line under the name of a project's opening: the logo gold, lightened (same hue and saturation, only the
+   lightness raised) as far as it takes to read on the brightest spot of every slide, without a shadow or a darker scrim.
+   The label is at 4.5:1 or more, the line at 3:1 or more (see docs/design-brief.md). Only these two use them. */
+.photo-hero__eyebrow {
+  color: rgb(227 213 175);
+}
+.photo-hero__tagline {
+  color: rgb(202 173 100);
+}
+
+/* The Проекти hero (photo-hero--top): like Почетна, it starts at the very top of the window and the header lies over it,
+   clear until the page scrolls (components/Navbar.tsx), on ONE smooth gradient
+   (Оникс, from the very top of the window, fading to nothing under the heading: no edge anywhere), so the header links and
+   the logo read over every slide. The header is fixed, so it is counted once: the hero
+   is never taller than one viewport and its content starts below the header. Under 1024px the heading, the photo and the
+   group stack on Оникс, the photo's frame giving way so all three fit the first screen. From 1024px (earlier than the
+   shared hero breakpoint, 1101px, which the other photo heroes keep) it is exactly the whole screen with its text over
+   the photo, the heading 20px below the bar. Every slide has the same height, so the page below never moves. */
+.photo-hero--top {
+  margin-top: 0;
+}
+.photo-hero--top .photo-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: calc(var(--nav-h) + 250px);
+  pointer-events: none;
+  /* the one top gradient: darkest at the very top, where the header's logo mark, links and button are (94%, measured: the thin
+     gold mark needs it over the bright slides), easing out under the heading and the line under it, nothing left 250px below
+     the bar. Smooth stops, no plateau, so no edge shows. */
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-onyx) 94%, transparent) 0,
+    color-mix(in srgb, var(--color-onyx) 90%, transparent) 48px,
+    color-mix(in srgb, var(--color-onyx) 64%, transparent) var(--nav-h),
+    color-mix(in srgb, var(--color-onyx) 50%, transparent) calc(var(--nav-h) + 40px),
+    color-mix(in srgb, var(--color-onyx) 34%, transparent) calc(var(--nav-h) + 105px),
+    color-mix(in srgb, var(--color-onyx) 16%, transparent) calc(var(--nav-h) + 185px),
+    color-mix(in srgb, var(--color-onyx) 5%, transparent) calc(var(--nav-h) + 230px),
+    transparent calc(var(--nav-h) + 250px)
+  );
+}
+/* the shared top scrim is not used by this hero: the gradient above is its only top shade */
+.photo-hero--top .photo-hero__media .hero-scrim-top {
+  display: none;
+}
+/* the consultation button while the header is clear over this hero: a faint Оникс fill behind it, so its gold reads on a
+   bright sky; once the header is solid (the page scrolled, or the menu open) the button is exactly as it is everywhere */
+body:has(.photo-hero--top) header[data-clear] .btn-primary {
+  background-color: color-mix(in srgb, var(--color-onyx) 35%, transparent);
+}
+@media (max-width: 1023px) {
+  /* a phone or a tablet: the heading on Оникс under the clear header, then the whole photo at the full width (16:9, nothing
+     cropped), then the indicators, the name and the town (the order is set in projects.css), so no scrims */
+  .photo-hero--top {
+    display: flex;
+    flex-direction: column;
+  }
+  .photo-hero--top {
+    /* never taller than the first screen: the photo's frame gives way first */
+    max-height: 100svh;
+  }
+  .photo-hero--top .photo-hero__media {
+    /* one height for every slide: what the tallest photo needs at the full width (HeroSlideshow sets --tall-a), shrinking
+       when the heading, the photo and the group would not fit the first screen; each photo is scaled down whole inside
+       it (.media-fit), on Оникс where it leaves room */
+    flex: 0 1 auto;
+    min-height: 0;
+    height: calc(100vw / var(--tall-a, 1.7778));
+    aspect-ratio: auto;
+  }
+  .photo-hero--top .photo-hero__media::after,
+  .photo-hero--top .photo-hero__media .hero-scrim-top,
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: none;
+  }
+  .photo-hero--top .photo-hero__content {
+    flex: none;
+  }
+}
+@media (min-width: 1024px) {
+  /* exactly the first screen: the fixed header lies over its top, so the hero is one viewport tall, its content starts
+     below the header (padding-top below) and the photos are scaled down to fit the frame under the header */
+  .photo-hero--top.photo-hero--fill {
+    --hero-h: 100svh;
+    overflow: clip;
+  }
+  .photo-hero--top.photo-hero--fill .photo-hero__content {
+    padding-top: calc(var(--nav-h) + 20px);
+  }
+}
+/* A slide of this hero with a building box (the Радовиш Twins render, Media's `box`): on a wide screen (OPENING_WIDE_QUERY in
+   lib/hero.ts) its building stays whole and 16px under the clear header, the photo drawn smaller on Оникс if it has to;
+   narrower it covers the hero like every other slide, centred, and from 1024px held at 50% 55% as they are. */
+.photo-hero--top .media-box__photo {
+  --w: var(--cover-w);
+  --x: var(--cover-x);
+  --y: var(--cover-y);
+}
+@media (min-width: 1024px) {
+  .photo-hero--top .media-box__photo {
+    --fy: 0.55;
+  }
+}
+@media (min-aspect-ratio: 130/100) {
+  .photo-hero--top {
+    --photo-top: calc(var(--nav-h) + 16px);
+    /* the hero starts at the top of the window and is at least 560px: the building stays on the first screen */
+    --photo-bottom: 100svh;
+  }
+  .photo-hero--top .media-box__photo {
+    --w: var(--box-w);
+    --x: var(--box-x);
+    --y: var(--box-y);
+  }
+}
+/* 1024–1100px: the shared full-screen layout (.photo-hero from 1101px, with its fill variant), for this hero only */
+@media (min-width: 1024px) and (max-width: 1100px) {
+  .photo-hero--top {
+    display: flex;
+    overflow: hidden;
+    container-type: inline-size;
+    height: var(--hero-h);
+  }
+  .photo-hero--top .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: block;
+    height: calc(var(--hero-h) * 0.6);
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 65%, transparent) calc(var(--hero-h) * 0.33),
+      transparent 100%
+    );
+  }
+  .photo-hero--top .photo-hero__media img {
+    object-position: var(--hero-pos, 50% 55%);
+  }
+  .photo-hero--top .photo-hero__content {
+    flex: 1;
+    gap: 48px;
+    padding-bottom: 56px;
+  }
+}
+
+/* A photo shown whole (Media's `whole`): at its own proportions, centred in its frame, as wide as the frame allows (a narrow
+   photo also never wider than its own pixels, --max); never cropped or zoomed. The frame is its own container, so the sum
+   is CSS. */
+.media-fit {
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+}
+.media-fit__photo {
+  --w: min(var(--max, 100cqw), 100cqw, 100cqh * var(--a));
+  position: absolute;
+  width: var(--w);
+  height: calc(var(--w) / var(--a));
+  left: calc((100cqw - var(--w)) / 2);
+  top: calc((100cqh - var(--w) / var(--a)) / 2);
+}
+/* The Проекти hero from 1024px, like Почетна's: the photo fills the whole first screen, from the top of the window (the
+   header lies over it) to its bottom. A wide photo covers it from edge to edge at its own proportions: some sky,
+   foreground or a sliver of the sides gives way, held per slide (--hero-fx / --hero-fy, set from ProjectsHero's framing)
+   so the buildings stay whole. A narrow photo (data-fade; none in the hero today) would be shown whole on Оникс, as
+   filling the width would cut its building. Shading is light and only where text lies: Почетна's top scrim under the
+   header, a soft shade under the heading, and one behind the group at the bottom left. */
+@media (min-width: 1024px) {
+  .photo-hero--top .pj-slide-photo {
+    inset: 0;
+  }
+  /* where the heading block ends: under the bar, its padding, the heading (1.08 lines), the 8px gap and the line under it (1.3
+     lines), and 14px of room; a slide whose roof (--hero-roof, a fraction of the photo's height) is higher than that is let
+     down by the difference, so the block stays in the sky. The strip it leaves at the top is under the header's own
+     shade (94% Оникс at the very top), and the photo's own top is dark sky, so no edge shows. */
+  .photo-hero--top {
+    --pj-h1: calc(clamp(30px, 2.6vw + 12px, 52px) * var(--type-scale, 1) * 1.08);
+    --pj-sub: calc(clamp(16px, 0.4vw + 11px, 18px) * var(--type-scale, 1) * 1.3);
+    --pj-sky: calc(var(--nav-h) + 20px + var(--pj-h1) + 8px + var(--pj-sub) + 14px);
+  }
+  .photo-hero--top .media-fit__photo:not([data-fade]) {
+    --w: max(100cqw, 100cqh * var(--a));
+    --hero-dy: max(0px, var(--pj-sky) - var(--hero-roof, 1) * var(--w) / var(--a));
+    left: calc((100cqw - var(--w)) * var(--hero-fx, 0.5));
+    top: calc((100cqh - var(--w) / var(--a)) * var(--hero-fy, 0.5) + var(--hero-dy));
+  }
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: none;
+  }
+  /* the heading lies on the photo: a soft shadow keeps it readable on a bright sky or a light façade */
+  .photo-hero--top .pj-h1 {
+    text-shadow: 0 1px 16px color-mix(in srgb, var(--color-onyx) 55%, transparent);
+  }
+  /* the line under the heading is gold (.photo-hero__eyebrow): a soft local shade behind the heading block (not a glow on the
+     letters) keeps it at 4.5:1 or better over the bright skies at 1440 and 1280 (measured on the brightest pixel behind the
+     line, on every slide), and only a faint shadow stays on the letters as a backup. The shade is Оникс at 70%, held out to
+     55% of the ellipse and then faded to nothing at its edge (it was 46% at the centre, fading all the way: by the line, at
+     the lower edge of the block, it was under half of that); the block and its extent are unchanged */
+  .photo-hero--top .pj-hero-text {
+    position: relative;
+  }
+  .photo-hero--top .pj-hero-text::before {
+    content: "";
+    position: absolute;
+    inset: -28px -160px -22px;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 50% 50% at 50% 54%,
+      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 70%), transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 70%), transparent) 55%,
+      transparent 100%
+    );
+  }
+  .photo-hero--top .pj-under {
+    text-shadow: 0 1px 3px color-mix(in srgb, var(--color-onyx) 35%, transparent);
+  }
+  /* the group sits 56px above the hero's bottom edge (the content's padding); its own layer keeps the shade behind it */
+  .photo-hero--top .pj-hero-row {
+    position: relative;
+    z-index: 0;
+  }
+  /* a shorter laptop screen (1280×720 and lower): the heading block closer under the header and the group a little lower,
+     so more of the architecture shows between them */
+  @media (max-height: 760px) {
+    .photo-hero--top {
+      --pj-sky: calc(var(--nav-h) + 10px + var(--pj-h1) + 8px + var(--pj-sub) + 14px);
+    }
+    .photo-hero--top.photo-hero--fill .photo-hero__content {
+      padding-top: calc(var(--nav-h) + 10px);
+      padding-bottom: 40px;
+    }
+  }
+  .photo-hero--top .pj-hero-row::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -90px -220px -70px -170px;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side ellipse at 50% 58%,
+      color-mix(in srgb, var(--color-onyx) 66%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 44%, transparent) 55%,
+      transparent 100%
+    );
+  }
+}
+
+/* City Center's opening (.photo-hero--sky, used by ProjectOpening only): one photo with the header and the hero together
+   inside the first screen. The photo always fills the full width (no strips at the sides), at its own proportions and
+   never enlarged beyond that; where the frame is shorter than the photo, the road at the bottom is trimmed, never the sky or
+   the roofs (it is held at the top). From 1024px the text lies in the open sky at the top, with one light local shade; under
+   it the text is above the photo, which is then whole. */
+.photo-hero--sky .media-fit__photo {
+  --w: 100cqw;
+  top: 0;
+}
+/* the label is the brand gold; the line under the name is cream with its first words («Шест згради») in the brand gold */
+.photo-hero--sky .photo-hero__eyebrow,
+.photo-hero--sky .photo-hero__tagline-lead {
+  color: var(--color-gold);
+}
+.photo-hero--sky .photo-hero__tagline {
+  color: var(--color-travertine);
+}
+@media (min-width: 1024px) {
+  /* over the sunset sky the gold needs more than the soft shade: a small dark halo around the letters only */
+  .photo-hero--sky .photo-hero__eyebrow,
+  .photo-hero--sky .photo-hero__tagline {
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--color-onyx) 85%, transparent),
+      0 0 18px color-mix(in srgb, var(--color-onyx) 70%, transparent),
+      0 1px 2px color-mix(in srgb, var(--color-onyx) 60%, transparent);
+  }
+}
+@media (max-width: 1023px) {
+  .photo-hero--sky {
+    display: flex;
+    flex-direction: column;
+  }
+  .photo-hero--sky .photo-hero__content {
+    order: -1;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 20px;
+  }
+  .photo-hero--sky .photo-hero__media {
+    flex: none;
+  }
+  .photo-hero--sky h1 {
+    font-size: calc(clamp(36px, 9vw, 56px) * var(--type-scale, 1));
+  }
+}
+@media (min-width: 1024px) {
+  .photo-hero--sky.photo-hero--fill {
+    --hero-h: max(420px, min(100svh - var(--nav-h), 100vw * 9 / 16));
+    display: flex;
+    height: var(--hero-h);
+    aspect-ratio: auto;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .photo-hero--sky .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  .photo-hero--sky .photo-hero__media .hero-scrim-top,
+  .photo-hero--sky .photo-hero__media .hero-scrim-bottom {
+    display: none;
+  }
+  /* the one shade: soft, behind the text block at the top left */
+  .photo-hero--sky .photo-hero__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 64% 48% at 18% 12%,
+      color-mix(in srgb, var(--color-onyx) 42%, transparent) 0%,
+      transparent 100%
+    );
+  }
+  .photo-hero--sky .photo-hero__content {
+    flex: 1;
+    justify-content: flex-start;
+    gap: 0;
+    padding-top: 60px;
+    padding-bottom: 0;
+  }
+  .photo-hero--sky .photo-hero__back {
+    position: absolute;
+    inset: 8px 0 auto;
+  }
+  .photo-hero--sky h1 {
+    font-size: calc(clamp(36px, 4.6vw, 76px) * var(--type-scale, 1));
+  }
+}
+
+/* The header's consultation button, one step larger with the bar (it is 36px tall everywhere else): 44px, 14px text. */
+header .btn-primary--sm {
+  min-height: 44px;
+  padding: 0 22px;
+  font-size: min(calc(14px * var(--type-scale, 1)), var(--body-max, 999px));
+}
+/* 1024 to 1099px: the links, the logo and the button share 944px, so the button and the links give a little room */
+@media (max-width: 1099px) {
+  header .btn-primary--sm {
+    padding: 0 16px;
+    font-size: min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px));
+  }
+}
+/* The header's links while the bar is clear over a photo: full Травертин (not 75%). The current page's link stays gold
+   with its underline (data-current, set by the Navbar), as on the solid bar. */
+header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
+  color: var(--color-travertine);
+}
 /* "За проектот": the columns rise when they come into view (a script arms them only when they start below the fold). */
 .about-col {
   transition:
@@ -326,7 +889,6 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 }
 @media (prefers-reduced-motion: reduce) {
   .opening-rise,
-  .opening-settle,
   .q-in,
   .q-out {
     animation: none;
@@ -375,6 +937,51 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
     inset: 0;
     background: color-mix(in srgb, var(--color-onyx) 55%, transparent);
   }
+}
+
+/* A photo placed by its building box (Media's `box`): as large as it can be without the box going above --photo-top
+   (set by a frame that runs under the header), below --photo-bottom (set by a frame taller than the screen: the bottom
+   of the screen) or past a side, never larger than covering the frame; held on its focus
+   and moved only as far as the box needs. Where it stops short of the frame, the frame's own colour shows and the photo
+   fades into it over at most 64px (no fade on an edge that reaches the frame). Media sets the numbers: --a (width ÷
+   height), the box as fractions (--bx, --by, --bw, --bh) and the focus (--fx, --fy). A frame that wants the plain cover
+   sets --w, --x and --y to the --cover-* values. All of it is the frame's container units, so it follows every resize;
+   lib/image-sizes.ts (boxSizes) does the same sum for `sizes`. */
+.media-box {
+  container-type: size;
+}
+.media-box__photo {
+  --fx: 0.5;
+  --fy: 0.5;
+  --cover-w: max(100cqw, 100cqh * var(--a));
+  --cover-x: calc((100cqw - var(--w)) * var(--fx));
+  --cover-y: calc((100cqh - var(--h)) * var(--fy));
+  --box-bottom: min(100cqh, var(--photo-bottom, 100cqh));
+  --box-w: min(var(--cover-w), 100cqw / var(--bw), (var(--box-bottom) - var(--photo-top, 0px)) * var(--a) / var(--bh));
+  --box-x: clamp(-1 * var(--bx) * var(--w), var(--cover-x), 100cqw - (var(--bx) + var(--bw)) * var(--w));
+  --box-y: clamp(
+    var(--photo-top, 0px) - var(--by) * var(--h),
+    var(--cover-y),
+    var(--box-bottom) - (var(--by) + var(--bh)) * var(--h)
+  );
+  --w: var(--box-w);
+  --h: calc(var(--w) / var(--a));
+  --x: var(--box-x);
+  --y: var(--box-y);
+  --fade-l: min(64px, 3 * max(0px, var(--x)));
+  --fade-r: min(64px, 3 * max(0px, 100cqw - var(--x) - var(--w)));
+  --fade-t: min(64px, 3 * max(0px, var(--y)));
+  --fade-b: min(64px, 3 * max(0px, 100cqh - var(--y) - var(--h)));
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  mask-image:
+    linear-gradient(to right, transparent, black var(--fade-l), black calc(100% - var(--fade-r)), transparent),
+    linear-gradient(to bottom, transparent, black var(--fade-t), black calc(100% - var(--fade-b)), transparent);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
 }
 
 /* Stone grain: add .grain to a Травертин section (and .grain--dark to an Оникс / Еспресо one). The noise sits on its
@@ -448,6 +1055,145 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .phase-pulse {
     animation: none;
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 30%, transparent);
+  }
+}
+
+/* City Center's "За проектот" (components/project/ProjectAbout.tsx): the logo mark faint in the middle of the band, under
+   a darkening that is lighter in the middle (Оникс 55%) than at the edges (92%). */
+.pa-intro-mark,
+.pa-intro-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pa-intro-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pa-intro-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-onyx) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-onyx) 92%, transparent) 100%
+  );
+}
+/* Its motion (the script in ProjectAbout.tsx). The hidden start exists only once the script has armed the section
+   (data-state="armed", set only while all its lines are below the screen); "shown" plays the entrance: the headline fades
+   in over 1.2s while its letter spacing settles from .12em, then each line rises 16px (0.9s, its own --pa-delay). */
+.pa-intro .pa-headline {
+  transition:
+    opacity 1.2s var(--ease),
+    letter-spacing 1.2s var(--ease);
+}
+.pa-intro .pa-reveal {
+  transition:
+    opacity 0.9s var(--ease) var(--pa-delay, 0s),
+    transform 0.9s var(--ease) var(--pa-delay, 0s);
+}
+.pa-intro[data-state="armed"] .pa-headline {
+  opacity: 0;
+  letter-spacing: 0.12em;
+}
+.pa-intro[data-state="armed"] .pa-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+/* Under 768px the headline rises 16px like the other lines and its spacing never changes, so it is never clipped. */
+@media (max-width: 767px) {
+  .pa-intro .pa-headline {
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease);
+  }
+  .pa-intro[data-state="armed"] .pa-headline {
+    letter-spacing: normal;
+    transform: translateY(16px);
+  }
+}
+/* The keywords: already in their serif and size, in the paragraph's colour until lit (data-lit, set as the section
+   scrolls by), then gold with a 1px gold line drawn left to right under them. */
+.pa-key {
+  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition:
+    color 0.8s var(--ease),
+    background-size 0.8s var(--ease);
+}
+.pa-key[data-lit] {
+  color: var(--color-gold);
+  background-size: 100% 1px;
+}
+/* Landed on it or past it ("static"): the keywords are simply lit, no fade. */
+.pa-intro[data-state="static"] .pa-key {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pa-intro .pa-headline,
+  .pa-intro .pa-reveal,
+  .pa-key {
+    transition: none;
+  }
+  .pa-key {
+    color: var(--color-gold);
+    background-size: 100% 1px;
+  }
+}
+
+/* "Тек на градба" (components/project/ProjectBuildProgress.tsx): each phase draws the stretch of line from its dot to
+   the next one (Бронза while the phase is passed), through the middle of the dots. Under 1024px the phases stack and
+   the line runs down the left; from 1024px the five stand side by side and the line runs across. */
+.tl {
+  display: grid;
+  gap: 40px;
+}
+.tl-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 31px;
+}
+.tl-dot {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-bronze);
+  border-radius: 50%;
+}
+.tl-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  width: 1px;
+  height: calc(100% + 40px);
+  background: var(--color-line);
+}
+.tl-step.is-passed::before {
+  background: var(--color-bronze);
+}
+@media (min-width: 1024px) {
+  .tl {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .tl-step {
+    padding-left: 0;
+    padding-top: 29px;
+  }
+  .tl-dot {
+    top: 0;
+  }
+  .tl-step:not(:last-child)::before {
+    top: 7px;
+    width: calc(100% + 24px);
+    height: 1px;
   }
 }
 
@@ -651,7 +1397,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   padding: 12px 20px;
   background: var(--color-gold);
   color: var(--color-ink);
-  font-size: 14px;
+  font-size: min(calc(14px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 500;
   transform: translateY(-200%);
   transition: transform var(--dur-fast) var(--ease);
@@ -676,20 +1422,19 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
    with light foil text, and fills the same way. Used by <Button> and by the form submit. */
 .btn-primary {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  min-height: 44px;
-  padding: 22px 36px;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 24px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   color: var(--foil-line);
   font:
-    600 13px/1.2 var(--font-sans),
+    600 min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -710,6 +1455,8 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   /* the sheen is drawn twice the button's width and centred, so the label always sits on its brighter middle (Оникс
      text stays above 4.5:1 there; the darkest foil at the ends of the gradient falls outside the button) */
   background: var(--foil-sheen) center / 200% 100% no-repeat;
+  /* the button itself is not clipped (its tap area on phones reaches past the box), so the sweep layer is */
+  clip-path: inset(0);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
@@ -720,18 +1467,24 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   color: var(--foil-light);
 }
 .btn-primary--sm {
-  padding: 14px 22px;
-  font-size: 12px;
+  min-height: 36px;
+  padding: 0 18px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
 }
 .btn-primary__arrow {
   display: inline-flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border: 1px solid currentColor;
   border-radius: 50%;
+}
+.btn-primary__arrow svg,
+.btn-secondary__arrow svg {
+  width: 11px;
+  height: 6px;
 }
 /* Filled: hover (where there is a pointer), keyboard focus, and the --filled look at rest. */
 .btn-primary:focus-visible:not(:disabled):not([aria-disabled="true"]),
@@ -782,17 +1535,19 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 /* Phones: tighter, so "ЗАКАЖИ КОНСУЛТАЦИЈА" fits at 360px; a longer label wraps rather than overflows. */
 @media (max-width: 640px) {
   .btn-primary {
-    gap: 12px;
-    padding: 18px 22px;
-    font-size: 12px;
-    letter-spacing: var(--label-track);
-  }
-  .btn-primary--sm {
-    padding: 14px 22px;
+    gap: 10px;
   }
   .btn-primary:not(.btn-primary--sm) {
     white-space: normal;
     text-align: left;
+  }
+}
+/* Phones: the standard buttons are 44px tall (the small ones stay 36px, their tap area is 44 below). */
+@media (max-width: 480px) {
+  .btn-primary:not(.btn-primary--sm),
+  .btn-secondary:not(.btn-secondary--sm) {
+    min-height: 44px;
+    padding-inline: 20px;
   }
 }
 /* Reduced motion: no sweep; the fill fades in. */
@@ -839,15 +1594,15 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 14px 28px;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
   background: transparent;
   border: 1px solid var(--foil-line);
   border-radius: 0;
   color: var(--color-gold);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -865,16 +1620,17 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   color: var(--color-bronze);
 }
 .btn-secondary--sm {
-  padding: 10px 20px;
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
 }
 .btn-secondary__arrow {
   display: inline-flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin-block: -8px;
+  width: 24px;
+  height: 24px;
   border: 1px solid currentColor;
   border-radius: 50%;
   transition: transform var(--dur-fast) var(--ease);
@@ -914,7 +1670,7 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   border: 0;
   color: var(--color-gold);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -930,7 +1686,9 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
 }
 .btn-tertiary[data-tone="light"] {
   color: var(--color-bronze);
-  text-decoration-color: var(--color-bronze);
+  /* gold on a light surface: a thicker line (gold is 2.1:1 on it) */
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 2px;
 }
 @media (hover: hover) {
   .btn-tertiary:hover {
@@ -963,6 +1721,22 @@ body:has([data-opening]) header[data-at-top="true"]:not([data-open="true"]) {
   .btn-secondary:not(.btn-secondary--sm) {
     white-space: normal;
     text-align: center;
+  }
+}
+/* Phones: the visible buttons are small, the tap area is not. An invisible box at least 44px tall, centred on the button
+   (a taller box only where the button is shorter), so a finger always has room. Used by every button with a label. */
+@media (max-width: 767px) {
+  .btn-primary::after,
+  .btn-secondary::after,
+  .ct-btn::after,
+  .bk-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
   }
 }
 
@@ -1044,8 +1818,9 @@ body {
     opacity: 0;
   }
 }
-/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. */
-body:has([data-compare-bar]) {
+/* While the floating compare bar is on screen, the page ends higher, so the bar never covers its last content. The room
+   is added inside the footer: padding on the body would show a band of the page colour under the dark footer. */
+body:has([data-compare-bar]) footer {
   padding-bottom: 140px;
 }
 /* A grid column never grows past the screen because of a wide child (scrollable rows stay scrollable). */
@@ -1055,11 +1830,11 @@ body:has([data-compare-bar]) {
 @media (max-width: 767px) {
   /* Small utility sizes step up a little on phones; uppercase labels stay compact. */
   .text-xs {
-    font-size: 0.8125rem;
+    font-size: min(calc(0.8125rem * var(--type-scale, 1)), var(--body-max, 999px));
   }
   [class*="text-[11px]"],
   [class*="text-[10px]"] {
-    font-size: 0.75rem;
+    font-size: min(calc(0.75rem * var(--type-scale, 1)), var(--body-max, 999px));
   }
   /* Body copy is at least 16px; the small utilities only apply from tablets up. */
   p.text-xs,
@@ -1067,7 +1842,7 @@ body:has([data-compare-bar]) {
   li.text-sm,
   dd.text-sm,
   dd.text-xs {
-    font-size: 1rem;
+    font-size: min(calc(1rem * var(--type-scale, 1)), var(--body-max, 999px));
     line-height: 1.6;
   }
   /* Long Macedonian words never push a headline past the screen. */
@@ -1140,7 +1915,7 @@ body:has([data-compare-bar]) {
 .footer-sheen {
   display: inline-block;
   white-space: nowrap;
-  font-size: clamp(20px, 2.1vw, 30px);
+  font-size: calc(clamp(20px, 2.1vw, 30px) * var(--type-scale, 1));
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -1205,14 +1980,14 @@ body:has([data-compare-bar]) {
 .hero-title {
   max-width: 100%;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 34px;
+  font-size: calc(34px * var(--type-scale, 1));
   font-style: normal;
   text-wrap: balance;
 }
 @media (min-width: 600px) {
   .hero-title {
     white-space: nowrap;
-    font-size: clamp(30px, 4.3vw, 68px);
+    font-size: calc(clamp(30px, 4.3vw, 68px) * var(--type-scale, 1));
   }
 }
 
@@ -1232,4 +2007,400 @@ body:has([data-compare-bar]) {
     color-mix(in srgb, var(--color-onyx) 30%, transparent),
     transparent 72%
   );
+}
+
+/* The scroll indicator (components/ScrollIndicator.tsx): a hairline track and a short thumb in the right gutter. Light
+   colour with mix-blend-mode: difference, so it reads on both the dark and the light sections; barely noticeable (45%). */
+.scroll-cue {
+  position: fixed;
+  right: 28px;
+  bottom: 40px;
+  z-index: 20;
+  color: var(--color-travertine);
+  mix-blend-mode: difference;
+  opacity: 0.45;
+  pointer-events: none;
+}
+.scroll-cue__track {
+  position: relative;
+  width: 1px;
+  height: 72px;
+  background: color-mix(in srgb, currentColor 30%, transparent);
+}
+.scroll-cue__thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 20px;
+  background: currentColor;
+}
+@media (max-width: 639px) {
+  .scroll-cue {
+    right: 10px;
+    bottom: 24px;
+  }
+  .scroll-cue__track {
+    height: 56px;
+  }
+}
+
+/* «Во што веруваме» (components/home/ManifestText.tsx): without scripts, with reduced motion and before hydration the text is
+   full Оникс. Once the script arms it each word starts at 18% Оникс and turns dark (`.on`) as the paragraph scrolls
+   through the screen; the colour eases over 0.3s, switched on a frame after the grey start. */
+.mf-text[data-armed] .mf-w {
+  color: color-mix(in srgb, var(--color-onyx) 18%, transparent);
+}
+.mf-text[data-armed] .mf-w.on {
+  color: var(--color-onyx);
+}
+.mf-text[data-live] .mf-w {
+  transition: color 0.3s ease;
+}
+/* «Во што веруваме»: «Месинг во движење» (components/home/ManifestStage.tsx, Manifest.tsx). The section is fully visible as it
+   is written here: the marks, the lines, the label, the words and the signature only start hidden once the script has armed
+   it (data-arm), and one attribute (data-go, when 45% of it is on screen) plays everything, once. In order: the marks fade in
+   over 1.6s and glide 36px in from the sides; a 110px Бронза line (45%) grows from each mark toward the quote (1.4s, after
+   0.8s); the label fades in; each word rises out of its own line (1.3s, 22ms apart, from 0.7s); one slow sheen passes over
+   the marks (2.6s, from 1.6s); the signature comes last. The two light tints of the sheen are the approved highlights of this
+   effect and are used nowhere else. */
+.mf-quote {
+  position: relative;
+  --mk: calc(110px * var(--type-scale, 1));
+  /* a phone or a narrow window: the marks above and below the quote, the lines hidden */
+  padding: calc(52px * var(--type-scale, 1)) 0 calc(64px * var(--type-scale, 1));
+}
+.mf-mark {
+  position: absolute;
+  font-family: var(--font-voice);
+  font-size: var(--mk);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  background: linear-gradient(
+    110deg,
+    var(--color-bronze) 0%,
+    var(--color-bronze) 40%,
+    #b89474 48%,
+    #e8cdb2 50%,
+    #b89474 52%,
+    var(--color-bronze) 60%,
+    var(--color-bronze) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.mf-mark--open {
+  left: 0;
+  top: calc(var(--mk) * -0.06);
+}
+.mf-mark--close {
+  right: 0;
+  bottom: calc(64px * var(--type-scale, 1) - var(--mk) + var(--mk) * 0.06);
+}
+.mf-rule {
+  display: none;
+  position: absolute;
+  width: 110px;
+  height: 1px;
+  background: var(--color-bronze);
+  opacity: 0.45;
+}
+@media (min-width: 1160px) {
+  /* beside the quote: 200px marks, out in the margins (the quote is 720px, the marks need 204px on each side: narrower, they would be cut) */
+  .mf-quote {
+    --mk: calc(200px * var(--type-scale, 1));
+    padding: 0;
+  }
+  .mf-mark--open {
+    left: calc(-170px * var(--type-scale, 1));
+    top: calc(-72px * var(--type-scale, 1));
+  }
+  .mf-mark--close {
+    right: calc(-170px * var(--type-scale, 1));
+    bottom: calc(-150px * var(--type-scale, 1));
+  }
+  .mf-rule {
+    display: block;
+  }
+  .mf-rule--open {
+    left: -50px;
+    top: 22px;
+    transform-origin: left;
+  }
+  .mf-rule--close {
+    right: -60px;
+    bottom: 30px;
+    transform-origin: right;
+  }
+}
+/* the words: .wd is the invisible line a word rises out of; its padding is taken back by the margin, so the lines of the
+   quote are exactly as high as plain text */
+.mf-text .wd {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.mf-text .wr {
+  display: inline-block;
+}
+.mf-stage[data-arm] .mf-mark {
+  transition:
+    opacity 1.6s ease,
+    transform 2s cubic-bezier(0.16, 1, 0.3, 1),
+    background-position 2.6s ease 1.6s;
+}
+.mf-stage[data-arm] .mf-rule {
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s;
+}
+.mf-stage[data-arm] .mf-eyebrow {
+  transition: opacity 1.1s ease 0.45s;
+}
+.mf-stage[data-arm] .mf-text .wr {
+  transition:
+    transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1.3s ease;
+  transition-delay: calc(0.7s + var(--i) * 22ms);
+}
+.mf-stage[data-arm] .mf-sign {
+  transition: opacity 1.2s ease calc(0.7s + var(--n, 40) * 22ms + 1.6s);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark {
+  opacity: 0;
+  background-position: 100% 0;
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark--open {
+  transform: translateX(-36px);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark--close {
+  transform: translateX(36px);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-rule {
+  transform: scaleX(0);
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-eyebrow,
+.mf-stage[data-arm]:not([data-go]) .mf-sign {
+  opacity: 0;
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-text .wr {
+  transform: translateY(105%);
+  opacity: 0;
+  transition: none;
+}
+.mf-stage[data-go] .mf-mark--close {
+  transition-delay: 0.25s, 0.25s, 2s;
+}
+/* «Што нè разликува» (components/home/DifferencesStage.tsx). Under 1024px: the heading, then every point as a pair, its
+   photo (at its own proportions, the full content width) 16px above the number, title and text, the pairs 48px apart,
+   nothing dimmed, nothing sticky. From 1024px: on the left one sticky block under the bar (--nav-h and 32px), the heading
+   (one line) and under it a 4:3 photo as wide as the column; on the right the four points, each at least 52vh tall, in
+   a column as wide as the text (34rem) so the rules between them end with it. The point crossing the middle of the
+   window is at full strength and its photo is shown (a 600ms crossfade, instant with reduced motion); the others are
+   dimmed (once the script has armed it) to colours that keep 4.5:1 on the section's Пясок: Оникс at 62%, Бронза at 88%. */
+.df-frame {
+  display: none;
+}
+.df-list {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-top: 48px;
+}
+.df-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.df-pic {
+  position: relative;
+  aspect-ratio: var(--a, 1.5);
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .df {
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    column-gap: 72px;
+  }
+  .df-col {
+    container-type: inline-size;
+  }
+  .df-stick {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .df-frame {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-espresso);
+  }
+  .df-photo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .df-photo.is-active {
+    opacity: 1;
+  }
+  .df-list {
+    gap: 0;
+    max-width: 34rem;
+    margin-top: 0;
+  }
+  .df-point {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 52vh;
+    border-top: 1px solid var(--color-line);
+  }
+  .df-pic {
+    display: none;
+  }
+  .df-num,
+  .df-title,
+  .df-text {
+    transition: color 0.5s ease;
+  }
+  .df[data-armed] .df-point:not(.is-active) .df-num {
+    color: color-mix(in srgb, var(--color-gold-deep) 88%, transparent);
+  }
+  .df[data-armed] .df-point:not(.is-active) .df-title,
+  .df[data-armed] .df-point:not(.is-active) .df-text {
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .df-photo,
+  .df-num,
+  .df-title,
+  .df-text {
+    transition: none;
+  }
+}
+
+/* The gallery row of a photo-led project page (components/project/ProjectGallery.tsx): it starts at the content's edge
+   (the 1320px container with its 5% sides) and ends there too, and snaps photo by photo to that edge; 16:9 photos 72vw
+   wide (at most 1100px), 88vw on a phone, so the next one peeks in. */
+.pg-track {
+  --pg-edge: calc((100vw - min(100vw, 1320px)) / 2 + min(100vw, 1320px) * 0.05);
+  padding-inline: var(--pg-edge);
+  scroll-padding-inline: var(--pg-edge);
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+.pg-slide {
+  width: min(72vw, 1100px);
+  scroll-snap-align: start;
+}
+@media (max-width: 767px) {
+  .pg-slide {
+    width: 88vw;
+  }
+}
+
+/* The photo-led opening (components/project/ProjectHeroSlideshow.tsx). Under the opening shape (OPENING_WIDE_QUERY in
+   lib/hero.ts, 13:10) the photo is whole and full width right under the header, then the back link and the text, on
+   Оникс with nothing over the photo. From it the opening is the whole first screen, edge to edge, the text on the photo:
+   each photo covers the screen unless that would cut its building box or put it under the header and 16px (--photo-top,
+   .media-box), and the only shading is one gradient behind the text at the bottom and a light one under the clear
+   header. opening shape */
+.pl-opening {
+  display: flex;
+  flex-direction: column;
+}
+.pl-opening__stage {
+  order: -1;
+  margin-top: var(--nav-h);
+}
+.pl-opening__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--pl-aspect);
+}
+.pl-opening__shade {
+  display: none;
+}
+.pl-opening__back {
+  padding-top: 16px;
+}
+.pl-opening__text {
+  padding-top: 8px;
+  padding-bottom: 40px;
+}
+@media (min-aspect-ratio: 130/100) {
+  .pl-opening {
+    --photo-top: calc(var(--nav-h) + 16px);
+    height: 100vh;
+    height: 100svh;
+    justify-content: space-between;
+  }
+  .pl-opening__stage,
+  .pl-opening__frame {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    width: auto;
+    aspect-ratio: auto;
+  }
+  /* The only shading, measured against the brightest 1% of each photo behind each text at every wide size, all three
+     slides, for 4.5:1 or more: Оникс 78% behind the header (its gold current link is the darkest text), 55% at the back
+     link, gone 180px under the header; and (.pl-opening__text::before) Оникс 70% behind the label, the name and the
+     dashes, whatever height they take, gone 200px above them. */
+  .pl-opening__shade {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-onyx) 78%, transparent) var(--nav-h),
+      color-mix(in srgb, var(--color-onyx) 55%, transparent) calc(var(--nav-h) + 60px),
+      transparent calc(var(--nav-h) + 180px)
+    );
+  }
+  .pl-opening__text::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -216px;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-onyx) 70%, transparent) calc(100% - 200px),
+      transparent
+    );
+  }
+  .pl-opening__back,
+  .pl-opening__text {
+    position: relative;
+    z-index: 1;
+  }
+  .pl-opening__back {
+    padding-top: calc(var(--nav-h) + 16px);
+  }
+  .pl-opening__text {
+    padding-top: 0;
+    padding-bottom: 56px;
+  }
 }

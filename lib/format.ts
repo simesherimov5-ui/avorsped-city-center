@@ -6,11 +6,17 @@ import type { Orientation, ProjectStatus } from "@/types";
  * data at build/SSR time can differ from a browser's, which would make the server and the browser disagree.
  */
 export function formatArea(value: number, decimals = 1): string {
-  return `${value.toFixed(decimals).replace(".", ",")} м²`;
+  return `${areaNumber(value, decimals)} м²`;
 }
 
-export function statusLabel(status: "available" | "reserved" | "sold"): string {
-  return { available: "Достапен", reserved: "Резервиран", sold: "Продаден" }[status];
+/** An area without its unit, with a decimal comma ("28,70"; two decimals unless told otherwise). */
+export function areaNumber(value: number, decimals = 2): string {
+  return value.toFixed(decimals).replace(".", ",");
+}
+
+/** A range of areas as the site writes it: rounded to whole m², "29–187 м²". */
+export function formatAreaRange(min: number, max: number): string {
+  return `${areaNumber(min, 0)}–${areaNumber(max, 0)} м²`;
 }
 
 const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
@@ -21,6 +27,21 @@ const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
 
 export function projectStatusLabel(status: ProjectStatus): string {
   return PROJECT_STATUS_LABELS[status];
+}
+
+/**
+ * The text if it is real, else undefined: empty, or a placeholder still waiting for the client's text ("[месец]",
+ * "[Каде се користи · производител]", anything in square brackets) is never shown.
+ */
+export function realText(value: string | undefined | null): string | undefined {
+  const text = value?.trim();
+  return text && !/\[[^\]]*\]/.test(text) ? text : undefined;
+}
+
+/** Names listed in a sentence, the Macedonian way: commas between them, «и» only before the last ("А, Б и В"). */
+export function listNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} и ${names[names.length - 1]}`;
 }
 
 const ORIENTATION_LABELS: Record<Orientation, string> = {

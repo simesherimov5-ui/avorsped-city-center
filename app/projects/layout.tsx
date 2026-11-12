@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { TypeUp } from "@/components/TypeUp";
 import { SITE_NAME, pageMetadata } from "@/lib/seo";
 
 // The list page is a client component, so its metadata lives here.
@@ -12,5 +13,5 @@ const page = pageMetadata({
 export const metadata: Metadata = { ...page, title: { default: "Проекти", template: `%s | ${SITE_NAME}` } };
 
 export default function ProjectsLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <TypeUp>{children}</TypeUp>;
 }

@@ -14,7 +14,7 @@ export function Film({ still, src }: { still: { src: string; alt: string }; src?
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="eyebrow text-accent">Филм</div>
-              <h2 className="mt-3 font-display text-(length:--fs-h2) font-normal leading-[1.2]">
+              <h2 className="mt-3 font-display text-[length:calc(var(--fs-h2)*1.15)] font-normal leading-[1.2] text-balance">
                 Три децении, во една минута.
               </h2>
             </div>

@@ -12,7 +12,7 @@ import { useMediaQuery } from "@/lib/useMediaQuery";
 // A company-wide hero, not a single-project pitch: the portfolio holds
 // several developments and this is their shared front door.
 const HERO_IMAGE = {
-  src: "/images/exteriors/exterior-hero-wide.jpg",
+  src: "/images/approved-rich/city-center-exterior-rich.png",
   alt: "Јавор Шпед — архитектонска визуелизација",
   isPlaceholder: false,
 };
@@ -38,24 +38,22 @@ export function Hero() {
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const statsBarRef = useRef<HTMLDivElement>(null);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const eyebrow = eyebrowRef.current;
       const headline = headlineRef.current;
       const stats = statsBarRef.current;
-      const scrollCue = scrollIndicatorRef.current;
-      if (!eyebrow || !headline || !stats || !scrollCue) return;
+      if (!eyebrow || !headline || !stats) return;
 
       if (!revealing) {
-        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 0 });
-        gsap.set([eyebrow, stats, scrollCue], { y: 14 });
+        gsap.set([eyebrow, headline, stats], { opacity: 0 });
+        gsap.set([eyebrow, stats], { y: 14 });
         return;
       }
 
       if (instant || revealedAtMount.current) {
-        gsap.set([eyebrow, headline, stats, scrollCue], { opacity: 1, y: 0 });
+        gsap.set([eyebrow, headline, stats], { opacity: 1, y: 0 });
         return;
       }
 
@@ -66,8 +64,7 @@ export function Hero() {
       const tl = gsap.timeline();
       tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1)
         .to(split.lines, { yPercent: 0, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.3)
-        .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1)
-        .to(scrollCue, { opacity: 1, y: 0, duration: 0.7 }, 1.3);
+        .to(stats, { opacity: 1, y: 0, duration: 0.7 }, 1.1);
 
       return () => {
         split.revert();
@@ -78,10 +75,7 @@ export function Hero() {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative flex h-[100dvh] min-h-[560px] flex-col overflow-hidden bg-ink text-paper"
-    >
+    <section ref={sectionRef} className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-paper">
       <motion.div style={{ y: photoY }} className="absolute inset-0">
         {/* No entrance animation on the photo itself. data-hero-image marks it so the
             opening can wait until it is loaded before the black screen opens. */}
@@ -160,30 +154,16 @@ export function Hero() {
       {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
-          <span className="text-label font-medium uppercase tracking-label text-gold sm:text-[13px]">
+          <span className="text-label font-medium uppercase tracking-label text-gold sm:text-[length:min(calc(13px*var(--type-scale,1)),var(--body-max,999px))]">
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">
-            <span className="text-label font-semibold uppercase tracking-label text-brass">— Javor Sped Holding</span>
-            <span className="text-[17px] font-normal leading-[1.5] text-gold">
-              Секоја адреса има приказна. Најдете ја вашата.
+            <span className="text-label font-semibold uppercase tracking-label text-brass">— JAVOR SPED HOLDING</span>
+            <span className="text-[length:min(calc(17px*var(--type-scale,1)),var(--body-max,999px))] font-normal leading-[1.5] text-gold">
+              Секоја адреса има своја приказна. Пронајдете ја вашата.
             </span>
           </span>
         </div>
-      </div>
-
-      {/* Scroll indicator — a thin gold line pulsing downward in a loop. */}
-      <div
-        ref={scrollIndicatorRef}
-        className="absolute bottom-28 right-6 flex flex-col items-center gap-3 text-paper/62 sm:bottom-20 lg:right-10"
-      >
-        <span className="relative h-9 w-px overflow-hidden bg-line-dark">
-          <motion.span
-            animate={reduceMotion ? undefined : { y: ["-100%", "100%"] }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            className="absolute inset-x-0 h-1/2 bg-gold"
-          />
-        </span>
       </div>
     </section>
   );
