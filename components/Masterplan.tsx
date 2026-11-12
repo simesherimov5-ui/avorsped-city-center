@@ -191,7 +191,7 @@ export function Compass({ north }: { north: number }) {
           x="36"
           y="13"
           textAnchor="middle"
-          fontSize="9"
+          fontSize="13"
           fontWeight="600"
           fill="var(--color-gold)"
           style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}

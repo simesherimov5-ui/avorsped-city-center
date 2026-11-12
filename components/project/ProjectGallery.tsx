@@ -86,7 +86,7 @@ export function ProjectGallery({ photos }: { photos: Photo[] }) {
       <div className="mx-auto flex max-w-[1320px] flex-wrap items-end justify-between gap-6 px-[5%]">
         <Reveal>
           <div className="eyebrow tracking-[0.32em] text-gold">ГАЛЕРИЈА</div>
-          <h2 className="m-0 mt-4 font-display text-[clamp(40px,4.8vw,72px)] font-normal leading-[1.05] text-paper">
+          <h2 className="m-0 mt-4 font-display text-[length:calc(clamp(40px,4.8vw,72px)*var(--type-scale,1))] font-normal leading-[1.05] text-paper">
             Погледнете го проектот.
           </h2>
         </Reveal>

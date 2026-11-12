@@ -96,7 +96,6 @@
      Used only through .grain below. */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.43 0 0 0 0 0.33 0 0 0 0 0.24 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  --label-size: 12px;
   --label-track: 0.13em;
 
   /*
@@ -119,18 +118,60 @@
 
   /* Typography scale — named tokens for consistent size + line-height pairs,
      reused across components instead of picking numbers ad hoc. */
-  --text-body-size: 0.9375rem; /* 15px */
   --text-body-leading: 1.7;
-  --text-lead-size: 1.0625rem; /* 17px */
   --text-lead-leading: 1.65;
-  --text-caption-size: 0.8125rem; /* 13px */
   --text-caption-leading: 1.5;
   /* The one type scale of the site; nothing is set larger than these at any width. */
-  --fs-hero: clamp(30px, 3.6vw, 52px);
-  --fs-h1: clamp(28px, 3vw, 44px);
-  --fs-h2: clamp(24px, 2.2vw, 32px);
-  --fs-h3: clamp(18px, 1.4vw, 20px);
-  --fs-statement: clamp(19px, 1.7vw, 22px);
+}
+
+/* The type scale. --type-scale is 1 everywhere except inside .type-up (components/TypeUp.tsx: Почетна, Проекти, City Center,
+   Дојран, Завршени проекти), where it is 1.2. The tokens below are declared on :root and again on .type-up, so each one is
+   worked out with the scale of the place it is used in; every other font size of those pages is written as
+   calc(<size> * var(--type-scale, 1)). Outside .type-up all of it is exactly the size it always was. */
+:root {
+  --type-scale: 1;
+}
+.type-up {
+  --type-scale: 1.2;
+}
+:root,
+.type-up {
+  --label-size: calc(12px * var(--type-scale));
+  --text-label: var(--label-size);
+  --text-body-size: calc(0.9375rem * var(--type-scale)); /* 15px */
+  --text-lead-size: calc(1.0625rem * var(--type-scale)); /* 17px */
+  --text-caption-size: calc(0.8125rem * var(--type-scale)); /* 13px */
+  /* The one type scale of the site; nothing is set larger than these at any width. */
+  --fs-hero: calc(clamp(30px, 3.6vw, 52px) * var(--type-scale));
+  --fs-h1: calc(clamp(28px, 3vw, 44px) * var(--type-scale));
+  --fs-h2: calc(clamp(24px, 2.2vw, 32px) * var(--type-scale));
+  --fs-h3: calc(clamp(18px, 1.4vw, 20px) * var(--type-scale));
+  --fs-statement: calc(clamp(19px, 1.7vw, 22px) * var(--type-scale));
+  /* Tailwind's own sizes (text-xs … text-6xl) */
+  --text-xs: calc(0.75rem * var(--type-scale));
+  --text-sm: calc(0.875rem * var(--type-scale));
+  --text-base: calc(1rem * var(--type-scale));
+  --text-lg: calc(1.125rem * var(--type-scale));
+  --text-xl: calc(1.25rem * var(--type-scale));
+  --text-2xl: calc(1.5rem * var(--type-scale));
+  --text-3xl: calc(1.875rem * var(--type-scale));
+  --text-4xl: calc(2.25rem * var(--type-scale));
+  --text-5xl: calc(3rem * var(--type-scale));
+  --text-6xl: calc(3.75rem * var(--type-scale));
+}
+/* what sets no size of its own inherits the body size of the scope (the body itself is outside it) */
+.type-up {
+  font-size: var(--text-body-size);
+}
+/* Phones: the same 1.2, but body text is never larger than 18px. */
+@media (max-width: 639px) {
+  .type-up {
+    --text-body-size: min(calc(0.9375rem * var(--type-scale)), 18px);
+    --text-lead-size: min(calc(1.0625rem * var(--type-scale)), 18px);
+    --text-base: min(calc(1rem * var(--type-scale)), 18px);
+    --text-lg: min(calc(1.125rem * var(--type-scale)), 18px);
+    --body-max: 18px;
+  }
 }
 
 @theme inline {
@@ -168,9 +209,10 @@
   --default-transition-duration: var(--dur-fast);
   --default-transition-timing-function: var(--ease);
   --ease-site: var(--ease);
-  --text-label: var(--label-size);
   --tracking-label: var(--label-track);
   --tracking-nav: 0.1em;
+  /* the size itself follows the scale (the same name is declared again on :root and .type-up below); here it makes the utility exist */
+  --text-label: var(--label-size);
 }
 
 /* Playfair Display for headings and large display numbers, everywhere but the three places of the brand voice. Not
@@ -373,7 +415,7 @@ h4 {
 }
 /* The line under the project's name in its opening: 16px on a phone, and never under 24px where it lies on the photos. */
 .photo-hero__tagline {
-  font-size: clamp(16px, 1.7vw, 26px);
+  font-size: calc(clamp(16px, 1.7vw, 26px) * var(--type-scale, 1));
 }
 .photo-hero__content {
   position: relative;
@@ -415,7 +457,7 @@ h4 {
     inset: 8px 0 auto;
   }
   .photo-hero__tagline {
-    font-size: clamp(24px, 1.7vw, 26px);
+    font-size: calc(clamp(24px, 1.7vw, 26px) * var(--type-scale, 1));
   }
   .photo-hero__content {
     flex: 1;
@@ -754,7 +796,7 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
     flex: none;
   }
   .photo-hero--sky h1 {
-    font-size: clamp(36px, 9vw, 56px);
+    font-size: calc(clamp(36px, 9vw, 56px) * var(--type-scale, 1));
   }
 }
 @media (min-width: 1024px) {
@@ -799,7 +841,7 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
     inset: 8px 0 auto;
   }
   .photo-hero--sky h1 {
-    font-size: clamp(36px, 4.6vw, 76px);
+    font-size: calc(clamp(36px, 4.6vw, 76px) * var(--type-scale, 1));
   }
 }
 
@@ -807,13 +849,13 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
 header .btn-primary--sm {
   min-height: 44px;
   padding: 0 22px;
-  font-size: 14px;
+  font-size: min(calc(14px * var(--type-scale, 1)), var(--body-max, 999px));
 }
 /* 1024 to 1099px: the links, the logo and the button share 944px, so the button and the links give a little room */
 @media (max-width: 1099px) {
   header .btn-primary--sm {
     padding: 0 16px;
-    font-size: 13px;
+    font-size: min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px));
   }
 }
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%). The current page's link stays gold
@@ -1341,7 +1383,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   padding: 12px 20px;
   background: var(--color-gold);
   color: var(--color-ink);
-  font-size: 14px;
+  font-size: min(calc(14px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 500;
   transform: translateY(-200%);
   transition: transform var(--dur-fast) var(--ease);
@@ -1378,7 +1420,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   border-radius: 0;
   color: var(--foil-line);
   font:
-    600 13px/1.2 var(--font-sans),
+    600 min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -1413,7 +1455,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
 .btn-primary--sm {
   min-height: 36px;
   padding: 0 18px;
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
 }
 .btn-primary__arrow {
   display: inline-flex;
@@ -1546,7 +1588,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   border-radius: 0;
   color: var(--color-gold);
   font:
-    600 13px/1.2 var(--font-sans),
+    600 min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -1566,7 +1608,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
 .btn-secondary--sm {
   min-height: 36px;
   padding: 0 16px;
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
 }
 .btn-secondary__arrow {
   display: inline-flex;
@@ -1614,7 +1656,7 @@ header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
   border: 0;
   color: var(--color-gold);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -1774,11 +1816,11 @@ body:has([data-compare-bar]) footer {
 @media (max-width: 767px) {
   /* Small utility sizes step up a little on phones; uppercase labels stay compact. */
   .text-xs {
-    font-size: 0.8125rem;
+    font-size: min(calc(0.8125rem * var(--type-scale, 1)), var(--body-max, 999px));
   }
   [class*="text-[11px]"],
   [class*="text-[10px]"] {
-    font-size: 0.75rem;
+    font-size: min(calc(0.75rem * var(--type-scale, 1)), var(--body-max, 999px));
   }
   /* Body copy is at least 16px; the small utilities only apply from tablets up. */
   p.text-xs,
@@ -1786,7 +1828,7 @@ body:has([data-compare-bar]) footer {
   li.text-sm,
   dd.text-sm,
   dd.text-xs {
-    font-size: 1rem;
+    font-size: min(calc(1rem * var(--type-scale, 1)), var(--body-max, 999px));
     line-height: 1.6;
   }
   /* Long Macedonian words never push a headline past the screen. */
@@ -1859,7 +1901,7 @@ body:has([data-compare-bar]) footer {
 .footer-sheen {
   display: inline-block;
   white-space: nowrap;
-  font-size: clamp(20px, 2.1vw, 30px);
+  font-size: calc(clamp(20px, 2.1vw, 30px) * var(--type-scale, 1));
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -1924,14 +1966,14 @@ body:has([data-compare-bar]) footer {
 .hero-title {
   max-width: 100%;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 34px;
+  font-size: calc(34px * var(--type-scale, 1));
   font-style: normal;
   text-wrap: balance;
 }
 @media (min-width: 600px) {
   .hero-title {
     white-space: nowrap;
-    font-size: clamp(30px, 4.3vw, 68px);
+    font-size: calc(clamp(30px, 4.3vw, 68px) * var(--type-scale, 1));
   }
 }
 

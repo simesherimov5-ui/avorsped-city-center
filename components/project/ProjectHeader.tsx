@@ -39,7 +39,9 @@ export function ProjectHeader({
           {facts.map((fact) => (
             <div key={fact.label} className="flex flex-col gap-1.5 border-t border-line py-4">
               <dt className="eyebrow eyebrow-tight text-muted">{fact.label}</dt>
-              <dd className="text-[15px] font-medium leading-snug text-charcoal">{fact.value}</dd>
+              <dd className="text-[length:min(calc(15px*var(--type-scale,1)),var(--body-max,999px))] font-medium leading-snug text-charcoal">
+                {fact.value}
+              </dd>
             </div>
           ))}
         </dl>

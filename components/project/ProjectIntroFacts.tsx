@@ -21,7 +21,7 @@ export function ProjectIntroFacts({
       <div className="mx-auto grid max-w-[1320px] gap-14 px-[5%] pb-[72px] pt-[88px] md:grid-cols-[7fr_5fr] md:gap-[88px] md:pb-[120px] md:pt-[140px]">
         <Reveal>
           <div className="eyebrow tracking-[0.32em] text-gold-deep">ЗА ПРОЕКТОТ</div>
-          <h2 className="m-0 mt-4 font-display text-[clamp(40px,4.8vw,72px)] font-normal leading-[1.05] text-ink">
+          <h2 className="m-0 mt-4 font-display text-[length:calc(clamp(40px,4.8vw,72px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
             {heading.title}
             <span className="text-gold-deep">{heading.titleItalic}</span>
           </h2>
@@ -40,7 +40,9 @@ export function ProjectIntroFacts({
             {facts.map((fact) => (
               <div key={fact.label} className="flex items-baseline justify-between gap-6 border-b border-line py-5">
                 <dt className="text-label font-semibold uppercase tracking-[0.28em] text-gold-deep">{fact.label}</dt>
-                <dd className="m-0 text-right font-display text-[28px] leading-tight text-ink">{fact.value}</dd>
+                <dd className="m-0 text-right font-display text-[length:calc(28px*var(--type-scale,1))] leading-tight text-ink">
+                  {fact.value}
+                </dd>
               </div>
             ))}
           </dl>

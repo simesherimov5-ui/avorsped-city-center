@@ -30,7 +30,7 @@ export function ProjectLocation({
           <Reveal>
             <div className="flex flex-col gap-4">
               <div className="eyebrow tracking-[0.32em] text-gold-deep">ЛОКАЦИЈА</div>
-              <h2 className="m-0 font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">
+              <h2 className="m-0 font-display text-[length:calc(clamp(38px,4.4vw,62px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
                 {walking.title}
                 {realText(walking.titleItalic) && <span className="text-gold-deep">{walking.titleItalic}</span>}
               </h2>

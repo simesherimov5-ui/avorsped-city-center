@@ -137,13 +137,13 @@ export function ProjectAbout({
       <div className="relative mx-auto flex w-full max-w-[860px] flex-col items-center px-[5%] py-14 text-center md:py-24">
         <span aria-hidden className="block h-14 w-px bg-gold" />
         {head.title && (
-          <h2 className="pa-headline m-0 mt-8 whitespace-nowrap font-display text-[clamp(30px,5.2vw,60px)] font-normal leading-[1.1] text-paper">
+          <h2 className="pa-headline m-0 mt-8 whitespace-nowrap font-display text-[length:calc(clamp(30px,5.2vw,60px)*var(--type-scale,1))] font-normal leading-[1.1] text-paper">
             {head.title}
           </h2>
         )}
         {head.subtitle && (
           <p
-            className="pa-reveal m-0 mt-[14px] font-sans text-[12px] uppercase tracking-[0.32em] text-paper/64"
+            className="pa-reveal m-0 mt-[14px] font-sans text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] uppercase tracking-[0.32em] text-paper/64"
             style={delay(0)}
           >
             {head.subtitle}
@@ -153,7 +153,7 @@ export function ProjectAbout({
           {about.paragraphs.map((paragraph, i) => (
             <p
               key={paragraph.slice(0, 24)}
-              className="pa-reveal m-0 text-[17px] font-light leading-[1.9] text-paper/85 md:text-[19px]"
+              className="pa-reveal m-0 text-[length:min(calc(17px*var(--type-scale,1)),var(--body-max,999px))] font-light leading-[1.9] text-paper/85 md:text-[length:calc(19px*var(--type-scale,1))]"
               style={delay(first + i)}
             >
               {withAccents(paragraph, about.accents ?? []).map((part, i) => (

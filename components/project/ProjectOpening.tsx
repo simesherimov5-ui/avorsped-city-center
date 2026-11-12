@@ -5,7 +5,8 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { HeroSlideshow, type HeroSlide } from "@/components/ui/HeroSlideshow";
 import { useI18n } from "@/lib/i18n";
 
-const H1_CLASS = "font-display text-[clamp(44px,6vw,96px)] font-normal leading-[1.05] text-balance text-paper";
+const H1_CLASS =
+  "font-display text-[length:calc(clamp(44px,6vw,96px)*var(--type-scale,1))] font-normal leading-[1.05] text-balance text-paper";
 const P_CLASS = "max-w-[min(760px,100%)] font-sans leading-[1.45] font-normal photo-hero__tagline";
 
 // width of the slideshow controls: the indicators (44px, 10px apart), the gap and the pause button

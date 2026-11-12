@@ -65,7 +65,7 @@
   margin: 0;
   font-family: var(--font-display), "Times New Roman", serif;
   /* compact, so the heading block keeps clear of the roofs under it: 52px on a wide screen, about 45px at 1280, 30px on a phone */
-  font-size: clamp(30px, 2.6vw + 12px, 52px);
+  font-size: calc(clamp(30px, 2.6vw + 12px, 52px) * var(--type-scale, 1));
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -79,7 +79,7 @@
 }
 .pj-under {
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: clamp(16px, 0.4vw + 11px, 18px);
+  font-size: calc(clamp(16px, 0.4vw + 11px, 18px) * var(--type-scale, 1));
   line-height: 1.3;
   /* a readable line length, centred under the heading */
   max-width: 60ch;
@@ -157,7 +157,7 @@
 .pj-now-name {
   font-family: var(--font-display), "Times New Roman", serif;
   /* responsive, so the longest name («Радовиш Twins») stays on one line inside the screen: 26px on a phone, 40px at 1280 */
-  font-size: clamp(26px, 2.2vw + 12px, 42px);
+  font-size: calc(clamp(26px, 2.2vw + 12px, 42px) * var(--type-scale, 1));
   line-height: 1.1;
   color: var(--color-travertine);
 }
@@ -357,7 +357,7 @@
   background: none;
   color: var(--color-onyx);
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 20px;
+  font-size: calc(20px * var(--type-scale, 1));
   text-align: left;
   cursor: pointer;
 }
@@ -399,7 +399,7 @@
   background: transparent;
   color: var(--color-onyx);
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 18px;
+  font-size: calc(18px * var(--type-scale, 1));
   text-align: left;
   cursor: pointer;
 }
@@ -489,7 +489,7 @@
   }
   .pj-tab {
     position: relative;
-    font-size: 16px;
+    font-size: min(calc(16px * var(--type-scale, 1)), var(--body-max, 999px));
   }
   .pj-tab::after {
     content: "";
@@ -517,7 +517,7 @@
 }
 .pj-count {
   min-height: 18px;
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 400;
   letter-spacing: var(--label-track);
   color: var(--color-bronze);
@@ -628,7 +628,7 @@
 }
 .pj-arrow {
   color: var(--color-bronze);
-  font-size: 18px;
+  font-size: calc(18px * var(--type-scale, 1));
   transition: transform var(--dur-fast) var(--ease);
 }
 .pj-row:focus-visible .pj-arrow {
@@ -766,7 +766,7 @@
 }
 .pj-pin-name {
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 20px;
+  font-size: calc(20px * var(--type-scale, 1));
   line-height: 1.1;
   color: var(--color-onyx);
 }
@@ -795,7 +795,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--color-onyx) 20%, transparent);
   background: none;
   color: var(--color-onyx);
-  font-size: 20px;
+  font-size: calc(20px * var(--type-scale, 1));
   line-height: 1;
   cursor: pointer;
 }
@@ -821,7 +821,7 @@
   padding: 6px 10px;
   background: color-mix(in srgb, var(--color-sand) 85%, transparent);
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 400;
   letter-spacing: 0.1em;
   pointer-events: none;

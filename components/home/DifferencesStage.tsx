@@ -111,10 +111,12 @@ export function DifferencesStage({ heading, items }: { heading: ReactNode; items
                   />
                 </div>
                 <div className="eyebrow text-gold-deep">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="font-display text-[length:clamp(22px,2vw,28px)] font-normal leading-[1.3]">
+                <h3 className="font-display text-[length:calc(clamp(22px,2vw,28px)*var(--type-scale,1))] font-normal leading-[1.3]">
                   {item.title}
                 </h3>
-                <p className="max-w-[44ch] text-[14px] font-normal leading-[1.7] text-ink/[0.72]">{item.text}</p>
+                <p className="max-w-[44ch] text-[length:min(calc(14px*var(--type-scale,1)),var(--body-max,999px))] font-normal leading-[1.7] text-ink/[0.72]">
+                  {item.text}
+                </p>
               </div>
             </Reveal>
           </div>

@@ -87,7 +87,7 @@ export function Quotes({ quotes }: { quotes: ResidentQuote[] }) {
           className="flex min-h-[200px] w-full max-w-[960px] flex-col items-center justify-center gap-9"
         >
           <div className={leaving ? "q-out" : "q-in"} key={`${index}-${leaving}`}>
-            <blockquote className="m-0 font-display text-[clamp(30px,3.4vw,48px)] font-normal leading-[1.3] text-paper">
+            <blockquote className="m-0 font-display text-[length:calc(clamp(30px,3.4vw,48px)*var(--type-scale,1))] font-normal leading-[1.3] text-paper">
               „{quote.text}“
             </blockquote>
             <p className="mt-9 text-label font-semibold uppercase tracking-label text-accent">{by}</p>

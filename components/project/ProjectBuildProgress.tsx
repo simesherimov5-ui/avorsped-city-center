@@ -46,7 +46,7 @@ export function ProjectBuildProgress({ project }: { project: Project }) {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="flex flex-col gap-4">
               <div className="eyebrow tracking-[0.32em] text-gold-deep">ТЕК НА ГРАДБА</div>
-              <h2 className="m-0 font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">
+              <h2 className="m-0 font-display text-[length:calc(clamp(38px,4.4vw,62px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
                 {progress.title}
                 {realText(progress.titleItalic) && <span className="text-gold-deep">{progress.titleItalic}</span>}
               </h2>

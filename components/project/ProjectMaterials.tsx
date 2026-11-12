@@ -19,7 +19,7 @@ export function ProjectMaterials({ project }: { project: Project }) {
           <div className="flex flex-wrap items-end justify-between gap-8">
             <div className="flex flex-col gap-4">
               <div className="eyebrow tracking-[0.32em] text-gold-deep">МАТЕРИЈАЛИ</div>
-              <h2 className="m-0 font-display text-[clamp(38px,4.4vw,62px)] font-normal leading-[1.05] text-ink">
+              <h2 className="m-0 font-display text-[length:calc(clamp(38px,4.4vw,62px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
                 {heading.title}
                 {realText(heading.titleItalic) && <span className="text-gold-deep">{heading.titleItalic}</span>}
               </h2>
@@ -27,7 +27,9 @@ export function ProjectMaterials({ project }: { project: Project }) {
             {project.equippedBy && (
               <div className="flex flex-col gap-1.5 sm:text-right">
                 <div className="text-label uppercase tracking-[0.28em] text-muted">Опремено од</div>
-                <div className="font-display text-[26px] leading-tight text-ink">{project.equippedBy}</div>
+                <div className="font-display text-[length:calc(26px*var(--type-scale,1))] leading-tight text-ink">
+                  {project.equippedBy}
+                </div>
               </div>
             )}
           </div>
@@ -49,8 +51,14 @@ export function ProjectMaterials({ project }: { project: Project }) {
                     )}
                   </div>
                 </div>
-                <div className="font-display text-[26px] leading-tight text-ink">{item.name}</div>
-                {realText(item.note) && <p className="m-0 text-[13px] leading-[1.6] text-gold-deep">{item.note}</p>}
+                <div className="font-display text-[length:calc(26px*var(--type-scale,1))] leading-tight text-ink">
+                  {item.name}
+                </div>
+                {realText(item.note) && (
+                  <p className="m-0 text-[length:min(calc(13px*var(--type-scale,1)),var(--body-max,999px))] leading-[1.6] text-gold-deep">
+                    {item.note}
+                  </p>
+                )}
               </li>
             ))}
           </ul>

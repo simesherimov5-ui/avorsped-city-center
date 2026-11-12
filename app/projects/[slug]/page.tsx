@@ -128,7 +128,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 )}
               </Reveal>
               {project.photoCredit && (
-                <p className="mt-4 text-[12px] leading-relaxed text-muted">
+                <p className="mt-4 text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] leading-relaxed text-muted">
                   {project.photoCredit.map((part, i) =>
                     part.href ? (
                       <a
@@ -256,7 +256,7 @@ function PhotoLedProjectPage({ project }: { project: PhotoLedProject }) {
         >
           <div className="mx-auto max-w-[1320px] px-[5%] py-16 md:py-24">
             <div className="eyebrow tracking-[0.32em] text-gold-deep">КОМПЛЕКСОТ</div>
-            <h2 className="m-0 mt-4 font-display text-[clamp(40px,4.8vw,72px)] font-normal leading-[1.05] text-ink">
+            <h2 className="m-0 mt-4 font-display text-[length:calc(clamp(40px,4.8vw,72px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
               Изберете објект.
             </h2>
             <p className="m-0 mt-4 text-base text-muted">Изберете објект од планот.</p>

@@ -46,7 +46,7 @@
   background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
   color: var(--fp-mute);
   font:
-    600 12px/1 var(--font-sans),
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -102,7 +102,7 @@
 }
 .fp-label {
   color: var(--color-gold);
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
@@ -118,7 +118,7 @@
   margin: 0;
   max-width: 40ch;
   color: color-mix(in srgb, var(--color-travertine) 72%, transparent);
-  font-size: 16px;
+  font-size: min(calc(16px * var(--type-scale, 1)), var(--body-max, 999px));
   line-height: 1.6;
 }
 /* The apartments of the chosen floor, under the building: rows like the floor rows */
@@ -151,7 +151,7 @@
   background: color-mix(in srgb, var(--color-espresso) 45%, var(--color-onyx));
   color: var(--fp-mute);
   font:
-    600 12px/1.2 var(--font-sans),
+    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -188,7 +188,7 @@
   gap: 12px;
   min-height: 44px;
   color: var(--color-gold);
-  font-size: 12px;
+  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-decoration: none;

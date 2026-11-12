@@ -103,7 +103,7 @@ export function ProjectHeroSlideshow({
       <div className="pl-opening__text mx-auto flex w-full max-w-[1320px] flex-wrap items-end justify-between gap-x-8 gap-y-6 px-[5%]">
         <div className="min-w-0">
           <div className="eyebrow photo-hero__eyebrow tracking-[0.4em]">{eyebrow}</div>
-          <h1 className="m-0 mt-4 font-display text-[clamp(56px,8vw,128px)] font-normal leading-[0.95] text-paper">
+          <h1 className="m-0 mt-4 font-display text-[length:calc(clamp(56px,8vw,128px)*var(--type-scale,1))] font-normal leading-[0.95] text-paper">
             {name}
           </h1>
         </div>

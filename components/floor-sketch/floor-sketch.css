@@ -106,7 +106,7 @@
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-onyx) 12%, transparent);
   color: var(--color-onyx);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(12px, 1.7vw, 18px);
+  font-size: calc(clamp(12px, 1.7vw, 18px) * var(--type-scale, 1));
   font-variant-numeric: lining-nums;
   line-height: 1.2;
   white-space: nowrap;
@@ -118,7 +118,7 @@
 .fs-chips.is-dense .fs-chip {
   gap: 3px;
   padding: 1px 5px;
-  font-size: clamp(9px, 1.15vw, 13px);
+  font-size: calc(clamp(9px, 1.15vw, 13px) * var(--type-scale, 1));
 }
 .fs-chip.is-hot {
   border-color: var(--color-bronze);

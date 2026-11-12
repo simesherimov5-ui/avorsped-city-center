@@ -96,7 +96,7 @@ export function ObjectPicker({
               aria-label={label(o)}
               onClick={() => toggle(o.id)}
               className={cn(
-                "absolute flex items-center justify-center border-[1.2px] border-bronze font-display text-[clamp(22px,2.6vw,40px)] leading-none transition-colors",
+                "absolute flex items-center justify-center border-[1.2px] border-bronze font-display text-[length:calc(clamp(22px,2.6vw,40px)*var(--type-scale,1))] leading-none transition-colors",
                 "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold",
                 isSelected ? "bg-bronze text-paper" : "bg-sand text-ink [@media(hover:hover)]:hover:bg-gold/20"
               )}
@@ -131,7 +131,7 @@ export function ObjectPicker({
               <div className="eyebrow tracking-[0.32em] text-gold-deep">
                 {projectName} · Објект {o.number}
               </div>
-              <h3 className="m-0 font-display text-[clamp(36px,3vw,48px)] font-normal leading-[1.05] text-ink">
+              <h3 className="m-0 font-display text-[length:calc(clamp(36px,3vw,48px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
                 Објект {o.number}
               </h3>
               <div aria-hidden className="h-px w-full bg-line" />

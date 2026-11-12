@@ -20,7 +20,7 @@ export function ProjectPlace({
       <div className="mx-auto grid max-w-[1320px] items-stretch gap-14 px-[5%] pb-[72px] pt-[88px] md:pb-[120px] md:pt-[140px] lg:grid-cols-[5fr_7fr]">
         <Reveal>
           <div className="eyebrow tracking-[0.32em] text-gold-deep">ЛОКАЦИЈА</div>
-          <h2 className="m-0 mt-4 font-display text-[clamp(40px,4.8vw,72px)] font-normal leading-[1.05] text-ink">
+          <h2 className="m-0 mt-4 font-display text-[length:calc(clamp(40px,4.8vw,72px)*var(--type-scale,1))] font-normal leading-[1.05] text-ink">
             {city}, <span className="text-gold-deep">Северна Македонија.</span>
           </h2>
           <a

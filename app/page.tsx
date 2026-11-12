@@ -1,3 +1,4 @@
+import { TypeUp } from "@/components/TypeUp";
 import { Hero } from "@/components/Hero";
 import { Reveal as ScrollReveal } from "@/components/motion/Reveal";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
@@ -28,7 +29,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (
-    <>
+    <TypeUp>
       {/* 1. Hero — who we are */}
       <Hero />
 
@@ -86,6 +87,6 @@ export default function HomePage() {
 
       {/* 8. The ending: a pane of glass over the building mark */}
       <ClosingGlass phone={companyInfo.phone} email={companyInfo.email} />
-    </>
+    </TypeUp>
   );
 }

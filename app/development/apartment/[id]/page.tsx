@@ -107,7 +107,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             <aside className="h-fit border border-line bg-warm-white p-6 sm:p-8 lg:sticky lg:top-28">
               <div className="eyebrow text-gold">Површина</div>
-              <div className="mt-2 font-display text-[clamp(40px,4vw,56px)] leading-none tabular-nums text-travertine">
+              <div className="mt-2 font-display text-[length:calc(clamp(40px,4vw,56px)*var(--type-scale,1))] leading-none tabular-nums text-travertine">
                 {formatArea(apartment.area, apartment.areaDecimals)}
               </div>
 
