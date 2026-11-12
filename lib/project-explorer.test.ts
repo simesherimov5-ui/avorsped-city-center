@@ -85,17 +85,13 @@ describe("carouselProjects and heroSlides (the real data)", () => {
     expect(carouselProjects(projects).every((x) => x.status === "under-construction")).toBe(true);
   });
 
-  it("puts the projects with a wide slide photo first in the Проекти hero", () => {
-    expect(heroSlides(projects).map((x) => x.id)).toEqual([
-      "city-center",
-      "dojranski-raj",
-      "radovish-twins",
-      "stanbena-kukja",
-      "stanbena-kukja-2",
-      "city-center-2",
-      "boro-pochkov",
-      "dojranski-raj-2",
-    ]);
+  it("shows exactly City Center, Дојрански Рај and Радовиш Twins in the Проекти hero, in that order", () => {
+    expect(heroSlides(projects).map((x) => x.id)).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
+  });
+
+  it("leaves a hero project out of the hero while it has no slide photo (here only in the test)", () => {
+    const withoutPhoto = projects.map((x) => (x.id === "dojranski-raj" ? { ...x, slideImage: undefined } : x));
+    expect(heroSlides(withoutPhoto).map((x) => x.id)).toEqual(["city-center", "radovish-twins"]);
   });
 
   it("moves a project up by itself once the data gives it a photo (here only in the test, not in the data)", () => {
@@ -108,11 +104,8 @@ describe("carouselProjects and heroSlides (the real data)", () => {
         .map((x) => x.id)
         .slice(0, 5)
     ).toEqual(["city-center", "stanbena-kukja", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
-    expect(
-      heroSlides(withPhoto)
-        .map((x) => x.id)
-        .slice(0, 4)
-    ).toEqual(["city-center", "dojranski-raj", "radovish-twins", "boro-pochkov"]);
+    // the Проекти hero keeps its three projects
+    expect(heroSlides(withPhoto).map((x) => x.id)).toEqual(["city-center", "dojranski-raj", "radovish-twins"]);
     // the data itself is untouched
     expect(projects.find((x) => x.id === "boro-pochkov")?.heroImage.isPlaceholder).toBe(true);
   });

@@ -1,10 +1,19 @@
 "use client";
 
 import "@/components/projects/projects.css";
-import { useEffect, useRef, useState, useSyncExternalStore, type HTMLAttributes, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
 import { Media } from "@/components/ui/Media";
 import { NoPhoto } from "@/components/ui/NoPhoto";
 import { PauseButton } from "@/components/ui/PauseButton";
+import { aspectOf } from "@/lib/image-sizes";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { ImageFocus, PhotoBox } from "@/types";
 
@@ -77,6 +86,7 @@ export function HeroSlideshow({
   storageKey,
   label,
   className,
+  wholePhotos = false,
   children,
 }: {
   slides: HeroSlide[];
@@ -85,6 +95,8 @@ export function HeroSlideshow({
   label: string;
   /** Added to the section's classes. */
   className?: string;
+  /** Every photo is shown whole at its own proportions (Media's `whole`, quality 85) instead of covering the frame. */
+  wholePhotos?: boolean;
   children: (controls: HeroSlideshowControls) => ReactNode;
 }) {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -112,6 +124,12 @@ export function HeroSlideshow({
   const stopped = manual || stoppedForVisit || reduce;
   const paused = hovered || keyboardFocus || hidden || offscreen || stopped;
   const count = slides.length;
+  // the narrowest proportions among the photos (at most 16:9): on a narrow screen every slide's frame is as tall as this
+  // photo needs at the full width, so the hero keeps one height through the slideshow (.photo-hero--top)
+  const tallest = Math.min(
+    ...slides.map((s) => (s.image.isPlaceholder || !s.image.src ? 16 / 9 : (aspectOf(s.image.src) ?? 16 / 9))),
+    16 / 9
+  );
   const touched = () => {
     if (pointer.current !== "mouse") writeStop(storageKey, true);
   };
@@ -180,6 +198,8 @@ export function HeroSlideshow({
       ref={sectionRef}
       className={className ? `pj-hero photo-hero photo-hero--fill ${className}` : "pj-hero photo-hero photo-hero--fill"}
       aria-label={label}
+      // one frame height for every slide on a narrow screen (.photo-hero--top)
+      style={wholePhotos ? ({ "--tall-a": tallest } as CSSProperties) : undefined}
       onPointerDownCapture={(e) => (pointer.current = e.pointerType)}
       onFocus={(e) => e.target.matches(":focus-visible") && setKeyboardFocus(true)}
       onBlur={(e) => {
@@ -189,10 +209,30 @@ export function HeroSlideshow({
       <div className="pj-media photo-hero__media">
         {slides.map((s, i) => (
           <div key={s.key} className={`pj-slide${i === slide ? " is-on" : ""}`} aria-hidden={i !== slide}>
-            <div className="pj-slide-photo">
+            <div
+              className="pj-slide-photo"
+              // where a whole photo is held where the hero's frame trims it (.photo-hero--top from 1024px)
+              style={
+                wholePhotos && s.focus
+                  ? ({ "--hero-fx": s.focus.x / 100, "--hero-fy": s.focus.y / 100 } as CSSProperties)
+                  : undefined
+              }
+            >
               {s.image.isPlaceholder || !s.image.src ? (
                 // a project without a photo yet: the site's no-photo slide (Еспресо with the logo mark)
                 <NoPhoto />
+              ) : wholePhotos ? (
+                <Media
+                  image={s.image}
+                  maxWidth={s.maxWidth}
+                  tone="dark"
+                  whole
+                  quality={85}
+                  className="h-full w-full"
+                  sizes={s.sizes ?? "100vw"}
+                  priority={i === 0}
+                  defer={i !== 0}
+                />
               ) : (
                 <Media
                   image={s.image}

@@ -2,20 +2,26 @@ import Image, { type ImageLoaderProps } from "next/image";
 import type { CSSProperties } from "react";
 import { Placeholder } from "./Placeholder";
 import { cn } from "@/lib/cn";
-import { aspectOf, isNarrowPhoto, percentToFraction } from "@/lib/image-sizes";
+import { aspectOf, cappedWidth, isNarrowPhoto, percentToFraction } from "@/lib/image-sizes";
 import type { ImageFocus, PhotoBox } from "@/types";
 
 /** The default quality of a photo (every quality used is also in next.config.ts → images.qualities). */
 const QUALITY = 80;
 
+/** From this proportion (width / height) a photo counts as wide: shown whole it fills a frame's width. */
+export const WIDE_PHOTO = 1.5;
+
 // The soft fade at the edges of a shrunken picture: transparent at each edge, solid by 5% in.
 const EDGE_FADE =
   "linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 5%, black 95%, transparent)";
 
-/** The optimizer's own URL with the width held at `maxWidth`: a 1920px photo is never asked for 2400 or 3200 on a 2x screen. */
+/**
+ * The optimizer's own URL with the width held at the photo's own (`maxWidth`): a 1920px photo is never asked for 2400 or
+ * 3200 on a 2x screen. The width is always one the optimizer lists (cappedWidth): it refuses the others, such as 1672.
+ */
 const cappedLoader = (maxWidth: number) =>
   function loader({ src, width, quality }: ImageLoaderProps) {
-    return `/_next/image?url=${encodeURIComponent(src)}&w=${Math.min(width, maxWidth)}&q=${quality || 75}`;
+    return `/_next/image?url=${encodeURIComponent(src)}&w=${cappedWidth(width, maxWidth)}&q=${quality || 75}`;
   };
 
 interface MediaImage {
@@ -46,6 +52,7 @@ export function Media({
   maxWidth,
   quality = QUALITY,
   box,
+  whole = false,
 }: {
   image: MediaImage;
   className?: string;
@@ -81,6 +88,12 @@ export function Media({
    * to go with it: boxSizes in lib/image-sizes.ts.
    */
   box?: PhotoBox;
+  /**
+   * The photo shown whole in its frame (a hero), at its own proportions and centred, never cropped or zoomed: as wide as
+   * the frame allows, but not wider than its own pixels (`maxWidth`). Where the proportions leave room, the frame's own
+   * colour shows and the photo's edges fade into it (.media-fit in globals.css). The `sizes` to go with it: wholeSizes.
+   */
+  whole?: boolean;
 }) {
   const loader = maxWidth ? cappedLoader(maxWidth) : undefined;
   if (image.isPlaceholder || !image.src) {
@@ -91,6 +104,33 @@ export function Media({
   const loading = priority
     ? ({ loading: "eager", fetchPriority: "high" } as const)
     : ({ loading: "lazy", fetchPriority: defer ? "low" : undefined } as const);
+
+  if (whole) {
+    const aspect = aspectOf(image.src) ?? 16 / 9;
+    // a wide photo fills its frame's width (its own pixels are then stretched a little where the screen is wider); a narrow
+    // one is never drawn wider than its own pixels and its edges fade into the frame's colour
+    const narrow = aspect < WIDE_PHOTO;
+    const place = {
+      "--a": aspect.toFixed(4),
+      ...(narrow && maxWidth && { "--max": `${maxWidth}px` }),
+    } as CSSProperties;
+    return (
+      <div className={cn("media-fit", className)}>
+        <div className="media-fit__photo" style={place} data-fade={narrow ? "" : undefined}>
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes={sizes}
+            className="object-contain"
+            quality={quality}
+            loader={loader}
+            {...loading}
+          />
+        </div>
+      </div>
+    );
+  }
 
   // Placed by its building box (.media-box in globals.css): the sum is CSS on the frame's container units, so it follows
   // every resize without a script and the page renders the same on the server.

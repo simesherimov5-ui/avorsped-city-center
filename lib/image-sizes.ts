@@ -51,3 +51,33 @@ export function boxSizes(src: string, box: PhotoBox, frames: BoxFrame[], fallbac
     `min(max(${f.w}, ${f.h} * ${a}), ${f.w} / ${percentToFraction(box.w)}, (${f.bottom ? `min(${f.h}, ${f.bottom})` : f.h} - ${f.top}) * ${a} / ${percentToFraction(box.h)})`;
   return [...frames.map((f) => `${f.media} ${value(f)}`), fallback].join(", ");
 }
+
+/** The widths the image optimizer accepts (next.config.ts → images.deviceSizes; lib/image-sizes.test.ts checks they match). */
+export const OPTIMIZER_WIDTHS: readonly number[] = [640, 750, 828, 1080, 1200, 1600, 1920, 2400, 3200];
+
+/**
+ * The width to ask the optimizer for, for a photo that is `maxWidth` pixels wide: a width that is not wider than the file
+ * is asked for as it is; a wider one is held at the smallest accepted width that still covers the file (the optimizer
+ * refuses a width that is not on its list, such as 1672, and never enlarges a file, so it returns the original size).
+ */
+export function cappedWidth(width: number, maxWidth: number, allowed: readonly number[] = OPTIMIZER_WIDTHS): number {
+  if (width <= maxWidth) return width;
+  return allowed.find((w) => w >= maxWidth) ?? allowed[allowed.length - 1];
+}
+
+/** One layout of a frame for a photo shown whole: the frame's width, and its height where the photo may be limited by it. */
+export type WholeFrame = { media?: string; w: string; h?: string };
+
+/**
+ * The `sizes` of a photo shown whole (Media's `whole`, .media-fit in globals.css): min(its own width in pixels, the frame
+ * width, the frame height × the photo's width / height), one WholeFrame per layout, the last one without `media`.
+ */
+export function wholeSizes(src: string, maxWidth: number, frames: WholeFrame[]): string {
+  const a = (aspectOf(src) ?? 16 / 9).toFixed(4);
+  return frames
+    .map((f) => {
+      const value = `min(${maxWidth}px, ${f.w}${f.h ? `, (${f.h}) * ${a}` : ""})`;
+      return f.media ? `${f.media} ${value}` : value;
+    })
+    .join(", ");
+}

@@ -46,7 +46,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   text-align: center;
   /* the heading block goes to the top of the picture where the hero is a full screen; the caption row stays at the bottom
      (the column is pushed apart, and has no room to spare when the text lies below the photo) */
@@ -64,7 +64,8 @@
 .pj-h1 {
   margin: 0;
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: clamp(35px, 4.4vw, 70px);
+  /* compact, so the heading block keeps clear of the roofs under it: 52px on a wide screen, about 45px at 1280, 30px on a phone */
+  font-size: clamp(30px, 2.6vw + 12px, 52px);
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -78,27 +79,30 @@
 }
 .pj-under {
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: var(--fs-statement);
+  font-size: clamp(16px, 0.4vw + 11px, 18px);
   line-height: 1.3;
   /* a readable line length, centred under the heading */
   max-width: 60ch;
   text-wrap: balance;
-  /* Травертин, like the heading: gold read at under 3:1 over the brightest sky of some slides and copper at 2.4:1 */
+  /* Травертин (4.5:1 or better on every slide, see the soft local shade behind the heading block in app/globals.css) */
   color: var(--color-travertine);
 }
+/* the group at the bottom left: the indicators (with the pause button beside them), the project's name, its town and status */
 .pj-hero-row {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top: 22px;
-  border-top: 1px solid var(--color-gold);
 }
 .pj-hero-left {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.pj-controls {
+  display: flex;
   align-items: center;
-  gap: 12px 28px;
+  gap: 20px;
 }
 .pj-tracks {
   display: flex;
@@ -124,7 +128,7 @@
   width: 100%;
   height: 2px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--color-travertine) 25%, transparent);
+  background: color-mix(in srgb, var(--color-travertine) 45%, transparent);
 }
 .pj-track-fill {
   position: absolute;
@@ -152,7 +156,9 @@
 }
 .pj-now-name {
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: 21px;
+  /* responsive, so the longest name («Радовиш Twins») stays on one line inside the screen: 26px on a phone, 40px at 1280 */
+  font-size: clamp(26px, 2.2vw + 12px, 42px);
+  line-height: 1.1;
   color: var(--color-travertine);
 }
 .pj-now-meta {
@@ -167,21 +173,55 @@
     gap: 8px;
   }
 }
-/* Phones: the indicators take their own row and share its width (each at most 56px, at least 24px wide, 44px tall),
-   so all of the carousel's projects fit beside the pause button. */
-@media (max-width: 767px) {
-  .pj-hero-left {
+/* A phone or a tablet: the heading above the photo, the group below it, on Оникс (the photo sits between them, so the content
+   box steps aside and its two blocks take the page's margins themselves). The indicators share their row's width with the
+   pause button (each at most 56px, at least 24px wide, 44px tall), so all of the carousel's projects fit. */
+@media (max-width: 1023px) {
+  .photo-hero--top .photo-hero__content {
+    display: contents;
+  }
+  .pj-hero-text,
+  .pj-hero-row {
+    /* they keep their height; the photo between them gives way (app/globals.css) */
+    flex: none;
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 5%;
+    box-sizing: border-box;
+  }
+  .pj-hero-text {
+    order: -1;
+    margin-bottom: 0;
+    padding-top: calc(var(--nav-h) + 24px);
+    padding-bottom: 24px;
+  }
+  .pj-hero-left,
+  .pj-controls {
+    width: 100%;
+  }
+  .pj-hero-row {
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+  .pj-controls .pj-tracks {
     flex: 1 1 auto;
     min-width: 0;
   }
-  .pj-hero-left .pj-tracks {
-    flex: 1 1 100%;
-    min-width: 0;
-  }
-  .pj-hero-left .pj-track-btn {
+  .pj-controls .pj-track-btn {
     flex: 1 1 0;
     min-width: 24px;
     max-width: var(--pj-track-w, 56px);
+  }
+}
+@media (max-width: 767px) {
+  .pj-hero-text,
+  .pj-hero-row {
+    padding-inline: 20px;
+  }
+  .pj-hero-text {
+    align-items: flex-start;
+    text-align: left;
   }
 }
 @media (max-width: 767px) {

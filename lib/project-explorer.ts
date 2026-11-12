@@ -109,10 +109,14 @@ export function carouselProjects(projects: Project[]) {
   return [...building.filter((p) => hasPhoto(p.heroImage)), ...building.filter((p) => !hasPhoto(p.heroImage))];
 }
 
-/** The Проекти hero's slides: the carousel's projects, the ones with a wide (16:9) slide photo first. */
+/** The projects of the Проекти hero, in this order (the hero only: their pages and cards are unaffected). */
+export const HERO_SLIDE_IDS = ["city-center", "dojranski-raj", "radovish-twins"] as const;
+
+/** The Проекти hero's slides: the projects of HERO_SLIDE_IDS that are in the data with a wide slide photo, in that order. */
 export function heroSlides(projects: Project[]) {
-  const all = carouselProjects(projects);
-  return [...all.filter((p) => hasPhoto(p.slideImage)), ...all.filter((p) => !hasPhoto(p.slideImage))];
+  return HERO_SLIDE_IDS.map((id) => projects.find((p) => p.id === id)).filter(
+    (p): p is Project => p !== undefined && hasPhoto(p.slideImage)
+  );
 }
 
 /** The photo a project's slide shows: the first photo of a photo-led opening, else the hero photo; never a placeholder. */

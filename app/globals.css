@@ -485,11 +485,13 @@ h4 {
 }
 
 /* The Проекти hero (photo-hero--top): like Почетна, it starts at the very top of the window and the header lies over it,
-   clear until the page scrolls (components/Navbar.tsx), on Почетна's top scrim (Оникс 70% fading out over 180px) plus the
-   hero's own top scrim, so the header links read over every slide. Under 1024px the hero is at least the whole first
-   screen (100svh, at least 560px): the text keeps its own height at the bottom and the photo takes the rest from the top,
-   never less than the old 16:9 plus the bar. From 1024px (earlier than the shared hero breakpoint, 1101px, which the
-   other photo heroes keep) it is exactly the whole screen with its text over the photo, the heading 40px below the bar. */
+   clear until the page scrolls (components/Navbar.tsx), on ONE smooth gradient
+   (Оникс, from the very top of the window, fading to nothing under the heading: no edge anywhere), so the header links and
+   the logo read over every slide. The header is fixed, so it is counted once: the hero
+   is never taller than one viewport and its content starts below the header. Under 1024px the heading, the photo and the
+   group stack on Оникс, the photo's frame giving way so all three fit the first screen. From 1024px (earlier than the
+   shared hero breakpoint, 1101px, which the other photo heroes keep) it is exactly the whole screen with its text over
+   the photo, the heading 20px below the bar. Every slide has the same height, so the page below never moves. */
 .photo-hero--top {
   margin-top: 0;
 }
@@ -497,59 +499,70 @@ h4 {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 180px;
+  height: calc(var(--nav-h) + 250px);
   pointer-events: none;
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-onyx) 70%, transparent), transparent);
-}
-/* the hero's own top scrim (the shared one, as from the breakpoint) at every width: the clear header's current link is
-   gold, and over the brighter skies of the narrower crops Почетна's alone left it at 2.5:1 */
-.photo-hero--top .photo-hero__media .hero-scrim-top {
-  display: block;
-  height: 250px;
+  /* the one top gradient: darkest at the very top, where the header's logo mark, links and button are (94%, measured: the thin
+     gold mark needs it over the bright slides), easing out under the heading and the line under it, nothing left 250px below
+     the bar. Smooth stops, no plateau, so no edge shows. */
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
-    color-mix(in srgb, var(--color-onyx) 58%, transparent) 68%,
-    transparent 100%
+    color-mix(in srgb, var(--color-onyx) 94%, transparent) 0,
+    color-mix(in srgb, var(--color-onyx) 90%, transparent) 48px,
+    color-mix(in srgb, var(--color-onyx) 64%, transparent) var(--nav-h),
+    color-mix(in srgb, var(--color-onyx) 50%, transparent) calc(var(--nav-h) + 40px),
+    color-mix(in srgb, var(--color-onyx) 34%, transparent) calc(var(--nav-h) + 105px),
+    color-mix(in srgb, var(--color-onyx) 16%, transparent) calc(var(--nav-h) + 185px),
+    color-mix(in srgb, var(--color-onyx) 5%, transparent) calc(var(--nav-h) + 230px),
+    transparent calc(var(--nav-h) + 250px)
   );
 }
+/* the shared top scrim is not used by this hero: the gradient above is its only top shade */
+.photo-hero--top .photo-hero__media .hero-scrim-top {
+  display: none;
+}
+/* the consultation button while the header is clear over this hero: a faint Оникс fill behind it, so its gold reads on a
+   bright sky; once the header is solid (the page scrolled, or the menu open) the button is exactly as it is everywhere */
+body:has(.photo-hero--top) header[data-clear] .btn-primary {
+  background-color: color-mix(in srgb, var(--color-onyx) 35%, transparent);
+}
 @media (max-width: 1023px) {
+  /* a phone or a tablet: the heading on Оникс under the clear header, then the whole photo at the full width (16:9, nothing
+     cropped), then the indicators, the name and the town (the order is set in projects.css), so no scrims */
   .photo-hero--top {
     display: flex;
     flex-direction: column;
-    min-height: max(560px, 100svh);
+  }
+  .photo-hero--top {
+    /* never taller than the first screen: the photo's frame gives way first */
+    max-height: 100svh;
   }
   .photo-hero--top .photo-hero__media {
-    flex: 1 0 auto;
+    /* one height for every slide: what the tallest photo needs at the full width (HeroSlideshow sets --tall-a), shrinking
+       when the heading, the photo and the group would not fit the first screen; each photo is scaled down whole inside
+       it (.media-fit), on Оникс where it leaves room */
+    flex: 0 1 auto;
+    min-height: 0;
+    height: calc(100vw / var(--tall-a, 1.7778));
     aspect-ratio: auto;
-    min-height: calc(var(--nav-h) + 100vw * 9 / 16);
+  }
+  .photo-hero--top .photo-hero__media::after,
+  .photo-hero--top .photo-hero__media .hero-scrim-top,
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: none;
   }
   .photo-hero--top .photo-hero__content {
     flex: none;
   }
 }
 @media (min-width: 1024px) {
+  /* exactly the first screen: the fixed header lies over its top, so the hero is one viewport tall, its content starts
+     below the header (padding-top below) and the photos are scaled down to fit the frame under the header */
   .photo-hero--top.photo-hero--fill {
-    --hero-h: max(560px, 100svh);
-  }
-  /* Почетна's top scrim fades out over the same span as the hero's own one (below), so it also lies under the line under
-     the heading: over the brightest façades the line read at 4.3:1 without it */
-  .photo-hero--top .photo-hero__media::after {
-    height: calc(var(--nav-h) + 250px);
-  }
-  /* the heading block starts below the bar, so the hero's top scrim does too: the same 58% held for 170px under the bar
-     (as when the hero itself started there), fading out 80px later */
-  .photo-hero--top .photo-hero__media .hero-scrim-top {
-    height: calc(var(--nav-h) + 250px);
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) 0%,
-      color-mix(in srgb, var(--color-onyx) 58%, transparent) calc(var(--nav-h) + 170px),
-      transparent 100%
-    );
+    --hero-h: 100svh;
+    overflow: clip;
   }
   .photo-hero--top.photo-hero--fill .photo-hero__content {
-    padding-top: calc(var(--nav-h) + 40px);
+    padding-top: calc(var(--nav-h) + 20px);
   }
 }
 /* A slide of this hero with a building box (the Радовиш Twins render, Media's `box`): on a wide screen (OPENING_WIDE_QUERY in
@@ -607,6 +620,95 @@ h4 {
     flex: 1;
     gap: 48px;
     padding-bottom: 56px;
+  }
+}
+
+/* A photo shown whole (Media's `whole`): at its own proportions, centred in its frame, as wide as the frame allows (a narrow
+   photo also never wider than its own pixels, --max); never cropped or zoomed. The frame is its own container, so the sum
+   is CSS. */
+.media-fit {
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+}
+.media-fit__photo {
+  --w: min(var(--max, 100cqw), 100cqw, 100cqh * var(--a));
+  position: absolute;
+  width: var(--w);
+  height: calc(var(--w) / var(--a));
+  left: calc((100cqw - var(--w)) / 2);
+  top: calc((100cqh - var(--w) / var(--a)) / 2);
+}
+/* The Проекти hero from 1024px, like Почетна's: the photo fills the whole first screen, from the top of the window (the
+   header lies over it) to its bottom. A wide photo covers it from edge to edge at its own proportions: some sky,
+   foreground or a sliver of the sides gives way, held per slide (--hero-fx / --hero-fy, set from ProjectsHero's framing)
+   so the buildings stay whole. A narrow photo (data-fade; none in the hero today) would be shown whole on Оникс, as
+   filling the width would cut its building. Shading is light and only where text lies: Почетна's top scrim under the
+   header, a soft shade under the heading, and one behind the group at the bottom left. */
+@media (min-width: 1024px) {
+  .photo-hero--top .pj-slide-photo {
+    inset: 0;
+  }
+  .photo-hero--top .media-fit__photo:not([data-fade]) {
+    --w: max(100cqw, 100cqh * var(--a));
+    left: calc((100cqw - var(--w)) * var(--hero-fx, 0.5));
+    top: calc((100cqh - var(--w) / var(--a)) * var(--hero-fy, 0.5));
+  }
+  .photo-hero--top .photo-hero__media .hero-scrim-bottom {
+    display: none;
+  }
+  /* the heading lies on the photo: a soft shadow keeps it readable on a bright sky or a light façade */
+  .photo-hero--top .pj-h1 {
+    text-shadow: 0 1px 16px color-mix(in srgb, var(--color-onyx) 55%, transparent);
+  }
+  /* the line under the heading is Травертин: a soft local shade behind the heading block (not a glow on the letters)
+     keeps it at 4.5:1 or better over the bright skies, and only a faint shadow stays on the letters as a backup */
+  .photo-hero--top .pj-hero-text {
+    position: relative;
+  }
+  .photo-hero--top .pj-hero-text::before {
+    content: "";
+    position: absolute;
+    inset: -28px -160px -22px;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 50% 50% at 50% 54%,
+      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 46%), transparent) 0%,
+      transparent 100%
+    );
+  }
+  .photo-hero--top .pj-under {
+    text-shadow: 0 1px 3px color-mix(in srgb, var(--color-onyx) 35%, transparent);
+  }
+  /* the group sits 56px above the hero's bottom edge (the content's padding); its own layer keeps the shade behind it */
+  .photo-hero--top .pj-hero-row {
+    position: relative;
+    z-index: 0;
+  }
+  /* a shorter laptop screen (1280×720 and lower): the heading block closer under the header and the group a little lower,
+     so more of the architecture shows between them */
+  @media (max-height: 760px) {
+    .photo-hero--top.photo-hero--fill .photo-hero__content {
+      padding-top: calc(var(--nav-h) + 10px);
+      padding-bottom: 40px;
+    }
+    .photo-hero--top .pj-hero-text {
+      gap: 4px;
+    }
+  }
+  .photo-hero--top .pj-hero-row::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -90px -220px -70px -170px;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side ellipse at 50% 58%,
+      color-mix(in srgb, var(--color-onyx) 66%, transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) 44%, transparent) 55%,
+      transparent 100%
+    );
   }
 }
 
