@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronLeft } from "lucide-react";
@@ -11,6 +13,7 @@ import {
   placeLabel,
   placeOf,
   companyInfo,
+  render3dFor,
 } from "@/data";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
@@ -58,6 +61,12 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     apartment.planImage?.width && apartment.planImage.height
       ? Math.min(2.4, Math.max(0.6, apartment.planImage.width / apartment.planImage.height))
       : 4 / 3;
+  // The 3D render mapped to this apartment (only Зграда 02 has them): the tabs show whenever one is mapped; whether its file
+  // is in public/ yet is checked here, at build time, so a missing one shows the "coming soon" line instead of a broken request.
+  const render3dSrc = render3dFor(apartment.id);
+  const render3d = render3dSrc
+    ? { src: render3dSrc, available: existsSync(path.join(process.cwd(), "public", render3dSrc)) }
+    : undefined;
 
   const inquiryHref = `/contact?project=${encodeURIComponent(apartment.projectId)}${apartment.buildingId ? `&building=${encodeURIComponent(apartment.buildingId)}` : ""}&apartment=${apartment.id}`;
 
@@ -104,7 +113,12 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
           {/* the plan is the main thing; the facts and the enquiry beside it (under it on a phone) */}
           <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(340px,1fr)] lg:items-start lg:gap-10">
-            <PlanEnlarge plan={floorPlanImage} apartmentNumber={apartment.number} ratio={planRatio} />
+            <PlanEnlarge
+              plan={floorPlanImage}
+              apartmentNumber={apartment.number}
+              ratio={planRatio}
+              render3d={render3d}
+            />
 
             <aside className="apt-panel lg:sticky lg:top-[calc(var(--nav-h)+24px)]">
               {/* 1 · the total */}

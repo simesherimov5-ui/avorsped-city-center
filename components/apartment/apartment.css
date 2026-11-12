@@ -10,6 +10,43 @@
   border: 1px solid color-mix(in srgb, var(--color-bronze) 35%, transparent);
 }
 
+/* ОСНОВА / 3D (a building whose apartments have 3D renders, data/renders.ts): two tabs at the top left of the plan card,
+   the small-label style (.eyebrow). The chosen one is Оникс with a 2px Бронза underline (the gold of a light surface,
+   6.2:1); the other is the muted Оникс 68%. Each is 44px tall; keyboard focus gets a 2px Бронза ring. */
+.apt-tabs {
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 20px;
+}
+.apt-tabs .apt-tab {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 4px;
+  border-bottom: 2px solid transparent;
+  color: var(--color-muted);
+  transition: color var(--dur-fast) var(--ease);
+  outline: none;
+}
+.apt-tabs .apt-tab[aria-selected="true"] {
+  border-bottom-color: var(--color-bronze);
+  color: var(--color-onyx);
+}
+.apt-tabs .apt-tab:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 2px;
+}
+@media (min-width: 640px) {
+  .apt-tabs {
+    top: 10px;
+  }
+}
+
 /* The panel beside the plan: the total, the interior area and the terrace, the type, bathrooms and floor, the rooms, the enquiry */
 .apt-panel {
   height: fit-content;
