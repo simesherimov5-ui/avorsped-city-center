@@ -4,7 +4,6 @@ import { Reveal } from "@/components/ui/Reveal";
 import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
 import { OtherProjects } from "@/components/OtherProjects";
 import { ProjectMaterials } from "@/components/project/ProjectMaterials";
-import { ProjectParking } from "@/components/project/ProjectParking";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectBuildProgress } from "@/components/project/ProjectBuildProgress";
 import { ProjectBook } from "@/components/project/ProjectBook";
@@ -92,9 +91,8 @@ export default function DevelopmentPage() {
 
       {cityCenter && (
         <>
-          {/* 4 · Материјали · 5 · Паркинг */}
+          {/* 4 · Материјали */}
           <ProjectMaterials project={cityCenter} />
-          <ProjectParking project={cityCenter} />
 
           {/* 6 · Тек на градба · 7 · Локација · 8 · Закажете средба */}
           <ProjectBuildProgress project={cityCenter} />
