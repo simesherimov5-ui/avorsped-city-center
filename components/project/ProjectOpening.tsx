@@ -16,9 +16,11 @@ const controlsWidth = (count: number) => count * 44 + (count - 1) * 10 + 12 + 44
  * .photo-hero--fill), with this project's photos. Above the hero breakpoint (lib/hero.ts) it is exactly the first screen, the
  * back link top left on the photos and, bottom left, the place and state, the name and the line about the project, the
  * indicators and the pause button at the right end of that row; under it the photos are at the top and the text below on
- * Оникс. The only darkening is the two shared scrims; there are no text shadows. The back link is full Травертин; the label and the
- * line under the name are the site's gold (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`).
- * It is on screen from the first paint: no film before it, no entrance of its own.
+ * Оникс. The photo is shown whole (Media's `whole`, never zoomed) and the opening stays inside the first screen
+ * (.photo-hero--sky in app/globals.css): the text lies in the open sky at the top, with one light local shade, and under
+ * 1024px it is above the photo. The back link is full Травертин; the label and the line under the name are the site's gold
+ * (Montserrat, upright). Its "stopped for the visit" flag is its own (`storageKey`). It is on screen from the first
+ * paint: no film before it, no entrance of its own.
  */
 export function ProjectOpening({
   name,
@@ -39,7 +41,7 @@ export function ProjectOpening({
   const { t } = useI18n();
 
   return (
-    <HeroSlideshow slides={slides} storageKey={storageKey} label={name} className="photo-hero--dvh">
+    <HeroSlideshow slides={slides} storageKey={storageKey} label={name} className="photo-hero--sky" wholePhotos>
       {({ tracks, pause, rowProps }) => (
         <div className="photo-hero__content">
           <div className="photo-hero__back">
@@ -59,16 +61,24 @@ export function ProjectOpening({
               <div className="min-w-0 flex-1 basis-[420px]">
                 <div className="eyebrow photo-hero__eyebrow uppercase">{eyebrow}</div>
                 <h1 className={`m-0 mt-3 ${H1_CLASS}`}>{name}</h1>
-                {tagline && <p className={`m-0 mt-4 ${P_CLASS}`}>{tagline}</p>}
+                {tagline && (
+                  <p className={`m-0 mt-4 ${P_CLASS}`}>
+                    {/* split at the first comma: the words before it in gold, the comma and the rest in cream */}
+                    <span className="photo-hero__tagline-lead">{tagline.split(",", 1)[0]}</span>
+                    {tagline.slice(tagline.split(",", 1)[0].length)}
+                  </p>
+                )}
               </div>
-              <div
-                className="flex min-h-11 shrink-0 items-center gap-3"
-                style={{ "--pj-track-w": "44px", width: controlsWidth(slides.length) } as CSSProperties}
-                {...rowProps}
-              >
-                {tracks}
-                {pause}
-              </div>
+              {slides.length > 1 && (
+                <div
+                  className="flex min-h-11 shrink-0 items-center gap-3"
+                  style={{ "--pj-track-w": "44px", width: controlsWidth(slides.length) } as CSSProperties}
+                  {...rowProps}
+                >
+                  {tracks}
+                  {pause}
+                </div>
+              )}
             </div>
           </div>
         </div>

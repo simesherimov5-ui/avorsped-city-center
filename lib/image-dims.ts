@@ -4,6 +4,7 @@ export const IMAGE_DIMS: Record<string, readonly [number, number]> = {
   "/images/approved-rich/dojran-aerial-beach-rich.png": [1672, 941],
   "/images/approved-rich/stanbena-kukja-facade-rich.png": [1234, 1275],
   "/images/brand/holding-since-1994.jpg": [2160, 2160],
+  "/images/city-center-selected/hero-city-center-sunset-edited.png": [1672, 941],
   "/images/dojran/aerial-1.jpg": [3200, 1600],
   "/images/dojran/aerial-beach.jpg": [3200, 1800],
   "/images/dojran/facade-2.jpg": [3200, 1600],

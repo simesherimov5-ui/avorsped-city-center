@@ -65,44 +65,17 @@ export const projects: Project[] = [
       sd: "/videos/city-center/city-center-hero-720p.mp4",
       poster: "/videos/city-center/city-center-hero-poster.jpg",
     },
-    // The four frames of the opening's slideshow: 1920px wide, held at the top (y 0) so the trim comes out of the ground,
-    // never out of the roofs.
+    // The opening is one photo, shown whole under the header (the edited sunset visualization, 1672px wide: Media's `whole`
+    // with the sky hero in app/globals.css); `maxWidth` keeps the optimizer from asking for more than the file has.
     openingSlides: [
       {
         image: {
-          src: "/images/city-center/hero/cc-hero-01-crossing.jpg",
-          alt: "City Center — раскрсница",
+          src: "/images/city-center-selected/hero-city-center-sunset-edited.png",
+          alt: "City Center — комплексот во зајдисонце",
           isPlaceholder: false,
         },
         focus: { zoom: 1, x: 50, y: 0 },
-        maxWidth: 1920,
-      },
-      {
-        image: {
-          src: "/images/city-center/hero/cc-hero-02-towers-tree.jpg",
-          alt: "City Center — кули и зеленило",
-          isPlaceholder: false,
-        },
-        focus: { zoom: 1, x: 50, y: 0 },
-        maxWidth: 1920,
-      },
-      {
-        image: {
-          src: "/images/city-center/hero/cc-hero-03-parking.jpg",
-          alt: "City Center — паркинг",
-          isPlaceholder: false,
-        },
-        focus: { zoom: 1, x: 50, y: 0 },
-        maxWidth: 1920,
-      },
-      {
-        image: {
-          src: "/images/city-center/hero/cc-hero-04-street.jpg",
-          alt: "City Center — улица",
-          isPlaceholder: false,
-        },
-        focus: { zoom: 1, x: 50, y: 0 },
-        maxWidth: 1920,
+        maxWidth: 1672,
       },
     ],
     openingTagline: "Шест згради, една нова адреса во Струмица.",

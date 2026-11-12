@@ -712,6 +712,97 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   }
 }
 
+/* City Center's opening (.photo-hero--sky, used by ProjectOpening only): one photo with the header and the hero together
+   inside the first screen. The photo always fills the full width (no strips at the sides), at its own proportions and
+   never enlarged beyond that; where the frame is shorter than the photo, the road at the bottom is trimmed, never the sky or
+   the roofs (it is held at the top). From 1024px the text lies in the open sky at the top, with one light local shade; under
+   it the text is above the photo, which is then whole. */
+.photo-hero--sky .media-fit__photo {
+  --w: 100cqw;
+  top: 0;
+}
+/* the label is the brand gold; the line under the name is cream with its first words («Шест згради») in the brand gold */
+.photo-hero--sky .photo-hero__eyebrow,
+.photo-hero--sky .photo-hero__tagline-lead {
+  color: var(--color-gold);
+}
+.photo-hero--sky .photo-hero__tagline {
+  color: var(--color-travertine);
+}
+@media (min-width: 1024px) {
+  /* over the sunset sky the gold needs more than the soft shade: a small dark halo around the letters only */
+  .photo-hero--sky .photo-hero__eyebrow,
+  .photo-hero--sky .photo-hero__tagline {
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--color-onyx) 85%, transparent),
+      0 0 18px color-mix(in srgb, var(--color-onyx) 70%, transparent),
+      0 1px 2px color-mix(in srgb, var(--color-onyx) 60%, transparent);
+  }
+}
+@media (max-width: 1023px) {
+  .photo-hero--sky {
+    display: flex;
+    flex-direction: column;
+  }
+  .photo-hero--sky .photo-hero__content {
+    order: -1;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 20px;
+  }
+  .photo-hero--sky .photo-hero__media {
+    flex: none;
+  }
+  .photo-hero--sky h1 {
+    font-size: clamp(36px, 9vw, 56px);
+  }
+}
+@media (min-width: 1024px) {
+  .photo-hero--sky.photo-hero--fill {
+    --hero-h: max(420px, min(100svh - var(--nav-h), 100vw * 9 / 16));
+    display: flex;
+    height: var(--hero-h);
+    aspect-ratio: auto;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .photo-hero--sky .photo-hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  .photo-hero--sky .photo-hero__media .hero-scrim-top,
+  .photo-hero--sky .photo-hero__media .hero-scrim-bottom {
+    display: none;
+  }
+  /* the one shade: soft, behind the text block at the top left */
+  .photo-hero--sky .photo-hero__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 64% 48% at 18% 12%,
+      color-mix(in srgb, var(--color-onyx) 42%, transparent) 0%,
+      transparent 100%
+    );
+  }
+  .photo-hero--sky .photo-hero__content {
+    flex: 1;
+    justify-content: flex-start;
+    gap: 0;
+    padding-top: 60px;
+    padding-bottom: 0;
+  }
+  .photo-hero--sky .photo-hero__back {
+    position: absolute;
+    inset: 8px 0 auto;
+  }
+  .photo-hero--sky h1 {
+    font-size: clamp(36px, 4.6vw, 76px);
+  }
+}
+
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%). The current page's link stays gold
    with its underline (data-current, set by the Navbar), as on the solid bar. */
 header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {
