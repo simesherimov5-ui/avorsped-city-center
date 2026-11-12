@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { navHeight } from "@/lib/header";
 import { getLenis } from "@/lib/lenis";
 import { prefersReducedMotion } from "@/lib/gsap";
 
@@ -14,7 +15,7 @@ export function ScrollToButton({ target, children }: { target: string; children:
         const el = document.getElementById(target);
         if (!el) return;
         const lenis = getLenis();
-        if (lenis) lenis.scrollTo(el, { offset: -72 });
+        if (lenis) lenis.scrollTo(el, { offset: -navHeight() });
         else el.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
       }}
     >

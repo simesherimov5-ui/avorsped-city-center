@@ -55,11 +55,40 @@ export function Logo({
   variant = "stacked",
   className,
 }: {
-  variant?: "inline" | "stacked" | "icon";
+  variant?: "inline" | "stacked" | "icon" | "lockup";
   className?: string;
 }) {
   if (variant === "icon") {
     return <BuildingMark gold className={cn("h-10 w-auto", className)} />;
+  }
+
+  // the lockup of the first navbar (the mark, HOLDING above JAVOR SPED), drawn from one size: --logo-h is the mark's height and
+  // everything else keeps the first lockup's proportions to it (a 28px mark, 8px and 16px words, 10px apart). The words show
+  // from 1280px; narrower, the mark is alone.
+  if (variant === "lockup") {
+    return (
+      <div className={cn("flex items-center", className)} style={{ gap: "calc(var(--logo-h) * 0.36)" }}>
+        <BuildingMark gold className="w-auto shrink-0" style={{ height: "var(--logo-h)" }} />
+        <div className="hidden flex-col leading-none text-gold xl:flex">
+          <span
+            className="font-semibold uppercase"
+            style={{ fontSize: "calc(var(--logo-h) * 0.286)", letterSpacing: "0.35em" }}
+          >
+            Holding
+          </span>
+          <span
+            className="font-display font-medium uppercase"
+            style={{
+              marginTop: "calc(var(--logo-h) * 0.143)",
+              fontSize: "calc(var(--logo-h) * 0.571)",
+              letterSpacing: "0.025em",
+            }}
+          >
+            Javor Sped
+          </span>
+        </div>
+      </div>
+    );
   }
 
   if (variant === "inline") {

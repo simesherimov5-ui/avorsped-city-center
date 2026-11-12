@@ -77,7 +77,7 @@
   /* The page background of the all-dark pages (За нас, Контакт): the same Оникс as everywhere, one dark, not two. */
   --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
-  --nav-h: 61px;
+  --nav-h: 64px;
 
   /* The site's three animation speeds and its one easing (also lib/motion.ts and lib/gsap.ts). Fast: hover, press, small
      colour changes. Base: menus, pop-ups, form steps, toggles. Slow: image movement, section reveals. What leaves takes
@@ -189,12 +189,12 @@
 
 @media (min-width: 640px) {
   :root {
-    --nav-h: 69px;
+    --nav-h: 72px;
   }
 }
 @media (min-width: 1024px) {
   :root {
-    --nav-h: 85px;
+    --nav-h: 90px;
   }
 }
 
@@ -803,6 +803,19 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   }
 }
 
+/* The header's consultation button, one step larger with the bar (it is 36px tall everywhere else): 44px, 14px text. */
+header .btn-primary--sm {
+  min-height: 44px;
+  padding: 0 22px;
+  font-size: 14px;
+}
+/* 1024 to 1099px: the links, the logo and the button share 944px, so the button and the links give a little room */
+@media (max-width: 1099px) {
+  header .btn-primary--sm {
+    padding: 0 16px;
+    font-size: 13px;
+  }
+}
 /* The header's links while the bar is clear over a photo: full Травертин (not 75%). The current page's link stays gold
    with its underline (data-current, set by the Navbar), as on the solid bar. */
 header[data-clear] a.nav-link:not(#site-logo):not([data-current]) {

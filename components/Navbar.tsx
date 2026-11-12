@@ -217,19 +217,21 @@ export function Navbar() {
                 : "border-transparent bg-transparent"
           )}
         >
-          <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8 sm:py-3 lg:px-10 lg:py-5">
+          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px, app/globals.css), less its hairline; from 1024px a grid whose
+              middle column is the links, so they sit on the page centre whatever the widths on either side */}
+          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-10">
             <Link
               id="site-logo"
               href="/"
               onPointerDown={spawnClickPulse}
-              className="focus-ring nav-link relative isolate -ml-2 flex h-11 min-w-11 items-center justify-center px-2"
+              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:54px]"
               aria-label="Javor Sped Holding — почетна"
             >
-              <Logo variant="icon" />
+              <Logo variant="lockup" />
             </Link>
 
-            <div className="hidden flex-1 items-center justify-center lg:flex">
-              <div ref={linksRef} className="relative flex gap-7 xl:gap-9">
+            <div className="hidden items-center justify-center lg:flex">
+              <div ref={linksRef} className="relative flex gap-5 min-[1100px]:gap-6 xl:gap-9">
                 {LINKS.map((link) => (
                   <Link
                     key={link.href}
@@ -242,7 +244,7 @@ export function Navbar() {
                     // the current page's tab is gold (with the underline) on the solid bar and over the photo alike
                     data-current={activeHref === link.href || undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-label uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[14px] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
                       activeHref === link.href && "text-gold!"
                     )}
                   >
@@ -257,14 +259,14 @@ export function Navbar() {
               </div>
             </div>
 
-            <div className="nav-link hidden items-center gap-4 lg:flex">
+            <div className="nav-link hidden items-center justify-self-end lg:flex">
               {/* One button, one style, on every page (the black pages only change the bar's background). */}
               <Button href={consultHref} onClick={consultClick} variant="primary" size="sm" tone="dark">
                 {t("nav.consultation")}
               </Button>
             </div>
 
-            <div className="flex items-center lg:hidden">
+            <div className="flex items-center justify-self-end lg:hidden">
               <button
                 className="focus-ring -mr-2 flex h-11 w-11 items-center justify-center text-on-chrome"
                 aria-controls="mobile-menu"

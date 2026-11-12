@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Button } from "@/components/ui/Button";
 import { CALM_EASE, gsap, prefersReducedMotion, ScrollTrigger, SplitText } from "@/lib/gsap";
+import { navHeight } from "@/lib/header";
 import { getLenis } from "@/lib/lenis";
 
 /** The band comes in once, when this share of it is on the screen. */
@@ -79,7 +80,7 @@ export function BookBand({
     const el = scrollTarget ? document.getElementById(scrollTarget) : null;
     if (!el) return;
     const lenis = getLenis();
-    if (lenis) lenis.scrollTo(el, { offset: -72 });
+    if (lenis) lenis.scrollTo(el, { offset: -navHeight() });
     else el.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
   };
 

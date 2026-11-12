@@ -1,3 +1,4 @@
+import { navHeight } from "@/lib/header";
 import { getLenis } from "@/lib/lenis";
 
 /**
@@ -25,7 +26,7 @@ export function scrollToBookingForm() {
   if (!form) return;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const lenis = getLenis();
-  if (lenis && !reduced) lenis.scrollTo(form, { offset: -110, duration: 1.1 });
+  if (lenis && !reduced) lenis.scrollTo(form, { offset: -(navHeight() + 20), duration: 1.1 });
   else form.scrollIntoView({ block: "start", behavior: reduced ? "auto" : "smooth" });
   form
     .querySelector<HTMLElement>('[data-group="interest"] [role="radio"][tabindex="0"]')

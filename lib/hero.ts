@@ -20,9 +20,9 @@ export const OPENING_WIDE_QUERY = `(min-aspect-ratio: ${Math.round(OPENING_WIDE_
 
 /** The header's height from each width up, widest first (--nav-h in app/globals.css; lib/hero.test.ts checks it). */
 export const NAV_HEIGHTS: readonly (readonly [minWidth: number, height: number])[] = [
-  [1024, 85],
-  [640, 69],
-  [0, 61],
+  [1024, 90],
+  [640, 72],
+  [0, 64],
 ];
 
 /**
