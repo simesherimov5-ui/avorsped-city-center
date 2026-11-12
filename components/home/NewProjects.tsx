@@ -5,9 +5,11 @@ import type { Project } from "@/types";
 
 /**
  * "Сега во изградба": the company's current projects, in the same full-width slideshow as the Проекти page: one project
- * at a time with its status, name, place and a way in.
+ * at a time with its name, place and a way in. Only projects with a photo are in it.
  */
 export function NewProjects({ projects }: { projects: Project[] }) {
+  // only projects with a photo are passed in (projectsWithPhoto); with none the section is not there
+  if (projects.length === 0) return null;
   return (
     <section id="new" className="grain grain--dark bg-chrome text-on-chrome">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">

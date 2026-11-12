@@ -12,7 +12,7 @@ import { Soon } from "@/components/home/Soon";
 import { Quotes } from "@/components/home/Quotes";
 import { ClosingGlass } from "@/components/home/ClosingGlass";
 import { projects, companyInfo, residentQuotes } from "@/data";
-import { carouselProjects } from "@/lib/project-explorer";
+import { carouselProjects, projectsWithPhoto } from "@/lib/project-explorer";
 import type { Metadata } from "next";
 
 // TODO(client): the film is not made yet; until it is, the frame shows this aerial view of City Center.
@@ -40,7 +40,7 @@ export default function HomePage() {
       <Film still={FILM_STILL} />
 
       {/* 4. What is being built now */}
-      <NewProjects projects={carouselProjects(projects)} />
+      <NewProjects projects={projectsWithPhoto(carouselProjects(projects))} />
 
       {/* 5. The numbers */}
       <section className="grain grain--dark border-t border-on-chrome/10 bg-chrome text-on-chrome">

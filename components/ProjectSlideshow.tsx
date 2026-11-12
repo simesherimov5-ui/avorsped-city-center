@@ -38,8 +38,8 @@ const subscribeVisibility = (onChange: () => void) => {
  * arrow, dash, swipe or key restarts the timer, so the slide the visitor chose gets a full interval before the show
  * moves on. Slides crossfade over 1.2s while the new photo
  * settles from 1.08 to 1, then drifts to 1.05 for the rest of its time. Reduced motion: no
- * autoplay, no zoom, no text animation. A project without a photo gets the site's no-photo slide (Еспресо with the logo
- * mark) and, under its name, its city and status. With one project there are no arrows, dashes or pause, and no autoplay.
+ * autoplay, no zoom, no text animation. Callers pass only projects with a photo (projectsWithPhoto in lib/project-explorer.ts); a slide
+ * without one would show the site's no-photo slide (Еспресо with the logo mark). With one project there are no arrows, dashes or pause, and no autoplay.
  */
 export function ProjectSlideshow({
   projects,

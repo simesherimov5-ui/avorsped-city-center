@@ -23,7 +23,7 @@ function slideOf(p: Project): OtherSlide {
 }
 
 // A closing beat for any single-project experience (the generic project page, /development, /dojran): the other projects
-// being built in one slideshow, the ones with a photo first. With one project it has no controls; with none the section
+// being built that have a photo, in one slideshow. With one project it has no controls; with none the section
 // is not there.
 export function OtherProjects({ currentProjectId }: { currentProjectId: string }) {
   const others = otherProjects(projects, currentProjectId);
