@@ -14,11 +14,15 @@ export const PREMIUM_EASE = "premium";
 /** The calm settle curve (cubic-bezier .22, 1, .36, 1) the redesign uses for things that arrive: the opening's strokes and wordmark. */
 export const CALM_EASE = "calm";
 
+/** The gallery pop-up's moving-in-both-directions curve (cubic-bezier .76, 0, .24, 1): the strip, the grow and the shrink. */
+export const INOUT_EASE = "inout";
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
   for (const [name, curve] of [
     [PREMIUM_EASE, "0.77, 0, 0.175, 1"],
     [CALM_EASE, "0.22, 1, 0.36, 1"],
+    [INOUT_EASE, "0.76, 0, 0.24, 1"],
   ]) {
     try {
       CustomEase.create(name, curve);

@@ -1,30 +1,34 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Media } from "@/components/ui/Media";
-import { Modal } from "@/components/ui/Modal";
+import { PhotoLightbox } from "@/components/ui/PhotoLightbox";
 import { Reveal } from "@/components/ui/Reveal";
-import { getLenis } from "@/lib/lenis";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 
 type Photo = { src: string; alt: string; isPlaceholder: boolean };
 
 const pad = (n: number) => String(n).padStart(2, "0");
-const SWIPE_PX = 50;
 
 /**
  * «ГАЛЕРИЈА» of a photo-led project page, on Оникс: the heading and a counter, then a row of 16:9 photos that starts at
  * the content's edge and snaps photo by photo, the next one peeking in (72vw, at most 1100px; 88vw on a phone). From
  * 768px ← → buttons move it (and ← → keys while it has focus); a phone swipes it natively. Under it a hairline with a gold
- * stretch shows where the row is. A photo opens in a full-screen viewer (the site's Modal: focus trapped and given back,
- * Esc, the page locked), with ← → keys, buttons and swipe. With a mouse a photo grows a little under the pointer.
+ * stretch shows where the row is. A photo opens in the shared photo pop-up (PhotoLightbox: it grows from the card and shrinks back into it; the Modal's
+ * focus trap and focus return, Esc, the page locked), with ← → keys, buttons, thumbnails and drag. With a mouse a photo grows a little under the pointer.
  */
 export function ProjectGallery({ photos }: { photos: Photo[] }) {
   const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
   const track = useRef<HTMLUListElement>(null);
   const [current, setCurrent] = useState(0);
-  const [viewer, setViewer] = useState<number | null>(null);
+  // the photo the pop-up shows and the card it grew from (kept while it closes, so it can shrink back into it)
+  const [viewer, setViewer] = useState<{ open: boolean; index: number; el: HTMLElement | null }>({
+    open: false,
+    index: 0,
+    el: null,
+  });
+  const origin = useMemo(() => ({ el: viewer.el, index: viewer.index }), [viewer.el, viewer.index]);
   const count = photos.length;
 
   // the photo the row rests on: the one whose left edge is nearest the row's start (where it snaps)
@@ -124,7 +128,9 @@ export function ProjectGallery({ photos }: { photos: Photo[] }) {
           <li key={photo.src} className="pg-slide flex-none">
             <button
               type="button"
-              onClick={() => setViewer(i)}
+              onClick={(e) =>
+                setViewer({ open: true, index: i, el: e.currentTarget.firstElementChild as HTMLElement | null })
+              }
               aria-label={`Отворете ја фотографијата ${i + 1} од ${count}: ${photo.alt}`}
               className="focus-ring group block aspect-video w-full overflow-hidden bg-espresso"
             >
@@ -151,100 +157,14 @@ export function ProjectGallery({ photos }: { photos: Photo[] }) {
         </div>
       </div>
 
-      <GalleryViewer photos={photos} index={viewer} onIndex={setViewer} onClose={() => setViewer(null)} />
+      <PhotoLightbox
+        photos={photos}
+        open={viewer.open}
+        startIndex={viewer.index}
+        origin={origin}
+        label="Фотографии од проектот"
+        onClose={() => setViewer((v) => ({ ...v, open: false }))}
+      />
     </section>
-  );
-}
-
-/** The full-screen viewer: the photo whole on Оникс (96%), its number, ← → buttons, keys and swipe. */
-function GalleryViewer({
-  photos,
-  index,
-  onIndex,
-  onClose,
-}: {
-  photos: Photo[];
-  index: number | null;
-  onIndex: (i: number) => void;
-  onClose: () => void;
-}) {
-  const count = photos.length;
-  const swipe = useRef<number | null>(null);
-  const open = index !== null;
-  const go = (dir: 1 | -1) => index !== null && onIndex((index + dir + count) % count);
-  const goRef = useRef(go);
-  useEffect(() => {
-    goRef.current = go;
-  });
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === "ArrowRight") goRef.current(1);
-      else if (e.key === "ArrowLeft") goRef.current(-1);
-    };
-    window.addEventListener("keydown", onKey);
-    // the page's smooth scroll stands still while the viewer is open
-    const lenis = getLenis();
-    lenis?.stop();
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      lenis?.start();
-    };
-  }, [open]);
-  const photo = index !== null ? photos[index] : null;
-
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      label="Фотографии од проектот"
-      overlay={0.96}
-      closeIn="screen"
-      className="w-full"
-    >
-      {photo && (
-        <div
-          className="flex flex-col items-center gap-4 px-4"
-          onPointerDown={(e: PointerEvent) => (swipe.current = e.clientX)}
-          onPointerUp={(e: PointerEvent) => {
-            const start = swipe.current;
-            swipe.current = null;
-            if (start !== null && Math.abs(e.clientX - start) > SWIPE_PX) go(e.clientX < start ? 1 : -1);
-          }}
-        >
-          <div className="relative h-[min(78svh,56.25vw)] w-[min(92vw,1672px)]">
-            <Media
-              key={photo.src}
-              image={photo}
-              tone="dark"
-              fit="contain"
-              className="h-full w-full !bg-transparent"
-              sizes="92vw"
-            />
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => go(-1)}
-              aria-label="Претходна фотографија"
-              className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-paper/40 text-paper"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <span className="text-label tracking-[0.3em] text-paper/85" aria-live="polite">
-              {pad(index! + 1)} / {pad(count)}
-            </span>
-            <button
-              type="button"
-              onClick={() => go(1)}
-              aria-label="Следна фотографија"
-              className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-paper/40 text-paper"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      )}
-    </Modal>
   );
 }

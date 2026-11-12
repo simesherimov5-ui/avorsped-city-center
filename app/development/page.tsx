@@ -3,6 +3,7 @@ import { Masterplan } from "@/components/Masterplan";
 import { Reveal } from "@/components/ui/Reveal";
 import { GoogleMapPin } from "@/components/location-map/GoogleMapPin";
 import { OtherProjects } from "@/components/OtherProjects";
+import { ProjectPhotoGallery } from "@/components/project/ProjectPhotoGallery";
 import { ProjectMaterials } from "@/components/project/ProjectMaterials";
 import { ProjectLocation } from "@/components/project/ProjectLocation";
 import { ProjectBuildProgress } from "@/components/project/ProjectBuildProgress";
@@ -82,6 +83,7 @@ export default function DevelopmentPage() {
                   basePath="/development"
                   north={cityCenter?.masterplanNorth}
                   moveInYear={cityCenter?.stats?.moveInYear}
+                  afterCard={cityCenter?.showcase && <ProjectPhotoGallery key="photos" photos={cityCenter.showcase} />}
                 />
               </div>
             </Reveal>

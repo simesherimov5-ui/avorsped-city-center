@@ -267,6 +267,8 @@ interface ProjectFields {
   heroFilm?: { hd: string; sd: string; poster: string };
   /** The line under the name in the opening; split at its first comma (sans, then serif). Falls back to `tagline`. */
   openingTagline?: string;
+  /** The photo slideshow above the building picker («Комплексот низ фотографии»), in the order shown. */
+  showcase?: { src: string; alt: string; isPlaceholder: boolean }[];
   /** The "За проектот" section under the opening. Without it the page has no such section. */
   about?: ProjectAbout;
   /** Direction of north on the aerial photo of the building picker, in degrees (0 = up, clockwise). Without it: no compass. */

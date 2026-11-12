@@ -79,6 +79,17 @@ export const projects: Project[] = [
       },
     ],
     openingTagline: "Шест згради, една нова адреса во Струмица.",
+    showcase: [
+      ["gallery-01-wide-sunset", "комплексот во зајдисонце"],
+      ["gallery-02-golden-view", "поглед во златно светло"],
+      ["gallery-03-facade-approved-sunlight", "фасада на сончева светлина"],
+      ["gallery-04-balcony-details", "детали од балконите"],
+      ["gallery-05-complex-greenery", "комплексот и зеленилото"],
+    ].map(([file, what]) => ({
+      src: `/images/city-center-selected/${file}.png`,
+      alt: `City Center — ${what}`,
+      isPlaceholder: false,
+    })),
     about: {
       title: "Нов стандард на живеење",
       subtitle: "Во срцето на Струмица",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
 import type { Building, MediaImage } from "@/types";
@@ -32,6 +32,8 @@ interface MasterplanProps {
   north?: number;
   /** The year of moving in of the project, for a building that has none of its own. */
   moveInYear?: number;
+  /** Shown directly under the building card (the project's gallery button), whichever building is chosen. */
+  afterCard?: ReactNode;
 }
 
 /**
@@ -40,7 +42,16 @@ interface MasterplanProps {
  * chosen at the start; a marker or a number changes it. The photo keeps its own 16:9 box whatever the card beside it does
  * (stretching it would crop the photo and slide the markers off their buildings).
  */
-export function Masterplan({ buildings, image, hotspots, basePath, className, north, moveInYear }: MasterplanProps) {
+export function Masterplan({
+  buildings,
+  image,
+  hotspots,
+  basePath,
+  className,
+  north,
+  moveInYear,
+  afterCard,
+}: MasterplanProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(buildings[0]?.id ?? null);
 
@@ -144,7 +155,11 @@ export function Masterplan({ buildings, image, hotspots, basePath, className, no
         </div>
       </div>
 
-      {active && <BuildingCard building={active} basePath={basePath} moveInYear={moveInYear} />}
+      <div className="flex min-w-0 flex-col gap-3">
+        {active && <BuildingCard building={active} basePath={basePath} moveInYear={moveInYear} />}
+        {/* under the card, whichever building is chosen: it is about the whole complex */}
+        {afterCard}
+      </div>
     </div>
   );
 }

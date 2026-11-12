@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import { X } from "lucide-react";
@@ -37,6 +44,20 @@ const SITE_TIMING: ModalTiming = {
   outEase: CALM_EASE,
 };
 
+/** The three layers a choreography moves. */
+export type ModalElements = { dialog: HTMLDivElement; backdrop: HTMLDivElement; panel: HTMLDivElement };
+
+/**
+ * Opt-in: the content moves the pop-up in and out itself (the photo pop-up, components/ui/PhotoLightbox.tsx) instead of
+ * the site's default fade and rise. `enter` runs once the pop-up is on screen (and again if it is opened while it is still
+ * leaving); `exit` runs when it is asked to close and must call `done` when it has left, which unmounts it. A `done` of
+ * an exit that a new opening has replaced does nothing.
+ */
+export type ModalChoreography = {
+  enter: (els: ModalElements) => void;
+  exit: (els: ModalElements, done: () => void) => void;
+};
+
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -50,6 +71,8 @@ type Props = {
   className?: string;
   /** Other speeds than the site's (the Контакт page keeps the deployed site's). */
   timing?: ModalTiming;
+  /** Other motion than the default (see ModalChoreography); the focus, scroll lock and keys stay the Modal's. */
+  choreography?: ModalChoreography;
   children: ReactNode;
 };
 
@@ -67,6 +90,7 @@ export function Modal({
   closeIn = "panel",
   className,
   timing = SITE_TIMING,
+  choreography,
   children,
 }: Props) {
   // Stays mounted through the exit animation: `open` starts the animation, `shown` ends it.
@@ -81,8 +105,31 @@ export function Modal({
     onCloseRef.current = onClose;
   }, [onClose]);
 
+  const choreographyRef = useRef(choreography);
+  // in the layout phase, before the effect below reads it: an opening with a new origin has its new choreography at once
+  useLayoutEffect(() => {
+    choreographyRef.current = choreography;
+  }, [choreography]);
+  const runRef = useRef(0);
+  // before the first paint of a pop-up that moves itself: its start state is set, so it never flashes
+  useLayoutEffect(() => {
+    const c = choreographyRef.current;
+    const dialog = dialogRef.current;
+    const backdrop = backdropRef.current;
+    const panel = panelRef.current;
+    if (!c || !dialog || !backdrop || !panel) return;
+    const els = { dialog, backdrop, panel };
+    const run = ++runRef.current;
+    if (open) c.enter(els);
+    else
+      c.exit(els, () => {
+        if (runRef.current === run) setShown(false);
+      });
+  }, [open, shown]);
+
   useGSAP(
     () => {
+      if (choreography) return;
       const dialog = dialogRef.current;
       const backdrop = backdropRef.current;
       const panel = panelRef.current;
@@ -110,7 +157,7 @@ export function Modal({
         });
       }
     },
-    { dependencies: [open, shown, timing], scope: dialogRef }
+    { dependencies: [open, shown, timing, choreography === undefined], scope: dialogRef }
   );
 
   // While it is on screen: lock the page, move focus in, and give focus back afterwards.
