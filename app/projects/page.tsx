@@ -13,10 +13,8 @@ function ProjectsHeading() {
   return (
     <section className="grain grain--dark bg-chrome text-on-chrome">
       <div className="mx-auto max-w-7xl px-5 pb-14 pt-[calc(var(--nav-h)+48px)] sm:px-8 lg:px-10">
-        <h1 className="font-display text-(length:--fs-h1) font-normal leading-[1.2] text-balance">
-          Разгледајте ги нашите проекти.
-        </h1>
-        <p className="mt-4 text-on-chrome/80">Можеби вашиот дом веќе ве чека.</p>
+        <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
+        <p className="pj-under photo-hero__eyebrow mt-4">Можеби вашиот дом веќе ве чека.</p>
       </div>
     </section>
   );

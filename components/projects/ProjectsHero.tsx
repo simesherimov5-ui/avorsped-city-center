@@ -57,7 +57,7 @@ export function ProjectsHero({ slides }: { slides: Project[] }) {
           <div className="pj-wrap photo-hero__content">
             <div className="pj-hero-text">
               <h1 className="pj-h1">Разгледајте ги нашите проекти.</h1>
-              <div className="pj-under">Можеби вашиот дом веќе ве чека.</div>
+              <div className="pj-under photo-hero__eyebrow">Можеби вашиот дом веќе ве чека.</div>
             </div>
 
             <div className="pj-hero-row" {...rowProps}>

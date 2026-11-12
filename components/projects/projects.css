@@ -84,8 +84,9 @@
   /* a readable line length, centred under the heading */
   max-width: 60ch;
   text-wrap: balance;
-  /* Травертин (4.5:1 or better on every slide, see the soft local shade behind the heading block in app/globals.css) */
-  color: var(--color-travertine);
+  /* gold: the colour is .photo-hero__eyebrow's (the logo gold lightened, app/globals.css), set on the element: the plain site
+     gold measures 1.3:1 to 3:1 over the brightest part of these slides, this tint 2:1 to 4.8:1, both with the soft local
+     shade behind the heading block (app/globals.css) */
 }
 /* the group at the bottom left: the indicators (with the pause button beside them), the project's name, its town and status */
 .pj-hero-row {
