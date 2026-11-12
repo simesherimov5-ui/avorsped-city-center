@@ -2057,6 +2057,147 @@ body:has([data-compare-bar]) footer {
 .mf-text[data-live] .mf-w {
   transition: color 0.3s ease;
 }
+/* «Во што веруваме»: «Месинг во движење» (components/home/ManifestStage.tsx, Manifest.tsx). The section is fully visible as it
+   is written here: the marks, the lines, the label, the words and the signature only start hidden once the script has armed
+   it (data-arm), and one attribute (data-go, when 45% of it is on screen) plays everything, once. In order: the marks fade in
+   over 1.6s and glide 36px in from the sides; a 110px Бронза line (45%) grows from each mark toward the quote (1.4s, after
+   0.8s); the label fades in; each word rises out of its own line (1.3s, 22ms apart, from 0.7s); one slow sheen passes over
+   the marks (2.6s, from 1.6s); the signature comes last. The two light tints of the sheen are the approved highlights of this
+   effect and are used nowhere else. */
+.mf-quote {
+  position: relative;
+  --mk: calc(110px * var(--type-scale, 1));
+  /* a phone or a narrow window: the marks above and below the quote, the lines hidden */
+  padding: calc(52px * var(--type-scale, 1)) 0 calc(64px * var(--type-scale, 1));
+}
+.mf-mark {
+  position: absolute;
+  font-family: var(--font-voice);
+  font-size: var(--mk);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  background: linear-gradient(
+    110deg,
+    var(--color-bronze) 0%,
+    var(--color-bronze) 40%,
+    #b89474 48%,
+    #e8cdb2 50%,
+    #b89474 52%,
+    var(--color-bronze) 60%,
+    var(--color-bronze) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.mf-mark--open {
+  left: 0;
+  top: calc(var(--mk) * -0.06);
+}
+.mf-mark--close {
+  right: 0;
+  bottom: calc(64px * var(--type-scale, 1) - var(--mk) + var(--mk) * 0.06);
+}
+.mf-rule {
+  display: none;
+  position: absolute;
+  width: 110px;
+  height: 1px;
+  background: var(--color-bronze);
+  opacity: 0.45;
+}
+@media (min-width: 1160px) {
+  /* beside the quote: 200px marks, out in the margins (the quote is 720px, the marks need 204px on each side: narrower, they would be cut) */
+  .mf-quote {
+    --mk: calc(200px * var(--type-scale, 1));
+    padding: 0;
+  }
+  .mf-mark--open {
+    left: calc(-170px * var(--type-scale, 1));
+    top: calc(-72px * var(--type-scale, 1));
+  }
+  .mf-mark--close {
+    right: calc(-170px * var(--type-scale, 1));
+    bottom: calc(-150px * var(--type-scale, 1));
+  }
+  .mf-rule {
+    display: block;
+  }
+  .mf-rule--open {
+    left: -50px;
+    top: 22px;
+    transform-origin: left;
+  }
+  .mf-rule--close {
+    right: -60px;
+    bottom: 30px;
+    transform-origin: right;
+  }
+}
+/* the words: .wd is the invisible line a word rises out of; its padding is taken back by the margin, so the lines of the
+   quote are exactly as high as plain text */
+.mf-text .wd {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.mf-text .wr {
+  display: inline-block;
+}
+.mf-stage[data-arm] .mf-mark {
+  transition:
+    opacity 1.6s ease,
+    transform 2s cubic-bezier(0.16, 1, 0.3, 1),
+    background-position 2.6s ease 1.6s;
+}
+.mf-stage[data-arm] .mf-rule {
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s;
+}
+.mf-stage[data-arm] .mf-eyebrow {
+  transition: opacity 1.1s ease 0.45s;
+}
+.mf-stage[data-arm] .mf-text .wr {
+  transition:
+    transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1.3s ease;
+  transition-delay: calc(0.7s + var(--i) * 22ms);
+}
+.mf-stage[data-arm] .mf-sign {
+  transition: opacity 1.2s ease calc(0.7s + var(--n, 40) * 22ms + 1.6s);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark {
+  opacity: 0;
+  background-position: 100% 0;
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark--open {
+  transform: translateX(-36px);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-mark--close {
+  transform: translateX(36px);
+}
+.mf-stage[data-arm]:not([data-go]) .mf-rule {
+  transform: scaleX(0);
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-eyebrow,
+.mf-stage[data-arm]:not([data-go]) .mf-sign {
+  opacity: 0;
+  transition: none;
+}
+.mf-stage[data-arm]:not([data-go]) .mf-text .wr {
+  transform: translateY(105%);
+  opacity: 0;
+  transition: none;
+}
+.mf-stage[data-go] .mf-mark--close {
+  transition-delay: 0.25s, 0.25s, 2s;
+}
 /* «Што нè разликува» (components/home/DifferencesStage.tsx). Under 1024px: the heading, then every point as a pair, its
    photo (at its own proportions, the full content width) 16px above the number, title and text, the pairs 48px apart,
    nothing dimmed, nothing sticky. From 1024px: on the left one sticky block under the bar (--nav-h and 32px), the heading

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, type CSSProperties } from "react";
 
 /** Where the reveal starts and ends, as a share of the visible height: the paragraph's top at 85%, its bottom past 70%. */
 const START = 0.85;
@@ -75,7 +75,12 @@ export function ManifestText({ text, className }: { text: string; className?: st
       {words.map((word, i) => (
         <Fragment key={i}>
           {i > 0 && " "}
-          <span className="mf-w">{word}</span>
+          {/* .wd is the invisible line each word rises out of (ManifestStage), .wr the rising word, .mf-w its colour */}
+          <span className="wd">
+            <span className="wr" style={{ "--i": i } as CSSProperties}>
+              <span className="mf-w">{word}</span>
+            </span>
+          </span>
         </Fragment>
       ))}
     </p>
