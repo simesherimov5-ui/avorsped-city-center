@@ -12,7 +12,7 @@ import { useMediaQuery } from "@/lib/useMediaQuery";
 // A company-wide hero, not a single-project pitch: the portfolio holds
 // several developments and this is their shared front door.
 const HERO_IMAGE = {
-  src: "/images/exteriors/exterior-hero-wide.jpg",
+  src: "/images/approved-rich/city-center-exterior-rich.png",
   alt: "Јавор Шпед — архитектонска визуелизација",
   isPlaceholder: false,
 };

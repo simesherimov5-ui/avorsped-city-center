@@ -160,8 +160,12 @@ export const projects: Project[] = [
     distanceHighlights: ["250 м од градски парк", "500 м од центарот на градот"],
     // A narrow frame (the Проекти card) is centred on the main central building, so it is whole from roof to ground.
     imageFocus: { zoom: 1, x: 52, y: 50 },
-    heroImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
-    slideImage: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center", isPlaceholder: false },
+    heroImage: { src: "/images/approved-rich/city-center-exterior-rich.png", alt: "City Center", isPlaceholder: false },
+    slideImage: {
+      src: "/images/approved-rich/city-center-exterior-rich.png",
+      alt: "City Center",
+      isPlaceholder: false,
+    },
     gallery: [
       { src: "/images/exteriors/exterior-gallery-1.jpg", alt: "City Center — визуелизација 1", isPlaceholder: false },
       { src: "/images/exteriors/exterior-gallery-2.jpg", alt: "City Center — визуелизација 2", isPlaceholder: false },
@@ -199,15 +203,19 @@ export const projects: Project[] = [
     units: 7,
     description:
       "Објект проектиран по најсовремени стандарди и нормативи, со функционални станови и високо ниво на технологија. Лоциран во мирен дел на градот, во близина на градскиот парк, училишта, болници, супермаркети и спортски сали.",
-    // The hero photo is square (1730 × 1787): in a wide frame Media shows it whole, over a blurred copy of itself.
-    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1730 / 1787 },
+    // The hero photo is square (1234 × 1275): in a wide frame Media shows it whole, over a blurred copy of itself.
+    imageFocus: { zoom: 1, x: 50, y: 50, aspect: 1234 / 1275 },
     heroImage: {
-      src: "/images/stanbena-zgrada/facade-night.jpg",
+      src: "/images/approved-rich/stanbena-kukja-facade-rich.png",
       alt: "Станбена куќа 1 — фасада",
       isPlaceholder: false,
     },
     gallery: [
-      { src: "/images/stanbena-zgrada/facade-night.jpg", alt: "Станбена куќа 1 — фасада", isPlaceholder: false },
+      {
+        src: "/images/approved-rich/stanbena-kukja-facade-rich.png",
+        alt: "Станбена куќа 1 — фасада",
+        isPlaceholder: false,
+      },
       { src: "/images/stanbena-zgrada/dnevna-soba.jpg", alt: "Станбена куќа 1 — дневен престој", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/kujna.jpg", alt: "Станбена куќа 1 — кујна и трпезарија", isPlaceholder: false },
       { src: "/images/stanbena-zgrada/dvor.jpg", alt: "Станбена куќа 1 — двор", isPlaceholder: false },
@@ -327,7 +335,7 @@ export const projects: Project[] = [
     cardImage: { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
     cardFocus: { zoom: 1, x: 46, y: 50 },
     slideImage: {
-      src: "/images/dojran/aerial-beach.jpg",
+      src: "/images/approved-rich/dojran-aerial-beach-rich.png",
       alt: "Дојрански Рај — поглед од воздух",
       isPlaceholder: false,
     },
@@ -337,7 +345,11 @@ export const projects: Project[] = [
       { src: "/images/dojran/facade-3.jpg", alt: "Дојрански Рај — фасада 3", isPlaceholder: false },
       { src: "/images/dojran/facade-4.jpg", alt: "Дојрански Рај — фасада 4", isPlaceholder: false },
       { src: "/images/dojran/aerial-1.jpg", alt: "Дојрански Рај — аерален поглед", isPlaceholder: false },
-      { src: "/images/dojran/aerial-beach.jpg", alt: "Дојрански Рај — плажа Фук Так", isPlaceholder: false },
+      {
+        src: "/images/approved-rich/dojran-aerial-beach-rich.png",
+        alt: "Дојрански Рај — плажа Фук Так",
+        isPlaceholder: false,
+      },
     ],
     specifications: [
       { label: "Локација", value: "Стар Дојран, Сретеново (плажа Фук Так)" },
@@ -751,7 +763,7 @@ export const companyTimeline: CompanyMilestone[] = [
   {
     year: "2026",
     text: `Во изградба: ${listNames(underConstruction().map((p) => p.name))}.`,
-    image: { src: "/images/exteriors/exterior-hero-wide.jpg", alt: "City Center — визуелизација" },
+    image: { src: "/images/approved-rich/city-center-exterior-rich.png", alt: "City Center — визуелизација" },
   },
 ];
 
