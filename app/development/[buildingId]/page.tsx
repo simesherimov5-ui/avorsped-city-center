@@ -4,10 +4,10 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { ChevronLeft } from "lucide-react";
 import { getBuilding, apartments, buildings, development } from "@/data";
 import { Media } from "@/components/ui/Media";
-import { FloorPicker } from "@/components/floor-picker/FloorPicker";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { pageMetadata } from "@/lib/seo";
+import { floorTitle } from "@/lib/floor";
 import { floorsText, unitsText } from "@/lib/plural";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -41,6 +41,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
   if (!building) notFound();
 
   const units = apartments.filter((a) => a.buildingId === building.id);
+  // the floor buttons, in building order: the attic (ПК) first, the lowest floor last
+  const floorsTopDown = [...building.floors]
+    .sort((a, b) => b.number - a.number)
+    .map((floor) => ({ ...floor, units: units.filter((a) => a.floor === floor.number).length }));
 
   return (
     <ZoomEnter className="on-dark">
@@ -56,15 +60,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           </Link>
         </div>
 
+        {/* From 1024px: the text on the left, the floor buttons and the photo on the right. On a phone: text, floors, photo. */}
         <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <Media
-              image={building.exteriorImage}
-              className="aspect-[4/3]"
-              sizes="(max-width: 1024px) 155vw, 870px"
-              priority
-            />
-            <div>
+            <div className="min-w-0">
               <div className="eyebrow text-gold-deep">Вие сте овде</div>
               <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
               <dl className="mt-8 grid grid-cols-2 gap-6">
@@ -72,36 +71,38 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                 <Stat label="Станови" value={String(building.totalApartments)} />
               </dl>
             </div>
+            <div className="min-w-0">
+              {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h) */}
+              <nav id="izberete-kat" aria-labelledby="izberete-kat-label" className="scroll-mt-(--nav-h)">
+                <div id="izberete-kat-label" className="eyebrow text-gold-deep">
+                  Изберете кат
+                </div>
+                {/* one row, top floor first; on a narrow screen it scrolls sideways inside itself */}
+                <ul className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                  {floorsTopDown.map((floor) => (
+                    <li key={floor.number} className="min-w-20 flex-1 lg:min-w-0">
+                      <Link
+                        href={`/development/${building.id}/${floor.number}`}
+                        aria-label={`${floorTitle(floor.label)}, ${unitsText(floor.units)}`}
+                        className="flex min-h-14 flex-col items-center justify-center border border-line px-1 py-2 text-center transition-colors outline-none hover:border-gold-deep focus-visible:border-gold-deep focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-gold-deep"
+                      >
+                        <span className="text-lg font-medium tabular-nums leading-tight">{floor.label}</span>
+                        <span className="mt-0.5 text-xs leading-tight text-muted">{unitsText(floor.units)}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <Media
+                image={building.exteriorImage}
+                className="mt-6 aspect-[4/3]"
+                sizes="(max-width: 1024px) 155vw, 870px"
+                priority
+              />
+            </div>
           </div>
         </section>
       </div>
-
-      {/* on a cream band; scroll-mt keeps the heading under the header (the shared --nav-h) when the page scrolls to it */}
-      <section id="izberete-kat" className="on-light fp-band scroll-mt-(--nav-h) py-16 sm:py-20">
-        <div className="mx-auto max-w-[1448px] px-5 sm:px-8">
-          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
-          <div className="mt-10">
-            <FloorPicker
-              basePath={`/development/${building.id}`}
-              floors={building.floors.map((floor) => ({
-                number: floor.number,
-                label: floor.label,
-                sketch: floor.sketch,
-                apartments: units
-                  .filter((a) => a.floor === floor.number)
-                  .map((a) => ({
-                    id: a.id,
-                    number: a.number,
-                    area: a.area,
-                    areaDecimals: a.areaDecimals,
-                    bedrooms: a.bedrooms,
-                    outline: a.outline,
-                  })),
-              }))}
-            />
-          </div>
-        </div>
-      </section>
     </ZoomEnter>
   );
 }
