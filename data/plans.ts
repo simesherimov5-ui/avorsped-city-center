@@ -85,6 +85,9 @@ export function buildFromPlans(
           .map((a): Apartment => {
             const rooms: Room[] = a.spaces.map((space) => ({ name: space.name, area: space.area }));
             const outline: ApartmentOutline = { polygon: a.polygon, label: a.label };
+            const terrace = a.spaces
+              .filter((space) => /^(Тераса|Балкон)/.test(space.name))
+              .reduce((sum, space) => sum + space.area, 0);
             return {
               id: `${id}-f${floor.floor}-${unitSlug(a.number)}`,
               projectId: options.projectId,
@@ -98,9 +101,9 @@ export function buildFromPlans(
               bathrooms: a.spaces.filter((space) => space.name.startsWith("Бања")).length,
               area: a.area,
               areaDecimals: 2,
-              balconyArea: a.spaces
-                .filter((space) => /^(Тераса|Балкон)/.test(space.name))
-                .reduce((sum, space) => sum + space.area, 0),
+              // the interior area is the total less the terrace until the company's own figure comes (types: netArea)
+              netArea: Math.round((a.area - terrace) * 100) / 100,
+              balconyArea: terrace,
               status: "available",
               rooms,
               outline,

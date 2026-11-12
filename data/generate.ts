@@ -31,6 +31,7 @@ const ORIENTATIONS: Orientation[] = [
   "South-West",
 ];
 
+/** `area` is the interior area: the rooms inside add up to it, and the terrace comes after them. */
 function generateRooms(bedrooms: number, area: number, balconyArea: number): Room[] {
   if (bedrooms === 0) {
     const living = Math.round(area * 0.55 * 10) / 10;
@@ -294,10 +295,13 @@ export function buildSampleApartments(projectId: string, order: number, units: S
       bedrooms: u.bedrooms,
       bathrooms: u.bathrooms,
       area: u.area,
+      // the interior area is the total less the terrace until the company's own figure comes (types: netArea)
+      netArea: Math.round((u.area - balconyArea) * 10) / 10,
       balconyArea,
       orientation: u.orientation ?? ORIENTATIONS[Math.floor(seeded(order, u.floor, idx, 8) * ORIENTATIONS.length)],
       status: pickStatus(order, u.floor, floorCount, idx),
-      rooms: generateRooms(u.bedrooms, u.area, balconyArea),
+      // the rooms inside add up to the interior area; the terrace is the last of them
+      rooms: generateRooms(u.bedrooms, u.area - balconyArea, balconyArea),
       gallery: [
         { src: "", alt: `${projectId} ${u.number} дневна соба`, isPlaceholder: true },
         { src: "", alt: `${projectId} ${u.number} кујна`, isPlaceholder: true },

@@ -17,10 +17,11 @@ import { floorPlanImageForApartment } from "@/lib/assets";
 import { Media } from "@/components/ui/Media";
 import { ApartmentTour } from "@/components/ApartmentTour";
 import { ApartmentCard } from "@/components/ApartmentCard";
-import { Button } from "@/components/ui/Button";
+import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ZoomEnter, ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { PlanEnlarge } from "@/components/apartment/PlanEnlarge";
 import { pageMetadata } from "@/lib/seo";
+import "@/components/apartment/apartment.css";
 
 export function generateStaticParams() {
   return apartments.map((a) => ({ id: a.id }));
@@ -74,21 +75,21 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
       a.id !== apartment.id
   );
 
-  const roomsTotalLabel =
-    Math.abs(apartment.rooms.reduce((sum, r) => sum + r.area, 0) - apartment.area) < 0.01
-      ? "Вкупна површина"
-      : "Вкупна внатрешна површина";
+  // the rooms inside, in the order of the drawing: the terraces are in the panel's «Тераса», not in this list
+  const indoorRooms = apartment.rooms.filter((room) => !/^(Тераса|Балкон)/.test(room.name));
+  const areaDecimals = apartment.areaDecimals;
+  const typeName = apartment.typeLabel ?? (apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type));
 
-  // The page is on Оникс (.on-dark turns every inherited text colour gold); reading text is Травертин, gold only marks:
-  // the identification line, the labels, the area and the total.
+  // The page is on cream (Травертин, between the header and the footer): .on-light gives it the light-surface tokens, so the
+  // text is Оникс and the labels, lines and the button are Бронза (components/apartment/apartment.css).
   return (
-    <ZoomEnter className="on-dark pt-24 sm:pt-28">
-      <div className="text-travertine">
+    <ZoomEnter className="on-light apt-page pt-[calc(var(--nav-h)+24px)]">
+      <div>
         <div className="mx-auto max-w-[1280px] px-5 pt-6 sm:px-8 lg:px-10">
           <ZoomNavLink
             href={back.href}
             label={place.building || place.project}
-            className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-travertine/70 hover:text-travertine sm:text-sm"
+            className="focus-ring -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-base text-ink/70 hover:text-ink sm:text-sm"
           >
             <ChevronLeft className="h-4 w-4" /> {back.text}
           </ZoomNavLink>
@@ -96,85 +97,91 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
         <section className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 lg:px-10">
           {/* who this is: the project, the building, the floor, the apartment */}
-          <div className="eyebrow text-gold">
+          <div className="eyebrow text-gold-deep">
             {place.text} · {floorLabelOf(apartment)}
           </div>
-          <h1 className="t-h1 mt-1.5 text-travertine">Стан {apartment.number}</h1>
+          <h1 className="t-h1 mt-1.5 text-ink">Стан {apartment.number}</h1>
 
           {/* the plan is the main thing; the facts and the enquiry beside it (under it on a phone) */}
           <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(340px,1fr)] lg:items-start lg:gap-10">
             <PlanEnlarge plan={floorPlanImage} apartmentNumber={apartment.number} ratio={planRatio} />
 
-            <aside className="h-fit border border-line bg-warm-white p-6 sm:p-8 lg:sticky lg:top-28">
-              <div className="eyebrow text-gold">Површина</div>
-              <div className="mt-2 font-display text-[length:calc(clamp(40px,4vw,56px)*var(--type-scale,1))] leading-none tabular-nums text-travertine">
-                {formatArea(apartment.area, apartment.areaDecimals)}
+            <aside className="apt-panel lg:sticky lg:top-[calc(var(--nav-h)+24px)]">
+              {/* 1 · the total */}
+              <div className="apt-total">
+                <div className="apt-label">Вкупна површина</div>
+                <div className="apt-num">{formatArea(apartment.area, areaDecimals)}</div>
               </div>
 
-              <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-travertine/15 pt-6 text-sm">
-                <Spec
-                  label="Тип"
-                  value={apartment.typeLabel ?? (apartment.bedrooms === 0 ? "Студио" : typeLabel(apartment.type))}
-                />
-                <Spec label="Соби" value={String(apartment.bedrooms)} />
-                {apartment.bathrooms > 0 && <Spec label="Бањи" value={String(apartment.bathrooms)} />}
+              {/* 2 + 3 · the interior area and the terrace */}
+              <div className={apartment.balconyArea > 0 ? "apt-two" : "apt-two apt-two--single"}>
+                <div>
+                  <div className="apt-label">Површина</div>
+                  <div className="apt-num">{formatArea(apartment.netArea, areaDecimals)}</div>
+                </div>
                 {apartment.balconyArea > 0 && (
-                  <Spec label="Тераса" value={formatArea(apartment.balconyArea, apartment.areaDecimals)} />
+                  <div>
+                    <div className="apt-label">Тераса</div>
+                    <div className="apt-num">{formatArea(apartment.balconyArea, areaDecimals)}</div>
+                  </div>
                 )}
-                {apartment.orientation && <Spec label="Ориентација" value={orientationLabel(apartment.orientation)} />}
-                <Spec label="Кат" value={floorLabelOf(apartment)} />
+              </div>
+
+              {/* 4 · the type, the bathrooms, the floor */}
+              <dl className="apt-facts m-0">
+                <div>
+                  <dt className="apt-label">Тип</dt>
+                  <dd className="apt-fact">{typeName}</dd>
+                </div>
+                <div>
+                  <dt className="apt-label">Бањи</dt>
+                  <dd className="apt-fact">{apartment.bathrooms}</dd>
+                </div>
+                <div>
+                  <dt className="apt-label">Кат</dt>
+                  <dd className="apt-fact">{floorLabelOf(apartment)}</dd>
+                </div>
               </dl>
 
-              <div className="mt-6 space-y-3 border-t border-travertine/15 pt-6">
-                <Button href={inquiryHref} variant="primary" tone="dark" className="w-full">
+              {/* 5 · room by room, the rooms inside only */}
+              {indoorRooms.length > 0 && (
+                <div className="apt-rooms">
+                  <div className="apt-label">Соба по соба</div>
+                  <ul>
+                    {indoorRooms.map((room, i) => (
+                      <li key={`${room.name}-${i}`} className="apt-row">
+                        <span>{room.name}</span>
+                        <span>{formatArea(room.area, areaDecimals)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* 6 · the enquiry and the phone */}
+              <div className="apt-actions">
+                <Link href={inquiryHref} className="apt-cta">
                   Прашајте за овој стан
-                </Button>
+                </Link>
+                <a href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`} className="apt-phone">
+                  <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  Или јавете ни се: {companyInfo.phone}
+                </a>
               </div>
-              <a
-                href={`tel:${companyInfo.phone.replace(/\s+/g, "")}`}
-                className="focus-ring mt-5 flex min-h-12 items-center justify-center gap-2 border-t border-travertine/15 pt-5 text-base text-travertine/70 transition-colors hover:text-travertine sm:text-sm"
-              >
-                <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
-                Или јавете ни се: {companyInfo.phone}
-              </a>
             </aside>
           </div>
 
-          {/* the room breakdown, after the plan and the facts */}
-          <div className="mt-14 lg:mt-20">
-            <h2 className="t-h2 text-travertine">Простор, соба по соба.</h2>
-            <table className="mt-6 w-full max-w-3xl text-base">
-              <tbody>
-                {apartment.rooms.map((room, i) => (
-                  <tr key={`${room.name}-${i}`} className="border-b border-travertine/15">
-                    <td className="py-3 pr-4 text-travertine">{room.name}</td>
-                    <td className="whitespace-nowrap py-3 text-right font-medium tabular-nums text-travertine">
-                      {formatArea(room.area, apartment.areaDecimals)}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td className="py-4 pr-4 font-medium text-travertine">{roomsTotalLabel}</td>
-                  <td className="whitespace-nowrap py-4 text-right text-xl font-medium tabular-nums text-gold">
-                    {formatArea(apartment.area, apartment.areaDecimals)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p className="mt-3 max-w-3xl text-xs leading-relaxed text-travertine/60">
-              {floorPlanImage.isPlaceholder
-                ? `Основата за Стан ${apartment.number} ќе биде додадена.`
-                : floorPlanImage.isExactMatch
-                  ? `Архитектонска основа за Стан ${apartment.number}.`
-                  : `Основата е пример за овој тип на стан. Мерењата во табелата се специфични за Стан ${apartment.number}.`}
+          {floorPlanImage.isPlaceholder && (
+            <p className="mt-3 max-w-3xl text-xs leading-relaxed text-ink/70">
+              Основата за Стан {apartment.number} ќе биде додадена.
             </p>
-          </div>
+          )}
 
           <div className="mt-16 space-y-16">
             {/* The room photos and the 360° tour show only once real media exists: no empty boxes for visitors. */}
             {apartment.gallery.some((img) => !img.isPlaceholder) && (
               <div>
-                <h2 className="t-h3 text-travertine">Простории</h2>
+                <h2 className="t-h3 text-ink">Простории</h2>
                 <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                   {apartment.gallery.map((img, i) => (
                     <Media
@@ -190,8 +197,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             {apartment.tour?.available && (
               <div>
-                <h2 className="t-h3 text-travertine">Истражете го станот</h2>
-                <p className="mt-2 text-sm text-travertine/70">
+                <h2 className="t-h3 text-ink">Истражете го станот</h2>
+                <p className="mt-2 text-sm text-ink/70">
                   Движете се меѓу просториите, разгледувајте наоколу и зумирајте ги деталите.
                 </p>
                 <div className="mt-6">
@@ -202,7 +209,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
             {others.length > 0 && (
               <div>
-                <h2 className="t-h3 text-travertine">Други станови на овој кат</h2>
+                <h2 className="t-h3 text-ink">Други станови на овој кат</h2>
                 <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {others.slice(0, 2).map((a) => (
                     <ApartmentCard key={a.id} apartment={a} />
@@ -221,13 +228,4 @@ const GALLERY_ROOM_LABELS = ["Дневна соба", "Кујна", "Спалн�
 
 function roomLabelForGalleryIndex(i: number) {
   return GALLERY_ROOM_LABELS[i] ?? `Просторија ${i + 1}`;
-}
-
-function Spec({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="eyebrow eyebrow-tight text-travertine/60">{label}</dt>
-      <dd className="mt-1 font-medium capitalize text-travertine">{value}</dd>
-    </div>
-  );
 }

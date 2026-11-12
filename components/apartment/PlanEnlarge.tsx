@@ -28,7 +28,7 @@ export function PlanEnlarge({ plan, apartmentNumber, ratio }: { plan: Plan; apar
   };
 
   return (
-    <div className="relative rounded-xl border border-gold/50 bg-sand text-onyx">
+    <div className="apt-plan relative rounded-xl bg-sand text-onyx">
       <span className="eyebrow absolute left-4 top-4 z-10 rounded-sm bg-onyx/90 px-2.5 py-1 text-gold">Основа</span>
 
       <div className="p-4 pt-14 sm:p-8 sm:pt-16">

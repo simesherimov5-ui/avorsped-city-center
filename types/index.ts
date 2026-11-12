@@ -51,6 +51,11 @@ export interface Apartment {
   bedrooms: number;
   bathrooms: number;
   area: number; // m² total
+  /**
+   * The interior area in m², without the terrace (the apartment page's «Површина»). For now it is the total less the
+   * terrace (`area` - `balconyArea`); the company's own figure replaces it where it sends one.
+   */
+  netArea: number;
   /** How many decimals the area is written with (2 for an apartment from the architect's drawing); one where left out. */
   areaDecimals?: number;
   balconyArea: number; // m²
