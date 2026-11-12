@@ -21,7 +21,7 @@ export function ProjectPhotoGallery({ photos }: { photos: LightboxPhoto[] }) {
         type="button"
         aria-haspopup="dialog"
         onClick={() => setOpen(true)}
-        className="focus-ring flex min-h-11 w-full items-center justify-center border border-line px-5 text-label font-semibold uppercase tracking-label text-ink/80 transition-colors duration-200 hover:border-ink/40 hover:text-ink motion-reduce:transition-none"
+        className="focus-ring flex min-h-11 w-full items-center justify-center border border-line px-5 lg:min-h-[52px] lg:px-6 text-label font-semibold uppercase tracking-label text-ink/80 transition-colors duration-200 hover:border-ink/40 hover:text-ink motion-reduce:transition-none"
       >
         Фотографии од комплексот
       </button>

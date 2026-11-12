@@ -46,7 +46,7 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
     <ZoomEnter className="on-dark">
       {/* The intro is a cream block that starts right under the navigation (its top padding is the header's height); it sets
           its own ground with the token because .on-light's own background would win over a utility class. */}
-      <div className="on-light pt-24 sm:pt-28" style={{ backgroundColor: "var(--color-parchment)" }}>
+      <div className="on-light pt-[calc(var(--nav-h)+24px)]" style={{ backgroundColor: "var(--color-parchment)" }}>
         <div className="mx-auto max-w-7xl px-5 sm:px-8 pt-6 lg:px-10">
           <Link
             href="/development"
@@ -76,9 +76,10 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         </section>
       </div>
 
-      <section className="bg-chrome py-16 text-on-chrome sm:py-20">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" tone="dark" />
+      {/* on a cream band; scroll-mt keeps the heading under the header (the shared --nav-h) when the page scrolls to it */}
+      <section id="izberete-kat" className="on-light fp-band scroll-mt-(--nav-h) py-16 sm:py-20">
+        <div className="mx-auto max-w-[1448px] px-5 sm:px-8">
+          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
           <div className="mt-10">
             <FloorPicker
               basePath={`/development/${building.id}`}

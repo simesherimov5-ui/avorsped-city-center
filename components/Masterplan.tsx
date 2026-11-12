@@ -59,12 +59,16 @@ export function Masterplan({
   const choose = (id: string) => setSelected(id);
 
   return (
-    <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-6">
+    <div className="grid w-full gap-8 lg:grid-cols-[minmax(0,1fr)_clamp(340px,27.2vw,392px)] lg:items-start lg:gap-6">
       <div className="min-w-0">
         {/* Real aerial photo with selectable hotspots per building */}
         <div className={cn("relative aspect-[16/9] w-full overflow-hidden border border-line", className)}>
           <div className="absolute inset-0">
-            <Media image={image} className="h-full w-full" sizes="(max-width: 1280px) 100vw, 836px" />
+            <Media
+              image={image}
+              className="h-full w-full"
+              sizes="(max-width: 1023px) 100vw, min(968px, calc(100vw - 88px - clamp(340px,27.2vw,392px)))"
+            />
           </div>
 
           {north !== undefined && <Compass north={north} />}
@@ -88,7 +92,7 @@ export function Masterplan({
                 onClick={() => choose(building.id)}
                 aria-pressed={isSelected}
                 aria-label={`${building.name} — детали`}
-                className="focus-ring group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center active:scale-90"
+                className="focus-ring group absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center active:scale-90 sm:h-[52px] sm:w-[52px]"
                 style={spot}
               >
                 <motion.div
@@ -98,7 +102,7 @@ export function Masterplan({
                   }}
                   transition={{ duration: DURATION.base, ease: EASE }}
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-9 sm:w-9 sm:text-sm",
+                    "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold sm:h-[42px] sm:w-[42px] sm:text-sm",
                     (isSelected || isHovered) && "outline outline-1 outline-offset-4 outline-accent/50",
                     isSelected
                       ? "border-accent bg-accent text-chrome"
@@ -117,7 +121,7 @@ export function Masterplan({
                     opacity: isHovered && !isSelected ? 1 : 0,
                     y: isHovered && !isSelected ? 0 : 6,
                   }}
-                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
+                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-44 -translate-x-1/2 sm:w-52 border border-on-chrome/10 bg-chrome p-3.5 text-left text-on-chrome"
                 >
                   <div className="text-base font-medium">{building.name}</div>
                   <div className="mt-2 space-y-1 text-label text-on-chrome/70">
@@ -134,7 +138,7 @@ export function Masterplan({
         </div>
 
         {/* The building numbers, the chosen one filled */}
-        <div role="group" aria-label="Згради" className="mt-4 flex flex-wrap gap-2">
+        <div role="group" aria-label="Згради" className="mt-4 flex flex-wrap gap-2 sm:mt-5 sm:gap-2.5">
           {buildings.map((b) => (
             <button
               key={b.id}
@@ -145,7 +149,7 @@ export function Masterplan({
               onMouseEnter={() => setHovered(b.id)}
               onMouseLeave={() => setHovered(null)}
               className={cn(
-                "focus-ring flex h-11 w-12 items-center justify-center border text-base font-medium transition-colors",
+                "focus-ring flex h-11 w-12 items-center justify-center border text-base font-medium transition-colors sm:h-[52px] sm:w-14",
                 b.id === active?.id ? "border-onyx bg-onyx text-travertine" : "border-line text-ink hover:border-ink/40"
               )}
             >
@@ -174,7 +178,7 @@ export function Compass({ north }: { north: number }) {
     <svg
       aria-hidden="true"
       viewBox="0 0 72 72"
-      className="pointer-events-none absolute right-0 top-0 h-[58px] w-[58px] sm:h-[72px] sm:w-[72px]"
+      className="pointer-events-none absolute right-0 top-0 h-[58px] w-[58px] sm:h-[85px] sm:w-[85px]"
     >
       <g transform={`rotate(${north} 36 36)`}>
         <circle cx="36" cy="36" r="26" fill="var(--color-onyx)" fillOpacity="0.45" />

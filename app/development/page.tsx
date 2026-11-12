@@ -60,9 +60,11 @@ export default function DevelopmentPage() {
 
         {/* 3 · pick a building: the aerial photo with its markers and the compass, the building numbers under it, the card of the chosen building beside it */}
         <section id="izberete-zgrada" className="scroll-mt-(--nav-h) bg-parchment py-12 sm:py-16">
-          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          {/* wider than the page's 1200px content: the plan and the card are about 15% bigger from 1440px (the card column is
+              the same clamp in Masterplan.tsx) */}
+          <div className="mx-auto max-w-[1448px] px-5 sm:px-8">
             <Reveal>
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end lg:gap-6">
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_clamp(340px,27.2vw,392px)] lg:items-end lg:gap-6">
                 <div>
                   <div className="eyebrow text-gold-deep">КОМПЛЕКСОТ</div>
                   <h2 className="mt-3 text-balance font-display text-(length:--fs-h2) font-normal leading-[1.1] text-charcoal">
