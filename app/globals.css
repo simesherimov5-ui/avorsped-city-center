@@ -703,8 +703,11 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   .photo-hero--top .pj-h1 {
     text-shadow: 0 1px 16px color-mix(in srgb, var(--color-onyx) 55%, transparent);
   }
-  /* the line under the heading is Травертин: a soft local shade behind the heading block (not a glow on the letters)
-     keeps it at 4.5:1 or better over the bright skies, and only a faint shadow stays on the letters as a backup */
+  /* the line under the heading is gold (.photo-hero__eyebrow): a soft local shade behind the heading block (not a glow on the
+     letters) keeps it at 4.5:1 or better over the bright skies at 1440 and 1280 (measured on the brightest pixel behind the
+     line, on every slide), and only a faint shadow stays on the letters as a backup. The shade is Оникс at 70%, held out to
+     55% of the ellipse and then faded to nothing at its edge (it was 46% at the centre, fading all the way: by the line, at
+     the lower edge of the block, it was under half of that); the block and its extent are unchanged */
   .photo-hero--top .pj-hero-text {
     position: relative;
   }
@@ -716,7 +719,8 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
     pointer-events: none;
     background: radial-gradient(
       ellipse 50% 50% at 50% 54%,
-      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 46%), transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 70%), transparent) 0%,
+      color-mix(in srgb, var(--color-onyx) var(--pj-shade, 70%), transparent) 55%,
       transparent 100%
     );
   }
