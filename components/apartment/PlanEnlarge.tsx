@@ -19,13 +19,13 @@ export function PlanEnlarge({
   plan,
   apartmentNumber,
   ratio,
-  render3d,
+  render3dSrc,
 }: {
   plan: Plan;
   apartmentNumber: string;
   ratio: number;
-  /** The apartment's 3D render (data/renders.ts): with it the viewer gets ОСНОВА / 3D tabs, even while the file is missing. */
-  render3d?: { src: string; available: boolean };
+  /** The apartment's 3D render, given only when its file exists (lib/render3d.ts): with it the viewer gets ОСНОВА / 3D tabs. */
+  render3dSrc?: string;
 }) {
   const uid = useId();
   const [view, setView] = useState<View>("plan");
@@ -44,7 +44,7 @@ export function PlanEnlarge({
     setOpen(true);
   };
 
-  const tabs = render3d
+  const tabs = render3dSrc
     ? ([
         { key: "plan", label: "Основа" },
         { key: "3d", label: "3D" },
@@ -128,7 +128,7 @@ export function PlanEnlarge({
               priority
             />
           </div>
-          {render3d && (
+          {render3dSrc && (
             <div
               role="tabpanel"
               id={`${uid}-panel-3d`}
@@ -137,11 +137,11 @@ export function PlanEnlarge({
               className="h-full w-full"
             >
               {/* mounted only once the tab has been opened, and fetched at once then (priority: no waiting for a lazy-load
-                  observer); whole, centred, never cropped or stretched */}
+                  observer); whole, centred, never cropped or stretched. If it fails to load, a short line says it is coming. */}
               {seen3d &&
-                (render3d.available && !failed ? (
+                (!failed ? (
                   <Media
-                    image={{ src: render3d.src, alt: `3D приказ — Стан ${apartmentNumber}`, isPlaceholder: false }}
+                    image={{ src: render3dSrc, alt: `3D приказ — Стан ${apartmentNumber}`, isPlaceholder: false }}
                     fit="contain"
                     crisp
                     className="h-full w-full !bg-transparent"

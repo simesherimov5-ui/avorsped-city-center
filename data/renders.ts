@@ -1,8 +1,8 @@
 /**
  * The furnished 3D renders of the apartments (cleaned of their original number labels), shown in the «3D» tab of an
- * apartment's plan viewer. One file is shared by every apartment of the same layout. An apartment listed here gets the
- * ОСНОВА / 3D tabs whether its file is in public/ yet or not (the tab then says the render is coming); an apartment
- * not listed keeps the plan viewer without tabs. Another building gets renders by adding its rows here, nothing else.
+ * apartment's plan viewer. One file is shared by every apartment of the same layout. An apartment gets the ОСНОВА / 3D
+ * tabs once its file is in public/ (lib/render3d.ts); until then, or when it is not listed, the viewer has no tabs.
+ * Another building gets renders by adding its rows here and its files, nothing else.
  */
 const RENDERS_3D: { file: string; apartmentIds: string[] }[] = [
   // City Center, Зграда 02 (lamela 2): Стан 1 to 5 on the first floor, then the five layouts of floors 2 to ПК

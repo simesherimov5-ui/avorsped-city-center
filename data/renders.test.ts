@@ -1,6 +1,6 @@
-import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { apartments, render3dFor, renders3d } from "@/data";
+import { render3dShown } from "@/lib/render3d";
 
 const DIR = "/images/renders-3d/lamela-2";
 
@@ -28,14 +28,23 @@ describe("3D renders", () => {
     // the full list, for the review: apartment → file (and whether the file is in public/ yet)
     console.info(
       b02
-        .map((a) => {
-          const file = render3dFor(a.id);
-          return `Стан ${a.number.padEnd(3)} ${a.id.padEnd(10)} → ${file} ${file && existsSync(`public${file}`) ? "present" : "pending"}`;
-        })
+        .map(
+          (a) =>
+            `Стан ${a.number.padEnd(3)} ${a.id.padEnd(10)} → ${render3dFor(a.id)} ${render3dShown(a.id) ? "present" : "pending"}`
+        )
         .join("\n")
     );
     expect(b02).toHaveLength(30);
     expect(resolved).toEqual(EXPECTED);
+  });
+
+  it("lists the apartments whose viewer shows the ОСНОВА / 3D tabs (their render file is in public/)", () => {
+    const withTabs = apartments.filter((a) => render3dShown(a.id)).map((a) => a.id);
+    console.info(
+      `Apartments with ОСНОВА / 3D tabs: ${withTabs.length}${withTabs.length ? ` (${withTabs.join(", ")})` : ""}`
+    );
+    // every apartment that shows tabs has a mapped render; none is shown without its file
+    expect(withTabs.every((id) => render3dFor(id) !== undefined)).toBe(true);
   });
 
   it("gives Кат 04 → Стан 17 the render shared by 7, 12, 17, 22 and 27", () => {

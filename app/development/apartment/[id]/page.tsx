@@ -1,5 +1,3 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ChevronLeft } from "lucide-react";
@@ -13,8 +11,8 @@ import {
   placeLabel,
   placeOf,
   companyInfo,
-  render3dFor,
 } from "@/data";
+import { render3dShown } from "@/lib/render3d";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { Media } from "@/components/ui/Media";
@@ -61,12 +59,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     apartment.planImage?.width && apartment.planImage.height
       ? Math.min(2.4, Math.max(0.6, apartment.planImage.width / apartment.planImage.height))
       : 4 / 3;
-  // The 3D render mapped to this apartment (only Зграда 02 has them): the tabs show whenever one is mapped; whether its file
-  // is in public/ yet is checked here, at build time, so a missing one shows the "coming soon" line instead of a broken request.
-  const render3dSrc = render3dFor(apartment.id);
-  const render3d = render3dSrc
-    ? { src: render3dSrc, available: existsSync(path.join(process.cwd(), "public", render3dSrc)) }
-    : undefined;
+  // The apartment's 3D render, only when its file is in public/ (checked at build time): then the viewer gets ОСНОВА / 3D tabs
+  const render3d = render3dShown(apartment.id);
 
   const inquiryHref = `/contact?project=${encodeURIComponent(apartment.projectId)}${apartment.buildingId ? `&building=${encodeURIComponent(apartment.buildingId)}` : ""}&apartment=${apartment.id}`;
 
@@ -117,7 +111,7 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
               plan={floorPlanImage}
               apartmentNumber={apartment.number}
               ratio={planRatio}
-              render3d={render3d}
+              render3dSrc={render3d}
             />
 
             <aside className="apt-panel lg:sticky lg:top-[calc(var(--nav-h)+24px)]">
