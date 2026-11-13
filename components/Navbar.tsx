@@ -202,6 +202,7 @@ export function Navbar() {
       >
         <header
           ref={navRef}
+          data-scale="hero"
           data-at-top={!scrolled}
           data-clear={!solid ? "" : undefined}
           data-open={open}
@@ -217,7 +218,7 @@ export function Navbar() {
                 : "border-transparent bg-transparent"
           )}
         >
-          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px, app/globals.css), less its hairline; from 1024px a grid whose
+          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px × --scale-hero, app/globals.css), less its hairline; from 1024px a grid whose
               middle column is the free space between the logo and the button, with the links centred in it (the logo is narrow
               and the button wide, so the links sit left of the page centre: the optical centre of what is between them) */}
           <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:px-10">
@@ -225,7 +226,7 @@ export function Navbar() {
               id="site-logo"
               href="/"
               onPointerDown={spawnClickPulse}
-              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:54px]"
+              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:calc(54px*var(--scale-hero))]"
               aria-label="Javor Sped Holding — Почетна"
             >
               <BuildingMark gold className="w-auto shrink-0" style={{ height: "var(--logo-h)" }} />
@@ -245,7 +246,7 @@ export function Navbar() {
                     // the current page's tab is gold (with the underline) on the solid bar and over the photo alike
                     data-current={activeHref === link.href || undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[14px] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[length:max(var(--min-label),calc(14px*var(--type-scale,1)))] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
                       activeHref === link.href && "text-gold!"
                     )}
                   >

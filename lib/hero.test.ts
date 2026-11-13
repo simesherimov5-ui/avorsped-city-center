@@ -1,6 +1,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { HERO_OVERLAY_MIN_WIDTH, HERO_UNDER_HEADER_PATHS, NAV_HEIGHTS, OPENING_WIDE_QUERY } from "@/lib/hero";
+import {
+  HERO_OVERLAY_MIN_WIDTH,
+  HERO_UNDER_HEADER_PATHS,
+  NAV_HEIGHTS,
+  OPENING_WIDE_QUERY,
+  SCALE_HERO,
+} from "@/lib/hero";
 import { projects } from "@/data";
 
 const read = (path: string) => readFileSync(path, "utf8");
@@ -29,7 +35,12 @@ describe("the photo-led opening", () => {
     const css = read("app/globals.css");
     for (const [min, height] of NAV_HEIGHTS) {
       const rule = `--nav-h: ${height}px;`;
-      if (min === 0) expect(css.slice(css.indexOf(":root"))).toContain(rule);
+      if (min === 1024) {
+        // from 1024px the header is 90px times the hero factor, which lib/hero.ts copies from the CSS
+        expect(css).toContain(`--scale-hero: ${SCALE_HERO};`);
+        expect(css).toContain("--nav-h: calc(90px * var(--scale-hero));");
+        expect(height).toBe(90 * SCALE_HERO);
+      } else if (min === 0) expect(css.slice(css.indexOf(":root"))).toContain(rule);
       else expect(css.slice(css.indexOf(`@media (min-width: ${min}px)`))).toMatch(new RegExp(`^[^}]*${rule}`));
     }
   });

@@ -113,7 +113,7 @@
   justify-content: center;
   gap: 6px 22px;
   margin-top: 10px;
-  font-size: min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px));
+  font-size: max(var(--min-label), min(calc(13px * var(--type-scale, 1)), var(--body-max, 999px)));
   font-weight: 500;
   letter-spacing: 0.06em;
 }

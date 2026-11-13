@@ -65,7 +65,7 @@ export function BuildingCard({
               />
               <span
                 className={cn(
-                  "whitespace-nowrap text-[length:min(calc(0.625rem*var(--type-scale,1)),var(--body-max,999px))] leading-none",
+                  "whitespace-nowrap text-[length:max(var(--min-label),min(calc(0.625rem*var(--type-scale,1)),var(--body-max,999px)))] leading-none",
                   i < current ? "text-ink" : i === current ? "font-semibold text-bronze" : "text-muted"
                 )}
               >

@@ -55,7 +55,7 @@ export function ProjectMaterials({ project }: { project: Project }) {
                   {item.name}
                 </div>
                 {realText(item.note) && (
-                  <p className="m-0 text-[length:min(calc(13px*var(--type-scale,1)),var(--body-max,999px))] leading-[1.6] text-gold-deep">
+                  <p className="m-0 text-[length:max(var(--min-label),min(calc(13px*var(--type-scale,1)),var(--body-max,999px)))] leading-[1.6] text-gold-deep">
                     {item.note}
                   </p>
                 )}

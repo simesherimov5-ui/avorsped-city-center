@@ -18,9 +18,15 @@ export const HERO_OVERLAY_QUERY = `(min-width: ${HERO_OVERLAY_MIN_WIDTH}px)`;
 export const OPENING_WIDE_MIN_RATIO = 1.3;
 export const OPENING_WIDE_QUERY = `(min-aspect-ratio: ${Math.round(OPENING_WIDE_MIN_RATIO * 100)}/100)`;
 
+/**
+ * The desktop factor of the header and the page openings (--scale-hero in app/globals.css, from 1024px). The CSS is the one
+ * place to change it; this copy has to say the same (lib/hero.test.ts checks it), since the header height below follows it.
+ */
+export const SCALE_HERO = 0.75;
+
 /** The header's height from each width up, widest first (--nav-h in app/globals.css; lib/hero.test.ts checks it). */
 export const NAV_HEIGHTS: readonly (readonly [minWidth: number, height: number])[] = [
-  [1024, 90],
+  [1024, 90 * SCALE_HERO],
   [640, 72],
   [0, 64],
 ];

@@ -199,6 +199,7 @@ export function HeroSlideshow({
   return (
     <section
       ref={sectionRef}
+      data-scale="hero"
       className={className ? `pj-hero photo-hero photo-hero--fill ${className}` : "pj-hero photo-hero photo-hero--fill"}
       aria-label={label}
       // one frame height for every slide on a narrow screen (.photo-hero--top)

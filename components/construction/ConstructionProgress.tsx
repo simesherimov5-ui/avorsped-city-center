@@ -147,12 +147,12 @@ function Full({ data, className }: { data: ConstructionProgressData | null; clas
                   />
                 </span>
               )}
-              <div className="text-[length:min(calc(15px*var(--type-scale,1)),var(--body-max,999px))] text-ink">
+              <div className="text-[length:max(var(--min-label),min(calc(15px*var(--type-scale,1)),var(--body-max,999px)))] text-ink">
                 {phase.label}
               </div>
               {sub && (
                 <small
-                  className="mono-stat mt-1.5 block text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] text-gold-deep"
+                  className="mono-stat mt-1.5 block text-[length:max(var(--min-label),min(calc(12px*var(--type-scale,1)),var(--body-max,999px)))] text-gold-deep"
                   style={{ letterSpacing: 0 }}
                 >
                   {sub}

@@ -27,7 +27,11 @@ export function ProjectHeader({
       <h1 className="mt-3 font-display text-(length:--fs-h1) font-normal leading-[1.04] tracking-[-0.01em] text-charcoal">
         {name}
       </h1>
-      {description && <p className="mt-5 max-w-xl text-base font-normal leading-[1.75] text-ink/75">{description}</p>}
+      {description && (
+        <p className="mt-5 max-w-xl text-[length:max(var(--min-body),var(--text-base))] font-normal leading-[1.75] text-ink/75">
+          {description}
+        </p>
+      )}
       {facts.length > 0 && (
         <dl
           className={cn(
@@ -39,7 +43,10 @@ export function ProjectHeader({
           {facts.map((fact) => (
             <div key={fact.label} className="flex flex-col gap-1.5 border-t border-line py-4">
               <dt className="eyebrow eyebrow-tight text-muted">{fact.label}</dt>
-              <dd className="text-[length:min(calc(15px*var(--type-scale,1)),var(--body-max,999px))] font-medium leading-snug text-charcoal">
+              <dd
+                data-scale="rest"
+                className="text-[length:max(var(--min-label),min(calc(15px*var(--type-scale,1)),var(--body-max,999px)))] font-medium leading-snug text-charcoal"
+              >
                 {fact.value}
               </dd>
             </div>
