@@ -571,7 +571,7 @@
 .pj-map-view.is-leaving {
   opacity: 0;
 }
-.pj-cell.is-swapping {
+.pj-card.is-swapping {
   animation: pj-swap-in var(--dur-base) var(--ease) backwards;
 }
 @keyframes pj-swap-in {
@@ -590,30 +590,10 @@
     transform: none;
   }
 }
-/* the cards of the grid: one column on a phone, two from 640px, three from 1024px, 24px apart (as the cards were first laid out) */
 .pj-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
-}
-@media (min-width: 640px) {
-  .pj-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .pj-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-/* a cell is as tall as its row, and the card inside fills it */
-.pj-cell {
-  display: grid;
-}
-.pj-cell.is-rising {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: pj-fadeup var(--dur-slow) var(--ease) forwards;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 40px 28px;
 }
 @media (max-width: 767px) {
   .pj-results {
@@ -622,37 +602,148 @@
   }
 }
 
-/* ───────── the photo box of a row of the map view (the grid's cards are the shared ProjectCard) ───────── */
+/* ───────── card ───────── */
+.pj-card {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-onyx);
+  text-decoration: none;
+  /* press: the card gives a little and springs back (scale, so it never fights the rise-in's transform) */
+  transition: scale var(--dur-fast) var(--ease);
+}
+.pj-card:active {
+  scale: 0.985;
+}
+.pj-card.is-rising {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: pj-fadeup var(--dur-slow) var(--ease) forwards;
+}
+.pj-card:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 4px;
+}
+.pj-photo {
+  position: relative;
+  /* the 3:2 photo frame */
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--color-espresso);
+}
+/* The photo zooms in slowly on hover (900ms), inside the card's frame. */
 .pj-img {
   position: absolute;
   inset: 0;
+  transition: transform 900ms var(--ease);
+}
+.pj-card:focus-visible .pj-img,
+.pj-row:focus-visible .pj-img {
+  transform: scale(1.035);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-img,
+  .pj-row:hover .pj-img {
+    transform: scale(1.035);
+  }
+}
+.pj-photo-scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-onyx) 65%, transparent) 100%);
+}
+.pj-title-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.pj-name {
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-size: var(--fs-h3);
+  line-height: 1.2;
 }
 .pj-arrow {
   color: var(--color-bronze);
   font-size: calc(18px * var(--type-scale, 1));
   transition: transform var(--dur-fast) var(--ease);
 }
+.pj-card:focus-visible .pj-arrow,
 .pj-row:focus-visible .pj-arrow {
   transform: translateX(4px);
 }
 @media (hover: hover) {
+  .pj-card:hover .pj-arrow,
   .pj-row:hover .pj-arrow {
     transform: translateX(4px);
   }
 }
+.pj-rule {
+  margin-top: 12px;
+  position: relative;
+  height: 1px;
+  background: var(--color-gold);
+}
+/* on hover a 2px gold line grows over the 1px rule, left to right: the rule visibly thickens */
+.pj-rule i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-slow) var(--ease);
+}
+.pj-card:focus-visible .pj-rule i {
+  transform: scaleX(1);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-rule i {
+    transform: scaleX(1);
+  }
+}
+.pj-tagline {
+  margin: 12px 0 0;
+  font-size: max(var(--min-body), calc(16px * var(--type-scale, 1)));
+  font-weight: 400;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
+}
+@media (max-width: 767px) {
+  .pj-title-row {
+    margin-top: 12px;
+  }
+  .pj-rule,
+  .pj-tagline {
+    margin-top: 8px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .pj-cell.is-rising,
+  .pj-card.is-rising,
   .pj-view {
     opacity: 1;
     transform: none;
     animation: none;
   }
+  .pj-img,
   .pj-arrow {
     transition: none;
   }
+  .pj-card:hover .pj-img,
+  .pj-card:hover .pj-arrow,
+  .pj-card:focus-visible .pj-img,
+  .pj-card:focus-visible .pj-arrow,
+  .pj-row:hover .pj-img,
   .pj-row:hover .pj-arrow,
+  .pj-row:focus-visible .pj-img,
   .pj-row:focus-visible .pj-arrow {
     transform: none;
+  }
+  .pj-card:active {
+    scale: none;
   }
 }
 

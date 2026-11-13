@@ -22,7 +22,6 @@ import {
   type View,
 } from "@/lib/project-explorer";
 import type { Project } from "@/types";
-import { ProjectCard } from "@/components/ProjectCard";
 import { PinIcon } from "./PinIcon";
 import { ProjectsMap, type MapPin } from "./ProjectsMap";
 
@@ -433,14 +432,45 @@ const cnView = (changed: boolean, leaving: boolean) =>
   ["pj-map-view", changed && "pj-view", leaving && "is-leaving"].filter(Boolean).join(" ");
 
 function GridCard({ project, delay, swap = false }: { project: Project; delay?: number; swap?: boolean }) {
-  // the card is the shared ProjectCard (the same one as on Завршени проекти); the cell around it only carries the rise-in
-  // and the swap of a new choice
+  // the card's own photo and framing where the project has one (Дојрански Рај, Радовиш Twins: the whole building), else its
+  // hero photo
+  const photo = project.cardImage ?? project.heroImage;
   return (
-    <div
-      className={`pj-cell${delay !== undefined ? (swap ? " is-swapping" : " is-rising") : ""}`}
+    <Link
+      href={href(project)}
+      className={`pj-card${delay !== undefined ? (swap ? " is-swapping" : " is-rising") : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay.toFixed(2)}s` } : undefined}
     >
-      <ProjectCard project={project} />
-    </div>
+      <div className="pj-photo">
+        {photo.isPlaceholder ? (
+          <NoPhoto />
+        ) : (
+          <div className="pj-img">
+            <Media
+              image={photo}
+              label={project.name}
+              tone="dark"
+              fit={project.imageFit ?? "cover"}
+              focus={project.cardFocus ?? project.imageFocus}
+              className="h-full w-full !bg-transparent"
+              // the photo is drawn wider than its card (the crop of a wide photo, and the project's own zoom)
+              sizes="(max-width: 767px) 160vw, (max-width: 1100px) 100vw, 620px"
+              defer
+            />
+          </div>
+        )}
+        <div className="pj-photo-scrim" />
+      </div>
+      <div className="pj-title-row">
+        <span className="pj-name">{project.name}</span>
+        <span className="pj-arrow" aria-hidden>
+          →
+        </span>
+      </div>
+      <div className="pj-rule">
+        <i />
+      </div>
+      {project.tagline && <p className="pj-tagline">{project.tagline}</p>}
+    </Link>
   );
 }
