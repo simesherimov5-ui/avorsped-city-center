@@ -64,12 +64,12 @@ export function Logo({
 
   // the lockup of the first navbar (the mark, HOLDING above JAVOR SPED), drawn from one size: --logo-h is the mark's height and
   // everything else keeps the first lockup's proportions to it (a 28px mark, 8px and 16px words, 10px apart). The words show
-  // from 1280px; narrower, the mark is alone.
+  // at every width (the header checks that they fit next to the phone menu button).
   if (variant === "lockup") {
     return (
       <div className={cn("flex items-center", className)} style={{ gap: "calc(var(--logo-h) * 0.36)" }}>
         <BuildingMark gold className="w-auto shrink-0" style={{ height: "var(--logo-h)" }} />
-        <div className="hidden flex-col leading-none text-gold xl:flex">
+        <div className="flex flex-col leading-none text-gold">
           <span
             className="font-semibold uppercase"
             style={{ fontSize: "calc(var(--logo-h) * 0.286)", letterSpacing: "0.35em" }}
