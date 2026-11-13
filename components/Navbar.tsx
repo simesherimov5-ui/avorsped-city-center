@@ -15,7 +15,7 @@ import { isBlackPage } from "@/lib/theme";
 import { contactHref, scrollToBookingForm } from "@/lib/contact-link";
 import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { Button } from "@/components/ui/Button";
-import { Logo } from "@/components/ui/Logo";
+import { BuildingMark } from "@/components/ui/Logo";
 import { HERO_UNDER_HEADER_PATHS } from "@/lib/hero";
 
 const LINKS = [
@@ -230,7 +230,13 @@ export function Navbar() {
               className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:calc(54px*var(--scale-hero))]"
               aria-label="Javor Sped Holding — Почетна"
             >
-              <Logo variant="lockup" />
+              {/* From 1024px the mark sits where the wordmark's text used to start (mark width + gap in from the link's left edge),
+                  and the free space the text took is kept on its right, so the links and the button stay where they were. */}
+              <BuildingMark
+                gold
+                className="w-auto shrink-0 lg:ml-[calc(var(--logo-h)*1.068)] lg:mr-[calc(var(--logo-h)*2.686)]"
+                style={{ height: "var(--logo-h)" }}
+              />
             </Link>
 
             <div className="hidden items-center justify-center lg:flex lg:translate-x-[calc(var(--nav-shift)*-1)]">
