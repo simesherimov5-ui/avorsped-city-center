@@ -60,10 +60,11 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           </Link>
         </div>
 
-        {/* From 1024px: the text on the left, the floor buttons and the photo on the right. On a phone: text, floors, photo. */}
+        {/* From 1024px: the floor buttons and the photo on the left, the text on the right (moved there with `order`, so the
+            reading order stays text first). On a phone: text, floors, photo. */}
         <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div className="min-w-0">
+            <div className="min-w-0 lg:order-2">
               <div className="eyebrow text-gold-deep">Вие сте овде</div>
               <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
               <dl className="mt-8 grid grid-cols-2 gap-6">
