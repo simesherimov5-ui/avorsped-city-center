@@ -43,6 +43,17 @@ export function PlanEnlarge({
     setFrom(source.current);
     setOpen(true);
   };
+  // the 3D render in the same pop-up, framed in its own proportions (read from the loaded picture)
+  const source3d = useRef<HTMLDivElement>(null);
+  const [open3d, setOpen3d] = useState(false);
+  const [aspect3d, setAspect3d] = useState<number | undefined>(undefined);
+  const label3d = `3D приказ — Стан ${apartmentNumber}`;
+  const show3d = () => {
+    const img = source3d.current?.querySelector("img");
+    if (img?.naturalWidth && img.naturalHeight) setAspect3d(img.naturalWidth / img.naturalHeight);
+    setFrom(source3d.current);
+    setOpen3d(true);
+  };
 
   const tabs = render3dSrc
     ? ([
@@ -74,11 +85,14 @@ export function PlanEnlarge({
     tabRefs.current[to]?.focus();
   };
   const onPlan = view === "plan";
+  // the enlarge button acts on the view that is shown; on 3D only once the render is there (not the "coming soon" line)
+  const can3d = Boolean(render3dSrc) && !failed;
+  const canAct = onPlan ? canEnlarge : can3d;
 
   return (
     <div className="apt-plan relative rounded-xl bg-sand text-onyx">
       {tabs ? (
-        // ОСНОВА / 3D: real tabs, the chosen one underlined in Бронза (the gold of a light surface), the other muted
+        // ОСНОВА / 3D: real tabs, the chosen one a solid Оникс chip with gold text, the other outlined (apartment.css)
         <div role="tablist" aria-label={`Приказ на стан ${apartmentNumber}`} onKeyDown={onTabKey} className="apt-tabs">
           {tabs.map((t, i) => (
             <button
@@ -130,11 +144,13 @@ export function PlanEnlarge({
           </div>
           {render3dSrc && (
             <div
+              ref={source3d}
               role="tabpanel"
               id={`${uid}-panel-3d`}
               aria-labelledby={`${uid}-tab-3d`}
               hidden={onPlan}
-              className="h-full w-full"
+              onClick={can3d ? show3d : undefined}
+              className={can3d ? "h-full w-full cursor-zoom-in" : "h-full w-full"}
             >
               {/* mounted only once the tab has been opened, and fetched at once then (priority: no waiting for a lazy-load
                   observer); whole, centred, never cropped or stretched. If it fails to load, a short line says it is coming. */}
@@ -159,22 +175,54 @@ export function PlanEnlarge({
         </div>
       </div>
 
-      {canEnlarge && (
-        // kept in place (only hidden) on the 3D tab, so the card keeps its height when switching
+      {(canEnlarge || can3d) && (
+        // one bar for both views: the button enlarges the view that is shown. When that view has nothing to enlarge (a
+        // render that failed to load) the bar keeps its place, only hidden, so the card keeps its height when switching.
         <div
-          className={`flex justify-end border-t border-onyx/10 px-4 py-3 sm:px-8${onPlan ? "" : " invisible"}`}
-          aria-hidden={onPlan ? undefined : true}
+          className={`flex justify-end border-t border-onyx/10 px-4 py-3 sm:px-8${canAct ? "" : " invisible"}`}
+          aria-hidden={canAct ? undefined : true}
         >
           <button
             type="button"
-            onClick={show}
+            onClick={onPlan ? show : show3d}
             aria-haspopup="dialog"
             className="focus-ring inline-flex min-h-11 items-center gap-2.5 border border-onyx/30 px-4 text-label font-semibold uppercase tracking-label text-onyx transition-colors duration-200 hover:border-onyx hover:bg-onyx hover:text-travertine motion-reduce:transition-none"
           >
-            <Maximize2 className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-            Зголеми ја основата
+            <Maximize2 className="h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
+            {tabs ? (
+              // both labels share one grid cell, the other one only hidden, so the button is always the size of the longer
+              // one and the card never changes height when switching
+              <span className="grid text-left">
+                <span
+                  className={`col-start-1 row-start-1${onPlan ? "" : " invisible"}`}
+                  aria-hidden={!onPlan || undefined}
+                >
+                  Зголеми ја основата
+                </span>
+                <span
+                  className={`col-start-1 row-start-1${onPlan ? " invisible" : ""}`}
+                  aria-hidden={onPlan || undefined}
+                >
+                  Зголеми го 3D приказот
+                </span>
+              </span>
+            ) : (
+              "Зголеми ја основата"
+            )}
           </button>
         </div>
+      )}
+
+      {can3d && render3dSrc && (
+        <PhotoLightbox
+          photos={[{ src: render3dSrc, alt: label3d, isPlaceholder: false, crisp: true }]}
+          open={open3d}
+          origin={origin}
+          label={label3d}
+          aspect={aspect3d}
+          surface="light"
+          onClose={() => setOpen3d(false)}
+        />
       )}
 
       {canEnlarge && (

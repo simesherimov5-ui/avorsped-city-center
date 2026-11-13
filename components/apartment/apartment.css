@@ -11,31 +11,53 @@
 }
 
 /* ОСНОВА / 3D (a building whose apartments have 3D renders, data/renders.ts): two tabs at the top left of the plan card,
-   the small-label style (.eyebrow). The chosen one is Оникс with a 2px Бронза underline (the gold of a light surface,
-   6.2:1); the other is the muted Оникс 68%. Each is 44px tall; keyboard focus gets a 2px Бронза ring. */
+   the small-label style (.eyebrow), shaped like the static «Основа» badge of the other apartments (rounded-sm). The chosen
+   one is a solid Оникс chip with Светол бакар text (the gold for text on dark, 6.9:1); the other is transparent with Оникс
+   text (16:1 on the card) and a 1px Оникс 20% border, Оникс 40% on hover (mouse only). Both have a 1px border, so they are
+   the same size and nothing moves when switching. Each draws about 36px tall, like the badge; an invisible ::after makes
+   the area that takes a tap 44px tall. Keyboard focus: a 2px Бронза ring. */
 .apt-tabs {
   position: absolute;
-  top: 6px;
+  top: 12px;
   left: 16px;
   z-index: 10;
   display: flex;
-  gap: 20px;
+  gap: 8px;
 }
 .apt-tabs .apt-tab {
+  position: relative;
   display: inline-flex;
-  min-height: 44px;
   min-width: 44px;
   align-items: center;
   justify-content: center;
-  padding-inline: 4px;
-  border-bottom: 2px solid transparent;
-  color: var(--color-muted);
-  transition: color var(--dur-fast) var(--ease);
+  padding: 9px 15px; /* 10px 16px with the 1px border */
+  border: 1px solid color-mix(in srgb, var(--color-onyx) 20%, transparent);
+  border-radius: 0.25rem; /* Tailwind's rounded-sm, the badge's corner */
+  background: transparent;
+  color: var(--color-onyx);
+  line-height: 1.2;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
   outline: none;
 }
+.apt-tabs .apt-tab::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 44px;
+  transform: translateY(-50%);
+}
+@media (hover: hover) {
+  .apt-tabs .apt-tab[aria-selected="false"]:hover {
+    border-color: color-mix(in srgb, var(--color-onyx) 40%, transparent);
+  }
+}
 .apt-tabs .apt-tab[aria-selected="true"] {
-  border-bottom-color: var(--color-bronze);
-  color: var(--color-onyx);
+  border-color: var(--color-onyx);
+  background: var(--color-onyx);
+  color: var(--color-gold);
 }
 .apt-tabs .apt-tab:focus-visible {
   outline: 2px solid var(--color-bronze);
@@ -43,7 +65,7 @@
 }
 @media (min-width: 640px) {
   .apt-tabs {
-    top: 10px;
+    top: 14px;
   }
 }
 
