@@ -78,6 +78,8 @@
   --black: var(--color-onyx);
   /* Height of the fixed navbar, for pages that start right below it. */
   --nav-h: 64px;
+  /* from 1024px the header links sit centred between the wordmark and the button; this moves them further left (0 = none) */
+  --nav-shift: 0px;
 
   /* The site's three animation speeds and its one easing (also lib/motion.ts and lib/gsap.ts). Fast: hover, press, small
      colour changes. Base: menus, pop-ups, form steps, toggles. Slow: image movement, section reveals. What leaves takes
