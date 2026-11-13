@@ -4,10 +4,10 @@ import { TransitionLink as Link } from "@/components/page-transition/TransitionL
 import { ChevronLeft } from "lucide-react";
 import { getBuilding, apartments, buildings, development } from "@/data";
 import { Media } from "@/components/ui/Media";
+import { FloorPicker } from "@/components/floor-picker/FloorPicker";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ZoomEnter } from "@/components/ui/ZoomTransition";
 import { pageMetadata } from "@/lib/seo";
-import { floorTitle } from "@/lib/floor";
 import { floorsText, unitsText } from "@/lib/plural";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -41,10 +41,6 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
   if (!building) notFound();
 
   const units = apartments.filter((a) => a.buildingId === building.id);
-  // the floor buttons, in building order: the attic (ПК) first, the lowest floor last
-  const floorsTopDown = [...building.floors]
-    .sort((a, b) => b.number - a.number)
-    .map((floor) => ({ ...floor, units: units.filter((a) => a.floor === floor.number).length }));
 
   return (
     <ZoomEnter className="on-dark">
@@ -60,11 +56,11 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           </Link>
         </div>
 
-        {/* From 1024px: the floor buttons and the photo on the left, the text on the right (moved there with `order`, so the
-            reading order stays text first). On a phone: text, floors, photo. */}
+        {/* From 1024px: the floor picker (the drawn building) on the left, across both rows; the text top right and the photo
+            under it. On a phone, in source order: text, floor picker, photo. */}
         <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div className="min-w-0 lg:order-2">
+          <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:items-start">
+            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
               <div className="eyebrow text-gold-deep">Вие сте овде</div>
               <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
               <dl className="mt-8 grid grid-cols-2 gap-6">
@@ -72,35 +68,35 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                 <Stat label="Станови" value={String(building.totalApartments)} />
               </dl>
             </div>
-            <div className="min-w-0">
-              {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h) */}
-              <nav id="izberete-kat" aria-labelledby="izberete-kat-label" className="scroll-mt-(--nav-h)">
-                <div id="izberete-kat-label" className="eyebrow text-gold-deep">
-                  Изберете кат
-                </div>
-                {/* one row, top floor first; on a narrow screen it scrolls sideways inside itself */}
-                <ul className="mt-3 flex gap-2 overflow-x-auto pb-1">
-                  {floorsTopDown.map((floor) => (
-                    <li key={floor.number} className="min-w-20 flex-1 lg:min-w-0">
-                      <Link
-                        href={`/development/${building.id}/${floor.number}`}
-                        aria-label={`${floorTitle(floor.label)}, ${unitsText(floor.units)}`}
-                        className="flex min-h-14 flex-col items-center justify-center border border-line px-1 py-2 text-center transition-colors outline-none hover:border-gold-deep focus-visible:border-gold-deep focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-gold-deep"
-                      >
-                        <span className="text-lg font-medium tabular-nums leading-tight">{floor.label}</span>
-                        <span className="mt-0.5 text-xs leading-tight text-muted">{unitsText(floor.units)}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-              <Media
-                image={building.exteriorImage}
-                className="mt-6 aspect-[4/3]"
-                sizes="(max-width: 1024px) 155vw, 870px"
-                priority
+            {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h). Picking a
+                floor opens its page, as the floor buttons did. */}
+            <div id="izberete-kat" className="min-w-0 scroll-mt-(--nav-h) lg:col-start-1 lg:row-span-2 lg:row-start-1">
+              <FloorPicker
+                basePath={`/development/${building.id}`}
+                pickOpensFloor
+                floors={building.floors.map((floor) => ({
+                  number: floor.number,
+                  label: floor.label,
+                  sketch: floor.sketch,
+                  apartments: units
+                    .filter((a) => a.floor === floor.number)
+                    .map((a) => ({
+                      id: a.id,
+                      number: a.number,
+                      area: a.area,
+                      areaDecimals: a.areaDecimals,
+                      bedrooms: a.bedrooms,
+                      outline: a.outline,
+                    })),
+                }))}
               />
             </div>
+            <Media
+              image={building.exteriorImage}
+              className="aspect-[4/3] lg:col-start-2 lg:row-start-2"
+              sizes="(max-width: 1024px) 155vw, 870px"
+              priority
+            />
           </div>
         </section>
       </div>

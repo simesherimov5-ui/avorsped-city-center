@@ -2,6 +2,8 @@
 
 import "./floor-picker.css";
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useRouter } from "next/navigation";
+import { usePageTransition } from "@/components/page-transition/PageTransition";
 import { TransitionLink as Link } from "@/components/page-transition/TransitionLink";
 import { ZoomNavLink } from "@/components/ui/ZoomTransition";
 import { floorTitle } from "@/lib/floor";
@@ -36,8 +38,18 @@ const DENSE_FROM = 7;
  * apartments of the chosen floor listed under it and, beside it, the floor's sketch. Hovering a row with a mouse, or clicking / tapping it, chooses it;
  * Up and Down move the choice. It starts on the lowest floor that has apartments. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
+ * With `pickOpensFloor` (the building page) a click, tap or Enter on a floor opens that floor's page (`basePath`/number) at
+ * once; a mouse hovering the rows still previews each floor.
  */
-export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; basePath?: string }) {
+export function FloorPicker({
+  floors,
+  basePath,
+  pickOpensFloor = false,
+}: {
+  floors: PickerFloor[];
+  basePath?: string;
+  pickOpensFloor?: boolean;
+}) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
   // A floor with no apartments listed yet (the details are not here yet) is shown, with a short «soon» line in its panel.
@@ -47,6 +59,8 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
   // the apartment the pointer or the keyboard is on, in the sketch or in the list: both light up
   const [hot, setHot] = useState<string | null>(null);
   const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const transition = usePageTransition();
+  const router = useRouter();
 
   if (!start) return null;
   const current = rows.find((f) => f.number === selected) ?? start;
@@ -80,7 +94,13 @@ export function FloorPicker({ floors, basePath }: { floors: PickerFloor[]; baseP
               aria-pressed={floor.number === current.number}
               // one tab stop for the whole building; the arrow keys move inside it
               tabIndex={floor.number === current.number ? 0 : -1}
-              onClick={() => setSelected(floor.number)}
+              onClick={() => {
+                setSelected(floor.number);
+                if (!pickOpensFloor || !basePath) return;
+                const href = `${basePath}/${floor.number}`;
+                if (transition) transition.navigate(href);
+                else router.push(href);
+              }}
               onPointerEnter={(event) => {
                 if (event.pointerType === "mouse") setSelected(floor.number);
               }}
