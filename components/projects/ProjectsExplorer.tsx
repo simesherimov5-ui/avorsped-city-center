@@ -431,6 +431,7 @@ function Explorer({
 const cnView = (changed: boolean, leaving: boolean) =>
   ["pj-map-view", changed && "pj-view", leaving && "is-leaving"].filter(Boolean).join(" ");
 
+// The /projects card, «name on the photo» (projects.css, card): only the photo, the name with its arrow and the line.
 function GridCard({ project, delay, swap = false }: { project: Project; delay?: number; swap?: boolean }) {
   // the card's own photo and framing where the project has one (Дојрански Рај, Радовиш Twins: the whole building), else its
   // hero photo
@@ -454,23 +455,20 @@ function GridCard({ project, delay, swap = false }: { project: Project; delay?: 
               focus={project.cardFocus ?? project.imageFocus}
               className="h-full w-full !bg-transparent"
               // the photo is drawn wider than its card (the crop of a wide photo, and the project's own zoom)
-              sizes="(max-width: 767px) 160vw, (max-width: 1100px) 100vw, 620px"
+              sizes="(max-width: 767px) 190vw, (max-width: 1100px) 100vw, 620px"
               defer
             />
           </div>
         )}
-        <div className="pj-photo-scrim" />
+        {/* the name and the arrow, and the line under them, on the photo (its shade is .pj-photo::after) */}
+        <div className="pj-name-row">
+          <span className="pj-name">{project.name}</span>
+          <span className="pj-arrow" aria-hidden>
+            →
+          </span>
+        </div>
+        <div className="pj-line" aria-hidden />
       </div>
-      <div className="pj-title-row">
-        <span className="pj-name">{project.name}</span>
-        <span className="pj-arrow" aria-hidden>
-          →
-        </span>
-      </div>
-      <div className="pj-rule">
-        <i />
-      </div>
-      {project.tagline && <p className="pj-tagline">{project.tagline}</p>}
     </Link>
   );
 }

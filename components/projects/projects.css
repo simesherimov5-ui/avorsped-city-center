@@ -602,11 +602,17 @@
   }
 }
 
-/* ───────── card ───────── */
+/* ───────── card ─────────
+   «Name on the photo» (the approved mockup): a tall 3 / 4.2 card with a 1px Оникс 14% border. The photo fills it (cover),
+   an Оникс shade covers its lower half, and at the bottom, 20px from the sides, the name and a small arrow in Травертин
+   (Playfair, about 22px) over a 2px line (Травертин 25%). On hover (devices that can hover) or keyboard focus the line fills
+   with gold from the left (0.9s), the arrow moves 5px right and the photo scales to 1.04 (1.2s). Nothing else is on the
+   card; a tap opens the project. */
 .pj-card {
-  display: flex;
-  flex-direction: column;
-  color: var(--color-onyx);
+  --pj-card-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+  border: 1px solid color-mix(in srgb, var(--color-onyx) 14%, transparent);
+  color: var(--color-travertine);
   text-decoration: none;
   /* press: the card gives a little and springs back (scale, so it never fights the rise-in's transform) */
   transition: scale var(--dur-fast) var(--ease);
@@ -625,100 +631,108 @@
 }
 .pj-photo {
   position: relative;
-  /* the 3:2 photo frame */
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 3 / 4.2;
   overflow: hidden;
   background: var(--color-espresso);
 }
-/* The photo zooms in slowly on hover (900ms), inside the card's frame. */
+/* the shade over the photo's lower half (over the no-photo mark too), under the name and the line */
+.pj-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--color-onyx) 78%, transparent) 100%);
+}
+/* The photo inside its frame; the map view's rows use it too (900ms there). */
 .pj-img {
   position: absolute;
   inset: 0;
   transition: transform 900ms var(--ease);
 }
-.pj-card:focus-visible .pj-img,
+.pj-card .pj-img {
+  transition: transform 1.2s var(--pj-card-ease);
+}
+.pj-card:focus-visible .pj-img {
+  transform: scale(1.04);
+}
 .pj-row:focus-visible .pj-img {
   transform: scale(1.035);
 }
 @media (hover: hover) {
-  .pj-card:hover .pj-img,
+  .pj-card:hover .pj-img {
+    transform: scale(1.04);
+  }
   .pj-row:hover .pj-img {
     transform: scale(1.035);
   }
 }
-.pj-photo-scrim {
+.pj-name-row {
   position: absolute;
-  inset: auto 0 0 0;
-  height: 45%;
-  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-onyx) 65%, transparent) 100%);
-}
-.pj-title-row {
-  margin-top: 16px;
+  left: 20px;
+  right: 20px;
+  bottom: 30px;
+  z-index: 2;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
 .pj-name {
   font-family: var(--font-display), "Times New Roman", serif;
-  font-size: var(--fs-h3);
+  font-size: calc(22px * var(--type-scale, 1));
+  font-weight: 400;
   line-height: 1.2;
 }
+/* the arrow: Бронза in the map view's rows, Травертин on the card */
 .pj-arrow {
   color: var(--color-bronze);
   font-size: calc(18px * var(--type-scale, 1));
   transition: transform var(--dur-fast) var(--ease);
 }
-.pj-card:focus-visible .pj-arrow,
+.pj-card .pj-arrow {
+  flex: none;
+  color: inherit;
+  transition: transform 0.9s var(--pj-card-ease);
+}
+.pj-card:focus-visible .pj-arrow {
+  transform: translateX(5px);
+}
 .pj-row:focus-visible .pj-arrow {
   transform: translateX(4px);
 }
 @media (hover: hover) {
-  .pj-card:hover .pj-arrow,
+  .pj-card:hover .pj-arrow {
+    transform: translateX(5px);
+  }
   .pj-row:hover .pj-arrow {
     transform: translateX(4px);
   }
 }
-.pj-rule {
-  margin-top: 12px;
-  position: relative;
-  height: 1px;
-  background: var(--color-gold);
-}
-/* on hover a 2px gold line grows over the 1px rule, left to right: the rule visibly thickens */
-.pj-rule i {
+.pj-line {
   position: absolute;
-  top: 0;
-  left: 0;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2;
   height: 2px;
-  width: 100%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-travertine) 25%, transparent);
+}
+.pj-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: var(--color-gold);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform var(--dur-slow) var(--ease);
+  transition: transform 0.9s var(--pj-card-ease);
 }
-.pj-card:focus-visible .pj-rule i {
+.pj-card:focus-visible .pj-line::after {
   transform: scaleX(1);
 }
 @media (hover: hover) {
-  .pj-card:hover .pj-rule i {
+  .pj-card:hover .pj-line::after {
     transform: scaleX(1);
-  }
-}
-.pj-tagline {
-  margin: 12px 0 0;
-  font-size: max(var(--min-body), calc(16px * var(--type-scale, 1)));
-  font-weight: 400;
-  line-height: 1.5;
-  color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
-}
-@media (max-width: 767px) {
-  .pj-title-row {
-    margin-top: 12px;
-  }
-  .pj-rule,
-  .pj-tagline {
-    margin-top: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -728,8 +742,12 @@
     transform: none;
     animation: none;
   }
+  /* no movement: the line still fills (at once), as the hover and focus sign */
   .pj-img,
-  .pj-arrow {
+  .pj-arrow,
+  .pj-card .pj-img,
+  .pj-card .pj-arrow,
+  .pj-line::after {
     transition: none;
   }
   .pj-card:hover .pj-img,
