@@ -68,12 +68,13 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
                 <Stat label="Станови" value={String(building.totalApartments)} />
               </dl>
             </div>
-            {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h). Picking a
-                floor opens its page, as the floor buttons did. */}
+            {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h). Only the
+                drawn building is shown; picking a floor opens its page, as the floor buttons did. */}
             <div id="izberete-kat" className="min-w-0 scroll-mt-(--nav-h) lg:col-start-1 lg:row-span-2 lg:row-start-1">
               <FloorPicker
                 basePath={`/development/${building.id}`}
                 pickOpensFloor
+                buildingOnly
                 floors={building.floors.map((floor) => ({
                   number: floor.number,
                   label: floor.label,

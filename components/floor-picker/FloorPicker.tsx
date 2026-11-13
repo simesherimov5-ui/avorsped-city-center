@@ -39,16 +39,19 @@ const DENSE_FROM = 7;
  * Up and Down move the choice. It starts on the lowest floor that has apartments. The page passes the data
  * in as plain props, so nothing here knows where it comes from.
  * With `pickOpensFloor` (the building page) a click, tap or Enter on a floor opens that floor's page (`basePath`/number) at
- * once; a mouse hovering the rows still previews each floor.
+ * once; a mouse hovering the rows still previews each floor. With `buildingOnly` (the building page) only the drawn building
+ * is shown: no apartment rows under it and no panel beside it.
  */
 export function FloorPicker({
   floors,
   basePath,
   pickOpensFloor = false,
+  buildingOnly = false,
 }: {
   floors: PickerFloor[];
   basePath?: string;
   pickOpensFloor?: boolean;
+  buildingOnly?: boolean;
 }) {
   const rows = [...floors].sort((a, b) => b.number - a.number);
   const lowestFirst = [...floors].sort((a, b) => a.number - b.number);
@@ -65,7 +68,7 @@ export function FloorPicker({
   if (!start) return null;
   const current = rows.find((f) => f.number === selected) ?? start;
   // A floor with a sketch and shapes shows the sketch in the panel; a building without them shows the list only.
-  const hasSketch = floors.some((f) => f.sketch && f.apartments.some((a) => a.outline));
+  const hasSketch = !buildingOnly && floors.some((f) => f.sketch && f.apartments.some((a) => a.outline));
   const currentSketch = current.sketch && current.apartments.some((a) => a.outline) ? current.sketch : undefined;
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -79,7 +82,7 @@ export function FloorPicker({
   };
 
   return (
-    <div className={`fp${hasSketch ? " has-sketch" : ""}`}>
+    <div className={`fp${hasSketch ? " has-sketch" : ""}${buildingOnly ? " is-building-only" : ""}`}>
       <div className="fp-facade">
         <div className="fp-cap" aria-hidden />
         <div className="fp-floors" role="group" aria-label="Катови" onKeyDown={onKeyDown}>
@@ -115,7 +118,7 @@ export function FloorPicker({
           ))}
         </div>
         <div className="fp-base" aria-hidden />
-        {current.apartments.length > 0 && (
+        {!buildingOnly && current.apartments.length > 0 && (
           // keyed by the floor, so the list fades in again whenever the floor changes
           <ul key={current.number} className="fp-apts" aria-label={`Станови — ${floorTitle(current.label)}`}>
             {current.apartments.map((a) => (
@@ -141,41 +144,43 @@ export function FloorPicker({
         )}
       </div>
 
-      <div className="fp-panel" aria-live="polite">
-        <div className="fp-label">Избор на стан по кат</div>
-        <h3 className="fp-title">{floorTitle(current.label)}</h3>
-        {currentSketch && (
-          <FloorSketch
-            image={currentSketch}
-            apartments={current.apartments}
-            levelKey={current.number}
-            hovered={hot}
-            onHover={setHot}
-            priority={false}
-          />
-        )}
-        {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
-        {basePath && current.apartments.length > 0 && (
-          <ZoomNavLink
-            href={`${basePath}/${current.number}`}
-            label={floorTitle(current.label)}
-            className="fp-floorlink"
-          >
-            Погледнете ја основата на катот
-            <svg
-              width="18"
-              height="10"
-              viewBox="0 0 18 10"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              aria-hidden
+      {!buildingOnly && (
+        <div className="fp-panel" aria-live="polite">
+          <div className="fp-label">Избор на стан по кат</div>
+          <h3 className="fp-title">{floorTitle(current.label)}</h3>
+          {currentSketch && (
+            <FloorSketch
+              image={currentSketch}
+              apartments={current.apartments}
+              levelKey={current.number}
+              hovered={hot}
+              onHover={setHot}
+              priority={false}
+            />
+          )}
+          {current.apartments.length === 0 && <p className="fp-soon">Деталите за овој кат следуваат наскоро.</p>}
+          {basePath && current.apartments.length > 0 && (
+            <ZoomNavLink
+              href={`${basePath}/${current.number}`}
+              label={floorTitle(current.label)}
+              className="fp-floorlink"
             >
-              <path d="M0 5h17M13 1l4 4-4 4" />
-            </svg>
-          </ZoomNavLink>
-        )}
-      </div>
+              Погледнете ја основата на катот
+              <svg
+                width="18"
+                height="10"
+                viewBox="0 0 18 10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                aria-hidden
+              >
+                <path d="M0 5h17M13 1l4 4-4 4" />
+              </svg>
+            </ZoomNavLink>
+          )}
+        </div>
+      )}
     </div>
   );
 }

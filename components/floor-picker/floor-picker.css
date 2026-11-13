@@ -259,3 +259,8 @@
     padding: 32px 16px;
   }
 }
+
+/* The building page: the drawn building alone (no apartment rows, no panel), one column */
+.fp.is-building-only {
+  grid-template-columns: minmax(0, 1fr);
+}
