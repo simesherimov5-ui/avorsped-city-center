@@ -57,13 +57,14 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
         </div>
 
         {/* From 1024px: the floor picker (the drawn building) on the left, across both rows; the text top right and the photo
-            under it. On a phone, in source order: text, floor picker, photo. */}
+            under it (24px below the stats, which sit side by side 64px apart). On a phone, in source order: text, floor
+            picker, photo. */}
         <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:items-start">
+          <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:items-start lg:gap-y-6">
             <div className="min-w-0 lg:col-start-2 lg:row-start-1">
               <div className="eyebrow text-gold-deep">Вие сте овде</div>
               <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
-              <dl className="mt-8 grid grid-cols-2 gap-6">
+              <dl className="mt-8 grid grid-cols-2 gap-6 lg:flex lg:gap-16">
                 <Stat label="Катови" value={String(building.floors.length)} />
                 <Stat label="Станови" value={String(building.totalApartments)} />
               </dl>
