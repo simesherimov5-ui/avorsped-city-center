@@ -8,7 +8,7 @@ import { Modal, type ModalChoreography } from "@/components/ui/Modal";
 import { CALM_EASE, INOUT_EASE, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { IMAGE_DIMS } from "@/lib/image-dims";
 import { aspectOf } from "@/lib/image-sizes";
-import { captionOf, clampIndex, dragOffset, dragOutcome, growTransform, mostlyOnScreen } from "@/lib/lightbox";
+import { clampIndex, dragOffset, dragOutcome, growTransform, mostlyOnScreen } from "@/lib/lightbox";
 
 export type LightboxPhoto = {
   src: string;
@@ -27,7 +27,9 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const COPPER = "var(--color-copper)";
 const FOCUS =
   "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-copper)]";
-const ARROW = `flex size-11 shrink-0 items-center justify-center rounded-full border text-paper transition-colors duration-200 motion-reduce:transition-none ${FOCUS}`;
+// the arrows beside the photo: 48px round 1px buttons just outside its left and right edges, vertically centred; under 900px
+// inside the photo near its edges, on a soft dark circle, 44px
+const ARROW = `absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border bg-onyx/55 text-paper transition-colors duration-200 motion-reduce:transition-none min-[900px]:size-12 min-[900px]:bg-transparent ${FOCUS}`;
 const ICON = { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.5 };
 
 type Control = { finishEnter: () => void };
@@ -59,11 +61,12 @@ const finish = (tl: gsap.core.Animation | null | undefined) => {
  * move, so the building is never stretched), 1050ms; from a button it fades and scales in, 600ms. Then the controls come in from
  * 14px below one after another. The photos lie on one strip, 56px apart, and a change slides it (950ms; the current photo
  * whole, the rest at 25%). Dragging moves the strip with the finger (touch-action: pan-y); it changes the photo after 18% of the
- * width or a flick, and at the first and last photo follows only 30%. The counter rolls through a mask, the caption
- * (the alt text without the project prefix) and the thumbnails' copper rail move with the same curve. Closing: the controls
+ * width or a flick, and at the first and last photo follows only 30%. The counter rolls through a mask and the thumbnails'
+ * copper rail moves with the same curve; there is no caption. The arrows stand just outside the photo's left and right
+ * edges (inside them, on a soft dark circle, under 900px). Closing: the controls
  * fade, then the frame shrinks back into the image it came from (if that is still the photo shown and on screen), or fades.
  * A new click, key or drag finishes the running motion at once. With reduced motion every step is a 200ms fade. One photo
- * (a plan): no strip, counter, caption, thumbnails or arrows, only the opening, closing and the mat line.
+ * (a plan): no strip, counter, thumbnails or arrows, only the opening, closing and the mat line.
  */
 export function PhotoLightbox({
   photos,
@@ -207,7 +210,6 @@ export function PhotoLightbox({
           slow ? 0.75 : 0.7
         );
         rise(all(dialog, '[data-lb-in="counter"]'), slow ? 0.8 : 0.76);
-        rise(all(dialog, '[data-lb-in="caption"]'), slow ? 0.9 : 0.85);
         rise(all(dialog, '[data-lb-in="arrow"]'), slow ? 1 : 0.94);
         all(dialog, '[data-lb-in="thumb"]').forEach((n, i) =>
           tl.fromTo(
@@ -346,12 +348,12 @@ function LightboxBody({
   const thumbsBox = useRef<HTMLDivElement>(null);
   const change = useRef<gsap.core.Timeline | null>(null);
   const drag = useRef<{ x: number; t: number; id: number } | null>(null);
-  // the two layers of the rolling counter and of the caption: the one in front and the one behind
-  const front = useRef({ counter: 0, caption: 0 });
+  // the two layers of the rolling counter: the one in front and the one behind
+  const front = useRef({ counter: 0 });
 
   const width = () => frame.current?.offsetWidth ?? 0;
   const baseX = (i: number) => -i * (width() + GAP);
-  const layers = (kind: "counter" | "caption") => all(root.current!, `[data-lb-layer="${kind}"]`);
+  const layers = (kind: "counter") => all(root.current!, `[data-lb-layer="${kind}"]`);
   const thumbs = () => all(root.current!, "[data-lb-thumb]");
   const slides = () => all(root.current!, "[data-lb-slide]");
 
@@ -370,18 +372,12 @@ function LightboxBody({
     const t = thumbs()[i];
     if (t && rail.current) gsap.set(rail.current, { x: t.offsetLeft, width: t.offsetWidth });
     const [c0, c1] = layers("counter");
-    const [p0, p1] = layers("caption");
-    front.current = { counter: 0, caption: 0 };
+    front.current = { counter: 0 };
     if (c0) {
       c0.textContent = pad(i + 1);
       gsap.set(c0, { yPercent: 0, opacity: 1 });
     }
     if (c1) gsap.set(c1, { yPercent: 100, opacity: 1 });
-    if (p0) {
-      p0.textContent = captionOf(photos[i]?.alt);
-      gsap.set(p0, { y: 0, opacity: 1 });
-    }
-    if (p1) gsap.set(p1, { y: 10, opacity: 0 });
   };
 
   useLayoutEffect(() => {
@@ -477,23 +473,6 @@ function LightboxBody({
         tl.to(incoming, { yPercent: 0, duration: 0.85, ease: INOUT_EASE }, 0.12);
       }
     }
-
-    // the caption: the old one fades out and up, the new one in from below 250ms later
-    const [p0, p1] = layers("caption");
-    if (p0 && p1) {
-      const out = front.current.caption === 0 ? p0 : p1;
-      const incoming = out === p0 ? p1 : p0;
-      front.current.caption = out === p0 ? 1 : 0;
-      incoming.textContent = captionOf(photos[next]?.alt);
-      if (reduce) {
-        gsap.set(out, { opacity: 0, y: 0 });
-        tl.fromTo(incoming, { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: T, ease }, 0);
-      } else {
-        gsap.set(incoming, { y: 10, opacity: 0 });
-        tl.to(out, { opacity: 0, y: -8, duration: 0.45, ease: CALM_EASE }, 0);
-        tl.to(incoming, { opacity: 1, y: 0, duration: 0.8, ease: CALM_EASE }, 0.25);
-      }
-    }
   };
 
   // the keys: ← → Home End, whatever has focus inside the pop-up (Esc and Tab are the Modal's)
@@ -540,10 +519,12 @@ function LightboxBody({
   };
 
   const roll = "text-[30px] min-[720px]:text-[38px]";
-  const stageWidth = `min(calc(100vw - 48px), 1400px, calc((100svh - ${many ? 220 : 120}px) * ${frameAspect.toFixed(4)}))`;
+  // from 900px the arrows stand outside the photo (48px + 28px on each side), so the photo leaves room for them
+  const sideRoom = many ? "var(--lb-side, 48px)" : "48px";
+  const stageWidth = `min(calc(100vw - ${sideRoom}), 1400px, calc((100svh - ${many ? 220 : 120}px) * ${frameAspect.toFixed(4)}))`;
 
   return (
-    <div ref={root}>
+    <div ref={root} className="[--lb-side:48px] min-[900px]:[--lb-side:200px]">
       <div
         data-lb-in="top"
         className="pointer-events-none fixed left-6 top-6 z-10 max-w-[calc(100vw-120px)] truncate text-label font-semibold uppercase tracking-label text-paper/70 min-[720px]:left-8 min-[720px]:top-7"
@@ -604,6 +585,44 @@ function LightboxBody({
             className="pointer-events-none absolute -inset-2 border min-[720px]:-inset-3"
             style={{ borderColor: `color-mix(in srgb, ${COPPER} 22%, transparent)` }}
           />
+          {many && (
+            <>
+              <button
+                type="button"
+                data-lb-in="arrow"
+                aria-label="Претходна фотографија"
+                aria-disabled={index === 0}
+                onClick={() => goTo(current.current - 1)}
+                onPointerDown={(e) => e.stopPropagation()}
+                className={`${ARROW} left-3 min-[900px]:right-[calc(100%+28px)] min-[900px]:left-auto`}
+                style={{
+                  borderColor: `color-mix(in srgb, ${COPPER} 55%, transparent)`,
+                  opacity: index === 0 ? 0.4 : 1,
+                }}
+              >
+                <svg {...ICON} aria-hidden>
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                data-lb-in="arrow"
+                aria-label="Следна фотографија"
+                aria-disabled={index === count - 1}
+                onClick={() => goTo(current.current + 1)}
+                onPointerDown={(e) => e.stopPropagation()}
+                className={`${ARROW} right-3 min-[900px]:left-[calc(100%+28px)] min-[900px]:right-auto`}
+                style={{
+                  borderColor: `color-mix(in srgb, ${COPPER} 55%, transparent)`,
+                  opacity: index === count - 1 ? 0.4 : 1,
+                }}
+              >
+                <svg {...ICON} aria-hidden>
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -626,50 +645,6 @@ function LightboxBody({
               <span aria-live="polite" className="sr-only">
                 {`Фотографија ${index + 1} од ${count}`}
               </span>
-            </div>
-
-            <div
-              data-lb-in="caption"
-              aria-hidden
-              className="font-display relative order-last h-[1.5em] min-w-0 basis-full text-[clamp(18px,1.7vw,23px)] italic leading-[1.5] text-paper min-[720px]:order-none min-[720px]:basis-0 min-[720px]:flex-1"
-            >
-              <span data-lb-layer="caption" className="absolute inset-x-0 block truncate" />
-              <span data-lb-layer="caption" className="absolute inset-x-0 block truncate" />
-            </div>
-
-            <div className="ml-auto flex items-center gap-3">
-              <button
-                type="button"
-                data-lb-in="arrow"
-                aria-label="Претходна фотографија"
-                aria-disabled={index === 0}
-                onClick={() => goTo(current.current - 1)}
-                className={ARROW}
-                style={{
-                  borderColor: `color-mix(in srgb, ${COPPER} 55%, transparent)`,
-                  opacity: index === 0 ? 0.4 : 1,
-                }}
-              >
-                <svg {...ICON} aria-hidden>
-                  <path d="M15 5l-7 7 7 7" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                data-lb-in="arrow"
-                aria-label="Следна фотографија"
-                aria-disabled={index === count - 1}
-                onClick={() => goTo(current.current + 1)}
-                className={ARROW}
-                style={{
-                  borderColor: `color-mix(in srgb, ${COPPER} 55%, transparent)`,
-                  opacity: index === count - 1 ? 0.4 : 1,
-                }}
-              >
-                <svg {...ICON} aria-hidden>
-                  <path d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
             </div>
           </div>
 
