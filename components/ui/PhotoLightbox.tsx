@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent, type RefObject } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
 // the close button (.bk-modal-close) and the black theme's variables, which only the About and Contact pages load
 import "@/components/black/black.css";
 import { Media } from "@/components/ui/Media";
 import { Modal, type ModalChoreography } from "@/components/ui/Modal";
+import { ZoomPan } from "@/components/ui/ZoomPan";
 import { CALM_EASE, INOUT_EASE, gsap, prefersReducedMotion } from "@/lib/gsap";
 import { IMAGE_DIMS } from "@/lib/image-dims";
 import { aspectOf } from "@/lib/image-sizes";
@@ -78,6 +88,7 @@ export function PhotoLightbox({
   aspect,
   surface = "dark",
   slowOpen = false,
+  zoomable = false,
 }: {
   photos: LightboxPhoto[];
   open: boolean;
@@ -98,6 +109,11 @@ export function PhotoLightbox({
    * reduced-motion fade are unchanged.
    */
   slowOpen?: boolean;
+  /**
+   * The plan and 3D pop-ups of the apartment page: the image can be zoomed (click or double tap 2.5x, wheel or pinch 1x to
+   * 4x, «+ − ⟲» buttons) and moved when zoomed (components/ui/ZoomPan.tsx). At 1x it behaves as without it.
+   */
+  zoomable?: boolean;
 }) {
   const indexRef = useRef(startIndex);
   const control = useRef<Control>({ finishEnter: () => {} });
@@ -311,6 +327,7 @@ export function PhotoLightbox({
         label={label}
         aspect={aspect}
         surface={surface}
+        zoomable={zoomable}
         indexRef={indexRef}
         control={control}
       />
@@ -324,6 +341,7 @@ function LightboxBody({
   label,
   aspect,
   surface,
+  zoomable,
   indexRef,
   control,
 }: {
@@ -332,6 +350,7 @@ function LightboxBody({
   label: string;
   aspect?: number;
   surface: "dark" | "light";
+  zoomable: boolean;
   indexRef: RefObject<number>;
   control: RefObject<Control>;
 }) {
@@ -551,30 +570,32 @@ function LightboxBody({
                 key={photo.src}
                 data-lb-slide
                 aria-hidden={i !== index}
-                className={`relative h-full flex-none basis-full ${surface === "light" ? "p-3 min-[720px]:p-5" : ""}`}
+                className={`relative h-full flex-none basis-full ${surface === "light" && !zoomable ? "p-3 min-[720px]:p-5" : ""}`}
               >
-                {surface === "light" && photo.crisp ? (
-                  // a plan: the drawing as it is, whole, on the light frame
-                  <Media
-                    image={photo}
-                    fit="contain"
-                    crisp
-                    sizes="(min-width: 1440px) 1400px, 100vw"
-                    priority={i === start}
-                    className="h-full w-full !bg-transparent"
-                  />
-                ) : (
-                  <Media
-                    image={photo}
-                    whole
-                    maxWidth={IMAGE_DIMS[photo.src]?.[0]}
-                    quality={85}
-                    sizes="(min-width: 1440px) 1400px, 100vw"
-                    priority={i === start}
-                    defer={i !== start}
-                    className="h-full w-full"
-                  />
-                )}
+                <Zoomable on={zoomable} padded={surface === "light"}>
+                  {surface === "light" && photo.crisp ? (
+                    // a plan: the drawing as it is, whole, on the light frame
+                    <Media
+                      image={photo}
+                      fit="contain"
+                      crisp
+                      sizes="(min-width: 1440px) 1400px, 100vw"
+                      priority={i === start}
+                      className="h-full w-full !bg-transparent"
+                    />
+                  ) : (
+                    <Media
+                      image={photo}
+                      whole
+                      maxWidth={IMAGE_DIMS[photo.src]?.[0]}
+                      quality={85}
+                      sizes="(min-width: 1440px) 1400px, 100vw"
+                      priority={i === start}
+                      defer={i !== start}
+                      className="h-full w-full"
+                    />
+                  )}
+                </Zoomable>
               </div>
             ))}
           </div>
@@ -673,5 +694,18 @@ function LightboxBody({
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * With `zoomable`, the slide's image sits in the zoom box (the light frame's padding moves inside it, so the zoomed image
+ * fills the frame up to its edges); without it, the image as it was.
+ */
+function Zoomable({ on, padded, children }: { on: boolean; padded: boolean; children: ReactNode }) {
+  if (!on) return <>{children}</>;
+  return (
+    <ZoomPan className="h-full w-full" contentClassName={padded ? "p-3 min-[720px]:p-5" : ""}>
+      {children}
+    </ZoomPan>
   );
 }

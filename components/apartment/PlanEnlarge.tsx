@@ -221,6 +221,7 @@ export function PlanEnlarge({
           label={label3d}
           aspect={aspect3d}
           surface="light"
+          zoomable
           onClose={() => setOpen3d(false)}
         />
       )}
@@ -233,6 +234,7 @@ export function PlanEnlarge({
           label={label}
           aspect={ratio}
           surface="light"
+          zoomable
           onClose={() => setOpen(false)}
         />
       )}
