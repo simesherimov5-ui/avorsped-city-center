@@ -28,6 +28,7 @@ export const development = generated.development;
 export const buildings: Building[] = generated.development.buildings;
 
 export { residentQuotes } from "./quotes";
+export { render3dFor, renders3d } from "./renders";
 
 /** A project known only by its name, city and status: no photo (the cards and the page show the logo mark), no text. */
 function stub(slug: string, name: string, status: Project["status"], city: string): Project {
@@ -78,7 +79,7 @@ export const projects: Project[] = [
         maxWidth: 1672,
       },
     ],
-    openingTagline: "Шест згради, една нова адреса во Струмица.",
+    openingTagline: "Една нова адреса во Струмица.",
     showcase: [
       ["gallery-01-wide-sunset", "комплексот во зајдисонце"],
       ["gallery-02-golden-view", "поглед во златно светло"],

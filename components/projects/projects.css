@@ -518,7 +518,7 @@
 }
 .pj-count {
   min-height: 18px;
-  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
+  font-size: max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)));
   font-weight: 400;
   letter-spacing: var(--label-track);
   color: var(--color-bronze);
@@ -571,7 +571,7 @@
 .pj-map-view.is-leaving {
   opacity: 0;
 }
-.pj-cell.is-swapping {
+.pj-card.is-swapping {
   animation: pj-swap-in var(--dur-base) var(--ease) backwards;
 }
 @keyframes pj-swap-in {
@@ -590,30 +590,10 @@
     transform: none;
   }
 }
-/* the cards of the grid: one column on a phone, two from 640px, three from 1024px, 24px apart (as the cards were first laid out) */
 .pj-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
-}
-@media (min-width: 640px) {
-  .pj-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .pj-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-/* a cell is as tall as its row, and the card inside fills it */
-.pj-cell {
-  display: grid;
-}
-.pj-cell.is-rising {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: pj-fadeup var(--dur-slow) var(--ease) forwards;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 40px 28px;
 }
 @media (max-width: 767px) {
   .pj-results {
@@ -622,37 +602,166 @@
   }
 }
 
-/* ───────── the photo box of a row of the map view (the grid's cards are the shared ProjectCard) ───────── */
+/* ───────── card ─────────
+   «Name on the photo» (the approved mockup): a tall 3 / 4.2 card with a 1px Оникс 14% border. The photo fills it (cover),
+   an Оникс shade covers its lower half, and at the bottom, 20px from the sides, the name and a small arrow in Травертин
+   (Playfair, about 22px) over a 2px line (Травертин 25%). On hover (devices that can hover) or keyboard focus the line fills
+   with gold from the left (0.9s), the arrow moves 5px right and the photo scales to 1.04 (1.2s). Nothing else is on the
+   card; a tap opens the project. */
+.pj-card {
+  --pj-card-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+  border: 1px solid color-mix(in srgb, var(--color-onyx) 14%, transparent);
+  color: var(--color-travertine);
+  text-decoration: none;
+  /* press: the card gives a little and springs back (scale, so it never fights the rise-in's transform) */
+  transition: scale var(--dur-fast) var(--ease);
+}
+.pj-card:active {
+  scale: 0.985;
+}
+.pj-card.is-rising {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: pj-fadeup var(--dur-slow) var(--ease) forwards;
+}
+.pj-card:focus-visible {
+  outline: 2px solid var(--color-bronze);
+  outline-offset: 4px;
+}
+.pj-photo {
+  position: relative;
+  aspect-ratio: 3 / 4.2;
+  overflow: hidden;
+  background: var(--color-espresso);
+}
+/* the shade over the photo's lower half (over the no-photo mark too), under the name and the line */
+.pj-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--color-onyx) 78%, transparent) 100%);
+}
+/* The photo inside its frame; the map view's rows use it too (900ms there). */
 .pj-img {
   position: absolute;
   inset: 0;
+  transition: transform 900ms var(--ease);
 }
+.pj-card .pj-img {
+  transition: transform 1.2s var(--pj-card-ease);
+}
+.pj-card:focus-visible .pj-img {
+  transform: scale(1.04);
+}
+.pj-row:focus-visible .pj-img {
+  transform: scale(1.035);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-img {
+    transform: scale(1.04);
+  }
+  .pj-row:hover .pj-img {
+    transform: scale(1.035);
+  }
+}
+.pj-name-row {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 30px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pj-name {
+  font-family: var(--font-display), "Times New Roman", serif;
+  font-size: calc(22px * var(--type-scale, 1));
+  font-weight: 400;
+  line-height: 1.2;
+}
+/* the arrow: Бронза in the map view's rows, Травертин on the card */
 .pj-arrow {
   color: var(--color-bronze);
   font-size: calc(18px * var(--type-scale, 1));
   transition: transform var(--dur-fast) var(--ease);
 }
+.pj-card .pj-arrow {
+  flex: none;
+  color: inherit;
+  transition: transform 0.9s var(--pj-card-ease);
+}
+.pj-card:focus-visible .pj-arrow {
+  transform: translateX(5px);
+}
 .pj-row:focus-visible .pj-arrow {
   transform: translateX(4px);
 }
 @media (hover: hover) {
+  .pj-card:hover .pj-arrow {
+    transform: translateX(5px);
+  }
   .pj-row:hover .pj-arrow {
     transform: translateX(4px);
   }
 }
+.pj-line {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-travertine) 25%, transparent);
+}
+.pj-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s var(--pj-card-ease);
+}
+.pj-card:focus-visible .pj-line::after {
+  transform: scaleX(1);
+}
+@media (hover: hover) {
+  .pj-card:hover .pj-line::after {
+    transform: scaleX(1);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .pj-cell.is-rising,
+  .pj-card.is-rising,
   .pj-view {
     opacity: 1;
     transform: none;
     animation: none;
   }
-  .pj-arrow {
+  /* no movement: the line still fills (at once), as the hover and focus sign */
+  .pj-img,
+  .pj-arrow,
+  .pj-card .pj-img,
+  .pj-card .pj-arrow,
+  .pj-line::after {
     transition: none;
   }
+  .pj-card:hover .pj-img,
+  .pj-card:hover .pj-arrow,
+  .pj-card:focus-visible .pj-img,
+  .pj-card:focus-visible .pj-arrow,
+  .pj-row:hover .pj-img,
   .pj-row:hover .pj-arrow,
+  .pj-row:focus-visible .pj-img,
   .pj-row:focus-visible .pj-arrow {
     transform: none;
+  }
+  .pj-card:active {
+    scale: none;
   }
 }
 
@@ -822,7 +931,7 @@
   padding: 6px 10px;
   background: color-mix(in srgb, var(--color-sand) 85%, transparent);
   color: color-mix(in srgb, var(--color-onyx) 68%, transparent);
-  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
+  font-size: max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)));
   font-weight: 400;
   letter-spacing: 0.1em;
   pointer-events: none;

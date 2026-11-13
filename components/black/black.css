@@ -16,7 +16,7 @@
   --bk-px: clamp(20px, 5vw, 64px);
   --bk-gap: clamp(64px, 7.5vw, 112px);
   color: var(--color-paper);
-  font-size: 15px;
+  font-size: max(var(--min-body), calc(15px * var(--type-scale, 1)));
   font-weight: 400;
   line-height: 1.6;
 }
@@ -85,7 +85,7 @@
   gap: 12px;
   color: var(--color-gold);
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 12px;
+  font-size: max(var(--min-label), calc(12px * var(--type-scale, 1)));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
@@ -104,7 +104,7 @@
 
 /* Small label */
 .bk-label {
-  font-size: 12px;
+  font-size: max(var(--min-label), calc(12px * var(--type-scale, 1)));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;

@@ -53,6 +53,7 @@ export function Media({
   quality = QUALITY,
   box,
   whole = false,
+  onError,
 }: {
   image: MediaImage;
   className?: string;
@@ -94,6 +95,8 @@ export function Media({
    * colour shows and the photo's edges fade into it (.media-fit in globals.css). The `sizes` to go with it: wholeSizes.
    */
   whole?: boolean;
+  /** Called when the picture fails to load, so the parent can show something else (needs a client component as the parent). */
+  onError?: () => void;
 }) {
   const loader = maxWidth ? cappedLoader(maxWidth) : undefined;
   if (image.isPlaceholder || !image.src) {
@@ -261,6 +264,7 @@ export function Media({
             className={contained ? "object-contain" : "object-cover"}
             quality={quality}
             unoptimized={crisp}
+            onError={onError}
             {...loading}
           />
         </div>
@@ -275,6 +279,7 @@ export function Media({
           quality={quality}
           unoptimized={crisp}
           loader={loader}
+          onError={onError}
           {...loading}
         />
       )}

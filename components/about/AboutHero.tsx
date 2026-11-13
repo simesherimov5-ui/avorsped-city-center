@@ -91,7 +91,7 @@ export function AboutHero({ image, eyebrow, lines, stats }: Props) {
   );
 
   return (
-    <section ref={root} className="ab-hero">
+    <section ref={root} data-scale="hero" className="ab-hero">
       <div data-hero="photo" className="ab-hero-photo">
         <Media
           image={{ ...image, isPlaceholder: false }}

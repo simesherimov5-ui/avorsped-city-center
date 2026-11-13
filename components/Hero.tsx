@@ -75,7 +75,11 @@ export function Hero() {
   );
 
   return (
-    <section ref={sectionRef} className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-paper">
+    <section
+      ref={sectionRef}
+      data-scale="hero"
+      className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink text-paper"
+    >
       <motion.div style={{ y: photoY }} className="absolute inset-0">
         {/* No entrance animation on the photo itself. data-hero-image marks it so the
             opening can wait until it is loaded before the black screen opens. */}
@@ -153,8 +157,8 @@ export function Hero() {
 
       {/* The strip along the bottom: where we are, and who we are with the sentence that asks the visitor to look further. */}
       <div ref={statsBarRef} className="relative border-t border-paper/35">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
-          <span className="text-label font-medium uppercase tracking-label text-gold sm:text-[length:min(calc(13px*var(--type-scale,1)),var(--body-max,999px))]">
+        <div className="wide-edge mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-4 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
+          <span className="text-label font-medium uppercase tracking-label text-gold sm:text-[length:max(var(--min-label),min(calc(13px*var(--type-scale,1)),var(--body-max,999px)))]">
             Струмица, Северна Македонија
           </span>
           <span className="flex flex-col items-center gap-1.5 sm:items-end sm:text-right">

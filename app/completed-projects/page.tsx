@@ -18,13 +18,16 @@ export default function CompletedProjectsPage() {
   return (
     <div className="pt-24 sm:pt-28">
       <section className="mx-auto max-w-7xl px-5 sm:px-8 py-14 lg:px-10">
-        <SectionHeading
-          as="h1"
-          eyebrow="Портфолио"
-          title="Завршени проекти"
-          size="compact"
-          description="Проекти на Јавор Шпед со завршена изградба, целосно предадени на сопствениците."
-        />
+        {/* the opening of the page: the hero scale (app/globals.css, [data-scale]) */}
+        <div data-scale="hero">
+          <SectionHeading
+            as="h1"
+            eyebrow="Портфолио"
+            title="Завршени проекти"
+            size="compact"
+            description="Проекти на Јавор Шпед со завршена изградба, целосно предадени на сопствениците."
+          />
+        </div>
 
         <div className="mt-10">
           {completed.length > 0 ? (

@@ -56,52 +56,53 @@ export default async function BuildingPage({ params }: { params: Promise<{ build
           </Link>
         </div>
 
+        {/* From 1024px: the floor picker (the drawn building) on the left, across both rows; the text top right and the photo
+            under it (24px below the stats, which sit side by side 64px apart); the photo fills the rest of the row, so its bottom
+            meets the frame's bottom (a cover crop, no stretching). On a phone, in source order: text, floor picker, photo. */}
         <section className="mx-auto max-w-7xl px-5 sm:px-8 py-10 lg:px-10">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <Media
-              image={building.exteriorImage}
-              className="aspect-[4/3]"
-              sizes="(max-width: 1024px) 155vw, 870px"
-              priority
-            />
-            <div>
-              <div className="eyebrow text-gold-deep">Вие сте овде</div>
+          <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:items-start lg:gap-y-6">
+            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
+              {/* from 1024px pulled up by its half-leading, so its capitals start on the frame's top line (left column) */}
+              <div className="eyebrow text-gold-deep lg:-mt-[0.46em]">Вие сте овде</div>
               <SectionHeading as="h1" eyebrow={STATUS_LABEL[building.status]} title={building.name} className="mt-2" />
-              <dl className="mt-8 grid grid-cols-2 gap-6">
+              <dl className="mt-8 grid grid-cols-2 gap-6 lg:flex lg:gap-16">
                 <Stat label="Катови" value={String(building.floors.length)} />
                 <Stat label="Станови" value={String(building.totalApartments)} />
               </dl>
             </div>
+            {/* the old links to #izberete-kat land here; scroll-mt keeps it under the header (the shared --nav-h). Only the
+                drawn building is shown; picking a floor opens its page, as the floor buttons did. */}
+            <div id="izberete-kat" className="min-w-0 scroll-mt-(--nav-h) lg:col-start-1 lg:row-span-2 lg:row-start-1">
+              <FloorPicker
+                basePath={`/development/${building.id}`}
+                pickOpensFloor
+                buildingOnly
+                floors={building.floors.map((floor) => ({
+                  number: floor.number,
+                  label: floor.label,
+                  sketch: floor.sketch,
+                  apartments: units
+                    .filter((a) => a.floor === floor.number)
+                    .map((a) => ({
+                      id: a.id,
+                      number: a.number,
+                      area: a.area,
+                      areaDecimals: a.areaDecimals,
+                      bedrooms: a.bedrooms,
+                      outline: a.outline,
+                    })),
+                }))}
+              />
+            </div>
+            <Media
+              image={building.exteriorImage}
+              className="aspect-[4/3] lg:col-start-2 lg:row-start-2 lg:aspect-auto lg:self-stretch"
+              sizes="(max-width: 1024px) 155vw, 870px"
+              priority
+            />
           </div>
         </section>
       </div>
-
-      {/* on a cream band; scroll-mt keeps the heading under the header (the shared --nav-h) when the page scrolls to it */}
-      <section id="izberete-kat" className="on-light fp-band scroll-mt-(--nav-h) py-16 sm:py-20">
-        <div className="mx-auto max-w-[1448px] px-5 sm:px-8">
-          <SectionHeading eyebrow="Влезете внатре" title="Изберете кат за да продолжите" align="center" />
-          <div className="mt-10">
-            <FloorPicker
-              basePath={`/development/${building.id}`}
-              floors={building.floors.map((floor) => ({
-                number: floor.number,
-                label: floor.label,
-                sketch: floor.sketch,
-                apartments: units
-                  .filter((a) => a.floor === floor.number)
-                  .map((a) => ({
-                    id: a.id,
-                    number: a.number,
-                    area: a.area,
-                    areaDecimals: a.areaDecimals,
-                    bedrooms: a.bedrooms,
-                    outline: a.outline,
-                  })),
-              }))}
-            />
-          </div>
-        </div>
-      </section>
     </ZoomEnter>
   );
 }

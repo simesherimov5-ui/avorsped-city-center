@@ -202,6 +202,7 @@ export function Navbar() {
       >
         <header
           ref={navRef}
+          data-scale="hero"
           data-at-top={!scrolled}
           data-clear={!solid ? "" : undefined}
           data-open={open}
@@ -217,21 +218,28 @@ export function Navbar() {
                 : "border-transparent bg-transparent"
           )}
         >
-          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px, app/globals.css), less its hairline; from 1024px a grid whose
-              middle column is the free space between the logo and the button, with the links centred in it (the logo is narrow
-              and the button wide, so the links sit left of the page centre: the optical centre of what is between them) */}
-          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:px-10">
+          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px × --scale-hero, app/globals.css), less its hairline; from 1024px
+              the wide container (.wide-edge: the logo at its left edge, the button at its right edge) with an auto 1fr auto grid, so
+              the links are centred in the free space between the wordmark and the button (a little left of the page centre;
+              --nav-shift in app/globals.css nudges them further left) */}
+          <nav className="wide-edge mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_1fr_auto]">
             <Link
               id="site-logo"
               href="/"
               onPointerDown={spawnClickPulse}
-              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:54px]"
+              className="focus-ring nav-link relative isolate -ml-2 flex min-h-11 min-w-11 items-center justify-self-start px-2 [--logo-h:44px] sm:[--logo-h:48px] lg:[--logo-h:calc(54px*var(--scale-hero))]"
               aria-label="Javor Sped Holding — Почетна"
             >
-              <BuildingMark gold className="w-auto shrink-0" style={{ height: "var(--logo-h)" }} />
+              {/* From 1024px the mark sits where the wordmark's text used to start (mark width + gap in from the link's left edge),
+                  and the free space the text took is kept on its right, so the links and the button stay where they were. */}
+              <BuildingMark
+                gold
+                className="w-auto shrink-0 lg:ml-[calc(var(--logo-h)*1.068)] lg:mr-[calc(var(--logo-h)*2.686)]"
+                style={{ height: "var(--logo-h)" }}
+              />
             </Link>
 
-            <div className="hidden items-center justify-center lg:flex">
+            <div className="hidden items-center justify-center lg:flex lg:translate-x-[calc(var(--nav-shift)*-1)]">
               <div ref={linksRef} className="relative flex gap-5 min-[1100px]:gap-6 xl:gap-9">
                 {LINKS.map((link) => (
                   <Link
@@ -245,7 +253,7 @@ export function Navbar() {
                     // the current page's tab is gold (with the underline) on the solid bar and over the photo alike
                     data-current={activeHref === link.href || undefined}
                     className={cn(
-                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[14px] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
+                      "nav-link relative isolate inline-flex min-h-11 items-center whitespace-nowrap text-[length:max(var(--min-label),calc(14px*var(--type-scale,1)))] uppercase tracking-nav transition-colors focus-ring text-on-chrome/75 hover:text-gold",
                       activeHref === link.href && "text-gold!"
                     )}
                   >

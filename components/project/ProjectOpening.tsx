@@ -30,6 +30,8 @@ export function ProjectOpening({
   slides,
   storageKey,
   backHref = "/projects",
+  wide = false,
+  plainTagline = false,
 }: {
   name: string;
   /** "CITY · STATUS", already joined. */
@@ -38,6 +40,10 @@ export function ProjectOpening({
   slides: HeroSlide[];
   storageKey: string;
   backHref?: string;
+  /** From 1024px the back link and the text sit in the shared wide container (.wide-edge), in line with the header's logo. */
+  wide?: boolean;
+  /** The line under the name all in cream, without the gold first words. */
+  plainTagline?: boolean;
 }) {
   const { t } = useI18n();
 
@@ -46,7 +52,7 @@ export function ProjectOpening({
       {({ tracks, pause, rowProps }) => (
         <div className="photo-hero__content">
           <div className="photo-hero__back">
-            <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+            <div className={`mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10${wide ? " wide-edge" : ""}`}>
               <Link
                 href={backHref}
                 className="focus-ring inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-label text-paper"
@@ -56,7 +62,7 @@ export function ProjectOpening({
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+          <div className={`mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10${wide ? " wide-edge" : ""}`}>
             {/* the bottom row: the text left, the controls at the right end (below the text where they do not fit beside it) */}
             <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
               <div className="min-w-0 flex-1 basis-[420px]">
@@ -64,9 +70,15 @@ export function ProjectOpening({
                 <h1 className={`m-0 mt-3 ${H1_CLASS}`}>{name}</h1>
                 {tagline && (
                   <p className={`m-0 mt-4 ${P_CLASS}`}>
-                    {/* split at the first comma: the words before it in gold, the comma and the rest in cream */}
-                    <span className="photo-hero__tagline-lead">{tagline.split(",", 1)[0]}</span>
-                    {tagline.slice(tagline.split(",", 1)[0].length)}
+                    {plainTagline ? (
+                      tagline
+                    ) : (
+                      <>
+                        {/* split at the first comma: the words before it in gold, the comma and the rest in cream */}
+                        <span className="photo-hero__tagline-lead">{tagline.split(",", 1)[0]}</span>
+                        {tagline.slice(tagline.split(",", 1)[0].length)}
+                      </>
+                    )}
                   </p>
                 )}
               </div>

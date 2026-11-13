@@ -27,13 +27,16 @@
   align-items: center;
   justify-content: center;
 }
+/* The mark, the ring and the counter are 10% larger than first drawn (--jsi-k); the ring's lines keep their width: the
+   SVG scales its strokes with it, so they are divided by the same factor. */
 .jsi-ring {
+  --jsi-k: 1.1;
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
+  width: calc(150px * var(--jsi-k));
+  height: calc(150px * var(--jsi-k));
+  margin: calc(-75px * var(--jsi-k)) 0 0 calc(-75px * var(--jsi-k));
   opacity: 0; /* the ring and the counter come in after the building is drawn */
 }
 .jsi-ring circle {
@@ -41,11 +44,11 @@
 }
 .jsi-ring-base {
   stroke: color-mix(in srgb, var(--color-brass) 22%, transparent);
-  stroke-width: 1;
+  stroke-width: calc(1 / var(--jsi-k));
 }
 .jsi-ring-prog {
   stroke: var(--color-brass);
-  stroke-width: 1.4;
+  stroke-width: calc(1.4 / var(--jsi-k));
   stroke-linecap: round;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
@@ -54,9 +57,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 62px;
-  height: 88px;
-  margin: -44px 0 0 -31px;
+  width: calc(62px * 1.1);
+  height: calc(88px * 1.1);
+  margin: calc(-44px * 1.1) 0 0 calc(-31px * 1.1);
   fill: none;
   stroke: url(#jsi-sheen);
   stroke-width: 6;
@@ -82,10 +85,10 @@
 .jsi-count {
   position: absolute;
   left: 50%;
-  top: calc(50% + 100px);
+  top: calc(50% + 100px * 1.1);
   transform: translateX(-50%);
   font:
-    500 12px var(--font-sans),
+    500 calc(12px * 1.1) var(--font-sans),
     sans-serif;
   letter-spacing: 0.3em;
   color: var(--color-brass);
@@ -144,16 +147,16 @@
 }
 @media (max-width: 767px) {
   .jsi-ring {
-    width: 120px;
-    height: 120px;
-    margin: -60px 0 0 -60px;
+    width: calc(120px * var(--jsi-k));
+    height: calc(120px * var(--jsi-k));
+    margin: calc(-60px * var(--jsi-k)) 0 0 calc(-60px * var(--jsi-k));
   }
   .jsi-logo {
-    width: 50px;
-    height: 71px;
-    margin: -36px 0 0 -25px;
+    width: calc(50px * 1.1);
+    height: calc(71px * 1.1);
+    margin: calc(-36px * 1.1) 0 0 calc(-25px * 1.1);
   }
   .jsi-count {
-    top: calc(50% + 82px);
+    top: calc(50% + 82px * 1.1);
   }
 }

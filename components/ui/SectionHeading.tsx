@@ -43,7 +43,12 @@ export function SectionHeading({
         {title}
       </Heading>
       {description && (
-        <p className={cn("mt-4 text-base leading-relaxed", tone === "dark" ? "text-on-chrome/70" : "text-ink/65")}>
+        <p
+          className={cn(
+            "mt-4 text-[length:max(var(--min-body),var(--text-base))] leading-relaxed",
+            tone === "dark" ? "text-on-chrome/70" : "text-ink/65"
+          )}
+        >
           {description}
         </p>
       )}

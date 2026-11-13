@@ -128,7 +128,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 )}
               </Reveal>
               {project.photoCredit && (
-                <p className="mt-4 text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] leading-relaxed text-muted">
+                <p className="mt-4 text-[length:max(var(--min-label),min(calc(12px*var(--type-scale,1)),var(--body-max,999px)))] leading-relaxed text-muted">
                   {project.photoCredit.map((part, i) =>
                     part.href ? (
                       <a
@@ -149,7 +149,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </section>
           )}
 
-          <section className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}>
+          {/* the opening of the page: the hero scale (app/globals.css, [data-scale]) */}
+          <section
+            data-scale="hero"
+            className={`mx-auto max-w-6xl px-5 pb-14 sm:px-8 lg:px-10 ${hasPhotos ? "" : "pt-10"}`}
+          >
             <Reveal immediate delay={0.08}>
               <ProjectHeader
                 eyebrow={project.location}

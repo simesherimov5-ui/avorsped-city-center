@@ -143,7 +143,7 @@ export function ProjectAbout({
         )}
         {head.subtitle && (
           <p
-            className="pa-reveal m-0 mt-[14px] font-sans text-[length:min(calc(12px*var(--type-scale,1)),var(--body-max,999px))] uppercase tracking-[0.32em] text-paper/64"
+            className="pa-reveal m-0 mt-[14px] font-sans text-[length:max(var(--min-label),min(calc(12px*var(--type-scale,1)),var(--body-max,999px)))] uppercase tracking-[0.32em] text-paper/64"
             style={delay(0)}
           >
             {head.subtitle}

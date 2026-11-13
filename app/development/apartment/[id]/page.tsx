@@ -12,6 +12,7 @@ import {
   placeOf,
   companyInfo,
 } from "@/data";
+import { render3dShown } from "@/lib/render3d";
 import { formatArea, orientationLabel, typeLabel } from "@/lib/format";
 import { floorPlanImageForApartment } from "@/lib/assets";
 import { Media } from "@/components/ui/Media";
@@ -58,6 +59,8 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
     apartment.planImage?.width && apartment.planImage.height
       ? Math.min(2.4, Math.max(0.6, apartment.planImage.width / apartment.planImage.height))
       : 4 / 3;
+  // The apartment's 3D render, only when its file is in public/ (checked at build time): then the viewer gets ОСНОВА / 3D tabs
+  const render3d = render3dShown(apartment.id);
 
   const inquiryHref = `/contact?project=${encodeURIComponent(apartment.projectId)}${apartment.buildingId ? `&building=${encodeURIComponent(apartment.buildingId)}` : ""}&apartment=${apartment.id}`;
 
@@ -104,7 +107,12 @@ export default async function ApartmentPage({ params }: { params: Promise<{ id: 
 
           {/* the plan is the main thing; the facts and the enquiry beside it (under it on a phone) */}
           <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(340px,1fr)] lg:items-start lg:gap-10">
-            <PlanEnlarge plan={floorPlanImage} apartmentNumber={apartment.number} ratio={planRatio} />
+            <PlanEnlarge
+              plan={floorPlanImage}
+              apartmentNumber={apartment.number}
+              ratio={planRatio}
+              render3dSrc={render3d}
+            />
 
             <aside className="apt-panel lg:sticky lg:top-[calc(var(--nav-h)+24px)]">
               {/* 1 · the total */}

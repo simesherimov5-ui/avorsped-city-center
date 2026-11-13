@@ -59,7 +59,7 @@
   background: var(--fp-row);
   color: var(--fp-mute);
   font:
-    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1 var(--font-sans),
+    600 max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)))/1 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -115,7 +115,7 @@
 }
 .fp-label {
   color: var(--fp-accent);
-  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
+  font-size: max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-transform: uppercase;
@@ -164,7 +164,7 @@
   background: var(--fp-row);
   color: var(--fp-mute);
   font:
-    600 min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px))/1.2 var(--font-sans),
+    600 max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)))/1.2 var(--font-sans),
     system-ui,
     sans-serif;
   letter-spacing: var(--label-track);
@@ -201,7 +201,7 @@
   gap: 14px;
   min-height: 52px;
   color: var(--fp-accent);
-  font-size: min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px));
+  font-size: max(var(--min-label), min(calc(12px * var(--type-scale, 1)), var(--body-max, 999px)));
   font-weight: 600;
   letter-spacing: var(--label-track);
   text-decoration: none;
@@ -258,4 +258,9 @@
   .fp.has-sketch .fp-panel {
     padding: 32px 16px;
   }
+}
+
+/* The building page: the drawn building alone (no apartment rows, no panel), one column */
+.fp.is-building-only {
+  grid-template-columns: minmax(0, 1fr);
 }
