@@ -79,7 +79,7 @@ export const projects: Project[] = [
         maxWidth: 1672,
       },
     ],
-    openingTagline: "Шест згради, една нова адреса во Струмица.",
+    openingTagline: "Една нова адреса во Струмица.",
     showcase: [
       ["gallery-01-wide-sunset", "комплексот во зајдисонце"],
       ["gallery-02-golden-view", "поглед во златно светло"],

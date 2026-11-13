@@ -808,7 +808,7 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   --w: 100cqw;
   top: 0;
 }
-/* the label is the brand gold; the line under the name is cream with its first words («Шест згради») in the brand gold */
+/* the label is the brand gold; the line under the name is cream, its first words (up to a comma) in the brand gold unless the opening asks for a plain line */
 .photo-hero--sky .photo-hero__eyebrow,
 .photo-hero--sky .photo-hero__tagline-lead {
   color: var(--color-gold);
@@ -887,6 +887,18 @@ body:has(.photo-hero--top) header[data-clear] .btn-primary {
   }
   .photo-hero--sky h1 {
     font-size: calc(clamp(36px, 4.6vw, 76px) * var(--type-scale, 1));
+  }
+}
+
+/* The wide edges (from 1024px): one container, 1600px at most, centred, its sides clamp(24px, 4vw, 64px). Used only by the
+   header, the bottom row of the Почетна hero and the City Center opening, so the logo, the City Center text and «Струмица…»
+   share one left edge and the button and the Почетна line one right edge. Under 1024px it does nothing: each keeps its own. */
+@media (min-width: 1024px) {
+  .wide-edge {
+    width: 100%;
+    max-width: 1600px;
+    margin-inline: auto;
+    padding-inline: clamp(24px, 4vw, 64px);
   }
 }
 

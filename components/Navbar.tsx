@@ -218,10 +218,10 @@ export function Navbar() {
                 : "border-transparent bg-transparent"
           )}
         >
-          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px × --scale-hero, app/globals.css), less its hairline; from 1024px a grid whose
-              middle column is the free space between the logo and the button, with the links centred in it (the logo is narrow
-              and the button wide, so the links sit left of the page centre: the optical centre of what is between them) */}
-          <nav className="mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:px-10">
+          {/* the bar is as high as the shared --nav-h (64 / 72 / 90px × --scale-hero, app/globals.css), less its hairline; from 1024px
+              the wide container (.wide-edge: the logo at its left edge, the button at its right edge) with a 1fr auto 1fr grid, so
+              the links are centred on the page */}
+          <nav className="wide-edge mx-auto grid h-[calc(var(--nav-h)-1px)] max-w-7xl grid-cols-[1fr_auto] items-center px-5 sm:px-8 lg:grid-cols-[1fr_auto_1fr]">
             <Link
               id="site-logo"
               href="/"

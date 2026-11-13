@@ -9,12 +9,17 @@ export function ProjectOpeningSection({
   project,
   aboutTarget,
   afterOpening,
+  wide,
+  plainTagline,
 }: {
   project: Project;
   /** The id of the section that «ИЗБЕРЕТЕ ЗГРАДА ↓» in "За проектот" leads to (the building picker). */
   aboutTarget?: string;
   /** A section between the opening photo and "За проектот". */
   afterOpening?: ReactNode;
+  /** Passed on to ProjectOpening (the City Center opening uses both). */
+  wide?: boolean;
+  plainTagline?: boolean;
 }) {
   const slides = (project.openingSlides ?? [{ image: project.heroImage }]).map((s, i) => ({
     key: `${i}-${s.image.src}`,
@@ -32,6 +37,8 @@ export function ProjectOpeningSection({
         tagline={project.openingTagline ?? project.tagline}
         slides={slides}
         storageKey={`hero-stopped-${project.slug}`}
+        wide={wide}
+        plainTagline={plainTagline}
       />
       {afterOpening}
       {project.about && <ProjectAbout about={project.about} target={aboutTarget} />}

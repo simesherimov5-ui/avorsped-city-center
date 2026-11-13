@@ -34,6 +34,8 @@ export default function DevelopmentPage() {
         <ProjectOpeningSection
           project={opening}
           aboutTarget="izberete-zgrada"
+          wide
+          plainTagline
           afterOpening={<ProjectNumbers project={opening} scrollTarget="izberete-zgrada" />}
         />
       )}
